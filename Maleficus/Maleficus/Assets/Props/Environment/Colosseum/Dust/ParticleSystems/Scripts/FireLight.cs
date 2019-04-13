@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace UnityStandardAssets.Effects
-{
+
+
     public class FireLight : MonoBehaviour
     {
         private float m_Rnd;
@@ -37,4 +37,4 @@ namespace UnityStandardAssets.Effects
             m_Light.enabled = false;
         }
     }
-}
+

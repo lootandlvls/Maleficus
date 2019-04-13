@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 
-namespace UnityStandardAssets.Effects
-{
+
+
     public class WaterHoseParticles : MonoBehaviour
     {
         public static float lastSoundTime;
@@ -52,4 +52,4 @@ namespace UnityStandardAssets.Effects
             }
         }
     }
-}
+

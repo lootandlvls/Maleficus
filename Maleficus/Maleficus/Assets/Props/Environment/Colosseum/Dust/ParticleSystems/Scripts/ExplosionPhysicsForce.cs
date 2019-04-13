@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UnityStandardAssets.Effects
-{
+
+
     public class ExplosionPhysicsForce : MonoBehaviour
     {
         public float explosionForce = 4;
@@ -34,4 +34,4 @@ namespace UnityStandardAssets.Effects
             }
         }
     }
-}
+

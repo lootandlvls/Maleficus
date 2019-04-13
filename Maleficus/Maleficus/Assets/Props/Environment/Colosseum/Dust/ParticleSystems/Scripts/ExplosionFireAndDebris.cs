@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace UnityStandardAssets.Effects
-{
+
+
     public class ExplosionFireAndDebris : MonoBehaviour
     {
         public Transform[] debrisPrefabs;
@@ -66,4 +66,4 @@ namespace UnityStandardAssets.Effects
             fire.parent = t;
         }
     }
-}
+

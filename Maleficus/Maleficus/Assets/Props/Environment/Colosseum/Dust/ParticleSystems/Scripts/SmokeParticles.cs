@@ -2,8 +2,8 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace UnityStandardAssets.Effects
-{
+
+
     public class SmokeParticles : MonoBehaviour
     {
         public AudioClip[] extinguishSounds;
@@ -15,4 +15,4 @@ namespace UnityStandardAssets.Effects
             GetComponent<AudioSource>().Play();
         }
     }
-}
+

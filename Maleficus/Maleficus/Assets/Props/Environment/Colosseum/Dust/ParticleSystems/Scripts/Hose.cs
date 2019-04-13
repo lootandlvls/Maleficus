@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 
 
-namespace UnityStandardAssets.Effects
-{
+
     public class Hose : MonoBehaviour
     {
         public float maxPower = 20;
@@ -33,4 +32,4 @@ namespace UnityStandardAssets.Effects
             }
         }
     }
-}
+
