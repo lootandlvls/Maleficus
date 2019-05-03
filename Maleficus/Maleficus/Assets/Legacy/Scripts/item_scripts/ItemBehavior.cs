@@ -47,19 +47,19 @@ public class ItemBehavior : MonoBehaviour {
         // Notify event manager 
         if (col.gameObject.tag == "Player1")
         {
-            EventManager.Instance.OnItemTaken(this, 1);
+            EventManagerOld.Instance.OnItemTaken(this, 1);
         }
         else if (col.gameObject.tag == "Player2")
         {
-            EventManager.Instance.OnItemTaken(this, 2);
+            EventManagerOld.Instance.OnItemTaken(this, 2);
         }
         else if (col.gameObject.tag == "Player3")
         {
-            EventManager.Instance.OnItemTaken(this, 3);
+            EventManagerOld.Instance.OnItemTaken(this, 3);
         }
         else if (col.gameObject.tag == "Player4")
         {
-            EventManager.Instance.OnItemTaken(this, 4);
+            EventManagerOld.Instance.OnItemTaken(this, 4);
         }
 
         if (col.gameObject.layer == 10)

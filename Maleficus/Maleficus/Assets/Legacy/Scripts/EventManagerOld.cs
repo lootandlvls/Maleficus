@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class EventManager : Singleton<EventManager> {
+public class EventManagerOld : Singleton<EventManagerOld> {
 
     public event Action<ItemBehavior, int> ItemTaken;
 

@@ -22,7 +22,7 @@ public class DanceFloor : MonoBehaviour {
         trans = GetComponent<Transform>();
         scale = trans.transform.localScale.x;
 
-        EventManager.Instance.ItemTaken += OnItemTaken;
+        EventManagerOld.Instance.ItemTaken += OnItemTaken;
 	}
 
     private void OnItemTaken(ItemBehavior item, int playerID)

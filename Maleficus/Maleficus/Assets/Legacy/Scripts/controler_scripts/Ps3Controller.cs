@@ -136,7 +136,7 @@ public class Ps3Controller : MonoBehaviour
         rbody = this.GetComponent<Rigidbody>();
         targetRotation = new Quaternion();
         anim = GetComponent<Animator>();
-        EventManager.Instance.ItemTaken += OnItemTaken;
+        EventManagerOld.Instance.ItemTaken += OnItemTaken;
     }
     private void OnItemTaken(ItemBehavior item, int playerID)
     {

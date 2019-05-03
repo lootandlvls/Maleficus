@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour {
+public class PlayerManagerOld : MonoBehaviour {
 
 
     List<PsController> assignedPlayerControllers = new List<PsController>();

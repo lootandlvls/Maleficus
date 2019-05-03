@@ -191,7 +191,7 @@ public class game_manager : MonoBehaviour
                     }
                     if (p1_ready)
                     {
-                        playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(true);
                         move_ui_invisible("blur_player_settings");
                         itemManager.SetActive(true);
                         InGameCanvas.gameObject.SetActive(true);
@@ -222,8 +222,8 @@ public class game_manager : MonoBehaviour
                     {
                         set_p1_color(drop_l_1.GetComponent<Text>().text);
                         set_p2_color(drop_l_2.GetComponent<Text>().text);
-                        playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(true);
-                        playerManager.GetComponent<PlayerManager>().p2.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p2.gameObject.SetActive(true);
                         move_ui_invisible("blur_player_settings");
                         itemManager.SetActive(true);
                         InGameCanvas.gameObject.SetActive(true);
@@ -258,9 +258,9 @@ public class game_manager : MonoBehaviour
                         set_p1_color(drop_l_1.GetComponent<Text>().text);
                         set_p2_color(drop_l_2.GetComponent<Text>().text);
                         set_p3_color(drop_l_3.GetComponent<Text>().text);
-                        playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(true);
-                        playerManager.GetComponent<PlayerManager>().p2.gameObject.SetActive(true);
-                        playerManager.GetComponent<PlayerManager>().p3.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p2.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p3.gameObject.SetActive(true);
                         move_ui_invisible("blur_player_settings");
                         itemManager.SetActive(true);
                         InGameCanvas.gameObject.SetActive(true);
@@ -301,10 +301,10 @@ public class game_manager : MonoBehaviour
                         set_p2_color(drop_l_2.GetComponent<Text>().text);
                         set_p3_color(drop_l_3.GetComponent<Text>().text);
                         set_p4_color(drop_l_4.GetComponent<Text>().text);
-                        playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(true);
-                        playerManager.GetComponent<PlayerManager>().p2.gameObject.SetActive(true);
-                        playerManager.GetComponent<PlayerManager>().p3.gameObject.SetActive(true);
-                        playerManager.GetComponent<PlayerManager>().p4.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p2.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p3.gameObject.SetActive(true);
+                        playerManager.GetComponent<PlayerManagerOld>().p4.gameObject.SetActive(true);
                         move_ui_invisible("blur_player_settings");
                         itemManager.SetActive(true);
                         InGameCanvas.gameObject.SetActive(true);
@@ -480,7 +480,7 @@ public class game_manager : MonoBehaviour
                 if(player1.lifes <= 0)
                 {
                     p1Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
                 }
@@ -492,7 +492,7 @@ public class game_manager : MonoBehaviour
                     //player 1 won
                     Debug.Log("player 1 won");
                     p1Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
 
@@ -501,7 +501,7 @@ public class game_manager : MonoBehaviour
                 {
                     // player 2 won
                     p2Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p2.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p2.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
                 }
@@ -512,7 +512,7 @@ public class game_manager : MonoBehaviour
                 {
                     //player 1 won
                     p1Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
 
@@ -521,7 +521,7 @@ public class game_manager : MonoBehaviour
                 {
                     // player 2 won
                     p2Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p2.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p2.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
                 }
@@ -529,7 +529,7 @@ public class game_manager : MonoBehaviour
                 {
                     //player 3 won 
                     p3Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p3.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p3.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
 
@@ -541,7 +541,7 @@ public class game_manager : MonoBehaviour
                 {
                     //player 1 won
                     p1Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p1.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p1.gameObject.SetActive(false);
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
                 }
@@ -549,7 +549,7 @@ public class game_manager : MonoBehaviour
                 {
                     // player 2 won
                     p2Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p2.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p2.gameObject.SetActive(false);
                     restartButton.enabled = true;
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
@@ -559,7 +559,7 @@ public class game_manager : MonoBehaviour
                     //player 3 won 
 
                     p3Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p3.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p3.gameObject.SetActive(false);
                     restartButton.enabled = true;
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
@@ -568,7 +568,7 @@ public class game_manager : MonoBehaviour
                 {
                     //player 4 won 
                     p4Won_text.gameObject.SetActive(true);
-                    playerManager.GetComponent<PlayerManager>().p4.gameObject.SetActive(false);
+                    playerManager.GetComponent<PlayerManagerOld>().p4.gameObject.SetActive(false);
                     restartButton.enabled = true;
                     restartButton.gameObject.SetActive(true);
                     restartIm.gameObject.SetActive(true);
@@ -645,16 +645,16 @@ public class game_manager : MonoBehaviour
         switch (cl)
         {
             case "Blue":
-                playerManager.GetComponent<PlayerManager>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
+                playerManager.GetComponent<PlayerManagerOld>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
                 break;
             case "Red":
-                playerManager.GetComponent<PlayerManager>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
+                playerManager.GetComponent<PlayerManagerOld>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
                 break;
             case "Green":
-                playerManager.GetComponent<PlayerManager>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
+                playerManager.GetComponent<PlayerManagerOld>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
                 break;
             case "Yellow":
-                playerManager.GetComponent<PlayerManager>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
+                playerManager.GetComponent<PlayerManagerOld>().p1.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
                 break;
         }
     }
@@ -664,16 +664,16 @@ public class game_manager : MonoBehaviour
         switch (cl)
         {
             case "Blue":
-                playerManager.GetComponent<PlayerManager>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
+                playerManager.GetComponent<PlayerManagerOld>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
                 break;
             case "Red":
-                playerManager.GetComponent<PlayerManager>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
+                playerManager.GetComponent<PlayerManagerOld>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
                 break;
             case "Green":
-                playerManager.GetComponent<PlayerManager>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
+                playerManager.GetComponent<PlayerManagerOld>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
                 break;
             case "Yellow":
-                playerManager.GetComponent<PlayerManager>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
+                playerManager.GetComponent<PlayerManagerOld>().p2.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
                 break;
         }
     }
@@ -683,16 +683,16 @@ public class game_manager : MonoBehaviour
         switch (cl)
         {
             case "Blue":
-                playerManager.GetComponent<PlayerManager>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
+                playerManager.GetComponent<PlayerManagerOld>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
                 break;
             case "Red":
-                playerManager.GetComponent<PlayerManager>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
+                playerManager.GetComponent<PlayerManagerOld>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
                 break;
             case "Green":
-                playerManager.GetComponent<PlayerManager>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
+                playerManager.GetComponent<PlayerManagerOld>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
                 break;
             case "Yellow":
-                playerManager.GetComponent<PlayerManager>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
+                playerManager.GetComponent<PlayerManagerOld>().p3.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
                 break;
         }
     }
@@ -702,16 +702,16 @@ public class game_manager : MonoBehaviour
         switch (cl)
         {
             case "Blue":
-                playerManager.GetComponent<PlayerManager>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
+                playerManager.GetComponent<PlayerManagerOld>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_blue;
                 break;
             case "Red":
-                playerManager.GetComponent<PlayerManager>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
+                playerManager.GetComponent<PlayerManagerOld>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_red;
                 break;
             case "Green":
-                playerManager.GetComponent<PlayerManager>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
+                playerManager.GetComponent<PlayerManagerOld>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_green;
                 break;
             case "Yellow":
-                playerManager.GetComponent<PlayerManager>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
+                playerManager.GetComponent<PlayerManagerOld>().p4.transform.Find("Toon Wizard").GetComponent<Renderer>().material = mat_yellow;
                 break;
         }
     }
@@ -843,28 +843,28 @@ public class game_manager : MonoBehaviour
 
     public void set_player_cd(float FCD, float ICD, float TCD)
     {
-        playerManager.GetComponent<PlayerManager>().p1.GetComponent<PsController>().fireballCD = FCD;
-        playerManager.GetComponent<PlayerManager>().p2.GetComponent<Ps2Controller>().fireballCD = FCD;
-        playerManager.GetComponent<PlayerManager>().p3.GetComponent<Ps3Controller>().fireballCD = FCD;
-        playerManager.GetComponent<PlayerManager>().p4.GetComponent<Ps4Controller>().fireballCD = FCD;
+        playerManager.GetComponent<PlayerManagerOld>().p1.GetComponent<PsController>().fireballCD = FCD;
+        playerManager.GetComponent<PlayerManagerOld>().p2.GetComponent<Ps2Controller>().fireballCD = FCD;
+        playerManager.GetComponent<PlayerManagerOld>().p3.GetComponent<Ps3Controller>().fireballCD = FCD;
+        playerManager.GetComponent<PlayerManagerOld>().p4.GetComponent<Ps4Controller>().fireballCD = FCD;
 
-        playerManager.GetComponent<PlayerManager>().p1.GetComponent<PsController>().iceballCD = ICD;
-        playerManager.GetComponent<PlayerManager>().p2.GetComponent<Ps2Controller>().iceballCD = ICD;
-        playerManager.GetComponent<PlayerManager>().p3.GetComponent<Ps3Controller>().iceballCD = ICD;
-        playerManager.GetComponent<PlayerManager>().p4.GetComponent<Ps4Controller>().iceballCD = ICD;
+        playerManager.GetComponent<PlayerManagerOld>().p1.GetComponent<PsController>().iceballCD = ICD;
+        playerManager.GetComponent<PlayerManagerOld>().p2.GetComponent<Ps2Controller>().iceballCD = ICD;
+        playerManager.GetComponent<PlayerManagerOld>().p3.GetComponent<Ps3Controller>().iceballCD = ICD;
+        playerManager.GetComponent<PlayerManagerOld>().p4.GetComponent<Ps4Controller>().iceballCD = ICD;
 
-        playerManager.GetComponent<PlayerManager>().p1.GetComponent<PsController>().teleportationCD = TCD;
-        playerManager.GetComponent<PlayerManager>().p2.GetComponent<Ps2Controller>().teleportationCD = TCD;
-        playerManager.GetComponent<PlayerManager>().p3.GetComponent<Ps3Controller>().teleportationCD = TCD;
-        playerManager.GetComponent<PlayerManager>().p4.GetComponent<Ps4Controller>().teleportationCD = TCD;
+        playerManager.GetComponent<PlayerManagerOld>().p1.GetComponent<PsController>().teleportationCD = TCD;
+        playerManager.GetComponent<PlayerManagerOld>().p2.GetComponent<Ps2Controller>().teleportationCD = TCD;
+        playerManager.GetComponent<PlayerManagerOld>().p3.GetComponent<Ps3Controller>().teleportationCD = TCD;
+        playerManager.GetComponent<PlayerManagerOld>().p4.GetComponent<Ps4Controller>().teleportationCD = TCD;
     }
 
     public void set_player_lifes(int lifes)
     {
-        playerManager.GetComponent<PlayerManager>().p1.GetComponent<PsController>().lifes = lifes;
-        playerManager.GetComponent<PlayerManager>().p2.GetComponent<Ps2Controller>().lifes = lifes;
-        playerManager.GetComponent<PlayerManager>().p3.GetComponent<Ps3Controller>().lifes = lifes;
-        playerManager.GetComponent<PlayerManager>().p4.GetComponent<Ps4Controller>().lifes = lifes;
+        playerManager.GetComponent<PlayerManagerOld>().p1.GetComponent<PsController>().lifes = lifes;
+        playerManager.GetComponent<PlayerManagerOld>().p2.GetComponent<Ps2Controller>().lifes = lifes;
+        playerManager.GetComponent<PlayerManagerOld>().p3.GetComponent<Ps3Controller>().lifes = lifes;
+        playerManager.GetComponent<PlayerManagerOld>().p4.GetComponent<Ps4Controller>().lifes = lifes;
 
         lifes_at_start = lifes;
     }

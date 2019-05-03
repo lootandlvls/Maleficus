@@ -141,7 +141,7 @@ public class PsController: MonoBehaviour
         anim = GetComponent<Animator>();
 
 
-        EventManager.Instance.ItemTaken += OnItemTaken;
+        EventManagerOld.Instance.ItemTaken += OnItemTaken;
     }
 
     private void OnItemTaken(ItemBehavior item, int playerID)
