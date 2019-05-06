@@ -1,26 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class TextAnimation : AbstractMenuAnimation {
-    
-    private Text text;
+public class ButtonSelectAnimation : AbstractMenuAnimation
+{
+    private MenuButton myMenuButton;
 
     private void Awake()
     {
-        text = GetComponent<Text>();
+        myMenuButton = GetComponent<MenuButton>();
     }
 
     protected override void PlayAppropriateAnimation(MenuState newState)
     {
         if (newState == activeOnState)
         {
-            text.enabled = true;
-        }
-        else
-        {
-            text.enabled = false;
+            myMenuButton.Highlight();
+            UIManager.Instance.OnSelectedButton(myMenuButton);
         }
     }
 }

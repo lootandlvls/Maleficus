@@ -7,22 +7,20 @@ public class Player : MonoBehaviour
 
     public bool IsConnected { get { return isConnected; } }
 
-    private char ControllerID;
     private bool isConnected;
 
 
 
     #region INPUT
-    public void Connect(char controllerID)
+    public void Connect()
     {
-        this.ControllerID = controllerID;
         isConnected = true;
         GetComponent<MeshRenderer>().material.color = Color.blue;
     }
 
     public void Move(float axis_X, float axis_Y)
     {
-
+        transform.Rotate(new Vector3(-1.0f * axis_Y, -1.0f * axis_X, 0.0f));
     }
 
     public void Rotate(float axis_X, float axis_Y)

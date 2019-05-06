@@ -19,7 +19,7 @@ public class game_manager : MonoBehaviour
 
     //restart Button and blur
 
-    public Button restartButton;
+    public UnityEngine.UI.Button restartButton;
     public Image restartIm;
 
     //Player winning Text
@@ -52,10 +52,10 @@ public class game_manager : MonoBehaviour
     private bool gameStarted = false;
 
     //mode
-    public Button s_respawn;
-    public Button s_deathmode;
-    public Button s_team_up;
-    public Button s_rapidfire;
+    public UnityEngine.UI.Button s_respawn;
+    public UnityEngine.UI.Button s_deathmode;
+    public UnityEngine.UI.Button s_team_up;
+    public UnityEngine.UI.Button s_rapidfire;
 
     private int lifes_at_start;
 

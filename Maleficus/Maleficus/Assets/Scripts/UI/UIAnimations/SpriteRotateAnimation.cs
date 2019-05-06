@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpriteRotateAnimation : AbstractAnimation
+public class SpriteRotateAnimation : AbstractMenuAnimation
 {
-    [SerializeField] private MenuState activeOnState;
-
     private bool canRotate = false;
 
     private void Update()

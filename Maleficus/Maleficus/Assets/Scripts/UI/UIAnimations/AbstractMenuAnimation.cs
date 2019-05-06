@@ -4,12 +4,13 @@ using UnityEngine;
 using System;
 
 
-public abstract class AbstractAnimation : MonoBehaviour {
+public abstract class AbstractMenuAnimation : MonoBehaviour {
 
+    [SerializeField] protected MenuState activeOnState;
 
     private void Start()
     {
-        EventManager.Instance.MenuStateUpdated += OnMenuStateUpdated;
+        EventManager.Instance.UI_MenuStateUpdated += OnMenuStateUpdated;
     }
 
     protected virtual void OnMenuStateUpdated(MenuState newState, MenuState lastState)

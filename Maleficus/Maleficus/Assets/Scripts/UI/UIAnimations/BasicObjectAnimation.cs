@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicObjectAnimation : AbstractAnimation {
+public class BasicObjectAnimation : AbstractMenuAnimation {
 
-
-    [SerializeField] private MenuState activeOnState;
 
     protected override void PlayAppropriateAnimation(MenuState newState)
     {
