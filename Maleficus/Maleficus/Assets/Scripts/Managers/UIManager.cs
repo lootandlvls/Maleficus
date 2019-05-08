@@ -33,35 +33,38 @@ public class UIManager : Singleton<UIManager>
     }
 
     private void On_INPUT_ButtonPressed(InputButton buttonType, int playerID)
-    { 
-        MenuButton nextButton = null;
-        switch (buttonType)
+    {
+        if (AppStateManager.Instance.CurrentAppState == AppState.IN_MENU)         // test case
         {
-            case InputButton.CONFIRM:
-                selectedButton.Press();
-                break;
+            MenuButton nextButton = null;
+            switch (buttonType)
+            {
+                case InputButton.CONFIRM:
+                    selectedButton.Press();
+                    break;
 
-            case InputButton.LEFT:
-                nextButton = selectedButton.GoToNextButton(ButtonDirection.LEFT);
-                break;
+                case InputButton.LEFT:
+                    nextButton = selectedButton.GoToNextButton(ButtonDirection.LEFT);
+                    break;
 
-            case InputButton.RIGHT:
-                nextButton = selectedButton.GoToNextButton(ButtonDirection.RIGHT);
-                break;
+                case InputButton.RIGHT:
+                    nextButton = selectedButton.GoToNextButton(ButtonDirection.RIGHT);
+                    break;
 
-            case InputButton.UP:
-                nextButton = selectedButton.GoToNextButton(ButtonDirection.UP);
-                break;
+                case InputButton.UP:
+                    nextButton = selectedButton.GoToNextButton(ButtonDirection.UP);
+                    break;
 
-            case InputButton.DOWN:
-                nextButton = selectedButton.GoToNextButton(ButtonDirection.DOWN);
-                break;
-        }
+                case InputButton.DOWN:
+                    nextButton = selectedButton.GoToNextButton(ButtonDirection.DOWN);
+                    break;
+            }
 
-        // Update selected button
-        if (nextButton != null)
-        {
-            selectedButton = nextButton;
+            // Update selected button
+            if (nextButton != null)
+            {
+                selectedButton = nextButton;
+            }
         }
     }
 

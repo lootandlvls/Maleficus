@@ -1007,7 +1007,7 @@ PrefabInstance:
     - target: {fileID: 4335998295998743999, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: isNoConnectionDebugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4335998296438487355, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}

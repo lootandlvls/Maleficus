@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(MenuButton))]
 public class ButtonSelectAnimation : AbstractMenuAnimation
 {
     private MenuButton myMenuButton;

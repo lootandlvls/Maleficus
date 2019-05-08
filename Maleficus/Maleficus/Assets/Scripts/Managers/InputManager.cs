@@ -28,17 +28,24 @@ public enum InputAxis
 
 public class InputManager : Singleton<InputManager>
 {
+    /// Threshold to know what joystick value can be considered as a directional button
+    private const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;
+
     [SerializeField] private bool isNoConnectionDebugMode = false;
 
     /// mapping from controllerID to playerID
     private Dictionary<char, int> playerMapping;
 
-
+    /// mapping to know if a specific player can perform a directional button when using the joystick 
+    private Dictionary<int, bool> canPerformHorizontalDirectionalButton;
+    private Dictionary<int, bool> canPerformVerticalDirectionalButton;
 
     protected override void Awake()
     {
         base.Awake();
         playerMapping = new Dictionary<char, int>();
+        InitializeDirectionalMaps();
+
     }
 
 
@@ -208,35 +215,55 @@ public class InputManager : Singleton<InputManager>
                 // Axis event
                 EventManager.Instance.INPUT_InvokeJoystickMoved(inputAxis, axisValue, playerID);
 
-                // Directional button event                                                                                                     // TODO: Trigger only once
+                // Directional button event                                                                                              
                 if (axisSide == 'L')
                 {
                     if (axisName == "Horizontal")
                     {
-                        if (axisValue == 1.0f)
+                        if ((Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == true))
                         {
-                            EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.RIGHT, playerID);
+                            canPerformHorizontalDirectionalButton[playerID] = false;
+                            // Which direction?
+                            if (axisValue > 0.0f)   // positive value
+                            {
+                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.RIGHT, playerID);
+                            }
+                            else                    // negative value
+                            {
+                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.LEFT, playerID);
+                            }
                         }
-                        else if (axisValue == -1.0f)
+                        else if ((Mathf.Abs(axisValue) < DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
                         {
-                            EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.LEFT, playerID);
+                            canPerformHorizontalDirectionalButton[playerID] = true;
                         }
                     }
                     else if (axisName == "Vertical")
                     {
-                        if (axisValue == 1.0f)
+                        if ((Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == true))
                         {
-                            EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.DOWN, playerID);
+                            canPerformVerticalDirectionalButton[playerID] = false;
+                            // Which direction?
+                            if (axisValue > 0.0f)   // positive value
+                            {
+                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.DOWN, playerID);
+                            }
+                            else                    // negative value
+                            {
+                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.UP, playerID);
+                            }
                         }
-                        else if (axisValue == -1.0f)
+                        else if ((Mathf.Abs(axisValue) < DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
                         {
-                            EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.UP, playerID);
+                            canPerformVerticalDirectionalButton[playerID] = true;
                         }
                     }
                 }
+                    
 
                 // Debug
                 DebugManager.Instance.Log(2, "joystick " + axisName + " " + axisSide + " by " + controllerID + " : " + axisValue);
+                
             }
         }
     }
@@ -251,4 +278,22 @@ public class InputManager : Singleton<InputManager>
         return playerMapping[controllerID];
     }
 
+    private void InitializeDirectionalMaps()
+    {
+        canPerformHorizontalDirectionalButton = new Dictionary<int, bool>();
+        canPerformHorizontalDirectionalButton[0] = true; // test ID
+        canPerformHorizontalDirectionalButton[1] = true;
+        canPerformHorizontalDirectionalButton[2] = true;
+        canPerformHorizontalDirectionalButton[3] = true;
+        canPerformHorizontalDirectionalButton[4] = true;
+
+        canPerformVerticalDirectionalButton = new Dictionary<int, bool>();
+        canPerformVerticalDirectionalButton[0] = true; // test ID
+        canPerformVerticalDirectionalButton[1] = true;
+        canPerformVerticalDirectionalButton[2] = true;
+        canPerformVerticalDirectionalButton[3] = true;
+        canPerformVerticalDirectionalButton[4] = true;
+
+
+    }
 }
