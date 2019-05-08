@@ -69,6 +69,10 @@ public class InputManager : Singleton<InputManager>
         Check_Spell(1, 'B');
         Check_Spell(1, 'C');
         Check_Spell(1, 'D');
+        //spell 2
+        Check_Spell(2, 'A');
+        // spell 3
+        Check_Spell(3, 'A');
 
         // Spell 2                                                                                                                           // TODO: Add in input settings
         //CheckAndCallSpell(2, 'A');
@@ -159,15 +163,19 @@ public class InputManager : Singleton<InputManager>
                 int playerID = GetPlayerID(controllerID, isNoConnectionDebugMode);
                 if (spellID == 1)
                 {
+                    
                     EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CAST_SPELL_1, playerID);
                 }
                 else if (spellID == 2)
                 {
+                   
                     EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CAST_SPELL_2, playerID);
                 }
                 else if (spellID == 3)
                 {
+                  
                     EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CAST_SPELL_3, playerID);
+                    
                 }
             }
         }

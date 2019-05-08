@@ -144,6 +144,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellSlot_1: {fileID: 0}
+  spellSlot_2: {fileID: 0}
+  spellSlot_3: {fileID: 0}
 --- !u!65 &377393212
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -423,6 +426,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellSlot_1: {fileID: 3095840691959451470, guid: 1b6e59fd2caf5ac4287d95aaaa211e8f,
+    type: 3}
+  spellSlot_2: {fileID: 7290182035913634289, guid: d842678e6d2694a42bca5dbb2ed81f87,
+    type: 3}
+  spellSlot_3: {fileID: 5517829343161919738, guid: e158010f8ec8fbf459e471407f9a7a1c,
+    type: 3}
 --- !u!65 &700634521
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -593,6 +602,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellSlot_1: {fileID: 0}
+  spellSlot_2: {fileID: 0}
+  spellSlot_3: {fileID: 0}
 --- !u!65 &1730606394
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -865,6 +877,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellSlot_1: {fileID: 0}
+  spellSlot_2: {fileID: 0}
+  spellSlot_3: {fileID: 0}
 --- !u!65 &2004335340
 BoxCollider:
   m_ObjectHideFlags: 0
