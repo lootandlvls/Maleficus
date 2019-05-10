@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestSpell : Spells
+public class TestSpell : AbstractSpell
 {
 
 

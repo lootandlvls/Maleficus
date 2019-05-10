@@ -32,9 +32,10 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(LateStartCoroutine());
     }
 
-    private void On_INPUT_ButtonPressed(InputButton buttonType, int playerID)
+    private void On_INPUT_ButtonPressed(InputButton buttonType, PlayerID playerID)
     {
-        if (AppStateManager.Instance.CurrentAppState == AppState.IN_MENU)         // test case
+        //Debug.Log("Button " + buttonType + " by " + playerID);
+        if (AppStateManager.Instance.IsInAStateWithUI == true)         // test case
         {
             MenuButton nextButton = null;
             switch (buttonType)
@@ -87,7 +88,7 @@ public class UIManager : Singleton<UIManager>
         }
         lastState = currentState;
         currentState = newState;
-        EventManager.Instance.UI_InvokeMenuStateUpdated(newState, lastState);
+        EventManager.Instance.Invoke_UI_MenuStateUpdated(newState, lastState);
     }
 
     public void OnSelectedButton(MenuButton selectedButton)

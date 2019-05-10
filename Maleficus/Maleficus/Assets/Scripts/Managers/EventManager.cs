@@ -9,7 +9,7 @@ public class EventManager : Singleton<EventManager>
 
     #region GAME
     public event Action<AppState> GAME_AppStateUpdated;
-    public void GAME_InvokeAppStateUpdated(AppState newAppState)
+    public void Invoke_GAME_AppStateUpdated(AppState newAppState)
     {
         if (GAME_AppStateUpdated != null)
         {
@@ -23,7 +23,25 @@ public class EventManager : Singleton<EventManager>
     #endregion
 
     #region SPELLS
+    public event Action<ISpell, PlayerID> SPELLS_SpellSpawned;
+    public void Invoke_SPELLS_SpellSpawned(ISpell castedSpell, PlayerID castingPlayerID)
+    {
 
+        if (SPELLS_SpellSpawned != null)
+        {
+            SPELLS_SpellSpawned.Invoke(castedSpell, castingPlayerID);
+        }
+    }
+
+    public event Action<HitInfo> SPELLS_SpellHitPlayer;
+    public void Invoke_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+    {
+
+        if (SPELLS_SpellHitPlayer != null)
+        {
+            SPELLS_SpellHitPlayer.Invoke(hitInfo);
+        }
+    }
     #endregion
 
 
@@ -31,7 +49,7 @@ public class EventManager : Singleton<EventManager>
 
     #region UI
     public event Action<MenuState, MenuState> UI_MenuStateUpdated;
-    public void UI_InvokeMenuStateUpdated(MenuState newState, MenuState lastState)
+    public void Invoke_UI_MenuStateUpdated(MenuState newState, MenuState lastState)
     {
         if (UI_MenuStateUpdated != null)
         {
@@ -41,8 +59,8 @@ public class EventManager : Singleton<EventManager>
     #endregion
 
     #region INPUT
-    public event Action<InputButton, int> INPUT_ButtonPressed;
-    public void INPUT_InvokeButtonPressed(InputButton buttonType, int playerID)
+    public event Action<InputButton, PlayerID> INPUT_ButtonPressed;
+    public void Invoke_INPUT_ButtonPressed(InputButton buttonType, PlayerID playerID)
     {
         if (INPUT_ButtonPressed != null)
         {
@@ -50,8 +68,8 @@ public class EventManager : Singleton<EventManager>
         }
     }
 
-    public event Action<InputAxis, float, int> INPUT_JoystickMoved;
-    public void INPUT_InvokeJoystickMoved(InputAxis axisType, float axisValue, int playerID)
+    public event Action<InputAxis, float, PlayerID> INPUT_JoystickMoved;
+    public void Invoke_INPUT_JoystickMoved(InputAxis axisType, float axisValue, PlayerID playerID)
     {
         if (INPUT_JoystickMoved != null)
         {

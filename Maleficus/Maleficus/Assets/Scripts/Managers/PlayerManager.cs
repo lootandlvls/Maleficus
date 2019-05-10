@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public enum PlayerID
+{
+    PLAYER_1,
+    PLAYER_2,
+    PLAYER_3,
+    PLAYER_4,
+    TEST
+}
+
 public class PlayerManager : Singleton<PlayerManager>
 {
 
@@ -11,26 +21,33 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private Player player_3;
     [SerializeField] private Player player_4;
 
-    Dictionary<int, Player> players;
+    Dictionary<PlayerID, Player> players;
 
 
     private void Start()
     {
-        players = new Dictionary<int, Player>();
-        players[1] = player_1;
-        players[2] = player_2;
-        players[3] = player_3;
-        players[4] = player_4;
-
+        players = new Dictionary<PlayerID, Player>();
+        players[PlayerID.PLAYER_1] = player_1;
+        players[PlayerID.PLAYER_2] = player_2;
+        players[PlayerID.PLAYER_3] = player_3;
+        players[PlayerID.PLAYER_4] = player_4;
+         
+        // Input events
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
+        //  Spell events
+        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
     }
 
-    
-
-    private void On_INPUT_ButtonPressed(InputButton inputButton, int playerID)
+    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
-        if (playerID == 0) return;
+        
+    }
+
+    private void On_INPUT_ButtonPressed(InputButton inputButton, PlayerID playerID)
+    {
+        Debug.Log("Button " + inputButton + " pressed by " + playerID);
+        if (playerID == PlayerID.TEST) return;
 
         switch(inputButton)
         {
@@ -48,9 +65,10 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
-    private void On_INPUT_JoystickMoved(InputAxis axisType, float axisValue, int playerID)
+    private void On_INPUT_JoystickMoved(InputAxis axisType, float axisValue, PlayerID playerID)
     {
-        if (playerID == 0) return;
+        if (playerID == PlayerID.TEST) return;
+
         switch(axisType)
         {
             case InputAxis.MOVE_X:
@@ -68,27 +86,27 @@ public class PlayerManager : Singleton<PlayerManager>
     /// Connect new player to a free spot
     /// </summary>
     /// <returns> The ID of the connected player </returns>
-    public int ConnectNextPlayerToController()
+    public PlayerID ConnectNextPlayerToController()
     {
         if (player_1.IsConnected == false)
         {
-            player_1.Connect();
-            return 1;
+            player_1.Connect(PlayerID.PLAYER_1);
+            return PlayerID.PLAYER_1;
         }
         else if (player_2.IsConnected == false)
         {
-            player_2.Connect();
-            return 2;
+            player_2.Connect(PlayerID.PLAYER_2);
+            return PlayerID.PLAYER_2;
         }
         else if (player_3.IsConnected == false)
         {
-            player_3.Connect();
-            return 3;
+            player_3.Connect(PlayerID.PLAYER_3);
+            return PlayerID.PLAYER_3;
         }
         else if (player_4.IsConnected == false)
         {
-            player_4.Connect();
-            return 4;
+            player_4.Connect(PlayerID.PLAYER_4);
+            return PlayerID.PLAYER_4;
         }
         else
         {
@@ -96,4 +114,26 @@ public class PlayerManager : Singleton<PlayerManager>
             return 0;
         }
     }
+
+
+    //public static int GetPlayerID(PlayerID playerID)
+    //{
+    //    int id = 0;
+    //    switch(playerID)
+    //    {
+    //        case PlayerID.PLAYER_1:
+    //            id = 1;
+    //            break;
+    //        case PlayerID.PLAYER_2:
+    //            id = 2;
+    //            break;
+    //        case PlayerID.PLAYER_3:
+    //            id = 3;
+    //            break;
+    //        case PlayerID.PLAYER_4:
+    //            id = 4;
+    //            break;
+    //    }
+    //    return id;
+    //}
 }

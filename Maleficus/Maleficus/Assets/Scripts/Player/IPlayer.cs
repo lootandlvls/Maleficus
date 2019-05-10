@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestSpell3 : AbstractSpell
+public interface IPlayer
 {
-  
+    PlayerID PlayerID { get; }
 }

@@ -31,21 +31,20 @@ public class InputManager : Singleton<InputManager>
     /// Threshold to know what joystick value can be considered as a directional button
     private const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;
 
-    [SerializeField] private bool isNoConnectionDebugMode = false;
+    [SerializeField] private bool isDebugMode = false;
 
     /// mapping from controllerID to playerID
-    private Dictionary<char, int> playerMapping;
+    private Dictionary<char, PlayerID> playerMapping;
 
     /// mapping to know if a specific player can perform a directional button when using the joystick 
-    private Dictionary<int, bool> canPerformHorizontalDirectionalButton;
-    private Dictionary<int, bool> canPerformVerticalDirectionalButton;
+    private Dictionary<PlayerID, bool> canPerformHorizontalDirectionalButton;
+    private Dictionary<PlayerID, bool> canPerformVerticalDirectionalButton;
 
     protected override void Awake()
     {
         base.Awake();
-        playerMapping = new Dictionary<char, int>();
+        playerMapping = new Dictionary<char, PlayerID>();
         InitializeDirectionalMaps();
-
     }
 
 
@@ -118,19 +117,18 @@ public class InputManager : Singleton<InputManager>
     {
         if (Input.GetButtonDown("Confirm_" + controllerID))
         {
-            if ((playerMapping.ContainsKey(controllerID) == true) || (isNoConnectionDebugMode == true))
+            if ((playerMapping.ContainsKey(controllerID) == true) || (isDebugMode == true))
             {
-                int playerID = GetPlayerID(controllerID, isNoConnectionDebugMode);
-                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CONFIRM, playerID);
-
+                PlayerID playerID = GetPlayerID(controllerID);
+                EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.CONFIRM, playerID);
             }
             else // Connect player
             {
                 // In Connecting Players state ?
                 if (AppStateManager.Instance.CurrentAppState == AppState.CONNECTING_PLAYERS)
                 {
-                    int connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
-                    if (connectedPlayerID != 0)
+                    PlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
+                    if (connectedPlayerID != PlayerID.TEST)
                     {
                         playerMapping[controllerID] = connectedPlayerID;
                     }
@@ -142,11 +140,11 @@ public class InputManager : Singleton<InputManager>
 
     private void Check_Cancel(char controllerID)
     {
-        if ((playerMapping.ContainsKey(controllerID) == true) || (isNoConnectionDebugMode == true))
+        if ((playerMapping.ContainsKey(controllerID) == true) || (isDebugMode == true))
         {
 
 
-            int playerID = GetPlayerID(controllerID, isNoConnectionDebugMode);
+            PlayerID playerID = GetPlayerID(controllerID);
         }
                                                                                                                                 // TODO: implement
     }
@@ -155,26 +153,26 @@ public class InputManager : Singleton<InputManager>
     private void Check_Spell(int spellID, char controllerID)
     {
         // Player already connected?
-        if ((playerMapping.ContainsKey(controllerID) == true) || (isNoConnectionDebugMode == true))
+        if ((playerMapping.ContainsKey(controllerID) == true) || (isDebugMode == true))
         {
             // Did player press button?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerID))
             {
-                int playerID = GetPlayerID(controllerID, isNoConnectionDebugMode);
+                PlayerID playerID = GetPlayerID(controllerID);
                 if (spellID == 1)
                 {
                     
-                    EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CAST_SPELL_1, playerID);
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.CAST_SPELL_1, playerID);
                 }
                 else if (spellID == 2)
                 {
                    
-                    EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CAST_SPELL_2, playerID);
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.CAST_SPELL_2, playerID);
                 }
                 else if (spellID == 3)
                 {
                   
-                    EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.CAST_SPELL_3, playerID);
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.CAST_SPELL_3, playerID);
                     
                 }
             }
@@ -185,14 +183,14 @@ public class InputManager : Singleton<InputManager>
     private void Check_Axis(string axisName, char axisSide, char controllerID)
     {
         // Player already connected?
-        if ((playerMapping.ContainsKey(controllerID) == true) || (isNoConnectionDebugMode == true))
+        if ((playerMapping.ContainsKey(controllerID) == true) || (isDebugMode == true))
         {
             // Did player moved joystick
 
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
             if (axisValue != 0.0f)
             {
-                int playerID = GetPlayerID(controllerID, isNoConnectionDebugMode);
+                PlayerID playerID = GetPlayerID(controllerID);
 
                 // Is it a MOVE or ROTATE joystick?
                 InputAxis inputAxis = InputAxis.MOVE_X;
@@ -221,7 +219,7 @@ public class InputManager : Singleton<InputManager>
                 }
 
                 // Axis event
-                EventManager.Instance.INPUT_InvokeJoystickMoved(inputAxis, axisValue, playerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(inputAxis, axisValue, playerID);
 
                 // Directional button event                                                                                              
                 if (axisSide == 'L')
@@ -234,11 +232,11 @@ public class InputManager : Singleton<InputManager>
                             // Which direction?
                             if (axisValue > 0.0f)   // positive value
                             {
-                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.RIGHT, playerID);
+                                EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.RIGHT, playerID);
                             }
                             else                    // negative value
                             {
-                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.LEFT, playerID);
+                                EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.LEFT, playerID);
                             }
                         }
                         else if ((Mathf.Abs(axisValue) < DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
@@ -254,11 +252,11 @@ public class InputManager : Singleton<InputManager>
                             // Which direction?
                             if (axisValue > 0.0f)   // positive value
                             {
-                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.DOWN, playerID);
+                                EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.DOWN, playerID);
                             }
                             else                    // negative value
                             {
-                                EventManager.Instance.INPUT_InvokeButtonPressed(InputButton.UP, playerID);
+                                EventManager.Instance.Invoke_INPUT_ButtonPressed(InputButton.UP, playerID);
                             }
                         }
                         else if ((Mathf.Abs(axisValue) < DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
@@ -277,30 +275,30 @@ public class InputManager : Singleton<InputManager>
     }
    
 
-    private int GetPlayerID(char controllerID, bool debugMode)
+    private PlayerID GetPlayerID(char controllerID)
     {
-        if (debugMode == true)
+        if (isDebugMode == true)
         {
-            return 0;
+            return PlayerID.TEST;
         }
         return playerMapping[controllerID];
     }
 
     private void InitializeDirectionalMaps()
     {
-        canPerformHorizontalDirectionalButton = new Dictionary<int, bool>();
-        canPerformHorizontalDirectionalButton[0] = true; // test ID
-        canPerformHorizontalDirectionalButton[1] = true;
-        canPerformHorizontalDirectionalButton[2] = true;
-        canPerformHorizontalDirectionalButton[3] = true;
-        canPerformHorizontalDirectionalButton[4] = true;
+        canPerformHorizontalDirectionalButton = new Dictionary<PlayerID, bool>();
+        canPerformHorizontalDirectionalButton[PlayerID.TEST] = true; // test ID
+        canPerformHorizontalDirectionalButton[PlayerID.PLAYER_1] = true;
+        canPerformHorizontalDirectionalButton[PlayerID.PLAYER_2] = true;
+        canPerformHorizontalDirectionalButton[PlayerID.PLAYER_3] = true;
+        canPerformHorizontalDirectionalButton[PlayerID.PLAYER_4] = true;
 
-        canPerformVerticalDirectionalButton = new Dictionary<int, bool>();
-        canPerformVerticalDirectionalButton[0] = true; // test ID
-        canPerformVerticalDirectionalButton[1] = true;
-        canPerformVerticalDirectionalButton[2] = true;
-        canPerformVerticalDirectionalButton[3] = true;
-        canPerformVerticalDirectionalButton[4] = true;
+        canPerformVerticalDirectionalButton = new Dictionary<PlayerID, bool>();
+        canPerformVerticalDirectionalButton[PlayerID.TEST] = true; // test ID
+        canPerformVerticalDirectionalButton[PlayerID.PLAYER_1] = true;
+        canPerformVerticalDirectionalButton[PlayerID.PLAYER_2] = true;
+        canPerformVerticalDirectionalButton[PlayerID.PLAYER_3] = true;
+        canPerformVerticalDirectionalButton[PlayerID.PLAYER_4] = true;
 
 
     }

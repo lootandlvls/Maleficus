@@ -1954,6 +1954,16 @@ PrefabInstance:
       propertyPath: isNoConnectionDebugMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4335998295998743999, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: isDebugMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335998297404941564, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: debugStartState
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e016db9698da6cf4c8fe22edd976b062, type: 3}
 --- !u!1 &1959525868

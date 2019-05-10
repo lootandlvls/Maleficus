@@ -42,7 +42,7 @@ public class DebugManager : Singleton<DebugManager>
         }
         else
         {
-            Debug.Log("Debug text with ID " + debugID + " not found in this scene!");
+            Debug.LogWarning("Debug text with ID " + debugID + " not found in this scene!");
         }
     }
 }

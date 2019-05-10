@@ -2,25 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayer
 {
-
+    public PlayerID PlayerID { get { return myPlayerID; } }
     public bool IsConnected { get { return isConnected; } }
+
+    
 
     private bool isConnected;
 
-      Dictionary<int, GameObject> spellsSlot;
+    private PlayerID myPlayerID;
 
-    [SerializeField] private GameObject spellSlot_1;
-    [SerializeField] private GameObject spellSlot_2;
-    [SerializeField] private GameObject spellSlot_3;
+      Dictionary<int, AbstractSpell> spellsSlot;
+
+    [SerializeField] private AbstractSpell spellSlot_1;
+    [SerializeField] private AbstractSpell spellSlot_2;
+    [SerializeField] private AbstractSpell spellSlot_3;
 
 
 
 
     private void Start()
     {
-        spellsSlot = new Dictionary<int, GameObject>();
+        spellsSlot = new Dictionary<int, AbstractSpell>();
         spellsSlot[1] = spellSlot_1;
         spellsSlot[2] = spellSlot_2;
         spellsSlot[3] = spellSlot_3;
@@ -28,8 +32,9 @@ public class Player : MonoBehaviour
 
 
     #region INPUT
-    public void Connect()
+    public void Connect(PlayerID playerID)
     {
+        myPlayerID = playerID;
         isConnected = true;
         GetComponent<MeshRenderer>().material.color = Color.blue;
         
@@ -66,13 +71,13 @@ public class Player : MonoBehaviour
 
 
     //set the spells chosen  by the player
-    public void SetSpells(GameObject spell_1, GameObject spell_2, GameObject spell_3)
+    public void SetSpells(AbstractSpell spell_1, AbstractSpell spell_2, AbstractSpell spell_3)
     {
         spellSlot_1 = spell_1;
         spellSlot_2 = spell_2;
         spellSlot_3 = spell_3;
 
-        spellsSlot = new Dictionary<int, GameObject>();
+        spellsSlot = new Dictionary<int, AbstractSpell>();
 
         spellsSlot[1] = spell_1;
         spellsSlot[2] = spell_2;
