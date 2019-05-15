@@ -68,15 +68,22 @@ public class PlayerManager : Singleton<PlayerManager>
     private void On_INPUT_JoystickMoved(InputAxis axisType, float axisValue, PlayerID playerID)
     {
         if (playerID == PlayerID.TEST) return;
-
+        // TODO: i think this needs to be changed because the way it works now the player can only move in one direction at a time!!! he needs to be able to move in both axis at the same time  for fluent movement
         switch(axisType)
         {
             case InputAxis.MOVE_X:
+                
                 players[playerID].Move(axisValue, 0.0f);
                 break;
 
             case InputAxis.MOVE_Y:
                 players[playerID].Move(0.0f, axisValue);
+                break;
+            case InputAxis.ROTATE_X:
+                players[playerID].Rotate(axisValue, 0.0f);
+                break;
+            case InputAxis.ROTATE_Y:
+                players[playerID].Rotate(0.0f, axisValue);
                 break;
         }
     }

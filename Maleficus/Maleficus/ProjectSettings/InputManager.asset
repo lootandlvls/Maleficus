@@ -195,7 +195,7 @@ InputManager:
     snap: 1
     invert: 0
     type: 2
-    axis: 1
+    axis: 3
     joyNum: 2
   - serializedVersion: 3
     m_Name: Vertical_L_C

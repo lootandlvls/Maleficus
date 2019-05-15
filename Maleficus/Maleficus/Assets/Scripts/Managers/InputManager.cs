@@ -188,13 +188,14 @@ public class InputManager : Singleton<InputManager>
             // Did player moved joystick
 
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
-            if (axisValue != 0.0f)
+         //if   (axisValue != 0.0f)
+            if ( Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD)
             {
                 PlayerID playerID = GetPlayerID(controllerID);
 
                 // Is it a MOVE or ROTATE joystick?
-                InputAxis inputAxis = InputAxis.MOVE_X;
-                if (axisSide == 'L') 
+                InputAxis inputAxis = InputAxis.MOVE_Y;
+                if (axisSide == 'L')
                 {
                     if (axisName == "Horizontal")
                     {
@@ -204,9 +205,9 @@ public class InputManager : Singleton<InputManager>
                     {
                         inputAxis = InputAxis.MOVE_Y;
                     }
-                    
+
                 }
-                else if (axisSide == 'R') 
+                else if (axisSide == 'R')
                 {
                     if (axisName == "Horizontal")
                     {
@@ -219,7 +220,10 @@ public class InputManager : Singleton<InputManager>
                 }
 
                 // Axis event
+               
+                
                 EventManager.Instance.Invoke_INPUT_JoystickMoved(inputAxis, axisValue, playerID);
+                
 
                 // Directional button event                                                                                              
                 if (axisSide == 'L')
