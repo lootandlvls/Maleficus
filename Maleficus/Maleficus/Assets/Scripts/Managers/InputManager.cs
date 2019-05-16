@@ -3,28 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public enum InputButton
-{
-    CONFIRM,
-    CANCEL,
-    CAST_SPELL_1,
-    CAST_SPELL_2,
-    CAST_SPELL_3,
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-}
-
-public enum InputAxis
-{
-    MOVE_X,
-    MOVE_Y,
-    ROTATE_X,
-    ROTATE_Y
-}
-
-
 
 public class InputManager : Singleton<InputManager>
 {
@@ -46,7 +24,6 @@ public class InputManager : Singleton<InputManager>
         playerMapping = new Dictionary<char, PlayerID>();
         InitializeDirectionalMaps();
     }
-
 
     private void Update()
     {

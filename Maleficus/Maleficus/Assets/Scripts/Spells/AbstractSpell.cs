@@ -20,6 +20,8 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public Vector3 EndDestination => throw new System.NotImplementedException();
 
+    [SerializeField] private PlayerID playerID;
+
 
     // Start is called before the first frame update
     private void Start()

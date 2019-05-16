@@ -2,20 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MenuState
-{
-    NONE,
-    MAIN,
-    IN_GAME
-}
-
-public enum ButtonDirection
-{
-    LEFT,
-    RIGHT,
-    UP,
-    DOWN
-}
 
 public class UIManager : Singleton<UIManager>
 {

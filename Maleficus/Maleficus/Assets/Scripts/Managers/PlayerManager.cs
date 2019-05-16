@@ -3,18 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum PlayerID
-{
-    PLAYER_1,
-    PLAYER_2,
-    PLAYER_3,
-    PLAYER_4,
-    TEST
-}
-
 public class PlayerManager : Singleton<PlayerManager>
 {
-
 
     [SerializeField] private Player player_1;
     [SerializeField] private Player player_2;

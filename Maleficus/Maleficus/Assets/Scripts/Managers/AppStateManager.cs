@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum AppState
-{
-    IN_MENU,
-    CONNECTING_PLAYERS,
-    IN_GAME,
-    TEST
-}
 
 public class AppStateManager : Singleton<AppStateManager>
 {
