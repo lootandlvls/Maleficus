@@ -10,6 +10,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     public Rigidbody myRigidBody;
     public Vector3 dirVector;
 
+    // TODO: Define members and implement getter functions
     public PlayerID PlayerID => throw new System.NotImplementedException();
 
     public int HitPower => throw new System.NotImplementedException();
@@ -19,6 +20,10 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     public Vector3 Direction => throw new System.NotImplementedException();
 
     public Vector3 EndDestination => throw new System.NotImplementedException();
+
+    public string SpellName => throw new System.NotImplementedException();
+
+    public int SpellLevel => throw new System.NotImplementedException();
 
     [SerializeField] private PlayerID playerID;
 

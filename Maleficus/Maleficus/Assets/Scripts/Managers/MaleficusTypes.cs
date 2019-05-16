@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-// AppState
+#region AppState
 public enum AppState
 {
     IN_MENU,
@@ -11,20 +11,21 @@ public enum AppState
     IN_GAME,
     TEST
 }
+#endregion
 
-
-// Player
+#region Player
 public enum PlayerID
 {
+    NONE,
     PLAYER_1,
     PLAYER_2,
     PLAYER_3,
     PLAYER_4,
     TEST
 }
+#endregion 
 
-
-// Input
+#region Input
 public enum InputButton
 {
     CONFIRM,
@@ -46,8 +47,34 @@ public enum InputAxis
     ROTATE_Y
 }
 
+public class PlayerInput
+{
+    public float Move_X;
+    public float Move_Y;
+    public float Rotate_X;
+    public float Rotate_Y;
 
-// UI
+    public void Flush()
+    {
+        Move_X = 0.0f;
+        Move_Y = 0.0f;
+        Rotate_X = 0.0f;
+        Rotate_Y = 0.0f;
+    }
+
+    public bool HasMoved()
+    {
+        return ((Move_X != 0.0f) || (Move_Y != 0.0f));
+    }
+
+    public bool HasRotated()
+    {
+        return ((Rotate_X != 0.0f) || (Rotate_Y != 0.0f));
+    }
+}
+#endregion
+
+#region UI
 public enum MenuState
 {
     NONE,
@@ -62,11 +89,51 @@ public enum ButtonDirection
     UP,
     DOWN
 }
+#endregion
 
 
 
-
-public class MaleficusTypes 
+public static class MaleficusTypes 
 {
-  
+    public static int PlayerIDToInt(PlayerID playerID)
+    {
+        int id = 0;
+        switch (playerID)
+        {
+            case PlayerID.PLAYER_1:
+                id = 1;
+                break;
+            case PlayerID.PLAYER_2:
+                id = 2;
+                break;
+            case PlayerID.PLAYER_3:
+                id = 3;
+                break;
+            case PlayerID.PLAYER_4:
+                id = 4;
+                break;
+        }
+        return id;
+    }
+
+    public static PlayerID IntToPlayerID(int playerID)
+    {
+        PlayerID id = 0;
+        switch (playerID)
+        {
+            case 1:
+                id = PlayerID.PLAYER_1;
+                break;
+            case 2:
+                id = PlayerID.PLAYER_2;
+                break;
+            case 3:
+                id = PlayerID.PLAYER_3;
+                break;
+            case 4:
+                id = PlayerID.PLAYER_4;
+                break;
+        }
+        return id;
+    }
 }

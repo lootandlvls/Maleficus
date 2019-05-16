@@ -50,6 +50,8 @@ public class InputManager : Singleton<InputManager>
         // spell 3
         Check_Spell(3, 'A');
 
+        // TODO: Add missing buttons in Input settings
+
         // Spell 2                                                                                                                           // TODO: Add in input settings
         //CheckAndCallSpell(2, 'A');
         //CheckAndCallSpell(2, 'B');
