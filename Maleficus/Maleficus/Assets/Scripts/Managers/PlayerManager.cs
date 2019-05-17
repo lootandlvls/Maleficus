@@ -47,7 +47,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
+        if (players[hitInfo.HitPlayerID].PlayerID != hitInfo.HitPlayerID) { 
+        players[hitInfo.HitPlayerID].transform.Translate(hitInfo.HitVelocity * 500);
         Debug.Log("Spell " + hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
+    }
     }
 
 

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SpellManager : Singleton<SpellManager>
 {
+
+
    
 
     public void OnPlayerHitWithSpell(AbstractSpell castedSpell, int castingPlayerID, int hitPlayerID)

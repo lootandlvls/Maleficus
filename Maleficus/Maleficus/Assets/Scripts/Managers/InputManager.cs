@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class InputManager : Singleton<InputManager>
 {
     /// Threshold to know what joystick value can be considered as a directional button
-    private const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;
+    private const float DIRECTIONAL_BUTTON_THRESHOLD = 0.0f;
 
     [SerializeField] private bool isDebugMode = false;
 

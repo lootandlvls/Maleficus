@@ -121,6 +121,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c63d220e61ad9848973601ea6fb0d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1000
-  rb: {fileID: 0}
+  myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
+  playerID: 0
+  hitPower: 0
+  speed: 1000
+  direction: {x: 0, y: 0, z: 0}
+  endDestination: {x: 0, y: 0, z: 0}
+  spellName: 
+  spellLevel: 0

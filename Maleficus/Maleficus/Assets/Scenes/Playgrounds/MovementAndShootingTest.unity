@@ -333,6 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   angularSpeed: 6
+  movingDirection: {x: 0, y: 0, z: 0}
   spellSlot_1: {fileID: 9173134455503607522, guid: d842678e6d2694a42bca5dbb2ed81f87,
     type: 3}
   spellSlot_2: {fileID: 3254869090874594294, guid: 1b6e59fd2caf5ac4287d95aaaa211e8f,
@@ -347,7 +348,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274112483}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -464,9 +465,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   angularSpeed: 1
-  spellSlot_1: {fileID: 0}
-  spellSlot_2: {fileID: 0}
-  spellSlot_3: {fileID: 0}
+  movingDirection: {x: 0, y: 0, z: 0}
+  spellSlot_1: {fileID: 9173134455503607522, guid: d842678e6d2694a42bca5dbb2ed81f87,
+    type: 3}
+  spellSlot_2: {fileID: 3254869090874594294, guid: 1b6e59fd2caf5ac4287d95aaaa211e8f,
+    type: 3}
+  spellSlot_3: {fileID: 3445134957822666064, guid: e158010f8ec8fbf459e471407f9a7a1c,
+    type: 3}
 --- !u!136 &336220896
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -683,9 +688,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   angularSpeed: 1
-  spellSlot_1: {fileID: 0}
-  spellSlot_2: {fileID: 0}
-  spellSlot_3: {fileID: 0}
+  movingDirection: {x: 0, y: 0, z: 0}
+  spellSlot_1: {fileID: 9173134455503607522, guid: d842678e6d2694a42bca5dbb2ed81f87,
+    type: 3}
+  spellSlot_2: {fileID: 3254869090874594294, guid: 1b6e59fd2caf5ac4287d95aaaa211e8f,
+    type: 3}
+  spellSlot_3: {fileID: 3445134957822666064, guid: e158010f8ec8fbf459e471407f9a7a1c,
+    type: 3}
 --- !u!136 &656603443
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -816,7 +825,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900845422}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -1307,9 +1316,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 50
   angularSpeed: 1
-  spellSlot_1: {fileID: 0}
-  spellSlot_2: {fileID: 0}
-  spellSlot_3: {fileID: 0}
+  movingDirection: {x: 0, y: 0, z: 0}
+  spellSlot_1: {fileID: 9173134455503607522, guid: d842678e6d2694a42bca5dbb2ed81f87,
+    type: 3}
+  spellSlot_2: {fileID: 3254869090874594294, guid: 1b6e59fd2caf5ac4287d95aaaa211e8f,
+    type: 3}
+  spellSlot_3: {fileID: 3445134957822666064, guid: e158010f8ec8fbf459e471407f9a7a1c,
+    type: 3}
 --- !u!136 &2082910817
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestSpell : AbstractSpell
+public class TestSpell : AbstractSpell , ISpell
 {
+    
+  
 
+    
 
    
-  
+
+
+
 }

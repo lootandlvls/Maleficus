@@ -5,27 +5,35 @@ using UnityEngine;
 public abstract class AbstractSpell : MonoBehaviour, ISpell
 {
 
-    public float speed = 1000;
+   
     private Vector3 movingDirection;
     public Rigidbody myRigidBody;
     public Vector3 dirVector;
+   
+
 
     // TODO: Define members and implement getter functions
-    public PlayerID PlayerID => throw new System.NotImplementedException();
+    public PlayerID PlayerID  { get { return playerID; } }
 
-    public int HitPower => throw new System.NotImplementedException();
+    public int HitPower { get { return hitPower; }  }
 
-    public float Speed => throw new System.NotImplementedException();
+    public float Speed { get { return speed; } }
 
-    public Vector3 Direction => throw new System.NotImplementedException();
+    public Vector3 Direction { get { return direction; } }
 
-    public Vector3 EndDestination => throw new System.NotImplementedException();
+    public Vector3 EndDestination { get { return endDestination; } }
 
-    public string SpellName => throw new System.NotImplementedException();
+    public string SpellName { get { return spellName; } }
 
-    public int SpellLevel => throw new System.NotImplementedException();
+    public int SpellLevel { get { return spellLevel; }  }
 
     [SerializeField] private PlayerID playerID;
+    [SerializeField] private int hitPower;
+    [SerializeField] private float speed;
+    [SerializeField] private Vector3 direction;
+    [SerializeField] private Vector3 endDestination;
+    [SerializeField] private string spellName;
+    [SerializeField] private int spellLevel;
 
 
     // Start is called before the first frame update
@@ -41,8 +49,10 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     }
 
     //this function will be over written by the spells children classes
-    private void SpellAbility()
+    public void SpellAbility( )
     {
+        
+      
 
     }
     public void Move()
@@ -54,6 +64,16 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     }
 
 
+    public void SetPlayerID(PlayerID playerid)
+    {
+        this.playerID = playerid;
+    }
+
+    public void SetDirection(Vector3 direction)
+    {
+        this.direction = direction;
+
+    }
 
     private void OnTriggerEnter(Collider other)
     {
