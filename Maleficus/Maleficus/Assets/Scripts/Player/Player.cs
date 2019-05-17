@@ -62,12 +62,19 @@ public class Player : MonoBehaviour, IPlayer
     
     public void Rotate(float axis_X, float axis_Z)
     {
+        Debug.Log(axis_X + " : " + axis_Z);
           DebugManager.Instance.Log(4, " PLAYER ROTATE ");
         if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > ROTATION_THRESHOLD))
         {
-            Vector3 CurrentRotation = transform.rotation.eulerAngles;
-           Quaternion targetRotation = Quaternion.Euler(new Vector3(CurrentRotation.x, Mathf.Atan2(axis_X, -axis_Z) * Mathf.Rad2Deg, CurrentRotation.z));
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * angularSpeed);
+            Vector3 CurrentRotationVector = transform.rotation.eulerAngles;
+            Quaternion CurrentRotation = Quaternion.Euler(CurrentRotationVector);
+            Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, -axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
+           Quaternion targetRotation = Quaternion.Euler(targetRotationVector);
+             DebugManager.Instance.Log(3, "CurrrentRotation : " + CurrentRotation.y + " TargerRotation : " + targetRotation.y);
+
+          //  transform.rotation = targetRotation;
+          transform.rotation = Quaternion.Lerp(CurrentRotation, targetRotation, Time.deltaTime * angularSpeed);
+          
             
         }
     }
