@@ -41,7 +41,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void Update()
     {
-        MovePlayers();
+        MoveAndRotatePlayers();
     }
 
 
@@ -131,7 +131,7 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
-    private void MovePlayers()
+    private void MoveAndRotatePlayers()
     {
         for (int i = 1; i < 5; i++)
         {
@@ -146,7 +146,7 @@ public class PlayerManager : Singleton<PlayerManager>
                 }
                 if (playerInput.HasRotated())
                 {
-                    player.Move(playerInput.Rotate_X, playerInput.Rotate_Y);
+                    player.Rotate(playerInput.Rotate_X, playerInput.Rotate_Y);
                 }
 
                 playerInput.Flush();
