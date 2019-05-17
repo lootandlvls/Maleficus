@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface ISpell
 {
+    string SpellName { get; }
+    int SpellLevel { get; }
     PlayerID PlayerID { get; }
     int HitPower { get; }
     Vector3 Direction { get; }

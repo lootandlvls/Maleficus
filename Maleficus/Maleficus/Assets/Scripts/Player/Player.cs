@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, IPlayer
 
     private bool isConnected;
 
-    private PlayerID myPlayerID;
+    private PlayerID myPlayerID = PlayerID.NONE;
 
       Dictionary<int, AbstractSpell> spellsSlot;
 
@@ -38,6 +38,18 @@ public class Player : MonoBehaviour, IPlayer
     }
 
 
+    private void Update()
+    {
+        //float x = Input.GetAxis("Horizontal_L_A");
+        //float z = Input.GetAxis("Vertical_L_A");
+
+        //if (myPlayerID == PlayerID.PLAYER_1)
+        //    DebugManager.Instance.Log(5, "Player " + PlayerID + " | X : " + x + " | Z : " + z);
+
+        //Vector3 movingDirection = new Vector3(x, 0.0f, -z).normalized * Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
+        //transform.Translate(movingDirection * speed * Time.deltaTime);
+    }
+
     #region INPUT
     public void Connect(PlayerID playerID)
     {
@@ -49,17 +61,21 @@ public class Player : MonoBehaviour, IPlayer
     // TODO : finish implementing it when the inputs are working properly
     public void Move(float axis_X, float axis_Z)
     {
-        
+
         if (Mathf.Abs(axis_X) >= DIRECTIONAL_BUTTON_THRESHOLD || Mathf.Abs(axis_Z) >= DIRECTIONAL_BUTTON_THRESHOLD)
         {
-            Vector3 movingDirection = new Vector3(axis_X * speed * Time.deltaTime, 0, - axis_Z * speed * Time.deltaTime);
+            Vector3 movingDirection = new Vector3(axis_X * speed * Time.deltaTime, 0, -axis_Z * speed * Time.deltaTime);
             // Vector3 faceDirection = transform.TransformDirection(Vector3.forward);
             rigidBody.velocity = new Vector3(movingDirection.x, rigidBody.velocity.y, movingDirection.z);
-         //   DebugManager.Instance.Log(4, "MovingDirection.X: " + movingDirection.x + "/ MovingDirection.Y: " + movingDirection.y + " / MovingDirection.Z: " + movingDirection.z);
+            DebugManager.Instance.Log(4, "MovingDirection.X: " + movingDirection.x + "/ MovingDirection.Y: " + movingDirection.y + " / MovingDirection.Z: " + movingDirection.z);
         }
         // transform.Rotate(new Vector3(-1.0f * axis_Y, -1.0f * axis_X, 0.0f));
+
+
+        //Vector3 movingDirection = new Vector3(axis_X, 0.0f, -axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
+        //transform.Translate(movingDirection * speed * Time.deltaTime);
     }
-    
+
     public void Rotate(float axis_X, float axis_Z)
     {
         Debug.Log(axis_X + " : " + axis_Z);

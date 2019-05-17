@@ -50,6 +50,8 @@ public class InputManager : Singleton<InputManager>
         // spell 3
         Check_Spell(3, 'A');
 
+        // TODO: Add missing buttons in Input settings
+
         // Spell 2                                                                                                                           // TODO: Add in input settings
         //CheckAndCallSpell(2, 'A');
         //CheckAndCallSpell(2, 'B');
@@ -111,7 +113,6 @@ public class InputManager : Singleton<InputManager>
                     }
                 }
             }
- 
         }
     }
 
@@ -120,10 +121,10 @@ public class InputManager : Singleton<InputManager>
         if ((playerMapping.ContainsKey(controllerID) == true) || (isDebugMode == true))
         {
 
-
+                                                                                                                                    // TODO: implement
             PlayerID playerID = GetPlayerID(controllerID);
         }
-                                                                                                                                // TODO: implement
+                                                                                                                                
     }
     
 
@@ -162,10 +163,9 @@ public class InputManager : Singleton<InputManager>
         // Player already connected?
         if ((playerMapping.ContainsKey(controllerID) == true) || (isDebugMode == true))
         {
-            // Did player moved joystick
-
+            // Did player move joystick
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
-         //if   (axisValue != 0.0f)
+         //if   (axisValue != 0.0f)                                                                                 // TODO: set back if?
             if ( Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD)
             {
                 PlayerID playerID = GetPlayerID(controllerID);

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
+
 public class PlayerManager : Singleton<PlayerManager>
 {
 
@@ -12,6 +14,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private Player player_4;
 
     Dictionary<PlayerID, Player> players;
+    Dictionary<PlayerID, PlayerInput> playersInput;
 
 
     private void Start()
@@ -21,7 +24,13 @@ public class PlayerManager : Singleton<PlayerManager>
         players[PlayerID.PLAYER_2] = player_2;
         players[PlayerID.PLAYER_3] = player_3;
         players[PlayerID.PLAYER_4] = player_4;
-         
+
+        playersInput = new Dictionary<PlayerID, PlayerInput>();
+        playersInput[PlayerID.PLAYER_1] = new PlayerInput();
+        playersInput[PlayerID.PLAYER_2] = new PlayerInput();
+        playersInput[PlayerID.PLAYER_3] = new PlayerInput();
+        playersInput[PlayerID.PLAYER_4] = new PlayerInput();
+
         // Input events
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
@@ -29,17 +38,26 @@ public class PlayerManager : Singleton<PlayerManager>
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
     }
 
-    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+
+    private void Update()
     {
-        
+        MoveAndRotatePlayers();
     }
 
+
+    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+    {
+        Debug.Log("Spell " + hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
+    }
+
+
+    #region Input
     private void On_INPUT_ButtonPressed(InputButton inputButton, PlayerID playerID)
     {
         Debug.Log("Button " + inputButton + " pressed by " + playerID);
         if (playerID == PlayerID.TEST) return;
 
-        switch(inputButton)
+        switch (inputButton)
         {
             case InputButton.CAST_SPELL_1:
                 players[playerID].CastSpell_1();
@@ -59,21 +77,22 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         if (playerID == PlayerID.TEST) return;
         // TODO: i think this needs to be changed because the way it works now the player can only move in one direction at a time!!! he needs to be able to move in both axis at the same time  for fluent movement
-        switch(axisType)
+        switch (axisType)
         {
             case InputAxis.MOVE_X:
-                
-                players[playerID].Move(axisValue, 0.0f);
+                playersInput[playerID].Move_X = axisValue;
                 break;
 
             case InputAxis.MOVE_Y:
-                players[playerID].Move(0.0f, axisValue);
+                playersInput[playerID].Move_Y = axisValue;
                 break;
+
             case InputAxis.ROTATE_X:
-                players[playerID].Rotate(axisValue, 0.0f);
+                playersInput[playerID].Rotate_X = axisValue;
                 break;
+
             case InputAxis.ROTATE_Y:
-                players[playerID].Rotate(0.0f, axisValue);
+                playersInput[playerID].Rotate_Y = axisValue;
                 break;
         }
     }
@@ -112,25 +131,29 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
+    private void MoveAndRotatePlayers()
+    {
+        for (int i = 1; i < 5; i++)
+        {
+            PlayerID playerID = MaleficusTypes.IntToPlayerID(i);
+            if (players[playerID].IsConnected)
+            {
+                PlayerInput playerInput = playersInput[playerID];
+                Player player = players[playerID];
+                if (playerInput.HasMoved())
+                {
+                    player.Move(playerInput.Move_X, playerInput.Move_Y);
+                }
+                if (playerInput.HasRotated())
+                {
+                    player.Rotate(playerInput.Rotate_X, playerInput.Rotate_Y);
+                }
 
-    //public static int GetPlayerID(PlayerID playerID)
-    //{
-    //    int id = 0;
-    //    switch(playerID)
-    //    {
-    //        case PlayerID.PLAYER_1:
-    //            id = 1;
-    //            break;
-    //        case PlayerID.PLAYER_2:
-    //            id = 2;
-    //            break;
-    //        case PlayerID.PLAYER_3:
-    //            id = 3;
-    //            break;
-    //        case PlayerID.PLAYER_4:
-    //            id = 4;
-    //            break;
-    //    }
-    //    return id;
-    //}
+                playerInput.Flush();
+            }
+        }
+    }
+    #endregion
+
+
 }
