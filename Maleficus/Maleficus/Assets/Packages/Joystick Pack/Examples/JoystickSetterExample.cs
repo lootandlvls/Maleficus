@@ -15,13 +15,13 @@ public class JoystickSetterExample : MonoBehaviour
         switch(index)
         {
             case 0:
-                variableJoystick.SetMode(JoystickType.Fixed);
+                variableJoystick.SetMode(ESnappingMode.Fixed);
                 break;
             case 1:
-                variableJoystick.SetMode(JoystickType.Floating);
+                variableJoystick.SetMode(ESnappingMode.Floating);
                 break;
             case 2:
-                variableJoystick.SetMode(JoystickType.Dynamic);
+                variableJoystick.SetMode(ESnappingMode.Dynamic);
                 break;
             default:
                 break;
@@ -33,15 +33,15 @@ public class JoystickSetterExample : MonoBehaviour
         switch (index)
         {
             case 0:
-                variableJoystick.AxisOptions = AxisOptions.Both;
+                variableJoystick.AxisOptions = EJoystickAxisRestriction.BOTH;
                 background.sprite = axisSprites[index];
                 break;
             case 1:
-                variableJoystick.AxisOptions = AxisOptions.Horizontal;
+                variableJoystick.AxisOptions = EJoystickAxisRestriction.HORIZONTAL;
                 background.sprite = axisSprites[index];
                 break;
             case 2:
-                variableJoystick.AxisOptions = AxisOptions.Vertical;
+                variableJoystick.AxisOptions = EJoystickAxisRestriction.VERTICAL;
                 background.sprite = axisSprites[index];
                 break;
             default:

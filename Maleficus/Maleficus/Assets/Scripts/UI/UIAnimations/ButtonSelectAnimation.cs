@@ -12,7 +12,7 @@ public class ButtonSelectAnimation : AbstractMenuAnimation
         myMenuButton = GetComponent<MenuButton>();
     }
 
-    protected override void PlayAppropriateAnimation(MenuState newState)
+    protected override void PlayAppropriateAnimation(EMenuState newState)
     {
         if (newState == activeOnState)
         {

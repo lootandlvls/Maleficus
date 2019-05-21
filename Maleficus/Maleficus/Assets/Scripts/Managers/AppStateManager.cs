@@ -6,15 +6,15 @@ using System;
 
 public class AppStateManager : Singleton<AppStateManager>
 {
-    private AppState[] STATES_WITH_UI = new AppState[] { AppState.IN_MENU/*, AppState.CONNECTING_PLAYERS*/ };
+    private EAppState[] STATES_WITH_UI = new EAppState[] { EAppState.IN_MENU/*, AppState.CONNECTING_PLAYERS*/ };
 
-    public AppState CurrentAppState     { get { return currentAppState; } }
+    public EAppState CurrentAppState     { get { return currentAppState; } }
     public bool IsInAStateWithUI       { get { return isInAStateWithUI; } }
 
-    [SerializeField] private AppState debugStartState;
+    [SerializeField] private EAppState debugStartState;
     private bool isInAStateWithUI = false;
 
-    private AppState currentAppState;
+    private EAppState currentAppState;
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class AppStateManager : Singleton<AppStateManager>
     }
 
 
-    private void UpdateAppState(AppState newAppState)
+    private void UpdateAppState(EAppState newAppState)
     {
         currentAppState = newAppState;
 

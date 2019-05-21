@@ -13,23 +13,23 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private Player player_3;
     [SerializeField] private Player player_4;
 
-    Dictionary<PlayerID, Player> players;
-    Dictionary<PlayerID, PlayerInput> playersInput;
+    Dictionary<EPlayerID, Player> players;
+    Dictionary<EPlayerID, PlayerInput> playersInput;
 
 
     private void Start()
     {
-        players = new Dictionary<PlayerID, Player>();
-        players[PlayerID.PLAYER_1] = player_1;
-        players[PlayerID.PLAYER_2] = player_2;
-        players[PlayerID.PLAYER_3] = player_3;
-        players[PlayerID.PLAYER_4] = player_4;
+        players = new Dictionary<EPlayerID, Player>();
+        players[EPlayerID.PLAYER_1] = player_1;
+        players[EPlayerID.PLAYER_2] = player_2;
+        players[EPlayerID.PLAYER_3] = player_3;
+        players[EPlayerID.PLAYER_4] = player_4;
 
-        playersInput = new Dictionary<PlayerID, PlayerInput>();
-        playersInput[PlayerID.PLAYER_1] = new PlayerInput();
-        playersInput[PlayerID.PLAYER_2] = new PlayerInput();
-        playersInput[PlayerID.PLAYER_3] = new PlayerInput();
-        playersInput[PlayerID.PLAYER_4] = new PlayerInput();
+        playersInput = new Dictionary<EPlayerID, PlayerInput>();
+        playersInput[EPlayerID.PLAYER_1] = new PlayerInput();
+        playersInput[EPlayerID.PLAYER_2] = new PlayerInput();
+        playersInput[EPlayerID.PLAYER_3] = new PlayerInput();
+        playersInput[EPlayerID.PLAYER_4] = new PlayerInput();
 
         // Input events
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
@@ -55,46 +55,46 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
     #region Input
-    private void On_INPUT_ButtonPressed(InputButton inputButton, PlayerID playerID)
+    private void On_INPUT_ButtonPressed(EInputButton inputButton, EPlayerID playerID)
     {
         Debug.Log("Button " + inputButton + " pressed by " + playerID);
-        if (playerID == PlayerID.TEST) return;
+        if (playerID == EPlayerID.TEST) return;
 
         switch (inputButton)
         {
-            case InputButton.CAST_SPELL_1:
+            case EInputButton.CAST_SPELL_1:
                 players[playerID].CastSpell_1();
                 break;
 
-            case InputButton.CAST_SPELL_2:
+            case EInputButton.CAST_SPELL_2:
                 players[playerID].CastSpell_2();
                 break;
 
-            case InputButton.CAST_SPELL_3:
+            case EInputButton.CAST_SPELL_3:
                 players[playerID].CastSpell_3();
                 break;
         }
     }
 
-    private void On_INPUT_JoystickMoved(InputAxis axisType, float axisValue, PlayerID playerID)
+    private void On_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
     {
-        if (playerID == PlayerID.TEST) return;
+        if (playerID == EPlayerID.TEST) return;
         // TODO: i think this needs to be changed because the way it works now the player can only move in one direction at a time!!! he needs to be able to move in both axis at the same time  for fluent movement
         switch (axisType)
         {
-            case InputAxis.MOVE_X:
+            case EInputAxis.MOVE_X:
                 playersInput[playerID].Move_X = axisValue;
                 break;
 
-            case InputAxis.MOVE_Y:
+            case EInputAxis.MOVE_Y:
                 playersInput[playerID].Move_Y = axisValue;
                 break;
 
-            case InputAxis.ROTATE_X:
+            case EInputAxis.ROTATE_X:
                 playersInput[playerID].Rotate_X = axisValue;
                 break;
 
-            case InputAxis.ROTATE_Y:
+            case EInputAxis.ROTATE_Y:
                 playersInput[playerID].Rotate_Y = axisValue;
                 break;
         }
@@ -105,27 +105,27 @@ public class PlayerManager : Singleton<PlayerManager>
     /// Connect new player to a free spot
     /// </summary>
     /// <returns> The ID of the connected player </returns>
-    public PlayerID ConnectNextPlayerToController()
+    public EPlayerID ConnectNextPlayerToController()
     {
         if (player_1.IsConnected == false)
         {
-            player_1.Connect(PlayerID.PLAYER_1);
-            return PlayerID.PLAYER_1;
+            player_1.Connect(EPlayerID.PLAYER_1);
+            return EPlayerID.PLAYER_1;
         }
         else if (player_2.IsConnected == false)
         {
-            player_2.Connect(PlayerID.PLAYER_2);
-            return PlayerID.PLAYER_2;
+            player_2.Connect(EPlayerID.PLAYER_2);
+            return EPlayerID.PLAYER_2;
         }
         else if (player_3.IsConnected == false)
         {
-            player_3.Connect(PlayerID.PLAYER_3);
-            return PlayerID.PLAYER_3;
+            player_3.Connect(EPlayerID.PLAYER_3);
+            return EPlayerID.PLAYER_3;
         }
         else if (player_4.IsConnected == false)
         {
-            player_4.Connect(PlayerID.PLAYER_4);
-            return PlayerID.PLAYER_4;
+            player_4.Connect(EPlayerID.PLAYER_4);
+            return EPlayerID.PLAYER_4;
         }
         else
         {
@@ -138,7 +138,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         for (int i = 1; i < 5; i++)
         {
-            PlayerID playerID = MaleficusTypes.IntToPlayerID(i);
+            EPlayerID playerID = MaleficusTypes.IntToPlayerID(i);
             if (players[playerID].IsConnected)
             {
                 PlayerInput playerInput = playersInput[playerID];

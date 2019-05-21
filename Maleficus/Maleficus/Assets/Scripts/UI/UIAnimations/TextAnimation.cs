@@ -12,7 +12,7 @@ public class TextAnimation : AbstractMenuAnimation {
         text = GetComponent<Text>();
     }
 
-    protected override void PlayAppropriateAnimation(MenuState newState)
+    protected override void PlayAppropriateAnimation(EMenuState newState)
     {
         if (newState == activeOnState)
         {

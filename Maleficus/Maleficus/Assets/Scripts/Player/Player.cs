@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
 {
-    public PlayerID PlayerID { get { return myPlayerID; } }
+    public EPlayerID PlayerID { get { return myPlayerID; } }
     public bool IsConnected { get { return isConnected; } }
 
     private const float DIRECTIONAL_BUTTON_THRESHOLD = 0f;
@@ -18,8 +18,7 @@ public class Player : MonoBehaviour, IPlayer
     private Rigidbody myRigidBody;
 
     private bool isConnected;
-
-    private PlayerID myPlayerID = PlayerID.NONE;
+    private EPlayerID myPlayerID = EPlayerID.NONE;
 
       Dictionary<int, AbstractSpell> spellsSlot;
 
@@ -53,7 +52,7 @@ public class Player : MonoBehaviour, IPlayer
     }
 
     #region INPUT
-    public void Connect(PlayerID playerID)
+    public void Connect(EPlayerID playerID)
     {
         myPlayerID = playerID;
         isConnected = true;
@@ -74,14 +73,13 @@ public class Player : MonoBehaviour, IPlayer
         //// transform.Rotate(new Vector3(-1.0f * axis_Y, -1.0f * axis_X, 0.0f));
 
 
-         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
-        transform.Translate(movingDirection * speed * 0.1f * Time.deltaTime);
+        movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
+        transform.position += movingDirection * speed * 0.1f * Time.deltaTime;
     }
 
     public void Rotate(float axis_X, float axis_Z)
     {
-        Debug.Log(axis_X + " : " + axis_Z);
-          DebugManager.Instance.Log(4, " PLAYER ROTATE ");
+        DebugManager.Instance.Log(4, " PLAYER ROTATE ");
         if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > ROTATION_THRESHOLD))
         {
             Vector3 CurrentRotationVector = transform.rotation.eulerAngles;

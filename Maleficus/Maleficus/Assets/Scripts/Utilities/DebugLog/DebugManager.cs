@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class DebugManager : Singleton<DebugManager>
 {
     private Dictionary<int, DebugText> debugTexts;
+    private Dictionary<int, bool> reportedDebugTexts;
 
     private new void Awake()
     {
         base.Awake();
         debugTexts = new Dictionary<int, DebugText>();
+        reportedDebugTexts = new Dictionary<int, bool>();
     }
 
 
@@ -42,7 +46,11 @@ public class DebugManager : Singleton<DebugManager>
         }
         else
         {
-            Debug.LogWarning("Debug text with ID " + debugID + " not found in this scene!");
+            if (reportedDebugTexts.ContainsKey(debugID) == false)
+            {
+                reportedDebugTexts.Add(debugID, true);
+                Debug.LogWarning("Debug text with ID " + debugID + " not found in this scene!");
+            }
         }
     }
 }

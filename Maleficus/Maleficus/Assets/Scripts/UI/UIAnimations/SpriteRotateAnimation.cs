@@ -17,7 +17,7 @@ public class SpriteRotateAnimation : AbstractMenuAnimation
     }
 
 
-    protected override void PlayAppropriateAnimation(MenuState newState)
+    protected override void PlayAppropriateAnimation(EMenuState newState)
     {
         if (newState == activeOnState)
         {

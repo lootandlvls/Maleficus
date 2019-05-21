@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
-    public MenuState CurrentState { get { return currentState; } }
-    private MenuState currentState = MenuState.NONE;
-    private MenuState lastState = MenuState.NONE;
+    public EMenuState CurrentState { get { return currentState; } }
+    private EMenuState currentState = EMenuState.NONE;
+    private EMenuState lastState = EMenuState.NONE;
 
     private MenuButton selectedButton;                                                                         // TODO: Update selected button on menu change
 
@@ -18,7 +18,7 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(LateStartCoroutine());
     }
 
-    private void On_INPUT_ButtonPressed(InputButton buttonType, PlayerID playerID)
+    private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
         //Debug.Log("Button " + buttonType + " by " + playerID);
         if (AppStateManager.Instance.IsInAStateWithUI == true)         // test case
@@ -26,24 +26,24 @@ public class UIManager : Singleton<UIManager>
             MenuButton nextButton = null;
             switch (buttonType)
             {
-                case InputButton.CONFIRM:
+                case EInputButton.CONFIRM:
                     selectedButton.Press();
                     break;
 
-                case InputButton.LEFT:
-                    nextButton = selectedButton.GoToNextButton(ButtonDirection.LEFT);
+                case EInputButton.LEFT:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.LEFT);
                     break;
 
-                case InputButton.RIGHT:
-                    nextButton = selectedButton.GoToNextButton(ButtonDirection.RIGHT);
+                case EInputButton.RIGHT:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.RIGHT);
                     break;
 
-                case InputButton.UP:
-                    nextButton = selectedButton.GoToNextButton(ButtonDirection.UP);
+                case EInputButton.UP:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.UP);
                     break;
 
-                case InputButton.DOWN:
-                    nextButton = selectedButton.GoToNextButton(ButtonDirection.DOWN);
+                case EInputButton.DOWN:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.DOWN);
                     break;
             }
 
@@ -58,7 +58,7 @@ public class UIManager : Singleton<UIManager>
     private IEnumerator LateStartCoroutine()
     {
         yield return new WaitForEndOfFrame();
-        UpdateState(MenuState.MAIN);
+        UpdateState(EMenuState.MAIN);
     }
 
     private void Update()
@@ -66,7 +66,7 @@ public class UIManager : Singleton<UIManager>
         DebugManager.Instance.Log(1, "Menu State : " + currentState);
     }
 
-    public void UpdateState(MenuState newState)
+    public void UpdateState(EMenuState newState)
     {
         if (newState == currentState)
         {

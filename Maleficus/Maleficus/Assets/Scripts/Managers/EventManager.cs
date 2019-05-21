@@ -8,8 +8,8 @@ public class EventManager : Singleton<EventManager>
 
 
     #region GAME
-    public event Action<AppState> GAME_AppStateUpdated;
-    public void Invoke_GAME_AppStateUpdated(AppState newAppState)
+    public event Action<EAppState> GAME_AppStateUpdated;
+    public void Invoke_GAME_AppStateUpdated(EAppState newAppState)
     {
         if (GAME_AppStateUpdated != null)
         {
@@ -23,8 +23,8 @@ public class EventManager : Singleton<EventManager>
     #endregion
 
     #region SPELLS
-    public event Action<ISpell, PlayerID> SPELLS_SpellSpawned;
-    public void Invoke_SPELLS_SpellSpawned(ISpell castedSpell, PlayerID castingPlayerID)
+    public event Action<ISpell, EPlayerID> SPELLS_SpellSpawned;
+    public void Invoke_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayerID)
     {
 
         if (SPELLS_SpellSpawned != null)
@@ -48,8 +48,8 @@ public class EventManager : Singleton<EventManager>
 
 
     #region UI
-    public event Action<MenuState, MenuState> UI_MenuStateUpdated;
-    public void Invoke_UI_MenuStateUpdated(MenuState newState, MenuState lastState)
+    public event Action<EMenuState, EMenuState> UI_MenuStateUpdated;
+    public void Invoke_UI_MenuStateUpdated(EMenuState newState, EMenuState lastState)
     {
         if (UI_MenuStateUpdated != null)
         {
@@ -59,8 +59,8 @@ public class EventManager : Singleton<EventManager>
     #endregion
 
     #region INPUT
-    public event Action<InputButton, PlayerID> INPUT_ButtonPressed;
-    public void Invoke_INPUT_ButtonPressed(InputButton buttonType, PlayerID playerID)
+    public event Action<EInputButton, EPlayerID> INPUT_ButtonPressed;
+    public void Invoke_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
         if (INPUT_ButtonPressed != null)
         {
@@ -68,8 +68,8 @@ public class EventManager : Singleton<EventManager>
         }
     }
 
-    public event Action<InputAxis, float, PlayerID> INPUT_JoystickMoved;
-    public void Invoke_INPUT_JoystickMoved(InputAxis axisType, float axisValue, PlayerID playerID)
+    public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved;
+    public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
     {
         if (INPUT_JoystickMoved != null)
         {

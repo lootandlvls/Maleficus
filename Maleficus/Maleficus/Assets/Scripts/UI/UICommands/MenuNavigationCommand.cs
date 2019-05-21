@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MenuNavigationCommand : AbstractMenuCommand {
 
-    [SerializeField] private MenuState fromState;
-    [SerializeField] private MenuState toState;
+    [SerializeField] private EMenuState fromState;
+    [SerializeField] private EMenuState toState;
 
 
     public override void Execute()

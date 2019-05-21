@@ -32,12 +32,12 @@ public class MenuButton : MonoBehaviour
         myMenuCommand.Execute();
     }
 
-    public MenuButton GoToNextButton(ButtonDirection buttonDirection)
+    public MenuButton GoToNextButton(EButtonDirection buttonDirection)
     {
         MenuButton buttonToReturn = null;
         switch(buttonDirection)
         {
-            case ButtonDirection.LEFT:
+            case EButtonDirection.LEFT:
                 if (leftButton != null)
                 {
                     leftButton.Highlight();
@@ -45,7 +45,7 @@ public class MenuButton : MonoBehaviour
                 }
                 break;
 
-            case ButtonDirection.RIGHT:
+            case EButtonDirection.RIGHT:
                 if (rightButton != null)
                 {
                     rightButton.Highlight();
@@ -53,7 +53,7 @@ public class MenuButton : MonoBehaviour
                 }
                 break;
 
-            case ButtonDirection.UP:
+            case EButtonDirection.UP:
                 if (upperButton != null)
                 {
                     upperButton.Highlight();
@@ -61,7 +61,7 @@ public class MenuButton : MonoBehaviour
                 }
                 break;
 
-            case ButtonDirection.DOWN:
+            case EButtonDirection.DOWN:
                 if (buttomButton != null)
                 {
                     buttomButton.Highlight();

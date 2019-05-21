@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IPlayer
 {
-    PlayerID PlayerID { get; }
+    EPlayerID PlayerID { get; }
 }

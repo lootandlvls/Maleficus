@@ -13,7 +13,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
 
     // TODO: Define members and implement getter functions
-    public PlayerID PlayerID  { get { return playerID; } }
+    public EPlayerID PlayerID  { get { return playerID; } }
 
     public int HitPower { get { return hitPower; }  }
 
@@ -27,7 +27,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public int SpellLevel { get { return spellLevel; }  }
 
-    [SerializeField] private PlayerID playerID;
+    [SerializeField] private EPlayerID playerID;
     [SerializeField] private int hitPower;
     [SerializeField] private float speed;
     [SerializeField] private Vector3 direction;
@@ -64,7 +64,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     }
 
 
-    public void SetPlayerID(PlayerID playerid)
+    public void SetPlayerID(EPlayerID playerid)
     {
         this.playerID = playerid;
     }

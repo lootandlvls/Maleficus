@@ -6,18 +6,18 @@ using System;
 
 public abstract class AbstractMenuAnimation : MonoBehaviour {
 
-    [SerializeField] protected MenuState activeOnState;
+    [SerializeField] protected EMenuState activeOnState;
 
     private void Start()
     {
         EventManager.Instance.UI_MenuStateUpdated += OnMenuStateUpdated;
     }
 
-    protected virtual void OnMenuStateUpdated(MenuState newState, MenuState lastState)
+    protected virtual void OnMenuStateUpdated(EMenuState newState, EMenuState lastState)
     {
         PlayAppropriateAnimation(newState);
     }
 
-    protected abstract void PlayAppropriateAnimation(MenuState newState);
+    protected abstract void PlayAppropriateAnimation(EMenuState newState);
 
 }

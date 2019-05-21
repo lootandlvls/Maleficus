@@ -6,52 +6,57 @@ using UnityEngine.EventSystems;
 public class VariableJoystick : Joystick
 {
     public float MoveThreshold { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
+    public ETouchJoystickType TouchJoystickType { get { return touchJoystickType; } }
 
+    [SerializeField] private ETouchJoystickType touchJoystickType;
     [SerializeField] private float moveThreshold = 1;
-    [SerializeField] private JoystickType joystickType = JoystickType.Fixed;
+    [SerializeField] private ESnappingMode joystickType = ESnappingMode.Dynamic;
 
     private Vector2 fixedPosition = Vector2.zero;
-
-    public void SetMode(JoystickType joystickType)
-    {
-        this.joystickType = joystickType;
-        if(joystickType == JoystickType.Fixed)
-        {
-            background.anchoredPosition = fixedPosition;
-            background.gameObject.SetActive(true);
-        }
-        else
-            background.gameObject.SetActive(false);
-    }
 
     protected override void Start()
     {
         base.Start();
         fixedPosition = background.anchoredPosition;
         SetMode(joystickType);
+
+        if (InputManager.Instance.InputMode != EInputMode.TOUCH)
+        {
+            gameObject.SetActive(false);
+        }
     }
+
+    public void SetMode(ESnappingMode joystickType)
+    {
+        this.joystickType = joystickType;
+        if(joystickType == ESnappingMode.Fixed)
+        {
+            background.anchoredPosition = fixedPosition;
+            background.gameObject.SetActive(true);
+        }
+    }
+
+    
 
     public override void OnPointerDown(PointerEventData eventData)
     {
-        if(joystickType != JoystickType.Fixed)
+        if(joystickType != ESnappingMode.Fixed)
         {
             background.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
-            background.gameObject.SetActive(true);
         }
         base.OnPointerDown(eventData);
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        if(joystickType != JoystickType.Fixed)
-            background.gameObject.SetActive(false);
+        background.anchoredPosition = fixedPosition;
 
         base.OnPointerUp(eventData);
     }
 
     protected override void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
     {
-        if (joystickType == JoystickType.Dynamic && magnitude > moveThreshold)
+        if (joystickType == ESnappingMode.Dynamic && magnitude > moveThreshold)
         {
             Vector2 difference = normalised * (magnitude - moveThreshold) * radius;
             background.anchoredPosition += difference;
@@ -60,4 +65,4 @@ public class VariableJoystick : Joystick
     }
 }
 
-public enum JoystickType { Fixed, Floating, Dynamic }
+public enum ESnappingMode { Fixed, Floating, Dynamic }

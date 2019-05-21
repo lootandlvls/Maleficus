@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 #region AppState
-public enum AppState
+public enum EAppState
 {
     IN_MENU,
     CONNECTING_PLAYERS,
@@ -14,7 +14,7 @@ public enum AppState
 #endregion
 
 #region Player
-public enum PlayerID
+public enum EPlayerID
 {
     NONE,
     PLAYER_1,
@@ -26,7 +26,7 @@ public enum PlayerID
 
 public struct HitInfo
 {
-    public HitInfo(ISpell castedSpell, PlayerID castingPlayerID, PlayerID hitplayerID, Vector3 hitPosition)
+    public HitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;
@@ -35,21 +35,27 @@ public struct HitInfo
     }
 
     public ISpell CastedSpell { get { return castedSpell; } }
-    public PlayerID CastingPlayerID { get { return castingPlayerID; } }
-    public PlayerID HitPlayerID { get { return hitPlayerID; } }
+    public EPlayerID CastingPlayerID { get { return castingPlayerID; } }
+    public EPlayerID HitPlayerID { get { return hitPlayerID; } }
     public Vector3 HitPosition { get { return hitPosition; } }
     public Vector3 HitVelocity { get { return hitPosition + castedSpell.Direction * castedSpell.HitPower; } }
 
 
     private ISpell castedSpell;
-    private PlayerID castingPlayerID;
-    private PlayerID hitPlayerID;
+    private EPlayerID castingPlayerID;
+    private EPlayerID hitPlayerID;
     private Vector3 hitPosition;
 }
 #endregion 
 
 #region Input
-public enum InputButton
+public enum EInputMode
+{
+    CONTROLLER,
+    TOUCH,
+    TEST
+}
+public enum EInputButton
 {
     CONFIRM,
     CANCEL,
@@ -62,12 +68,35 @@ public enum InputButton
     RIGHT
 }
 
-public enum InputAxis
+public enum EInputAxis
 {
     MOVE_X,
     MOVE_Y,
     ROTATE_X,
     ROTATE_Y
+}
+
+public enum ETouchJoystickType
+{
+    MOVE,
+    SPELL_1,
+    SPELL_2,
+    SPELL_3
+}
+
+public enum EJoystickAxisRestriction
+{
+    BOTH,
+    HORIZONTAL,
+    VERTICAL
+}
+
+public enum EJoystickState
+{
+    NONE,
+    IDLE,
+    SELECTED_CAN_TRIGGER_BUTTON,
+    SELECTED_CANNOT_TRIGGER_BUTTON
 }
 
 public class PlayerInput
@@ -98,14 +127,14 @@ public class PlayerInput
 #endregion
 
 #region UI
-public enum MenuState
+public enum EMenuState
 {
     NONE,
     MAIN,
     IN_GAME
 }
 
-public enum ButtonDirection
+public enum EButtonDirection
 {
     LEFT,
     RIGHT,
@@ -118,43 +147,43 @@ public enum ButtonDirection
 
 public static class MaleficusTypes 
 {
-    public static int PlayerIDToInt(PlayerID playerID)
+    public static int PlayerIDToInt(EPlayerID playerID)
     {
         int id = 0;
         switch (playerID)
         {
-            case PlayerID.PLAYER_1:
+            case EPlayerID.PLAYER_1:
                 id = 1;
                 break;
-            case PlayerID.PLAYER_2:
+            case EPlayerID.PLAYER_2:
                 id = 2;
                 break;
-            case PlayerID.PLAYER_3:
+            case EPlayerID.PLAYER_3:
                 id = 3;
                 break;
-            case PlayerID.PLAYER_4:
+            case EPlayerID.PLAYER_4:
                 id = 4;
                 break;
         }
         return id;
     }
 
-    public static PlayerID IntToPlayerID(int playerID)
+    public static EPlayerID IntToPlayerID(int playerID)
     {
-        PlayerID id = 0;
+        EPlayerID id = 0;
         switch (playerID)
         {
             case 1:
-                id = PlayerID.PLAYER_1;
+                id = EPlayerID.PLAYER_1;
                 break;
             case 2:
-                id = PlayerID.PLAYER_2;
+                id = EPlayerID.PLAYER_2;
                 break;
             case 3:
-                id = PlayerID.PLAYER_3;
+                id = EPlayerID.PLAYER_3;
                 break;
             case 4:
-                id = PlayerID.PLAYER_4;
+                id = EPlayerID.PLAYER_4;
                 break;
         }
         return id;
