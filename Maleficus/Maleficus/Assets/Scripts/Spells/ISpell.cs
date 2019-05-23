@@ -6,7 +6,7 @@ public interface ISpell
 {
     string SpellName { get; }
     int SpellLevel { get; }
-    EPlayerID PlayerID { get;  }
+    EPlayerID CastingPlayerID { get;  }
     int HitPower { get;  }
     Vector3 Direction { get; }
     Vector3 EndDestination { get;  }

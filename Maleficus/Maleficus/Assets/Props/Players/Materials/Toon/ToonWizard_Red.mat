@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Material
+  m_Name: ToonWizard_Red
   m_Shader: {fileID: 4800000, guid: b0f9b4efb9e73a5469c229a687bc892c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4

@@ -18,6 +18,12 @@ public class UIManager : Singleton<UIManager>
         StartCoroutine(LateStartCoroutine());
     }
 
+    private IEnumerator LateStartCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+        UpdateState(EMenuState.MAIN);
+    }
+
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
         //Debug.Log("Button " + buttonType + " by " + playerID);
@@ -55,11 +61,7 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private IEnumerator LateStartCoroutine()
-    {
-        yield return new WaitForEndOfFrame();
-        UpdateState(EMenuState.MAIN);
-    }
+    
 
     private void Update()
     {

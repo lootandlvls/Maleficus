@@ -4,34 +4,29 @@ using UnityEngine;
 
 public abstract class AbstractSpell : MonoBehaviour, ISpell
 {
-
-   
     private Vector3 movingDirection;
     public Rigidbody myRigidBody;
     public Vector3 dirVector;
    
-
-
-    // TODO: Define members and implement getter functions
-    public EPlayerID PlayerID  { get { return playerID; } }
+    public EPlayerID CastingPlayerID  { get; set; }
 
     public int HitPower { get { return hitPower; }  }
 
     public float Speed { get { return speed; } }
 
-    public Vector3 Direction { get { return direction; } }
+    public Vector3 Direction { get; set; }
 
-    public Vector3 EndDestination { get { return endDestination; } }
+    public Vector3 EndDestination { get; set; }
 
     public string SpellName { get { return spellName; } }
 
     public int SpellLevel { get { return spellLevel; }  }
 
-    [SerializeField] private EPlayerID playerID;
+
+    private EPlayerID castingPlayerID;
+
     [SerializeField] private int hitPower;
     [SerializeField] private float speed;
-    [SerializeField] private Vector3 direction;
-    [SerializeField] private Vector3 endDestination;
     [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
 
@@ -64,23 +59,16 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     }
 
 
-    public void SetPlayerID(EPlayerID playerid)
-    {
-        this.playerID = playerid;
-    }
 
-    public void SetDirection(Vector3 direction)
-    {
-        this.direction = direction;
 
-    }
+
 
     private void OnTriggerEnter(Collider other)
     {
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
-        if (otherPlayer != null)
+        if ((otherPlayer != null) && (otherPlayer.PlayerID != CastingPlayerID))
         {
-            HitInfo hitInfo = new HitInfo(this, PlayerID, otherPlayer.PlayerID, transform.position);
+            HitInfo hitInfo = new HitInfo(this, CastingPlayerID, otherPlayer.PlayerID, transform.position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
     }

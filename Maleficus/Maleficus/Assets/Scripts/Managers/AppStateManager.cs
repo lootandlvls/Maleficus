@@ -15,6 +15,7 @@ public class AppStateManager : Singleton<AppStateManager>
     private bool isInAStateWithUI = false;
 
     private EAppState currentAppState;
+    private EAppState lastState;
 
     private void Start()
     {
@@ -24,6 +25,7 @@ public class AppStateManager : Singleton<AppStateManager>
 
     private void UpdateAppState(EAppState newAppState)
     {
+        lastState = currentAppState;
         currentAppState = newAppState;
 
         if (newAppState.ContainedIn(STATES_WITH_UI))
@@ -37,7 +39,7 @@ public class AppStateManager : Singleton<AppStateManager>
             isInAStateWithUI = false;
         }
 
-        EventManager.Instance.Invoke_GAME_AppStateUpdated(newAppState);
+        EventManager.Instance.Invoke_GAME_AppStateUpdated(newAppState, lastState);
 
 
     

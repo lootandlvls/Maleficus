@@ -3,6 +3,83 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public static class MaleficusTypes 
+{
+    // Player characters paths
+    public const string PATH_PLAYER_RED             = "Wizard_Red";
+    public const string PATH_PLAYER_BLUE            = "Wizard_Blue";
+    public const string PATH_PLAYER_GREEN           = "Wizard_Green";
+    public const string PATH_PLAYER_YELLOW          = "Wizard_Yellow";
+    public const string PATH_PLAYER_SPAWN_POSITION  = "PlayerSpawnPosition";
+
+    // Spells path
+    public const string PATH_SPELL_FIRE             = "Spell_Fire";         // TODO: Define rest
+
+
+
+
+    /// Threshold to know what joystick value can be considered as a directional button 
+    public const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;
+    /// Threshold to know when a touch joystick can perform a spell button
+    public const float SPELL_BUTTON_THRESHOLD = 0.3f;
+
+    public const float ROTATION_THRESHOLD = 0.0f;
+
+
+    /// Convert a PlayerID enum to an int
+    public static int PlayerIDToInt(EPlayerID playerID)
+    {
+        int id = 0;
+        switch (playerID)
+        {
+            case EPlayerID.PLAYER_1:
+                id = 1;
+                break;
+            case EPlayerID.PLAYER_2:
+                id = 2;
+                break;
+            case EPlayerID.PLAYER_3:
+                id = 3;
+                break;
+            case EPlayerID.PLAYER_4:
+                id = 4;
+                break;
+        }
+        return id;
+    }
+
+    /// Convert an int to a PlayerID enum 
+    public static EPlayerID IntToPlayerID(int playerID)
+    {
+        EPlayerID id = 0;
+        switch (playerID)
+        {
+            case 1:
+                id = EPlayerID.PLAYER_1;
+                break;
+            case 2:
+                id = EPlayerID.PLAYER_2;
+                break;
+            case 3:
+                id = EPlayerID.PLAYER_3;
+                break;
+            case 4:
+                id = EPlayerID.PLAYER_4;
+                break;
+        }
+        return id;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 #region AppState
 public enum EAppState
 {
@@ -142,50 +219,3 @@ public enum EButtonDirection
     DOWN
 }
 #endregion
-
-
-
-public static class MaleficusTypes 
-{
-    public static int PlayerIDToInt(EPlayerID playerID)
-    {
-        int id = 0;
-        switch (playerID)
-        {
-            case EPlayerID.PLAYER_1:
-                id = 1;
-                break;
-            case EPlayerID.PLAYER_2:
-                id = 2;
-                break;
-            case EPlayerID.PLAYER_3:
-                id = 3;
-                break;
-            case EPlayerID.PLAYER_4:
-                id = 4;
-                break;
-        }
-        return id;
-    }
-
-    public static EPlayerID IntToPlayerID(int playerID)
-    {
-        EPlayerID id = 0;
-        switch (playerID)
-        {
-            case 1:
-                id = EPlayerID.PLAYER_1;
-                break;
-            case 2:
-                id = EPlayerID.PLAYER_2;
-                break;
-            case 3:
-                id = EPlayerID.PLAYER_3;
-                break;
-            case 4:
-                id = EPlayerID.PLAYER_4;
-                break;
-        }
-        return id;
-    }
-}

@@ -6,17 +6,16 @@ using UnityEngine.UI;
 
 public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    private const float BUTTON_TRIGGER_THRESHOLD = 0.3f;
 
-    public float Horizontal { get { return (snapX) ? SnapFloat(input.x, EJoystickAxisRestriction.HORIZONTAL) : input.x; } }
-    public float Vertical { get { return (snapY) ? SnapFloat(input.y, EJoystickAxisRestriction.VERTICAL) : input.y; } }
-    public Vector2 Direction { get { return new Vector2(Horizontal, Vertical); } }
-    public float HandleRange { get { return handleRange; } set { handleRange = Mathf.Abs(value); } }
-    public float DeadZone { get { return deadZone; } set { deadZone = Mathf.Abs(value); } }
+    public float Horizontal                     { get { return (snapX) ? SnapFloat(input.x, EJoystickAxisRestriction.HORIZONTAL) : input.x; } }
+    public float Vertical                       { get { return (snapY) ? SnapFloat(input.y, EJoystickAxisRestriction.VERTICAL) : input.y; } }
+    public Vector2 Direction                    { get { return new Vector2(Horizontal, Vertical); } }
+    public float HandleRange                    { get { return handleRange; } set { handleRange = Mathf.Abs(value); } }
+    public float DeadZone                       { get { return deadZone; } set { deadZone = Mathf.Abs(value); } }
     public EJoystickAxisRestriction AxisOptions { get { return AxisOptions; } set { axisRestriction = value; } }
-    public bool SnapX { get { return snapX; } set { snapX = value; } }
-    public bool SnapY { get { return snapY; } set { snapY = value; } }
-    public float MoveThreshold { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
+    public bool SnapX                           { get { return snapX; } set { snapX = value; } }
+    public bool SnapY                           { get { return snapY; } set { snapY = value; } }
+    public float MoveThreshold                  { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
 
 
     [SerializeField] private ETouchJoystickType joystickType;
@@ -101,7 +100,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         OnDrag(eventData);
 
         // Update Joystick appearance 
-        if (input.magnitude > BUTTON_TRIGGER_THRESHOLD)
+        if (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD)
         {
             UpdateState(EJoystickState.SELECTED_CAN_TRIGGER_BUTTON);
         }
@@ -128,7 +127,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         handle.anchoredPosition = input * radius * handleRange;
        
         // Update Joystick appearance 
-        if (input.magnitude > BUTTON_TRIGGER_THRESHOLD)
+        if (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD)
         {
             UpdateState(EJoystickState.SELECTED_CAN_TRIGGER_BUTTON);
         }
@@ -142,7 +141,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     {
         background.anchoredPosition = fixedPosition;
 
-        if ((joystickType != ETouchJoystickType.MOVE) && (input.magnitude > BUTTON_TRIGGER_THRESHOLD))
+        if ((joystickType != ETouchJoystickType.MOVE) && (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD))
         {
             InputManager.Instance.OnJoystickReleased(joystickType);
         }

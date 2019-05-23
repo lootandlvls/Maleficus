@@ -5,29 +5,30 @@ using UnityEngine;
 public class Player : MonoBehaviour, IPlayer
 {
     public EPlayerID PlayerID { get { return myPlayerID; } }
-    public bool IsConnected { get { return isConnected; } }
 
-    private const float DIRECTIONAL_BUTTON_THRESHOLD = 0f;
-    private const float ROTATION_THRESHOLD = 0f;
 
     [SerializeField] float speed ;
     [SerializeField] float angularSpeed;
-    [SerializeField] Vector3 movingDirection;
-
-
-    private Rigidbody myRigidBody;
-
-    private bool isConnected;
-    private EPlayerID myPlayerID = EPlayerID.NONE;
-
-      Dictionary<int, AbstractSpell> spellsSlot;
 
     [SerializeField] private AbstractSpell spellSlot_1;
     [SerializeField] private AbstractSpell spellSlot_2;
     [SerializeField] private AbstractSpell spellSlot_3;
 
+    private Vector3 movingDirection;
+    private Rigidbody myRigidBody;
+    private DirectionalSprite myDirectionalSprite;
+
+    private EPlayerID myPlayerID = EPlayerID.NONE;
+
+    private Dictionary<int, AbstractSpell> spellsSlot;
 
 
+
+
+    private void Awake()
+    {
+        myDirectionalSprite = GetComponentInChildren<DirectionalSprite>();
+    }
 
     private void Start()
     {
@@ -52,14 +53,8 @@ public class Player : MonoBehaviour, IPlayer
     }
 
     #region INPUT
-    public void Connect(EPlayerID playerID)
-    {
-        myPlayerID = playerID;
-        isConnected = true;
-        GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
-        
-    }
-    // TODO : finish implementing it when the inputs are working properly
+
+                                                                                                                // TODO : finish implementing it (input working now)
     public void Move(float axis_X, float axis_Z)
     {
 
@@ -80,7 +75,7 @@ public class Player : MonoBehaviour, IPlayer
     public void Rotate(float axis_X, float axis_Z)
     {
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
-        if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > ROTATION_THRESHOLD))
+        if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusTypes.ROTATION_THRESHOLD))
         {
             Vector3 CurrentRotationVector = transform.rotation.eulerAngles;
             Quaternion CurrentRotation = Quaternion.Euler(CurrentRotationVector);
@@ -90,40 +85,47 @@ public class Player : MonoBehaviour, IPlayer
 
           //  transform.rotation = targetRotation;
           transform.rotation = Quaternion.Lerp(CurrentRotation, targetRotation, Time.deltaTime * angularSpeed);
-          
-            
+
+            // Update sprite
+            if ((Mathf.Abs(axis_X) > MaleficusTypes.SPELL_BUTTON_THRESHOLD) || (Mathf.Abs(axis_Z) > MaleficusTypes.SPELL_BUTTON_THRESHOLD))
+            {
+                myDirectionalSprite.ShowSprite();
+            }
+            else
+            {
+                myDirectionalSprite.HideSprite();
+            }
         }
     }
 
     public void CastSpell_1()
     {
-        
-       // StartCoroutine(SpellTestCoroutine());
-      AbstractSpell spell = Instantiate(spellsSlot[1],transform.position, transform.rotation);
-        spell.SetPlayerID(myPlayerID);
-        spell.SetDirection(movingDirection);
-       
-
-
+        CastSpell(spellsSlot[1]);
     }
 
     public void CastSpell_2()
     {
-
-        AbstractSpell spell = Instantiate(spellsSlot[2], transform.position, transform.rotation);
-        spell.SetPlayerID(myPlayerID);
-
+        CastSpell(spellsSlot[2]);
     }
 
     public void CastSpell_3()
     {
-        AbstractSpell spell = Instantiate(spellsSlot[3], transform.position, transform.rotation);
-        spell.SetPlayerID(myPlayerID);
+        CastSpell(spellsSlot[3]);
+    }
 
+    private void CastSpell(AbstractSpell spellToCast)
+    {
+        AbstractSpell spell = Instantiate(spellToCast, transform.position, transform.rotation);
+        spell.CastingPlayerID = myPlayerID;
+        spell.Direction = movingDirection;
+
+                                                                        // TODO: Not working here
+        // Deactivate Directional Sprite
+        myDirectionalSprite.HideSprite();
     }
 
 
-    //set the spells chosen  by the player
+    /// Set the spells chosen  by the player
     public void SetSpells(AbstractSpell spell_1, AbstractSpell spell_2, AbstractSpell spell_3)
     {
         spellSlot_1 = spell_1;

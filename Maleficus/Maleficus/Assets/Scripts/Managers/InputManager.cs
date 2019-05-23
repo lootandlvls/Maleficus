@@ -8,15 +8,11 @@ public class InputManager : Singleton<InputManager>
 {
     public EInputMode InputMode { get { return inputMode; } }
 
-    /// Threshold to know what joystick value can be considered as a directional button
-    private const float DIRECTIONAL_BUTTON_THRESHOLD = 0.0f;
-
     [SerializeField] private EInputMode inputMode;
-    private EPlayerID touchPlayerID;
 
+    private EPlayerID touchPlayerID;
     /// mapping from controllerID to playerID
     private Dictionary<char, EPlayerID> playerControllerMapping;
-
     /// mapping to know if a specific player can perform a directional button when using the joystick 
     private Dictionary<EPlayerID, bool> canPerformHorizontalDirectionalButton;
     private Dictionary<EPlayerID, bool> canPerformVerticalDirectionalButton;
@@ -45,11 +41,12 @@ public class InputManager : Singleton<InputManager>
         Check_Confirm('C');
         Check_Confirm('D');
 
+                                                        // TODO: Add missing Cancel buttons in Input Setting
         // Cancel
-        Check_Cancel('A');
-        Check_Cancel('B');
-        Check_Cancel('C');
-        Check_Cancel('D');
+        //Check_Cancel('A');
+        //Check_Cancel('B');
+        //Check_Cancel('C');
+        //Check_Cancel('D');
 
 
         // Spell 1
@@ -62,9 +59,9 @@ public class InputManager : Singleton<InputManager>
         // spell 3
         Check_Spell(3, 'A');
 
-        // TODO: Add missing buttons in Input settings
+                                                            // TODO: Add missing Spell buttons in Input settings
 
-        // Spell 2                                                                                                                           // TODO: Add in input settings
+        // Spell 2                                                                                                                   
         //CheckAndCallSpell(2, 'A');
         //CheckAndCallSpell(2, 'B');
         //CheckAndCallSpell(2, 'C');
@@ -166,13 +163,23 @@ public class InputManager : Singleton<InputManager>
 
     private void Check_Cancel(char controllerID)
     {
-        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
+                                                                                                        // TODO: Test with controller if it works
+        if (Input.GetButtonDown("Cancel_" + controllerID))
         {
-
-                                                                                                                                    // TODO: implement
-            EPlayerID playerID = GetPlayerID(controllerID);
-        }
-                                                                                                                                
+            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
+            {
+                EPlayerID playerID = GetPlayerID(controllerID);
+                if (AppStateManager.Instance.CurrentAppState == EAppState.CONNECTING_PLAYERS)
+                {
+                    PlayerManager.Instance.DisconnectPlayer(playerID);
+                    playerControllerMapping.Remove(controllerID);
+                }
+                else // not in connecting state
+                {
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CANCEL, playerID);
+                }
+            }
+        }                                                                                                                    
     }
     
 
@@ -187,19 +194,15 @@ public class InputManager : Singleton<InputManager>
                 EPlayerID playerID = GetPlayerID(controllerID);
                 if (spellID == 1)
                 {
-                    
                     EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, playerID);
                 }
                 else if (spellID == 2)
                 {
-                   
                     EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_2, playerID);
                 }
                 else if (spellID == 3)
                 {
-                  
                     EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_3, playerID);
-                    
                 }
             }
         }
@@ -213,8 +216,7 @@ public class InputManager : Singleton<InputManager>
         {
             // Did player move joystick
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
-         //if   (axisValue != 0.0f)                                                                                 // TODO: set back if?
-            if ( Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD)
+            if   (axisValue != 0.0f)
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
 
@@ -245,17 +247,15 @@ public class InputManager : Singleton<InputManager>
                 }
 
                 // Axis event
-               
-                
                 EventManager.Instance.Invoke_INPUT_JoystickMoved(inputAxis, axisValue, playerID);
-                
+
 
                 // Directional button event                                                                                              
                 if (axisSide == 'L')
                 {
                     if (axisName == "Horizontal")
                     {
-                        if ((Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == true))
+                        if ((Mathf.Abs(axisValue) > MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == true))
                         {
                             canPerformHorizontalDirectionalButton[playerID] = false;
                             // Which direction?
@@ -268,14 +268,14 @@ public class InputManager : Singleton<InputManager>
                                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.LEFT, playerID);
                             }
                         }
-                        else if ((Mathf.Abs(axisValue) < DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
+                        else if ((Mathf.Abs(axisValue) < MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
                         {
                             canPerformHorizontalDirectionalButton[playerID] = true;
                         }
                     }
                     else if (axisName == "Vertical")
                     {
-                        if ((Mathf.Abs(axisValue) > DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == true))
+                        if ((Mathf.Abs(axisValue) > MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == true))
                         {
                             canPerformVerticalDirectionalButton[playerID] = false;
                             // Which direction?
@@ -288,18 +288,16 @@ public class InputManager : Singleton<InputManager>
                                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.UP, playerID);
                             }
                         }
-                        else if ((Mathf.Abs(axisValue) < DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
+                        else if ((Mathf.Abs(axisValue) < MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
                         {
                             canPerformVerticalDirectionalButton[playerID] = true;
                         }
                     }
                 }
-                    
-
-                // Debug
-                DebugManager.Instance.Log(2, "joystick " + axisName + " " + axisSide + " by " + controllerID + " : " + axisValue);
-                
             }
+
+            // Debug
+            DebugManager.Instance.Log(2, "joystick " + axisName + " " + axisSide + " by " + controllerID + " : " + axisValue);
         }
     }
    
