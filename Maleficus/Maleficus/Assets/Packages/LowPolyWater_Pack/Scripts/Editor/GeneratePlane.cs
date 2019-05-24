@@ -26,7 +26,6 @@ namespace LowPolyWater
         static void CreateWizard()
         {
             cam = Camera.current;
-            // Hack because camera.current doesn't return editor camera if scene view doesn't have focus
             if (!cam)
             {
                 cam = lastUsedCam;

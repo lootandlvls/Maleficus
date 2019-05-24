@@ -250,7 +250,6 @@ public class PsController: MonoBehaviour
                     this.gameObject.SetActive(false);
                 }
                 initPlayer();
-                //TODO : ADD THE RESPAWN TIME AND SPAWN  TEMPORERY INVINCIBILITY
                 deathAnimation();
                 if (deathAnimationFinished)
                 {

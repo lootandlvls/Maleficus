@@ -22,9 +22,6 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public int SpellLevel { get { return spellLevel; }  }
 
-
-    private EPlayerID castingPlayerID;
-
     [SerializeField] private int hitPower;
     [SerializeField] private float speed;
     [SerializeField] private string spellName;
@@ -66,7 +63,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     private void OnTriggerEnter(Collider other)
     {
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
-        if ((otherPlayer != null) && (otherPlayer.PlayerID != CastingPlayerID))
+        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID)) 
         {
             HitInfo hitInfo = new HitInfo(this, CastingPlayerID, otherPlayer.PlayerID, transform.position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);

@@ -140,6 +140,7 @@ public class InputManager : Singleton<InputManager>
     {
         if (Input.GetButtonDown("Confirm_" + controllerID))
         {
+            Debug.Log("Confrim " + controllerID);
             // Player already connected?
             if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
             {

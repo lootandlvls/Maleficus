@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [Header("Spawn character when the player connects with a controller")]
     [SerializeField] private bool isSpawnPlayerOnConnect_DebugMode = false;
     [SerializeField] private bool isSpawnAllPlayers_DebugMode = false;
 
@@ -80,6 +81,8 @@ public class PlayerManager : Singleton<PlayerManager>
                 Quaternion playerRotation = playersSpawnPositions[toSpawnPlayerID].Rotation;
 
                 Player spawnedPlayer = Instantiate(playerPrefab, playerPosition, playerRotation);
+                spawnedPlayer.PlayerID = toSpawnPlayerID;
+
                 activePlayers.Add(toSpawnPlayerID, spawnedPlayer);
 
                 EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(toSpawnPlayerID);
@@ -191,7 +194,7 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             EventManager.Instance.Invoke_PLAYERS_PlayerDisconnected(playerID);
             connectedPlayers[playerID] = false;
-                                                                // TODO: Destroy active player??
+                                                                // TODO: Destroy only in connection menu
         }
         else
         {
@@ -273,12 +276,12 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
-    private bool IsPlayerConnected(EPlayerID playerID)
+    public bool IsPlayerConnected(EPlayerID playerID)
     {
         return connectedPlayers[playerID];
     }
 
-    private bool IsPlayerActive(EPlayerID playerID)
+    public bool IsPlayerActive(EPlayerID playerID)
     {
         return activePlayers.ContainsKey(playerID);
     }

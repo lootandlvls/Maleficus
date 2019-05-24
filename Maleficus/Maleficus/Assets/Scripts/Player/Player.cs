@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer
 {
-    public EPlayerID PlayerID { get { return myPlayerID; } }
+    public EPlayerID PlayerID { get; set; }
 
 
     [SerializeField] float speed ;
@@ -17,8 +17,6 @@ public class Player : MonoBehaviour, IPlayer
     private Vector3 movingDirection;
     private Rigidbody myRigidBody;
     private DirectionalSprite myDirectionalSprite;
-
-    private EPlayerID myPlayerID = EPlayerID.NONE;
 
     private Dictionary<int, AbstractSpell> spellsSlot;
 
@@ -37,20 +35,10 @@ public class Player : MonoBehaviour, IPlayer
         spellsSlot[2] = spellSlot_2;
         spellsSlot[3] = spellSlot_3;
         myRigidBody = this.GetComponent<Rigidbody>();
+
     }
 
 
-    private void Update()
-    {
-        //float x = Input.GetAxis("Horizontal_L_A");
-        //float z = Input.GetAxis("Vertical_L_A");
-
-        //if (myPlayerID == PlayerID.PLAYER_1)
-        //    DebugManager.Instance.Log(5, "Player " + PlayerID + " | X : " + x + " | Z : " + z);
-
-        //Vector3 movingDirection = new Vector3(x, 0.0f, -z).normalized * Mathf.Max(Mathf.Abs(x), Mathf.Abs(z));
-        //transform.Translate(movingDirection * speed * Time.deltaTime);
-    }
 
     #region INPUT
 
@@ -80,11 +68,11 @@ public class Player : MonoBehaviour, IPlayer
             Vector3 CurrentRotationVector = transform.rotation.eulerAngles;
             Quaternion CurrentRotation = Quaternion.Euler(CurrentRotationVector);
             Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, -axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
-           Quaternion targetRotation = Quaternion.Euler(targetRotationVector);
-             DebugManager.Instance.Log(3, "CurrrentRotation : " + CurrentRotation.y + " TargerRotation : " + targetRotation.y);
+            Quaternion targetRotation = Quaternion.Euler(targetRotationVector);
+            DebugManager.Instance.Log(3, "CurrrentRotation : " + CurrentRotation.y + " TargerRotation : " + targetRotation.y);
 
-          //  transform.rotation = targetRotation;
-          transform.rotation = Quaternion.Lerp(CurrentRotation, targetRotation, Time.deltaTime * angularSpeed);
+            //  transform.rotation = targetRotation;
+            transform.rotation = Quaternion.Lerp(CurrentRotation, targetRotation, Time.deltaTime * angularSpeed);
 
             // Update sprite
             if ((Mathf.Abs(axis_X) > MaleficusTypes.SPELL_BUTTON_THRESHOLD) || (Mathf.Abs(axis_Z) > MaleficusTypes.SPELL_BUTTON_THRESHOLD))
@@ -116,7 +104,7 @@ public class Player : MonoBehaviour, IPlayer
     private void CastSpell(AbstractSpell spellToCast)
     {
         AbstractSpell spell = Instantiate(spellToCast, transform.position, transform.rotation);
-        spell.CastingPlayerID = myPlayerID;
+        spell.CastingPlayerID = PlayerID;
         spell.Direction = movingDirection;
 
                                                                         // TODO: Not working here
