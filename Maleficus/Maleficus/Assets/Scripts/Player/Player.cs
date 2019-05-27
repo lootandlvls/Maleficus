@@ -1,4 +1,5 @@
-﻿    using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,14 +36,25 @@ public class Player : MonoBehaviour, IPlayer
         spellsSlot[2] = spellSlot_2;
         spellsSlot[3] = spellSlot_3;
         myRigidBody = this.GetComponent<Rigidbody>();
+        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
 
     }
 
 
+    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+    {
+        if (hitInfo.HitPlayerID == PlayerID)
+        {
+            Rigidbody rgb = GetComponent<Rigidbody>();
+            rgb.AddForceAtPosition(hitInfo.HitVelocity, transform.position, ForceMode.Impulse);
+
+        }
+    }
+
 
     #region INPUT
 
-                                                                                                                // TODO : finish implementing it (input working now)
+    // TODO : finish implementing it (input working now)
     public void Move(float axis_X, float axis_Z)
     {
 
@@ -103,10 +115,11 @@ public class Player : MonoBehaviour, IPlayer
 
     private void CastSpell(AbstractSpell spellToCast)
     {
-        AbstractSpell spell = Instantiate(spellToCast, transform.position, transform.rotation);
+        Vector3 startPosition = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z + 1);
+        AbstractSpell spell = Instantiate(spellToCast, startPosition, transform.rotation);
         spell.CastingPlayerID = PlayerID;
-        spell.Direction = movingDirection;
-
+       
+        
                                                                         // TODO: Not working here
         // Deactivate Directional Sprite
         myDirectionalSprite.HideSprite();

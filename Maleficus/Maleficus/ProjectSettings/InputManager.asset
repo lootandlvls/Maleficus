@@ -82,7 +82,7 @@ InputManager:
     sensitivity: 1
     snap: 0
     invert: 0
-    type: 0
+    type: 2
     axis: 0
     joyNum: 3
   - serializedVersion: 3
@@ -98,8 +98,8 @@ InputManager:
     sensitivity: 1
     snap: 0
     invert: 0
-    type: 0
-    axis: 2
+    type: 2
+    axis: 3
     joyNum: 3
   - serializedVersion: 3
     m_Name: Horizontal_L_D
@@ -210,8 +210,8 @@ InputManager:
     sensitivity: 1
     snap: 0
     invert: 1
-    type: 0
-    axis: 0
+    type: 2
+    axis: 1
     joyNum: 3
   - serializedVersion: 3
     m_Name: Vertical_R_C
@@ -226,8 +226,8 @@ InputManager:
     sensitivity: 1
     snap: 0
     invert: 0
-    type: 0
-    axis: 3
+    type: 2
+    axis: 4
     joyNum: 3
   - serializedVersion: 3
     m_Name: Vertical_L_D

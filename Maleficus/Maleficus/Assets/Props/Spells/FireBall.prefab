@@ -94,11 +94,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
-  playerID: 0
-  hitPower: 0
-  speed: 500
-  direction: {x: 0, y: 0, z: 0}
-  endDestination: {x: 0, y: 0, z: 0}
+  hitPower: 2
+  speed: 1000
   spellName: 
   spellLevel: 0
 --- !u!135 &5895132878442650487

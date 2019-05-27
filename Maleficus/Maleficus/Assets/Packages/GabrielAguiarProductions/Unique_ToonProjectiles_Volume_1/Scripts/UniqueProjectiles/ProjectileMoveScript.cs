@@ -78,8 +78,56 @@ public class ProjectileMoveScript : MonoBehaviour {
         if (speed != 0 && rb != null)
 			rb.position += (transform.forward + offset) * (speed * Time.deltaTime);        
     }
+    
 
-	void OnCollisionEnter (Collision co) {
+    public void DestroySpell()
+    {
+            
+            if (shotSFX != null && GetComponent<AudioSource>())
+            {
+                GetComponent<AudioSource>().PlayOneShot(hitSFX);
+            }
+
+            if (trails.Count > 0)
+            {
+                for (int i = 0; i < trails.Count; i++)
+                {
+                    trails[i].transform.parent = null;
+                    var ps = trails[i].GetComponent<ParticleSystem>();
+                    if (ps != null)
+                    {
+                        ps.Stop();
+                        Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
+                    }
+                }
+            }
+
+            speed = 0;
+            GetComponent<Rigidbody>().isKinematic = true;
+
+            
+            Quaternion rot = Quaternion.FromToRotation(Vector3.up, Vector3.down);
+            Vector3 pos = transform.position;
+
+            if (hitPrefab != null)
+            {
+                var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
+
+                var ps = hitVFX.GetComponent<ParticleSystem>();
+                if (ps == null)
+                {
+                    var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+                    Destroy(hitVFX, psChild.main.duration);
+                }
+                else
+                    Destroy(hitVFX, ps.main.duration);
+            }
+
+            StartCoroutine(DestroyParticle(0f));
+        
+    }
+
+	/*void OnCollisionEnter (Collision co) {
         if (!bounce)
         {
             if (co.gameObject.tag != "Bullet" && !collided)
@@ -137,7 +185,7 @@ public class ProjectileMoveScript : MonoBehaviour {
             rb.AddForce (Vector3.Reflect((contact.point - startPos).normalized, contact.normal) * bounceForce, ForceMode.Impulse);
             Destroy ( this );
         }
-	}
+	}*/
 
 	public IEnumerator DestroyParticle (float waitTime) {
 

@@ -14,7 +14,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public float Speed { get { return speed; } }
 
-    public Vector3 Direction { get; set; }
+    public Vector3 Direction { get { return dirVector; } }
 
     public Vector3 EndDestination { get; set; }
 
@@ -26,7 +26,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     [SerializeField] private float speed;
     [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
-
+    
 
     // Start is called before the first frame update
     private void Start()
@@ -65,8 +65,11 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID)) 
         {
+           
             HitInfo hitInfo = new HitInfo(this, CastingPlayerID, otherPlayer.PlayerID, transform.position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
+            ProjectileMoveScript destroy = this.GetComponent<ProjectileMoveScript>();
+            destroy.DestroySpell();
         }
     }
 }

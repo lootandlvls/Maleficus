@@ -17,8 +17,8 @@ public class PlayerManager : Singleton<PlayerManager>
     // Only defined for active members dictionaries
     Dictionary<EPlayerID, bool> connectedPlayers                        = new Dictionary<EPlayerID, bool>(); 
     Dictionary<EPlayerID, Player> activePlayers                         = new Dictionary<EPlayerID, Player>();
-    
 
+    
     protected override void Awake()
     {
         base.Awake();
@@ -63,10 +63,22 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
-        if (activePlayers[hitInfo.HitPlayerID].PlayerID != hitInfo.HitPlayerID)
-        { 
-        activePlayers[hitInfo.HitPlayerID].transform.Translate(hitInfo.HitVelocity * 500);
+       // Debug.Log(hitInfo.HitPlayerID + " HIT");
+        if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID )
+        {
+                 
+            StartCoroutine(PushPlayer(hitInfo));
+
+
         }
+    }
+    private IEnumerator PushPlayer(HitInfo hitInfo)
+    {
+        Rigidbody rgb = activePlayers[hitInfo.HitPlayerID].GetComponent<Rigidbody>();
+        rgb.isKinematic = false;
+        transform.position = Vector3.MoveTowards(activePlayers[hitInfo.HitPlayerID].transform.position, hitInfo.HitVelocity, Time.deltaTime * 2);
+        yield return new WaitForSeconds(0.1f);
+        rgb.isKinematic = true;
     }
 
 
@@ -285,4 +297,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         return activePlayers.ContainsKey(playerID);
     }
+
+
+   
 }

@@ -10,7 +10,12 @@ PrefabInstance:
     - target: {fileID: 1515304141566281053, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: m_Name
-      value: Player_Main
+      value: Wizard_Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 1568295349694429993, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1516624554419814651, guid: c54733bccde00434389154d36c388460,
         type: 3}
