@@ -83,6 +83,9 @@ public class EventManager : Singleton<EventManager>
         }
         Debug.Log(hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
     }
+
+
+
     #endregion
 
 

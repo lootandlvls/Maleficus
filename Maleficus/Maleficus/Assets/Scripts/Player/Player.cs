@@ -8,7 +8,7 @@ public class Player : MonoBehaviour, IPlayer
     public EPlayerID PlayerID { get; set; }
 
 
-    [SerializeField] float speed ;
+      public float speed ;
     [SerializeField] float angularSpeed;
 
     [SerializeField] private AbstractSpell spellSlot_1;
@@ -50,7 +50,6 @@ public class Player : MonoBehaviour, IPlayer
 
         }
     }
-
 
     #region INPUT
 

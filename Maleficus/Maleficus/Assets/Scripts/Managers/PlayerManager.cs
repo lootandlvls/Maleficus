@@ -60,16 +60,28 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
 
-
+    #region Spell
     private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
-       // Debug.Log(hitInfo.HitPlayerID + " HIT");
-        if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID )
+       
+        if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
         {
-                 
-            StartCoroutine(PushPlayer(hitInfo));
 
+            //  StartCoroutine(PushPlayer(hitInfo));
+            
 
+        }
+        if (hitInfo.HasEffect)
+        {   foreach (Debuff debuffeffect in hitInfo.DebuffEffects)
+                {
+                ApplyDebuff(hitInfo.HasEffect, debuffeffect , hitInfo.HitPlayerID);
+            }
+
+            foreach (Buff buffeffect in hitInfo.DebuffEffects)
+            {
+                ApplyBuff(hitInfo.HasEffect, buffeffect, hitInfo.HitPlayerID);
+            }
+           
         }
     }
     private IEnumerator PushPlayer(HitInfo hitInfo)
@@ -81,8 +93,76 @@ public class PlayerManager : Singleton<PlayerManager>
         rgb.isKinematic = true;
     }
 
+    private void ApplyDebuff(bool hasEffect ,Debuff debuff , EPlayerID playerID)
+    {
+        if (hasEffect)
+        {
+            switch (debuff)
+            {
+                case Debuff.FROZEN:
+                    Debug.Log("Player Frozen");
+                    
+                    break;
 
-    private void SpawnPlayer(EPlayerID toSpawnPlayerID)
+                case Debuff.STUN:
+                    Debug.Log("Player Stunned");
+               
+                    break;
+
+                case Debuff.SLOWDOWN:
+                    Debug.Log("Player SLOWED DOWN");
+                    
+                    break;
+
+                case Debuff.CHARM:
+
+                    break;
+                   
+            }
+
+        }
+
+
+    }
+    private void ApplyBuff(bool hasEffect, Buff buff, EPlayerID playerID)
+    {
+        if (hasEffect)
+        {
+            switch (buff)
+            {
+                case Buff.INCREACE_SPEED:
+                    Debug.Log("Spead increased");
+                    break;
+
+                case Buff.INCREASE_CASTING_SPEED:
+                    Debug.Log("INCREASE_CASTING_SPEED");
+                    break;
+
+                case Buff.INCREASE_DAMAGE:
+                    Debug.Log("IINCREASE_DAMAGE");
+                    break;
+
+                case Buff.INCREASE_OFFENSIVE_SPELL_SIZE:
+                    Debug.Log("INCREASE_OFFENSIVE_SPELL_SIZE");
+                    break;
+                case Buff.PROTECT:
+                    Debug.Log("PROTECT");
+                    break;
+                case Buff.REMOVE_DEBUFF:
+                    Debug.Log("REMOVE_DEBUF");
+                    break;
+
+
+            }
+
+        }
+    }
+
+        #region SpellEffects
+        #endregion
+        #endregion
+
+        private void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
         if ((connectedPlayers[toSpawnPlayerID] == true) || (isSpawnAllPlayers_DebugMode == true))
         {
