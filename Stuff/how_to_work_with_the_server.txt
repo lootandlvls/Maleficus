@@ -41,6 +41,6 @@
 Displaying Debug of running Server
 
 1.1 go to root folder
-	cd home/ubuntu
+	cd /home/ubuntu/
 
 1.2 tail -f server.log
