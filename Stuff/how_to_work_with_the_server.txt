@@ -1,0 +1,40 @@
+0. changing the server code
+
+0.1. if you changed something in the server unity project, build to Linux x86_64, Server Build
+
+0.2. zip the resulting Server_Data folder and the Server.x86_64
+
+0.3 open git bash and copy the zip to the ubuntu server, therefore fill in the location of the private key and the location of the build zip in the command bellow: 
+	scp -i LOCATION_OF_THE_ubuntutest_server.pem LOCATION_OF_THE_Server_Build_Linux.zip ubuntu@ec2-52-91-55-121.compute-1.amazonaws.com:/home/ubuntu/docker/unity/build
+
+0.4 connect to the ubuntu server via ssh, therefore fill in the location of the private key:
+	ssh -i LOCATION_OF_THE_ubuntutest_server.pem ubuntu@ec2-52-91-55-121.compute-1.amazonaws.com
+
+0.5 stop the running server
+	./kill_server.sh
+
+0.6 go to docker/unity/build:
+	cd docker/unity/build
+
+0.7 delete the Server_Data folder and the Server.x86_64
+	rm -rf ./Server_Data/
+	rm Server.x86_64
+
+0.8 unzip the Server_Build.zip:
+	unzip Server_Build.zip
+
+0.9 remove the Server_Build.zip:
+	rm Server_Build.zip
+
+0.10 give yourselve execution rights of Server.x86_64
+	chmod +x Server.x86_64
+
+0.11 go to the root folder of the user ubuntu
+	cd ..
+	cd ..
+	cd ..
+
+0.12 run the server:
+	./start_server.sh
+----------------------------------------------------------------------------
+

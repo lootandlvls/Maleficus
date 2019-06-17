@@ -19,8 +19,6 @@ public class Mongo
         
         client = new MongoClient(MONGO_URI);
         db = client.GetDatabase(DATABASE_NAME);
-        var command = new JsonCommand<BsonDocument>("{connectionStatus : 1, showPrivileges: true}");
-        Debug.Log(db.RunCommand(command));
         // initialize collections here
         accounts = db.GetCollection<Model_Account>("account");
         follows = db.GetCollection<Model_Follow>("follow");
