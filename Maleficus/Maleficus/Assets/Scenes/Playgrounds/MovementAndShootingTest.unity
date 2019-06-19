@@ -1622,12 +1622,12 @@ PrefabInstance:
     - target: {fileID: 4335998296438487355, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: isSpawnAllPlayers_DebugMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335998296438487355, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: isSpawnPlayerOnConnect_DebugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4335998296438487354, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
@@ -1790,13 +1790,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1315917141}
-  m_LocalRotation: {x: 0.51280797, y: -0, z: -0, w: 0.8585034}
-  m_LocalPosition: {x: 0, y: 14.87, z: -9.4}
+  m_LocalRotation: {x: 0.17047416, y: -0, z: -0, w: 0.9853621}
+  m_LocalPosition: {x: 0, y: 3.9, z: -13.4}
   m_LocalScale: {x: 1, y: 1.5817392, z: 0.67777836}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 61.702003, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 19.631, y: 0, z: 0}
 --- !u!1 &1373955750
 GameObject:
   m_ObjectHideFlags: 0

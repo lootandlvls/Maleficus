@@ -185,8 +185,8 @@ public class ProjectileMoveScript : MonoBehaviour {
             rb.AddForce (Vector3.Reflect((contact.point - startPos).normalized, contact.normal) * bounceForce, ForceMode.Impulse);
             Destroy ( this );
         }
-	}*/
-
+	}
+*/
 	public IEnumerator DestroyParticle (float waitTime) {
 
 		if (transform.childCount > 0 && waitTime != 0) {

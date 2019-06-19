@@ -63,26 +63,30 @@ public class PlayerManager : Singleton<PlayerManager>
     #region Spell
     private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
-       
-        if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
+        if (hitInfo.HasPower)
         {
+            if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
+            {
 
-            //  StartCoroutine(PushPlayer(hitInfo));
-            
+                //  StartCoroutine(PushPlayer(hitInfo));
 
+
+            }
         }
-        if (hitInfo.HasEffect)
-        {   foreach (Debuff debuffeffect in hitInfo.DebuffEffects)
-                {
-                ApplyDebuff(hitInfo.HasEffect, debuffeffect , hitInfo.HitPlayerID);
+        //TODO : remove hasEffect
+
+      
+        foreach (SpellEffects debuffeffect in hitInfo.DebuffEffects)
+            {   
+                ApplyDebuff( debuffeffect , hitInfo.HitPlayerID);
             }
 
-            foreach (Buff buffeffect in hitInfo.DebuffEffects)
+            foreach (SpellEffects buffeffect in hitInfo.DebuffEffects)
             {
-                ApplyBuff(hitInfo.HasEffect, buffeffect, hitInfo.HitPlayerID);
+                ApplyBuff( buffeffect, hitInfo.HitPlayerID);
             }
            
-        }
+        
     }
     private IEnumerator PushPlayer(HitInfo hitInfo)
     {
@@ -93,73 +97,70 @@ public class PlayerManager : Singleton<PlayerManager>
         rgb.isKinematic = true;
     }
 
-    private void ApplyDebuff(bool hasEffect ,Debuff debuff , EPlayerID playerID)
+    private void ApplyDebuff( SpellEffects debuff , EPlayerID playerID)
     {
-        if (hasEffect)
-        {
+        
             switch (debuff)
             {
-                case Debuff.FROZEN:
+                case SpellEffects.FROZEN:
                     Debug.Log("Player Frozen");
                     
                     break;
 
-                case Debuff.STUN:
+                case SpellEffects.STUN:
                     Debug.Log("Player Stunned");
                
                     break;
 
-                case Debuff.SLOWDOWN:
+                case SpellEffects.SLOWDOWN:
                     Debug.Log("Player SLOWED DOWN");
                     
                     break;
 
-                case Debuff.CHARM:
+                case SpellEffects.CHARM:
 
                     break;
                    
             }
 
-        }
+        
 
 
     }
-    private void ApplyBuff(bool hasEffect, Buff buff, EPlayerID playerID)
+    private void ApplyBuff( SpellEffects buff, EPlayerID playerID)
     {
-        if (hasEffect)
-        {
-            switch (buff)
+        Debug.Log("Apply Buff on player " + playerID);
+        switch (buff)
             {
-                case Buff.INCREACE_SPEED:
+                case SpellEffects.INCREACE_SPEED:
                     Debug.Log("Spead increased");
                     break;
 
-                case Buff.INCREASE_CASTING_SPEED:
+                case SpellEffects.INCREASE_CASTING_SPEED:
                     Debug.Log("INCREASE_CASTING_SPEED");
                     break;
 
-                case Buff.INCREASE_DAMAGE:
+                case SpellEffects.INCREASE_DAMAGE:
                     Debug.Log("IINCREASE_DAMAGE");
                     break;
 
-                case Buff.INCREASE_OFFENSIVE_SPELL_SIZE:
+                case SpellEffects.INCREASE_OFFENSIVE_SPELL_SIZE:
                     Debug.Log("INCREASE_OFFENSIVE_SPELL_SIZE");
                     break;
-                case Buff.PROTECT:
+                case SpellEffects.PROTECT:
                     Debug.Log("PROTECT");
                     break;
-                case Buff.REMOVE_DEBUFF:
+                case SpellEffects.REMOVE_DEBUFF:
                     Debug.Log("REMOVE_DEBUF");
                     break;
 
 
             }
 
-        }
+        
     }
 
-        #region SpellEffects
-        #endregion
+        
         #endregion
 
         private void SpawnPlayer(EPlayerID toSpawnPlayerID)

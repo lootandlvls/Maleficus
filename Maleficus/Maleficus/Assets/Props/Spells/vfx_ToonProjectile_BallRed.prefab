@@ -137,15 +137,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
+  force: 500
+  vectorSpell: {x: 100, y: 100, z: 100}
   hitPower: 2
   speed: 1000
   spellName: 
   spellLevel: 0
-  hasEffect: 1
-  movementType: 1
+  hasPower: 0
+  movementType: 2
   debuffEffects: 
   buffEffects: 
-  shoot: 1
+  OnSelfEffect: 0
+  shoot: 0
 --- !u!1 &5754994495581551780
 GameObject:
   m_ObjectHideFlags: 0
@@ -9807,7 +9810,7 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 1, g: 0.15095034, b: 0.07352942, a: 1}
+      minColor: {r: 1, g: 0.109320685, b: 0.0745098, a: 1}
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2

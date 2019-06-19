@@ -92,17 +92,18 @@ public enum EAppState
 
 #region Spells
 
-public enum Debuff
+
+
+public enum SpellType
 {
-    FROZEN,
-    STUN,
-    SLOWDOWN,
-    CHARM,
-    NONE
-    
+    BUFF_ONSELF,
+    PUSH,
+    BUFF_ONTEAMMATE
 }
 
-public enum Buff
+
+
+public enum SpellEffects
 {
     PROTECT,
     INCREASE_DAMAGE,
@@ -110,15 +111,24 @@ public enum Buff
     INCREASE_CASTING_SPEED,
     REMOVE_DEBUFF,
     INCREASE_OFFENSIVE_SPELL_SIZE,
+    FROZEN,
+    STUN,
+    SLOWDOWN,
+    CHARM,
     NONE
-
 }
+
+
 
 public enum MovementType
 {
-    LINEAR,
-    PARABOLIC,
-    AOE
+    LINEAR_HIT,
+    LINEAR_EXPLOSIVE,
+    PARABOLIC_EXPLOSIVE,
+    LINEAR_INSTANT, //Single or multi
+    TELEPORT,
+    AOE,
+
 }
 #endregion
 
@@ -135,13 +145,13 @@ public enum EPlayerID
 
 public struct HitInfo
 {
-    public HitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasEffect , List<Debuff> debuffEffects, List<Buff> buffEffects)
+    public HitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<SpellEffects> debuffEffects, List<SpellEffects> buffEffects)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;
         this.hitPlayerID = hitplayerID;
         this.hitPosition = hitPosition;
-        this.hasEffect = hasEffect;
+        this.hasPower = hasPower;
         this.buffEffects = buffEffects;
         this.debuffEffects = debuffEffects;
         
@@ -152,18 +162,18 @@ public struct HitInfo
     public EPlayerID HitPlayerID { get { return hitPlayerID; } }
     public Vector3 HitPosition { get { return hitPosition; } }
     public Vector3 HitVelocity { get { return hitPosition + castedSpell.Direction * castedSpell.HitPower; } }
-    public bool HasEffect { get { return hasEffect; } }
-    public List<Debuff> DebuffEffects { get {return debuffEffects; }}
-    public List<Buff> BuffEffects { get { return buffEffects; } }
+    public bool HasPower { get { return hasPower; } }
+    public List<SpellEffects> DebuffEffects { get {return debuffEffects; }}
+    public List<SpellEffects> BuffEffects { get { return buffEffects; } }
 
 
     private ISpell castedSpell;
     private EPlayerID castingPlayerID;
     private EPlayerID hitPlayerID;
     private Vector3 hitPosition;
-    private bool hasEffect;
-    private List<Debuff> debuffEffects;
-    private List<Buff> buffEffects;
+    private bool hasPower;
+    private List<SpellEffects> debuffEffects;
+    private List<SpellEffects> buffEffects;
 }
 #endregion 
 

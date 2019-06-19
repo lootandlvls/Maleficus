@@ -10,8 +10,8 @@ public interface ISpell
     int HitPower { get;  }
     Vector3 Direction { get; }
     Vector3 EndDestination { get;  }
-    bool HasEffect { get; }
-    List<Debuff> DebuffEffects { get; }
-    List<Buff> BuffEffects { get; }
+    bool HasPower { get; }
+    List<SpellEffects> DebuffEffects { get; }
+    List<SpellEffects> BuffEffects { get; }
     MovementType MovementType { get;}
 }
