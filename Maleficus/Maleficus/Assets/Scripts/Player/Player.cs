@@ -7,7 +7,11 @@ public class Player : MonoBehaviour, IPlayer
 {
     public EPlayerID PlayerID { get; set; }
 
+    public String playerVerticalInput;
+    public String playerHorizontalInput;
+
     [SerializeField] private Transform SpellInitPosition;
+    [SerializeField] private Transform SpellEndPosition;
     public float speed ;
     [SerializeField] float angularSpeed;
 
@@ -114,10 +118,27 @@ public class Player : MonoBehaviour, IPlayer
 
     private void CastSpell(AbstractSpell spellToCast)
     {
-        Vector3 startPosition = new Vector3(transform.position.x + 1, transform.position.y + 0.5f, transform.position.z + 1);
-        AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position , transform.rotation);
-        spell.CastingPlayerID = PlayerID;
-       
+
+        if (spellToCast.MovementType == MovementType.AOE)
+        {
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
+            AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
+            spell.CastingPlayerID = PlayerID;
+            spell.parabolicSpell_EndPosition = SpellEndPosition;
+        }
+        else if (spellToCast.MovementType == MovementType.LINEAR_INSTANT)
+        {
+            Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.eulerAngles.y , transform.rotation.z,1);
+            AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
+         
+            spell.transform.parent = this.transform;
+        }
+        else
+        {
+            AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, transform.rotation);
+            spell.CastingPlayerID = PlayerID;
+            spell.parabolicSpell_EndPosition = SpellEndPosition;
+        }
         
                                                                         // TODO: Not working here
         // Deactivate Directional Sprite

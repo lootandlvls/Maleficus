@@ -8,7 +8,8 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     public Rigidbody myRigidBody;
     public Vector3 dirVector;
     public EPlayerID CastingPlayerID { get; set; }
-    
+    public Transform parabolicSpell_EndPosition;
+
   
 
 
@@ -45,7 +46,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     
    
 
-    private bool shoot = true;
+    
 // Start is called before the first frame update
     private void Start()
     {
@@ -62,40 +63,10 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     // Update is called once per frame
     private void Update()
     {
-       /* if (shoot)
-        {
-            Move();
-        }*/
-    }
-
-    //this function will be over written by the spells children classes
-    public void SpellAbility( )
-    {
-        
       
-
     }
-   /* public void Move()
-    {
-        /*  movingDirection.z = speed * Time.deltaTime;
-
-          dirVector = transform.TransformDirection(movingDirection);
-          myRigidBody.velocity = new Vector3(dirVector.x, dirVector.y, dirVector.z);
-        movingDirection = new Vector3(myRigidBody.position.x , 100 , myRigidBody.position.z );
-        Vector3 vector = new Vector3(1, 10, 1);
-       Vector3 facedDirection= transform.TransformDirection(vectorSpell);
-        myRigidBody.AddForce(facedDirection * force , ForceMode.Impulse);
-        shoot = false;
-
-
-    }*/
-
-
-
-
-
-
-  /*  private void OnTriggerEnter(Collider other)
+ 
+    private void OnTriggerEnter(Collider other)
     {
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID)) 
@@ -106,5 +77,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
             ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
             destroyEffect.DestroySpell();
         }
-    }*/
+
+       
+    }
 }

@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7946647777849258601}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.65559745, y: 2.8125, z: 9.84421}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0109375, y: 0.010937504, z: 0.010937504}
   m_Children: []
   m_Father: {fileID: 7948522024305349590}
@@ -4702,7 +4702,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7946663155365147785}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.65559745, y: -1.1131164, z: 9.84421}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.025, y: 0.025000015, z: 0.025000015}
   m_Children: []
   m_Father: {fileID: 7948522024305349590}
@@ -9377,7 +9377,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7946864684985083093}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.65559745, y: -0.83323133, z: 9.84421}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0078125, y: 0.0078125, z: 0.0078125}
   m_Children: []
   m_Father: {fileID: 7948522024305349590}
@@ -14052,7 +14052,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7947538983809226663}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.65559745, y: -1.122761, z: 9.84421}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.0078125, y: 0.0078125, z: 0.0078125}
   m_Children: []
   m_Father: {fileID: 7948522024305349590}
@@ -18762,6 +18762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
+  parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 0
   speed: 0
   spellName: 

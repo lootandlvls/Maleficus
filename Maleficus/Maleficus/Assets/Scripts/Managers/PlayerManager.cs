@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,9 +37,12 @@ public class PlayerManager : Singleton<PlayerManager>
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
         //  Spell events
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+        EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
 
         StartCoroutine(LateStartCoroutine());
     }
+
+   
 
     private IEnumerator LateStartCoroutine()
     {
@@ -61,6 +65,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
     #region Spell
+
+    private void On__SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
+    {
+        Debug.Log("Teleportation spell executed");
+        float InputH = Input.GetAxis(activePlayers[castingPlayerID].playerHorizontalInput);
+        float InputV = Input.GetAxis(activePlayers[castingPlayerID].playerVerticalInput);
+        Debug.Log(InputH + " and " + InputV);
+        Vector3 TeleportDirection = new Vector3();
+        TeleportDirection.x = InputH * Time.deltaTime * 10;
+        TeleportDirection.z = InputV * Time.deltaTime * 10;
+        activePlayers[castingPlayerID].transform.position += TeleportDirection * 50; 
+
+
+
+    }
     private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
         if (hitInfo.HasPower)
@@ -72,16 +91,14 @@ public class PlayerManager : Singleton<PlayerManager>
 
 
             }
-        }
-        //TODO : remove hasEffect
-
+        }   
       
         foreach (SpellEffects debuffeffect in hitInfo.DebuffEffects)
             {   
                 ApplyDebuff( debuffeffect , hitInfo.HitPlayerID);
             }
 
-            foreach (SpellEffects buffeffect in hitInfo.DebuffEffects)
+        foreach (SpellEffects buffeffect in hitInfo.DebuffEffects)
             {
                 ApplyBuff( buffeffect, hitInfo.HitPlayerID);
             }

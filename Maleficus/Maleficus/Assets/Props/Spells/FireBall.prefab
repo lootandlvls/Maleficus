@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2311848768039122816}
   - component: {fileID: 5469573806789804191}
   - component: {fileID: 2138321886847720664}
+  - component: {fileID: 3100671302945089157}
   - component: {fileID: 3254869090874594294}
   - component: {fileID: 5895132878442650487}
   - component: {fileID: 4763022062342663477}
@@ -80,6 +81,26 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &3100671302945089157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3095840691959451470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2caf596d6609443ad0c7eb41c9db30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startTransform: {fileID: 0}
+  endTransform: {fileID: 0}
+  endPosition: {x: 0, y: 0, z: 0}
+  endRotation: {x: 0, y: 0, z: 0, w: 0}
+  startPosition: {x: 0, y: 0, z: 0}
+  startRotation: {x: 0, y: 0, z: 0, w: 0}
+  movementSpeed: 12
+  heightFactor: 6
 --- !u!114 &3254869090874594294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,10 +115,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
+  parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 2
   speed: 1000
   spellName: 
   spellLevel: 0
+  OnSelfEffect: 0
+  hasPower: 0
+  movementType: 0
+  debuffEffects: 
+  buffEffects: 
 --- !u!135 &5895132878442650487
 SphereCollider:
   m_ObjectHideFlags: 0

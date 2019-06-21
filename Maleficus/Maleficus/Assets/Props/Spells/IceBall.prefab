@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4251016532661945556}
   - component: {fileID: 4498369470637404971}
   - component: {fileID: 8274413429116068806}
+  - component: {fileID: 4011313696646360110}
   - component: {fileID: 4192467860324068854}
   - component: {fileID: 9173134455503607522}
   m_Layer: 0
@@ -93,6 +94,23 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4011313696646360110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7290182035913634289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myRigidBody: {fileID: 0}
+  dirVector: {x: 0, y: 0, z: 0}
+  speed: 0
+  hitPower: 0
+  shoot: 0
 --- !u!54 &4192467860324068854
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -123,10 +141,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
-  playerID: 0
+  parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 0
   speed: 1000
-  direction: {x: 0, y: 0, z: 0}
-  endDestination: {x: 0, y: 0, z: 0}
   spellName: 
   spellLevel: 0
+  OnSelfEffect: 0
+  hasPower: 0
+  movementType: 0
+  debuffEffects: 
+  buffEffects: 

@@ -12,6 +12,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wizard_Red
       objectReference: {fileID: 0}
+    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: playerVerticalInput
+      value: Vertical_L_A
+      objectReference: {fileID: 0}
+    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: playerHorizontalInput
+      value: Horizontal_L_A
+      objectReference: {fileID: 0}
     - target: {fileID: 1568295349694429993, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: m_UseGravity

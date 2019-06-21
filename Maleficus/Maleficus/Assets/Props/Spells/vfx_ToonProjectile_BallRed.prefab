@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5639478765343923444}
   - component: {fileID: 5709450633962761674}
   - component: {fileID: 5700407496173925580}
+  - component: {fileID: 2551895587582708311}
   - component: {fileID: 5642156046015436466}
   - component: {fileID: 1046419516417460918}
   m_Layer: 0
@@ -90,11 +91,31 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2551895587582708311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5754590312865560016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2caf596d6609443ad0c7eb41c9db30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startTransform: {fileID: 0}
+  endTransform: {fileID: 0}
+  endPosition: {x: 0, y: 0, z: 0}
+  endRotation: {x: 0, y: 0, z: 0, w: 0}
+  startPosition: {x: 0, y: 0, z: 0}
+  startRotation: {x: 0, y: 0, z: 0, w: 0}
+  movementSpeed: 14
+  heightFactor: 6
 --- !u!114 &5642156046015436466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,18 +158,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
-  force: 500
-  vectorSpell: {x: 100, y: 100, z: 100}
+  parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 2
   speed: 1000
   spellName: 
   spellLevel: 0
+  OnSelfEffect: 0
   hasPower: 0
   movementType: 2
   debuffEffects: 
   buffEffects: 
-  OnSelfEffect: 0
-  shoot: 0
 --- !u!1 &5754994495581551780
 GameObject:
   m_ObjectHideFlags: 0

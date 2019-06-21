@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Parabolic_Explosive : MonoBehaviour
 {
+
+
     // Start is called before the first frame update
     void Start()
-    {
+    { 
         
     }
 

@@ -719,12 +719,12 @@ public class game_manager : MonoBehaviour
 
 
     //restart game
-    public void restart()
+ /*   public void restart()
     {
         Scene loadedLevel = SceneManager.GetActiveScene();
         SceneManager.LoadScene(loadedLevel.buildIndex);
 
-    } 
+    } */
 
    
     //move ui

@@ -73,6 +73,7 @@ public class EventManager : Singleton<EventManager>
         DebugLog(castedSpell + " casted by " + castingPlayerID);
     }
 
+    
     public event Action<HitInfo> SPELLS_SpellHitPlayer;
     public void Invoke_SPELLS_SpellHitPlayer(HitInfo hitInfo)
     {
@@ -84,6 +85,14 @@ public class EventManager : Singleton<EventManager>
         Debug.Log(hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
     }
 
+    public event Action<ISpell, EPlayerID> SPELLS_Teleport;
+    public void Invoke_SPELLS_Teleport(ISpell castedSpell , EPlayerID castingPlayerID)
+    {
+        if (SPELLS_Teleport != null)
+        {
+            SPELLS_Teleport.Invoke(castedSpell, castingPlayerID);
+        }
+    }
 
 
     #endregion
