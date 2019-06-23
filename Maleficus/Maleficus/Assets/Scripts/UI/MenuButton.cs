@@ -14,12 +14,12 @@ public class MenuButton : MonoBehaviour
     [SerializeField] private MenuButton buttomButton;
 
     private Button myButton;
-    private AbstractMenuCommand myMenuCommand;
+    private AbstractUICommand myMenuCommand;
 
     private void Awake()
     {
         myButton = GetComponent<Button>();
-        myMenuCommand = GetComponent<AbstractMenuCommand>();
+        myMenuCommand = GetComponent<AbstractUICommand>();
     }
 
     public void Highlight()

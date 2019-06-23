@@ -3,26 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class UIManager : Singleton<UIManager>
+public class UIManager : SingletonStateMachine<UIManager, EMenuState>
 {
-    public EMenuState CurrentState { get { return currentState; } }
-    private EMenuState currentState = EMenuState.NONE;
-    private EMenuState lastState = EMenuState.NONE;
-
     private MenuButton selectedButton;                                                                         // TODO: Update selected button on menu change
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
+
+        startState = EMenuState.MAIN;                                                                           // TODO: for testing. Change to correct one later
+        debugStateID = 50;
+
+        FindAndBindButtonCommands();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        // Bind state machine event
+        StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
+
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
         StartCoroutine(LateStartCoroutine());
     }
 
-    private IEnumerator LateStartCoroutine()
-    {
-        yield return new WaitForEndOfFrame();
-        UpdateState(EMenuState.MAIN);
-    }
 
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
@@ -61,26 +67,19 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    
-
-    private void Update()
-    {
-        DebugManager.Instance.Log(1, "Menu State : " + currentState);
-    }
-
-    public void UpdateState(EMenuState newState)
-    {
-        if (newState == currentState)
-        {
-            return;
-        }
-        lastState = currentState;
-        currentState = newState;
-        EventManager.Instance.Invoke_UI_MenuStateUpdated(newState, lastState);
-    }
-
     public void OnSelectedButton(MenuButton selectedButton)
     {
         this.selectedButton = selectedButton;
     }
+
+    private void FindAndBindButtonCommands()
+    {
+        // Menu Navigation Command
+        MenuNavigationCommand[] commands = FindObjectsOfType<MenuNavigationCommand>();
+        foreach (MenuNavigationCommand command in commands)
+        {
+            command.MenuNavigationCommandPressed += UpdateState;
+        }
+    }
+
 }

@@ -9,14 +9,70 @@ public class EventManager : Singleton<EventManager>
 
     #region GAME
     public event Action<EAppState, EAppState> GAME_AppStateUpdated;
-    public void Invoke_GAME_AppStateUpdated(EAppState newAppState, EAppState lastState)
+    public void Invoke_GAME_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
     {
         if (GAME_AppStateUpdated != null)
         {
-            GAME_AppStateUpdated.Invoke(newAppState, lastState);
+            GAME_AppStateUpdated.Invoke(newAppState, lastAppState);
         }
-        DebugLog("App state changed from " + lastState + " to " + newAppState);
+        DebugLog("App state changed from " + lastAppState + " to " + newAppState);
     }
+
+    public event Action<EGameMode> GAME_GameAboutToStart;
+    public void Invoke_GAME_GameAboutToStart(EGameMode gameModeAboutToStart)
+    {
+        if (GAME_GameAboutToStart != null)
+        {
+            GAME_GameAboutToStart.Invoke(gameModeAboutToStart);
+        }
+    }
+
+    public event Action<EGameMode> GAME_GameStarted;
+    public void Invoke_GAME_GameStarted(EGameMode gameModeStarted)
+    {
+        if (GAME_GameStarted != null)
+        {
+            GAME_GameStarted.Invoke(gameModeStarted);
+        }
+    }
+
+    public event Action<EGameMode> GAME_GamePaused;
+    public void Invoke_GAME_GamePaused(EGameMode gameModePaused)
+    {
+        if (GAME_GamePaused != null)
+        {
+            GAME_GamePaused.Invoke(gameModePaused);
+        }
+    }
+
+    public event Action<EGameMode> GAME_GameUnPaused;
+    public void Invoke_GAME_GameUnPaused(EGameMode gameModeUnPaused)
+    {
+        if (GAME_GameUnPaused != null)
+        {
+            GAME_GameUnPaused.Invoke(gameModeUnPaused);
+        }
+    }
+
+    public event Action<EGameMode> GAME_GameEnded;
+    public void Invoke_GAME_GameEnded(EGameMode gameModeEnded)
+    {
+        if (GAME_GameEnded != null)
+        {
+            GAME_GameEnded.Invoke(gameModeEnded);
+        }
+    }
+
+    public event Action<EGameMode> GAME_GameAborted;
+    public void Invoke_GAME_GameAborted(EGameMode gameModeAborted)
+    {
+        if (GAME_GameAborted != null)
+        {
+            GAME_GameAborted.Invoke(gameModeAborted);
+        }
+    }
+
+
     #endregion
 
     #region PLAYERS
@@ -96,9 +152,6 @@ public class EventManager : Singleton<EventManager>
 
 
     #endregion
-
-
-
 
     #region UI
     public event Action<EMenuState, EMenuState> UI_MenuStateUpdated;

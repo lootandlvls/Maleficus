@@ -4,7 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-
+/// <summary>
+/// Multiple channel (IDs) debug messages on every frame
+/// IDs:
+/// 2  - Joystick 
+/// 50  - UI state
+/// 51 - App state 
+/// </summary>
 public class DebugManager : Singleton<DebugManager>
 {
     private Dictionary<int, DebugText> debugTexts;

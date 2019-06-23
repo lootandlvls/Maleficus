@@ -26,6 +26,34 @@ public static class MaleficusTypes
     public const float ROTATION_THRESHOLD = 0.0f;
 
 
+    /// Update these lists when more states are added to AppState!
+    public static EAppState[] STATES_WITH_UI = new EAppState[]  // used mainly for menu navigation with controller
+    {
+        // In Lobby
+        EAppState.IN_LOBBY_MAIN,
+        EAppState.IN_LOBBY_CONNECTING_PLAYERS,
+        // In Game
+        EAppState.IN_GAME_PAUSED,
+        EAppState.IN_GAME_ENDED
+    };
+
+    public static EAppState[] STATES_IN_LOBBY = new EAppState[]
+    {
+        EAppState.IN_LOBBY_MAIN,
+        EAppState.IN_LOBBY_CONNECTING_PLAYERS
+    };
+
+    public static EAppState[] STATES_IN_GAME = new EAppState[]
+    {
+        EAppState.IN_GAME_NOT_STARTED,
+        EAppState.IN_GAME_ABOUT_TO_START,
+        EAppState.IN_GAME_RUNNING,
+        EAppState.IN_GAME_PAUSED,
+        EAppState.IN_GAME_ENDED,
+    };
+
+
+
     /// Convert a PlayerID enum to an int
     public static int PlayerIDToInt(EPlayerID playerID)
     {
@@ -77,17 +105,33 @@ public static class MaleficusTypes
 
 
 
-
-
-
 #region AppState
+/// Update the lists inside the class when more states are added to AppState!
 public enum EAppState
 {
-    IN_MENU,
-    CONNECTING_PLAYERS,
-    IN_GAME,
+    IN_LOBBY_MAIN,
+    IN_LOBBY_CONNECTING_PLAYERS,
+    IN_GAME_NOT_STARTED,
+    IN_GAME_ABOUT_TO_START,
+    IN_GAME_RUNNING,
+    IN_GAME_PAUSED,
+    IN_GAME_ENDED,
     TEST
 }
+
+
+#endregion
+
+#region Game
+public enum EGameMode
+{
+    LIVES_3,
+    TIME_2_MINUTES,
+    POINTS_100,
+    INSANE
+}
+
+
 #endregion
 
 #region Spells
@@ -260,6 +304,7 @@ public enum EMenuState
 {
     NONE,
     MAIN,
+    CONNECTING_PLAYERS,
     IN_GAME
 }
 

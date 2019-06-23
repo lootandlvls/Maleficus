@@ -1061,7 +1061,7 @@ GameObject:
   - component: {fileID: 910386090}
   - component: {fileID: 910386089}
   m_Layer: 5
-  m_Name: T_Menu (1)
+  m_Name: T_MenuState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2c03ba313c52847979c89ef0296640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugID: 2
+  DebugID: 50
 --- !u!114 &910386090
 MonoBehaviour:
   m_ObjectHideFlags: 0
