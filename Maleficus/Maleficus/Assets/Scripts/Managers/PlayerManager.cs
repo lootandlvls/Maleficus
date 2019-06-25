@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    
     [Header("Spawn character when the player connects with a controller")]
     [SerializeField] private bool isSpawnPlayerOnConnect_DebugMode = false;
     [SerializeField] private bool isSpawnAllPlayers_DebugMode = false;
+    [SerializeField] private bool isSpawnArPlayers = false;
 
     // Always defined dictionaries 
     Dictionary<EPlayerID, Player> playerPrefabs                         = new Dictionary<EPlayerID, Player>();
@@ -180,20 +182,28 @@ public class PlayerManager : Singleton<PlayerManager>
         
         #endregion
 
-        private void SpawnPlayer(EPlayerID toSpawnPlayerID)
+    private void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
         if ((connectedPlayers[toSpawnPlayerID] == true) || (isSpawnAllPlayers_DebugMode == true))
         {
             if (activePlayers.ContainsKey(toSpawnPlayerID) == false)
             {
                 Player playerPrefab = playerPrefabs[toSpawnPlayerID];
-                Vector3 playerPosition = playersSpawnPositions[toSpawnPlayerID].Position;
-                Quaternion playerRotation = playersSpawnPositions[toSpawnPlayerID].Rotation;
+                PlayerSpawnPosition playerSpawnPosition = playersSpawnPositions[toSpawnPlayerID];
+                Vector3 playerPosition = playerSpawnPosition.Position;
+                Quaternion playerRotation = playerSpawnPosition.Rotation;
 
                 Player spawnedPlayer = Instantiate(playerPrefab, playerPosition, playerRotation);
                 spawnedPlayer.PlayerID = toSpawnPlayerID;
 
                 activePlayers.Add(toSpawnPlayerID, spawnedPlayer);
+
+                if (isSpawnArPlayers == true)
+                {
+                    spawnedPlayer.IsARPlayer = true;
+                    spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
+                    spawnedPlayer.transform.localScale = playerSpawnPosition.transform.localScale;
+                }
 
                 EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(toSpawnPlayerID);
             }
@@ -204,7 +214,6 @@ public class PlayerManager : Singleton<PlayerManager>
             
         }
     }
-
     
 
     #region Input

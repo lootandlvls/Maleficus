@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IPlayer
 {
     EPlayerID PlayerID { get; }
+
+    bool IsARPlayer { get; }
 }

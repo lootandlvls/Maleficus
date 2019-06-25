@@ -30,6 +30,8 @@ public class CurveReader : Singleton<CurveReader>
 
     private void UpdateCurves()
     {
+        // TODO: Find a solution for building on Android 
+#if UNITY_EDITOR
         animationCurves = new List<AnimationCurve>();
 
         EditorCurveBinding[] curveBindings = AnimationUtility.GetCurveBindings(animationClip1);
@@ -40,6 +42,7 @@ public class CurveReader : Singleton<CurveReader>
         }
 
         Debug.Log("Curves updated");
+#endif
     }
 
     public float EvaluateCurve(int curveID, float time)

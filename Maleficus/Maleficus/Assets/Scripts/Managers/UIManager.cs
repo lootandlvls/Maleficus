@@ -35,6 +35,11 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         //Debug.Log("Button " + buttonType + " by " + playerID);
         if (AppStateManager.Instance.IsInAStateWithUI == true)         // test case
         {
+            if (selectedButton == null)
+            {
+                Debug.Log("selected button null");
+                return;
+            }
             MenuButton nextButton = null;
             switch (buttonType)
             {
