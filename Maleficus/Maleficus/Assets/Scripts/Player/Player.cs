@@ -80,34 +80,36 @@ public class Player : MonoBehaviour, IPlayer
 
         if (IsARPlayer == true)
         {
-            Vector2 coordinateForward = new Vector2(transform.forward.x, transform.forward.z).normalized;
-            Vector2 coordinateRight = new Vector2(transform.right.x, transform.right.z).normalized;
+            Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
+            Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
             Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
+            Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+            Vector2 thibautVector = (controllerAxis + cameraForward).normalized;
             float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
             int sign;
             if (dotWithRight > 0.0f)
             {
-                sign = 1;
+                sign = -1;
             }
             else if (dotWithRight < 0.0f)
             {
-                sign = -1;
+                sign = 1;
             }
             else
             {
                 sign = 0;
             }
             float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
+            DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
 
-            axis_X = axis_X * Mathf.Cos(angle) - axis_Z * Mathf.Sin(angle);
-            axis_Z = axis_Z * Mathf.Cos(angle) + axis_X * Mathf.Sin(angle);
+            axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
+            axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
+            controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+
+            axis_X = controllerAxis.x;
+            axis_Z = controllerAxis.y;
 
             DebugManager.Instance.Log(69, "X : " + axis_X + " | Y : " + axis_Z + " | A : " + angle * Mathf.Rad2Deg);
-
-
-
-
-
 
         }
 
