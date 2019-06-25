@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/Net_Scenes/Lobby.unity
-    guid: 51b08663e75baff48b8f9ccbba99930d
+    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_Lobby.unity
+    guid: bddb1906bfb8023448416c99f8fc2d3a
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/Net_Scenes/Hub.unity
-    guid: 8eade3221b1430042be9efb22dd87502
+    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_InGame.unity
+    guid: 748ea2def2649e446b27d5fd8cc8d5f7
   m_configObjects: {}
