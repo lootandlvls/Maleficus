@@ -57,6 +57,7 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 
     private void OnConnectPlayersCommandPressed()
     {
+        Debug.Log("AppStateManager: On connect player ");
         if (currentState.ContainedIn(MaleficusTypes.STATES_IN_LOBBY))                               // TODO: Doesn't work
         {
             UpdateState(EAppState.IN_LOBBY_CONNECTING_PLAYERS);
