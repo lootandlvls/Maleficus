@@ -9,6 +9,7 @@ using System;
 public abstract class AbstractUIReaction : MonoBehaviour {
 
     [SerializeField] protected EMenuState activeOnState;
+    [SerializeField] protected EMenuState activeOnSecondState;
 
     private void Start()
     {
@@ -17,9 +18,9 @@ public abstract class AbstractUIReaction : MonoBehaviour {
 
     protected virtual void OnMenuStateUpdated(EMenuState newState, EMenuState lastState)
     {
-        PlayAppropriateReaction(newState);
+        PlayAppropriateReaction(newState, lastState);
     }
 
-    protected abstract void PlayAppropriateReaction(EMenuState newState);
+    protected abstract void PlayAppropriateReaction(EMenuState newState, EMenuState secondState);
 
 }

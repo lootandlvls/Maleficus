@@ -11,7 +11,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
     {
         base.Awake();
 
-        startState = EMenuState.MAIN;                                                                           // TODO: for testing. Change to correct one later
+        startState = EMenuState.STARTUP;                                                                           // TODO: for testing. Change to correct one later
         debugStateID = 50;
 
         FindAndBindButtonCommands();

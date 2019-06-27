@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class NetworkManager : Singleton<NetworkManager>
+public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMessage>
 {
     public static NetworkManager Instance { private set; get; }
 
@@ -29,8 +29,21 @@ public class NetworkManager : Singleton<NetworkManager>
     private bool isStarted;
 
     #region Monobehaviour
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        startState = ENetworkMessage.NONE;                                                                           // TODO: for testing. Change to correct one later
+        debugStateID = 1000;
+    }
+
     private void Start()
     {
+        base.Start();
+        // Bind state machine event
+        StateUpdateEvent += EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated;
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
         Init();
@@ -41,6 +54,12 @@ public class NetworkManager : Singleton<NetworkManager>
         UpdateMessagePump();
     }
     #endregion
+
+    protected override void UpdateState(ENetworkMessage receivedMessage)
+    {
+        base.UpdateState(receivedMessage);
+
+    }
 
     public void Init()
     {
@@ -91,17 +110,21 @@ public class NetworkManager : Singleton<NetworkManager>
         switch (type)
         {
             case NetworkEventType.Nothing:
+                UpdateState(ENetworkMessage.NONE);
                 break;
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Connected to server");
+                UpdateState(ENetworkMessage.CONNECTED);
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Disconnected from server");
+                UpdateState(ENetworkMessage.DISCONNECTED);
                 break;
 
             case NetworkEventType.DataEvent:
+                UpdateState(ENetworkMessage.DATA);
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
                 NetMsg msg = (NetMsg)formatter.Deserialize(ms);
@@ -111,6 +134,7 @@ public class NetworkManager : Singleton<NetworkManager>
 
             default:
             case NetworkEventType.BroadcastEvent:
+                UpdateState(ENetworkMessage.BROADCAST);
                 Debug.Log("Unexpected network event type");
                 break;
         }

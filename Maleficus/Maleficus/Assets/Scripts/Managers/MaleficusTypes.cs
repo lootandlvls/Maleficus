@@ -32,6 +32,8 @@ public static class MaleficusTypes
         // In Lobby
         EAppState.IN_LOBBY_MAIN,
         EAppState.IN_LOBBY_CONNECTING_PLAYERS,
+        EAppState.IN_LOGIN,
+        EAppState.IN_STARTUP,
         // In Game
         EAppState.IN_GAME_PAUSED,
         EAppState.IN_GAME_ENDED
@@ -109,6 +111,8 @@ public static class MaleficusTypes
 /// Update the lists inside the class when more states are added to AppState!
 public enum EAppState
 {
+    IN_STARTUP,
+    IN_LOGIN,
     IN_LOBBY_MAIN,
     IN_LOBBY_CONNECTING_PLAYERS,
     IN_GAME_NOT_STARTED,
@@ -303,6 +307,12 @@ public class PlayerInput
 public enum EMenuState
 {
     NONE,
+    STARTUP,
+    LOGIN,
+    LOGIN_REGISTER,
+    LOGIN_LOGIN,
+    LOGIN_FOLLOW,
+    LOGGIN_LEGAL,
     MAIN,
     CONNECTING_PLAYERS,
     IN_GAME
@@ -314,5 +324,16 @@ public enum EButtonDirection
     RIGHT,
     UP,
     DOWN
+}
+#endregion
+
+#region NETWORK
+public enum ENetworkMessage
+{
+    NONE,
+    CONNECTED,
+    DISCONNECTED,
+    DATA,
+    BROADCAST
 }
 #endregion

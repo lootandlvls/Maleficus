@@ -12,7 +12,7 @@ public class TextActivationReaction : AbstractUIReaction {
         text = GetComponent<Text>();
     }
 
-    protected override void PlayAppropriateReaction(EMenuState newState)
+    protected override void PlayAppropriateReaction(EMenuState newState, EMenuState secondState)
     {
         if (newState == activeOnState)
         {

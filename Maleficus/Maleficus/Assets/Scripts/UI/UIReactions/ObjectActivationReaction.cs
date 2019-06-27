@@ -5,9 +5,9 @@ using UnityEngine;
 public class ObjectActivationReaction : AbstractUIReaction {
 
 
-    protected override void PlayAppropriateReaction(EMenuState newState)
+    protected override void PlayAppropriateReaction(EMenuState newState, EMenuState secondState)
     {
-        if (newState == activeOnState)
+        if (newState == activeOnState || secondState == activeOnState)
         {
             gameObject.SetActive(true);
         }

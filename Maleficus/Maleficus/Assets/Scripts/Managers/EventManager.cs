@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Networking;
 
 public class EventManager : Singleton<EventManager>
 {
@@ -183,6 +184,18 @@ public class EventManager : Singleton<EventManager>
         {
             INPUT_JoystickMoved.Invoke(axisType, axisValue, playerID);
         }
+    }
+    #endregion
+
+    #region NETWORK
+    public event Action<ENetworkMessage, ENetworkMessage> NETWORK_ReceivedMessageUpdated;
+    public void Invoke_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
+    {
+        if (NETWORK_ReceivedMessageUpdated != null)
+        {
+            NETWORK_ReceivedMessageUpdated.Invoke(receivedMsg, lastMsg);
+        }
+        DebugLog("Client received Message: " + receivedMsg);
     }
     #endregion
 

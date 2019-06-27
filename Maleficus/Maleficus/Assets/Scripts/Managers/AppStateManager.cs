@@ -25,6 +25,7 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_GAME_AppStateUpdated;
+
     }
 
 
@@ -57,10 +58,20 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 
     private void OnConnectPlayersCommandPressed()
     {
-        Debug.Log("AppStateManager: On connect player ");
+        Debug.Log("AppStateManager: On connect player");
         if (currentState.ContainedIn(MaleficusTypes.STATES_IN_LOBBY))                               // TODO: Doesn't work
         {
             UpdateState(EAppState.IN_LOBBY_CONNECTING_PLAYERS);
+        }
+    }
+
+    //Todo does this belong here?
+    private void OnConnectedToServer()
+    {
+        Debug.Log("AppStateManager: On connected to server");
+        if(currentState == EAppState.IN_STARTUP)
+        {
+            UpdateState(EAppState.IN_LOGIN);
         }
     }
 }

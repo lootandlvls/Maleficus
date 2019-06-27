@@ -17,7 +17,7 @@ public class SpriteRotatorReaction : AbstractUIReaction
     }
 
 
-    protected override void PlayAppropriateReaction(EMenuState newState)
+    protected override void PlayAppropriateReaction(EMenuState newState, EMenuState secondState)
     {
         if (newState == activeOnState)
         {
