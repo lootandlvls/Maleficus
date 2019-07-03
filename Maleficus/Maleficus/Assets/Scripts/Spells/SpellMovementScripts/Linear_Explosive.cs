@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Linear_Explosive : MonoBehaviour
+public class Linear_Explosive : AbstractSpell
 {
     // Start is called before the first frame update
     void Start()

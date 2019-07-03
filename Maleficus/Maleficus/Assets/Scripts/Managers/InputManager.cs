@@ -56,10 +56,10 @@ public class InputManager : Singleton<InputManager>
         Check_Spell(1, 'D');
         //spell 2
         Check_Spell(2, 'A');
+        Check_Spell(2, 'B');
         // spell 3
         Check_Spell(3, 'A');
-
-                                                            // TODO: Add missing Spell buttons in Input settings
+        Check_Spell(3, 'B');        // TODO: Add missing Spell buttons in Input settings
 
         // Spell 2                                                                                                                   
         //CheckAndCallSpell(2, 'A');
@@ -193,6 +193,7 @@ public class InputManager : Singleton<InputManager>
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerID))
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
+                Debug.Log(controllerID);
                 if (spellID == 1)
                 {
                     EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, playerID);

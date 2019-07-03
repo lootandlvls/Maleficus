@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CurveTestSpeed : MonoBehaviour
+public class CurveTestSpeed : AbstractSpell
 {
     [SerializeField] private Transform startTransform;
     [SerializeField] private Transform endTransform;

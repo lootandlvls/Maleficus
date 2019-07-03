@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2417432040855070894}
-  - component: {fileID: 7842807209708716787}
   - component: {fileID: 2121186348404551797}
   m_Layer: 0
   m_Name: Teleportation
@@ -32,30 +31,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7842807209708716787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 63446852261949800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc58784263973ae4ab60d15b9a5335f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 0
-  speed: 0
-  spellName: 
-  spellLevel: 0
-  OnSelfEffect: 0
-  hasPower: 0
-  movementType: 4
-  debuffEffects: 
-  buffEffects: 
 --- !u!114 &2121186348404551797
 MonoBehaviour:
   m_ObjectHideFlags: 0

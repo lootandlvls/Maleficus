@@ -35,7 +35,7 @@ public class ProjectileMoveScript : MonoBehaviour {
         rb = GetComponent <Rigidbody> ();
 
 		//used to create a radius for the accuracy and have a very unique randomness
-		if (accuracy != 100) {
+		/*if (accuracy != 100) {
 			accuracy = 1 - (accuracy / 100);
 
 			for (int i = 0; i < 2; i++) {
@@ -53,7 +53,7 @@ public class ProjectileMoveScript : MonoBehaviour {
 						offset = new Vector3 (0, offset.y, val);
 				}
 			}
-		}
+		}*/
 			
 		if (muzzlePrefab != null) {
 			var muzzleVFX = Instantiate (muzzlePrefab, transform.position, Quaternion.identity);
@@ -73,8 +73,8 @@ public class ProjectileMoveScript : MonoBehaviour {
 	}
 
 	void FixedUpdate () {
-        if (target != null)
-            rotateToMouse.RotateToMouse (gameObject, target.transform.position);
+     /*  if (target != null)
+            rotateToMouse.RotateToMouse (gameObject, target.transform.position);*/
         if (speed != 0 && rb != null)
 			rb.position += (transform.forward + offset) * (speed * Time.deltaTime);        
     }

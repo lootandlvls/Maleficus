@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class AbstractSpell : MonoBehaviour, ISpell
 {
-    private Vector3 movingDirection;
+  //  private Vector3 movingDirection;
     public Rigidbody myRigidBody;
     public Vector3 dirVector;
     public EPlayerID CastingPlayerID { get; set; }
     public Transform parabolicSpell_EndPosition;
-
+    
   
 
 
@@ -39,8 +39,9 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPower;
-  
-    [SerializeField] private MovementType movementType;
+    
+
+      [SerializeField] private MovementType movementType;
     [SerializeField] private  List<SpellEffects> debuffEffects;
     [SerializeField] private  List<SpellEffects> buffEffects;
     
@@ -50,6 +51,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 // Start is called before the first frame update
     private void Start()
     {
+        dirVector = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
         if (OnSelfEffect)
         {
@@ -65,19 +67,55 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     {
       
     }
- 
-    private void OnTriggerEnter(Collider other)
-    {
-        IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
-        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID)) 
-        {         
 
-            HitInfo hitInfo = new HitInfo(this, CastingPlayerID, otherPlayer.PlayerID, transform.position,hasPower, debuffEffects , buffEffects);
+ 
+
+
+    protected void ProcessHits(IPlayer[] hitPlayers)
+    {
+        foreach (IPlayer hitPlayer in hitPlayers)
+        {
+           
+            // Debug.Log(dirVector);
+            HitInfo hitInfo = new HitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
+
             ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+
+            if (destroyEffect != null)
+            {
+                destroyEffect.DestroySpell();
+            }
+        }
+    }
+
+    protected void ProcessHits(IPlayer hitPlayer)
+    {
+        
+        // Debug.Log(dirVector);
+        HitInfo hitInfo = new HitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
+        EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
+
+        ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+        if (destroyEffect != null)
+        {
             destroyEffect.DestroySpell();
         }
-
+    }
+    // Vector3 dir = (other.transform.position - transform.position) * power;
+    protected void ExplostionProcessHits(IPlayer[] hitPlayers)
+    {
+        foreach (IPlayer hitPlayer in hitPlayers)
+        {   
+            Vector3 movingDirection =  (hitPlayer.Position - transform.position).normalized  * HitPower;
+            dirVector = movingDirection;
+            ProcessHits(hitPlayer);
+        }
+           
+       
        
     }
+
+
+
 }

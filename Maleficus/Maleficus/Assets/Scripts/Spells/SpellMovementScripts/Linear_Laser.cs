@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Linear_Instant : AbstractSpell
+public class Linear_Laser : AbstractSpell
 {
     private void OnTriggerStay(Collider other)
     {

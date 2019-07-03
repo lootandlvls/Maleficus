@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AOE : MonoBehaviour
+public class AOE : AbstractSpell
 {
 
    private Vector3 startPosition;
@@ -23,6 +23,7 @@ public class AOE : MonoBehaviour
     {
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
         int i = 0;
+        List<IPlayer> hitPlayers = new List<IPlayer>();
         while (i < hitColliders.Length)
         {
             if ((hitColliders[i] != null) && hitColliders[i].tag == "Player1" )
@@ -31,16 +32,16 @@ public class AOE : MonoBehaviour
                 AbstractSpell abstractSpell = this.GetComponent<AbstractSpell>();
 
                 if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
-                { 
-              
-                HitInfo hitInfo = new HitInfo(abstractSpell, abstractSpell.CastingPlayerID, otherPlayer.PlayerID, transform.position, abstractSpell.HasPower, abstractSpell.DebuffEffects, abstractSpell.BuffEffects);
-                EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
+                {
+
+                    hitPlayers.Add(otherPlayer);
 
                 }
              }
            
             i++;
         }
+        ProcessHits(hitPlayers.ToArray());
 
     }
 }

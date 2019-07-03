@@ -19,7 +19,10 @@ public class PlayerManager : Singleton<PlayerManager>
     Dictionary<EPlayerID, bool> connectedPlayers                        = new Dictionary<EPlayerID, bool>(); 
     Dictionary<EPlayerID, Player> activePlayers                         = new Dictionary<EPlayerID, Player>();
 
-    
+   
+
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -35,14 +38,12 @@ public class PlayerManager : Singleton<PlayerManager>
         // Input events
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
-        //  Spell events
-        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
-        EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
+       
 
         StartCoroutine(LateStartCoroutine());
     }
-
    
+
 
     private IEnumerator LateStartCoroutine()
     {
@@ -64,121 +65,7 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
 
-    #region Spell
-
-    private void On__SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
-    {
-        Debug.Log("Teleportation spell executed");
-        float InputH = Input.GetAxis(activePlayers[castingPlayerID].playerHorizontalInput);
-        float InputV = Input.GetAxis(activePlayers[castingPlayerID].playerVerticalInput);
-        Debug.Log(InputH + " and " + InputV);
-        Vector3 TeleportDirection = new Vector3();
-        TeleportDirection.x = InputH * Time.deltaTime * 10;
-        TeleportDirection.z = InputV * Time.deltaTime * 10;
-        activePlayers[castingPlayerID].transform.position += TeleportDirection * 50; 
-
-
-
-    }
-    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
-    {
-        if (hitInfo.HasPower)
-        {
-            if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
-            {
-
-                //  StartCoroutine(PushPlayer(hitInfo));
-
-
-            }
-        }   
-      
-        foreach (SpellEffects debuffeffect in hitInfo.DebuffEffects)
-            {   
-                ApplyDebuff( debuffeffect , hitInfo.HitPlayerID);
-            }
-
-        foreach (SpellEffects buffeffect in hitInfo.DebuffEffects)
-            {
-                ApplyBuff( buffeffect, hitInfo.HitPlayerID);
-            }
-           
-        
-    }
-    private IEnumerator PushPlayer(HitInfo hitInfo)
-    {
-        Rigidbody rgb = activePlayers[hitInfo.HitPlayerID].GetComponent<Rigidbody>();
-        rgb.isKinematic = false;
-        transform.position = Vector3.MoveTowards(activePlayers[hitInfo.HitPlayerID].transform.position, hitInfo.HitVelocity, Time.deltaTime * 2);
-        yield return new WaitForSeconds(0.1f);
-        rgb.isKinematic = true;
-    }
-
-    private void ApplyDebuff( SpellEffects debuff , EPlayerID playerID)
-    {
-        
-            switch (debuff)
-            {
-                case SpellEffects.FROZEN:
-                    Debug.Log("Player Frozen");
-                    
-                    break;
-
-                case SpellEffects.STUN:
-                    Debug.Log("Player Stunned");
-               
-                    break;
-
-                case SpellEffects.SLOWDOWN:
-                    Debug.Log("Player SLOWED DOWN");
-                    
-                    break;
-
-                case SpellEffects.CHARM:
-
-                    break;
-                   
-            }
-
-        
-
-
-    }
-    private void ApplyBuff( SpellEffects buff, EPlayerID playerID)
-    {
-        Debug.Log("Apply Buff on player " + playerID);
-        switch (buff)
-            {
-                case SpellEffects.INCREACE_SPEED:
-                    Debug.Log("Spead increased");
-                    break;
-
-                case SpellEffects.INCREASE_CASTING_SPEED:
-                    Debug.Log("INCREASE_CASTING_SPEED");
-                    break;
-
-                case SpellEffects.INCREASE_DAMAGE:
-                    Debug.Log("IINCREASE_DAMAGE");
-                    break;
-
-                case SpellEffects.INCREASE_OFFENSIVE_SPELL_SIZE:
-                    Debug.Log("INCREASE_OFFENSIVE_SPELL_SIZE");
-                    break;
-                case SpellEffects.PROTECT:
-                    Debug.Log("PROTECT");
-                    break;
-                case SpellEffects.REMOVE_DEBUFF:
-                    Debug.Log("REMOVE_DEBUF");
-                    break;
-
-
-            }
-
-        
-    }
-
-        
-        #endregion
+    
 
         private void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
@@ -396,6 +283,9 @@ public class PlayerManager : Singleton<PlayerManager>
         return activePlayers.ContainsKey(playerID);
     }
 
+    public Dictionary<EPlayerID, Player> GetActivePlayers()
+    {
+        return activePlayers;
+    }
 
-   
 }

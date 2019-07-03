@@ -7,6 +7,10 @@ public class Player : MonoBehaviour, IPlayer
 {
     public EPlayerID PlayerID { get; set; }
 
+    public Vector3 Position { get { return transform.position; } }
+    public Quaternion Rotation { get { return transform.rotation; } }
+  
+
     public String playerVerticalInput;
     public String playerHorizontalInput;
 
@@ -118,20 +122,39 @@ public class Player : MonoBehaviour, IPlayer
 
     private void CastSpell(AbstractSpell spellToCast)
     {
-
-        if (spellToCast.MovementType == MovementType.AOE)
+        if (spellToCast.GetComponent<AOE>() != null)
+        //if (spellToCast.MovementType == MovementType.AOE)
         {
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
             AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
             spell.CastingPlayerID = PlayerID;
-            spell.parabolicSpell_EndPosition = SpellEndPosition;
+            Debug.Log("AOE SPELL CASTED");
+         //   spell.parabolicSpell_EndPosition = SpellEndPosition;
         }
-        else if (spellToCast.MovementType == MovementType.LINEAR_INSTANT)
+        else if (spellToCast.GetComponent<Linear_Instant>() != null)
+        //else if (spellToCast.MovementType == MovementType.LINEAR_INSTANT)
         {
-            Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.eulerAngles.y , transform.rotation.z,1);
+            Quaternion rotation = new Quaternion(transform.rotation.x, transform.position.y, transform.rotation.z,1);
             AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
-         
+            spell.transform.rotation = this.transform.rotation;
             spell.transform.parent = this.transform;
+            spell.CastingPlayerID = PlayerID;
+            Debug.Log("LINEAR INSTANT SPELL CASTED");
+        }
+        else if (spellToCast.GetComponent<Teleport>() != null)
+        {
+            Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z);
+            AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
+            spell.CastingPlayerID = PlayerID;
+        }
+        else if (spellToCast.GetComponent<Linear_Laser>() != null)
+        {
+            Quaternion rotation = new Quaternion(transform.rotation.x, transform.position.y, transform.rotation.z, 1);
+            AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
+            spell.transform.rotation = this.transform.rotation;
+            spell.transform.parent = this.transform;
+            spell.CastingPlayerID = PlayerID;
+            StartCoroutine(PlayerCantMove());
         }
         else
         {
@@ -169,10 +192,17 @@ public class Player : MonoBehaviour, IPlayer
         yield return new WaitForSeconds(0.3f);
         GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
     }
+
+    IEnumerator PlayerCantMove()
+    {
+        speed = 0;
+        yield return new WaitForSeconds(2.5f);
+        speed = 75;
+    }
     #endregion
 
 
-    
+
 
 
 }

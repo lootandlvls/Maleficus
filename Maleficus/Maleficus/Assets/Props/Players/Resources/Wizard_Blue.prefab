@@ -10,8 +10,20 @@ PrefabInstance:
     - target: {fileID: 1515304141566281053, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: m_Name
-      value: Player_Blue
+      value: Wizard_Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: spellSlot_1
+      value: 
+      objectReference: {fileID: 1369919918315290314, guid: 739d238671aaa334a8b1a907a756dd07,
+        type: 3}
+    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: spellSlot_3
+      value: 
+      objectReference: {fileID: 1046419516417460918, guid: 7204a205bc9444e449a6f8ae15b17268,
+        type: 3}
     - target: {fileID: 1516624554419814651, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: m_LocalPosition.x

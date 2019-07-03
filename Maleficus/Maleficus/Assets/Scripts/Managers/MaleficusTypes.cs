@@ -128,6 +128,7 @@ public enum MovementType
     LINEAR_INSTANT, //Single or multi
     TELEPORT,
     AOE,
+    LINEAR_LASER
 
 }
 #endregion
@@ -161,7 +162,7 @@ public struct HitInfo
     public EPlayerID CastingPlayerID { get { return castingPlayerID; } }
     public EPlayerID HitPlayerID { get { return hitPlayerID; } }
     public Vector3 HitPosition { get { return hitPosition; } }
-    public Vector3 HitVelocity { get { return hitPosition + castedSpell.Direction * castedSpell.HitPower; } }
+    public Vector3 HitVelocity { get { return hitPosition + castedSpell.Direction ; } }
     public bool HasPower { get { return hasPower; } }
     public List<SpellEffects> DebuffEffects { get {return debuffEffects; }}
     public List<SpellEffects> BuffEffects { get { return buffEffects; } }
