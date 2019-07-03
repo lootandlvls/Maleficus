@@ -1028,7 +1028,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 2
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -6038,6 +6038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerVerticalInput: 
   playerHorizontalInput: 
+  isARPlayer: 1
   SpellInitPosition: {fileID: 608549788462845129}
   SpellEndPosition: {fileID: 7339631618129149989}
   speed: 75

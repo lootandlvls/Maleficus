@@ -152,7 +152,7 @@ public class Server : MonoBehaviour
 
         foreach(var f in db.FindAllFollowBy(account.Email))
         {
-            if(f.ActiveConnection == 1)
+            if(f.ActiveConnection != 0)
             {
                 SendClient(recHostId, f.ActiveConnection, fu);
             }
@@ -196,7 +196,7 @@ public class Server : MonoBehaviour
 
             foreach (var f in db.FindAllFollowBy(account.Email))
             {
-                if (f.ActiveConnection == 1)
+                if (f.ActiveConnection != 0)
                 {
                     //Todo rename cnnId to connectionId in whole solution
                     SendClient(recHostId, f.ActiveConnection, fu);

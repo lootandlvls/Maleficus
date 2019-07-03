@@ -7,9 +7,12 @@ public class Player : MonoBehaviour, IPlayer
 {
     public EPlayerID PlayerID { get; set; }
 
+
     public Vector3 Position { get { return transform.position; } }
     public Quaternion Rotation { get { return transform.rotation; } }
   
+
+    public bool IsARPlayer { get; set; }
 
     public String playerVerticalInput;
     public String playerHorizontalInput;
@@ -30,8 +33,6 @@ public class Player : MonoBehaviour, IPlayer
     private Dictionary<int, AbstractSpell> spellsSlot;
 
 
-
-
     private void Awake()
     {
         myDirectionalSprite = GetComponentInChildren<DirectionalSprite>();
@@ -45,6 +46,11 @@ public class Player : MonoBehaviour, IPlayer
         spellsSlot[3] = spellSlot_3;
         myRigidBody = this.GetComponent<Rigidbody>();
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+
+        if (IsARPlayer == true)
+        {
+            speed *= transform.parent.localScale.x;
+        }
 
     }
 
@@ -74,6 +80,43 @@ public class Player : MonoBehaviour, IPlayer
         //}
         //// transform.Rotate(new Vector3(-1.0f * axis_Y, -1.0f * axis_X, 0.0f));
 
+
+       
+
+        if (IsARPlayer == true)
+        {
+            Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
+            Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
+            Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
+            Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+            Vector2 thibautVector = (controllerAxis + cameraForward).normalized;
+            float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
+            int sign;
+            if (dotWithRight > 0.0f)
+            {
+                sign = -1;
+            }
+            else if (dotWithRight < 0.0f)
+            {
+                sign = 1;
+            }
+            else
+            {
+                sign = 0;
+            }
+            float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
+            DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
+
+            axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
+            axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
+            controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+
+            axis_X = controllerAxis.x;
+            axis_Z = controllerAxis.y;
+
+            DebugManager.Instance.Log(69, "X : " + axis_X + " | Y : " + axis_Z + " | A : " + angle * Mathf.Rad2Deg);
+
+        }
 
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
         transform.position += movingDirection * speed * 0.1f * Time.deltaTime;

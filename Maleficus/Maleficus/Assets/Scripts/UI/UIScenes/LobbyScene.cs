@@ -19,7 +19,7 @@ public class LobbyScene : MonoBehaviour
         string password = GameObject.Find("CreatePassword").GetComponent<TMP_InputField>().text;
         string email = GameObject.Find("CreateEmail").GetComponent<TMP_InputField>().text;
 
-        Client.Instance.SendCreateAccount(username, password, email);
+        NetworkManager.Instance.SendCreateAccount(username, password, email);
     }
     public void OnClickLoginRequest()
     {
@@ -28,7 +28,7 @@ public class LobbyScene : MonoBehaviour
         string usernameOrEmail = GameObject.Find("LoginUsernameOrEmail").GetComponent<TMP_InputField>().text;
         string password = GameObject.Find("LoginPassword").GetComponent<TMP_InputField>().text;
 
-        Client.Instance.SendLoginRequest(usernameOrEmail, password);
+        NetworkManager.Instance.SendLoginRequest(usernameOrEmail, password);
     }
 
     public void ChangeWelcomeMessage(string msg)

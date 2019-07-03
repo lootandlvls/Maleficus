@@ -4,31 +4,36 @@ using UnityEngine;
 using System;
 
 
-public class AppStateManager : Singleton<AppStateManager>
+public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 {
-    private EAppState[] STATES_WITH_UI = new EAppState[] { EAppState.IN_MENU/*, AppState.CONNECTING_PLAYERS*/ };
-
-    public EAppState CurrentAppState     { get { return currentAppState; } }
     public bool IsInAStateWithUI       { get { return isInAStateWithUI; } }
 
     [SerializeField] private EAppState debugStartState;
     private bool isInAStateWithUI = false;
 
-    private EAppState currentAppState;
-    private EAppState lastState;
-
-    private void Start()
+    protected override void Awake()
     {
-        UpdateAppState(debugStartState);
+        base.Awake();
+
+        startState = debugStartState;
+        debugStateID = 51;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        // Bind state machine event
+        StateUpdateEvent += EventManager.Instance.Invoke_GAME_AppStateUpdated;
+
     }
 
 
-    private void UpdateAppState(EAppState newAppState)
+    protected override void UpdateState(EAppState newAppState)
     {
-        lastState = currentAppState;
-        currentAppState = newAppState;
+        base.UpdateState(newAppState);
 
-        if (newAppState.ContainedIn(STATES_WITH_UI))
+        if (newAppState.ContainedIn(MaleficusTypes.STATES_WITH_UI))
         {
             Debug.Log("Is in state wit UI");
             isInAStateWithUI = true;
@@ -39,9 +44,34 @@ public class AppStateManager : Singleton<AppStateManager>
             isInAStateWithUI = false;
         }
 
-        EventManager.Instance.Invoke_GAME_AppStateUpdated(newAppState, lastState);
+    }
 
+    private void FindAndBindButtonCommands()
+    {
+        // Connect Players Command
+        StartConnectingPlayersCommand[] commands = FindObjectsOfType<StartConnectingPlayersCommand>();
+        foreach (StartConnectingPlayersCommand command in commands)
+        {
+            command.ConnectPlayersCommandPressed += OnConnectPlayersCommandPressed; ;
+        }
+    }
 
-    
+    private void OnConnectPlayersCommandPressed()
+    {
+        Debug.Log("AppStateManager: On connect player");
+        if (currentState.ContainedIn(MaleficusTypes.STATES_IN_LOBBY))                               // TODO: Doesn't work
+        {
+            UpdateState(EAppState.IN_LOBBY_CONNECTING_PLAYERS);
+        }
+    }
+
+    //Todo does this belong here?
+    private void OnConnectedToServer()
+    {
+        Debug.Log("AppStateManager: On connected to server");
+        if(currentState == EAppState.IN_STARTUP)
+        {
+            UpdateState(EAppState.IN_LOGIN);
+        }
     }
 }

@@ -18,8 +18,8 @@ public class HubScene : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        selfInformation.text = Client.Instance.self.Username + "#" + Client.Instance.self.Discriminator;
-        Client.Instance.SendRequestFollow();
+        selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
+        NetworkManager.Instance.SendRequestFollow();
     }
 
     public void AddFollowToUi(Account follow)
@@ -50,13 +50,13 @@ public class HubScene : MonoBehaviour
             return;
         }
 
-        Client.Instance.SendAddFollow(usernameDiscriminator);
+        NetworkManager.Instance.SendAddFollow(usernameDiscriminator);
 
     }
 
     public void OnClickRemoveFollow(string username, string discriminator)
     {
-        Client.Instance.SendRemoveFollow(username + "#" + discriminator);
+        NetworkManager.Instance.SendRemoveFollow(username + "#" + discriminator);
         uiFollows.Remove(username + "#" + discriminator);
     }
     #endregion

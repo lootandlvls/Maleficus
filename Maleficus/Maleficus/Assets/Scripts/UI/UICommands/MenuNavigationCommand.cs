@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class MenuNavigationCommand : AbstractMenuCommand {
+public class MenuNavigationCommand : AbstractUICommand {
+
+    public event Action<EMenuState> MenuNavigationCommandPressed;
 
     [SerializeField] private EMenuState fromState;
     [SerializeField] private EMenuState toState;
@@ -10,6 +13,10 @@ public class MenuNavigationCommand : AbstractMenuCommand {
 
     public override void Execute()
     {
-        UIManager.Instance.UpdateState(toState);
+
+        if (MenuNavigationCommandPressed != null)
+        {
+            MenuNavigationCommandPressed.Invoke(toState);
+        }
     }
 }
