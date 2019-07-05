@@ -9392,6 +9392,7 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 0
+  cooldown: 3
   movementType: 0
   debuffEffects: 
   buffEffects: 

@@ -4860,12 +4860,13 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
+  cooldown: 1
+  spellDuration: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 
   directionVector: {x: 0, y: 0, z: 0}
   Spellspeed: 0
-  spellDuration: 0
   shoot: 0
 --- !u!198 &4975907493685325142
 ParticleSystem:

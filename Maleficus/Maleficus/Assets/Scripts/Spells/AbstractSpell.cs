@@ -39,9 +39,11 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPower;
-    
 
-      [SerializeField] private MovementType movementType;
+    public float cooldown;
+    public float spellDuration;
+  
+    [SerializeField] private  MovementType movementType;
     [SerializeField] private  List<SpellEffects> debuffEffects;
     [SerializeField] private  List<SpellEffects> buffEffects;
     
