@@ -117,7 +117,7 @@ public class Player : MonoBehaviour, IPlayer
             DebugManager.Instance.Log(69, "X : " + axis_X + " | Y : " + axis_Z + " | A : " + angle * Mathf.Rad2Deg);
 
         }
-
+        
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
         transform.position += movingDirection * speed * 0.1f * Time.deltaTime;
     }

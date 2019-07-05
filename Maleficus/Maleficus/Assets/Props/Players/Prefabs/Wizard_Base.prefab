@@ -6006,7 +6006,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
@@ -6038,12 +6038,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerVerticalInput: 
   playerHorizontalInput: 
-  isARPlayer: 1
   SpellInitPosition: {fileID: 608549788462845129}
   SpellEndPosition: {fileID: 7339631618129149989}
   speed: 75
   angularSpeed: 28
-  spellSlot_1: {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07,
+  spellSlot_1: {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639,
     type: 3}
   spellSlot_2: {fileID: 2529863791790152314, guid: 5f5d57d7d5418d94483960af93d846ab,
     type: 3}
