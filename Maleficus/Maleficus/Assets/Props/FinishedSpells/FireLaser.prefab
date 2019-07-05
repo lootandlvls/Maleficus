@@ -13805,6 +13805,8 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
+  cooldown: 5
+  spellDuration: 2.5
   movementType: 6
   debuffEffects: 
   buffEffects: 

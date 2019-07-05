@@ -26,6 +26,16 @@ public class Player : MonoBehaviour, IPlayer
     [SerializeField] private AbstractSpell spellSlot_2;
     [SerializeField] private AbstractSpell spellSlot_3;
 
+    private bool readyToShoot = true;
+
+    private bool readyToUseSpell_1 = true;
+    private bool readyToUseSpell_2 = true;
+    private bool readyToUseSpell_3 = true;
+
+    private float spellCooldown_1;
+    private float spellCooldown_2;
+    private float spellCooldown_3;
+
     private Vector3 movingDirection;
     private Rigidbody myRigidBody;
     private DirectionalSprite myDirectionalSprite;
@@ -40,10 +50,15 @@ public class Player : MonoBehaviour, IPlayer
 
     private void Start()
     {
+        // this will be then late change to setSpell function
         spellsSlot = new Dictionary<int, AbstractSpell>();
         spellsSlot[1] = spellSlot_1;
         spellsSlot[2] = spellSlot_2;
         spellsSlot[3] = spellSlot_3;
+        spellCooldown_1 = spellSlot_1.cooldown;
+        spellCooldown_2 = spellSlot_2.cooldown;
+        spellCooldown_3 = spellSlot_3.cooldown;
+
         myRigidBody = this.GetComponent<Rigidbody>();
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
 
@@ -150,32 +165,73 @@ public class Player : MonoBehaviour, IPlayer
 
     public void CastSpell_1()
     {
-        CastSpell(spellsSlot[1]);
+        Debug.Log("readyToShoot = " + readyToShoot);
+        Debug.Log("readyToUseSpell_1 = " + readyToUseSpell_1);
+        if (readyToUseSpell_1 && readyToShoot)
+        {
+            readyToShoot = false;
+            readyToUseSpell_1 = false;
+            CastSpell(spellsSlot[1]);
+            StartCoroutine(ReadyToUseSpell(spellsSlot[1].spellDuration,  0));
+            StartCoroutine(ReadyToUseSpell(spellsSlot[1].cooldown, 1));
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void CastSpell_2()
     {
-        CastSpell(spellsSlot[2]);
+        if (readyToUseSpell_2 && readyToShoot)
+        {
+            readyToShoot = false;
+            readyToUseSpell_2 = false;
+            CastSpell(spellsSlot[2]);
+            StartCoroutine(ReadyToUseSpell(spellsSlot[2].spellDuration,  0));
+            StartCoroutine(ReadyToUseSpell(spellsSlot[2].cooldown, 2));
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void CastSpell_3()
     {
-        CastSpell(spellsSlot[3]);
+        
+         if (readyToUseSpell_3 && readyToShoot)
+         {
+            readyToShoot = false;
+            readyToUseSpell_3 = false;
+            CastSpell(spellsSlot[3]);
+            StartCoroutine(ReadyToUseSpell(spellsSlot[3].spellDuration, 0));
+            StartCoroutine(ReadyToUseSpell(spellsSlot[3].cooldown,  3));
+        }
+         else
+        {
+            return;
+        }
     }
 
     private void CastSpell(AbstractSpell spellToCast)
-    {
+    {    
+     
+        
         if (spellToCast.GetComponent<AOE>() != null)
-        //if (spellToCast.MovementType == MovementType.AOE)
+        
         {
+           
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
             AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
             spell.CastingPlayerID = PlayerID;
             Debug.Log("AOE SPELL CASTED");
+           
+           
          //   spell.parabolicSpell_EndPosition = SpellEndPosition;
         }
         else if (spellToCast.GetComponent<Linear_Instant>() != null)
-        //else if (spellToCast.MovementType == MovementType.LINEAR_INSTANT)
+       
         {
             Quaternion rotation = new Quaternion(transform.rotation.x, transform.position.y, transform.rotation.z,1);
             AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
@@ -183,32 +239,40 @@ public class Player : MonoBehaviour, IPlayer
             spell.transform.parent = this.transform;
             spell.CastingPlayerID = PlayerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
+           
+
         }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z);
             AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
             spell.CastingPlayerID = PlayerID;
+          
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
+          
             Quaternion rotation = new Quaternion(transform.rotation.x, transform.position.y, transform.rotation.z, 1);
             AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
             spell.transform.rotation = this.transform.rotation;
             spell.transform.parent = this.transform;
             spell.CastingPlayerID = PlayerID;
             StartCoroutine(PlayerCantMove());
+          
         }
         else
         {
+           
             AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, transform.rotation);
             spell.CastingPlayerID = PlayerID;
             spell.parabolicSpell_EndPosition = SpellEndPosition;
+           
         }
         
                                                                         // TODO: Not working here
         // Deactivate Directional Sprite
-        myDirectionalSprite.HideSprite();
+        myDirectionalSprite.HideSprite();       
+       
     }
 
 
@@ -218,6 +282,8 @@ public class Player : MonoBehaviour, IPlayer
         spellSlot_1 = spell_1;
         spellSlot_2 = spell_2;
         spellSlot_3 = spell_3;
+
+       
 
         spellsSlot = new Dictionary<int, AbstractSpell>();
 
@@ -242,6 +308,36 @@ public class Player : MonoBehaviour, IPlayer
         yield return new WaitForSeconds(2.5f);
         speed = 75;
     }
+    //Spell Cooldowns
+    IEnumerator ReadyToUseSpell(float time , int id)
+    {     
+        switch (id)
+        {
+            case 0:
+                yield return new WaitForSeconds(time);
+                readyToShoot = true;
+                break;
+            case 1:
+                yield return new WaitForSeconds(time);
+                readyToUseSpell_1 = true;
+                break;
+
+            case 2:
+                yield return new WaitForSeconds(time);
+                readyToUseSpell_2 = true;
+                break;
+
+            case 3:
+                yield return new WaitForSeconds(time);
+                readyToUseSpell_3 = true;
+                break;
+            
+        }
+       
+       
+        Debug.Log("ready to use the spell again");
+    }
+  
     #endregion
 
 

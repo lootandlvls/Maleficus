@@ -7,7 +7,7 @@ public class Linear_Hit : AbstractSpell
     private Vector3 movingDirection;  
     public Vector3 directionVector;
     [SerializeField] float Spellspeed;
-    [SerializeField] private float spellDuration;
+    
     [SerializeField] bool shoot;
 
     // Start is called before the first frame update
