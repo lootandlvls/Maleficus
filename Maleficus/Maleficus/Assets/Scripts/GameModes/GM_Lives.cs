@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lives3GameMode : AbstractGameMode
+public class GM_Lives : AbstractGameMode
 {
     private void Awake()
     {
-        gameMode = EGameMode.LIVES_3;
+
     }
 }

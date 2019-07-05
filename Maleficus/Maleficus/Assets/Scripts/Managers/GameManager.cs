@@ -27,7 +27,7 @@ public class GameManager : Singleton<GameManager>
         switch (gameModeToStart)
         {
             case EGameMode.LIVES_3:
-                currentGameMode = new Lives3GameMode();
+                currentGameMode = new GM_Lives();
                 break;
 
             case EGameMode.TIME_2_MINUTES:
@@ -45,7 +45,7 @@ public class GameManager : Singleton<GameManager>
         if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_NOT_STARTED)
         {
             Debug.Log("Starting 3 lives game");
-            currentGameMode = new Lives3GameMode();
+            currentGameMode = new GM_Lives();
 
             EventManager.Instance.Invoke_GAME_GameAboutToStart(currentGameMode.GameMode);
         }
