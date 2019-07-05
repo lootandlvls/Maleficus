@@ -26,6 +26,7 @@ public class EventManager : Singleton<EventManager>
         {
             GAME_GameAboutToStart.Invoke(gameModeAboutToStart);
         }
+        DebugLog("Game about to start : " + gameModeAboutToStart);
     }
 
     public event Action<EGameMode> GAME_GameStarted;
@@ -35,6 +36,7 @@ public class EventManager : Singleton<EventManager>
         {
             GAME_GameStarted.Invoke(gameModeStarted);
         }
+        DebugLog("Game started : " + gameModeStarted);
     }
 
     public event Action<EGameMode> GAME_GamePaused;
@@ -44,6 +46,7 @@ public class EventManager : Singleton<EventManager>
         {
             GAME_GamePaused.Invoke(gameModePaused);
         }
+        DebugLog("Game paused : " + gameModePaused);
     }
 
     public event Action<EGameMode> GAME_GameUnPaused;
@@ -53,6 +56,7 @@ public class EventManager : Singleton<EventManager>
         {
             GAME_GameUnPaused.Invoke(gameModeUnPaused);
         }
+        DebugLog("Game unpaused : " + gameModeUnPaused);
     }
 
     public event Action<EGameMode> GAME_GameEnded;
@@ -62,6 +66,7 @@ public class EventManager : Singleton<EventManager>
         {
             GAME_GameEnded.Invoke(gameModeEnded);
         }
+        DebugLog("Game ended : " + gameModeEnded);
     }
 
     public event Action<EGameMode> GAME_GameAborted;
@@ -71,8 +76,18 @@ public class EventManager : Singleton<EventManager>
         {
             GAME_GameAborted.Invoke(gameModeAborted);
         }
+        DebugLog("Game aborted : " + gameModeAborted);
     }
 
+    public event Action<ETeamID, EGameMode> GAME_TeamWon;
+    public void Invoke_GAME_PlayerWon(ETeamID winnerTeamID, EGameMode gameMode)
+    {
+        if (GAME_TeamWon != null)
+        {
+            GAME_TeamWon.Invoke(winnerTeamID, gameMode);
+        }
+        DebugLog("Team " + winnerTeamID + " won the game: " + gameMode);
+    }
 
     #endregion
 

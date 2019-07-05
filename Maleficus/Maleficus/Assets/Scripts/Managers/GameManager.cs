@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    private Dictionary<EPlayerID, int> playerScores;
-
     private AbstractGameMode currentGameMode;
 
     private bool isCanStartGame;
@@ -18,37 +16,41 @@ public class GameManager : Singleton<GameManager>
         isCanStartGame = false;
     }
 
+    private void Start()
+    {
+        EventManager.Instance.GAME_TeamWon += On_GAME_TeamWon;
+    }
 
-
+    
 
     #region Game Commands
     public void StartGame(EGameMode gameModeToStart)
     {
-        switch (gameModeToStart)
-        {
-            case EGameMode.LIVES_3:
-                currentGameMode = new GM_Lives();
-                break;
-
-            case EGameMode.TIME_2_MINUTES:
-
-                break;
-
-            case EGameMode.INSANE:
-
-                break;
-        }
-    }
-
-    public void Start3LivesGame()
-    {
         if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_NOT_STARTED)
         {
-            Debug.Log("Starting 3 lives game");
-            currentGameMode = new GM_Lives();
+            switch (gameModeToStart)
+            {
+                case EGameMode.SINGLE_LIVES_5:
+                    currentGameMode = new GM_Single_Lives();
+                    break;
+
+                case EGameMode.SINGLE_TIME_2:
+
+                    break;
+
+                case EGameMode.INSANE:
+
+                    break;
+            }
 
             EventManager.Instance.Invoke_GAME_GameAboutToStart(currentGameMode.GameMode);
         }
+    }
+
+    // Test function
+    public void Start3LivesGame()
+    {
+        StartGame(EGameMode.SINGLE_LIVES_5);
 
     }
 
@@ -70,9 +72,10 @@ public class GameManager : Singleton<GameManager>
         {
             yield return new WaitForEndOfFrame();
         }
-
-        
     }
 
-
+    private void On_GAME_TeamWon(ETeamID winnerTeamID, EGameMode gameMode)
+    {
+        EndGame();
+    }
 }

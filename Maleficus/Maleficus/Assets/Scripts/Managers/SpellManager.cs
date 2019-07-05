@@ -12,7 +12,7 @@ public class SpellManager : Singleton<SpellManager>
     [SerializeField] private float friction;
     private void Start()
     {
-        activePlayers = PlayerManager.Instance.GetActivePlayers();
+        activePlayers = PlayerManager.Instance.ActivePlayers;
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
     }

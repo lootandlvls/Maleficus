@@ -129,10 +129,11 @@ public enum EAppState
 #region Game
 public enum EGameMode
 {
-    LIVES_3,
-    TIME_2_MINUTES,
-    POINTS_100,
+    SINGLE_LIVES_5,
+    SINGLE_TIME_2,
+    SINGLE_POINTS_100,
     INSANE
+        // TODO: Define rest of game modes
 }
 
 
@@ -190,6 +191,15 @@ public enum EPlayerID
     PLAYER_3,
     PLAYER_4,
     TEST
+}
+
+public enum ETeamID
+{
+    NONE,
+    TEAM_1,
+    TEAM_2,
+    TEAM_3,
+    TEAM_4
 }
 
 public struct HitInfo

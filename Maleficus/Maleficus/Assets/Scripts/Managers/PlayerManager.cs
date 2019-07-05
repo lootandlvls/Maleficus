@@ -6,24 +6,33 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+
+    public Dictionary<EPlayerID, Player> PlayerPrefabs                              { get { return playerPrefabs; } }
+    public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions         { get { return playersSpawnPositions; } }
+    public Dictionary<EPlayerID, PlayerInput> PlayersInput                          { get { return playersInput; } }
+    public Dictionary<ETeamID, List<EPlayerID>> PlayerTeams                         { get { return playerTeams; } }
+    public Dictionary<EPlayerID, bool> ConnectedPlayers                             { get { return connectedPlayers; } }
+    public Dictionary<EPlayerID, Player> ActivePlayers                              { get { return activePlayers; } }
     
     [Header("Spawn character when the player connects with a controller")]
     [SerializeField] private bool isSpawnPlayerOnConnect_DebugMode = false;
     [SerializeField] private bool isSpawnAllPlayers_DebugMode = false;
     [SerializeField] private bool isSpawnArPlayers = false;
 
-    // Always defined dictionaries 
-    Dictionary<EPlayerID, Player> playerPrefabs                         = new Dictionary<EPlayerID, Player>();
-    Dictionary<EPlayerID, PlayerSpawnPosition> playersSpawnPositions    = new Dictionary<EPlayerID, PlayerSpawnPosition>();
-    Dictionary<EPlayerID, PlayerInput> playersInput                     = new Dictionary<EPlayerID, PlayerInput>();
+    /* Always defined dictionaries */
+    private Dictionary<EPlayerID, Player> playerPrefabs                         = new Dictionary<EPlayerID, Player>();
+    private Dictionary<EPlayerID, PlayerSpawnPosition> playersSpawnPositions    = new Dictionary<EPlayerID, PlayerSpawnPosition>();
+    private Dictionary<EPlayerID, PlayerInput> playersInput                     = new Dictionary<EPlayerID, PlayerInput>();
+    private Dictionary<ETeamID, List<EPlayerID>> playerTeams = new Dictionary<ETeamID, List<EPlayerID>>();
 
-    // Only defined for active members dictionaries
-    Dictionary<EPlayerID, bool> connectedPlayers                        = new Dictionary<EPlayerID, bool>(); 
-    Dictionary<EPlayerID, Player> activePlayers                         = new Dictionary<EPlayerID, Player>();
+    /* Only defined for active members dictionaries */
+    /// Added whenever a player has connected with controller. Stays the same during the whole game.
+    /// IS INITIALIZED WITH ALL PLAYERS and false!
+    private Dictionary<EPlayerID, bool> connectedPlayers                        = new Dictionary<EPlayerID, bool>();
+    /// Added whenever a player has spawned. Removed when he dies.
+    private Dictionary<EPlayerID, Player> activePlayers                         = new Dictionary<EPlayerID, Player>();
 
    
-
-
 
     protected override void Awake()
     {
@@ -66,7 +75,16 @@ public class PlayerManager : Singleton<PlayerManager>
         MoveAndRotatePlayers();
     }
 
-
+                                                                                                                    // TODO: Use this 
+    public void AssignPlayerToTeam(EPlayerID playerID, ETeamID teamID)
+    {
+        if (playerTeams[teamID].Contains(playerID))
+        {
+            playerTeams[teamID].Remove(playerID);
+        }
+        playerTeams[teamID].Add(playerID);
+          
+    }
     
 
     private void SpawnPlayer(EPlayerID toSpawnPlayerID)
@@ -82,6 +100,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
                 Player spawnedPlayer = Instantiate(playerPrefab, playerPosition, playerRotation);
                 spawnedPlayer.PlayerID = toSpawnPlayerID;
+                spawnedPlayer.TeamID = GetPlayerTeamID(toSpawnPlayerID);
 
                 activePlayers.Add(toSpawnPlayerID, spawnedPlayer);
 
@@ -245,7 +264,14 @@ public class PlayerManager : Singleton<PlayerManager>
         connectedPlayers[EPlayerID.PLAYER_2] = false;
         connectedPlayers[EPlayerID.PLAYER_3] = false;
         connectedPlayers[EPlayerID.PLAYER_4] = false;
+
+        playerTeams[ETeamID.TEAM_1] = new List<EPlayerID>() { EPlayerID.PLAYER_1 };
+        playerTeams[ETeamID.TEAM_2] = new List<EPlayerID>() { EPlayerID.PLAYER_2 };
+        playerTeams[ETeamID.TEAM_3] = new List<EPlayerID>() { EPlayerID.PLAYER_3 };
+        playerTeams[ETeamID.TEAM_4] = new List<EPlayerID>() { EPlayerID.PLAYER_4 };
     }
+
+    
 
     private void LoadPlayerResources()
     {
@@ -292,9 +318,16 @@ public class PlayerManager : Singleton<PlayerManager>
         return activePlayers.ContainsKey(playerID);
     }
 
-    public Dictionary<EPlayerID, Player> GetActivePlayers()
+    public ETeamID GetPlayerTeamID(EPlayerID playerID)
     {
-        return activePlayers;
+        ETeamID result = ETeamID.NONE;
+        foreach (ETeamID teamID in PlayerTeams.Keys)
+        {
+            if (PlayerTeams[teamID].Contains(playerID))
+            {
+                result = teamID;
+            }
+        }
+        return result;
     }
-
 }
