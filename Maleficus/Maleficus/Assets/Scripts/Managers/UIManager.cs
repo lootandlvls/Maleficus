@@ -23,12 +23,28 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
 
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
+        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
 
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
         StartCoroutine(LateStartCoroutine());
     }
 
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
+    {
+        switch(receivedMsg)
+        {
+            case ENetworkMessage.CONNECTED:
+                UpdateState(EMenuState.LOGIN);
+                break;
+            case ENetworkMessage.LOGGED_IN:
+                UpdateState(EMenuState.MAIN);
+                break;
+            case ENetworkMessage.REGISTERED:
+                UpdateState(EMenuState.LOGIN);
+                break;
+        }
+    }
 
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
@@ -80,11 +96,65 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
     private void FindAndBindButtonCommands()
     {
         // Menu Navigation Command
-        MenuNavigationCommand[] commands = FindObjectsOfType<MenuNavigationCommand>();
-        foreach (MenuNavigationCommand command in commands)
+        MenuNavigationCommand[] MNCcommands = FindObjectsOfType<MenuNavigationCommand>();
+        foreach (MenuNavigationCommand command in MNCcommands)
         {
             command.MenuNavigationCommandPressed += UpdateState;
         }
+
+        OpenLoginPopUpCommand[] OLPUcommands = FindObjectsOfType<OpenLoginPopUpCommand>();
+        foreach(OpenLoginPopUpCommand command in OLPUcommands)
+        {
+            command.OpenLoginPopUpCommandPressed += On_OpenLoginPopUpCommandPressed;
+        }
+
+        OpenRegisterPopUpCommand[] ORPcommands = FindObjectsOfType<OpenRegisterPopUpCommand>();
+        foreach(OpenRegisterPopUpCommand command in ORPcommands)
+        {
+            command.OpenRegisterPopUpCommandPressed += On_OpenRegisterPopUpCommandPressed;
+        }
+
+        GoBackToLoginCommand[] GBLcommands = FindObjectsOfType<GoBackToLoginCommand>();
+        foreach(GoBackToLoginCommand command in GBLcommands)
+        {
+            command.GoBackToLoginCommandPressed += On_GoBackToLoginCommandPressed;
+        }
+
+        LoginRequestCommand[] LRcommands = FindObjectsOfType<LoginRequestCommand>();
+        foreach(LoginRequestCommand command in LRcommands)
+        {
+            command.LoginRequestCommandPressed += On_LoginRequestCommandPressed;
+        }
+
+        RegisterRequestCommand[] RRcommands = FindObjectsOfType<RegisterRequestCommand>();
+        foreach(RegisterRequestCommand command in RRcommands)
+        {
+            command.RegisterRequestCommandPressed += On_RegisterRequestCommandPressed;
+        }
     }
 
+    private void On_RegisterRequestCommandPressed()
+    {
+        RegisterContext.Instance.OnClickCreateAccount();
+    }
+
+    private void On_LoginRequestCommandPressed()
+    {
+        LoginContext.Instance.OnClickLoginRequest();
+    }
+
+    private void On_GoBackToLoginCommandPressed()
+    {
+        UpdateState(EMenuState.LOGIN);
+    }
+
+    private void On_OpenRegisterPopUpCommandPressed()
+    {
+        UpdateState(EMenuState.LOGIN_REGISTER);
+    }
+
+    private void On_OpenLoginPopUpCommandPressed()
+    {
+        UpdateState(EMenuState.LOGIN_LOGIN);
+    }
 }

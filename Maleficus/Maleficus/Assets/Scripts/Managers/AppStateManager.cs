@@ -16,6 +16,8 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
     {
         base.Awake();
 
+        FindAndBindButtonCommands();
+
         startState = debugStartState;
         debugStateID = 51;
     }
@@ -53,7 +55,7 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
         StartConnectingPlayersCommand[] commands = FindObjectsOfType<StartConnectingPlayersCommand>();
         foreach (StartConnectingPlayersCommand command in commands)
         {
-            command.ConnectPlayersCommandPressed += OnConnectPlayersCommandPressed; ;
+            command.ConnectPlayersCommandPressed += OnConnectPlayersCommandPressed;
         }
     }
 
