@@ -150,7 +150,7 @@ public class InputManager : Singleton<InputManager>
             else // Connect player
             {
                 // In Connecting Players state ?
-                if (AppStateManager.Instance.CurrentState == EAppState.IN_LOBBY_CONNECTING_PLAYERS)
+                if (AppStateManager.Instance.IsCanControlPlayers == true)
                 {
                     EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
                     if (connectedPlayerID != EPlayerID.TEST)
@@ -171,7 +171,7 @@ public class InputManager : Singleton<InputManager>
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
 
-                if (AppStateManager.Instance.CurrentState == EAppState.IN_LOBBY_CONNECTING_PLAYERS)
+                if (AppStateManager.Instance.IsCanControlPlayers == true)
                 {
                     PlayerManager.Instance.DisconnectPlayer(playerID);
                     playerControllerMapping.Remove(controllerID);

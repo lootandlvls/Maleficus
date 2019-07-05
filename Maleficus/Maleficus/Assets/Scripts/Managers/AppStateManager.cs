@@ -6,7 +6,8 @@ using System;
 
 public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 {
-    public bool IsInAStateWithUI       { get { return isInAStateWithUI; } }
+    public bool IsInAStateWithUI        { get { return isInAStateWithUI; } }
+    public bool IsCanControlPlayers     { get { return true; } } // Todo: use correct context
 
     [SerializeField] private EAppState debugStartState;
     private bool isInAStateWithUI = false;
