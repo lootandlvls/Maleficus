@@ -54,6 +54,21 @@ public static class MaleficusTypes
         EAppState.IN_GAME_ENDED,
     };
 
+    // UI State List
+    public static EMenuState[] MENU_STATE_STARTUP = new EMenuState[]
+    {
+        EMenuState.STARTUP
+    };
+
+    public static EMenuState[] MENU_STATE_IN_LOGIN = new EMenuState[]
+    {
+        EMenuState.LOGIN_LOGIN,
+        EMenuState.LOGIN_REGISTER,
+        EMenuState.LOGIN_FOLLOW,
+        EMenuState.LOGIN_LEGAL
+    };
+
+
 
 
     /// Convert a PlayerID enum to an int
@@ -310,10 +325,10 @@ public enum EMenuState
     NONE,
     STARTUP,
     LOGIN,
-    LOGIN_REGISTER,
     LOGIN_LOGIN,
+    LOGIN_REGISTER,
     LOGIN_FOLLOW,
-    LOGGIN_LEGAL,
+    LOGIN_LEGAL,
     MAIN,
     CONNECTING_PLAYERS,
     IN_GAME
@@ -335,6 +350,9 @@ public enum ENetworkMessage
     CONNECTED,
     DISCONNECTED,
     DATA,
-    BROADCAST
+    BROADCAST,
+    LOGGED_IN,
+    LOGGED_OUT,
+    REGISTERED
 }
 #endregion
