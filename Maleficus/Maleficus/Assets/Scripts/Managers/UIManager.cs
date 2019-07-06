@@ -93,6 +93,8 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         this.selectedButton = selectedButton;
     }
 
+
+
     private void FindAndBindButtonActions()
     {
         // Menu Navigation Action
@@ -105,56 +107,60 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         OpenLoginPopUpAction[] OLPUActions = FindObjectsOfType<OpenLoginPopUpAction>();
         foreach(OpenLoginPopUpAction Action in OLPUActions)
         {
-            Action.OpenLoginPopUpActionPressed += On_OpenLoginPopUpActionPressed;
+            Action.OpenLoginPopUpActionPressed += () =>
+            {
+                UpdateState(EMenuState.LOGIN_LOGIN);
+            };
         }
+
 
         OpenRegisterPopUpAction[] ORPActions = FindObjectsOfType<OpenRegisterPopUpAction>();
         foreach(OpenRegisterPopUpAction Action in ORPActions)
         {
-            Action.OpenRegisterPopUpActionPressed += On_OpenRegisterPopUpActionPressed;
+            Action.OpenRegisterPopUpActionPressed += () =>
+            {
+                UpdateState(EMenuState.LOGIN_REGISTER);
+
+            };
         }
 
         GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
         foreach(GoBackToLoginAction Action in GBLActions)
         {
-            Action.GoBackToLoginActionPressed += On_GoBackToLoginActionPressed;
+            Action.GoBackToLoginActionPressed += () =>
+            {
+                UpdateState(EMenuState.LOGIN);
+
+
+            };
         }
 
         LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
         foreach(LoginRequestAction Action in LRActions)
         {
-            Action.LoginRequestActionPressed += On_LoginRequestActionPressed;
+            Action.LoginRequestActionPressed += () =>
+            {
+                LoginContext.Instance.OnClickLoginRequest();
+
+            };
         }
 
         RegisterRequestAction[] RRActions = FindObjectsOfType<RegisterRequestAction>();
         foreach(RegisterRequestAction Action in RRActions)
         {
-            Action.RegisterRequestActionPressed += On_RegisterRequestActionPressed;
+            Action.RegisterRequestActionPressed += () =>
+            {
+                RegisterContext.Instance.OnClickCreateAccount();
+
+
+            };
         }
     }
 
-    private void On_RegisterRequestActionPressed()
-    {
-        RegisterContext.Instance.OnClickCreateAccount();
-    }
 
-    private void On_LoginRequestActionPressed()
-    {
-        LoginContext.Instance.OnClickLoginRequest();
-    }
 
-    private void On_GoBackToLoginActionPressed()
-    {
-        UpdateState(EMenuState.LOGIN);
-    }
 
-    private void On_OpenRegisterPopUpActionPressed()
-    {
-        UpdateState(EMenuState.LOGIN_REGISTER);
-    }
+    
 
-    private void On_OpenLoginPopUpActionPressed()
-    {
-        UpdateState(EMenuState.LOGIN_LOGIN);
-    }
+    
 }
