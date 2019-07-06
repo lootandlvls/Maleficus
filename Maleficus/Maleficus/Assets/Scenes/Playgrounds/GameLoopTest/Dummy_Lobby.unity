@@ -217,7 +217,7 @@ GameObject:
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!20 &130369289
 Camera:
@@ -244,7 +244,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -1344,17 +1344,17 @@ PrefabInstance:
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -803.0129
+      value: -809.57
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -449.2782
+      value: -452.02
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.009176
+      value: -13.706
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
@@ -1399,17 +1399,17 @@ PrefabInstance:
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.2824535
+      value: 4.5537233
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.2824538
+      value: 4.553724
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.2824535
+      value: 4.5537233
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c333dacb8e4af4b45870a4e182a019c5, type: 3}

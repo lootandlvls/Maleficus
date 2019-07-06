@@ -7,30 +7,26 @@ using UnityEngine;
 public class PlayerManager : Singleton<PlayerManager>
 {
 
-    public Dictionary<EPlayerID, Player> PlayerPrefabs                              { get { return playerPrefabs; } }
-    public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions         { get { return playersSpawnPositions; } }
-    public Dictionary<EPlayerID, PlayerInput> PlayersInput                          { get { return playersInput; } }
-    public Dictionary<ETeamID, List<EPlayerID>> PlayerTeams                         { get { return playerTeams; } }
-    public Dictionary<EPlayerID, bool> ConnectedPlayers                             { get { return connectedPlayers; } }
-    public Dictionary<EPlayerID, Player> ActivePlayers                              { get { return activePlayers; } }
-    
-    [Header("Spawn character when the player connects with a controller")]
-    [SerializeField] private bool isSpawnPlayerOnConnect_DebugMode = false;
-    [SerializeField] private bool isSpawnAllPlayers_DebugMode = false;
-    [SerializeField] private bool isSpawnArPlayers = false;
+    public Dictionary<EPlayerID, Player>                PlayerPrefabs               { get { return playerPrefabs; } }
+    public Dictionary<EPlayerID, PlayerSpawnPosition>   PlayersSpawnPositions       { get { return playersSpawnPositions; } }
+    public Dictionary<EPlayerID, PlayerInput>           PlayersInput                { get { return playersInput; } }
+    public Dictionary<EPlayerID, bool>                  ConnectedPlayers            { get { return connectedPlayers; } }
+    public Dictionary<EPlayerID, Player>                ActivePlayers               { get { return activePlayers; } }
+    public Dictionary<ETeamID, List<EPlayerID>>         PlayerTeams                 { get { return playerTeams; } }
 
-    /* Always defined dictionaries */
-    private Dictionary<EPlayerID, Player> playerPrefabs                         = new Dictionary<EPlayerID, Player>();
-    private Dictionary<EPlayerID, PlayerSpawnPosition> playersSpawnPositions    = new Dictionary<EPlayerID, PlayerSpawnPosition>();
-    private Dictionary<EPlayerID, PlayerInput> playersInput                     = new Dictionary<EPlayerID, PlayerInput>();
-    private Dictionary<ETeamID, List<EPlayerID>> playerTeams = new Dictionary<ETeamID, List<EPlayerID>>();
 
-    /* Only defined for active members dictionaries */
-    /// Added whenever a player has connected with controller. Stays the same during the whole game.
-    /// IS INITIALIZED WITH ALL PLAYERS and false!
-    private Dictionary<EPlayerID, bool> connectedPlayers                        = new Dictionary<EPlayerID, bool>();
+
+    /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
+    private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
+    private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnPositions       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
+    private Dictionary<EPlayerID, PlayerInput>          playersInput                = new Dictionary<EPlayerID, PlayerInput>();
+    /// Initially initialized with false, then true whenever the respective player connects
+    private Dictionary<EPlayerID, bool>                 connectedPlayers            = new Dictionary<EPlayerID, bool>();
+
+    /* Dictionaries that are defined only for active players  */
     /// Added whenever a player has spawned. Removed when he dies.
-    private Dictionary<EPlayerID, Player> activePlayers                         = new Dictionary<EPlayerID, Player>();
+    private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
+    private Dictionary<ETeamID, List<EPlayerID>>        playerTeams                 = new Dictionary<ETeamID, List<EPlayerID>>();
 
    
 
@@ -50,7 +46,6 @@ public class PlayerManager : Singleton<PlayerManager>
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
        
-
         StartCoroutine(LateStartCoroutine());
     }
    
@@ -60,7 +55,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         yield return new WaitForEndOfFrame();
 
-        if (isSpawnAllPlayers_DebugMode == true)
+        if (MotherOfManagers.Instance.IsSpawnAllPlayers == true)
         {
             SpawnPlayer(EPlayerID.PLAYER_1);
             SpawnPlayer(EPlayerID.PLAYER_2);
@@ -89,7 +84,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
-        if ((connectedPlayers[toSpawnPlayerID] == true) || (isSpawnAllPlayers_DebugMode == true))
+        if ((connectedPlayers[toSpawnPlayerID] == true) || (MotherOfManagers.Instance.IsSpawnAllPlayers == true))
         {
             if (activePlayers.ContainsKey(toSpawnPlayerID) == false)
             {
@@ -104,7 +99,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
                 activePlayers.Add(toSpawnPlayerID, spawnedPlayer);
 
-                if (isSpawnArPlayers == true)
+                if (MotherOfManagers.Instance.IsSpawnARPlayers == true)
                 {
                     spawnedPlayer.IsARPlayer = true;
                     spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
@@ -200,7 +195,7 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             EventManager.Instance.Invoke_PLAYERS_PlayerConnected(playerIDToConnect);
 
-            if (isSpawnPlayerOnConnect_DebugMode == true)
+            if (MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true)
             {
                 SpawnPlayer(playerIDToConnect);
             }
@@ -308,6 +303,8 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
+
+    /* public player information getter functions */
     public bool IsPlayerConnected(EPlayerID playerID)
     {
         return connectedPlayers[playerID];
@@ -329,5 +326,10 @@ public class PlayerManager : Singleton<PlayerManager>
             }
         }
         return result;
+    }
+
+    public EPlayerID[] GetPlayersInTeam(ETeamID inTeamID)
+    {
+        return PlayerTeams[inTeamID].ToArray();
     }
 }

@@ -6,7 +6,8 @@ using UnityEngine.Networking;
 
 public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMessage>
 {
-    public static NetworkManager Instance { private set; get; }
+
+    // public static NetworkManager Instance { private set; get; }                                                  // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
 
     private const int MAX_USER = 100;
     private const int PORT = 26002;
@@ -45,7 +46,8 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated;
 
-        Instance = this;
+        //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
+
         DontDestroyOnLoad(gameObject);
         Init();
     }

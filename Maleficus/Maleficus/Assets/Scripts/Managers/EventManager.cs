@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 
 public class EventManager : Singleton<EventManager>
 {
-    [SerializeField] private bool isDebugLogEvents = false;
 
     #region GAME
     public event Action<EAppState, EAppState> GAME_AppStateUpdated;
@@ -146,8 +145,8 @@ public class EventManager : Singleton<EventManager>
     }
 
     
-    public event Action<HitInfo> SPELLS_SpellHitPlayer;
-    public void Invoke_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+    public event Action<SHitInfo> SPELLS_SpellHitPlayer;
+    public void Invoke_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
 
         if (SPELLS_SpellHitPlayer != null)
@@ -216,7 +215,7 @@ public class EventManager : Singleton<EventManager>
 
     private void DebugLog(string messageLog)
     {
-        if (isDebugLogEvents == true)
+        if (MotherOfManagers.Instance.IsDebugLogEvents == true)
         {
             Debug.Log(messageLog);
         }

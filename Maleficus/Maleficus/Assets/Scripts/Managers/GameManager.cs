@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager/*<T>*/ : Singleton<GameManager/*<T>*/> //where T : AbstractPlayerStats, new()                      // TODO: See why script won't show in inspector. My guess: Singleton can't accept classes with generic Type => implement Singleton structure internally in this class
 {
-    private AbstractGameMode currentGameMode;
+                                        
+    //private AbstractGameMode<T> currentGameMode;
 
     private bool isCanStartGame;
 
@@ -24,14 +25,14 @@ public class GameManager : Singleton<GameManager>
     
 
     #region Game Actions
-    public void StartGame(EGameMode gameModeToStart)
+    private void StartGame(EGameMode gameModeToStart)
     {
         if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_NOT_STARTED)
         {
             switch (gameModeToStart)
             {
                 case EGameMode.SINGLE_LIVES_5:
-                    currentGameMode = new GM_Single_Lives();
+                    //currentGameMode = new GM_Single_Lives<T>();  // TODO: Solve compile error
                     break;
 
                 case EGameMode.SINGLE_TIME_2:
@@ -43,9 +44,11 @@ public class GameManager : Singleton<GameManager>
                     break;
             }
 
-            EventManager.Instance.Invoke_GAME_GameAboutToStart(currentGameMode.GameMode);
+            //EventManager.Instance.Invoke_GAME_GameAboutToStart(currentGameMode.GameMode);
         }
     }
+
+
 
     // Test function
     public void Start3LivesGame()
@@ -54,12 +57,12 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    public void PauseOrUnpauseGame()
+    private void PauseOrUnpauseGame()
     {
 
     }
 
-    public void EndGame()
+    private void EndGame()
     {
 
     }

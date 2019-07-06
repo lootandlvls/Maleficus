@@ -57,7 +57,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
         myRigidBody = GetComponent<Rigidbody>();
         if (OnSelfEffect)
         {
-            HitInfo hitInfo = new HitInfo(this, CastingPlayerID,  CastingPlayerID, transform.position, hasPower, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID,  CastingPlayerID, transform.position, hasPower, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
         
@@ -79,7 +79,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
         {
            
             // Debug.Log(dirVector);
-            HitInfo hitInfo = new HitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
 
             ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
@@ -95,7 +95,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     {
         
         // Debug.Log(dirVector);
-        HitInfo hitInfo = new HitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
+        SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
         EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
 
         ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();

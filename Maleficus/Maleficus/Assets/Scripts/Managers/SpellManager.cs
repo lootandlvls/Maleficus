@@ -31,7 +31,7 @@ public class SpellManager : Singleton<SpellManager>
 
 
     }
-    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+    private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
         if (hitInfo.HasPower)
         {
@@ -56,7 +56,7 @@ public class SpellManager : Singleton<SpellManager>
 
 
     }
-    private IEnumerator PushPlayer(HitInfo hitInfo)
+    private IEnumerator PushPlayer(SHitInfo hitInfo)
     {   
         
         Rigidbody rgb = activePlayers[hitInfo.HitPlayerID].GetComponent<Rigidbody>();

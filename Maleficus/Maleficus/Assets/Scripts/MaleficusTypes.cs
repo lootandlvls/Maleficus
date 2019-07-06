@@ -144,11 +144,68 @@ public enum EAppState
 #region Game
 public enum EGameMode
 {
+    NONE,
     SINGLE_LIVES_5,
     SINGLE_TIME_2,
     SINGLE_POINTS_100,
     INSANE
         // TODO: Define rest of game modes
+}
+
+public class AbstractPlayerStats
+{
+
+}
+
+public class SPlayerLivesStats : AbstractPlayerStats
+{
+    public SPlayerLivesStats()
+    {
+
+    }
+    public SPlayerLivesStats(int maximumNumberOfLives)
+    {
+        remainingLives = maximumNumberOfLives;
+        numberOfKilledPlayers = 0;
+        lastHitBy = EPlayerID.NONE;
+    }
+
+    public int RemainingLives           { get { return remainingLives; } }
+    public int NumberOfKilledPlayers    { get { return numberOfKilledPlayers; } }
+    public bool IsDead                  { get { return remainingLives == 0; } }
+    public EPlayerID LastHitBy          { get { return lastHitBy; } }
+
+    /// <summary>
+    /// Decrement by 1 a player's lives and tell if he died.
+    /// </summary>
+    /// <returns> are reamining lives = 0 </returns>
+    public bool DecrementPlayerLives()
+    {
+        remainingLives--;
+        return remainingLives == 0;
+    }
+
+    /// <summary>
+    /// Icrements the number of killed players by 1
+    /// </summary>
+    public void IncrementNumberOfKilledPlayers()
+    {
+        numberOfKilledPlayers++;
+    }
+
+    /// <summary>
+    /// Sets the Player ID of the last player that hit this player.
+    /// Used to determine who finally killed this player.
+    /// </summary>
+    public void SetLastHitBy(EPlayerID hitByPlayerID)
+    {
+        lastHitBy = hitByPlayerID;
+    }
+
+    private int remainingLives;
+    private int numberOfKilledPlayers;
+    private EPlayerID lastHitBy;
+
 }
 
 
@@ -217,9 +274,9 @@ public enum ETeamID
     TEAM_4
 }
 
-public struct HitInfo
+public struct SHitInfo
 {
-    public HitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<SpellEffects> debuffEffects, List<SpellEffects> buffEffects)
+    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<SpellEffects> debuffEffects, List<SpellEffects> buffEffects)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;

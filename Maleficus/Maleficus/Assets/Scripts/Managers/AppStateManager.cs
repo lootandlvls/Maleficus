@@ -9,7 +9,6 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
     public bool IsInAStateWithUI        { get { return isInAStateWithUI; } }
     public bool IsCanControlPlayers     { get { return true; } } // Todo: use correct context
 
-    [SerializeField] private EAppState debugStartState;
     private bool isInAStateWithUI = false;
 
     protected override void Awake()
@@ -18,7 +17,7 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 
         FindAndBindButtonActions();
 
-        startState = debugStartState;
+        startState = MotherOfManagers.Instance.DebugStartState;
         debugStateID = 51;
     }
 

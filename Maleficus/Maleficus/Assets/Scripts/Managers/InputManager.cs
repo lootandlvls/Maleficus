@@ -6,9 +6,8 @@ using UnityEngine.EventSystems;
 
 public class InputManager : Singleton<InputManager>
 {
-    public EInputMode InputMode { get { return inputMode; } }
+    public EInputMode InputMode { get { return MotherOfManagers.Instance.InputMode; } }
 
-    [SerializeField] private EInputMode inputMode;
 
     private EPlayerID touchPlayerID;
     /// mapping from controllerID to playerID
@@ -26,7 +25,7 @@ public class InputManager : Singleton<InputManager>
 
     private void Start()
     {
-        if (inputMode == EInputMode.TOUCH)
+        if (InputMode == EInputMode.TOUCH)
         {
             touchPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
         }
@@ -103,7 +102,7 @@ public class InputManager : Singleton<InputManager>
 
     public void OnJoystickMoved(Vector2 joystickInput, ETouchJoystickType joystickType)
     {
-        if (inputMode == EInputMode.TOUCH)
+        if (InputMode == EInputMode.TOUCH)
         {
             if (joystickType == ETouchJoystickType.MOVE)
             { 
@@ -142,7 +141,7 @@ public class InputManager : Singleton<InputManager>
         {
             Debug.Log("Confrim " + controllerID);
             // Player already connected?
-            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
+            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
@@ -167,7 +166,7 @@ public class InputManager : Singleton<InputManager>
                                                                                                         // TODO: Test with controller if it works
         if (Input.GetButtonDown("Cancel_" + controllerID))
         {
-            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
+            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
 
@@ -188,7 +187,7 @@ public class InputManager : Singleton<InputManager>
     private void Check_Spell(int spellID, char controllerID)
     {
         // Player already connected?
-        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
+        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player press button?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerID))
@@ -215,7 +214,7 @@ public class InputManager : Singleton<InputManager>
     private void Check_Axis(string axisName, char axisSide, char controllerID)
     {
         // Player already connected?
-        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (inputMode == EInputMode.TEST))
+        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player move joystick
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
@@ -307,7 +306,7 @@ public class InputManager : Singleton<InputManager>
 
     private EPlayerID GetPlayerID(char controllerID)
     {
-        if (inputMode == EInputMode.TEST)
+        if (InputMode == EInputMode.TEST)
         {
             return EPlayerID.TEST;
         }

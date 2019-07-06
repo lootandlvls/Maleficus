@@ -53,7 +53,7 @@ public class Player : MonoBehaviour, IPlayer
     }
 
 
-    private void On_SPELLS_SpellHitPlayer(HitInfo hitInfo)
+    private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
         if (hitInfo.HitPlayerID == PlayerID)
         {
