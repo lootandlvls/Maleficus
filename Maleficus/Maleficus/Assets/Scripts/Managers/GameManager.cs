@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 
     
 
-    #region Game Commands
+    #region Game Actions
     public void StartGame(EGameMode gameModeToStart)
     {
         if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_NOT_STARTED)

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// UI element that executes a command when interacted with.
+/// UI element that executes a Action when interacted with.
 /// </summary>
-public abstract class AbstractUICommand : MonoBehaviour
+public abstract class AbstractUIAction : MonoBehaviour
 {
 
     public abstract void Execute();

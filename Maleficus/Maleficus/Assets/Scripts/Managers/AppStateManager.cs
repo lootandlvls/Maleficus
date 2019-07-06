@@ -16,7 +16,7 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
     {
         base.Awake();
 
-        FindAndBindButtonCommands();
+        FindAndBindButtonActions();
 
         startState = debugStartState;
         debugStateID = 51;
@@ -49,17 +49,17 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 
     }
 
-    private void FindAndBindButtonCommands()
+    private void FindAndBindButtonActions()
     {
-        // Connect Players Command
-        StartConnectingPlayersCommand[] commands = FindObjectsOfType<StartConnectingPlayersCommand>();
-        foreach (StartConnectingPlayersCommand command in commands)
+        // Connect Players Action
+        StartConnectingPlayersAction[] Actions = FindObjectsOfType<StartConnectingPlayersAction>();
+        foreach (StartConnectingPlayersAction Action in Actions)
         {
-            command.ConnectPlayersCommandPressed += OnConnectPlayersCommandPressed;
+            Action.ConnectPlayersActionPressed += OnConnectPlayersActionPressed;
         }
     }
 
-    private void OnConnectPlayersCommandPressed()
+    private void OnConnectPlayersActionPressed()
     {
         Debug.Log("AppStateManager: On connect player");
         if (currentState.ContainedIn(MaleficusTypes.STATES_IN_LOBBY))                               // TODO: Doesn't work

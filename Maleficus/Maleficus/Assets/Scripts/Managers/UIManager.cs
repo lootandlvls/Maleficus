@@ -14,7 +14,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         startState = EMenuState.STARTUP;                                                                           // TODO: for testing. Change to correct one later
         debugStateID = 50;
 
-        FindAndBindButtonCommands();
+        FindAndBindButtonActions();
     }
 
     protected override void Start()
@@ -93,67 +93,67 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         this.selectedButton = selectedButton;
     }
 
-    private void FindAndBindButtonCommands()
+    private void FindAndBindButtonActions()
     {
-        // Menu Navigation Command
-        MenuNavigationCommand[] MNCcommands = FindObjectsOfType<MenuNavigationCommand>();
-        foreach (MenuNavigationCommand command in MNCcommands)
+        // Menu Navigation Action
+        MenuNavigationAction[] MNCActions = FindObjectsOfType<MenuNavigationAction>();
+        foreach (MenuNavigationAction Action in MNCActions)
         {
-            command.MenuNavigationCommandPressed += UpdateState;
+            Action.MenuNavigationActionPressed += UpdateState;
         }
 
-        OpenLoginPopUpCommand[] OLPUcommands = FindObjectsOfType<OpenLoginPopUpCommand>();
-        foreach(OpenLoginPopUpCommand command in OLPUcommands)
+        OpenLoginPopUpAction[] OLPUActions = FindObjectsOfType<OpenLoginPopUpAction>();
+        foreach(OpenLoginPopUpAction Action in OLPUActions)
         {
-            command.OpenLoginPopUpCommandPressed += On_OpenLoginPopUpCommandPressed;
+            Action.OpenLoginPopUpActionPressed += On_OpenLoginPopUpActionPressed;
         }
 
-        OpenRegisterPopUpCommand[] ORPcommands = FindObjectsOfType<OpenRegisterPopUpCommand>();
-        foreach(OpenRegisterPopUpCommand command in ORPcommands)
+        OpenRegisterPopUpAction[] ORPActions = FindObjectsOfType<OpenRegisterPopUpAction>();
+        foreach(OpenRegisterPopUpAction Action in ORPActions)
         {
-            command.OpenRegisterPopUpCommandPressed += On_OpenRegisterPopUpCommandPressed;
+            Action.OpenRegisterPopUpActionPressed += On_OpenRegisterPopUpActionPressed;
         }
 
-        GoBackToLoginCommand[] GBLcommands = FindObjectsOfType<GoBackToLoginCommand>();
-        foreach(GoBackToLoginCommand command in GBLcommands)
+        GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
+        foreach(GoBackToLoginAction Action in GBLActions)
         {
-            command.GoBackToLoginCommandPressed += On_GoBackToLoginCommandPressed;
+            Action.GoBackToLoginActionPressed += On_GoBackToLoginActionPressed;
         }
 
-        LoginRequestCommand[] LRcommands = FindObjectsOfType<LoginRequestCommand>();
-        foreach(LoginRequestCommand command in LRcommands)
+        LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
+        foreach(LoginRequestAction Action in LRActions)
         {
-            command.LoginRequestCommandPressed += On_LoginRequestCommandPressed;
+            Action.LoginRequestActionPressed += On_LoginRequestActionPressed;
         }
 
-        RegisterRequestCommand[] RRcommands = FindObjectsOfType<RegisterRequestCommand>();
-        foreach(RegisterRequestCommand command in RRcommands)
+        RegisterRequestAction[] RRActions = FindObjectsOfType<RegisterRequestAction>();
+        foreach(RegisterRequestAction Action in RRActions)
         {
-            command.RegisterRequestCommandPressed += On_RegisterRequestCommandPressed;
+            Action.RegisterRequestActionPressed += On_RegisterRequestActionPressed;
         }
     }
 
-    private void On_RegisterRequestCommandPressed()
+    private void On_RegisterRequestActionPressed()
     {
         RegisterContext.Instance.OnClickCreateAccount();
     }
 
-    private void On_LoginRequestCommandPressed()
+    private void On_LoginRequestActionPressed()
     {
         LoginContext.Instance.OnClickLoginRequest();
     }
 
-    private void On_GoBackToLoginCommandPressed()
+    private void On_GoBackToLoginActionPressed()
     {
         UpdateState(EMenuState.LOGIN);
     }
 
-    private void On_OpenRegisterPopUpCommandPressed()
+    private void On_OpenRegisterPopUpActionPressed()
     {
         UpdateState(EMenuState.LOGIN_REGISTER);
     }
 
-    private void On_OpenLoginPopUpCommandPressed()
+    private void On_OpenLoginPopUpActionPressed()
     {
         UpdateState(EMenuState.LOGIN_LOGIN);
     }
