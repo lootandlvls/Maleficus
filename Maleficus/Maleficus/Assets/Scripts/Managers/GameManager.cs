@@ -27,7 +27,7 @@ public class GameManager/*<T>*/ : Singleton<GameManager/*<T>*/> //where T : Abst
     #region Game Actions
     private void StartGame(EGameMode gameModeToStart)
     {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_NOT_STARTED)
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
             switch (gameModeToStart)
             {

@@ -26,46 +26,48 @@ public static class MaleficusTypes
     public const float ROTATION_THRESHOLD = 0.0f;
 
 
-    /// Update these lists when more states are added to AppState!
-    public static EAppState[] STATES_WITH_UI = new EAppState[]  // used mainly for menu navigation with controller
+    /* App States classifications lists */
+    // Update these lists when more states are added to AppState!
+    public static EAppState[] APP_STATES_WITH_UI = new EAppState[]  // used mainly for menu navigation with controller
     {
-        // In Lobby
-        EAppState.IN_LOBBY_MAIN,
-        EAppState.IN_LOBBY_CONNECTING_PLAYERS,
-        EAppState.IN_LOGIN,
-        EAppState.IN_STARTUP,
+        // In Menu
+        EAppState.IN_MENU_IN_MAIN,
+        EAppState.IN_MENU_IN_CONNECTING_PLAYERS,
+        EAppState.IN_MENU_IN_LOGING_IN,
+
         // In Game
-        EAppState.IN_GAME_PAUSED,
-        EAppState.IN_GAME_ENDED
+        EAppState.IN_GAME_IN_PAUSED,
+        EAppState.IN_GAME_IN_ENDED
     };
 
-    public static EAppState[] STATES_IN_LOBBY = new EAppState[]
+    public static EAppState[] APP_STATES_IN_MENU = new EAppState[]
     {
-        EAppState.IN_LOBBY_MAIN,
-        EAppState.IN_LOBBY_CONNECTING_PLAYERS
+        EAppState.IN_MENU_IN_MAIN,
+        EAppState.IN_MENU_IN_CONNECTING_PLAYERS
     };
 
-    public static EAppState[] STATES_IN_GAME = new EAppState[]
+    public static EAppState[] APP_STATES_IN_GAME = new EAppState[]
     {
-        EAppState.IN_GAME_NOT_STARTED,
-        EAppState.IN_GAME_ABOUT_TO_START,
-        EAppState.IN_GAME_RUNNING,
-        EAppState.IN_GAME_PAUSED,
-        EAppState.IN_GAME_ENDED,
+        EAppState.IN_GAME_IN_NOT_STARTED,
+        EAppState.IN_GAME_IN_ABOUT_TO_START,
+        EAppState.IN_GAME_IN_RUNNING,
+        EAppState.IN_GAME_IN_PAUSED,
+        EAppState.IN_GAME_IN_ENDED,
     };
 
-    // UI State List
-    public static EMenuState[] MENU_STATE_STARTUP = new EMenuState[]
+    /* UI States classifications lists */
+    // Update these lists when more states are added to MenuState!
+    public static EMenuState[] MENU_STATES_STARTUP = new EMenuState[]
     {
-        EMenuState.STARTUP
+        EMenuState.IN_STARTUP
     };
 
-    public static EMenuState[] MENU_STATE_IN_LOGIN = new EMenuState[]
+    public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
     {
-        EMenuState.LOGIN_LOGIN,
-        EMenuState.LOGIN_REGISTER,
-        EMenuState.LOGIN_FOLLOW,
-        EMenuState.LOGIN_LEGAL
+        EMenuState.IN_LOGIN_IN_LOGIN,
+        EMenuState.IN_LOGIN_IN_REGISTER,
+        EMenuState.IN_LOGIN_IN_FOLLOW,
+        EMenuState.IN_LOGIN_IN_LEGAL
     };
 
 
@@ -123,18 +125,22 @@ public static class MaleficusTypes
 
 
 #region AppState
-/// Update the lists inside the class when more states are added to AppState!
+/// <summary>
+/// State of the whole application. 
+/// "IN" is used a hierarchy separator. A state can either be in MENU or in GAME.
+/// Note: Update the states classifications lists inside the class when more states are added to AppState!
+/// </summary>
 public enum EAppState
 {
-    IN_STARTUP,
-    IN_LOGIN,
-    IN_LOBBY_MAIN,
-    IN_LOBBY_CONNECTING_PLAYERS,
-    IN_GAME_NOT_STARTED,
-    IN_GAME_ABOUT_TO_START,
-    IN_GAME_RUNNING,
-    IN_GAME_PAUSED,
-    IN_GAME_ENDED,
+    IN_MENU_IN_MAIN,
+    IN_MENU_IN_CONNECTING_PLAYERS,
+    IN_MENU_IN_LOGING_IN,
+    IN_MENU_IN_SHOP,
+    IN_GAME_IN_NOT_STARTED,
+    IN_GAME_IN_ABOUT_TO_START,
+    IN_GAME_IN_RUNNING,
+    IN_GAME_IN_PAUSED,
+    IN_GAME_IN_ENDED,
     TEST
 }
 
@@ -387,18 +393,27 @@ public class PlayerInput
 #endregion
 
 #region UI
+/// <summary>
+/// State of the UI menu.
+/// "IN" is used here as a hierarchy separator. Generally second IN refers to a pop-up context on top of the original menu state.
+/// </summary>
 public enum EMenuState
 {
     NONE,
-    STARTUP,
-    LOGIN,
-    LOGIN_LOGIN,
-    LOGIN_REGISTER,
-    LOGIN_FOLLOW,
-    LOGIN_LEGAL,
-    MAIN,
-    CONNECTING_PLAYERS,
-    IN_GAME
+    IN_MAIN,
+    IN_CONNECTING_PLAYERS,
+    IN_STARTUP,                                                                         //TODO: Define. Ambiguous meaning
+    /* Login context */
+    IN_LOGIN,
+    IN_LOGIN_IN_LOGIN,
+    IN_LOGIN_IN_REGISTER,
+    IN_LOGIN_IN_FOLLOW,
+    IN_LOGIN_IN_LEGAL,
+    /* Game context */
+    IN_GAME_ABOUT_TO_START,
+    IN_GAME_RUNNING,
+    IN_GAME_PAUSED,
+    IN_GAME_OVER
 }
 
 public enum EButtonDirection

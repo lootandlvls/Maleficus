@@ -7,7 +7,7 @@ public class MotherOfManagers : Singleton<MotherOfManagers>
 
 
     [Header ("App State")]
-    [SerializeField] public EAppState DebugStartState = EAppState.IN_LOBBY_MAIN;
+    [SerializeField] public EAppState DebugStartState = EAppState.IN_MENU_IN_MAIN;
 
     [Header ("Input")]
     [SerializeField] public EInputMode InputMode = EInputMode.CONTROLLER;

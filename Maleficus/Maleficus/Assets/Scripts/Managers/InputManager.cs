@@ -140,22 +140,20 @@ public class InputManager : Singleton<InputManager>
         if (Input.GetButtonDown("Confirm_" + controllerID))
         {
             Debug.Log("Confrim " + controllerID);
-            // Player already connected?
-            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
+
+            if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
+                // Send Input
                 EPlayerID playerID = GetPlayerID(controllerID);
                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
             }
-            else // Connect player
+            else if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
+                // Connect players
             {
-                // In Connecting Players state ?
-                if (AppStateManager.Instance.IsCanControlPlayers == true)
+                EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
+                if (connectedPlayerID != EPlayerID.TEST)
                 {
-                    EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
-                    if (connectedPlayerID != EPlayerID.TEST)
-                    {
-                        playerControllerMapping[controllerID] = connectedPlayerID;
-                    }
+                    playerControllerMapping[controllerID] = connectedPlayerID;
                 }
             }
         }
@@ -166,16 +164,17 @@ public class InputManager : Singleton<InputManager>
                                                                                                         // TODO: Test with controller if it works
         if (Input.GetButtonDown("Cancel_" + controllerID))
         {
-            if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
+            if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
 
-                if (AppStateManager.Instance.IsCanControlPlayers == true)
+                if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
+                    // Disconnect Player
                 {
                     PlayerManager.Instance.DisconnectPlayer(playerID);
                     playerControllerMapping.Remove(controllerID);
                 }
-                else // not in connecting state
+                else // Not in connecting players state
                 {
                     EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CANCEL, playerID);
                 }
@@ -186,8 +185,7 @@ public class InputManager : Singleton<InputManager>
 
     private void Check_Spell(int spellID, char controllerID)
     {
-        // Player already connected?
-        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
+        if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player press button?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerID))
@@ -213,8 +211,7 @@ public class InputManager : Singleton<InputManager>
 
     private void Check_Axis(string axisName, char axisSide, char controllerID)
     {
-        // Player already connected?
-        if ((playerControllerMapping.ContainsKey(controllerID) == true) || (InputMode == EInputMode.TEST))
+        if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player move joystick
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
@@ -330,5 +327,11 @@ public class InputManager : Singleton<InputManager>
         canPerformVerticalDirectionalButton[EPlayerID.PLAYER_4] = true;
 
 
+    }
+
+
+    private bool IsPlayerConnected(char controllerID)
+    {
+        return playerControllerMapping.ContainsKey(controllerID);
     }
 }

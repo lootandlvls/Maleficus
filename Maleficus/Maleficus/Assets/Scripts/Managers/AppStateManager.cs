@@ -6,8 +6,7 @@ using System;
 
 public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 {
-    public bool IsInAStateWithUI        { get { return isInAStateWithUI; } }
-    public bool IsCanControlPlayers     { get { return true; } } // Todo: use correct context
+    public bool IsInAStateWithUI        { get { return isInAStateWithUI; } }                            // TODO: use this
 
     private bool isInAStateWithUI = false;
 
@@ -35,7 +34,7 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
     {
         base.UpdateState(newAppState);
 
-        if (newAppState.ContainedIn(MaleficusTypes.STATES_WITH_UI))
+        if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_WITH_UI))
         {
             Debug.Log("Is in state wit UI");
             isInAStateWithUI = true;
@@ -54,26 +53,22 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
         StartConnectingPlayersAction[] Actions = FindObjectsOfType<StartConnectingPlayersAction>();
         foreach (StartConnectingPlayersAction Action in Actions)
         {
-            Action.ConnectPlayersActionPressed += OnConnectPlayersActionPressed;
+            Action.ConnectPlayersActionPressed += () =>
+            {
+                //if (currentState.ContainedIn(MaleficusTypes.APP_STATES_IN_MENU))                               // TODO: Doesn't work
+                //{
+                    UpdateState(EAppState.IN_MENU_IN_CONNECTING_PLAYERS);
+                //}
+            };
         }
-    }
 
-    private void OnConnectPlayersActionPressed()
-    {
-        Debug.Log("AppStateManager: On connect player");
-        if (currentState.ContainedIn(MaleficusTypes.STATES_IN_LOBBY))                               // TODO: Doesn't work
+        BackAction[] backActions = FindObjectsOfType<BackAction>();
+        foreach (BackAction Action in backActions)
         {
-            UpdateState(EAppState.IN_LOBBY_CONNECTING_PLAYERS);
-        }
-    }
-
-    //Todo does this belong here?
-    private void OnConnectedToServer()
-    {
-        Debug.Log("AppStateManager: On connected to server");
-        if(currentState == EAppState.IN_STARTUP)
-        {
-            UpdateState(EAppState.IN_LOGIN);
+            Action.BackActionPressed += () =>
+            {
+                UpdateState(LastState);
+            };
         }
     }
 }

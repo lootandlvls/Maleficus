@@ -11,7 +11,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
     {
         base.Awake();
 
-        startState = EMenuState.STARTUP;                                                                           // TODO: for testing. Change to correct one later
+        startState = EMenuState.IN_MAIN;                                                                        
         debugStateID = 50;
 
         FindAndBindButtonActions();
@@ -32,17 +32,20 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
     {
-        switch(receivedMsg)
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_LOGING_IN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
         {
-            case ENetworkMessage.CONNECTED:
-                UpdateState(EMenuState.LOGIN);
-                break;
-            case ENetworkMessage.LOGGED_IN:
-                UpdateState(EMenuState.MAIN);
-                break;
-            case ENetworkMessage.REGISTERED:
-                UpdateState(EMenuState.LOGIN);
-                break;
+            switch (receivedMsg)
+            {
+                case ENetworkMessage.CONNECTED:
+                    UpdateState(EMenuState.IN_LOGIN);
+                    break;
+                case ENetworkMessage.LOGGED_IN:
+                    UpdateState(EMenuState.IN_MAIN);
+                    break;
+                case ENetworkMessage.REGISTERED:
+                    UpdateState(EMenuState.IN_LOGIN);
+                    break;
+            }
         }
     }
 
@@ -98,6 +101,15 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
     private void FindAndBindButtonActions()
     {
         // Menu Navigation Action
+        BackAction[] backActions = FindObjectsOfType<BackAction>();
+        foreach (BackAction Action in backActions)
+        {
+            Action.BackActionPressed += () =>
+            {
+                UpdateState(LastState);
+            };
+        }
+
         MenuNavigationAction[] MNCActions = FindObjectsOfType<MenuNavigationAction>();
         foreach (MenuNavigationAction Action in MNCActions)
         {
@@ -109,7 +121,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         {
             Action.OpenLoginPopUpActionPressed += () =>
             {
-                UpdateState(EMenuState.LOGIN_LOGIN);
+                UpdateState(EMenuState.IN_LOGIN_IN_LOGIN);
             };
         }
 
@@ -119,7 +131,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         {
             Action.OpenRegisterPopUpActionPressed += () =>
             {
-                UpdateState(EMenuState.LOGIN_REGISTER);
+                UpdateState(EMenuState.IN_LOGIN_IN_REGISTER);
 
             };
         }
@@ -129,7 +141,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         {
             Action.GoBackToLoginActionPressed += () =>
             {
-                UpdateState(EMenuState.LOGIN);
+                UpdateState(EMenuState.IN_LOGIN);
 
 
             };
