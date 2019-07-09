@@ -425,6 +425,7 @@ public enum EButtonDirection
 }
 #endregion
 
+//Todo move data_ to own enums
 #region NETWORK
 public enum ENetworkMessage
 {
@@ -432,6 +433,12 @@ public enum ENetworkMessage
     CONNECTED,
     DISCONNECTED,
     DATA,
+    DATA_NONE,
+    DATA_ONCREATEACCOUNT,
+    DATA_ONLOGINREQUEST,
+    DATA_ONADDFOLLOW,
+    DATA_ONREQUESTFOLLOW,
+    DATA_ONUPDATEFOLLOW,
     BROADCAST,
     LOGGED_IN,
     LOGGED_OUT,
