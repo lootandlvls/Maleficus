@@ -52,7 +52,7 @@ public class Parabolic_Explosive : AbstractSpell
             if (percentageProgress >= 1.0f)
             {
                 isStarted = false;
-                onExplosionEnter(transform.position, 3);
+                onExplosionEnter(transform.position, 5);
                ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
 
                 destroyEffect.DestroySpell();

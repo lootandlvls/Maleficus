@@ -6046,7 +6046,7 @@ MonoBehaviour:
     type: 3}
   spellSlot_2: {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d,
     type: 3}
-  spellSlot_3: {fileID: 4160352071230772421, guid: 7204a205bc9444e449a6f8ae15b17268,
+  spellSlot_3: {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07,
     type: 3}
 --- !u!1 &1515340630872704857
 GameObject:

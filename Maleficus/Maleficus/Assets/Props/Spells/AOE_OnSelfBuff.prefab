@@ -9397,7 +9397,7 @@ ParticleSystem:
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -9466,7 +9466,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 0.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14072,7 +14072,7 @@ ParticleSystem:
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -14141,7 +14141,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1.5
+      scalar: 0.5
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -18759,6 +18759,8 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 0
+  cooldown: 0
+  spellDuration: 0
   movementType: 5
   debuffEffects: 
   buffEffects: 
@@ -19162,7 +19164,7 @@ PrefabInstance:
     - target: {fileID: 6352151562051580209, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6352151562051580209, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}

@@ -169,6 +169,7 @@ public class Player : MonoBehaviour, IPlayer
             Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
             AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
             spell.CastingPlayerID = PlayerID;
+            spell.transform.parent = this.transform;
             Debug.Log("AOE SPELL CASTED");
          //   spell.parabolicSpell_EndPosition = SpellEndPosition;
         }
