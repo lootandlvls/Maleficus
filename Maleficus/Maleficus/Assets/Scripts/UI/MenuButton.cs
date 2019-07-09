@@ -14,12 +14,12 @@ public class MenuButton : MonoBehaviour
     [SerializeField] private MenuButton buttomButton;
 
     private Button myButton;
-    private AbstractUICommand myMenuCommand;
+    private AbstractUIAction myMenuAction;
 
     private void Awake()
     {
         myButton = GetComponent<Button>();
-        myMenuCommand = GetComponent<AbstractUICommand>();
+        myMenuAction = GetComponent<AbstractUIAction>();
     }
 
     public void Highlight()
@@ -29,7 +29,7 @@ public class MenuButton : MonoBehaviour
 
     public void Press()
     {
-        myMenuCommand.Execute();
+        myMenuAction.Execute();
     }
 
     public MenuButton GoToNextButton(EButtonDirection buttonDirection)

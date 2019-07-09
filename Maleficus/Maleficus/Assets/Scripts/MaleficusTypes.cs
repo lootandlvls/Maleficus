@@ -26,33 +26,50 @@ public static class MaleficusTypes
     public const float ROTATION_THRESHOLD = 0.0f;
 
 
-    /// Update these lists when more states are added to AppState!
-    public static EAppState[] STATES_WITH_UI = new EAppState[]  // used mainly for menu navigation with controller
+    /* App States classifications lists */
+    // Update these lists when more states are added to AppState!
+    public static EAppState[] APP_STATES_WITH_UI = new EAppState[]  // used mainly for menu navigation with controller
     {
-        // In Lobby
-        EAppState.IN_LOBBY_MAIN,
-        EAppState.IN_LOBBY_CONNECTING_PLAYERS,
-        EAppState.IN_LOGIN,
-        EAppState.IN_STARTUP,
+        // In Menu
+        EAppState.IN_MENU_IN_MAIN,
+        EAppState.IN_MENU_IN_CONNECTING_PLAYERS,
+        EAppState.IN_MENU_IN_LOGING_IN,
+
         // In Game
-        EAppState.IN_GAME_PAUSED,
-        EAppState.IN_GAME_ENDED
+        EAppState.IN_GAME_IN_PAUSED,
+        EAppState.IN_GAME_IN_ENDED
     };
 
-    public static EAppState[] STATES_IN_LOBBY = new EAppState[]
+    public static EAppState[] APP_STATES_IN_MENU = new EAppState[]
     {
-        EAppState.IN_LOBBY_MAIN,
-        EAppState.IN_LOBBY_CONNECTING_PLAYERS
+        EAppState.IN_MENU_IN_MAIN,
+        EAppState.IN_MENU_IN_CONNECTING_PLAYERS
     };
 
-    public static EAppState[] STATES_IN_GAME = new EAppState[]
+    public static EAppState[] APP_STATES_IN_GAME = new EAppState[]
     {
-        EAppState.IN_GAME_NOT_STARTED,
-        EAppState.IN_GAME_ABOUT_TO_START,
-        EAppState.IN_GAME_RUNNING,
-        EAppState.IN_GAME_PAUSED,
-        EAppState.IN_GAME_ENDED,
+        EAppState.IN_GAME_IN_NOT_STARTED,
+        EAppState.IN_GAME_IN_ABOUT_TO_START,
+        EAppState.IN_GAME_IN_RUNNING,
+        EAppState.IN_GAME_IN_PAUSED,
+        EAppState.IN_GAME_IN_ENDED,
     };
+
+    /* UI States classifications lists */
+    // Update these lists when more states are added to MenuState!
+    public static EMenuState[] MENU_STATES_STARTUP = new EMenuState[]
+    {
+        EMenuState.IN_STARTUP
+    };
+
+    public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
+    {
+        EMenuState.IN_LOGIN_IN_LOGIN,
+        EMenuState.IN_LOGIN_IN_REGISTER,
+        EMenuState.IN_LOGIN_IN_FOLLOW,
+        EMenuState.IN_LOGIN_IN_LEGAL
+    };
+
 
 
 
@@ -108,18 +125,22 @@ public static class MaleficusTypes
 
 
 #region AppState
-/// Update the lists inside the class when more states are added to AppState!
+/// <summary>
+/// State of the whole application. 
+/// "IN" is used a hierarchy separator. A state can either be in MENU or in GAME.
+/// Note: Update the states classifications lists inside the class when more states are added to AppState!
+/// </summary>
 public enum EAppState
 {
-    IN_STARTUP,
-    IN_LOGIN,
-    IN_LOBBY_MAIN,
-    IN_LOBBY_CONNECTING_PLAYERS,
-    IN_GAME_NOT_STARTED,
-    IN_GAME_ABOUT_TO_START,
-    IN_GAME_RUNNING,
-    IN_GAME_PAUSED,
-    IN_GAME_ENDED,
+    IN_MENU_IN_MAIN,
+    IN_MENU_IN_CONNECTING_PLAYERS,
+    IN_MENU_IN_LOGING_IN,
+    IN_MENU_IN_SHOP,
+    IN_GAME_IN_NOT_STARTED,
+    IN_GAME_IN_ABOUT_TO_START,
+    IN_GAME_IN_RUNNING,
+    IN_GAME_IN_PAUSED,
+    IN_GAME_IN_ENDED,
     TEST
 }
 
@@ -129,10 +150,68 @@ public enum EAppState
 #region Game
 public enum EGameMode
 {
-    LIVES_3,
-    TIME_2_MINUTES,
-    POINTS_100,
+    NONE,
+    SINGLE_LIVES_5,
+    SINGLE_TIME_2,
+    SINGLE_POINTS_100,
     INSANE
+        // TODO: Define rest of game modes
+}
+
+public class AbstractPlayerStats
+{
+
+}
+
+public class SPlayerLivesStats : AbstractPlayerStats
+{
+    public SPlayerLivesStats()
+    {
+
+    }
+    public SPlayerLivesStats(int maximumNumberOfLives)
+    {
+        remainingLives = maximumNumberOfLives;
+        numberOfKilledPlayers = 0;
+        lastHitBy = EPlayerID.NONE;
+    }
+
+    public int RemainingLives           { get { return remainingLives; } }
+    public int NumberOfKilledPlayers    { get { return numberOfKilledPlayers; } }
+    public bool IsDead                  { get { return remainingLives == 0; } }
+    public EPlayerID LastHitBy          { get { return lastHitBy; } }
+
+    /// <summary>
+    /// Decrement by 1 a player's lives and tell if he died.
+    /// </summary>
+    /// <returns> are reamining lives = 0 </returns>
+    public bool DecrementPlayerLives()
+    {
+        remainingLives--;
+        return remainingLives == 0;
+    }
+
+    /// <summary>
+    /// Icrements the number of killed players by 1
+    /// </summary>
+    public void IncrementNumberOfKilledPlayers()
+    {
+        numberOfKilledPlayers++;
+    }
+
+    /// <summary>
+    /// Sets the Player ID of the last player that hit this player.
+    /// Used to determine who finally killed this player.
+    /// </summary>
+    public void SetLastHitBy(EPlayerID hitByPlayerID)
+    {
+        lastHitBy = hitByPlayerID;
+    }
+
+    private int remainingLives;
+    private int numberOfKilledPlayers;
+    private EPlayerID lastHitBy;
+
 }
 
 
@@ -192,9 +271,18 @@ public enum EPlayerID
     TEST
 }
 
-public struct HitInfo
+public enum ETeamID
 {
-    public HitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<SpellEffects> debuffEffects, List<SpellEffects> buffEffects)
+    NONE,
+    TEAM_1,
+    TEAM_2,
+    TEAM_3,
+    TEAM_4
+}
+
+public struct SHitInfo
+{
+    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<SpellEffects> debuffEffects, List<SpellEffects> buffEffects)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;
@@ -305,18 +393,27 @@ public class PlayerInput
 #endregion
 
 #region UI
+/// <summary>
+/// State of the UI menu.
+/// "IN" is used here as a hierarchy separator. Generally second IN refers to a pop-up context on top of the original menu state.
+/// </summary>
 public enum EMenuState
 {
     NONE,
-    STARTUP,
-    LOGIN,
-    LOGIN_REGISTER,
-    LOGIN_LOGIN,
-    LOGIN_FOLLOW,
-    LOGGIN_LEGAL,
-    MAIN,
-    CONNECTING_PLAYERS,
-    IN_GAME
+    IN_MAIN,
+    IN_CONNECTING_PLAYERS,
+    IN_STARTUP,                                                                         //TODO: Define. Ambiguous meaning
+    /* Login context */
+    IN_LOGIN,
+    IN_LOGIN_IN_LOGIN,
+    IN_LOGIN_IN_REGISTER,
+    IN_LOGIN_IN_FOLLOW,
+    IN_LOGIN_IN_LEGAL,
+    /* Game context */
+    IN_GAME_ABOUT_TO_START,
+    IN_GAME_RUNNING,
+    IN_GAME_PAUSED,
+    IN_GAME_OVER
 }
 
 public enum EButtonDirection
@@ -335,6 +432,9 @@ public enum ENetworkMessage
     CONNECTED,
     DISCONNECTED,
     DATA,
-    BROADCAST
+    BROADCAST,
+    LOGGED_IN,
+    LOGGED_OUT,
+    REGISTERED
 }
 #endregion

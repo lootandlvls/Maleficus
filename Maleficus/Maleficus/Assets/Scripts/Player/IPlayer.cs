@@ -6,6 +6,8 @@ public interface IPlayer
 {
     EPlayerID PlayerID { get; }
 
+    ETeamID TeamID { get; }
+
 
     Vector3 Position { get; }
 

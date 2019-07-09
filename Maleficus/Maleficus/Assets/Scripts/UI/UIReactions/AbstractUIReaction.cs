@@ -9,7 +9,22 @@ using System;
 public abstract class AbstractUIReaction : MonoBehaviour {
 
     [SerializeField] protected EMenuState activeOnState;
-    [SerializeField] protected EMenuState activeOnSecondState;
+
+    protected EMenuState[] activeOnStates;
+
+    private void Awake()
+    {
+        List<EMenuState> temp = new List<EMenuState>();
+        switch (activeOnState)
+        {
+            case EMenuState.IN_LOGIN:
+                temp = new List<EMenuState>(MaleficusTypes.MENU_STATES_IN_LOGIN);
+                break;
+        }
+
+        temp.Add(activeOnState);
+        activeOnStates = temp.ToArray();
+    }
 
     private void Start()
     {
@@ -18,9 +33,10 @@ public abstract class AbstractUIReaction : MonoBehaviour {
 
     protected virtual void OnMenuStateUpdated(EMenuState newState, EMenuState lastState)
     {
-        PlayAppropriateReaction(newState, lastState);
+        PlayAppropriateReaction(newState);
     }
 
-    protected abstract void PlayAppropriateReaction(EMenuState newState, EMenuState secondState);
+    protected abstract void PlayAppropriateReaction(EMenuState newState);
+
 
 }

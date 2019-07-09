@@ -217,7 +217,7 @@ GameObject:
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!20 &130369289
 Camera:
@@ -244,7 +244,7 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -429,9 +429,9 @@ GameObject:
   - component: {fileID: 301166620}
   - component: {fileID: 301166619}
   - component: {fileID: 301166618}
-  - component: {fileID: 301166617}
   - component: {fileID: 301166616}
   - component: {fileID: 301166615}
+  - component: {fileID: 301166617}
   m_Layer: 5
   m_Name: B_Back
   m_TagString: Untagged
@@ -497,11 +497,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 301166613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
+  m_Script: {fileID: 11500000, guid: 37ba939da7ef506418f66df891afb5aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromState: 2
-  toState: 1
 --- !u!114 &301166618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,18 +539,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 301166619}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 301166617}
-        m_MethodName: Execute
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &301166619
@@ -888,18 +875,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 452309305}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 452309303}
-        m_MethodName: Execute
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &452309305
@@ -1344,17 +1320,17 @@ PrefabInstance:
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -803.0129
+      value: -809.57
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -449.2782
+      value: -452.02
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15.009176
+      value: -13.706
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
@@ -1399,17 +1375,17 @@ PrefabInstance:
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.2824535
+      value: 4.5537233
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 2.2824538
+      value: 4.553724
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 2.2824535
+      value: 4.5537233
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c333dacb8e4af4b45870a4e182a019c5, type: 3}
@@ -1559,6 +1535,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4335998297404941564, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: debugStartState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnAllPlayers
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: DebugStartState
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4335998295998743999, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: isNoConnectionDebugMode
@@ -1568,11 +1559,6 @@ PrefabInstance:
         type: 3}
       propertyPath: isDebugMode
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4335998297404941564, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: debugStartState
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4335998296438487355, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}

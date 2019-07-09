@@ -11,10 +11,10 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
     {
         base.Awake();
 
-        startState = EMenuState.STARTUP;                                                                           // TODO: for testing. Change to correct one later
+        startState = EMenuState.IN_MAIN;                                                                        
         debugStateID = 50;
 
-        FindAndBindButtonCommands();
+        FindAndBindButtonActions();
     }
 
     protected override void Start()
@@ -23,12 +23,31 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
 
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
+        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
 
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
         StartCoroutine(LateStartCoroutine());
     }
 
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
+    {
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_LOGING_IN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
+        {
+            switch (receivedMsg)
+            {
+                case ENetworkMessage.CONNECTED:
+                    UpdateState(EMenuState.IN_LOGIN);
+                    break;
+                case ENetworkMessage.LOGGED_IN:
+                    UpdateState(EMenuState.IN_MAIN);
+                    break;
+                case ENetworkMessage.REGISTERED:
+                    UpdateState(EMenuState.IN_LOGIN);
+                    break;
+            }
+        }
+    }
 
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
@@ -77,14 +96,83 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         this.selectedButton = selectedButton;
     }
 
-    private void FindAndBindButtonCommands()
+
+
+    private void FindAndBindButtonActions()
     {
-        // Menu Navigation Command
-        MenuNavigationCommand[] commands = FindObjectsOfType<MenuNavigationCommand>();
-        foreach (MenuNavigationCommand command in commands)
+        // Menu Navigation Action
+        BackAction[] backActions = FindObjectsOfType<BackAction>();
+        foreach (BackAction Action in backActions)
         {
-            command.MenuNavigationCommandPressed += UpdateState;
+            Action.BackActionPressed += () =>
+            {
+                UpdateState(LastState);
+            };
+        }
+
+        MenuNavigationAction[] MNCActions = FindObjectsOfType<MenuNavigationAction>();
+        foreach (MenuNavigationAction Action in MNCActions)
+        {
+            Action.MenuNavigationActionPressed += UpdateState;
+        }
+
+        OpenLoginPopUpAction[] OLPUActions = FindObjectsOfType<OpenLoginPopUpAction>();
+        foreach(OpenLoginPopUpAction Action in OLPUActions)
+        {
+            Action.OpenLoginPopUpActionPressed += () =>
+            {
+                UpdateState(EMenuState.IN_LOGIN_IN_LOGIN);
+            };
+        }
+
+
+        OpenRegisterPopUpAction[] ORPActions = FindObjectsOfType<OpenRegisterPopUpAction>();
+        foreach(OpenRegisterPopUpAction Action in ORPActions)
+        {
+            Action.OpenRegisterPopUpActionPressed += () =>
+            {
+                UpdateState(EMenuState.IN_LOGIN_IN_REGISTER);
+
+            };
+        }
+
+        GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
+        foreach(GoBackToLoginAction Action in GBLActions)
+        {
+            Action.GoBackToLoginActionPressed += () =>
+            {
+                UpdateState(EMenuState.IN_LOGIN);
+
+
+            };
+        }
+
+        LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
+        foreach(LoginRequestAction Action in LRActions)
+        {
+            Action.LoginRequestActionPressed += () =>
+            {
+                LoginContext.Instance.OnClickLoginRequest();
+
+            };
+        }
+
+        RegisterRequestAction[] RRActions = FindObjectsOfType<RegisterRequestAction>();
+        foreach(RegisterRequestAction Action in RRActions)
+        {
+            Action.RegisterRequestActionPressed += () =>
+            {
+                RegisterContext.Instance.OnClickCreateAccount();
+
+
+            };
         }
     }
 
+
+
+
+    
+
+    
 }

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager/*<T>*/ : Singleton<GameManager/*<T>*/> //where T : AbstractPlayerStats, new()                      // TODO: See why script won't show in inspector. My guess: Singleton can't accept classes with generic Type => implement Singleton structure internally in this class
 {
-    private Dictionary<EPlayerID, int> playerScores;
-
-    private AbstractGameMode currentGameMode;
+                                        
+    //private AbstractGameMode<T> currentGameMode;
 
     private bool isCanStartGame;
 
@@ -18,46 +17,52 @@ public class GameManager : Singleton<GameManager>
         isCanStartGame = false;
     }
 
-
-
-
-    #region Game Commands
-    public void StartGame(EGameMode gameModeToStart)
+    private void Start()
     {
-        switch (gameModeToStart)
+        EventManager.Instance.GAME_TeamWon += On_GAME_TeamWon;
+    }
+
+    
+
+    #region Game Actions
+    private void StartGame(EGameMode gameModeToStart)
+    {
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
-            case EGameMode.LIVES_3:
-                currentGameMode = new Lives3GameMode();
-                break;
+            switch (gameModeToStart)
+            {
+                case EGameMode.SINGLE_LIVES_5:
+                    //currentGameMode = new GM_Single_Lives<T>();  // TODO: Solve compile error
+                    break;
 
-            case EGameMode.TIME_2_MINUTES:
+                case EGameMode.SINGLE_TIME_2:
 
-                break;
+                    break;
 
-            case EGameMode.INSANE:
+                case EGameMode.INSANE:
 
-                break;
+                    break;
+            }
+
+            //EventManager.Instance.Invoke_GAME_GameAboutToStart(currentGameMode.GameMode);
         }
     }
 
+
+
+    // Test function
     public void Start3LivesGame()
     {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_NOT_STARTED)
-        {
-            Debug.Log("Starting 3 lives game");
-            currentGameMode = new Lives3GameMode();
-
-            EventManager.Instance.Invoke_GAME_GameAboutToStart(currentGameMode.GameMode);
-        }
+        StartGame(EGameMode.SINGLE_LIVES_5);
 
     }
 
-    public void PauseOrUnpauseGame()
+    private void PauseOrUnpauseGame()
     {
 
     }
 
-    public void EndGame()
+    private void EndGame()
     {
 
     }
@@ -70,9 +75,10 @@ public class GameManager : Singleton<GameManager>
         {
             yield return new WaitForEndOfFrame();
         }
-
-        
     }
 
-
+    private void On_GAME_TeamWon(ETeamID winnerTeamID, EGameMode gameMode)
+    {
+        EndGame();
+    }
 }

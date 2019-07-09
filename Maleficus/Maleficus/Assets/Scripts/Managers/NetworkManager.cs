@@ -6,7 +6,8 @@ using UnityEngine.Networking;
 
 public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMessage>
 {
-    public static NetworkManager Instance { private set; get; }
+
+    // public static NetworkManager Instance { private set; get; }                                                  // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
 
     private const int MAX_USER = 100;
     private const int PORT = 26002;
@@ -35,22 +36,26 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         base.Awake();
 
         startState = ENetworkMessage.NONE;                                                                           // TODO: for testing. Change to correct one later
-        debugStateID = 1000;
+        debugStateID = 1000; //Todo change to appropriate id
     }
 
-    private void Start()
+    protected override void Start()
     {
         base.Start();
+
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated;
 
-        Instance = this;
+        //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
+
         DontDestroyOnLoad(gameObject);
         Init();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         UpdateMessagePump();
     }
     #endregion
@@ -59,6 +64,7 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
     {
         base.UpdateState(receivedMessage);
 
+        Debug.Log("Update state " + receivedMessage);
     }
 
     public void Init()
@@ -109,9 +115,9 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
         switch (type)
         {
-            case NetworkEventType.Nothing:
-                UpdateState(ENetworkMessage.NONE);
-                break;
+            //case NetworkEventType.Nothing:
+            //    UpdateState(ENetworkMessage.NONE);
+            //    break;
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Connected to server");
@@ -132,11 +138,11 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
 
-            default:
-            case NetworkEventType.BroadcastEvent:
-                UpdateState(ENetworkMessage.BROADCAST);
-                Debug.Log("Unexpected network event type");
-                break;
+            //default:
+            //case NetworkEventType.BroadcastEvent:
+            //    UpdateState(ENetworkMessage.BROADCAST);
+            //    Debug.Log("Unexpected network event type");
+            //    break;
         }
     }
 
@@ -152,9 +158,11 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
                 break;
             case NetOP.OnCreateAccount:
                 OnCreateAccount((Net_OnCreateAccount)msg);
+                UpdateState(ENetworkMessage.REGISTERED);
                 break;
             case NetOP.OnLoginRequest:
                 OnLoginRequest((Net_OnLoginRequest)msg);
+                UpdateState(ENetworkMessage.LOGGED_IN);
                 break;
             case NetOP.OnAddFollow:
                 OnAddFollow((Net_OnAddFollow)msg);
@@ -170,16 +178,17 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
 
     private void OnCreateAccount(Net_OnCreateAccount oca)
     {
-        LobbyScene.Instance.EnableInputs();
-        LobbyScene.Instance.ChangeAuthenticationMessage(oca.Information);
+        LoginContext.Instance.EnableInputs();
+        LoginContext.Instance.ChangeAuthenticationMessage(oca.Information);
+
     }
     private void OnLoginRequest(Net_OnLoginRequest olr)
     {
-        LobbyScene.Instance.ChangeAuthenticationMessage(olr.Information);
+        LoginContext.Instance.ChangeAuthenticationMessage(olr.Information);
         if (olr.Success != 1)
         {
             // unsuccessfull login
-            LobbyScene.Instance.EnableInputs();
+            LoginContext.Instance.EnableInputs();
         }
         else
         {
@@ -193,7 +202,8 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
 
             token = olr.Token;
 
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Hub");
+            // change to next state
+            
         }
     }
     private void OnAddFollow(Net_OnAddFollow oaf)
@@ -235,24 +245,24 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         // invalid username
         if (!Utility.IsUsername(username))
         {
-            LobbyScene.Instance.ChangeAuthenticationMessage("Username is invalid");
-            LobbyScene.Instance.EnableInputs();
+            LoginContext.Instance.ChangeAuthenticationMessage("Username is invalid");
+            LoginContext.Instance.EnableInputs();
             return;
         }
 
         // invalid email
         if (!Utility.IsEmail(email))
         {
-            LobbyScene.Instance.ChangeAuthenticationMessage("Email is invalid");
-            LobbyScene.Instance.EnableInputs();
+            LoginContext.Instance.ChangeAuthenticationMessage("Email is invalid");
+            LoginContext.Instance.EnableInputs();
             return;
         }
 
         // invalid password
         if (!Utility.IsPassword(password))
         {
-            LobbyScene.Instance.ChangeAuthenticationMessage("Password is invalid");
-            LobbyScene.Instance.EnableInputs();
+            LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
+            LoginContext.Instance.EnableInputs();
             return;
         }
 
@@ -261,7 +271,7 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         ca.Password = Utility.Sha256FromString(password);
         ca.Email = email;
 
-        LobbyScene.Instance.ChangeAuthenticationMessage("Sending request...");
+        LoginContext.Instance.ChangeAuthenticationMessage("Sending request...");
         SendServer(ca);
     }
     public void SendLoginRequest(string usernameOrEmail, string password)
@@ -270,16 +280,16 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         // invalid email or username
         if (!Utility.IsUsernameAndDiscriminator(usernameOrEmail) && !Utility.IsEmail(usernameOrEmail))
         {
-            LobbyScene.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
-            LobbyScene.Instance.EnableInputs();
+            LoginContext.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
+            LoginContext.Instance.EnableInputs();
             return;
         }
 
         // invalid password
         if (!Utility.IsPassword(password))
         {
-            LobbyScene.Instance.ChangeAuthenticationMessage("Password is invalid");
-            LobbyScene.Instance.EnableInputs();
+            LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
+            LoginContext.Instance.EnableInputs();
             return;
         }
 
@@ -288,7 +298,7 @@ public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMess
         lr.UsernameOrEmail = usernameOrEmail;
         lr.Password = Utility.Sha256FromString(password);
 
-        LobbyScene.Instance.ChangeAuthenticationMessage("Sending Login request...");
+        LoginContext.Instance.ChangeAuthenticationMessage("Sending Login request...");
         SendServer(lr);
     }
 

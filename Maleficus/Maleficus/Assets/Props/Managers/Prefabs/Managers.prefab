@@ -132,6 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4335998295704777601}
+  - component: {fileID: 3612836632577155832}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -155,6 +156,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3612836632577155832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4335998295704777600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be6cd55cde3b0ed4682f0d471db7c139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DebugStartState: 2
+  InputMode: 0
+  IsSpawnPlayerOnConnect: 1
+  IsSpawnAllPlayers: 1
+  IsSpawnARPlayers: 0
+  IsDebugLogEvents: 1
 --- !u!1 &4335998295768301887
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,10 +346,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fd42a054186c04d9cf980f40fc3cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player_1: {fileID: 0}
-  player_2: {fileID: 0}
-  player_3: {fileID: 0}
-  player_4: {fileID: 0}
 --- !u!1 &4335998297404941566
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2e4102fc697074583a0c3ca5d1bdd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugStartState: 1
 --- !u!1 &5169349337228766896
 GameObject:
   m_ObjectHideFlags: 0
@@ -538,6 +552,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512cf275eaaa21b4393825f97f72fd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FrozenEffect: {fileID: 0}
+  friction: 0
 --- !u!1 &8098184902868246776
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +563,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5889587382612739557}
-  - component: {fileID: 4757474655611091494}
+  - component: {fileID: 2942509484940805203}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -569,7 +585,7 @@ Transform:
   m_Father: {fileID: 2613532659259175318}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4757474655611091494
+--- !u!114 &2942509484940805203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

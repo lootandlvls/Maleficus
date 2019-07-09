@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class MenuNavigationCommand : AbstractUICommand {
+public class MenuNavigationAction : AbstractUIAction {
 
-    public event Action<EMenuState> MenuNavigationCommandPressed;
+    public event Action<EMenuState> MenuNavigationActionPressed;
 
     [SerializeField] private EMenuState fromState;
     [SerializeField] private EMenuState toState;
@@ -14,9 +14,9 @@ public class MenuNavigationCommand : AbstractUICommand {
     public override void Execute()
     {
 
-        if (MenuNavigationCommandPressed != null)
+        if (MenuNavigationActionPressed != null)
         {
-            MenuNavigationCommandPressed.Invoke(toState);
+            MenuNavigationActionPressed.Invoke(toState);
         }
     }
 }
