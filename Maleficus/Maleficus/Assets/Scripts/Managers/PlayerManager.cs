@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerManager : Singleton<PlayerManager>
+public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
 
     public Dictionary<EPlayerID, Player>                PlayerPrefabs               { get { return playerPrefabs; } }
@@ -14,17 +14,16 @@ public class PlayerManager : Singleton<PlayerManager>
     public Dictionary<EPlayerID, Player>                ActivePlayers               { get { return activePlayers; } }
     public Dictionary<ETeamID, List<EPlayerID>>         PlayerTeams                 { get { return playerTeams; } }
 
-
-
+    
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
     private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
     private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnPositions       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
     private Dictionary<EPlayerID, PlayerInput>          playersInput                = new Dictionary<EPlayerID, PlayerInput>();
+    /* Dictionaries that are defined only for active players  */
+    /// Added whenever a player has spawned. Removed when he dies.
     /// Initially initialized with false, then true whenever the respective player connects
     private Dictionary<EPlayerID, bool>                 connectedPlayers            = new Dictionary<EPlayerID, bool>();
 
-    /* Dictionaries that are defined only for active players  */
-    /// Added whenever a player has spawned. Removed when he dies.
     private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
     private Dictionary<ETeamID, List<EPlayerID>>        playerTeams                 = new Dictionary<ETeamID, List<EPlayerID>>();
 
@@ -36,12 +35,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
         InitializeDictionaries();
         LoadPlayerResources();
+    }
+
+    public override void Initialize()
+    {
         FindPlayerSpawnPositions();
     }
 
 
+
     private void Start()
     {
+        // State change events
+        //AppStateManager.Instance.Instance
+
+
         // Input events
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
@@ -69,6 +77,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         MoveAndRotatePlayers();
     }
+
 
                                                                                                                     // TODO: Use this 
     public void AssignPlayerToTeam(EPlayerID playerID, ETeamID teamID)

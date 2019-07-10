@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class InputManager : Singleton<InputManager>
+public class InputManager : AbstractSingletonManager<InputManager>
 {
     public EInputMode InputMode { get { return MotherOfManagers.Instance.InputMode; } }
 

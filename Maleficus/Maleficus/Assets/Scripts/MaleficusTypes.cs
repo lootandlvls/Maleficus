@@ -5,16 +5,21 @@ using UnityEngine;
 
 public static class MaleficusTypes 
 {
-    // Player characters paths
+    /* Scene names (in build settings) */
+    public const string SCENE_MENU                  = "Dummy_MENU";         // TODO: Replace with correct scenes
+    public const string SCENE_GAME                  = "Dummy_GAME";
+
+    public const int NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE = 3;
+
+    /* Player characters paths */
     public const string PATH_PLAYER_RED             = "Wizard_Red";
     public const string PATH_PLAYER_BLUE            = "Wizard_Blue";
     public const string PATH_PLAYER_GREEN           = "Wizard_Green";
     public const string PATH_PLAYER_YELLOW          = "Wizard_Yellow";
     public const string PATH_PLAYER_SPAWN_POSITION  = "PlayerSpawnPosition";
 
-    // Spells path
+    /* Spells path */
     public const string PATH_SPELL_FIRE             = "Spell_Fire";         // TODO: Define rest
-
 
 
 
@@ -69,8 +74,6 @@ public static class MaleficusTypes
         EMenuState.IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_LOGIN_IN_LEGAL
     };
-
-
 
 
     /// Convert a PlayerID enum to an int
@@ -141,7 +144,15 @@ public enum EAppState
     IN_GAME_IN_RUNNING,
     IN_GAME_IN_PAUSED,
     IN_GAME_IN_ENDED,
+    IN_GAME_IN_ABORTED,
     TEST
+}
+
+public enum EScene
+{
+    NONE,
+    MENU,
+    GAME
 }
 
 
@@ -178,7 +189,7 @@ public class SPlayerLivesStats : AbstractPlayerStats
 
     public int RemainingLives           { get { return remainingLives; } }
     public int NumberOfKilledPlayers    { get { return numberOfKilledPlayers; } }
-    public bool IsDead                  { get { return remainingLives == 0; } }
+    public bool IsGameOver                  { get { return remainingLives == 0; } }
     public EPlayerID LastHitBy          { get { return lastHitBy; } }
 
     /// <summary>

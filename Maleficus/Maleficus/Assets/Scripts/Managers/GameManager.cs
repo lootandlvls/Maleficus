@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager/*<T>*/ : Singleton<GameManager/*<T>*/> //where T : AbstractPlayerStats, new()                      // TODO: See why script won't show in inspector. My guess: Singleton can't accept classes with generic Type => implement Singleton structure internally in this class
+public class GameManager/*<T>*/ : AbstractSingletonManager<GameManager/*<T>*/> //where T : AbstractPlayerStats, new()                      // TODO: See why script won't show in inspector. My guess: Singleton can't accept classes with generic Type => implement Singleton structure internally in this class
 {
                                         
-    //private AbstractGameMode<T> currentGameMode;
+    private AbstractGameMode<T> currentGameMode;
 
     private bool isCanStartGame;
 

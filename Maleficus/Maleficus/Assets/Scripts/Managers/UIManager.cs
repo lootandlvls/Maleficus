@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class UIManager : SingletonStateMachine<UIManager, EMenuState>
+public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
-    private MenuButton selectedButton;                                                                         // TODO: Update selected button on menu change
+    private MaleficusButton selectedButton;                                                                         // TODO: Update selected button on menu change
 
     protected override void Awake()
     {
@@ -59,7 +59,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
                 Debug.Log("selected button null");
                 return;
             }
-            MenuButton nextButton = null;
+            MaleficusButton nextButton = null;
             switch (buttonType)
             {
                 case EInputButton.CONFIRM:
@@ -91,7 +91,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         }
     }
 
-    public void OnSelectedButton(MenuButton selectedButton)
+    public void OnSelectedButton(MaleficusButton selectedButton)
     {
         this.selectedButton = selectedButton;
     }
@@ -104,7 +104,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         BackAction[] backActions = FindObjectsOfType<BackAction>();
         foreach (BackAction Action in backActions)
         {
-            Action.BackActionPressed += () =>
+            Action.ActionButtonPressed += () =>
             {
                 UpdateState(LastState);
             };
@@ -119,7 +119,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         OpenLoginPopUpAction[] OLPUActions = FindObjectsOfType<OpenLoginPopUpAction>();
         foreach(OpenLoginPopUpAction Action in OLPUActions)
         {
-            Action.OpenLoginPopUpActionPressed += () =>
+            Action.ActionButtonPressed += () =>
             {
                 UpdateState(EMenuState.IN_LOGIN_IN_LOGIN);
             };
@@ -129,7 +129,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         OpenRegisterPopUpAction[] ORPActions = FindObjectsOfType<OpenRegisterPopUpAction>();
         foreach(OpenRegisterPopUpAction Action in ORPActions)
         {
-            Action.OpenRegisterPopUpActionPressed += () =>
+            Action.ActionButtonPressed += () =>
             {
                 UpdateState(EMenuState.IN_LOGIN_IN_REGISTER);
 
@@ -139,7 +139,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
         foreach(GoBackToLoginAction Action in GBLActions)
         {
-            Action.GoBackToLoginActionPressed += () =>
+            Action.ActionButtonPressed += () =>
             {
                 UpdateState(EMenuState.IN_LOGIN);
 
@@ -150,7 +150,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
         foreach(LoginRequestAction Action in LRActions)
         {
-            Action.LoginRequestActionPressed += () =>
+            Action.ActionButtonPressed += () =>
             {
                 LoginContext.Instance.OnClickLoginRequest();
 
@@ -160,7 +160,7 @@ public class UIManager : SingletonStateMachine<UIManager, EMenuState>
         RegisterRequestAction[] RRActions = FindObjectsOfType<RegisterRequestAction>();
         foreach(RegisterRequestAction Action in RRActions)
         {
-            Action.RegisterRequestActionPressed += () =>
+            Action.ActionButtonPressed += () =>
             {
                 RegisterContext.Instance.OnClickCreateAccount();
 

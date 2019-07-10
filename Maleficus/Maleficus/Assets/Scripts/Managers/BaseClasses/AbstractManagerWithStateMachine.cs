@@ -5,14 +5,14 @@ using System;
 
 
 /// <summary>
-/// A class that defines a state machine.
+/// A Manager class that uses a state machine. See parent AbstractManager class for more information about what a Manager is.
 /// IMPORTANT: do following steps when inheriting from this class
 /// 1) Define "startState" in Awake() of child class
 /// 2) Define "debugStateID" in Awake() of child class
 /// 3) Bind "StateUpdateEvent" in start method of child class
 /// </summary>
 /// <typeparam name="E"></typeparam>
-public class SingletonStateMachine<T, E> : Singleton<T> where T : Singleton<T>
+public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractSingletonManager<T> where T : AbstractSingletonManager<T>
 {
     protected event Action<E, E> StateUpdateEvent;
 

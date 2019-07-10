@@ -55,7 +55,7 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
         EPlayerID winnerPlayerID = EPlayerID.NONE;
         foreach (EPlayerID playerID in PlayerStats.Keys)
         {
-            if (PlayerStats[playerID].IsDead == true)
+            if (PlayerStats[playerID].IsGameOver == true)
             {
                 deadPlayersCounter++;
             }

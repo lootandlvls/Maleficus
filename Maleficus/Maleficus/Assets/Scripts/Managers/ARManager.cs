@@ -4,7 +4,7 @@ using UnityEngine;
 using Vuforia;
 using UnityEngine.UI;
 
-public class ARManager : Singleton<ARManager>
+public class ARManager : AbstractSingletonManager<ARManager>
 {
     private ContentPositioningBehaviour[] contentPositionings;
     private AnchorInputListenerBehaviour[] anchorInputListeners;

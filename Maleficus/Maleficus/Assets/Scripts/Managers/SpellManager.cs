@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SpellManager : Singleton<SpellManager>
+public class SpellManager : AbstractSingletonManager<SpellManager>
 {
-
-    Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
 
     [SerializeField] private GameObject FrozenEffect;
     [SerializeField] private float friction;
+
+    private Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
+
     private void Start()
     {
         activePlayers = PlayerManager.Instance.ActivePlayers;
+
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
     }
@@ -53,9 +55,8 @@ public class SpellManager : Singleton<SpellManager>
         {
             ApplyBuff(buffeffect, hitInfo.HitPlayerID);
         }
-
-
     }
+
     private IEnumerator PushPlayer(SHitInfo hitInfo)
     {   
         
@@ -135,7 +136,8 @@ public class SpellManager : Singleton<SpellManager>
 
 
     }
-    IEnumerator PlayerFrozen(EPlayerID playerID)
+
+    private IEnumerator PlayerFrozen(EPlayerID playerID)
     {
         activePlayers[playerID].speed = 0;
         GameObject snowman = Instantiate(FrozenEffect, activePlayers[playerID].transform.position, activePlayers[playerID].transform.rotation);
@@ -146,7 +148,7 @@ public class SpellManager : Singleton<SpellManager>
         activePlayers[playerID].speed = 75;
     }
 
-    IEnumerator PlayerStunned(EPlayerID playerID)
+    private IEnumerator PlayerStunned(EPlayerID playerID)
     {
         activePlayers[playerID].speed = 0;
         yield return new WaitForSeconds(2.5f);

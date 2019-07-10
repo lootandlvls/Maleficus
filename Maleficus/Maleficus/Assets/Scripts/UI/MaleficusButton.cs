@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 
 
-public class MenuButton : MonoBehaviour
+public class MaleficusButton : MonoBehaviour
 {
 
-    [SerializeField] private MenuButton leftButton;
-    [SerializeField] private MenuButton rightButton;
-    [SerializeField] private MenuButton upperButton;
-    [SerializeField] private MenuButton buttomButton;
+    [SerializeField] private MaleficusButton leftButton;
+    [SerializeField] private MaleficusButton rightButton;
+    [SerializeField] private MaleficusButton upperButton;
+    [SerializeField] private MaleficusButton buttomButton;
 
     private Button myButton;
     private AbstractUIAction myMenuAction;
@@ -32,9 +32,9 @@ public class MenuButton : MonoBehaviour
         myMenuAction.Execute();
     }
 
-    public MenuButton GoToNextButton(EButtonDirection buttonDirection)
+    public MaleficusButton GoToNextButton(EButtonDirection buttonDirection)
     {
-        MenuButton buttonToReturn = null;
+        MaleficusButton buttonToReturn = null;
         switch(buttonDirection)
         {
             case EButtonDirection.LEFT:

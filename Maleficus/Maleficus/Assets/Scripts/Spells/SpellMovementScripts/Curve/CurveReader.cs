@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class CurveReader : Singleton<CurveReader>
+public class CurveReader : AbstractSingletonManager<CurveReader>
 {
     public Vector3 Curve1;
     public Vector3 Curve2;

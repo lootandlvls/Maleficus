@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LoginRequestAction : AbstractUIAction
+public class StartGameAction : AbstractUIAction
 {
     // Simply invoke ActionButtonPressed event
 }

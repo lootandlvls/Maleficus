@@ -5,13 +5,8 @@ using System;
 
 public class BackAction : AbstractUIAction
 {
-    public event Action BackActionPressed;
+    public bool IsStaysInSameAppState { get { return isStaysInSameAppState; } }
 
-    public override void Execute()
-    {
-        if (BackActionPressed != null)
-        {
-            BackActionPressed.Invoke();
-        }
-    }
+    [SerializeField] private bool isStaysInSameAppState = false; 
+
 }

@@ -4,20 +4,44 @@ using UnityEngine;
 using System;
 using UnityEngine.Networking;
 
-public class EventManager : Singleton<EventManager>
+public class EventManager : AbstractSingletonManager<EventManager>
 {
 
-    #region GAME
-    public event Action<EAppState, EAppState> GAME_AppStateUpdated;
-    public void Invoke_GAME_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
+    #region APP
+    public event Action<EAppState, EAppState> ÁPP_AppStateUpdated;
+    public void Invoke_APP_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
     {
-        if (GAME_AppStateUpdated != null)
+        if (ÁPP_AppStateUpdated != null)
         {
-            GAME_AppStateUpdated.Invoke(newAppState, lastAppState);
+            ÁPP_AppStateUpdated.Invoke(newAppState, lastAppState);
         }
         DebugLog("App state changed from " + lastAppState + " to " + newAppState);
     }
 
+    public event Action<EScene> APP_SceneWillChange;
+    public void Invoke_APP_SceneWillChange(EScene newScene)
+    {
+        if (APP_SceneWillChange != null)
+        {
+            APP_SceneWillChange.Invoke(newScene);
+        }
+        DebugLog("Scene changed : " + newScene);
+    }
+
+    public event Action<EScene> APP_SceneChanged;
+    public void Invoke_APP_SceneChanged(EScene newScene)
+    {
+        if (APP_SceneChanged != null)
+        {
+            APP_SceneChanged.Invoke(newScene);
+        }
+        DebugLog("Scene changed : " + newScene);
+    }
+
+
+    #endregion
+
+    #region GAME
     public event Action<EGameMode> GAME_GameAboutToStart;
     public void Invoke_GAME_GameAboutToStart(EGameMode gameModeAboutToStart)
     {

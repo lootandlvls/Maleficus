@@ -37,8 +37,4 @@ public abstract class AbstractGameMode<T> : MonoBehaviour where T : AbstractPlay
         Debug.Log(connectedPlayers.Count + " players playings");
     }
 
-    public static implicit operator AbstractGameMode<T>(GM_Single_Lives<T> v)
-    {
-        throw new NotImplementedException();
-    }
 }

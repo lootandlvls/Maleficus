@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class NetworkManager : SingletonStateMachine<NetworkManager, ENetworkMessage>
+public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkManager, ENetworkMessage>
 {
 
     // public static NetworkManager Instance { private set; get; }                                                  // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert

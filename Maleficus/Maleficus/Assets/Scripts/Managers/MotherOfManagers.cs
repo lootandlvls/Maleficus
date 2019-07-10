@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MotherOfManagers : Singleton<MotherOfManagers>
+public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {
-
 
     [Header ("App State")]
     [SerializeField] public EAppState DebugStartState = EAppState.IN_MENU_IN_MAIN;
@@ -19,5 +18,38 @@ public class MotherOfManagers : Singleton<MotherOfManagers>
 
     [Header ("Debug")]
     [SerializeField] public bool IsDebugLogEvents = false;
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        DontDestroyOnLoad(this);
+    }
+
+    private void Start()
+    {
+        EventManager.Instance.APP_SceneChanged += One_APP_SceneChanged; 
+    }
+
+    private void One_APP_SceneChanged(EScene newScene)
+    {
+        InitializeManagers();
+    }
+
+
+    private void InitializeManagers()
+    {
+        Debug.Log("Intializing managers");
+        AbstractManager[] abstractManagers = FindObjectsOfType<AbstractManager>();
+        foreach (AbstractManager abstractManager in abstractManagers)
+        {
+            Debug.Log("Initializing " + abstractManager.name);
+            if (abstractManager != this)
+            {
+                abstractManager.Initialize();
+            }
+        }
+    }
 
 }

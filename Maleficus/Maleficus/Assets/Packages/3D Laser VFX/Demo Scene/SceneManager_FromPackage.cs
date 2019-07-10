@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneManager : MonoBehaviour {
+public class SceneManager_FromPackage : MonoBehaviour {
 	public TextMesh text_fx_name;
 	public GameObject[] lasers_prefabs;
 	public GameObject[] hits_prefabs;

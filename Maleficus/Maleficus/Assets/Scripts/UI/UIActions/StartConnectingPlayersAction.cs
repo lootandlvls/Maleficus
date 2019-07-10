@@ -8,14 +8,5 @@ using System;
 /// </summary>
 public class StartConnectingPlayersAction : AbstractUIAction
 {
-    public event Action ConnectPlayersActionPressed;
-
-    public override void Execute()
-    {
-
-        if (ConnectPlayersActionPressed != null)
-        {
-            ConnectPlayersActionPressed.Invoke();
-        }
-    }
+    // Simply invoke ActionButtonPressed event
 }

@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Playgrounds/ARTest.unity
     guid: 58a824967433fa34ea2b771e65cf44dc
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_GAME.unity
+    guid: 748ea2def2649e446b27d5fd8cc8d5f7
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_MENU.unity
+    guid: bddb1906bfb8023448416c99f8fc2d3a
   m_configObjects: {}

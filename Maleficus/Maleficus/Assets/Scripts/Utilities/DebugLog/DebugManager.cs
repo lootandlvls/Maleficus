@@ -8,10 +8,11 @@ using UnityEngine.UI;
 /// Multiple channel (IDs) debug messages on every frame
 /// IDs:
 /// 2  - Joystick 
-/// 50  - UI state
+/// 50 - UI state
 /// 51 - App state 
+/// 52 - Scene
 /// </summary>
-public class DebugManager : Singleton<DebugManager>
+public class DebugManager : AbstractSingletonManager<DebugManager>
 {
     private Dictionary<int, DebugText> debugTexts;
     private Dictionary<int, bool> reportedDebugTexts;
