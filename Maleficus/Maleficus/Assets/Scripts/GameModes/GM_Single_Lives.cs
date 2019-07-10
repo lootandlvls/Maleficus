@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : AbstractPlayerStats, new()
+public class GM_Single_Lives<T> : AbstractGameMode<PlayerStats_Lives> where T : AbstractPlayerStats, new()
 {
     // Should only be called directly after object construction (used in Start method)
     public int TotalLives { get { return totalLives; } set { totalLives = value; } }
@@ -26,7 +26,7 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
         // Initialize player stats correctly
         foreach (EPlayerID playerID in PlayerStats.Keys)
         {
-            PlayerStats[playerID] = new SPlayerLivesStats(TotalLives);
+            PlayerStats[playerID] = new PlayerStats_Lives(TotalLives);
         }
 
         EventManager.Instance.PLAYERS_PlayerDied    += On_PLAYERS_PlayerDied;
@@ -45,8 +45,8 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
         // if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_RUNNING)          // TODO: check for right state
 
         // Update remaining lives and kills counter
-        SPlayerLivesStats killedPlayer = PlayerStats[diedPlayerID];
-        SPlayerLivesStats killingPlayer = PlayerStats[killedPlayer.LastHitBy];
+        PlayerStats_Lives killedPlayer = PlayerStats[diedPlayerID];
+        PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
         killedPlayer.DecrementPlayerLives();
         killingPlayer.IncrementNumberOfKilledPlayers();
 

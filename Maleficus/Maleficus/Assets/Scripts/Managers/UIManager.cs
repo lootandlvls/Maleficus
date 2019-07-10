@@ -11,7 +11,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     {
         base.Awake();
 
-        startState = EMenuState.IN_MAIN;                                                                        
+        startState = EMenuState.IN_STARTUP;                                                                        
         debugStateID = 50;
 
         FindAndBindButtonActions();
@@ -165,6 +165,15 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                 RegisterContext.Instance.OnClickCreateAccount();
 
 
+            };
+        }
+
+        AddFriendAction[] AFActions = FindObjectsOfType<AddFriendAction>();
+        foreach(AddFriendAction Action in AFActions)
+        {
+            Action.AddFriendActionPressed += () =>
+            {
+                FriendsContext.Instance.OnClickAddFollow();
             };
         }
     }

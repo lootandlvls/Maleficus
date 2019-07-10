@@ -8,7 +8,7 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 {
 
     // public static NetworkManager Instance { private set; get; }                                                  // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
-
+    //TODO move consts to maleficus types
     private const int MAX_USER = 100;
     private const int PORT = 26002;
     private const int WEB_PORT = 26004;
@@ -48,7 +48,6 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 
         //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
 
-        DontDestroyOnLoad(gameObject);
         Init();
     }
 
@@ -63,8 +62,6 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
     protected override void UpdateState(ENetworkMessage receivedMessage)
     {
         base.UpdateState(receivedMessage);
-
-        Debug.Log("Update state " + receivedMessage);
     }
 
     public void Init()
@@ -157,21 +154,30 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
                 Debug.Log("Unexpected NetOP");
                 break;
             case NetOP.OnCreateAccount:
+                Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)msg);
                 UpdateState(ENetworkMessage.REGISTERED);
                 break;
             case NetOP.OnLoginRequest:
+                Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)msg);
                 UpdateState(ENetworkMessage.LOGGED_IN);
                 break;
             case NetOP.OnAddFollow:
+                Debug.Log("Add Friend");
                 OnAddFollow((Net_OnAddFollow)msg);
+                UpdateState(ENetworkMessage.DATA_ONADDFOLLOW);
                 break;
             case NetOP.OnRequestFollow:
+                Debug.Log("Get Friends");
                 OnRequestFollow((Net_OnRequestFollow)msg);
+                UpdateState(ENetworkMessage.DATA_ONREQUESTFOLLOW);
                 break;
+                //Todo change to Onupdatefollow
             case NetOP.UpdateFollow:
+                Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
+                UpdateState(ENetworkMessage.DATA_ONUPDATEFOLLOW);
                 break;
         }
     }
@@ -201,28 +207,30 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
             self.Discriminator = olr.Discriminator;
 
             token = olr.Token;
+            Debug.Log("token: " + token);
+            LoginContext.Instance.EnableInputs();
 
             // change to next state
-            
+
         }
     }
     private void OnAddFollow(Net_OnAddFollow oaf)
     {
         if (oaf.Success == 1)
         {
-            HubScene.Instance.AddFollowToUi(oaf.Follow);
+            FriendsContext.Instance.AddFollowToUi(oaf.Follow);
         }
     }
     private void OnRequestFollow(Net_OnRequestFollow orf)
     {
         foreach (var follow in orf.Follows)
         {
-            HubScene.Instance.AddFollowToUi(follow);
+            FriendsContext.Instance.AddFollowToUi(follow);
         }
     }
     private void UpdateFollow(Net_UpdateFollow fu)
     {
-        HubScene.Instance.UpdateFollow(fu.Follow);
+        FriendsContext.Instance.UpdateFollow(fu.Follow);
     }
     #endregion
 

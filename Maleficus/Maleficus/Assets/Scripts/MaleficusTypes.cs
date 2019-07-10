@@ -174,13 +174,13 @@ public class AbstractPlayerStats
 
 }
 
-public class SPlayerLivesStats : AbstractPlayerStats
+public class PlayerStats_Lives : AbstractPlayerStats
 {
-    public SPlayerLivesStats()
+    public PlayerStats_Lives()
     {
 
     }
-    public SPlayerLivesStats(int maximumNumberOfLives)
+    public PlayerStats_Lives(int maximumNumberOfLives)
     {
         remainingLives = maximumNumberOfLives;
         numberOfKilledPlayers = 0;
@@ -436,6 +436,7 @@ public enum EButtonDirection
 }
 #endregion
 
+//Todo move data_ to own enums
 #region NETWORK
 public enum ENetworkMessage
 {
@@ -443,6 +444,12 @@ public enum ENetworkMessage
     CONNECTED,
     DISCONNECTED,
     DATA,
+    DATA_NONE,
+    DATA_ONCREATEACCOUNT,
+    DATA_ONLOGINREQUEST,
+    DATA_ONADDFOLLOW,
+    DATA_ONREQUESTFOLLOW,
+    DATA_ONUPDATEFOLLOW,
     BROADCAST,
     LOGGED_IN,
     LOGGED_OUT,

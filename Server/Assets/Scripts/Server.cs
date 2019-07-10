@@ -178,7 +178,7 @@ public class Server : MonoBehaviour
     }
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
-        string randomToken = Utility.GenerateRandom(256);
+        string randomToken = Utility.GenerateRandom(128);
         Model_Account account = db.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
         Net_OnLoginRequest olr = new Net_OnLoginRequest();
         if (account != null)
