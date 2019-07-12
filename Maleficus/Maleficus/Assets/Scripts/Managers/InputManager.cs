@@ -147,7 +147,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 EPlayerID playerID = GetPlayerID(controllerID);
                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
             }
-            else if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
+            else //if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
                 // Connect players
             {
                 EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();

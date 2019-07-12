@@ -35,7 +35,7 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
     {
         base.Awake();
 
-        startState = ENetworkMessage.NONE;                                                                           // TODO: for testing. Change to correct one later
+        startStates = MaleficusTypes.START_NETWORKSTATES;                                                                           // TODO: for testing. Change to correct one later
         debugStateID = 1000; //Todo change to appropriate id
     }
 

@@ -9,7 +9,9 @@ public class TODOs : MonoBehaviour
   
     // TODO: Spells | add skill points to use when choosing a spell
     // TODO: Implement Loading screen
-
+    // TODO: Pack debug logs into DebugManager and add bools in MotherOfManagers to be able to filter logs
+    // TODO: Define with Nassim Spells Resources
+    // TODO: Define DebugIDs as const in MaleficusTypes
 
     //Network ------------------------------------------------------------------------
     //TODO: Resend Messages when they couldn't be sent

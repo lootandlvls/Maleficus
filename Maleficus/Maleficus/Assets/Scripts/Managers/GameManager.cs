@@ -19,6 +19,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
     private void Start()
     {
         EventManager.Instance.GAME_TeamWon += On_GAME_TeamWon;
+
     }
 
     
@@ -33,7 +34,8 @@ public class GameManager : AbstractSingletonManager<GameManager>
             switch (gameModeToStart)
             {
                 case EGameMode.SINGLE_LIVES_5:
-                    gameObject.AddComponent<GM_Single_Lives<PlayerStats_Lives>>();          // TODO: Test if it works
+                    gameObject.AddComponent<GM_Single_Lives>();          // TODO: Test if it works
+                    Debug.Log("Starting " + EGameMode.SINGLE_LIVES_5);
                     break;
 
                 case EGameMode.SINGLE_TIME_2:
@@ -50,22 +52,24 @@ public class GameManager : AbstractSingletonManager<GameManager>
     }
 
 
-
-    // Test function
-    public void Start3LivesGame()
-    {
-        StartGame(EGameMode.SINGLE_LIVES_5);
-
-    }
-
     private void PauseOrUnpauseGame()
     {
-
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            EventManager.Instance.Invoke_GAME_GamePaused(currentGameMode);
+        }
+        else if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_PAUSED)
+        {
+            EventManager.Instance.Invoke_GAME_GameUnPaused(currentGameMode);
+        }
     }
 
-    private void EndGame()
+    private void EndGame(bool wasAborted = false)
     {
-
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            EventManager.Instance.Invoke_GAME_GameEnded(currentGameMode, wasAborted);
+        }
     }
 
     #endregion
@@ -81,5 +85,40 @@ public class GameManager : AbstractSingletonManager<GameManager>
     private void On_GAME_TeamWon(ETeamID winnerTeamID, EGameMode gameMode)
     {
         EndGame();
+    }
+
+
+
+    protected override void FindAndBindButtonActions()
+    {
+        base.FindAndBindButtonActions();
+
+        /* In GAME */
+        StartTestGameAction[] startTestGameActions = FindObjectsOfType<StartTestGameAction>();
+        foreach (StartTestGameAction action in startTestGameActions)
+        {
+            action.ActionButtonPressed += () =>
+            {
+                StartGame(EGameMode.SINGLE_LIVES_5);
+            };
+        }
+
+        PauseGameAction[] pauseGameActions = FindObjectsOfType<PauseGameAction>();
+        foreach (PauseGameAction action in pauseGameActions)
+        {
+            action.ActionButtonPressed += () =>
+            {
+                PauseOrUnpauseGame();
+            };
+        }
+
+        AbortGameAction[] abortGameActions = FindObjectsOfType<AbortGameAction>();
+        foreach (AbortGameAction action in abortGameActions)
+        {
+            action.ActionButtonPressed += () =>
+            {
+                EndGame(true);
+            };
+        }
     }
 }

@@ -11,86 +11,40 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     {
         base.Awake();
 
-        startState = EMenuState.IN_STARTUP;                                                                        
+        // 1) Assign appropriate currentState from MaleficusTypes
+        startStates = MaleficusTypes.START_MENU_STATES;
+        // 2) Define "debugStateID" in Awake() of child class
         debugStateID = 50;
-
-        FindAndBindButtonActions();
     }
 
     protected override void Start()
     {
         base.Start();
 
-        // Bind state machine event
+        //// Debug state                                                                                            // TODO: Use debug states?
+        //if (MotherOfManagers.Instance.DebugStartMenuState != EMenuState.NONE)
+        //{
+        //    startState = MotherOfManagers.Instance.DebugStartMenuState;
+        //}
+
+        // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
+
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
 
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
-        StartCoroutine(LateStartCoroutine());
+        EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
+        EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
+        EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
+        EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
     }
 
-    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
-    {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_LOGING_IN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
-        {
-            switch (receivedMsg)
-            {
-                case ENetworkMessage.CONNECTED:
-                    UpdateState(EMenuState.IN_LOGIN);
-                    break;
-                case ENetworkMessage.LOGGED_IN:
-                    UpdateState(EMenuState.IN_MAIN);
-                    break;
-                case ENetworkMessage.REGISTERED:
-                    UpdateState(EMenuState.IN_LOGIN);
-                    break;
-            }
-        }
-    }
-
-    private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
-    {
-        //Debug.Log("Button " + buttonType + " by " + playerID);
-        if (AppStateManager.Instance.IsInAStateWithUI == true)         // test case
-        {
-            if (selectedButton == null)
-            {
-                Debug.Log("selected button null");
-                return;
-            }
-            MaleficusButton nextButton = null;
-            switch (buttonType)
-            {
-                case EInputButton.CONFIRM:
-                    selectedButton.Press();
-                    break;
-
-                case EInputButton.LEFT:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.LEFT);
-                    break;
-
-                case EInputButton.RIGHT:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.RIGHT);
-                    break;
-
-                case EInputButton.UP:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.UP);
-                    break;
-
-                case EInputButton.DOWN:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.DOWN);
-                    break;
-            }
-
-            // Update selected button
-            if (nextButton != null)
-            {
-                selectedButton = nextButton;
-            }
-        }
-    }
-
+   
+    /// <summary>
+    /// When a pressed is highlighted (selected by controller)
+    /// </summary>
+    /// <param name="selectedButton"></param>
     public void OnSelectedButton(MaleficusButton selectedButton)
     {
         this.selectedButton = selectedButton;
@@ -98,7 +52,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
 
 
-    private void FindAndBindButtonActions()
+    protected override void FindAndBindButtonActions()
     {
         // Menu Navigation Action
         BackAction[] backActions = FindObjectsOfType<BackAction>();
@@ -179,9 +133,88 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     }
 
 
+    #region Events Callbacks
+    private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
+    {
+        //Debug.Log("Button " + buttonType + " by " + playerID);
+        if (AppStateManager.Instance.IsInAStateWithUI == true)         // test case
+        {
+            if (selectedButton == null)
+            {
+                Debug.Log("selected button null");
+                return;
+            }
+            MaleficusButton nextButton = null;
+            switch (buttonType)
+            {
+                case EInputButton.CONFIRM:
+                    selectedButton.Press();
+                    break;
 
+                case EInputButton.LEFT:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.LEFT);
+                    break;
 
-    
+                case EInputButton.RIGHT:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.RIGHT);
+                    break;
 
-    
+                case EInputButton.UP:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.UP);
+                    break;
+
+                case EInputButton.DOWN:
+                    nextButton = selectedButton.GoToNextButton(EButtonDirection.DOWN);
+                    break;
+            }
+
+            // Update selected button
+            if (nextButton != null)
+            {
+                selectedButton = nextButton;
+            }
+        }
+    }
+
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
+    {
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_LOGING_IN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
+        {
+            switch (receivedMsg)
+            {
+                case ENetworkMessage.CONNECTED:
+                    UpdateState(EMenuState.IN_LOGIN);
+                    break;
+                case ENetworkMessage.LOGGED_IN:
+                    UpdateState(EMenuState.IN_MAIN);
+                    break;
+                case ENetworkMessage.REGISTERED:
+                    UpdateState(EMenuState.IN_LOGIN);
+                    break;
+            }
+        }
+    }
+
+    private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
+    {
+        UpdateState(EMenuState.IN_GAME_OVER);
+    }
+
+    private void On_GAME_GameUnPaused(EGameMode obj)
+    {
+        UpdateState(EMenuState.IN_GAME_RUNNING);
+    }
+
+    private void On_GAME_GamePaused(EGameMode obj)
+    {
+        UpdateState(EMenuState.IN_GAME_PAUSED);
+    }
+
+    private void On_GAME_GameStarted(EGameMode obj)
+    {
+        UpdateState(EMenuState.IN_GAME_RUNNING);
+    }
+
+    #endregion
+
 }

@@ -8,7 +8,8 @@ using System;
 /// </summary>
 public abstract class AbstractUIReaction : MonoBehaviour {
 
-    [SerializeField] protected EMenuState activeOnState;
+    [SerializeField] protected bool isInitializeOnStart = true;
+    [SerializeField] protected EMenuState activeOnState = EMenuState.NONE;
 
     protected EMenuState[] activeOnStates;
 
@@ -29,6 +30,20 @@ public abstract class AbstractUIReaction : MonoBehaviour {
     private void Start()
     {
         EventManager.Instance.UI_MenuStateUpdated += OnMenuStateUpdated;
+
+        // Initialization
+        if (isInitializeOnStart == true)
+        {
+            PlayAppropriateReaction(UIManager.Instance.CurrentState);
+        }
+    }
+
+    protected virtual void OnDestroy()
+    {
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.UI_MenuStateUpdated -= OnMenuStateUpdated;
+        }
     }
 
     protected virtual void OnMenuStateUpdated(EMenuState newState, EMenuState lastState)

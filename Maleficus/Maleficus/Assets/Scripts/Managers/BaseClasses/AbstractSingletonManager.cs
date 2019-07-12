@@ -20,8 +20,10 @@ public abstract class AbstractSingletonManager<T> : AbstractManager where T : Ab
     /// <summary>
     /// Base awake method that sets the singleton's unique instance.
     /// </summary>
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (instance != null)
         {
             Debug.LogErrorFormat("Trying to instantiate a second instance of singleton class {0}", GetType().Name);

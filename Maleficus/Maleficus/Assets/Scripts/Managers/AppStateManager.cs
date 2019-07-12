@@ -7,29 +7,45 @@ using System;
 
 public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppStateManager, EAppState>
 {
-    public bool IsInAStateWithUI        { get { return CurrentState.ContainedIn(MaleficusTypes.APP_STATES_WITH_UI) == true; } }                            // TODO: use this
+    public bool IsInAStateWithUI { get { return CurrentState.ContainedIn(MaleficusTypes.APP_STATES_WITH_UI) == true; } }                            // TODO: use this
+    public EScene CurrentScene { get { return currentScene; } }  //return GetScene(CurrentState); } }
 
-    public EScene CurrentScene { get { return currentScene; } }  
 
-    private EScene currentScene = EScene.NONE;
+    private EScene currentScene = EScene.ENTRY;
+
     private List<AbstractUIAction> boundActions = new List<AbstractUIAction>();
 
 
     #region Unity Functions
-
     protected override void Awake()
     {
         base.Awake();
 
-        startState = MotherOfManagers.Instance.DebugStartState;
+        // 1) Assign appropriate currentState from MaleficusTypes
+        startStates = MaleficusTypes.START_APP_STATES;
+        // 2) Define "debugStateID" in Awake() of child class
         debugStateID = 51;
     }
+
     protected override void Start()
     {
         base.Start();
 
-        // Bind state machine event
+        //// Debug state                                                                                                                // TODO: Use debug states?
+        //if (MotherOfManagers.Instance.DebugStartMenuState != EMenuState.NONE)
+        //{
+        //    startState = MotherOfManagers.Instance.DebugStartAppState;
+        //}
+
+        // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
+
+        SceneManager.sceneLoaded += On_SceneLoaded;
+
+        EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
+        EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
+        EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
+        EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
     }
 
     protected override void Update()
@@ -38,37 +54,36 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         DebugManager.Instance.Log(52, CurrentScene.ToString());
     }
-#endregion
+    #endregion
 
-    #region Inherited Members
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        Debug.Log("Initializing AppStateManager");
-        FindAndBindButtonActions();
-    }
 
     protected override void UpdateState(EAppState newAppState)
     {
-        // Has scene changed?
-        if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_IN_GAME) && (CurrentScene != EScene.GAME))
-        {
-            UpdateScene(EScene.GAME);
-        }
-        else if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_IN_MENU) && (CurrentScene != EScene.MENU))
-        {
-            UpdateScene(EScene.MENU);
-        }
-        
         // Update state
         base.UpdateState(newAppState);
+
+        Debug.Log("Updated state : " + LastState + " -> " + CurrentState + " : " + CurrentScene);
+
+        //// Is in entry scene                                                                                                              // TODO: Use debug entry start state
+        //if (CurrentScene == EScene.ENTRY && MotherOfManagers.Instance.StartSceneOnEntry != EScene.NONE)
+        //{
+        //    Debug.Log("Mother of zebbi says : " + MotherOfManagers.Instance.StartSceneOnEntry);
+        //    UpdateScene(MotherOfManagers.Instance.StartSceneOnEntry);
+        //}
+        //// Has scene changed
+        //else
+        //{
+
+        if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
+        {
+            EScene newScene = MaleficusTypes.FROM_SCENE_TO[CurrentScene];
+            UpdateScene(newScene);
+        }
     }
 
     private void UpdateScene(EScene newScene)
     {
-        Debug.Log("Update scene");
-        currentScene = newScene;
+        Debug.Log("Update scene from " + CurrentScene + " to " + newScene);
 
         EventManager.Instance.Invoke_APP_SceneWillChange(newScene);
 
@@ -79,16 +94,15 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private IEnumerator LateUpdateSceneCoroutine(EScene newScene)
     {
         int frameCounter = 0;
-        while (frameCounter != MaleficusTypes.NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE)
+        while (frameCounter < MaleficusTypes.NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE)
         {
             frameCounter++;
             yield return new WaitForEndOfFrame();
         }
 
-
+        LoadScene(newScene);
     }
 
-#endregion
 
     private void LoadScene(EScene sceneToLoad)
     {
@@ -96,25 +110,31 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             case EScene.MENU:
                 SceneManager.LoadScene(MaleficusTypes.SCENE_MENU);
-                EventManager.Instance.Invoke_APP_SceneChanged(sceneToLoad);
+                currentScene = EScene.MENU;
                 break;
 
             case EScene.GAME:
                 SceneManager.LoadScene(MaleficusTypes.SCENE_GAME);
-                EventManager.Instance.Invoke_APP_SceneChanged(sceneToLoad);
+                currentScene = EScene.GAME;
+                break;
+
+            default:
+                Debug.LogError(sceneToLoad + " is not a valid scene to load!");
                 break;
         }
     }
 
-    private void FindAndBindButtonActions()
+    protected override void FindAndBindButtonActions()
     {
+        base.FindAndBindButtonActions();
+
         // Connect Players Action
         StartConnectingPlayersAction[] connectPlayersActions = FindObjectsOfType<StartConnectingPlayersAction>();
         foreach (StartConnectingPlayersAction action in connectPlayersActions)
         {
             action.ActionButtonPressed += () =>
             {
-                 UpdateState(EAppState.IN_MENU_IN_CONNECTING_PLAYERS);
+                UpdateState(EAppState.IN_MENU_IN_CONNECTING_PLAYERS);
             };
         }
 
@@ -131,14 +151,57 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             }
         }
 
-        // Start game (change scene)
-        StartGameAction[] startGameActions = FindObjectsOfType<StartGameAction>();
-        foreach (StartGameAction action in startGameActions)
+        // Launch game (change scene)
+        PlayAction[] playActions = FindObjectsOfType<PlayAction>();
+        foreach (PlayAction action in playActions)
         {
             action.ActionButtonPressed += () =>
             {
-                UpdateState(EAppState.IN_GAME_IN_ABOUT_TO_START);
+                UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
             };
         }
+    }
+
+
+    #region Event Callbacks
+    private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
+    {
+        Debug.Log("Loading level done : " + newScene.name);
+        EventManager.Instance.Invoke_APP_SceneChanged(CurrentScene);
+
+        // Validity test
+        if ((newScene.name != MaleficusTypes.SCENE_GAME)
+            && (newScene.name != MaleficusTypes.SCENE_MENU)
+            && (newScene.name != MaleficusTypes.SCENE_ENTRY))
+        {
+            Debug.LogError("Loaded level doesn't match to build levels");
+        }
+    }
+
+    private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
+    {
+        UpdateState(EAppState.IN_GAME_IN_ENDED);
+    }
+
+    private void On_GAME_GameUnPaused(EGameMode obj)
+    {
+        UpdateState(EAppState.IN_GAME_IN_RUNNING);
+    }
+
+    private void On_GAME_GamePaused(EGameMode obj)
+    {
+        UpdateState(EAppState.IN_GAME_IN_PAUSED);
+    }
+
+    private void On_GAME_GameStarted(EGameMode obj)
+    {
+        UpdateState(EAppState.IN_GAME_IN_RUNNING);
+    }
+    #endregion
+
+
+    public void SetUpDebugStartScene(EScene startedScene)
+    {
+        currentScene = startedScene;
     }
 }

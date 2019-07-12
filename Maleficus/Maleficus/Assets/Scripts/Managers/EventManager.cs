@@ -25,7 +25,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
         {
             APP_SceneWillChange.Invoke(newScene);
         }
-        DebugLog("Scene changed : " + newScene);
+        DebugLog("Scene will change : " + newScene);
     }
 
     public event Action<EScene> APP_SceneChanged;
@@ -42,15 +42,15 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region GAME
-    public event Action<EGameMode> GAME_GameAboutToStart;
-    public void Invoke_GAME_GameAboutToStart(EGameMode gameModeAboutToStart)
-    {
-        if (GAME_GameAboutToStart != null)
-        {
-            GAME_GameAboutToStart.Invoke(gameModeAboutToStart);
-        }
-        DebugLog("Game about to start : " + gameModeAboutToStart);
-    }
+    //public event Action<EGameMode> GAME_GameAboutToStart;
+    //public void Invoke_GAME_GameAboutToStart(EGameMode gameModeAboutToStart)
+    //{
+    //    if (GAME_GameAboutToStart != null)
+    //    {
+    //        GAME_GameAboutToStart.Invoke(gameModeAboutToStart);
+    //    }
+    //    DebugLog("Game about to start : " + gameModeAboutToStart);
+    //}
 
     public event Action<EGameMode> GAME_GameStarted;
     public void Invoke_GAME_GameStarted(EGameMode gameModeStarted)
@@ -82,25 +82,25 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Game unpaused : " + gameModeUnPaused);
     }
 
-    public event Action<EGameMode> GAME_GameEnded;
-    public void Invoke_GAME_GameEnded(EGameMode gameModeEnded)
+    public event Action<EGameMode, bool> GAME_GameEnded;
+    public void Invoke_GAME_GameEnded(EGameMode gameModeEnded, bool wasAborted = false)
     {
         if (GAME_GameEnded != null)
         {
-            GAME_GameEnded.Invoke(gameModeEnded);
+            GAME_GameEnded.Invoke(gameModeEnded, wasAborted);
         }
-        DebugLog("Game ended : " + gameModeEnded);
+        DebugLog("Game ended : " + gameModeEnded + ". Aborted : " + wasAborted.ToString());
     }
 
-    public event Action<EGameMode> GAME_GameAborted;
-    public void Invoke_GAME_GameAborted(EGameMode gameModeAborted)
-    {
-        if (GAME_GameAborted != null)
-        {
-            GAME_GameAborted.Invoke(gameModeAborted);
-        }
-        DebugLog("Game aborted : " + gameModeAborted);
-    }
+    //public event Action<EGameMode> GAME_GameAborted;
+    //public void Invoke_GAME_GameAborted(EGameMode gameModeAborted)
+    //{
+    //    if (GAME_GameAborted != null)
+    //    {
+    //        GAME_GameAborted.Invoke(gameModeAborted);
+    //    }
+    //    DebugLog("Game aborted : " + gameModeAborted);
+    //}
 
     public event Action<ETeamID, EGameMode> GAME_TeamWon;
     public void Invoke_GAME_PlayerWon(ETeamID winnerTeamID, EGameMode gameMode)

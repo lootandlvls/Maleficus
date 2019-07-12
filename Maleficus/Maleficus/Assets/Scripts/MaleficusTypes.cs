@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public static class MaleficusTypes 
+public static class MaleficusTypes
 {
     /* Scene names (in build settings) */
-    public const string SCENE_MENU                  = "Dummy_MENU";         // TODO: Replace with correct scenes
-    public const string SCENE_GAME                  = "Dummy_GAME";
+    public const string SCENE_ENTRY = "Dummy_ENTRY";         // TODO: Replace with correct scenes
+    public const string SCENE_MENU = "Dummy_MENU";
+    public const string SCENE_GAME = "Dummy_GAME";
 
     public const int NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE = 3;
 
     /* Player characters paths */
-    public const string PATH_PLAYER_RED             = "Wizard_Red";
-    public const string PATH_PLAYER_BLUE            = "Wizard_Blue";
-    public const string PATH_PLAYER_GREEN           = "Wizard_Green";
-    public const string PATH_PLAYER_YELLOW          = "Wizard_Yellow";
-    public const string PATH_PLAYER_SPAWN_POSITION  = "PlayerSpawnPosition";
+    public const string PATH_PLAYER_RED = "Wizard_Red";
+    public const string PATH_PLAYER_BLUE = "Wizard_Blue";
+    public const string PATH_PLAYER_GREEN = "Wizard_Green";
+    public const string PATH_PLAYER_YELLOW = "Wizard_Yellow";
+    public const string PATH_PLAYER_SPAWN_POSITION = "PlayerSpawnPosition";
 
     /* Spells path */
-    public const string PATH_SPELL_FIRE             = "Spell_Fire";         // TODO: Define rest
+    public const string PATH_SPELL_FIRE = "Spell_Fire";         // TODO: Define rest
 
+    /* Managers path */
+    public const string PATH_MANAGERS = "Managers";
 
 
     /// Threshold to know what joystick value can be considered as a directional button 
@@ -29,6 +32,45 @@ public static class MaleficusTypes
     public const float SPELL_BUTTON_THRESHOLD = 0.3f;
 
     public const float ROTATION_THRESHOLD = 0.0f;
+
+
+    ///* Scenes switch logic */
+    public static Dictionary<EScene, EScene> FROM_SCENE_TO = new Dictionary<EScene, EScene>()
+    {
+        { EScene.NONE,  EScene.NONE },
+        { EScene.ENTRY, EScene.MENU },
+        { EScene.MENU,  EScene.GAME },
+        { EScene.GAME,  EScene.MENU }
+    };
+
+    /* Start states for the different scenes*/
+    public static Dictionary<EScene, EAppState> START_APP_STATES = new Dictionary<EScene, EAppState>()
+    {
+        { EScene.NONE,  EAppState.NONE},
+        { EScene.ENTRY, EAppState.IN_ENTRY_IN_LOADING },
+        { EScene.MENU,  EAppState.IN_MENU_IN_MAIN },
+        { EScene.GAME,  EAppState.IN_GAME_IN_NOT_STARTED },
+    };
+    public static Dictionary<EScene, EMenuState> START_MENU_STATES = new Dictionary<EScene, EMenuState>()
+    {
+        { EScene.NONE,  EMenuState.NONE},
+        { EScene.ENTRY, EMenuState.IN_ENTRY },
+        { EScene.MENU,  EMenuState.IN_MAIN},
+        { EScene.GAME,  EMenuState.IN_GAME_NOT_STARTED},
+    };
+    public static Dictionary<EScene, ENetworkMessage> START_NETWORKSTATES = new Dictionary<EScene, ENetworkMessage>()
+    {
+        { EScene.NONE,  ENetworkMessage.NONE},
+        { EScene.ENTRY, ENetworkMessage.NONE},
+        { EScene.MENU,  ENetworkMessage.NONE},
+        { EScene.GAME,  ENetworkMessage.NONE},
+    };
+    public static EAppState[] APP_STATES_THAT_TRIGGER_SCENE_CHANGE = new EAppState[]
+    {
+        EAppState.IN_ENTRY_IN_LOADING,
+        EAppState.IN_MENU_IN_STARTING_GAME,
+        EAppState.IN_GAME_IN_ENDED
+    };
 
 
     /* App States classifications lists */
@@ -45,10 +87,17 @@ public static class MaleficusTypes
         EAppState.IN_GAME_IN_ENDED
     };
 
+    public static EAppState[] APP_STATES_IN_ENTRY = new EAppState[]
+    {
+        EAppState.IN_ENTRY_IN_LOADING
+    };
+
     public static EAppState[] APP_STATES_IN_MENU = new EAppState[]
     {
         EAppState.IN_MENU_IN_MAIN,
-        EAppState.IN_MENU_IN_CONNECTING_PLAYERS
+        EAppState.IN_MENU_IN_CONNECTING_PLAYERS,
+        EAppState.IN_MENU_IN_STARTING_GAME
+,
     };
 
     public static EAppState[] APP_STATES_IN_GAME = new EAppState[]
@@ -59,6 +108,7 @@ public static class MaleficusTypes
         EAppState.IN_GAME_IN_PAUSED,
         EAppState.IN_GAME_IN_ENDED,
     };
+
 
     /* UI States classifications lists */
     // Update these lists when more states are added to MenuState!
@@ -135,10 +185,13 @@ public static class MaleficusTypes
 /// </summary>
 public enum EAppState
 {
+    NONE,
+    IN_ENTRY_IN_LOADING,
     IN_MENU_IN_MAIN,
     IN_MENU_IN_CONNECTING_PLAYERS,
     IN_MENU_IN_LOGING_IN,
     IN_MENU_IN_SHOP,
+    IN_MENU_IN_STARTING_GAME,
     IN_GAME_IN_NOT_STARTED,
     IN_GAME_IN_ABOUT_TO_START,
     IN_GAME_IN_RUNNING,
@@ -151,6 +204,7 @@ public enum EAppState
 public enum EScene
 {
     NONE,
+    ENTRY,
     MENU,
     GAME
 }
@@ -180,16 +234,19 @@ public class PlayerStats_Lives : AbstractPlayerStats
     {
 
     }
-    public PlayerStats_Lives(int maximumNumberOfLives)
+    public PlayerStats_Lives(EPlayerID playerStatID, int maximumNumberOfLives)
     {
+        playerID = playerStatID;
         remainingLives = maximumNumberOfLives;
         numberOfKilledPlayers = 0;
         lastHitBy = EPlayerID.NONE;
     }
 
+    public EPlayerID PlayerID           { get { return playerID; } }       
     public int RemainingLives           { get { return remainingLives; } }
+    public int NumberOfHitPlayers       { get { return numberOfHitPlayers; } }
     public int NumberOfKilledPlayers    { get { return numberOfKilledPlayers; } }
-    public bool IsGameOver                  { get { return remainingLives == 0; } }
+    public bool IsGameOver              { get { return remainingLives == 0; } }
     public EPlayerID LastHitBy          { get { return lastHitBy; } }
 
     /// <summary>
@@ -200,6 +257,14 @@ public class PlayerStats_Lives : AbstractPlayerStats
     {
         remainingLives--;
         return remainingLives == 0;
+    }
+
+    /// <summary>
+    /// Icrements the number of killed players by 1
+    /// </summary>
+    public void IncrementNumberOfHitPlayers()
+    {
+        numberOfHitPlayers++;
     }
 
     /// <summary>
@@ -219,7 +284,9 @@ public class PlayerStats_Lives : AbstractPlayerStats
         lastHitBy = hitByPlayerID;
     }
 
+    private EPlayerID playerID;
     private int remainingLives;
+    private int numberOfHitPlayers;
     private int numberOfKilledPlayers;
     private EPlayerID lastHitBy;
 
@@ -411,6 +478,7 @@ public class PlayerInput
 public enum EMenuState
 {
     NONE,
+    IN_ENTRY,
     IN_MAIN,
     IN_CONNECTING_PLAYERS,
     IN_STARTUP,                                                                         //TODO: Define. Ambiguous meaning
@@ -421,6 +489,7 @@ public enum EMenuState
     IN_LOGIN_IN_FOLLOW,
     IN_LOGIN_IN_LEGAL,
     /* Game context */
+    IN_GAME_NOT_STARTED,
     IN_GAME_ABOUT_TO_START,
     IN_GAME_RUNNING,
     IN_GAME_PAUSED,
