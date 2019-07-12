@@ -15,15 +15,19 @@ public abstract class AbstractUIReaction : MonoBehaviour {
 
     private void Awake()
     {
+        // Add all sub states if selected state is a high hierarchy 
         List<EMenuState> temp = new List<EMenuState>();
         switch (activeOnState)
         {
             case EMenuState.IN_LOGIN:
                 temp = new List<EMenuState>(MaleficusTypes.MENU_STATES_IN_LOGIN);
                 break;
+      
         }
-
-        temp.Add(activeOnState);
+        if (temp.Contains(activeOnState) == false)
+        {
+            temp.Add(activeOnState);
+        }
         activeOnStates = temp.ToArray();
     }
 
