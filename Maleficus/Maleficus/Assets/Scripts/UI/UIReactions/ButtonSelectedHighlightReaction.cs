@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MenuButton))]
+[RequireComponent(typeof(MaleficusButton))]
 public class ButtonSelectedHighlightReaction : AbstractUIReaction
 {
-    private MenuButton myMenuButton;
+    private MaleficusButton myMenuButton;
 
     private void Awake()
     {
-        myMenuButton = GetComponent<MenuButton>();
+        myMenuButton = GetComponent<MaleficusButton>();
     }
 
     protected override void PlayAppropriateReaction(EMenuState newState)

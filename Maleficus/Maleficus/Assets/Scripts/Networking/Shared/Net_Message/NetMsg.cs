@@ -19,6 +19,7 @@
 [System.Serializable]
 public abstract class NetMsg
 {
+    // OP = const id of the NET_ class, to differentiate between the different messages
     public byte OP {set;get;}
     public NetMsg()
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : AbstractPlayerStats, new()
+public class GM_Single_Lives : AbstractGameMode<PlayerStats_Lives>
 {
     // Should only be called directly after object construction (used in Start method)
     public int TotalLives { get { return totalLives; } set { totalLives = value; } }
@@ -23,14 +23,33 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
     {
         base.Start();
 
-        // Initialize player stats correctly
-        foreach (EPlayerID playerID in PlayerStats.Keys)
+        // Initialize player stats correctly/
+        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;             // TODO: Find a way to use playerStats from AbstractGameMode instead of reusing ConnectedPlayers
+        foreach (EPlayerID playerID in connectedPlayers.Keys)
         {
-            PlayerStats[playerID] = new SPlayerLivesStats(TotalLives);
+            if (connectedPlayers[playerID] == true)
+            {
+                playerStats[playerID] = new PlayerStats_Lives(playerID, TotalLives);                  
+            }
         }
 
         EventManager.Instance.PLAYERS_PlayerDied    += On_PLAYERS_PlayerDied;
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+    }
+
+
+    private void Update()
+    {
+        foreach(PlayerStats_Lives playerStat in PlayerStats.Values)
+        {
+            DebugManager.Instance.Log(103, "* " + playerStat.PlayerID + " *"
+                + "\nFrags : " + playerStat.NumberOfKilledPlayers
+                + "\nRemaining lives :" + playerStat.RemainingLives
+                + "\nNumber of hit players :" + playerStat.NumberOfHitPlayers
+                + "\nLast hit by : " + playerStat.LastHitBy
+                + "\n-------------------------\n"
+                );
+        }
     }
 
     private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
@@ -38,6 +57,7 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
         EPlayerID hitPlayerID = hitInfo.HitPlayerID;
         EPlayerID hitByPlayerID = hitInfo.CastingPlayerID;
         PlayerStats[hitPlayerID].SetLastHitBy(hitByPlayerID);
+        PlayerStats[hitByPlayerID].IncrementNumberOfHitPlayers();
     }
 
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
@@ -45,8 +65,8 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
         // if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_RUNNING)          // TODO: check for right state
 
         // Update remaining lives and kills counter
-        SPlayerLivesStats killedPlayer = PlayerStats[diedPlayerID];
-        SPlayerLivesStats killingPlayer = PlayerStats[killedPlayer.LastHitBy];
+        PlayerStats_Lives killedPlayer = PlayerStats[diedPlayerID];
+        PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
         killedPlayer.DecrementPlayerLives();
         killingPlayer.IncrementNumberOfKilledPlayers();
 
@@ -55,7 +75,7 @@ public class GM_Single_Lives<T> : AbstractGameMode<SPlayerLivesStats> where T : 
         EPlayerID winnerPlayerID = EPlayerID.NONE;
         foreach (EPlayerID playerID in PlayerStats.Keys)
         {
-            if (PlayerStats[playerID].IsDead == true)
+            if (PlayerStats[playerID].IsGameOver == true)
             {
                 deadPlayersCounter++;
             }

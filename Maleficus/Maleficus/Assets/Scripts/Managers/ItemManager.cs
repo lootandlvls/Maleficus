@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemManager : Singleton<ItemManager>
+public class ItemManager : AbstractSingletonManager<ItemManager>
 {
     // Start is called before the first frame update
     void Start()

@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HubScene : MonoBehaviour
+public class FriendsContext : MonoBehaviour
 {
-    public static HubScene Instance { set; get; }
+    public static FriendsContext Instance { set; get; }
 
     [SerializeField] private TextMeshProUGUI selfInformation;
     [SerializeField] private TMP_InputField addFollowInput;
@@ -18,8 +19,20 @@ public class HubScene : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
-        NetworkManager.Instance.SendRequestFollow();
+
+        EventManager.Instance.UI_MenuStateUpdated += On_UI_MenuStateUpdated;
+    }
+
+    private void On_UI_MenuStateUpdated(EMenuState newMsg, EMenuState lastMsg)
+    {
+        switch (newMsg)
+        {
+            case EMenuState.IN_MAIN:
+                selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
+                NetworkManager.Instance.SendRequestFollow();
+                Debug.Log("now friends should be requested");
+                break;
+        }
     }
 
     public void AddFollowToUi(Account follow)

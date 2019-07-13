@@ -8,24 +8,23 @@ using UnityEngine.UI;
 /// Multiple channel (IDs) debug messages on every frame
 /// IDs:
 /// 2  - Joystick 
-/// 50  - UI state
+/// 50 - UI state
 /// 51 - App state 
+/// 52 - Scene
+/// 103 - Single lives game mode stats
 /// </summary>
-public class DebugManager : Singleton<DebugManager>
+public class DebugManager : AbstractSingletonManager<DebugManager>
 {
-    private Dictionary<int, DebugText> debugTexts;
-    private Dictionary<int, bool> reportedDebugTexts;
+    private Dictionary<int, DebugText> debugTexts = new Dictionary<int, DebugText>();
+    private Dictionary<int, bool> reportedDebugTexts = new Dictionary<int, bool>();
 
-    private new void Awake()
+    public override void Initialize()
     {
-        base.Awake();
-        debugTexts = new Dictionary<int, DebugText>();
-        reportedDebugTexts = new Dictionary<int, bool>();
-    }
+        base.Initialize();
 
+        debugTexts.Clear();
+        reportedDebugTexts.Clear();
 
-    private void Start()
-    {
         DebugText[] foundDebugTexts = FindObjectsOfType<DebugText>();
         foreach (DebugText foundDebugText in foundDebugTexts)
         {
@@ -38,6 +37,7 @@ public class DebugManager : Singleton<DebugManager>
                 Debug.Log("A DebugText component with ID " + foundDebugText.DebugID + " has already been found in this scene!");
             }
         }
+
     }
 
     /// <summary>

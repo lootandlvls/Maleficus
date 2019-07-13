@@ -14,7 +14,7 @@ public abstract class AbstractGameMode<T> : MonoBehaviour where T : AbstractPlay
     public Dictionary<EPlayerID, T> PlayerStats     { get { return playerStats; } }
 
     protected EGameMode gameMode;
-    protected Dictionary<EPlayerID, T> playerStats;
+    protected Dictionary<EPlayerID, T> playerStats = new Dictionary<EPlayerID, T>();
 
 
     protected virtual void Awake()
@@ -34,11 +34,7 @@ public abstract class AbstractGameMode<T> : MonoBehaviour where T : AbstractPlay
                 playerStats.Add(playerID, new T());
             }
         }
-        Debug.Log(connectedPlayers.Count + " players playings");
+        Debug.Log(playerStats.Count + " players playings");
     }
 
-    public static implicit operator AbstractGameMode<T>(GM_Single_Lives<T> v)
-    {
-        throw new NotImplementedException();
-    }
 }

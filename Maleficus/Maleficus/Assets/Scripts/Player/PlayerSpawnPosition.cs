@@ -9,12 +9,12 @@ public class PlayerSpawnPosition : MonoBehaviour
     public Quaternion Rotation          { get { return transform.rotation; } set { transform.rotation = value; } }
 
     [SerializeField] private EPlayerID toSpawnPlayerID;
-    [SerializeField] private bool isHideShadowMeshOnStart;
+    [SerializeField] private bool isHideShadowMeshOnAwake;
 
 
     private void Awake()
     {
-        if (isHideShadowMeshOnStart == true)
+        if (isHideShadowMeshOnAwake == true)
         {
             HideShadowMesh();
         }

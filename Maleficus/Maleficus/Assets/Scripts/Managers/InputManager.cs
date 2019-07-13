@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class InputManager : Singleton<InputManager>
+public class InputManager : AbstractSingletonManager<InputManager>
 {
     public EInputMode InputMode { get { return MotherOfManagers.Instance.InputMode; } }
 
@@ -161,7 +161,7 @@ public class InputManager : Singleton<InputManager>
                 EPlayerID playerID = GetPlayerID(controllerID);
                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
             }
-            else if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
+            else //if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
                 // Connect players
             {
                 EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();

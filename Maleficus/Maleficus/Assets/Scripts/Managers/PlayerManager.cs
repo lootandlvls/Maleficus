@@ -4,27 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerManager : Singleton<PlayerManager>
+public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
 
     public Dictionary<EPlayerID, Player>                PlayerPrefabs               { get { return playerPrefabs; } }
-    public Dictionary<EPlayerID, PlayerSpawnPosition>   PlayersSpawnPositions       { get { return playersSpawnPositions; } }
+    public Dictionary<EPlayerID, PlayerSpawnPosition>   PlayersSpawnPositions       { get { return playersSpawnGhosts; } }
     public Dictionary<EPlayerID, PlayerInput>           PlayersInput                { get { return playersInput; } }
     public Dictionary<EPlayerID, bool>                  ConnectedPlayers            { get { return connectedPlayers; } }
     public Dictionary<EPlayerID, Player>                ActivePlayers               { get { return activePlayers; } }
     public Dictionary<ETeamID, List<EPlayerID>>         PlayerTeams                 { get { return playerTeams; } }
 
-
-
+    
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
     private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
-    private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnPositions       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
+    private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnGhosts       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
     private Dictionary<EPlayerID, PlayerInput>          playersInput                = new Dictionary<EPlayerID, PlayerInput>();
+    /* Dictionaries that are defined only for active players  */
+    /// Added whenever a player has spawned. Removed when he dies.
     /// Initially initialized with false, then true whenever the respective player connects
     private Dictionary<EPlayerID, bool>                 connectedPlayers            = new Dictionary<EPlayerID, bool>();
 
-    /* Dictionaries that are defined only for active players  */
-    /// Added whenever a player has spawned. Removed when he dies.
     private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
     private Dictionary<ETeamID, List<EPlayerID>>        playerTeams                 = new Dictionary<ETeamID, List<EPlayerID>>();
 
@@ -37,16 +36,29 @@ public class PlayerManager : Singleton<PlayerManager>
 
         InitializeDictionaries();
         LoadPlayerResources();
-        FindPlayerSpawnPositions();
+        FindPlayerSpawnGhost();
     }
 
 
     private void Start()
     {
+        // State change events
+        //AppStateManager.Instance.Instance
+
+
         // Input events
+
         EventManager.Instance.INPUT_ButtonPressed   += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_ButtonReleased  += On_INPUT_ButtonReleased;
         EventManager.Instance.INPUT_JoystickMoved   += On_INPUT_JoystickMoved;
+       
+        StartCoroutine(LateStartCoroutine());
+    
+
+
+        // Scene changed event
+        EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
+        EventManager.Instance.ÁPP_AppStateUpdated += On_ÁPP_AppStateUpdated;
        
         StartCoroutine(LateStartCoroutine());
     }
@@ -57,7 +69,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         yield return new WaitForEndOfFrame();
 
-        if (MotherOfManagers.Instance.IsSpawnAllPlayers == true)
+        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
         {
             SpawnPlayer(EPlayerID.PLAYER_1);
             SpawnPlayer(EPlayerID.PLAYER_2);
@@ -72,7 +84,9 @@ public class PlayerManager : Singleton<PlayerManager>
         MoveAndRotatePlayers();
     }
 
-                                                                                                                    // TODO: Use this 
+
+
+    // TODO: Use this 
     public void AssignPlayerToTeam(EPlayerID playerID, ETeamID teamID)
     {
         if (playerTeams[teamID].Contains(playerID))
@@ -86,12 +100,12 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
-        if ((connectedPlayers[toSpawnPlayerID] == true) || (MotherOfManagers.Instance.IsSpawnAllPlayers == true))
+        if ((connectedPlayers[toSpawnPlayerID] == true) || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME)))
         {
             if (activePlayers.ContainsKey(toSpawnPlayerID) == false)
             {
                 Player playerPrefab = playerPrefabs[toSpawnPlayerID];
-                PlayerSpawnPosition playerSpawnPosition = playersSpawnPositions[toSpawnPlayerID];
+                PlayerSpawnPosition playerSpawnPosition = playersSpawnGhosts[toSpawnPlayerID];
                 Vector3 playerPosition = playerSpawnPosition.Position;
                 Quaternion playerRotation = playerSpawnPosition.Rotation;
 
@@ -112,9 +126,8 @@ public class PlayerManager : Singleton<PlayerManager>
             }
             else
             {
-                Debug.LogError("Trying to spawn a player that is still active");
+                Debug.LogWarning("Trying to spawn a player that is still active");
             }
-            
         }
     }
 
@@ -270,7 +283,7 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             EventManager.Instance.Invoke_PLAYERS_PlayerConnected(playerIDToConnect);
 
-            if (MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true)
+            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
             {
                 SpawnPlayer(playerIDToConnect);
             }
@@ -324,18 +337,39 @@ public class PlayerManager : Singleton<PlayerManager>
     #endregion
 
 
+    #region Events Callbacks
+    private void On_APP_SceneChanged(EScene newScene)
+    {
+        if (newScene == EScene.GAME)
+        {
+            FindPlayerSpawnGhost();
+        }
+    }
+
+    private void On_ÁPP_AppStateUpdated(EAppState newState, EAppState lastState)
+    {
+        if (newState == EAppState.IN_GAME_IN_NOT_STARTED)
+        {
+            SpawnAllConnectedPlayers();
+        }
+    }
+    #endregion
+
     private void InitializeDictionaries()
     {
+        playersInput.Clear();
         playersInput[EPlayerID.PLAYER_1] = new PlayerInput();
         playersInput[EPlayerID.PLAYER_2] = new PlayerInput();
         playersInput[EPlayerID.PLAYER_3] = new PlayerInput();
         playersInput[EPlayerID.PLAYER_4] = new PlayerInput();
 
+        connectedPlayers.Clear();
         connectedPlayers[EPlayerID.PLAYER_1] = false;
         connectedPlayers[EPlayerID.PLAYER_2] = false;
         connectedPlayers[EPlayerID.PLAYER_3] = false;
         connectedPlayers[EPlayerID.PLAYER_4] = false;
 
+        playerTeams.Clear();
         playerTeams[ETeamID.TEAM_1] = new List<EPlayerID>() { EPlayerID.PLAYER_1 };
         playerTeams[ETeamID.TEAM_2] = new List<EPlayerID>() { EPlayerID.PLAYER_2 };
         playerTeams[ETeamID.TEAM_3] = new List<EPlayerID>() { EPlayerID.PLAYER_3 };
@@ -346,18 +380,22 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void LoadPlayerResources()
     {
+        playerPrefabs.Clear();
         playerPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(MaleficusTypes.PATH_PLAYER_RED));
         playerPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(MaleficusTypes.PATH_PLAYER_BLUE));
         playerPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(MaleficusTypes.PATH_PLAYER_YELLOW));
         playerPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(MaleficusTypes.PATH_PLAYER_GREEN));
     }
 
-    private void FindPlayerSpawnPositions()
+    private void FindPlayerSpawnGhost()
     {
+        playersSpawnGhosts.Clear();
+
+        // Try to find already placed player spawn positions in the scene
         PlayerSpawnPosition[] spawnPositions = FindObjectsOfType<PlayerSpawnPosition>();
         foreach (PlayerSpawnPosition spawnPosition in spawnPositions)
         {
-            playersSpawnPositions.Add(spawnPosition.ToSpawnPlayerID, spawnPosition);
+            playersSpawnGhosts.Add(spawnPosition.ToSpawnPlayerID, spawnPosition);
         }
 
         // Determine spawn positions relative to this transform if no PlayerSpawnPosition found in scene
@@ -366,19 +404,26 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             angle = 90 * i;
             EPlayerID playerID = MaleficusTypes.IntToPlayerID(i);
-            if (playersSpawnPositions.ContainsKey(playerID) == false)
+            if (playersSpawnGhosts.ContainsKey(playerID) == false)
             {
-                PlayerSpawnPosition spawnPosition = Instantiate(Resources.Load<PlayerSpawnPosition>(MaleficusTypes.PATH_PLAYER_SPAWN_POSITION));
-                spawnPosition.ToSpawnPlayerID = playerID;
-                spawnPosition.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
-                spawnPosition.transform.RotateAround(transform.position, Vector3.up, angle);
-                spawnPosition.Rotation = transform.rotation;
+                PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(MaleficusTypes.PATH_PLAYER_SPAWN_POSITION));
+                spawnGhost.ToSpawnPlayerID = playerID;
+                spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
+                spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
+                spawnGhost.Rotation = transform.rotation;
 
-                playersSpawnPositions.Add(playerID, spawnPosition);
+                playersSpawnGhosts.Add(playerID, spawnGhost);
             }
         }
     }
 
+    private void SpawnAllConnectedPlayers()
+    {
+        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        {
+            SpawnPlayer(playerID);
+        }
+    }
 
     /* public player information getter functions */
     public bool IsPlayerConnected(EPlayerID playerID)
