@@ -13,10 +13,19 @@ public static class MaleficusTypes
     public const string PATH_PLAYER_SPAWN_POSITION  = "PlayerSpawnPosition";
 
     // Spells path
-    public const string PATH_SPELL_FIRE             = "Spell_Fire";         // TODO: Define rest
+    public const string PATH_SPELL_FIREBALL_LVL_1 = "S_FireBall_lvl_1";
+    public const string PATH_SPELL_FIREBALL_LVL_2 = "S_FireBall_lvl_2";
+    public const string PATH_SPELL_ICEBALL_LVL_1 = "S_IceBall_lvl_1";
+    public const string PATH_SPELL_AOE_EXPLOSION_LVL_1 = "S_AOE_Explosion";
+    public const string PATH_SPELL_FIRE_SHOCKBLAST_LVL_1 = "S_Fire_ShockBlast";
+    public const string PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1 = "S_EnergyBalll_Parabolic";
+    public const string PATH_SPELL_FIRE__LASER_LVL_1 = "S_FireLaser";
+    public const string PATH_SPELL_TELEPORT_LVL_1 = "S_Teleportation";
 
-
-
+    //Effects path
+    public const string PATH_EFFECT_FROZEN = "E_Snowman";
+    public const string PATH_EFFECT_CHARGING_BODYENERGY = "BodyEnergyEffect";
+    public const string PATH_EFFECT_CHARGING_WANDENERGY = "WandEnergyEffect";
 
     /// Threshold to know what joystick value can be considered as a directional button 
     public const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;

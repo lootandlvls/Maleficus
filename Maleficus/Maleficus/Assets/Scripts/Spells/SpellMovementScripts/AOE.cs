@@ -10,7 +10,7 @@ public class AOE : AbstractSpell
     void Start()
     {
        
-        onExplosionEnter( transform.position, 3);
+        onExplosionEnter( transform.position, 3.5f);
     }
 
     // Update is called once per frame
@@ -41,7 +41,7 @@ public class AOE : AbstractSpell
            
             i++;
         }
-        ProcessHits(hitPlayers.ToArray());
+        ExplostionProcessHits(hitPlayers.ToArray());
 
     }
 }

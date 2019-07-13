@@ -7,9 +7,33 @@ public class SpellManager : Singleton<SpellManager>
 {
 
     Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
-
+     
     [SerializeField] private GameObject FrozenEffect;
     [SerializeField] private float friction;
+  
+    public List<AbstractSpell> SpellsUpgrade = new List<AbstractSpell>();
+    public List<GameObject> ChargingSpells_Effects = new List<GameObject>();
+    public List<AbstractSpell> All_Spells = new List<AbstractSpell>();
+
+    /* public Dictionary<EPlayerID, Dictionary<int, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<int, AbstractSpell>>();*/
+  //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
+    /* public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();
+     public Dictionary<int, AbstractSpell> Player_2_Spells = new Dictionary<int, AbstractSpell>();
+     public Dictionary<int, AbstractSpell> Player_3_Spells = new Dictionary<int, AbstractSpell>();
+     public Dictionary<int, AbstractSpell> Player_4_Spells = new Dictionary<int, AbstractSpell>();*/
+    public List<AbstractSpell> Player_1_Spells = new List<AbstractSpell>();
+    public List<AbstractSpell> Player_2_Spells = new List<AbstractSpell>();
+    public List<AbstractSpell> Player_3_Spells = new List<AbstractSpell>();
+    public List<AbstractSpell> Player_4_Spells = new List<AbstractSpell>();
+
+    protected override void  Awake()
+    {
+        base.Awake();
+
+        LoadSpellResources();
+        LoadEffectsResources();
+
+    }
     private void Start()
     {
         activePlayers = PlayerManager.Instance.ActivePlayers;
@@ -133,9 +157,200 @@ public class SpellManager : Singleton<SpellManager>
 
 
 
+     
+    }
+
+    public void CastSpell(EPlayerID playerID , int spell_Input_ID  )
+    {
+        AbstractSpell spellToCast;
+        
+        switch (playerID)
+        {
+            case EPlayerID.PLAYER_1:
+                switch (spell_Input_ID)
+                {
+                    case 1:
+                        //change to  spellToCast = Player_Spells[playerID][spell_Input_ID]; when dictionary are ready to use
+                        spellToCast = Player_1_Spells[0];
+                        InstantiateSpell(spellToCast, playerID);
+
+                        break;
+                    case 2:
+                        spellToCast = Player_1_Spells[1];
+                        InstantiateSpell(spellToCast, playerID);
+
+                        break;
+                    case 3:
+                        spellToCast = Player_1_Spells[2];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                }
+                break;
+
+            case EPlayerID.PLAYER_2:
+                switch (spell_Input_ID)
+                {
+                    case 1:
+                        spellToCast = Player_2_Spells[0];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                    case 2:
+                        spellToCast = Player_2_Spells[1];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                    case 3:
+                        spellToCast = Player_2_Spells[2];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                }
+                break;
+
+            case EPlayerID.PLAYER_3:
+                switch (spell_Input_ID)
+                {
+                    case 1:
+                        spellToCast = Player_3_Spells[0];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                    case 2:
+                        spellToCast = Player_3_Spells[1];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                    case 3:
+                        spellToCast = Player_3_Spells[2];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                }
+                break;
+            case EPlayerID.PLAYER_4:
+                switch (spell_Input_ID)
+                {
+                    case 1:
+                        spellToCast = Player_4_Spells[0];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                    case 2:
+                        spellToCast = Player_4_Spells[1];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                    case 3:
+                        spellToCast = Player_4_Spells[2];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
+                }
+                break;
+        }
 
     }
-    IEnumerator PlayerFrozen(EPlayerID playerID)
+
+    private void InstantiateSpell(AbstractSpell spellToCast , EPlayerID playerID)
+    {
+        if (spellToCast.GetComponent<AOE>() != null )
+       
+        {
+            activePlayers[playerID].animator.SetTrigger("shockwave");
+            Vector3 position = activePlayers[playerID].transform.position;
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
+              spell.CastingPlayerID = playerID;
+              spell.transform.parent = activePlayers[playerID].transform;
+               Debug.Log("AOE SPELL CASTED");
+              //spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        }
+        else if (spellToCast.GetComponent<Linear_Instant>() != null)
+       
+        {
+
+            Transform position = activePlayers[playerID].SpellInitPosition;
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+                AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
+                spell.transform.rotation = activePlayers[playerID].transform.rotation;
+                spell.transform.parent = activePlayers[playerID].transform;
+                spell.CastingPlayerID = playerID;
+            Debug.Log("LINEAR INSTANT SPELL CASTED");
+        }
+        else if (spellToCast.GetComponent<Teleport>() != null)
+        {
+            activePlayers[playerID].animator.SetTrigger("teleport");
+          
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+           StartCoroutine(animationDelay(spellToCast, playerID, 2));
+             Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
+             AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
+             spell.CastingPlayerID = playerID;
+        }
+        else if (spellToCast.GetComponent<Linear_Laser>() != null)
+        {
+           // activePlayers[playerID].animator.SetBool("channeling", true);
+            Transform position = activePlayers[playerID].SpellInitPosition;
+            Quaternion rotation = activePlayers[playerID].transform.rotation;    
+             AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
+              spell.transform.rotation = activePlayers[playerID].transform.rotation;
+              spell.transform.parent = activePlayers[playerID].transform;
+              spell.CastingPlayerID = playerID;
+           // StartCoroutine(PlayerCantMove());
+        }
+        else
+        {
+            Vector3 position = activePlayers[playerID].transform.position;
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+            activePlayers[playerID].animator.SetTrigger("projectileAttack");
+            StartCoroutine(animationDelay(spellToCast, playerID, 1));
+            //   StartCoroutine(spellCharging(spellToCast));
+            /* int counter = 1;
+             while (counter < 4)
+              {
+                  if (Input.GetButton("CastSpell_1_A"))
+                  {
+                     StartCoroutine(spellCharging());
+                     counter++;
+                  }
+                  else
+                  {
+                      return;
+                  }
+                  */
+
+            /* AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition.position, transform.rotation);
+               spell.CastingPlayerID = playerID;
+               spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+           }*/
+
+            /* AbstractSpell spellUpgrade = spellToCast;
+             foreach(AbstractSpell spell in SpellManager.Instance.spellsUpgrade)
+            {
+
+                if (spell.SpellName.Equals(spellToCast.SpellName + counter))
+                {
+                    Debug.Log(spellToCast.SpellName + counter + "has been chosen");
+                    spellUpgrade = spell;
+                }
+            }*/
+
+        }
+
+       
+        
+    }
+    private void LoadSpellResources()
+    {
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_AOE_EXPLOSION_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIREBALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIREBALL_LVL_2));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIRE__LASER_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_ICEBALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_TELEPORT_LVL_1));
+
+    }
+    private void LoadEffectsResources()
+    {
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_CHARGING_BODYENERGY));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_CHARGING_WANDENERGY));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_FROZEN));
+  }
+        IEnumerator PlayerFrozen(EPlayerID playerID)
     {
         activePlayers[playerID].speed = 0;
         GameObject snowman = Instantiate(FrozenEffect, activePlayers[playerID].transform.position, activePlayers[playerID].transform.rotation);
@@ -151,6 +366,24 @@ public class SpellManager : Singleton<SpellManager>
         activePlayers[playerID].speed = 0;
         yield return new WaitForSeconds(2.5f);
         activePlayers[playerID].speed = 75;
+    }
+
+    IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID,int animationID)
+    {
+        switch (animationID)
+        {
+            case 1:
+                activePlayers[playerID].animator.SetTrigger("projectileAttack");
+                break;
+            case 2:
+                activePlayers[playerID].animator.SetTrigger("teleport");
+                break;
+        }
+
+        yield return new WaitForSeconds(0.3f);
+        AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition.position, activePlayers[playerID].transform.rotation);
+        spell.CastingPlayerID = playerID;
+        spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
     }
 
 }

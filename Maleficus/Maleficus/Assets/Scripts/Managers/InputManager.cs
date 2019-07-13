@@ -47,18 +47,31 @@ public class InputManager : Singleton<InputManager>
         //Check_Cancel('C');
         //Check_Cancel('D');
 
-
+        /* Charging spell check */
         // Spell 1
-        Check_Spell(1, 'A');
-        Check_Spell(1, 'B');
-        Check_Spell(1, 'C');
-        Check_Spell(1, 'D');
+        Check_ChargingSpell(1, 'A');
+        Check_ChargingSpell(1, 'B');
+        Check_ChargingSpell(1, 'C');
+        Check_ChargingSpell(1, 'D');
         //spell 2
-        Check_Spell(2, 'A');
-        Check_Spell(2, 'B');
+        Check_ChargingSpell(2, 'A');
+        Check_ChargingSpell(2, 'B');
         // spell 3
-        Check_Spell(3, 'A');
-        Check_Spell(3, 'B');        // TODO: Add missing Spell buttons in Input settings
+        Check_ChargingSpell(3, 'A');
+        Check_ChargingSpell(3, 'B');          
+        
+        /* Casted spell check */
+        // Spell 1
+        Check_CastedSpell(1, 'A');
+        Check_CastedSpell(1, 'B');
+        Check_CastedSpell(1, 'C');
+        Check_CastedSpell(1, 'D');
+        //spell 2
+        Check_CastedSpell(2, 'A');
+        Check_CastedSpell(2, 'B');
+        // spell 3
+        Check_CastedSpell(3, 'A');
+        Check_CastedSpell(3, 'B');        // TODO: Add missing Spell buttons in Input settings
 
         // Spell 2                                                                                                                   
         //CheckAndCallSpell(2, 'A');
@@ -139,10 +152,11 @@ public class InputManager : Singleton<InputManager>
     {
         if (Input.GetButtonDown("Confirm_" + controllerID))
         {
-            Debug.Log("Confrim " + controllerID);
+
 
             if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
+                Debug.Log("Confrim " + controllerID);
                 // Send Input
                 EPlayerID playerID = GetPlayerID(controllerID);
                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
@@ -153,9 +167,10 @@ public class InputManager : Singleton<InputManager>
                 EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
                 if (connectedPlayerID != EPlayerID.TEST)
                 {
+                    Debug.Log("Confrim " + controllerID);
                     playerControllerMapping[controllerID] = connectedPlayerID;
                 }
-            }
+           }
         }
     }
 
@@ -183,18 +198,17 @@ public class InputManager : Singleton<InputManager>
     }
     
 
-    private void Check_Spell(int spellID, char controllerID)
+    private void Check_ChargingSpell(int spellID, char controllerID)
     {
         if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player press button?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerID))
-            {
+            {  
                 EPlayerID playerID = GetPlayerID(controllerID);
-                Debug.Log(controllerID);
                 if (spellID == 1)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, playerID);
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, playerID);                
                 }
                 else if (spellID == 2)
                 {
@@ -203,6 +217,30 @@ public class InputManager : Singleton<InputManager>
                 else if (spellID == 3)
                 {
                     EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_3, playerID);
+                }
+            }
+        }
+    }
+
+    private void Check_CastedSpell(int spellID, char controllerID)
+    {
+        if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
+        {
+            // Did player press button?
+            if (Input.GetButtonUp("CastSpell_" + spellID + '_' + controllerID))
+            {
+                EPlayerID playerID = GetPlayerID(controllerID);
+                if (spellID == 1)
+                {
+                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_1, playerID);                
+                }
+                else if (spellID == 2)
+                {
+                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_2, playerID);
+                }
+                else if (spellID == 3)
+                {
+                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_3, playerID);
                 }
             }
         }

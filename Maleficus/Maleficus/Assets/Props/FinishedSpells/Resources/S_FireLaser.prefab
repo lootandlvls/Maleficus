@@ -13737,7 +13737,7 @@ GameObject:
   - component: {fileID: 3012738371414162866}
   - component: {fileID: 8270885389934248921}
   m_Layer: 0
-  m_Name: FireLaser
+  m_Name: S_FireLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13799,7 +13799,7 @@ MonoBehaviour:
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
   parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 0
+  hitPower: 80
   speed: 20
   spellName: 
   spellLevel: 0

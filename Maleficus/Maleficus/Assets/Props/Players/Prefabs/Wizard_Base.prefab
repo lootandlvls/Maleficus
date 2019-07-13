@@ -5986,7 +5986,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d88800833a9a3ea4e82fb0bf3d0130d5, type: 3}
   m_Controller: {fileID: 9100000, guid: 81cf6026480daea40aa9ff4978a8dfec, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -6040,14 +6040,29 @@ MonoBehaviour:
   playerHorizontalInput: 
   SpellInitPosition: {fileID: 608549788462845129}
   SpellEndPosition: {fileID: 7339631618129149989}
-  speed: 75
   angularSpeed: 28
+  speed: 75
   spellSlot_1: {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072,
     type: 3}
-  spellSlot_2: {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d,
+  spellSlot_2: {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639,
     type: 3}
-  spellSlot_3: {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07,
+  spellSlot_3: {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d,
     type: 3}
+  chargingBodyEnergy: {fileID: 1820421771836070987, guid: 8fe5d31d8d3b7f4408c5ce8686c271de,
+    type: 3}
+  chargingWandEnergy: {fileID: 5551467226034161610, guid: 2b649d7e1c9688b4788d9cf712bcefcc,
+    type: 3}
+  animator: {fileID: 1464117566350752285}
+  readyToShoot: 1
+  readyToUseSpell_1: 1
+  readyToUseSpell_2: 1
+  readyToUseSpell_3: 1
+  spellCooldown_1: 0
+  spellCooldown_2: 0
+  spellCooldown_3: 0
+  spellDuration_1: 0
+  spellDuration_2: 0
+  spellDuration_3: 0
 --- !u!1 &1515340630872704857
 GameObject:
   m_ObjectHideFlags: 0

@@ -4722,7 +4722,7 @@ ParticleSystem:
   cullingMode: 1
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -4738,7 +4738,7 @@ ParticleSystem:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -4747,7 +4747,7 @@ ParticleSystem:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 1
+        value: 0
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -9391,7 +9391,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7946864684985083093}
   serializedVersion: 6
-  lengthInSec: 0.3
+  lengthInSec: 0.4
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 1
@@ -9466,7 +9466,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.4
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14066,7 +14066,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7947538983809226663}
   serializedVersion: 6
-  lengthInSec: 0.3
+  lengthInSec: 0.4
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 1
@@ -14141,7 +14141,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.4
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -18711,7 +18711,7 @@ GameObject:
   - component: {fileID: 7948522024305349590}
   - component: {fileID: 1160651867442885725}
   m_Layer: 0
-  m_Name: AOE_OnSelfBuff
+  m_Name: S_AOE_Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18753,13 +18753,13 @@ MonoBehaviour:
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
   parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 0
+  hitPower: 50
   speed: 0
   spellName: 
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 0
-  cooldown: 0
+  hasPower: 1
+  cooldown: 1
   spellDuration: 0
   movementType: 5
   debuffEffects: 
@@ -18921,6 +18921,41 @@ PrefabInstance:
       propertyPath: SizeModule.curve.scalar
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0.8018868
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.58887917
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.14751692
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: InitialModule.startColor.minColor.r
+      value: 0.9150943
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: InitialModule.startColor.minColor.g
+      value: 0.5111296
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: InitialModule.startColor.minColor.b
+      value: 0.28057137
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: lengthInSec
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7360dcfb61b7a0846af83b88c3941cb0, type: 3}
 --- !u!4 &1494491138773067583 stripped
@@ -19071,6 +19106,11 @@ PrefabInstance:
       propertyPath: looping
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8137825749641523987, guid: ae858b0c05dcb414b8ad39b69ee32544,
+        type: 3}
+      propertyPath: lengthInSec
+      value: 0.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae858b0c05dcb414b8ad39b69ee32544, type: 3}
 --- !u!4 &6049863537610135745 stripped
@@ -19174,7 +19214,7 @@ PrefabInstance:
     - target: {fileID: 6352151562051580209, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}
       propertyPath: lengthInSec
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 6352151562051580209, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}

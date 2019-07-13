@@ -16,13 +16,15 @@ public class AppStateManager : SingletonStateMachine<AppStateManager, EAppState>
 
         FindAndBindButtonActions();
 
-        startState = MotherOfManagers.Instance.DebugStartState;
         debugStateID = 51;
     }
 
     protected override void Start()
     {
         base.Start();
+
+        startState = MotherOfManagers.Instance.DebugStartState;
+
 
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_GAME_AppStateUpdated;

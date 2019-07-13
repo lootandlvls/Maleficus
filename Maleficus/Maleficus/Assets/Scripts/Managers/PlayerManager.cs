@@ -28,7 +28,8 @@ public class PlayerManager : Singleton<PlayerManager>
     private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
     private Dictionary<ETeamID, List<EPlayerID>>        playerTeams                 = new Dictionary<ETeamID, List<EPlayerID>>();
 
-   
+ 
+
 
     protected override void Awake()
     {
@@ -43,12 +44,13 @@ public class PlayerManager : Singleton<PlayerManager>
     private void Start()
     {
         // Input events
-        EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
-        EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
+        EventManager.Instance.INPUT_ButtonPressed   += On_INPUT_ButtonPressed;
+        EventManager.Instance.INPUT_ButtonReleased  += On_INPUT_ButtonReleased;
+        EventManager.Instance.INPUT_JoystickMoved   += On_INPUT_JoystickMoved;
        
         StartCoroutine(LateStartCoroutine());
     }
-   
+
 
 
     private IEnumerator LateStartCoroutine()
@@ -115,9 +117,56 @@ public class PlayerManager : Singleton<PlayerManager>
             
         }
     }
-    
+
 
     #region Input
+    private void On_INPUT_ButtonReleased(EInputButton inputButton, EPlayerID playerID)
+    {
+      
+        switch (inputButton)
+        {
+
+            case EInputButton.CAST_SPELL_1:
+                if (activePlayers[playerID].readyToShoot && activePlayers[playerID].readyToUseSpell_1)
+                {
+                    activePlayers[playerID].readyToShoot = false;
+                    activePlayers[playerID].readyToUseSpell_1 = false;
+                    activePlayers[playerID].StopChargingSpell_1();
+                    
+                    SpellManager.Instance.CastSpell(playerID, 1);
+                    StartCoroutine(ReadyToUseSpell(playerID,activePlayers[playerID].spellDuration_1, 0));
+                    StartCoroutine(ReadyToUseSpell(playerID,activePlayers[playerID].spellCooldown_1 + activePlayers[playerID].spellDuration_1, 1));
+                }
+                break;
+
+            case EInputButton.CAST_SPELL_2:
+                if (activePlayers[playerID].readyToShoot && activePlayers[playerID].readyToUseSpell_2)
+                {
+                    activePlayers[playerID].readyToShoot = false;
+                    activePlayers[playerID].readyToUseSpell_2 = false;
+                   
+                    activePlayers[playerID].StopChargingSpell_2();
+                    SpellManager.Instance.CastSpell(playerID, 2);
+                    StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellDuration_2, 0));
+                    StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellCooldown_2 + activePlayers[playerID].spellDuration_2, 2));
+                }
+                break;
+
+            case EInputButton.CAST_SPELL_3:
+                if (activePlayers[playerID].readyToShoot && activePlayers[playerID].readyToUseSpell_3)
+                {
+                    activePlayers[playerID].readyToShoot = false;
+                    activePlayers[playerID].readyToUseSpell_3 = false;
+                  
+                    activePlayers[playerID].StopChargingSpell_3();
+                    SpellManager.Instance.CastSpell(playerID, 3);
+                    StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellDuration_3, 0));
+                    StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellCooldown_3 + activePlayers[playerID].spellDuration_3 , 3));
+                }
+                break;
+        }
+    }
+
     private void On_INPUT_ButtonPressed(EInputButton inputButton, EPlayerID playerID)
     {
         if (playerID == EPlayerID.TEST) return;
@@ -125,15 +174,41 @@ public class PlayerManager : Singleton<PlayerManager>
         switch (inputButton)
         {
             case EInputButton.CAST_SPELL_1:
-                activePlayers[playerID].CastSpell_1();
+                //change to  SpellManager.Instance.Player_Spells[playerID][1].MovementType; when dictionary are ready to use
+                if ( activePlayers[playerID].readyToUseSpell_1 && activePlayers[playerID].readyToShoot)             
+                {
+                
+
+                    MovementType movementType = SpellManager.Instance.Player_1_Spells[0].MovementType;
+                    
+                    activePlayers[playerID].StartChargingSpell_1(movementType);
+                }
+               
                 break;
 
             case EInputButton.CAST_SPELL_2:
-                activePlayers[playerID].CastSpell_2();
+               
+                if ( activePlayers[playerID].readyToUseSpell_2 && activePlayers[playerID].readyToShoot)
+                {
+                    
+                    MovementType movementType = SpellManager.Instance.Player_1_Spells[1].MovementType;
+                  
+                    activePlayers[playerID].StartChargingSpell_2(movementType);
+                }
+               
                 break;
 
             case EInputButton.CAST_SPELL_3:
-                activePlayers[playerID].CastSpell_3();
+              
+                if ( activePlayers[playerID].readyToUseSpell_3 && activePlayers[playerID].readyToShoot)
+                {
+                   
+                    MovementType movementType = SpellManager.Instance.Player_1_Spells[2].MovementType;
+                  
+                    activePlayers[playerID].StartChargingSpell_3(movementType);
+                }
+               
+
                 break;
         }
     }
@@ -234,6 +309,7 @@ public class PlayerManager : Singleton<PlayerManager>
                 Player player = activePlayers[playerID];
                 if (playerInput.HasMoved())
                 {
+
                     player.Move(playerInput.Move_X, playerInput.Move_Y);
                 }
                 if (playerInput.HasRotated())
@@ -310,6 +386,11 @@ public class PlayerManager : Singleton<PlayerManager>
         return connectedPlayers[playerID];
     }
 
+    public PlayerInput GetPlayerInput (EPlayerID playerID)
+    {
+        return playersInput[playerID];
+    }
+
     public bool IsPlayerActive(EPlayerID playerID)
     {
         return activePlayers.ContainsKey(playerID);
@@ -331,5 +412,38 @@ public class PlayerManager : Singleton<PlayerManager>
     public EPlayerID[] GetPlayersInTeam(ETeamID inTeamID)
     {
         return PlayerTeams[inTeamID].ToArray();
+    }
+
+
+    IEnumerator ReadyToUseSpell(EPlayerID playerID, float time, int id)
+    {
+        switch (id)
+        {
+            case 0:
+                yield return new WaitForSeconds(time);
+                activePlayers[playerID].readyToShoot = true;
+
+                break;
+            case 1:
+                yield return new WaitForSeconds(time);
+                activePlayers[playerID].readyToUseSpell_1 = true;
+
+                break;
+
+            case 2:
+                yield return new WaitForSeconds(time);
+                activePlayers[playerID].readyToUseSpell_2 = true;
+
+                break;
+
+            case 3:
+                yield return new WaitForSeconds(time);
+                activePlayers[playerID].readyToUseSpell_3 = true;
+                break;
+
+        }
+
+
+        Debug.Log("ready to use the spell again");
     }
 }

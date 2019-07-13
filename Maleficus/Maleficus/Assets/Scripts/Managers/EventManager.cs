@@ -133,6 +133,7 @@ public class EventManager : Singleton<EventManager>
     #endregion
 
     #region SPELLS
+    
     public event Action<ISpell, EPlayerID> SPELLS_SpellSpawned;
     public void Invoke_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayerID)
     {
@@ -155,7 +156,7 @@ public class EventManager : Singleton<EventManager>
         }
         Debug.Log(hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
     }
-
+    //USED IN SPELL MANAGER TO TELEPORT THE PLAYER
     public event Action<ISpell, EPlayerID> SPELLS_Teleport;
     public void Invoke_SPELLS_Teleport(ISpell castedSpell , EPlayerID castingPlayerID)
     {
@@ -191,6 +192,16 @@ public class EventManager : Singleton<EventManager>
         DebugLog(buttonType + " pressed by " + playerID);
     }
 
+    public event Action<EInputButton, EPlayerID> INPUT_ButtonReleased;
+    public void Invoke_INPUT_ButtonReleased(EInputButton buttonType, EPlayerID playerID)
+    {
+        if (INPUT_ButtonReleased != null)
+        {
+            INPUT_ButtonReleased.Invoke(buttonType, playerID);
+        }
+        DebugLog(buttonType + " released by " + playerID);
+    }
+
     public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved;
     public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
     {
@@ -199,6 +210,15 @@ public class EventManager : Singleton<EventManager>
             INPUT_JoystickMoved.Invoke(axisType, axisValue, playerID);
         }
     }
+
+   /* public event Action<EInputButton, EPlayerID> INPUT_ButtonStillBeingPressed;
+    public void Invoke_INPUT_ButtonStillBeingPressed(EInputButton buttonType, EPlayerID playerID)
+    {
+        if (INPUT_ButtonStillBeingPressed != null)
+        {
+            INPUT_ButtonStillBeingPressed.Invoke(buttonType, playerID);
+        }
+    }*/
     #endregion
 
     #region NETWORK
