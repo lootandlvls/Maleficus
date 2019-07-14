@@ -37,11 +37,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         base.Start();
 
 
-        startState = MotherOfManagers.Instance.DebugStartState;
 
 
         // Bind state machine event
-        StateUpdateEvent += EventManager.Instance.Invoke_GAME_AppStateUpdated;
+        StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
 
         //// Debug state                                                                                                                // TODO: Use debug states?
         //if (MotherOfManagers.Instance.DebugStartMenuState != EMenuState.NONE)
