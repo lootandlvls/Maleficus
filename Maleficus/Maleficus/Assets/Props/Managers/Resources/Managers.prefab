@@ -12,6 +12,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnAllPlayers
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: InputMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnPlayerOnConnect
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4335998295704777601, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -66,21 +81,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsSpawnAllPlayers
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: InputMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsSpawnPlayerOnConnect
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e016db9698da6cf4c8fe22edd976b062, type: 3}

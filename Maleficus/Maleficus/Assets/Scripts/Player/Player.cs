@@ -37,7 +37,6 @@ public class Player : MonoBehaviour, IPlayer
     private DirectionalSprite myDirectionalSprite;
     private Dictionary<int, AbstractSpell> spellsSlot;
     public Animator animator;
-    private PlayerInput playerInput;
 
     public bool readyToShoot = true;
 
@@ -69,7 +68,6 @@ public class Player : MonoBehaviour, IPlayer
        
         InitializeSpellsCooldownsAndDurations();
 
-        playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
 
         myRigidBody = this.GetComponent<Rigidbody>();      
         animator = this.GetComponent<Animator>();
@@ -83,8 +81,9 @@ public class Player : MonoBehaviour, IPlayer
     }
     private void Update()
     {
-        
-       animator.SetFloat("run", playerInput.Move_X + playerInput.Move_Y);
+        PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
+
+        animator.SetFloat("run", playerInput.Move_X + playerInput.Move_Y);
         if (Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) == 0)
         {
             animator.SetBool("idle", true);
