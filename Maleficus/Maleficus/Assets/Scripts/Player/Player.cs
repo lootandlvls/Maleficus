@@ -91,8 +91,9 @@ public class Player : MonoBehaviour, IPlayer
             animator.SetBool("idle", false);
         }
 
-       
-
+        // Cance all forces
+        myRigidBody.velocity = Vector3.zero;
+        myRigidBody.angularVelocity = Vector3.zero;
 
     }
 

@@ -241,7 +241,8 @@ public enum EGameMode
     SINGLE_LIVES_5,
     SINGLE_TIME_2,
     SINGLE_POINTS_100,
-    INSANE
+    INSANE,
+    DUNGEON
         // TODO: Define rest of game modes
 }
 

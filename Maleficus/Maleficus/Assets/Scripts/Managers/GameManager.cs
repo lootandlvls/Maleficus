@@ -34,7 +34,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
             switch (gameModeToStart)
             {
                 case EGameMode.SINGLE_LIVES_5:
-                    gameObject.AddComponent<GM_Single_Lives>();          // TODO: Test if it works
+                    gameObject.AddComponent<GM_FFA_Lives>();          // TODO: Test if it works
                     Debug.Log("Starting " + EGameMode.SINGLE_LIVES_5);
                     break;
 
@@ -43,6 +43,11 @@ public class GameManager : AbstractSingletonManager<GameManager>
                     break;
 
                 case EGameMode.INSANE:
+
+                    break;
+
+                case EGameMode.DUNGEON:
+                    gameObject.AddComponent<GM_Single_Dungeon>();          // TODO: Test if it works
 
                     break;
             }
@@ -100,6 +105,15 @@ public class GameManager : AbstractSingletonManager<GameManager>
             action.ActionButtonPressed += () =>
             {
                 StartGame(EGameMode.SINGLE_LIVES_5);
+            };
+        }
+
+        StartDungeonSingleGame[] startDungeonSingleGameActions = FindObjectsOfType<StartDungeonSingleGame>();
+        foreach (StartDungeonSingleGame action in startDungeonSingleGameActions)
+        {
+            action.ActionButtonPressed += () =>
+            {
+                StartGame(EGameMode.DUNGEON);
             };
         }
 

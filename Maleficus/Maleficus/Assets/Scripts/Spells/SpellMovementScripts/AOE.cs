@@ -21,23 +21,29 @@ public class AOE : AbstractSpell
   //  && (this.GetComponent<AbstractSpell>().CastingPlayerID != hitColliders[i].GetComponent<IPlayer>().PlayerID)
     void onExplosionEnter(Vector3 center , float radius)
     {
+        AbstractSpell abstractSpell = GetComponent<AbstractSpell>();
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
         int i = 0;
         List<IPlayer> hitPlayers = new List<IPlayer>();
+        List<IEnemy> hitEnemies = new List<IEnemy>();
         while (i < hitColliders.Length)
         {
-            if ((hitColliders[i] != null) && hitColliders[i].tag == "Player1" )
+            if (hitColliders[i] != null)
             {
                 IPlayer otherPlayer = hitColliders[i].gameObject.GetComponent<IPlayer>();
-                AbstractSpell abstractSpell = this.GetComponent<AbstractSpell>();
-
-                if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
+                IEnemy otherEnemy = hitColliders[i].gameObject.GetComponent<IEnemy>();
+                if (otherPlayer != null)
                 {
-
-                    hitPlayers.Add(otherPlayer);
-
+                    if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
+                    {
+                        hitPlayers.Add(otherPlayer);
+                    }
                 }
-             }
+                else if (otherEnemy != null)
+                {
+                    hitEnemies.Add(otherEnemy);
+                }
+            }
            
             i++;
         }

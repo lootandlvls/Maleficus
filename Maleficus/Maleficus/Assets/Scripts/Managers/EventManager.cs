@@ -180,6 +180,20 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         Debug.Log(hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
     }
+
+    public event Action<IEnemy> SPELLS_SpellHitEnemy;
+    public void Invoke_SPELLS_SpellHitEnemy(IEnemy hitEnemy)
+    {
+
+        if (SPELLS_SpellHitEnemy != null)
+        {
+            SPELLS_SpellHitEnemy.Invoke(hitEnemy);
+        }
+        Debug.Log("Payer hit enemy " + hitEnemy.ToString());
+    }
+
+
+
     //USED IN SPELL MANAGER TO TELEPORT THE PLAYER
     public event Action<ISpell, EPlayerID> SPELLS_Teleport;
     public void Invoke_SPELLS_Teleport(ISpell castedSpell , EPlayerID castingPlayerID)

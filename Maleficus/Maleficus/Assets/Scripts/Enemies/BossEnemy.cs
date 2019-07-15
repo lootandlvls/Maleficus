@@ -36,7 +36,7 @@ public class BossEnemy : BasicEnemy
         //InitGestureSymbols();
         subLifeCounter = subLives;
         gestureIndex = 0;
-        UpdateState(State.MOVING_TOWARDS_PLAYER);
+        UpdateState(EnemyState.MOVING_TOWARDS_PLAYER);
         
     }
 
@@ -47,11 +47,11 @@ public class BossEnemy : BasicEnemy
         switch (myState)
         {
             
-            case State.ROAR:
+            case EnemyState.ROAR:
                 if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
                 {
                     Debug.Log("Back to moving");
-                    UpdateState(State.MOVING_TOWARDS_PLAYER);
+                    UpdateState(EnemyState.MOVING_TOWARDS_PLAYER);
                 }
                 break;
 
@@ -60,14 +60,14 @@ public class BossEnemy : BasicEnemy
 
 
 
-    protected override void UpdateState(State newState)
+    protected override void UpdateState(EnemyState newState)
     {
         base.UpdateState(newState);
 
         switch (newState)
         {
 
-            case State.ROAR:
+            case EnemyState.ROAR:
                 myNavAgent.speed = 0;
                 myAnimator.SetBool("IsMoving", false);
                 myAnimator.SetTrigger("Roar");
@@ -75,7 +75,7 @@ public class BossEnemy : BasicEnemy
                 break;
 
 
-            case State.KNOCKED:
+            case EnemyState.KNOCKED:
                 myNavAgent.speed = 0;
                 myAnimator.SetBool("IsMoving", false);
                 myAnimator.SetBool("IsKnocked", true);
@@ -93,7 +93,7 @@ public class BossEnemy : BasicEnemy
 
     private IEnumerator AttackCoroutine()
     {
-        while (myState == State.ATTACKING)
+        while (myState == EnemyState.ATTACKING)
         {
             while ((myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) == false)
             {

@@ -23,7 +23,7 @@ public class Linear_Hit : AbstractSpell
     void FixedUpdate()
     {
         
-           Move();
+        Move();
        
         
     }
@@ -32,25 +32,28 @@ public class Linear_Hit : AbstractSpell
     public void Move()
     {
       
-          movingDirection =  Vector3.forward * Speed * Time.deltaTime;
+        movingDirection =  Vector3.forward * Speed * Time.deltaTime;
 
-          directionVector = transform.TransformDirection(movingDirection);
-          myRigidBody.velocity = new Vector3(directionVector.x, directionVector.y, directionVector.z);
-       
-        
-
+        directionVector = transform.TransformDirection(movingDirection);
+        myRigidBody.velocity = new Vector3(directionVector.x, directionVector.y, directionVector.z);
 
     }
+
     private void OnTriggerEnter(Collider other)
     {
 
-       Vector3 pushingDirection = Vector3.forward * HitPower;
+        Vector3 pushingDirection = Vector3.forward * HitPower;
         dirVector = transform.TransformDirection(pushingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
+        IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
 
-       if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
+        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
         {
             ProcessHits(otherPlayer);
+        }
+        else if (otherEnemy != null)
+        {
+            ProcessHits(otherEnemy);
         }
         /*else
         {

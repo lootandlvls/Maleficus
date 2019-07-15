@@ -25,21 +25,19 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     [SerializeField] protected float walkingSpeed = 1.5f;
     [SerializeField] protected float attackingThreshold = 1.5f;
     [Header("Assign")]
-    //[SerializeField] protected GestureSymbol[] gestureSymbols;
     [SerializeField] protected GameObject damageParticleEffect;
     [SerializeField] protected GameObject spawnParticleEffect;
     [SerializeField] private AudioClip[] attackSounds;
 
     protected Vector3 playerPosition;
-    //protected Gesture[] gestures;
-    //protected Gesture currentGesture;
+
     protected int gestureIndex;
     protected Animator myAnimator;
     protected NavMeshAgent myNavAgent;
     protected AudioSource myAudioSource;
 
 
-    protected enum State
+    protected enum EnemyState
     {
         SPAWNING,
         MOVING_TOWARDS_PLAYER,
@@ -50,7 +48,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         KNOCKED,
         ROAR
     }
-    protected State myState;
+    protected EnemyState myState;
 
     
     protected virtual void Awake()
@@ -71,65 +69,65 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
-        // Init events
-        //EnemyAttacked   += EnemyManager.Instance.Action_OnEnemyAttacked;
-        //EnemyDied       += EnemyManager.Instance.Action_OnEnemyDied;
-
-
-        //AppStateManager.Instance.AppStateUpdated        += OnAppStateUpdated;
-        EventManager.Instance.ÁPP_AppStateUpdated        += OnAppStateUpdated;
-
-        //PlayersManager.Instance.PlayerPerformedGesture  += OnPlayerPerformedGesture;
-
-        // Init gestures
-        //InitGestureSymbols();
-        
+        EventManager.Instance.ÁPP_AppStateUpdated   += On_APP_AppStateUpdated;
+        EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
 
         // Init Enemy
-        UpdateState(State.SPAWNING);
+        UpdateState(EnemyState.SPAWNING);
 
-
-        //playerPosition = PlayersManager.Instance.PlayersPosition;
         myNavAgent.speed = walkingSpeed;
+    }
 
-
-        transform.LookAt(playerPosition);
+    private void On_SPELLS_SpellHitEnemy(IEnemy hitEnemy)
+    {
+        Debug.Log("Enemy attacked : " + ((BasicEnemy)hitEnemy == this).ToString());
+        if ((BasicEnemy) hitEnemy == this)
+        {
+            UpdateState(EnemyState.DEAD);
+        }
     }
 
     protected virtual void Update()
     {
+        
         // Update player position
-        foreach(Player player in PlayerManager.Instance.ActivePlayers.Values)
+        foreach (Player player in PlayerManager.Instance.ActivePlayers.Values)
         {
             playerPosition = player.Position;
             break;
         }
 
+
+
+        // Update enemy state
         switch (myState)
         {
-            case State.SPAWNING:
+            case EnemyState.SPAWNING:
                 if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
                 {
-                    UpdateState(State.MOVING_TOWARDS_PLAYER);
+                    UpdateState(EnemyState.MOVING_TOWARDS_PLAYER);
                 }
                 break;
 
-            case State.MOVING_TOWARDS_PLAYER:
+            case EnemyState.MOVING_TOWARDS_PLAYER:
+                myNavAgent.destination = playerPosition;
+                transform.LookAt(playerPosition);
+
                 if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold)
                 {
-                    UpdateState(State.ATTACKING);
+                    UpdateState(EnemyState.ATTACKING);
                 }
                 break;
 
-            case State.ATTACKING:
+            case EnemyState.ATTACKING:
                 Vector3 playersDir = (playerPosition - transform.position).normalized;
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playersDir, transform.up), Time.deltaTime * 1);
                 break;
 
-            case State.GETTING_HIT:
+            case EnemyState.GETTING_HIT:
                 if (myAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
                 {
-                    UpdateState(State.MOVING_TOWARDS_PLAYER);
+                    UpdateState(EnemyState.MOVING_TOWARDS_PLAYER);
                 }
                 break;
         }
@@ -137,22 +135,8 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     }
 
-    //protected void InitGestureSymbols()
-    //{
-    //    Debug.Log("Init gestures");
-    //    gestures = new Gesture[gestureSymbols.Length];
-    //    for (int i = 0; i < gestures.Length; i++)
-    //    {
-    //        gestures[i] = PosturesAndGesturesDataBase.Instance.GetARandomGesture();
-    //        gestures[i].ToPlayerID = (PlayerID)(Utils.GetRndIndex(PlayersManager.PLAYER_NUMBERS) + 1);
-    //        gestureSymbols[i].SetSprite(gestures[i].GestureSymbol);
-    //    }
-    //    currentGesture = gestures[0];
-    //    gestureIndex = 0;
-    //}
 
-
-    protected virtual void UpdateState(State newState)
+    protected virtual void UpdateState(EnemyState newState)
     {
         myState = newState;
 
@@ -161,26 +145,26 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
         switch(newState)
         {
-            case State.MOVING_TOWARDS_PLAYER:
+            case EnemyState.MOVING_TOWARDS_PLAYER:
                 myAnimator.SetBool("IsMoving", true);
                 myNavAgent.speed = walkingSpeed;
                 myNavAgent.destination = playerPosition;
                 break;
 
-            case State.ATTACKING:
+            case EnemyState.ATTACKING:
                 myAnimator.SetBool("IsMoving", false);
                 myNavAgent.speed = 0;
                 AttackEveryPeriodOfTime();
 
                 break;
 
-            case State.GETTING_HIT:
+            case EnemyState.GETTING_HIT:
                 myNavAgent.speed = 0;
                 myAnimator.SetTrigger("GetHit");
                 
                 break;
 
-            case State.DEAD:
+            case EnemyState.DEAD:
                 StopAllCoroutines();
                 myNavAgent.speed = 0;
                 myAnimator.SetBool("IsMoving", false);
@@ -188,20 +172,14 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 myNavAgent.enabled = false;
 
 
-                //AppStateManager.Instance.AppStateUpdated        -= OnAppStateUpdated;
-                EventManager.Instance.ÁPP_AppStateUpdated-= OnAppStateUpdated;
-
-                //PlayersManager.Instance.PlayerPerformedGesture  -= OnPlayerPerformedGesture;
-                //EnemyAttacked -= EnemyManager.Instance.Action_OnEnemyAttacked;
-
-
-                //if(EnemyDied != null) EnemyDied.Invoke(this);
+                EventManager.Instance.ÁPP_AppStateUpdated-= On_APP_AppStateUpdated;
+                
                 EventManager.Instance.Invoke_ENEMIES_EnemyDied(this);
 
                 DieAndVanish();
                 break;
 
-            case State.IDLE:
+            case EnemyState.IDLE:
                 myAnimator.SetBool("IsMoving", false);
                 myNavAgent.speed = 0;
                 break;
@@ -216,10 +194,9 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     private IEnumerator AttackCoroutine()
     {
-        while(myState == State.ATTACKING)
+        while(myState == EnemyState.ATTACKING)
         {
             int attackID = UnityEngine.Random.Range(1, 3);
-            Debug.Log(attackID);
             if (attackID == 1)
             {
                 myAnimator.SetTrigger("Attack1");
@@ -259,52 +236,18 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(attackDelay);
         SoundUtilities.PlayRandomSound(myAudioSource, attackSounds);
 
-        //if (EnemyAttacked != null) EnemyAttacked.Invoke(this);
         EventManager.Instance.Invoke_ENEMIES_EnemyAttackedPlayer(this);
     }
 
 
-    protected void OnAppStateUpdated(EAppState newState, EAppState lastState)
+    protected void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)
     {
         if (newState == EAppState.IN_GAME_IN_ENDED)
         {
-            UpdateState(State.IDLE);
+            UpdateState(EnemyState.IDLE);
         }
     }
 
-    //protected virtual void OnPlayerPerformedGesture(PlayerID byPlayer, GestureType gestureType)
-    //{
-    //    if (AppStateManager.Instance.CurrentState == AppState.PLAYING)
-    //    {
-    //        if ((currentGesture.ToPlayerID == byPlayer) && (currentGesture.IsType == gestureType))
-    //        {
-    //            // Instantiate Lazer from player
-    //            PlayersManager.Instance.SpawnLazer(byPlayer, gestureType, transform);
-    //            PlayersManager.Instance.SpawnSpellBall(byPlayer, gestureType, transform);
 
-    //            // Instantiate particle effect
-    //            if (damageParticleEffect != null)
-    //            {
-    //                Instantiate(damageParticleEffect, transform.position, Quaternion.identity);
-    //            }
-
-    //            // Update gesture and check if dead
-    //            gestureIndex++;
-    //            if (gestureIndex == gestures.Length)
-    //            {
-    //                gestureSymbols[gestureIndex - 1].HideSprite();
-    //                UpdateState(State.DEAD);
-    //            }
-    //            else
-    //            {
-    //                currentGesture = gestures[gestureIndex];
-    //                gestureSymbols[gestureIndex - 1].HideSprite();
-    //                UpdateState(State.GETTING_HIT);
-
-    //            }
-    //        }
-    //    }
-        
-    //}
 
 }

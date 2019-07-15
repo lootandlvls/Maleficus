@@ -23,6 +23,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     [Header ("Debug")]
     [SerializeField] public bool IsDebugLogEvents = false;
+    [SerializeField] public bool IsReduceLightIntensityOnSceneStart = false;
 
     protected override void Awake()
     {

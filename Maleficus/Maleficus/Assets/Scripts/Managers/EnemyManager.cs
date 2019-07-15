@@ -26,8 +26,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
     [Header("Minion")]
     [SerializeField] BasicEnemy minionEnemyPrefab;
 
-    [Header("Assign")]
-    [SerializeField] EnemySpawnPosition[] enemySpawnPositions;
+    EnemySpawnPosition[] enemySpawnPositions;
 
 
     private int lastChosedIndex;
