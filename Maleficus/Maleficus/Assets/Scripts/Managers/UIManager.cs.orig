@@ -11,9 +11,13 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     {
         base.Awake();
 
+<<<<<<< Updated upstream
         // 1) Assign appropriate currentState from MaleficusTypes
         startStates = MaleficusTypes.START_MENU_STATES;
         // 2) Define "debugStateID" in Awake() of child class
+=======
+        startState = EMenuState.IN_LOGIN;                                                                        
+>>>>>>> Stashed changes
         debugStateID = 50;
     }
 
@@ -130,6 +134,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                 FriendsContext.Instance.OnClickAddFollow();
             };
         }
+<<<<<<< Updated upstream
+    }
+
+
     #region Events Callbacks
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
@@ -196,10 +204,12 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     {
         UpdateState(EMenuState.IN_GAME_OVER);
     }
+
     private void On_GAME_GameUnPaused(EGameMode obj)
     {
         UpdateState(EMenuState.IN_GAME_RUNNING);
     }
+
     private void On_GAME_GamePaused(EGameMode obj)
     {
         UpdateState(EMenuState.IN_GAME_PAUSED);
@@ -209,7 +219,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     {
         UpdateState(EMenuState.IN_GAME_RUNNING);
     }
+
     #endregion
+
+=======
 
         InitLobbyAction[] ILActions = FindObjectsOfType<InitLobbyAction>();
         foreach (InitLobbyAction Action in ILActions)
@@ -220,4 +233,5 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             };
         }
     }
+>>>>>>> Stashed changes
 }

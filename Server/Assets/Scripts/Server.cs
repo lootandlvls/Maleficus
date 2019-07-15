@@ -6,15 +6,25 @@ using UnityEngine.Networking;
 
 public class Server : MonoBehaviour
 {
-    private const int MAX_USER = 100;
+    private const int MAX_USER = 10000;
     private const int PORT = 26002;
     private const int WEB_PORT = 26004;
+    private const int INSTANCE_MANAGER_PORT = 9999;
     private const int BYTE_SIZE = 1024;
     
-
+    // Networktransport for clients
     private byte reliableChannel;
     private int hostId;
+    private int instanceManagerHostId;
     private int webHostId;
+
+    // Networktransport for Instance Manager
+    private int InstanceManagerConnectionId;
+    private const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
+    //private const string INSTANCE_MANAGER_SERVER_IP = "127.0.0.1";
+
+    //private byte reliableChannel_InstanceManager;
+    //private int hostId_InstanceManager;
 
     private bool isStarted;
     private byte error;
@@ -42,19 +52,23 @@ public class Server : MonoBehaviour
         NetworkTransport.Init();
 
         ConnectionConfig cc = new ConnectionConfig();
+
         reliableChannel = cc.AddChannel(QosType.Reliable);
 
         HostTopology topo = new HostTopology(cc, MAX_USER);
 
 
         // Server only code
+
         hostId = NetworkTransport.AddHost(topo, PORT, null);
+        Debug.Log("added host with Port 26002");
         webHostId = NetworkTransport.AddWebsocketHost(topo, WEB_PORT, null);
+        Debug.Log("added host with Port 26004");
+        InstanceManagerConnectionId = NetworkTransport.Connect(hostId, INSTANCE_MANAGER_SERVER_IP, INSTANCE_MANAGER_PORT, 0, out error);
+        Debug.Log("connected to Instance Manager Port 9999");
 
         Debug.Log(string.Format("Opening connection on port {0} and webport {1}", PORT, WEB_PORT));
         isStarted = true;
-
-        
     }
 
     public void Shutdown()
@@ -83,7 +97,14 @@ public class Server : MonoBehaviour
             case NetworkEventType.Nothing:
                 break;
             case NetworkEventType.ConnectEvent:
-                Debug.Log(string.Format("User {0} has connected through host {1}!", connectionId, recHostId));
+                if (recHostId != 2)
+                {
+                    Debug.Log(string.Format("User {0} has connected through host {1}!", connectionId, recHostId));
+                }
+                else
+                {
+                    Debug.Log(string.Format("The Instance Manager has connected through host {0}!", recHostId));
+                }
                 break;
             case NetworkEventType.DisconnectEvent:
                 DisconnectEvent(recHostId, connectionId);
@@ -127,8 +148,12 @@ public class Server : MonoBehaviour
             case NetOP.RequestFollow:
                 RequestFollow(cnnId, channelId, recHostId, (Net_RequestFollow)msg);
                 break;
+            case NetOP.InitLobby:
+                InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
+                break;
         }
     }
+
     private void DisconnectEvent(int recHostId, int connectionId)
     {
         Debug.Log(string.Format("User {0} has disconnected!", connectionId));
@@ -158,6 +183,8 @@ public class Server : MonoBehaviour
             }
         }      
     }
+
+    #region Account
     private void CreateAccount(int cnnId, int channelId, int recHostId, Net_CreateAccount ca)
     {
         Net_OnCreateAccount oca = new Net_OnCreateAccount();
@@ -172,7 +199,6 @@ public class Server : MonoBehaviour
             oca.Success = 0;
             oca.Information = "Account was not created";
         }
-
 
         SendClient(recHostId, cnnId, oca);
     }
@@ -249,6 +275,29 @@ public class Server : MonoBehaviour
 
         SendClient(recHostId, cnnId, orf);
     }
+    #endregion
+
+    #region Lobby
+    private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
+    {
+        Net_OnInitLobby oil = new Net_OnInitLobby();
+        if (db.InitLobby(il.Token))
+        {
+            oil.Success = 1;
+            oil.Information = "Lobby has been initialized";
+
+            // send msg to InstanceManager to run new Instance
+            SendClient(2, cnnId, il);
+        }
+        else
+        {
+            oil.Success = 0;
+            oil.Information = "Lobby couldn't be initialized";
+        }
+
+        SendClient(recHostId, cnnId, oil);
+    }
+    #endregion
 
     #endregion
 
@@ -267,9 +316,14 @@ public class Server : MonoBehaviour
         {
             NetworkTransport.Send(hostId, cnnId, reliableChannel, buffer, BYTE_SIZE, out error);
         }
-        else
+        else if(recHost == 1)
         {
             NetworkTransport.Send(webHostId, cnnId, reliableChannel, buffer, BYTE_SIZE, out error);
+        }
+        else
+        {
+            NetworkTransport.Send(instanceManagerHostId, InstanceManagerConnectionId, reliableChannel, buffer, BYTE_SIZE, out error);
+            Debug.Log("sent to im");
         }
     }
     #endregion

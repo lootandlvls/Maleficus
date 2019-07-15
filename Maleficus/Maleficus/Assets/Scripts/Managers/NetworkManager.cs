@@ -16,6 +16,7 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
     private const string SERVER_IP = "52.91.55.121";
+    //private const string SERVER_IP = "127.0.0.1";
 
 
 
@@ -247,6 +248,8 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, BYTE_SIZE, out error);
     }
+
+    #region Account related
     public void SendCreateAccount(string username, string password, string email)
     {
 
@@ -282,6 +285,7 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
         LoginContext.Instance.ChangeAuthenticationMessage("Sending request...");
         SendServer(ca);
     }
+
     public void SendLoginRequest(string usernameOrEmail, string password)
     {
         // todo username and token working and messages should work
@@ -318,6 +322,7 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 
         SendServer(af);
     }
+
     public void SendRemoveFollow(string username)
     {
         Net_RemoveFollow rf = new Net_RemoveFollow();
@@ -326,6 +331,7 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 
         SendServer(rf);
     }
+
     public void SendRequestFollow()
     {
         Net_RequestFollow rf = new Net_RequestFollow();
@@ -334,5 +340,20 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 
         SendServer(rf);
     }
+
+    #endregion
+
+    #region Lobby related
+    public void SendInitLobby()
+    {
+        Net_InitLobby il = new Net_InitLobby();
+
+        il.Token = token;
+
+        SendServer(il);
+    }
+
+    #endregion
+
     #endregion
 }
