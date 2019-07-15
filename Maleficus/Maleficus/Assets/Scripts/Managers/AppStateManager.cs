@@ -48,6 +48,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
         EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
         EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
+
+        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
     protected override void Update()
@@ -106,6 +108,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     {
         switch (sceneToLoad)
         {
+            case EScene.ENTRY:
+                SceneManager.LoadScene(MaleficusTypes.SCENE_ENTRY);
+                currentScene = EScene.ENTRY;
+                break;
             case EScene.MENU:
                 SceneManager.LoadScene(MaleficusTypes.SCENE_MENU);
                 currentScene = EScene.MENU;
@@ -126,6 +132,26 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             default:
                 Debug.LogError(sceneToLoad + " is not a valid scene to load!");
                 break;
+        }
+    }
+
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
+    {
+        if (CurrentState == EAppState.IN_ENTRY || CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context
+        {
+            switch (receivedMsg)
+            {
+                case ENetworkMessage.CONNECTED:
+                    UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
+                    break;
+                case ENetworkMessage.LOGGED_IN:
+                    UpdateState(EAppState.IN_ENTRY_IN_LOADING);
+                    EventManager.Instance.Invoke_APP_SceneChanged(CurrentScene);
+                    break;
+                case ENetworkMessage.REGISTERED:
+                    UpdateState(EAppState.IN_ENTRY_IN_LOADING);
+                    break;
+            }
         }
     }
 
@@ -184,15 +210,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
     {
         Debug.Log("Loading level done : " + newScene.name);
-        EventManager.Instance.Invoke_APP_SceneChanged(CurrentScene);
-
-        // Validity test
-        if ((newScene.name != MaleficusTypes.SCENE_GAME)
-            && (newScene.name != MaleficusTypes.SCENE_MENU)
-            && (newScene.name != MaleficusTypes.SCENE_ENTRY))
-        {
-            Debug.LogError("Loaded level doesn't match to build levels");
-        }
     }
 
     private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
