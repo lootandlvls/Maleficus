@@ -33,8 +33,8 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public List<SpellEffects> BuffEffects { get { return buffEffects; } }
 
-    [SerializeField] private int hitPower;
-    [SerializeField] private float speed;
+    [SerializeField] public int hitPower;
+    [SerializeField] public float speed;
     [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
