@@ -203,13 +203,37 @@ public class Mongo
         return false;
     }
 
-    public bool InitLobby(string token)
+    public bool InitLobby(ObjectId initialiserId)
     {
-        if (FindAccountByToken(token) != null)
+        Model_Account self = FindAccountByObjectId(initialiserId);
+        if (self != null)
         {
             Model_Lobby newLobby = new Model_Lobby();
-            newLobby.Token = token;
+            newLobby.initialiserId = initialiserId;
+            newLobby.Team1.Add(self._id);
 
+            // add friends to game lobby
+            //Todo replace with inviting to lobby
+            List<Model_Account> yourFriends = FindAllFollowFromGetModelAccount(self.Token);
+
+            int friendListSize = yourFriends.Count;
+
+            if (friendListSize >= 1)
+            {
+                newLobby.Team2.Add(yourFriends[0]._id);
+            }
+
+            if(friendListSize >= 2)
+            {
+                newLobby.Team3.Add(yourFriends[1]._id);
+            }
+
+            if (friendListSize >= 3)
+            {
+                newLobby.Team4.Add(yourFriends[2]._id);
+            }
+
+            // insert lobby into mongodb
             lobbys.InsertOne(newLobby);
             return true;
         }
@@ -242,14 +266,10 @@ public class Mongo
         return accounts.Find(u => u.ActiveConnection == connectionId).FirstOrDefault<Model_Account>();
     }
 
-    public Model_Lobby FindLobbyByToken(string token)
-    {
-        return lobbys.Find(u => u.Token == token).FirstOrDefault<Model_Lobby>();
-    }
-
     #endregion
 
     #region Follow
+    // find all who you follow
     public List<Account> FindAllFollowFrom(string token)
     {
         Model_Reference self = new Model_Reference("account", FindAccountByToken(token)._id);
@@ -262,6 +282,8 @@ public class Mongo
         }
         return followsResponse;
     }
+
+    // find all who follow you
     public List<Account> FindAllFollowBy(string email)
     {
         Model_Reference self = new Model_Reference("account", FindAccountByEmail(email)._id);
@@ -274,6 +296,48 @@ public class Mongo
         }
         return followsResponse;
     }
+
+    public List<Model_Account> FindAllFollowFromGetModelAccount(string token)
+    {
+        //Todo replace redundant code
+        Model_Reference self = new Model_Reference("account", FindAccountByToken(token)._id);
+
+        List<Account> followsResponse = new List<Account>();
+        foreach (var f in follows.Find(f => f.Sender == self).ToList())
+        {
+            //maybe cast as objectId at f.target.id
+            followsResponse.Add(FindAccountByObjectId(f.Target.id).GetAccount());
+        }
+
+        List<Model_Account> ownFollows = new List<Model_Account>();
+        foreach (var f in followsResponse)
+        {
+            ownFollows.Add(FindAccountByUsernameAndDiscriminator(f.Username, f.Discriminator));
+        }
+        return ownFollows;
+    }
+
+    // find all who follow you
+    public List<Model_Account> FindAllFollowByGetModelAccount(string email)
+    {
+        //Todo replace redundant code
+        Model_Reference self = new Model_Reference("account", FindAccountByEmail(email)._id);
+
+        List<Account> followsResponse = new List<Account>();
+        foreach (var f in follows.Find(f => f.Target == self).ToList())
+        {
+            //maybe cast as objectId at f.target.id
+            followsResponse.Add(FindAccountByObjectId(f.Sender.id).GetAccount());
+        }
+
+        List<Model_Account> ownFollows = new List<Model_Account>();
+        foreach (var f in followsResponse)
+        {
+            ownFollows.Add(FindAccountByUsernameAndDiscriminator(f.Username, f.Discriminator));
+        }
+        return ownFollows;
+    }
+
     public Model_Follow FindFollowByUsernameAndDiscriminator(string token, string usernameAndDiscriminator)
     {
         string[] data = usernameAndDiscriminator.Split('#');
@@ -288,6 +352,13 @@ public class Mongo
         return null;
     }
 
+    #endregion
+
+    #region Lobby
+    public Model_Lobby FindLobbyByInitializerId(ObjectId initialiserId)
+    {
+        return lobbys.Find(u => u.initialiserId == initialiserId).FirstOrDefault<Model_Lobby>();
+    }
     #endregion
 
     #endregion

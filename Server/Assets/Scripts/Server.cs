@@ -281,21 +281,56 @@ public class Server : MonoBehaviour
     private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
     {
         Net_OnInitLobby oil = new Net_OnInitLobby();
-        if (db.InitLobby(il.Token))
+        Model_Account self = db.FindAccountByToken(il.Token);
+        if (db.InitLobby(self._id))
         {
             oil.Success = 1;
             oil.Information = "Lobby has been initialized";
 
             // send msg to InstanceManager to run new Instance
-            SendClient(2, cnnId, il);
+            //SendClient(2, cnnId, il);
         }
         else
         {
             oil.Success = 0;
             oil.Information = "Lobby couldn't be initialized";
+            SendClient(recHostId, cnnId, oil);
+            return;
         }
 
+        Model_Lobby lobby = db.FindLobbyByInitializerId(self._id);
+
+        // send all lobby members the message that the game can start now
+        // Todo change so different game modes can be initialized
         SendClient(recHostId, cnnId, oil);
+
+        if(lobby.Team2.Count != 0)
+        {
+            Model_Account player2 = db.FindAccountByObjectId(lobby.Team2[0]);
+            if (player2 != null)
+            {
+                SendClient(recHostId, player2.ActiveConnection, oil);
+            }
+        }
+
+        if (lobby.Team3.Count != 0)
+        {
+            Model_Account player3 = db.FindAccountByObjectId(lobby.Team3[0]);
+            if(player3 != null)
+            {
+                SendClient(recHostId, player3.ActiveConnection, oil);
+            }
+        }
+
+        if(lobby.Team4.Count != 0)
+        {
+            Model_Account player4 = db.FindAccountByObjectId(lobby.Team4[0]);
+            if (player4 != null)
+            {
+                SendClient(recHostId, player4.ActiveConnection, oil);
+            }
+        }
+
     }
     #endregion
 
