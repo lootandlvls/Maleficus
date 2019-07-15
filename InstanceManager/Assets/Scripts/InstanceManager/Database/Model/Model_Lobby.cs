@@ -6,12 +6,12 @@ public class Model_Lobby
 {
     public ObjectId _id { set; get; }
 
-    public string Token { set; get; }
+    public ObjectId initialiserId { set; get; }
 
     public EGameMode GameMode { set; get; }
 
-    public List<string> Team1 { set; get; }
-    public List<string> Team2 { set; get; }
-    public List<string> Team3 { set; get; }
-    public List<string> Team4 { set; get; }
+    public List<ObjectId> Team1 { set; get; }
+    public List<ObjectId> Team2 { set; get; }
+    public List<ObjectId> Team3 { set; get; }
+    public List<ObjectId> Team4 { set; get; }
 }

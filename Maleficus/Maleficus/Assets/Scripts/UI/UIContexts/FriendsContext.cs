@@ -27,7 +27,7 @@ public class FriendsContext : MonoBehaviour
     {
         switch (newMsg)
         {
-            case EMenuState.IN_MAIN:
+            case EMenuState.IN_MENU:
                 selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
                 NetworkManager.Instance.SendRequestFollow();
                 Debug.Log("now friends should be requested");

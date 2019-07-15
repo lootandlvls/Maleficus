@@ -64,7 +64,7 @@ public static class MaleficusTypes
     public static Dictionary<EScene, EAppState> START_APP_STATES = new Dictionary<EScene, EAppState>()
     {
         { EScene.NONE,      EAppState.NONE},
-        { EScene.ENTRY,     EAppState.IN_ENTRY_IN_LOADING },
+        { EScene.ENTRY,     EAppState.IN_ENTRY },
         { EScene.MENU,      EAppState.IN_MENU_IN_MAIN },
         { EScene.GAME,      EAppState.IN_GAME_IN_NOT_STARTED },
         { EScene.AR_GAME,   EAppState.IN_GAME_IN_NOT_STARTED },
@@ -73,7 +73,7 @@ public static class MaleficusTypes
     {
         { EScene.NONE,      EMenuState.NONE},
         { EScene.ENTRY,     EMenuState.IN_ENTRY },
-        { EScene.MENU,      EMenuState.IN_MAIN},
+        { EScene.MENU,      EMenuState.IN_MENU},
         { EScene.GAME,      EMenuState.IN_GAME_NOT_STARTED},
         { EScene.AR_GAME,   EMenuState.IN_GAME_NOT_STARTED},
     };
@@ -139,10 +139,10 @@ public static class MaleficusTypes
     };
     public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
     {
-        EMenuState.IN_LOGIN_IN_LOGIN,
-        EMenuState.IN_LOGIN_IN_REGISTER,
-        EMenuState.IN_LOGIN_IN_FOLLOW,
-        EMenuState.IN_LOGIN_IN_LEGAL
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_REGISTER,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL
     };
 
     /// Convert a PlayerID enum to an int
@@ -205,6 +205,8 @@ public static class MaleficusTypes
 public enum EAppState
 {
     NONE,
+    IN_ENTRY,
+    IN_ENTRY_IN_LOGIN,
     IN_ENTRY_IN_LOADING,
     IN_MENU_IN_MAIN,
     IN_MENU_IN_CONNECTING_PLAYERS,
@@ -433,15 +435,15 @@ public enum EMenuState
 {
     NONE,
     IN_ENTRY,
-    IN_MAIN,
+    IN_MENU,
     IN_CONNECTING_PLAYERS,
     IN_STARTUP,                                                                         //TODO: Define. Ambiguous meaning
     /* Login context */
-    IN_LOGIN,
-    IN_LOGIN_IN_LOGIN,
-    IN_LOGIN_IN_REGISTER,
-    IN_LOGIN_IN_FOLLOW,
-    IN_LOGIN_IN_LEGAL,
+    IN_ENTRY_IN_LOGIN,
+    IN_ENTRY_IN_LOGIN_IN_LOGIN,
+    IN_ENTRY_IN_LOGIN_IN_REGISTER,
+    IN_ENTRY_IN_LOGIN_IN_FOLLOW,
+    IN_ENTRY_IN_LOGIN_IN_LEGAL,
     /* Game context */
     IN_GAME_NOT_STARTED,
     IN_GAME_ABOUT_TO_START,

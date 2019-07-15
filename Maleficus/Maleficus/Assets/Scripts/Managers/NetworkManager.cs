@@ -4,7 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkManager, ENetworkMessage>
+public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
 
     // public static NetworkManager Instance { private set; get; }                                                  // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
@@ -15,8 +15,8 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
     private const int BYTE_SIZE = 1024;
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
-    private const string SERVER_IP = "52.91.55.121";
-    //private const string SERVER_IP = "127.0.0.1";
+    //private const string SERVER_IP = "52.91.55.121";
+    private const string SERVER_IP = "127.0.0.1";
 
 
 
@@ -36,33 +36,28 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
     {
         base.Awake();
 
-        startStates = MaleficusTypes.START_NETWORKSTATES;                                                                           // TODO: for testing. Change to correct one later
-        debugStateID = 1000; //Todo change to appropriate id
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
+        Start();
 
-        // Bind state machine event
-        StateUpdateEvent += EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated;
 
         //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
 
         Init();
     }
 
-    protected override void Update()
+    protected  void Update()
     {
-        base.Update();
 
         UpdateMessagePump();
     }
     #endregion
 
-    protected override void UpdateState(ENetworkMessage receivedMessage)
+    protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
     {
-        base.UpdateState(receivedMessage);
+        EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
 
     public void Init()
@@ -119,16 +114,16 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Connected to server");
-                UpdateState(ENetworkMessage.CONNECTED);
+                UpdateReceivedMessage(ENetworkMessage.CONNECTED);
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Disconnected from server");
-                UpdateState(ENetworkMessage.DISCONNECTED);
+                UpdateReceivedMessage(ENetworkMessage.DISCONNECTED);
                 break;
 
             case NetworkEventType.DataEvent:
-                UpdateState(ENetworkMessage.DATA);
+                UpdateReceivedMessage(ENetworkMessage.DATA);
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
                 NetMsg msg = (NetMsg)formatter.Deserialize(ms);
@@ -157,28 +152,28 @@ public class NetworkManager : AbstractSingletonManagerWithStateMachine<NetworkMa
             case NetOP.OnCreateAccount:
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)msg);
-                UpdateState(ENetworkMessage.REGISTERED);
+                UpdateReceivedMessage(ENetworkMessage.REGISTERED);
                 break;
             case NetOP.OnLoginRequest:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)msg);
-                UpdateState(ENetworkMessage.LOGGED_IN);
+                UpdateReceivedMessage(ENetworkMessage.LOGGED_IN);
                 break;
             case NetOP.OnAddFollow:
                 Debug.Log("Add Friend");
                 OnAddFollow((Net_OnAddFollow)msg);
-                UpdateState(ENetworkMessage.DATA_ONADDFOLLOW);
+                UpdateReceivedMessage(ENetworkMessage.DATA_ONADDFOLLOW);
                 break;
             case NetOP.OnRequestFollow:
                 Debug.Log("Get Friends");
                 OnRequestFollow((Net_OnRequestFollow)msg);
-                UpdateState(ENetworkMessage.DATA_ONREQUESTFOLLOW);
+                UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
                 break;
                 //Todo change to Onupdatefollow
             case NetOP.UpdateFollow:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
-                UpdateState(ENetworkMessage.DATA_ONUPDATEFOLLOW);
+                UpdateReceivedMessage(ENetworkMessage.DATA_ONUPDATEFOLLOW);
                 break;
         }
     }
