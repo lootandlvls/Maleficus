@@ -28,7 +28,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // 1) Assign appropriate currentState from MaleficusTypes
         startStates = MaleficusTypes.START_APP_STATES;
         // 2) Define "debugStateID" in Awake() of child class
-
         debugStateID = 51;
     }
 
@@ -36,17 +35,9 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     {
         base.Start();
 
-
-
-
         // Bind state machine event
         StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
 
-        //// Debug state                                                                                                                // TODO: Use debug states?
-        //if (MotherOfManagers.Instance.DebugStartMenuState != EMenuState.NONE)
-        //{
-        //    startState = MotherOfManagers.Instance.DebugStartAppState;
-        //}
 
         // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
@@ -76,19 +67,14 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         Debug.Log("Updated state : " + LastState + " -> " + CurrentState + " : " + CurrentScene);
 
-        //// Is in entry scene                                                                                                              // TODO: Use debug entry start state
-        //if (CurrentScene == EScene.ENTRY && MotherOfManagers.Instance.StartSceneOnEntry != EScene.NONE)
-        //{
-        //    Debug.Log("Mother of zebbi says : " + MotherOfManagers.Instance.StartSceneOnEntry);
-        //    UpdateScene(MotherOfManagers.Instance.StartSceneOnEntry);
-        //}
-        //// Has scene changed
-        //else
-        //{
-
         if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
         {
             EScene newScene = MaleficusTypes.FROM_SCENE_TO[CurrentScene];
+            // For AR mode
+            if (CurrentState == EAppState.IN_MENU_IN_STARTING_AR_GAME)
+            {
+                newScene = EScene.AR_GAME;
+            }
             UpdateScene(newScene);
         }
     }
@@ -129,6 +115,13 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 SceneManager.LoadScene(MaleficusTypes.SCENE_GAME);
                 currentScene = EScene.GAME;
                 break;
+
+            case EScene.AR_GAME:
+                SceneManager.LoadScene(MaleficusTypes.SCENE_ARGAME);
+                currentScene = EScene.AR_GAME;
+                break;
+
+                
 
             default:
                 Debug.LogError(sceneToLoad + " is not a valid scene to load!");
@@ -172,6 +165,18 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
             };
         }
+
+          // Launch AR game (change scene)
+        PlayARAction[] playARActions = FindObjectsOfType<PlayARAction>();
+        foreach (PlayARAction action in playARActions)
+        {
+            action.ActionButtonPressed += () =>
+            {
+                UpdateState(EAppState.IN_MENU_IN_STARTING_AR_GAME);
+            };
+        }
+
+
     }
 
 

@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_ENTRY.unity
     guid: edafa10ac17dcf04783721d91dc6fa85
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_ARGAME.unity
+    guid: 66828d7dd9d66cb47bb91a7b9b181dab
   m_configObjects: {}

@@ -9,6 +9,7 @@ public static class MaleficusTypes
     public const string SCENE_ENTRY = "Dummy_ENTRY";         // TODO: Replace with correct scenes
     public const string SCENE_MENU = "Dummy_MENU";
     public const string SCENE_GAME = "Dummy_GAME";
+    public const string SCENE_ARGAME = "Dummy_ARGAME";
 
 
     // Spells path
@@ -62,29 +63,33 @@ public static class MaleficusTypes
     /* Start states for the different scenes*/
     public static Dictionary<EScene, EAppState> START_APP_STATES = new Dictionary<EScene, EAppState>()
     {
-        { EScene.NONE,  EAppState.NONE},
-        { EScene.ENTRY, EAppState.IN_ENTRY_IN_LOADING },
-        { EScene.MENU,  EAppState.IN_MENU_IN_MAIN },
-        { EScene.GAME,  EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.NONE,      EAppState.NONE},
+        { EScene.ENTRY,     EAppState.IN_ENTRY_IN_LOADING },
+        { EScene.MENU,      EAppState.IN_MENU_IN_MAIN },
+        { EScene.GAME,      EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.AR_GAME,   EAppState.IN_GAME_IN_NOT_STARTED },
     };
     public static Dictionary<EScene, EMenuState> START_MENU_STATES = new Dictionary<EScene, EMenuState>()
     {
-        { EScene.NONE,  EMenuState.NONE},
-        { EScene.ENTRY, EMenuState.IN_ENTRY },
-        { EScene.MENU,  EMenuState.IN_MAIN},
-        { EScene.GAME,  EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.NONE,      EMenuState.NONE},
+        { EScene.ENTRY,     EMenuState.IN_ENTRY },
+        { EScene.MENU,      EMenuState.IN_MAIN},
+        { EScene.GAME,      EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.AR_GAME,   EMenuState.IN_GAME_NOT_STARTED},
     };
     public static Dictionary<EScene, ENetworkMessage> START_NETWORKSTATES = new Dictionary<EScene, ENetworkMessage>()
     {
-        { EScene.NONE,  ENetworkMessage.NONE},
-        { EScene.ENTRY, ENetworkMessage.NONE},
-        { EScene.MENU,  ENetworkMessage.NONE},
-        { EScene.GAME,  ENetworkMessage.NONE},
+        { EScene.NONE,      ENetworkMessage.NONE},
+        { EScene.ENTRY,     ENetworkMessage.NONE},
+        { EScene.MENU,      ENetworkMessage.NONE},
+        { EScene.GAME,      ENetworkMessage.NONE},
+        { EScene.AR_GAME,   ENetworkMessage.NONE},
     };
     public static EAppState[] APP_STATES_THAT_TRIGGER_SCENE_CHANGE = new EAppState[]
     {
         EAppState.IN_ENTRY_IN_LOADING,
         EAppState.IN_MENU_IN_STARTING_GAME,
+        EAppState.IN_MENU_IN_STARTING_AR_GAME,
         EAppState.IN_GAME_IN_ENDED
     };
 
@@ -206,6 +211,7 @@ public enum EAppState
     IN_MENU_IN_LOGING_IN,
     IN_MENU_IN_SHOP,
     IN_MENU_IN_STARTING_GAME,
+    IN_MENU_IN_STARTING_AR_GAME,
     IN_GAME_IN_NOT_STARTED,
     IN_GAME_IN_ABOUT_TO_START,
     IN_GAME_IN_RUNNING,
@@ -220,7 +226,8 @@ public enum EScene
     NONE,
     ENTRY,
     MENU,
-    GAME
+    GAME,
+    AR_GAME,
 }
 
 
