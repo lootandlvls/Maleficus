@@ -120,6 +120,27 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     }
 
+    public void OnJoystickPressed(ETouchJoystickType joystickType)
+    {
+        if (InputMode == EInputMode.TOUCH)
+        {
+            switch (joystickType)
+            {
+                case ETouchJoystickType.SPELL_1:
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, touchPlayerID);
+                    break;
+
+                case ETouchJoystickType.SPELL_2:
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_2, touchPlayerID);
+                    break;
+
+                case ETouchJoystickType.SPELL_3:
+                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_3, touchPlayerID);
+                    break;
+            }
+        }
+    }
+
     public void OnJoystickMoved(Vector2 joystickInput, ETouchJoystickType joystickType)
     {
         if (InputMode == EInputMode.TOUCH)
@@ -137,21 +158,26 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
 
+
+
     public void OnJoystickReleased(ETouchJoystickType joystickType)
     {
-        switch(joystickType)
+        if (InputMode == EInputMode.TOUCH)
         {
-            case ETouchJoystickType.SPELL_1:
-                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, touchPlayerID);
-                break;
+            switch (joystickType)
+            {
+                case ETouchJoystickType.SPELL_1:
+                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_1, touchPlayerID);
+                    break;
 
-            case ETouchJoystickType.SPELL_2:
-                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_2, touchPlayerID);
-                break;
+                case ETouchJoystickType.SPELL_2:
+                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_2, touchPlayerID);
+                    break;
 
-            case ETouchJoystickType.SPELL_3:
-                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_3, touchPlayerID);
-                break;
+                case ETouchJoystickType.SPELL_3:
+                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_3, touchPlayerID);
+                    break;
+            }
         }
     }
 
