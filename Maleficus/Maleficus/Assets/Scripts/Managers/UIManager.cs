@@ -75,7 +75,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
-                UpdateState(EMenuState.IN_LOGIN_IN_LOGIN);
+                UpdateState(EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN);
             };
         }
 
@@ -85,7 +85,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
-                UpdateState(EMenuState.IN_LOGIN_IN_REGISTER);
+                UpdateState(EMenuState.IN_ENTRY_IN_LOGIN_IN_REGISTER);
 
             };
         }
@@ -95,9 +95,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
-                UpdateState(EMenuState.IN_LOGIN);
-
-
+                UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
             };
         }
 
@@ -107,7 +105,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             Action.ActionButtonPressed += () =>
             {
                 LoginContext.Instance.OnClickLoginRequest();
-
             };
         }
 
@@ -117,8 +114,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             Action.ActionButtonPressed += () =>
             {
                 RegisterContext.Instance.OnClickCreateAccount();
-
-
             };
         }
 
@@ -186,18 +181,18 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
     {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_LOGING_IN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY || AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
         {
             switch (receivedMsg)
             {
                 case ENetworkMessage.CONNECTED:
-                    UpdateState(EMenuState.IN_LOGIN);
+                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                     break;
                 case ENetworkMessage.LOGGED_IN:
-                    UpdateState(EMenuState.IN_MAIN);
+                    UpdateState(EMenuState.IN_MENU);
                     break;
                 case ENetworkMessage.REGISTERED:
-                    UpdateState(EMenuState.IN_LOGIN);
+                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                     break;
             }
         }

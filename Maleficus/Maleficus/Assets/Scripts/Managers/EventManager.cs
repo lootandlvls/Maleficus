@@ -246,12 +246,12 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region NETWORK
-    public event Action<ENetworkMessage, ENetworkMessage> NETWORK_ReceivedMessageUpdated;
-    public void Invoke_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg, ENetworkMessage lastMsg)
+    public event Action<ENetworkMessage> NETWORK_ReceivedMessageUpdated;
+    public void Invoke_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
     {
         if (NETWORK_ReceivedMessageUpdated != null)
         {
-            NETWORK_ReceivedMessageUpdated.Invoke(receivedMsg, lastMsg);
+            NETWORK_ReceivedMessageUpdated.Invoke(receivedMsg);
         }
         DebugLog("Client received Message: " + receivedMsg);
     }
