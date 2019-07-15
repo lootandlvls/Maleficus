@@ -21,9 +21,7 @@ public class Player : MonoBehaviour, IPlayer
     public float angularSpeed;
     public float speed;
 
-    [SerializeField] private AbstractSpell spellSlot_1;
-    [SerializeField] private AbstractSpell spellSlot_2;
-    [SerializeField] private AbstractSpell spellSlot_3;
+  
     [Header("Charging Spell Effects")] 
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
@@ -373,6 +371,7 @@ public class Player : MonoBehaviour, IPlayer
     public void StopChargingSpell_1()
     {
         Debug.Log("player stopped charging spell 1");
+        playerCharging = false;
        
     }
     public void StopChargingSpell_2()
@@ -392,7 +391,9 @@ public class Player : MonoBehaviour, IPlayer
        
          if (movementType == MovementType.LINEAR_HIT)
           {
-             // spellCharging(spellSlot);
+            playerCharging = true;
+            Debug.Log("Player started Charging");
+              StartCoroutine( spellCharging(spellSlot));
           }
           else if (movementType == MovementType.LINEAR_LASER)
           {
@@ -401,22 +402,10 @@ public class Player : MonoBehaviour, IPlayer
           // TODO: Not working here
           // Deactivate Directional Sprite
           myDirectionalSprite.HideSprite();
-        Debug.Log("spell started charging");
+        
     }
-    /// Set the spells chosen  by the player
-    public void SetSpells(AbstractSpell spell_1, AbstractSpell spell_2, AbstractSpell spell_3)
-    {
-        spellSlot_1 = spell_1;
-        spellSlot_2 = spell_2;
-        spellSlot_3 = spell_3;
-
-        spellsSlot = new Dictionary<int, AbstractSpell>();
-
-        spellsSlot[1] = spell_1;
-        spellsSlot[2] = spell_2;
-        spellsSlot[3] = spell_3;
-       
-    }
+   
+  
 
 
    private void InitializeChargingEffects()
@@ -427,12 +416,12 @@ public class Player : MonoBehaviour, IPlayer
     {
 
         //change to SpellManager.Instance.Player_Spells[playerID][1]
-        spellCooldown_1 = SpellManager.Instance.Player_1_Spells[0].cooldown;
-        spellCooldown_2 = SpellManager.Instance.Player_1_Spells[1].cooldown;
-        spellCooldown_3 = SpellManager.Instance.Player_1_Spells[2].cooldown;
-        spellDuration_1 = SpellManager.Instance.Player_1_Spells[0].spellDuration;
-        spellDuration_2 = SpellManager.Instance.Player_1_Spells[1].spellDuration;
-        spellDuration_3 = SpellManager.Instance.Player_1_Spells[2].spellDuration;
+        spellCooldown_1 = SpellManager.Instance.Player_Spells[PlayerID][0].cooldown;
+        spellCooldown_2 = SpellManager.Instance.Player_Spells[PlayerID][1].cooldown;
+        spellCooldown_3 = SpellManager.Instance.Player_Spells[PlayerID][2].cooldown;
+        spellDuration_1 = SpellManager.Instance.Player_Spells[PlayerID][0].spellDuration;
+        spellDuration_2 = SpellManager.Instance.Player_Spells[PlayerID][1].spellDuration;
+        spellDuration_3 = SpellManager.Instance.Player_Spells[PlayerID][2].spellDuration;
     }
         IEnumerator PlayerCantMove()
     {
@@ -492,8 +481,10 @@ public class Player : MonoBehaviour, IPlayer
         spell.parabolicSpell_EndPosition = SpellEndPosition;
     }
 
-    private void spellCharging(int spellSlot)
+    IEnumerator  spellCharging(int spellSlot)
     {
+
+
         int counter = 0;
         int spellLVL;
         // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
@@ -507,11 +498,14 @@ public class Player : MonoBehaviour, IPlayer
        
         
         speed = 50;
-
-        while (Input.GetButton("CastSpell_1_A"))
+        Debug.Log("spellCharging function working...");
+        while (playerCharging)
         {
+
+           
             if (counter == 10 )
             {
+               
                 animator.SetBool("charging", true);
                 particleSystemBodyEffect.maxParticles = 1 ;
                 particleSystemWandEffect.maxParticles = 1;
@@ -521,11 +515,13 @@ public class Player : MonoBehaviour, IPlayer
                 particleSystemBodyEffect.maxParticles = counter;
                 particleSystemWandEffect.maxParticles = counter;
             }
-           
-              
-                counter++;
+            
+          
+            yield return new WaitForSeconds(0.0f);
+            counter++;
                     
         }
+        Debug.Log("spellCharging function Done!!");
         speed = 75;
         animator.SetBool("charging", false);
         Destroy(wandEffect);
@@ -549,7 +545,7 @@ public class Player : MonoBehaviour, IPlayer
                 spellUpgrade = spell;
             }
         }*/
-        animator.SetTrigger("projectileAttack");
+       // animator.SetTrigger("projectileAttack");
        // StartCoroutine(animationDelay(spellUpgrade, 1));
 
     }

@@ -6,7 +6,7 @@ public class Linear_Hit : AbstractSpell
 {
     private Vector3 movingDirection;  
     public Vector3 directionVector;
-    [SerializeField] float Spellspeed;
+    
     
     [SerializeField] bool shoot;
 
@@ -14,15 +14,16 @@ public class Linear_Hit : AbstractSpell
     void Start()
     {
         AbstractSpell abstractSpell = this.GetComponent<AbstractSpell>();
-        Spellspeed = abstractSpell.Speed;
+      
         myRigidBody = this.GetComponent<Rigidbody>();
     } 
 
+    
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
-            Move();
+           Move();
        
         
     }
@@ -30,19 +31,21 @@ public class Linear_Hit : AbstractSpell
 
     public void Move()
     {
-          movingDirection.z = Spellspeed * Time.deltaTime;
+      
+          movingDirection =  Vector3.forward * Speed * Time.deltaTime;
 
           directionVector = transform.TransformDirection(movingDirection);
-          myRigidBody.velocity = new Vector3(dirVector.x, dirVector.y, dirVector.z);
+          myRigidBody.velocity = new Vector3(directionVector.x, directionVector.y, directionVector.z);
        
-         shoot = false;
+        
 
 
     }
     private void OnTriggerEnter(Collider other)
     {
-        Vector3 movingDirection = Vector3.forward * HitPower;
-        dirVector = transform.TransformDirection(movingDirection);
+
+       Vector3 pushingDirection = Vector3.forward * HitPower;
+        dirVector = transform.TransformDirection(pushingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
 
        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))

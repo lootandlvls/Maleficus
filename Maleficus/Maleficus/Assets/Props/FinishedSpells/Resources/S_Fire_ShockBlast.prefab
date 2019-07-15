@@ -4675,7 +4675,7 @@ GameObject:
   - component: {fileID: 6589609418096585809}
   - component: {fileID: 3462094080666256724}
   m_Layer: 0
-  m_Name: Fire_ShockBlast
+  m_Name: S_Fire_ShockBlast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4754,7 +4754,7 @@ MonoBehaviour:
   parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 5
   speed: 0
-  spellName: 
+  spellName: S_Fire_Shockwave
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1

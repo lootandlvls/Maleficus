@@ -56,10 +56,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
         //spell 2
         Check_ChargingSpell(2, 'A');
         Check_ChargingSpell(2, 'B');
+        Check_ChargingSpell(2, 'C');
+        Check_ChargingSpell(2, 'D');
         // spell 3
         Check_ChargingSpell(3, 'A');
-        Check_ChargingSpell(3, 'B');          
-        
+        Check_ChargingSpell(3, 'B');
+        Check_ChargingSpell(3, 'C');
+        Check_ChargingSpell(3, 'D');
+
         /* Casted spell check */
         // Spell 1
         Check_CastedSpell(1, 'A');
@@ -69,10 +73,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
         //spell 2
         Check_CastedSpell(2, 'A');
         Check_CastedSpell(2, 'B');
+        Check_CastedSpell(2, 'C');
+        Check_CastedSpell(2, 'D');
         // spell 3
         Check_CastedSpell(3, 'A');
         Check_CastedSpell(3, 'B');        // TODO: Add missing Spell buttons in Input settings
-
+        Check_CastedSpell(3, 'C');
+        Check_CastedSpell(3, 'D');
         // Spell 2                                                                                                                   
         //CheckAndCallSpell(2, 'A');
         //CheckAndCallSpell(2, 'B');

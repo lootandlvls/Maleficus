@@ -16,16 +16,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<GameObject> ChargingSpells_Effects = new List<GameObject>();
     public List<AbstractSpell> All_Spells = new List<AbstractSpell>();
 
-    /* public Dictionary<EPlayerID, Dictionary<int, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<int, AbstractSpell>>();*/
+     public Dictionary<EPlayerID, Dictionary<int, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<int, AbstractSpell>>();
   //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
-    /* public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();
+     public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();
      public Dictionary<int, AbstractSpell> Player_2_Spells = new Dictionary<int, AbstractSpell>();
      public Dictionary<int, AbstractSpell> Player_3_Spells = new Dictionary<int, AbstractSpell>();
-     public Dictionary<int, AbstractSpell> Player_4_Spells = new Dictionary<int, AbstractSpell>();*/
-    public List<AbstractSpell> Player_1_Spells = new List<AbstractSpell>();
-    public List<AbstractSpell> Player_2_Spells = new List<AbstractSpell>();
-    public List<AbstractSpell> Player_3_Spells = new List<AbstractSpell>();
-    public List<AbstractSpell> Player_4_Spells = new List<AbstractSpell>();
+     public Dictionary<int, AbstractSpell> Player_4_Spells = new Dictionary<int, AbstractSpell>();
+    public List<AbstractSpell> Player_1_SpellsList = new List<AbstractSpell>();
+    public List<AbstractSpell> Player_2_SpellsList = new List<AbstractSpell>();
+    public List<AbstractSpell> Player_3_SpellsList = new List<AbstractSpell>();
+    public List<AbstractSpell> Player_4_SpellsList = new List<AbstractSpell>();
 
     protected override void  Awake()
     {
@@ -40,6 +40,32 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         activePlayers = PlayerManager.Instance.ActivePlayers;
 
+        
+
+        for (int i = 0; i < 3; i++)
+        {
+            
+            Player_1_Spells[i] = Player_1_SpellsList[i];
+            Player_2_Spells[i] = Player_2_SpellsList[i];
+            Player_3_Spells[i] = Player_3_SpellsList[i];
+            Player_4_Spells[i] = Player_4_SpellsList[i];
+           
+        }
+      
+        Player_Spells[EPlayerID.PLAYER_1] = Player_1_Spells;
+        Player_Spells[EPlayerID.PLAYER_2] = Player_2_Spells;
+        Player_Spells[EPlayerID.PLAYER_3] = Player_3_Spells;
+        Player_Spells[EPlayerID.PLAYER_4] = Player_4_Spells;
+
+        for (int i = 0; i < 3; i++)
+        {
+
+            Debug.Log(Player_Spells[EPlayerID.PLAYER_1][i].SpellName);
+            Debug.Log(Player_Spells[EPlayerID.PLAYER_2][i].SpellName);
+            Debug.Log(Player_Spells[EPlayerID.PLAYER_3][i].SpellName);
+            Debug.Log(Player_Spells[EPlayerID.PLAYER_4][i].SpellName);
+
+        }
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
     }
@@ -171,19 +197,19 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             case EPlayerID.PLAYER_1:
                 switch (spell_Input_ID)
                 {
+                    case 0:
+                       
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
+                        InstantiateSpell(spellToCast, playerID);
+
+                        break;
                     case 1:
-                        //change to  spellToCast = Player_Spells[playerID][spell_Input_ID]; when dictionary are ready to use
-                        spellToCast = Player_1_Spells[0];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
 
                         break;
                     case 2:
-                        spellToCast = Player_1_Spells[1];
-                        InstantiateSpell(spellToCast, playerID);
-
-                        break;
-                    case 3:
-                        spellToCast = Player_1_Spells[2];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                 }
@@ -192,16 +218,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             case EPlayerID.PLAYER_2:
                 switch (spell_Input_ID)
                 {
+                    case 0:
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
                     case 1:
-                        spellToCast = Player_2_Spells[0];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                     case 2:
-                        spellToCast = Player_2_Spells[1];
-                        InstantiateSpell(spellToCast, playerID);
-                        break;
-                    case 3:
-                        spellToCast = Player_2_Spells[2];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                 }
@@ -210,16 +236,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             case EPlayerID.PLAYER_3:
                 switch (spell_Input_ID)
                 {
+                    case 0:
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
                     case 1:
-                        spellToCast = Player_3_Spells[0];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                     case 2:
-                        spellToCast = Player_3_Spells[1];
-                        InstantiateSpell(spellToCast, playerID);
-                        break;
-                    case 3:
-                        spellToCast = Player_3_Spells[2];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                 }
@@ -227,16 +253,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             case EPlayerID.PLAYER_4:
                 switch (spell_Input_ID)
                 {
+                    case 0:
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
+                        InstantiateSpell(spellToCast, playerID);
+                        break;
                     case 1:
-                        spellToCast = Player_4_Spells[0];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                     case 2:
-                        spellToCast = Player_4_Spells[1];
-                        InstantiateSpell(spellToCast, playerID);
-                        break;
-                    case 3:
-                        spellToCast = Player_4_Spells[2];
+                        spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         break;
                 }

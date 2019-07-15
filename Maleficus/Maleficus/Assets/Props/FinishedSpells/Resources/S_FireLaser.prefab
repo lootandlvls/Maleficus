@@ -13799,9 +13799,9 @@ MonoBehaviour:
   myRigidBody: {fileID: 0}
   dirVector: {x: 0, y: 0, z: 0}
   parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 80
-  speed: 20
-  spellName: 
+  hitPower: 1
+  speed: 0
+  spellName: S_FireLaser
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
