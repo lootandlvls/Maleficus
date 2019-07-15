@@ -40,8 +40,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     protected void Start()
     {
-        Start();
-
 
         //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
 
