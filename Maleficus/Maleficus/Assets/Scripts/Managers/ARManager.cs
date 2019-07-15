@@ -6,10 +6,14 @@ using UnityEngine.UI;
 
 public class ARManager : AbstractSingletonManager<ARManager>
 {
+    public float SizeFactor { get { return sizeFactor; } }
+
     private ContentPositioningBehaviour[] contentPositionings;
     private AnchorInputListenerBehaviour[] anchorInputListeners;
 
-    [SerializeField] private Text lockButtonText;
+    private ARLockButton lockButton;
+
+    private float sizeFactor;
 
     private bool isAnchorListeningActive = true;
 
@@ -22,6 +26,25 @@ public class ARManager : AbstractSingletonManager<ARManager>
         {
             cpb.OnContentPlaced.AddListener(OnContentPlaced);
         }
+
+        AugmentedStage[] augmentedStages = FindObjectsOfType<AugmentedStage>();
+        foreach (AugmentedStage augmentedStage in augmentedStages)
+        {
+            sizeFactor = augmentedStage.transform.localScale.x;
+            break;
+        }
+
+        ARLockButton[] arLockButtons = FindObjectsOfType<ARLockButton>();
+        foreach (ARLockButton arLockButton in arLockButtons)
+        {
+            lockButton = arLockButton;
+            break;
+        }
+
+
+
+        Debug.Log("Size factor : " + sizeFactor);
+
 
         anchorInputListeners = FindObjectsOfType<AnchorInputListenerBehaviour>();
     }
@@ -44,11 +67,11 @@ public class ARManager : AbstractSingletonManager<ARManager>
 
         if (isAnchorListeningActive == true)
         {
-            lockButtonText.color = Color.green;
+            lockButton.SetIsUnlocked();
         }
         else
         {
-            lockButtonText.color = Color.red;
+            lockButton.SetIsLocked();
         }
     }
 

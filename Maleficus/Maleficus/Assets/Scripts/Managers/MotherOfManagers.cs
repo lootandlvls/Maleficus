@@ -38,16 +38,6 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     private void On_APP_SceneChanged(EScene newScene)
     {
-        // Find and destroy other Managers in the scene
-        //MotherOfManagers[] otherManagers = FindObjectsOfType<MotherOfManagers>();
-        //foreach (MotherOfManagers motherOfManager in otherManagers)
-        //{
-        //    if (motherOfManager != this)
-        //    {
-        //        Destroy(motherOfManager.gameObject);
-        //    }
-        //}
-
         InitializeManagers();
     }
 
