@@ -81,7 +81,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
 
-        animator.SetFloat("run", playerInput.Move_X + playerInput.Move_Y);
+       
         if (Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) == 0)
         {
             animator.SetBool("idle", true);
