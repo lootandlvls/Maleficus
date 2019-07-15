@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6536862604725729376}
   - component: {fileID: 2641138727745751977}
   m_Layer: 0
-  m_Name: IceBall_lvl_1
+  m_Name: S_IceBall_lvl_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,18 +95,17 @@ MonoBehaviour:
   dirVector: {x: 0, y: 0, z: 0}
   parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 20
-  speed: 40
-  spellName: 
+  speed: 800
+  spellName: S_IceBall
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 0
   cooldown: 3
+  spellDuration: 0
   movementType: 0
   debuffEffects: 06000000
   buffEffects: 
   directionVector: {x: 0, y: 0, z: 0}
-  Spellspeed: 0
-  spellDuration: 0
   shoot: 0
 --- !u!54 &6536862604725729376
 Rigidbody:

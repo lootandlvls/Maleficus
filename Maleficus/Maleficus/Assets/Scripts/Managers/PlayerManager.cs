@@ -146,7 +146,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     activePlayers[playerID].readyToUseSpell_1 = false;
                     activePlayers[playerID].StopChargingSpell_1();
                     
-                    SpellManager.Instance.CastSpell(playerID, 1);
+                    SpellManager.Instance.CastSpell(playerID, 0);
                     StartCoroutine(ReadyToUseSpell(playerID,activePlayers[playerID].spellDuration_1, 0));
                     StartCoroutine(ReadyToUseSpell(playerID,activePlayers[playerID].spellCooldown_1 + activePlayers[playerID].spellDuration_1, 1));
                 }
@@ -159,7 +159,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     activePlayers[playerID].readyToUseSpell_2 = false;
                    
                     activePlayers[playerID].StopChargingSpell_2();
-                    SpellManager.Instance.CastSpell(playerID, 2);
+                    SpellManager.Instance.CastSpell(playerID, 1);
                     StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellDuration_2, 0));
                     StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellCooldown_2 + activePlayers[playerID].spellDuration_2, 2));
                 }
@@ -172,7 +172,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     activePlayers[playerID].readyToUseSpell_3 = false;
                   
                     activePlayers[playerID].StopChargingSpell_3();
-                    SpellManager.Instance.CastSpell(playerID, 3);
+                    SpellManager.Instance.CastSpell(playerID, 2);
                     StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellDuration_3, 0));
                     StartCoroutine(ReadyToUseSpell(playerID, activePlayers[playerID].spellCooldown_3 + activePlayers[playerID].spellDuration_3 , 3));
                 }
@@ -192,9 +192,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 {
                 
 
-                    MovementType movementType = SpellManager.Instance.Player_1_Spells[0].MovementType;
-                    
+                    MovementType movementType = SpellManager.Instance.Player_Spells[playerID][0].MovementType;
+                   
                     activePlayers[playerID].StartChargingSpell_1(movementType);
+                    activePlayers[playerID].playerCharging = true;
                 }
                
                 break;
@@ -204,9 +205,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 if ( activePlayers[playerID].readyToUseSpell_2 && activePlayers[playerID].readyToShoot)
                 {
                     
-                    MovementType movementType = SpellManager.Instance.Player_1_Spells[1].MovementType;
+                    MovementType movementType = SpellManager.Instance.Player_Spells[playerID][1].MovementType;
                   
                     activePlayers[playerID].StartChargingSpell_2(movementType);
+                    activePlayers[playerID].playerCharging = true;
                 }
                
                 break;
@@ -216,9 +218,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 if ( activePlayers[playerID].readyToUseSpell_3 && activePlayers[playerID].readyToShoot)
                 {
                    
-                    MovementType movementType = SpellManager.Instance.Player_1_Spells[2].MovementType;
+                    MovementType movementType = SpellManager.Instance.Player_Spells[playerID][2].MovementType;
                   
                     activePlayers[playerID].StartChargingSpell_3(movementType);
+                    activePlayers[playerID].playerCharging = true;
                 }
                
 

@@ -52,7 +52,8 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     
 // Start is called before the first frame update
     private void Start()
-    {
+    {  
+
         dirVector = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
         if (OnSelfEffect)
