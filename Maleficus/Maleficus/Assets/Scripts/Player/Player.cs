@@ -181,145 +181,7 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    /* public void CastSpell_1()
-    {
-       
-
-        if (readyToUseSpell_1 && readyToShoot)
-        {
-
-            
-            readyToShoot = false;
-            readyToUseSpell_1 = false;
-            CastSpell(spellsSlot[1]);
-            StartCoroutine(ReadyToUseSpell(spellsSlot[1].spellDuration, 0));
-            StartCoroutine(ReadyToUseSpell(spellsSlot[1].cooldown, 1));
-        }
-        else
-        {
-            return;
-        }
-      
-    }
-
-    public void CastSpell_2()
-    {
-        if (readyToUseSpell_2 && readyToShoot)
-        {
-           
-            readyToShoot = false;
-            readyToUseSpell_2 = false;
-            CastSpell(spellsSlot[2]);
-            StartCoroutine(ReadyToUseSpell(spellsSlot[2].spellDuration, 0));
-            StartCoroutine(ReadyToUseSpell(spellsSlot[2].cooldown, 2));
-        }
-        else
-        {
-            return;
-        }
-       
-    }
-
-    public void CastSpell_3()
-    {
-        if (readyToUseSpell_3 && readyToShoot)
-        {
-            
-            readyToShoot = false;
-            readyToUseSpell_3 = false;
-            CastSpell(spellsSlot[3]);
-            StartCoroutine(ReadyToUseSpell(spellsSlot[3].spellDuration, 0));
-            StartCoroutine(ReadyToUseSpell(spellsSlot[3].cooldown, 3));
-        }
-        else
-        {
-            return;
-        }
-        
-    }*/
-
-    //private void CastSpell(int SpellSlot , MovementType movementType)
-    //{
-    //    if (movementType == MovementType.AOE)
-    //    //if (spellToCast.MovementType == MovementType.AOE)
-    //    {
-    //        animator.SetTrigger("shockwave");
-    //        Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.3f, transform.position.z);
-    //        AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
-    //        spell.CastingPlayerID = PlayerID;
-    //        spell.transform.parent = this.transform;
-    //        Debug.Log("AOE SPELL CASTED");
-    //        //   spell.parabolicSpell_EndPosition = SpellEndPosition;
-    //    }
-    //    else if (movementType == MovementType.LINEAR_INSTANT)
-    //    //else if (spellToCast.MovementType == MovementType.LINEAR_INSTANT)
-    //    {
-
-    //        Quaternion rotation = new Quaternion(transform.rotation.x, transform.position.y, transform.rotation.z, 1);
-    //    /  AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
-    //        spell.transform.rotation = this.transform.rotation;
-    //        spell.transform.parent = this.transform;
-    //        spell.CastingPlayerID = PlayerID;
-    //        Debug.Log("LINEAR INSTANT SPELL CASTED");
-    //    }
-    //    else if (movementType == MovementType.TELEPORT)
-    //    {
-    //        animator.SetTrigger("teleport");
-    //        StartCoroutine(animationDelay(spellToCast, 2));
-    //        Vector3 pos = new Vector3(transform.position.x, transform.position.y + 0.1f, transform.position.z);
-    //         AbstractSpell spell = Instantiate(spellToCast, pos, transform.rotation);
-    //         spell.CastingPlayerID = PlayerID;
-    //    }
-    //    else if (movementType == MovementType.LINEAR_LASER)
-    //    {
-    //        animator.SetBool("channeling", true);
-    //        Quaternion rotation = new Quaternion(transform.rotation.x, transform.position.y, transform.rotation.z, 1);
-    //      /*  AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, rotation);
-    //        spell.transform.rotation = this.transform.rotation;
-    //        spell.transform.parent = this.transform;
-    //        spell.CastingPlayerID = PlayerID;*/
-    //        StartCoroutine(PlayerCantMove());
-    //    }
-    //    else
-    //    {
-    //        StartCoroutine(spellCharging(spellToCast));
-    //         /* int counter = 1;
-    //          while (counter < 4)
-    //           {
-    //               if (Input.GetButton("CastSpell_1_A"))
-    //               {
-    //                  StartCoroutine(spellCharging());
-    //                  counter++;
-    //               }
-    //               else
-    //               {
-    //                   return;
-    //               }
-
-
-    //         /*  AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, transform.rotation);
-    //            spell.CastingPlayerID = PlayerID;
-    //            spell.parabolicSpell_EndPosition = SpellEndPosition;
-    //        }
-            
-    //         AbstractSpell spellUpgrade = spellToCast;
-    //         foreach(AbstractSpell spell in SpellManager.Instance.spellsUpgrade)
-    //        {
-                
-    //            if (spell.SpellName.Equals(spellToCast.SpellName + counter))
-    //            {
-    //                Debug.Log(spellToCast.SpellName + counter + "has been chosen");
-    //                spellUpgrade = spell;
-    //            }
-    //        }
-    //        animator.SetTrigger("projectileAttack");
-    //        StartCoroutine(animationDelay(spellUpgrade, 1));*/
-    //    }
-        
-    //                                                                    // TODO: Not working here
-    //    // Deactivate Directional Sprite
-    //    myDirectionalSprite.HideSprite();
-    //}
+   
 
 
     public void StartChargingSpell_1(MovementType movementType)
@@ -327,7 +189,7 @@ public class Player : MonoBehaviour, IPlayer
         if (readyToUseSpell_1 && readyToShoot)
         {
            
-            StartChargingSpell(1, movementType);
+         //   StartChargingSpell(1, movementType);
        //     StartCoroutine(ReadyToUseSpell(spellDuration_1, 0));
            // StartCoroutine(ReadyToUseSpell(spellCooldown_1, 1));
         }
@@ -343,7 +205,7 @@ public class Player : MonoBehaviour, IPlayer
         if (readyToUseSpell_2 && readyToShoot)
         {
           
-            StartChargingSpell(2, movementType);
+        //    StartChargingSpell(2, movementType);
            // StartCoroutine(ReadyToUseSpell(spellDuration_2, 0));
             //StartCoroutine(ReadyToUseSpell(spellCooldown_2, 2));
         }
@@ -357,7 +219,7 @@ public class Player : MonoBehaviour, IPlayer
         if (readyToUseSpell_3 && readyToShoot)
         {
           
-            StartChargingSpell(3, movementType);
+          //  StartChargingSpell(3, movementType);
          //   StartCoroutine(ReadyToUseSpell(spellDuration_3, 0));
          //   StartCoroutine(ReadyToUseSpell(spellCooldown_3, 3));
         }

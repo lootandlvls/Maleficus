@@ -280,7 +280,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
              AbstractSpell spell = Instantiate(spellToCast, position, rotation);
-              spell.CastingPlayerID = playerID;
+            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            {
+                spell.transform.localScale = activePlayers[playerID].transform.localScale;
+                spell.hitPower *= (int)spell.transform.parent.localScale.x; ;
+
+            }
+            spell.CastingPlayerID = playerID;
               spell.transform.parent = activePlayers[playerID].transform;
                Debug.Log("AOE SPELL CASTED");
               //spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
@@ -292,7 +298,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Transform position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
                 AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
-                spell.transform.rotation = activePlayers[playerID].transform.rotation;
+            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            {
+                spell.transform.localScale = activePlayers[playerID].transform.localScale;
+                spell.speed *= spell.transform.parent.localScale.x;
+                spell.hitPower *= (int)spell.transform.parent.localScale.x; ;
+            }
+            spell.transform.rotation = activePlayers[playerID].transform.rotation;
                 spell.transform.parent = activePlayers[playerID].transform;
                 spell.CastingPlayerID = playerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
@@ -305,7 +317,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
            StartCoroutine(animationDelay(spellToCast, playerID, 2));
              Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
              AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
-             spell.CastingPlayerID = playerID;
+            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            {
+                spell.transform.localScale = activePlayers[playerID].transform.localScale;
+                spell.speed *= spell.transform.parent.localScale.x;
+                spell.hitPower *= (int)spell.transform.parent.localScale.x; ;
+            }
+            spell.CastingPlayerID = playerID;
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
@@ -313,7 +331,12 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Transform position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;    
              AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
-              spell.transform.rotation = activePlayers[playerID].transform.rotation;
+            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            {
+                spell.transform.localScale = activePlayers[playerID].transform.localScale;
+                spell.speed *= spell.transform.parent.localScale.x;
+            }
+            spell.transform.rotation = activePlayers[playerID].transform.rotation;
               spell.transform.parent = activePlayers[playerID].transform;
               spell.CastingPlayerID = playerID;
            // StartCoroutine(PlayerCantMove());
@@ -414,6 +437,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         yield return new WaitForSeconds(0.3f);
         AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition.position, activePlayers[playerID].transform.rotation);
+        if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+        {
+            spell.transform.localScale = activePlayers[playerID].transform.localScale;
+            spell.speed *= spell.transform.parent.localScale.x;
+            spell.hitPower *= (int) spell.transform.parent.localScale.x; ;
+        }
+        
         spell.CastingPlayerID = playerID;
         spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
     }
