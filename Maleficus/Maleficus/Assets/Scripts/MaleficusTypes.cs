@@ -217,7 +217,6 @@ public enum EAppState
     IN_GAME_IN_RUNNING,
     IN_GAME_IN_PAUSED,
     IN_GAME_IN_ENDED,
-    IN_GAME_IN_ABORTED,
     TEST
 }
 
@@ -477,5 +476,15 @@ public enum ENetworkMessage
     LOGGED_IN,
     LOGGED_OUT,
     REGISTERED
+}
+#endregion
+
+#region ENEMIES
+public enum EnemyType
+{
+    BASIC,
+    CHAMPION,
+    BOSS,
+    MINION
 }
 #endregion

@@ -21,32 +21,7 @@ public class ARManager : AbstractSingletonManager<ARManager>
     {
         base.Awake();
 
-        contentPositionings = FindObjectsOfType<ContentPositioningBehaviour>();
-        foreach (ContentPositioningBehaviour cpb in contentPositionings)
-        {
-            cpb.OnContentPlaced.AddListener(OnContentPlaced);
-        }
-
-        AugmentedStage[] augmentedStages = FindObjectsOfType<AugmentedStage>();
-        foreach (AugmentedStage augmentedStage in augmentedStages)
-        {
-            sizeFactor = augmentedStage.transform.localScale.x;
-            break;
-        }
-
-        ARLockButton[] arLockButtons = FindObjectsOfType<ARLockButton>();
-        foreach (ARLockButton arLockButton in arLockButtons)
-        {
-            lockButton = arLockButton;
-            break;
-        }
-
-
-
-        Debug.Log("Size factor : " + sizeFactor);
-
-
-        anchorInputListeners = FindObjectsOfType<AnchorInputListenerBehaviour>();
+        FindAndBindButtonActions();
     }
 
     private void OnContentPlaced(GameObject placedContent)
@@ -67,17 +42,53 @@ public class ARManager : AbstractSingletonManager<ARManager>
 
         if (isAnchorListeningActive == true)
         {
+            Debug.Log("Set unlocked");
             lockButton.SetIsUnlocked();
         }
         else
         {
+            Debug.Log("Set locked");
             lockButton.SetIsLocked();
         }
     }
 
-    public void OnLockButtonPressed()
+    protected override void FindAndBindButtonActions()
     {
-        SetAnchorsInputActive(!isAnchorListeningActive);
+        base.FindAndBindButtonActions();
+
+        contentPositionings = FindObjectsOfType<ContentPositioningBehaviour>();
+        foreach (ContentPositioningBehaviour cpb in contentPositionings)
+        {
+            cpb.OnContentPlaced.AddListener(OnContentPlaced);
+        }
+
+        AugmentedStage[] augmentedStages = FindObjectsOfType<AugmentedStage>();
+        foreach (AugmentedStage augmentedStage in augmentedStages)
+        {
+            sizeFactor = augmentedStage.transform.localScale.x;
+            break;
+        }
+
+        anchorInputListeners = FindObjectsOfType<AnchorInputListenerBehaviour>();
+
+        ARLockButton[] arLockButtons = FindObjectsOfType<ARLockButton>();
+        foreach (ARLockButton arLockButton in arLockButtons)
+        {
+            lockButton = arLockButton;
+
+            lockButton.ActionButtonPressed += () =>
+            {
+                OnLockButtonPressed();
+            };
+            break;
+        }
     }
+
+    private void OnLockButtonPressed()
+    {
+        SetAnchorsInputActive(!isAnchorListeningActive);                                                            // TODO: Is working?
+
+    }
+
 }
 

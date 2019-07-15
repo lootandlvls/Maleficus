@@ -20,7 +20,7 @@ public abstract class AbstractManager : MonoBehaviour
     /// </summary>
     public virtual void Initialize()
     {
-        FindAndBindButtonActions();
+        FindAndBindButtonActions();                                                                         // TODO: Pack FindAndBindButtonActions into Initialize()
     }
 
     /// <summary>

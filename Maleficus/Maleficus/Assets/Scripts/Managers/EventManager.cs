@@ -257,6 +257,33 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
     #endregion
 
+
+    #region ENEMIES
+    public event Action<IEnemy> ENEMIES_EnemyAttackedPlayer;                                        // TODO: Add reference to attacked player ID
+    public void Invoke_ENEMIES_EnemyAttackedPlayer(IEnemy attackingEnemy)
+    {
+        if (ENEMIES_EnemyAttackedPlayer != null)
+        {
+            ENEMIES_EnemyAttackedPlayer.Invoke(attackingEnemy);
+        }
+        DebugLog("Enemy " + attackingEnemy.ToString() + " attacked ");
+    }
+
+
+    //public event Action<IEnemy> EnemyDied;
+    public event Action<IEnemy> ENEMIES_EnemyDied;
+    public void Invoke_ENEMIES_EnemyDied(IEnemy deadEnemy)
+    {
+        if (ENEMIES_EnemyDied != null)
+        {
+            ENEMIES_EnemyDied.Invoke(deadEnemy);
+        }
+        DebugLog("Enemy " + deadEnemy.ToString() + " died ");
+    }
+
+    #endregion;
+
+
     private void DebugLog(string messageLog)
     {
         if (MotherOfManagers.Instance.IsDebugLogEvents == true)

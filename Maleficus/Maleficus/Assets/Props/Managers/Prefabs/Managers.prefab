@@ -86,7 +86,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3e982f14d6c49a498fb25afa1773562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockButtonText: {fileID: 0}
 --- !u!1 &3833435040366009655
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,6 +506,7 @@ Transform:
   - {fileID: 4335998296438487354}
   - {fileID: 5409742357272549645}
   - {fileID: 8380552848578030185}
+  - {fileID: 5576756921845005498}
   m_Father: {fileID: 4335998295704777601}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -648,3 +648,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5af407d41952745a283afbca211213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8933254075485993536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5576756921845005498}
+  - component: {fileID: 5661305601773117063}
+  m_Layer: 0
+  m_Name: EnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5576756921845005498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8933254075485993536}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2613532659259175318}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5661305601773117063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8933254075485993536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bd2d1f1c37160e4681c8bacc2785b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basicEnemyPrefab: {fileID: 114409282968527766, guid: 359597ca943bcba48b221bef1fffc8fd,
+    type: 3}
+  basicEnemyMaxNumber: 5
+  championEnemyPrefab: {fileID: 114372475374285590, guid: 06998be293abf7e4fb8f8b751689b20b,
+    type: 3}
+  championEnemyMaxNumber: 2
+  bossEnemyPrefab: {fileID: 114295743167796352, guid: 97e6622e1073ddb4d9cbd459796c7915,
+    type: 3}
+  bossEnemyMaxNumber: 1
+  minionEnemyPrefab: {fileID: 114409282968527766, guid: 498b2932a69494a45a82e70ed955bf0b,
+    type: 3}
+  enemySpawnPositions: []
+  bossSpawnPosition: {fileID: 0}

@@ -220,13 +220,13 @@ PrefabInstance:
         type: 3}
       propertyPath: Player_1_SpellsList.Array.data[1]
       value: 
-      objectReference: {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072,
+      objectReference: {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d,
         type: 3}
     - target: {fileID: 3900233467615566551, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: Player_1_SpellsList.Array.data[2]
       value: 
-      objectReference: {fileID: 2529863791790152314, guid: 5f5d57d7d5418d94483960af93d846ab,
+      objectReference: {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639,
         type: 3}
     - target: {fileID: 3900233467615566551, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
