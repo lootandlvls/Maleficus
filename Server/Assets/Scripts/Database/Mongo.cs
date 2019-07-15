@@ -14,7 +14,9 @@ public class Mongo
 
     private IMongoCollection<Model_Account> accounts;
     private IMongoCollection<Model_Follow> follows;
+    private IMongoCollection<Model_Lobby> lobbys;
 
+    // initialize the connection to the database
     public void Init() { 
         
         client = new MongoClient(MONGO_URI);
@@ -22,9 +24,12 @@ public class Mongo
         // initialize collections here
         accounts = db.GetCollection<Model_Account>("account");
         follows = db.GetCollection<Model_Follow>("follow");
+        lobbys = db.GetCollection<Model_Lobby>("lobby");
         
         Debug.Log("Database has been initialized");
     }
+
+    // set the connection to the database to null
     public void Shutdown()
     {
         client = null;
@@ -71,12 +76,13 @@ public class Mongo
             rollCount++;
             if(rollCount > 1000)
             {
-                Debug.Log("We rolled to many times, suggest usernae change!");
+                Debug.Log("We rolled to many times, suggest username change!");
                 return false;
             }
         }
         accounts.InsertOne(newAccount);
         return true;
+
     }
     public Model_Account LoginAccount(string usernameOrEmail, string password, int cnnId, string token)
     {
@@ -196,9 +202,25 @@ public class Mongo
         
         return false;
     }
+
+    public bool InitLobby(string token)
+    {
+        if (FindAccountByToken(token) != null)
+        {
+            Model_Lobby newLobby = new Model_Lobby();
+            newLobby.Token = token;
+
+            lobbys.InsertOne(newLobby);
+            return true;
+        }
+
+        return false;
+    }
     #endregion
 
     #region Fetch
+
+    #region Account
     public Model_Account FindAccountByEmail(string email)
     {
         return accounts.Find(u => u.Email == email).FirstOrDefault<Model_Account>();
@@ -219,6 +241,15 @@ public class Mongo
     {
         return accounts.Find(u => u.ActiveConnection == connectionId).FirstOrDefault<Model_Account>();
     }
+
+    public Model_Lobby FindLobbyByToken(string token)
+    {
+        return lobbys.Find(u => u.Token == token).FirstOrDefault<Model_Lobby>();
+    }
+
+    #endregion
+
+    #region Follow
     public List<Account> FindAllFollowFrom(string token)
     {
         Model_Reference self = new Model_Reference("account", FindAccountByToken(token)._id);
@@ -256,6 +287,9 @@ public class Mongo
         }
         return null;
     }
+
+    #endregion
+
     #endregion
 
     #region Update
