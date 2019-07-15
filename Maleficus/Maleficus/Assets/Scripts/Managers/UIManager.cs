@@ -71,7 +71,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         OpenLoginPopUpAction[] OLPUActions = FindObjectsOfType<OpenLoginPopUpAction>();
-        foreach(OpenLoginPopUpAction Action in OLPUActions)
+        foreach (OpenLoginPopUpAction Action in OLPUActions)
         {
             Action.ActionButtonPressed += () =>
             {
@@ -81,7 +81,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
 
         OpenRegisterPopUpAction[] ORPActions = FindObjectsOfType<OpenRegisterPopUpAction>();
-        foreach(OpenRegisterPopUpAction Action in ORPActions)
+        foreach (OpenRegisterPopUpAction Action in ORPActions)
         {
             Action.ActionButtonPressed += () =>
             {
@@ -91,7 +91,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
-        foreach(GoBackToLoginAction Action in GBLActions)
+        foreach (GoBackToLoginAction Action in GBLActions)
         {
             Action.ActionButtonPressed += () =>
             {
@@ -102,7 +102,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
-        foreach(LoginRequestAction Action in LRActions)
+        foreach (LoginRequestAction Action in LRActions)
         {
             Action.ActionButtonPressed += () =>
             {
@@ -112,7 +112,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         RegisterRequestAction[] RRActions = FindObjectsOfType<RegisterRequestAction>();
-        foreach(RegisterRequestAction Action in RRActions)
+        foreach (RegisterRequestAction Action in RRActions)
         {
             Action.ActionButtonPressed += () =>
             {
@@ -123,13 +123,24 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         AddFriendAction[] AFActions = FindObjectsOfType<AddFriendAction>();
-        foreach(AddFriendAction Action in AFActions)
+        foreach (AddFriendAction Action in AFActions)
         {
             Action.AddFriendActionPressed += () =>
             {
                 FriendsContext.Instance.OnClickAddFollow();
             };
         }
+
+        InitLobbyAction[] ILActions = FindObjectsOfType<InitLobbyAction>();
+        foreach (InitLobbyAction Action in ILActions)
+        {
+            Action.ActionButtonPressed += () =>
+            {
+                NetworkManager.Instance.SendInitLobby();
+            };
+        }
+    }
+        
     #region Events Callbacks
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
@@ -211,13 +222,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     }
     #endregion
 
-        InitLobbyAction[] ILActions = FindObjectsOfType<InitLobbyAction>();
-        foreach (InitLobbyAction Action in ILActions)
-        {
-            Action.ActionButtonPressed += () =>
-            {
-                NetworkManager.Instance.SendInitLobby();
-            };
-        }
-    }
+        
 }
+
