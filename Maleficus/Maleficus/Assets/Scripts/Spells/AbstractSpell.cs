@@ -105,6 +105,23 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
             destroyEffect.DestroySpell();
         }
     }
+
+     protected void ProcessHits(IEnemy hitEnemy)
+    {
+        
+        // Debug.Log(dirVector);
+        EventManager.Instance.Invoke_SPELLS_SpellHitEnemy(hitEnemy);
+
+        ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+        if (destroyEffect != null)
+        {
+            destroyEffect.DestroySpell();
+        }
+    }
+
+
+
+
     // Vector3 dir = (other.transform.position - transform.position) * power;
     protected void ExplostionProcessHits(IPlayer[] hitPlayers)
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GM_Single_Lives : AbstractGameMode<PlayerStats_Lives>
+public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 {
     // Should only be called directly after object construction (used in Start method)
     public int TotalLives { get { return totalLives; } set { totalLives = value; } }
@@ -15,7 +15,7 @@ public class GM_Single_Lives : AbstractGameMode<PlayerStats_Lives>
         base.Awake();
 
         // Define in child class correct game mode!
-        gameMode = EGameMode.NONE;
+        gameMode = EGameMode.SINGLE_LIVES_5;
     }
 
 
