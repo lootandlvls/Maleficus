@@ -34,20 +34,19 @@ public class ARManager : AbstractSingletonManager<ARManager>
 
     private void SetAnchorsInputActive(bool isActive)
     {
+        isAnchorListeningActive = isActive;
+
         foreach (AnchorInputListenerBehaviour listener in anchorInputListeners)
         {
             listener.enabled = isActive;
-            isAnchorListeningActive = isActive;
         }
 
-        if (isAnchorListeningActive == true)
+        if (isActive == true)
         {
-            Debug.Log("Set unlocked");
             lockButton.SetIsUnlocked();
         }
         else
         {
-            Debug.Log("Set locked");
             lockButton.SetIsLocked();
         }
     }
@@ -74,21 +73,19 @@ public class ARManager : AbstractSingletonManager<ARManager>
         ARLockButton[] arLockButtons = FindObjectsOfType<ARLockButton>();
         foreach (ARLockButton arLockButton in arLockButtons)
         {
-            lockButton = arLockButton;
-
-            lockButton.ActionButtonPressed += () =>
+            if (lockButton == null)
             {
-                OnLockButtonPressed();
-            };
+                lockButton = arLockButton;
+                lockButton.SetIsUnlocked();
+
+                lockButton.ActionButtonPressed += () =>
+                {
+                    SetAnchorsInputActive(!isAnchorListeningActive);
+                };
+            }
+            
             break;
         }
     }
-
-    private void OnLockButtonPressed()
-    {
-        SetAnchorsInputActive(!isAnchorListeningActive);                                                            // TODO: Is working?
-
-    }
-
 }
 
