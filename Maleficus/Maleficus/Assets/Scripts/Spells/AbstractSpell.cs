@@ -123,7 +123,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
 
     // Vector3 dir = (other.transform.position - transform.position) * power;
-    protected void ExplostionProcessHits(IPlayer[] hitPlayers)
+    protected void ExplosionProcessHits(IPlayer[] hitPlayers)
     {
         foreach (IPlayer hitPlayer in hitPlayers)
         {   

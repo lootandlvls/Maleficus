@@ -92,22 +92,23 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Game ended : " + gameModeEnded + ". Aborted : " + wasAborted.ToString());
     }
 
-    //public event Action<EGameMode> GAME_GameAborted;
-    //public void Invoke_GAME_GameAborted(EGameMode gameModeAborted)
-    //{
-    //    if (GAME_GameAborted != null)
-    //    {
-    //        GAME_GameAborted.Invoke(gameModeAborted);
-    //    }
-    //    DebugLog("Game aborted : " + gameModeAborted);
-    //}
-
-    public event Action<ETeamID, EGameMode> GAME_TeamWon;
-    public void Invoke_GAME_PlayerWon(ETeamID winnerTeamID, EGameMode gameMode)
+    public event Action<AbstractPlayerStats, EGameMode> GAME_PlayerStatsUpdated;
+    public void Invoke_GAME_PlayerStatsUpdated(AbstractPlayerStats updatedPlayerStats, EGameMode fromGameMode)
     {
-        if (GAME_TeamWon != null)
+        if (GAME_PlayerStatsUpdated != null)
         {
-            GAME_TeamWon.Invoke(winnerTeamID, gameMode);
+            GAME_PlayerStatsUpdated.Invoke(updatedPlayerStats, fromGameMode);
+        }
+        DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
+    }
+
+
+    public event Action<ETeamID, EGameMode> GAME_GameOver;
+    public void Invoke_GAME_GameOver(ETeamID winnerTeamID, EGameMode gameMode)
+    {
+        if (GAME_GameOver != null)
+        {
+            GAME_GameOver.Invoke(winnerTeamID, gameMode);
         }
         DebugLog("Team " + winnerTeamID + " won the game: " + gameMode);
     }

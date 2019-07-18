@@ -58,6 +58,9 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         EPlayerID hitByPlayerID = hitInfo.CastingPlayerID;
         PlayerStats[hitPlayerID].SetLastHitBy(hitByPlayerID);
         PlayerStats[hitByPlayerID].IncrementNumberOfHitPlayers();
+
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitPlayerID], GameMode);
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitByPlayerID], GameMode);
     }
 
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
@@ -69,6 +72,10 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
         killedPlayer.DecrementPlayerLives();
         killingPlayer.IncrementNumberOfKilledPlayers();
+
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayer, GameMode);
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
+
 
         // Check if game over (only one player still alive)
         int deadPlayersCounter = 0;
@@ -88,7 +95,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         {
             //
             ETeamID winnerTeamID = PlayerManager.Instance.GetPlayerTeamID(winnerPlayerID);
-            EventManager.Instance.Invoke_GAME_PlayerWon(winnerTeamID, gameMode);
+            EventManager.Instance.Invoke_GAME_GameOver(winnerTeamID, gameMode);
         }
     }
 }

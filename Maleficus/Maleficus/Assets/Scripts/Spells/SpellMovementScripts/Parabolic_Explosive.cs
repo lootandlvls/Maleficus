@@ -108,7 +108,7 @@ public class Parabolic_Explosive : AbstractSpell
 
             i++;
         }
-        ExplostionProcessHits(hitPlayers.ToArray());
+        ExplosionProcessHits(hitPlayers.ToArray());
 
     }
 }

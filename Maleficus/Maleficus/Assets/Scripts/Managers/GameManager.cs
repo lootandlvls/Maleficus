@@ -18,7 +18,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void Start()
     {
-        EventManager.Instance.GAME_TeamWon += On_GAME_TeamWon;
+        EventManager.Instance.GAME_GameOver += On_GAME_TeamWon;
 
     }
 
