@@ -153,7 +153,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             livingBossEnemyCounter = 0;
             livingMinionEnemyCounter = 0;
 
-            basicEnemyMaxNumber = CoinManager.Instance.numberOfCoins - numberOfCollectedCoins;
+            basicEnemyMaxNumber = CoinManager.Instance.NumberOfCoins - numberOfCollectedCoins;
 
             if (numberOfCollectedCoins != 1)
             {

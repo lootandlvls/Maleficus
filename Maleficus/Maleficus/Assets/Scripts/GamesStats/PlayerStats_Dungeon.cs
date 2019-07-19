@@ -41,7 +41,7 @@ public class PlayerStats_Dungeon : AbstractPlayerStats
     /// <summary>
     /// Decrements number of remaining items to collect by 1
     /// </summary>
-    public void IncrementNumberOfCollectedItems()
+    public void DecrementNumberOfRemainingCoinsToCollect()
     {
         remainingNumberOfCollectedItems--;
     }

@@ -25,6 +25,8 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
     {
         base.Start();
 
+        TotalItemsToCollect = CoinManager.Instance.NumberOfCoins;
+
         // Initialize player stats correctly/
         Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;             // TODO: Find a way to use playerStats from AbstractGameMode instead of reusing ConnectedPlayers
         foreach (EPlayerID playerID in connectedPlayers.Keys)
@@ -44,11 +46,15 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
     {
         foreach (PlayerStats_Dungeon playerStat in playerStats.Values)
         {
-            playerStat.IncrementNumberOfKilledEnemies();
+            playerStat.DecrementNumberOfRemainingCoinsToCollect();
 
             EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameMode);
+
+            if (playerStat.RemainingNumberOfCollectedItems == 0)
+            {
+                EventManager.Instance.Invoke_GAME_GameOver(gameMode);
+            }
         }
-        
     }
 
     private void On_ENEMIES_EnemyDied(IEnemy diedEnemy)
@@ -72,8 +78,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             // Check if player is dead
             if (playerStat.IsGameOver == true)
             {
-                ETeamID winnerTeamID = PlayerManager.Instance.GetPlayerTeamID(playerStat.PlayerID);
-                //EventManager.Instance.Invoke_GAME_GameOver(winnerTeamID, gameMode);
+                EventManager.Instance.Invoke_GAME_GameOver(gameMode);
             }
         }
     }

@@ -9,7 +9,9 @@ public static class MaleficusTypes
     public const string SCENE_ENTRY = "Dummy_ENTRY";         // TODO: Replace with correct scenes
     public const string SCENE_MENU = "Dummy_MENU";
     public const string SCENE_GAME = "Dummy_GAME";
-    public const string SCENE_ARGAME = "Dummy_ARGAME";
+    public const string SCENE_DUNGEON_1 = "Dummy_ARGame_Dungeon_lvl_1";
+    public const string SCENE_DUNGEON_2 = "Dummy_ARGame_Dungeon_lvl_2";
+    public const string SCENE_DUNGEON_3 = "Dummy_ARGame_Dungeon_lvl_3";
 
 
     // Spells path
@@ -57,33 +59,46 @@ public static class MaleficusTypes
         { EScene.NONE,  EScene.NONE },
         { EScene.ENTRY, EScene.MENU },
         { EScene.MENU,  EScene.GAME },
-        { EScene.GAME,  EScene.MENU }
+        { EScene.GAME,  EScene.MENU },
+
+        // AR Mode
+        { EScene.DUNGEON_SELECTION,     EScene.AR_GAME },
+        { EScene.AR_GAME,               EScene.DUNGEON_SELECTION },
     };
 
     /* Start states for the different scenes*/
     public static Dictionary<EScene, EAppState> START_APP_STATES = new Dictionary<EScene, EAppState>()
     {
-        { EScene.NONE,      EAppState.NONE},
-        { EScene.ENTRY,     EAppState.IN_ENTRY },
-        { EScene.MENU,      EAppState.IN_MENU_IN_MAIN },
-        { EScene.GAME,      EAppState.IN_GAME_IN_NOT_STARTED },
-        { EScene.AR_GAME,   EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.NONE,                  EAppState.NONE},
+        { EScene.ENTRY,                 EAppState.IN_ENTRY },
+        { EScene.MENU,                  EAppState.IN_MENU_IN_MAIN },
+        { EScene.GAME,                  EAppState.IN_GAME_IN_NOT_STARTED },
+
+        // AR Mode
+        { EScene.AR_GAME,               EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.DUNGEON_SELECTION,     EAppState.IN_MENU_IN_MAIN },
     };
     public static Dictionary<EScene, EMenuState> START_MENU_STATES = new Dictionary<EScene, EMenuState>()
     {
-        { EScene.NONE,      EMenuState.NONE},
-        { EScene.ENTRY,     EMenuState.IN_ENTRY},
-        { EScene.MENU,      EMenuState.IN_MENU},
-        { EScene.GAME,      EMenuState.IN_GAME_NOT_STARTED},
-        { EScene.AR_GAME,   EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.NONE,                  EMenuState.NONE},
+        { EScene.ENTRY,                 EMenuState.IN_ENTRY},
+        { EScene.MENU,                  EMenuState.IN_MENU},
+        { EScene.GAME,                  EMenuState.IN_GAME_NOT_STARTED},
+
+        // AR Mode
+        { EScene.AR_GAME,               EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.DUNGEON_SELECTION,     EMenuState.IN_MENU},
     };
     public static Dictionary<EScene, EARState> START_AR_STATES = new Dictionary<EScene, EARState>()
     {
-        { EScene.NONE,      EARState.NO_POSE},
-        { EScene.ENTRY,     EARState.NO_POSE},
-        { EScene.MENU,      EARState.NO_POSE},
-        { EScene.GAME,      EARState.NO_POSE},
-        { EScene.AR_GAME,   EARState.NO_POSE},
+        { EScene.NONE,                  EARState.NO_POSE},
+        { EScene.ENTRY,                 EARState.NO_POSE},
+        { EScene.MENU,                  EARState.NO_POSE},
+        { EScene.GAME,                  EARState.NO_POSE},
+
+        // AR Mode
+        { EScene.AR_GAME,               EARState.NO_POSE},
+        { EScene.DUNGEON_SELECTION,     EARState.NO_POSE},
     };
     public static EAppState[] APP_STATES_THAT_TRIGGER_SCENE_CHANGE = new EAppState[]
     {
@@ -246,6 +261,7 @@ public enum EScene
     MENU,
     GAME,
     AR_GAME,
+    DUNGEON_SELECTION
 }
 
 
@@ -513,6 +529,14 @@ public enum EEnemyMovementType
 {
     NAV_MESH,
     WAYPOINTS
+}
+
+public enum EDungeonID
+{
+    NONE,
+    ONE,
+    TWO,
+    THREE
 }
 #endregion
 

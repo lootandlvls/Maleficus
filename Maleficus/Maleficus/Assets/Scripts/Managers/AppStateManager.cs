@@ -15,6 +15,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private List<AbstractUIAction> boundActions = new List<AbstractUIAction>();
 
+    private EDungeonID dungeonIDtoLoad = EDungeonID.NONE;
 
     #region Unity Functions
     protected override void Awake()
@@ -133,11 +134,33 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 break;
 
             case EScene.AR_GAME:
-                SceneManager.LoadScene(MaleficusTypes.SCENE_ARGAME);
-                currentScene = EScene.AR_GAME;
+                string ScenePath = "";
+                switch (dungeonIDtoLoad)
+                {
+                    case EDungeonID.ONE:
+                        ScenePath = MaleficusTypes.SCENE_DUNGEON_1;
+                        break;
+
+                    case EDungeonID.TWO:
+                        ScenePath = MaleficusTypes.SCENE_DUNGEON_2;
+                        break;
+
+                    case EDungeonID.THREE:
+                        ScenePath = MaleficusTypes.SCENE_DUNGEON_3;
+                        break;
+
+                    case EDungeonID.NONE:
+                        Debug.LogError("Not a valid Dungeon scene selected to load");
+                        break;
+                }
+
+                if (ScenePath != "")
+                {
+                    SceneManager.LoadScene(ScenePath);
+                    currentScene = EScene.AR_GAME;
+                }
                 break;
 
-                
 
             default:
                 Debug.LogError(sceneToLoad + " is not a valid scene to load!");
@@ -202,12 +225,12 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         }
 
           // Launch AR game (change scene)
-        PlayARAction[] playARActions = FindObjectsOfType<PlayARAction>();
-        foreach (PlayARAction action in playARActions)
+        foreach (StartDungeonAction action in FindObjectsOfType<StartDungeonAction>())
         {
-            action.ActionButtonPressed += () =>
-            {            
-                
+            action.StartDungeonPressed += (EDungeonID dungeonID) =>
+            {
+                Debug.Log("Start dungeon " + dungeonID + "pressed");
+                dungeonIDtoLoad = dungeonID;
                 UpdateState(EAppState.IN_MENU_IN_STARTING_AR_GAME);
             };
         }

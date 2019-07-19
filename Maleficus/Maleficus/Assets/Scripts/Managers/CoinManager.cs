@@ -6,7 +6,9 @@ public class CoinManager : AbstractSingletonManager<CoinManager>
 
 {
 
-    public int numberOfCoins = 0;
+    public int NumberOfCoins { get { return numberOfCoins; } }
+
+    private int numberOfCoins = 0;
     private int lastSpawnIndex = 0;
     private Dictionary<int, Coin> AllCoins = new Dictionary<int, Coin>();
 
@@ -14,23 +16,13 @@ public class CoinManager : AbstractSingletonManager<CoinManager>
     private void Start()
     {
         EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
-
-        Coin[] coinList = FindObjectsOfType<Coin>();
-        foreach (Coin coin in coinList)
-        {
-
-            AllCoins.Add(numberOfCoins, coin);
-            numberOfCoins++;
-            Debug.Log("counter = " + numberOfCoins);
-            coin.gameObject.SetActive(false);
-        }
-        AllCoins[0].gameObject.SetActive(true);
     }
+
     public override void Initialize()
     {
         base.Initialize();
-       
 
+        AllCoins.Clear();
         Coin[] coinList = FindObjectsOfType<Coin>();
         foreach (Coin coin in coinList)
         {
@@ -40,7 +32,10 @@ public class CoinManager : AbstractSingletonManager<CoinManager>
             Debug.Log("counter = " + numberOfCoins);
             coin.gameObject.SetActive(false);
         }
-        AllCoins[0].gameObject.SetActive(true);
+        if (AllCoins.Count != 0)
+        {
+            AllCoins[0].gameObject.SetActive(true);
+        }
 
 
     }
