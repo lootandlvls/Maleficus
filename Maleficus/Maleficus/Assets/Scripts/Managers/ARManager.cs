@@ -4,10 +4,11 @@ using UnityEngine;
 using Vuforia;
 using UnityEngine.UI;
 
-public class ARManager : AbstractSingletonManager<ARManager>
+public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EARState>
 {
     public float SizeFactor { get { return sizeFactor; } }
 
+    private AnchorBehaviour midAirAnchorBehaviour;
     private ContentPositioningBehaviour[] contentPositionings;
     private AnchorInputListenerBehaviour[] anchorInputListeners;
 
@@ -17,11 +18,35 @@ public class ARManager : AbstractSingletonManager<ARManager>
 
     private bool isAnchorListeningActive = true;
 
+
     protected override void Awake()
     {
         base.Awake();
 
         FindAndBindButtonActions();
+
+        startStates = MaleficusTypes.START_AR_STATES;
+
+        debugStateID = 89;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        StateUpdateEvent += EventManager.Instance.Invoke_AR_TrackingStateUpdated;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (midAirAnchorBehaviour != null)
+        {
+            UpdateState((EARState)((int)midAirAnchorBehaviour.CurrentStatus + 1));
+        }
+
+        Debug.Log("size factor " + sizeFactor);
     }
 
     private void OnContentPlaced(GameObject placedContent)
@@ -55,6 +80,8 @@ public class ARManager : AbstractSingletonManager<ARManager>
     {
         base.FindAndBindButtonActions();
 
+        midAirAnchorBehaviour = FindObjectOfType<AnchorBehaviour>();
+
         contentPositionings = FindObjectsOfType<ContentPositioningBehaviour>();
         foreach (ContentPositioningBehaviour cpb in contentPositionings)
         {
@@ -83,7 +110,6 @@ public class ARManager : AbstractSingletonManager<ARManager>
                     SetAnchorsInputActive(!isAnchorListeningActive);
                 };
             }
-            
             break;
         }
     }

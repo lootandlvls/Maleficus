@@ -60,10 +60,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         for (int i = 0; i < 3; i++)
         {
 
-            Debug.Log(Player_Spells[EPlayerID.PLAYER_1][i].SpellName);
-            Debug.Log(Player_Spells[EPlayerID.PLAYER_2][i].SpellName);
-            Debug.Log(Player_Spells[EPlayerID.PLAYER_3][i].SpellName);
-            Debug.Log(Player_Spells[EPlayerID.PLAYER_4][i].SpellName);
+            //Debug.Log(Player_Spells[EPlayerID.PLAYER_1][i].SpellName);
+            //Debug.Log(Player_Spells[EPlayerID.PLAYER_2][i].SpellName);
+            //Debug.Log(Player_Spells[EPlayerID.PLAYER_3][i].SpellName);
+            //Debug.Log(Player_Spells[EPlayerID.PLAYER_4][i].SpellName);
 
         }
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
@@ -282,7 +282,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
              AbstractSpell spell = Instantiate(spellToCast, position, rotation);
-            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.hitPower *= (int)spell.transform.localScale.x; ;
@@ -300,7 +300,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Transform position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
                 AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
-          if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+          if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.speed *= ARManager.Instance.SizeFactor;
@@ -319,7 +319,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
            StartCoroutine(animationDelay(spellToCast, playerID, 2));
              Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
              AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
-            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.speed *= ARManager.Instance.SizeFactor;
@@ -334,7 +334,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Quaternion rotation = activePlayers[playerID].transform.rotation;    
              AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
 
-            if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+            if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale = new Vector3(spell.transform.localScale.x * 0.05f, spell.transform.localScale.y * 0.05f, spell.transform.localScale.z * 0.05f);
                 spell.speed *= ARManager.Instance.SizeFactor;
@@ -443,7 +443,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         yield return new WaitForSeconds(0.3f);
         AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition.position, activePlayers[playerID].transform.rotation);
         spell.CastingPlayerID = playerID;
-        if ((MotherOfManagers.Instance.IsSpawnARPlayers == true))
+        if ((MotherOfManagers.Instance.IsARGame == true))
         {
             spell.transform.localScale *= ARManager.Instance.SizeFactor;
             spell.speed *= ARManager.Instance.SizeFactor;

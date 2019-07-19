@@ -18,11 +18,14 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void Start()
     {
-        EventManager.Instance.GAME_GameOver += On_GAME_TeamWon;
-
+        EventManager.Instance.GAME_GameOver += ON_GAME_GameOver;
+        EventManager.Instance.AR_ARStateUpdated += On_AR_ARStateUpdated;
+        EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
     }
 
-    
+ 
+
+
 
     #region Game Actions
     private void StartGame(EGameMode gameModeToStart)
@@ -34,9 +37,8 @@ public class GameManager : AbstractSingletonManager<GameManager>
             switch (gameModeToStart)
             {
                 case EGameMode.SINGLE_LIVES_5:
-                    gameObject.AddComponent<GM_FFA_Lives>();          // TODO: Test if it works
-                    Debug.Log("Starting " + EGameMode.SINGLE_LIVES_5);
-                    break;
+                    gameObject.AddComponent<GM_FFA_Lives>();          
+                    break; 
 
                 case EGameMode.SINGLE_TIME_2:
 
@@ -47,7 +49,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
                     break;
 
                 case EGameMode.DUNGEON:
-                    gameObject.AddComponent<GM_Single_Dungeon>();          // TODO: Test if it works
+                    gameObject.AddComponent<GM_Single_Dungeon>();          
 
                     break;
             }
@@ -79,20 +81,57 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     #endregion
 
-    private IEnumerator WaitingForGameStartCoroutine()
+
+#region Event Callbacks 
+    private void ON_GAME_GameOver(EGameMode gameMode)
     {
-        while (isCanStartGame == false)
+        EndGame();
+
+                                                                                    // TODO Show player stats according to game mode
+        switch(gameMode)
         {
-            yield return new WaitForEndOfFrame();
+            case EGameMode.SINGLE_LIVES_5:
+
+                break;
+
+            case EGameMode.DUNGEON:
+                GM_Single_Dungeon gameModeInstance = GetComponent<GM_Single_Dungeon>();
+                Dictionary<EPlayerID, PlayerStats_Dungeon> playerStats = gameModeInstance.PlayerStats;
+
+                // TODO
+
+                Destroy(gameModeInstance);
+                break;
         }
     }
 
-    private void On_GAME_TeamWon(ETeamID winnerTeamID, EGameMode gameMode)
+    private void On_AR_ARStateUpdated(EARState newState, EARState lastState)
     {
-        EndGame();
+        switch (newState)
+        {
+            case EARState.NO_POSE:
+                if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+                {
+                    PauseOrUnpauseGame();
+                }
+                break;
+        }
     }
 
+    private void On_AR_StagePlaced()
+    {
+        switch (AppStateManager.Instance.CurrentState)
+        {
+            case EAppState.IN_GAME_IN_NOT_STARTED:
+                StartGame(EGameMode.DUNGEON);
+                break;
 
+            case EAppState.IN_GAME_IN_PAUSED:
+                PauseOrUnpauseGame();
+                break;
+        }
+    }
+    #endregion
 
     protected override void FindAndBindButtonActions()
     {

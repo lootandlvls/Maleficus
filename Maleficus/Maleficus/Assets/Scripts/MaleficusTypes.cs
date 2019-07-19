@@ -72,18 +72,18 @@ public static class MaleficusTypes
     public static Dictionary<EScene, EMenuState> START_MENU_STATES = new Dictionary<EScene, EMenuState>()
     {
         { EScene.NONE,      EMenuState.NONE},
-        { EScene.ENTRY,     EMenuState.IN_ENTRY },
+        { EScene.ENTRY,     EMenuState.IN_ENTRY},
         { EScene.MENU,      EMenuState.IN_MENU},
         { EScene.GAME,      EMenuState.IN_GAME_NOT_STARTED},
         { EScene.AR_GAME,   EMenuState.IN_GAME_NOT_STARTED},
     };
-    public static Dictionary<EScene, ENetworkMessage> START_NETWORKSTATES = new Dictionary<EScene, ENetworkMessage>()
+    public static Dictionary<EScene, EARState> START_AR_STATES = new Dictionary<EScene, EARState>()
     {
-        { EScene.NONE,      ENetworkMessage.NONE},
-        { EScene.ENTRY,     ENetworkMessage.NONE},
-        { EScene.MENU,      ENetworkMessage.NONE},
-        { EScene.GAME,      ENetworkMessage.NONE},
-        { EScene.AR_GAME,   ENetworkMessage.NONE},
+        { EScene.NONE,      EARState.NO_POSE},
+        { EScene.ENTRY,     EARState.NO_POSE},
+        { EScene.MENU,      EARState.NO_POSE},
+        { EScene.GAME,      EARState.NO_POSE},
+        { EScene.AR_GAME,   EARState.NO_POSE},
     };
     public static EAppState[] APP_STATES_THAT_TRIGGER_SCENE_CHANGE = new EAppState[]
     {
@@ -489,5 +489,17 @@ public enum EnemyType
     CHAMPION,
     BOSS,
     MINION
+}
+#endregion
+
+#region AR
+public enum EARState
+{
+    NONE,
+    NO_POSE,
+    LIMITED,
+    DETECTED,
+    TRACKED,
+    EXTENDED_TRACKED
 }
 #endregion

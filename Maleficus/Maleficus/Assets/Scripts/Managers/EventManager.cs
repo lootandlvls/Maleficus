@@ -103,14 +103,14 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
 
 
-    public event Action<ETeamID, EGameMode> GAME_GameOver;
-    public void Invoke_GAME_GameOver(ETeamID winnerTeamID, EGameMode gameMode)
+    public event Action<EGameMode> GAME_GameOver;
+    public void Invoke_GAME_GameOver(EGameMode gameMode)
     {
         if (GAME_GameOver != null)
         {
-            GAME_GameOver.Invoke(winnerTeamID, gameMode);
+            GAME_GameOver.Invoke(gameMode);
         }
-        DebugLog("Team " + winnerTeamID + " won the game: " + gameMode);
+        DebugLog("Game over : " + gameMode);
     }
 
     #endregion
@@ -272,7 +272,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
     #endregion
 
-
     #region ENEMIES
     public event Action<IEnemy> ENEMIES_EnemyAttackedPlayer;                                        // TODO: Add reference to attacked player ID
     public void Invoke_ENEMIES_EnemyAttackedPlayer(IEnemy attackingEnemy)
@@ -298,6 +297,29 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #endregion;
 
+    #region AR
+    public event Action<EARState, EARState> AR_ARStateUpdated;                                        // TODO: Add reference to attacked player ID
+    public void Invoke_AR_TrackingStateUpdated(EARState newARState, EARState lastState)
+    {
+        if (AR_ARStateUpdated != null)
+        {
+            AR_ARStateUpdated.Invoke(newARState, lastState);
+        }
+        DebugLog("AR State updated : " + newARState);
+    }
+
+    public event Action AR_StagePlaced;                                        // TODO: Add reference to attacked player ID
+    public void Invoke_AR_AR_StagePlaced()
+    {
+        if (AR_StagePlaced != null)
+        {
+            AR_StagePlaced.Invoke();
+        }
+        DebugLog("Stage placed");
+    }
+
+
+    #endregion
 
     private void DebugLog(string messageLog)
     {

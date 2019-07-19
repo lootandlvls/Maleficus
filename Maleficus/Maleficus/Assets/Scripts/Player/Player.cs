@@ -72,7 +72,7 @@ public class Player : MonoBehaviour, IPlayer
 
         if (IsARPlayer == true)
         {
-            speed *= transform.parent.localScale.x;
+            speed *= ARManager.Instance.SizeFactor;
         }
 
        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;

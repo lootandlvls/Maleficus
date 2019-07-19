@@ -95,7 +95,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         {
             //
             ETeamID winnerTeamID = PlayerManager.Instance.GetPlayerTeamID(winnerPlayerID);
-            EventManager.Instance.Invoke_GAME_GameOver(winnerTeamID, gameMode);
+            EventManager.Instance.Invoke_GAME_GameOver(gameMode);
         }
     }
 }
