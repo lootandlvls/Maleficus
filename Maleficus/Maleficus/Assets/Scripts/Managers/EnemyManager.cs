@@ -207,7 +207,8 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 
-            Instantiate(championEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
+             GameObject enemy =  Instantiate(championEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
+            enemy.transform.parent = enemySpawnPositions[0].transform.parent;
             livingChampionEnemyCounter++;
             spawnedChampionEnemyCounter++;
             if (spawnedChampionEnemyCounter == championEnemyMaxNumber)

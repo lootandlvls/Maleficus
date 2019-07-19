@@ -154,6 +154,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         DebugLog(playerID + " died");
     }
+
+
+    public event Action PLAYERS_PlayerCollectedCoin;
+    public void Invoke_PLAYERS_PlayerCollectedCoin()
+    {
+        if (PLAYERS_PlayerCollectedCoin != null)
+        {
+            PLAYERS_PlayerCollectedCoin.Invoke();
+        }
+        Debug.Log("Player collected a coin");
+    }
     #endregion
 
     #region SPELLS
@@ -294,6 +305,9 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         DebugLog("Enemy " + deadEnemy.ToString() + " died ");
     }
+
+
+    
 
     #endregion;
 

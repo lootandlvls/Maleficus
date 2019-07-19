@@ -225,7 +225,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Player_1_SpellsList.Array.data[1]
       value: 
-      objectReference: {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d,
+      objectReference: {fileID: 3121775551052875721, guid: b020785eafba45b4ebbd707dd46f7ba5,
         type: 3}
     - target: {fileID: 3900233467615566551, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}

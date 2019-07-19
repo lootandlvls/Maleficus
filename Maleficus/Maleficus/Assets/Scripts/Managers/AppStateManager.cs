@@ -72,7 +72,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
         {
             EScene newScene = MaleficusTypes.FROM_SCENE_TO[CurrentScene];
-            // For AR mode
+            // For AR 
             if (CurrentState == EAppState.IN_MENU_IN_STARTING_AR_GAME)
             {
                 newScene = EScene.AR_GAME;
@@ -197,7 +197,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         foreach (PlayARAction action in playARActions)
         {
             action.ActionButtonPressed += () =>
-            {
+            {            
+                
                 UpdateState(EAppState.IN_MENU_IN_STARTING_AR_GAME);
             };
         }

@@ -56,7 +56,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         myAnimator = GetComponent<Animator>();
         myNavAgent = GetComponent<NavMeshAgent>();
         myAudioSource = SoundUtilities.AddAudioListener(gameObject, false, 0.15f, false);
-
+       
 
         if (spawnParticleEffect != null)
         {
@@ -74,7 +74,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
         // Init Enemy
         UpdateState(EnemyState.SPAWNING);
-
+        transform.localScale *= ARManager.Instance.SizeFactor;
         myNavAgent.speed = walkingSpeed;
     }
 

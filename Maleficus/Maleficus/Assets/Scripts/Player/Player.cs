@@ -161,14 +161,44 @@ public class Player : MonoBehaviour, IPlayer
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
         if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusTypes.ROTATION_THRESHOLD))
         {
+            if (IsARPlayer == true)
+            {
+                Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
+                Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
+                Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
+                Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+                float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
+                int sign;
+                if (dotWithRight > 0.0f)
+                {
+                    sign = -1;
+                }
+                else if (dotWithRight < 0.0f)
+                {
+                    sign = 1;
+                }
+                else
+                {
+                    sign = 0;
+                }
+                float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
+                DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
+            
+
+                axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
+                axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
+                controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+                axis_X = controllerAxis.x;
+                axis_Z = controllerAxis.y;
+            }
             Vector3 CurrentRotationVector = transform.rotation.eulerAngles;
             Quaternion CurrentRotation = Quaternion.Euler(CurrentRotationVector);
-            Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, -axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
+            Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
             Quaternion targetRotation = Quaternion.Euler(targetRotationVector);
             DebugManager.Instance.Log(3, "CurrrentRotation : " + CurrentRotation.y + " TargerRotation : " + targetRotation.y);
 
             //  transform.rotation = targetRotation;
-            transform.rotation = Quaternion.Lerp(CurrentRotation, targetRotation, Time.deltaTime * angularSpeed);
+            transform.rotation = Quaternion.Lerp(CurrentRotation.normalized, targetRotation.normalized, Time.deltaTime * angularSpeed);
 
             // Update sprite
             if ((Mathf.Abs(axis_X) > MaleficusTypes.SPELL_BUTTON_THRESHOLD) || (Mathf.Abs(axis_Z) > MaleficusTypes.SPELL_BUTTON_THRESHOLD))
