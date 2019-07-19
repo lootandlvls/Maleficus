@@ -212,11 +212,13 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 
+
             GameObject enemyObject = Instantiate(championEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
             if (MotherOfManagers.Instance.IsARGame)
             {
                 enemyObject.transform.localScale *= ARManager.Instance.SizeFactor;
             }
+
             livingChampionEnemyCounter++;
             spawnedChampionEnemyCounter++;
             if (spawnedChampionEnemyCounter == championEnemyMaxNumber)

@@ -7,6 +7,7 @@ public class EnemySpawnPosition : MonoBehaviour
 
     public Vector3 Position { get { return transform.position; } }
 
+
     [SerializeField] private bool isHideOnAwake = true;
 
     private void Awake()
@@ -16,4 +17,5 @@ public class EnemySpawnPosition : MonoBehaviour
             GetComponent<Renderer>().enabled = false;
         }
     }
+
 }
