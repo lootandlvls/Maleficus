@@ -73,8 +73,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
 
         // Init Enemy
-        UpdateState(EnemyState.SPAWNING);
-        transform.localScale *= ARManager.Instance.SizeFactor;
+        UpdateState(EnemyState.SPAWNING);      
         myNavAgent.speed = walkingSpeed;
     }
 
