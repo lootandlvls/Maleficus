@@ -74,6 +74,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
         // Init Enemy
         UpdateState(EnemyState.SPAWNING);
+
         myNavAgent.speed = walkingSpeed;
     }
 
