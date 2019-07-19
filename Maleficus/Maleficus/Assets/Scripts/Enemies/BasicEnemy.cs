@@ -74,7 +74,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
         // Init Enemy
         UpdateState(EnemyState.SPAWNING);
-        transform.localScale *= ARManager.Instance.SizeFactor;
         myNavAgent.speed = walkingSpeed;
     }
 
@@ -231,7 +230,12 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         float timer = Time.time;
         while (Time.time - timer < 3)
         {
-            transform.position += Vector3.down * Time.deltaTime * 0.5f;
+            Vector3 vanishDownUpdate = Vector3.down * Time.deltaTime * 0.5f;
+            if (MotherOfManagers.Instance.IsARGame == true)
+            {
+                vanishDownUpdate *= ARManager.Instance.SizeFactor;
+            }
+            transform.position += vanishDownUpdate;
             yield return new WaitForEndOfFrame();
         }
         Destroy(gameObject);

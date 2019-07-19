@@ -14,7 +14,30 @@ public class EnemySpawnPosition : MonoBehaviour
     {
         if (isHideOnAwake == true)
         {
-            GetComponent<Renderer>().enabled = false;
+            HideShadowMesh();
+        }
+    }
+
+    private void Start()
+    {
+        EventManager.Instance.ÁPP_AppStateUpdated += On_APP_AppStateUpdated;
+
+    }
+
+    private void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)
+    {
+        if (newState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            HideShadowMesh();
+        }
+    }
+
+    private void HideShadowMesh()
+    {
+        Renderer[] myMeshRenderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer myMeshRenderer in myMeshRenderers)
+        {
+            myMeshRenderer.enabled = false;
         }
     }
 

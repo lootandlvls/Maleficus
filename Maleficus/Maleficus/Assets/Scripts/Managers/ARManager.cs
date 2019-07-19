@@ -45,16 +45,28 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         {
             UpdateState((EARState)((int)midAirAnchorBehaviour.CurrentStatus + 1));
         }
-
-        Debug.Log("size factor " + sizeFactor);
     }
 
     private void OnContentPlaced(GameObject placedContent)
     {
-        if (placedContent.name == "Mid Air Stage")
+        switch (MotherOfManagers.Instance.ARPlacementMethod)
         {
-            SetAnchorsInputActive(false);
+            case EPlacementMethod.MID_AIR:
+                if (placedContent.name == "Mid Air Stage")
+                {
+                    SetAnchorsInputActive(false);
+                }
+                break;
+
+
+            case EPlacementMethod.ON_PLANE:
+                if (placedContent.name == "Ground Plane Stage")
+                {
+                    SetAnchorsInputActive(false);
+                }
+                break;
         }
+        
     }
 
     private void SetAnchorsInputActive(bool isActive)
