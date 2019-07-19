@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EARState>
 {
@@ -13,6 +14,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     private AnchorInputListenerBehaviour[] anchorInputListeners;
 
     private ARLockButton lockButton;
+    private AugmentedStage augmentedStage;
 
     private float sizeFactor;
 
@@ -63,10 +65,12 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                 if (placedContent.name == "Ground Plane Stage")
                 {
                     SetAnchorsInputActive(false);
+                    augmentedStage.ShowStage();
                 }
                 break;
         }
-        
+
+
     }
 
     private void SetAnchorsInputActive(bool isActive)
@@ -103,6 +107,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         AugmentedStage[] augmentedStages = FindObjectsOfType<AugmentedStage>();
         foreach (AugmentedStage augmentedStage in augmentedStages)
         {
+            this.augmentedStage = augmentedStage;
             sizeFactor = augmentedStage.transform.localScale.x;
             break;
         }

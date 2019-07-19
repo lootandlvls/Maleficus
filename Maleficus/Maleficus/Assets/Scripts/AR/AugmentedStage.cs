@@ -5,9 +5,6 @@ using Vuforia;
 
 public class AugmentedStage : MonoBehaviour
 {
-
-
-
     public void OnAutomaticHitTest(HitTestResult hitResult)
     {
         if (MotherOfManagers.Instance.ARPlacementMethod == EPlacementMethod.MID_AIR)
@@ -16,5 +13,11 @@ public class AugmentedStage : MonoBehaviour
         }
     }
 
-
+    public void ShowStage()
+    {
+        foreach(Renderer renderer in GetComponentsInChildren<Renderer>())
+        {
+            renderer.enabled = true;
+        }
+    }
 }
