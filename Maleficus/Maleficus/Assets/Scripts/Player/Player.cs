@@ -193,7 +193,7 @@ public class Player : MonoBehaviour, IPlayer
             }
             Vector3 CurrentRotationVector = transform.rotation.eulerAngles;
             Quaternion CurrentRotation = transform.rotation;
-            Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
+            Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, -axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
             Quaternion targetRotation = Quaternion.Euler(targetRotationVector);
             DebugManager.Instance.Log(3, "CurrrentRotation : " + CurrentRotation.y + " TargerRotation : " + targetRotation.y);
 
