@@ -78,19 +78,19 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
     {
         switch (deadEnemy.IsType)
         {
-            case EnemyType.BASIC:
+            case EEnemyType.BASIC:
                 livingBasicEnemyCounter--;
                 break;
 
-            case EnemyType.CHAMPION:
+            case EEnemyType.CHAMPION:
                 livingChampionEnemyCounter--;
                 break;
 
-            case EnemyType.BOSS:
+            case EEnemyType.BOSS:
                 livingBossEnemyCounter--;
                 break;
 
-            case EnemyType.MINION:
+            case EEnemyType.MINION:
                 livingMinionEnemyCounter--;
                 break;
         }

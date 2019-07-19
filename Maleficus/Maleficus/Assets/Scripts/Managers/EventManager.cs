@@ -323,7 +323,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
 
     public event Action AR_StagePlaced;                                        // TODO: Add reference to attacked player ID
-    public void Invoke_AR_AR_StagePlaced()
+    public void Invoke_AR_StagePlaced()
     {
         if (AR_StagePlaced != null)
         {

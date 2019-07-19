@@ -16,10 +16,9 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     private ARLockButton lockButton;
     private AugmentedStage augmentedStage;
 
-    private float sizeFactor;
+    private float sizeFactor = 1.0f;
 
     private bool isAnchorListeningActive = true;
-
 
     protected override void Awake()
     {
@@ -37,6 +36,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         base.Start();
 
         StateUpdateEvent += EventManager.Instance.Invoke_AR_TrackingStateUpdated;
+
     }
 
     protected override void Update()
@@ -70,7 +70,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                 break;
         }
 
-
+        EventManager.Instance.Invoke_AR_StagePlaced();
     }
 
     private void SetAnchorsInputActive(bool isActive)
@@ -129,6 +129,10 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             }
             break;
         }
+
     }
+
+
+
 }
 

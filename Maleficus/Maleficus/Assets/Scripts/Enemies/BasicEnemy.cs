@@ -10,14 +10,17 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     //public event Action<IEnemy> EnemyAttacked;
     //public event Action<IEnemy> EnemyDied;
 
+    private const float WAYPOINT_THRESHOLD = 2.0f;
+
     public int Damage { get { return damage; } }
     public float AttackTimeout { get { return attackTimeOut; } }
     public float SpawnRate { get { return spawnRate; } }
-    public EnemyType IsType { get { return isType; } }
+    public EEnemyType IsType { get { return isType; } }
 
 
     [Header("Attributes")]
-    [SerializeField] protected EnemyType isType;
+    [SerializeField] protected EEnemyType isType;
+    [SerializeField] protected EEnemyMovementType movementType;
     [SerializeField] protected int damage = 1;
     [SerializeField] protected float attackTimeOut = 3;
     [SerializeField] protected float attackDelay = 0.5f;
@@ -30,12 +33,13 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     [SerializeField] private AudioClip[] attackSounds;
 
     protected Vector3 playerPosition;
-
     protected int gestureIndex;
     protected Animator myAnimator;
     protected NavMeshAgent myNavAgent;
     protected AudioSource myAudioSource;
 
+
+    private EnemyWayPoint[] wayPoints;
 
     protected enum EnemyState
     {
@@ -55,16 +59,15 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     {
         myAnimator = GetComponent<Animator>();
         myNavAgent = GetComponent<NavMeshAgent>();
-        myAudioSource = SoundUtilities.AddAudioListener(gameObject, false, 0.15f, false);
-       
-
-      /*  if (spawnParticleEffect != null)
+        if (movementType == EEnemyMovementType.WAYPOINTS)
         {
-            GameObject obj = Instantiate(spawnParticleEffect, transform.position, Quaternion.identity);
-            obj.transform.parent = transform;
-        }*/
-        
+            myNavAgent.enabled = false;
+        }
+        myAudioSource = SoundUtilities.AddAudioListener(gameObject, false, 0.15f, false);
+
+        FindAllWayPoints();
     }
+
 
 
     protected virtual void Start()
@@ -110,16 +113,21 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 break;
 
             case EnemyState.MOVING_TOWARDS_PLAYER:
-                myNavAgent.destination = playerPosition;
-                transform.LookAt(playerPosition);
 
-                float distanceFactor = 1.0f;
-                if (MotherOfManagers.Instance.IsARGame == true)
+                if (movementType == EEnemyMovementType.NAV_MESH)
                 {
-                    distanceFactor = ARManager.Instance.SizeFactor;
+                    myNavAgent.destination = playerPosition;
+                    transform.LookAt(playerPosition);
+                }
+                else if (movementType == EEnemyMovementType.WAYPOINTS)
+                {
+                    Vector3 destination = GetNextDestinationToPlayer();
+                    Vector3 direction = (destination - transform.position).normalized;
+                    transform.position += direction * walkingSpeed * Time.deltaTime * ARManager.Instance.SizeFactor;
+                    transform.LookAt(destination);
                 }
 
-                if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold * distanceFactor)
+                if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold * ARManager.Instance.SizeFactor)
                 {
                     UpdateState(EnemyState.ATTACKING);
                 }
@@ -128,6 +136,11 @@ public class BasicEnemy : MonoBehaviour, IEnemy
             case EnemyState.ATTACKING:
                 Vector3 playersDir = (playerPosition - transform.position).normalized;
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playersDir, transform.up), Time.deltaTime * 1);
+
+                if (Vector3.Distance(transform.position, playerPosition) > attackingThreshold * ARManager.Instance.SizeFactor)
+                {
+                    UpdateState(EnemyState.MOVING_TOWARDS_PLAYER);
+                }
                 break;
 
             case EnemyState.GETTING_HIT:
@@ -137,8 +150,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 }
                 break;
         }
-
-
     }
 
 
@@ -153,12 +164,21 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         {
             case EnemyState.MOVING_TOWARDS_PLAYER:
                 myAnimator.SetBool("IsMoving", true);
-                myNavAgent.speed = walkingSpeed;
-                if (MotherOfManagers.Instance.IsARGame == true)
+
+                if (movementType == EEnemyMovementType.NAV_MESH)
                 {
-                    myNavAgent.speed *= ARManager.Instance.SizeFactor;
+                    myNavAgent.speed = walkingSpeed;
+                    if (MotherOfManagers.Instance.IsARGame == true)
+                    {
+                        myNavAgent.speed *= ARManager.Instance.SizeFactor;
+                    }
+                    myNavAgent.destination = playerPosition;
                 }
-                myNavAgent.destination = playerPosition;
+                else if (movementType == EEnemyMovementType.WAYPOINTS)
+                {
+
+                }
+                
                 break;
 
             case EnemyState.ATTACKING:
@@ -265,4 +285,39 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
 
 
+
+    private void FindAllWayPoints()
+    {
+        List<EnemyWayPoint> temp = new List<EnemyWayPoint>();
+        foreach (EnemyWayPoint waypoint in FindObjectsOfType<EnemyWayPoint>())
+        {
+            temp.Add(waypoint);
+        }
+        wayPoints = temp.ToArray();
+    }
+
+
+    private Vector3 GetNextDestinationToPlayer()
+    {
+        float minDistance = Vector3.Distance(transform.position, playerPosition);
+        Vector3 nextDestination = playerPosition;
+        Vector3 directionToPlayer = (playerPosition - transform.position).normalized;
+        foreach(EnemyWayPoint wayPoint in wayPoints)
+        {
+            Vector3 directionToWayPoint = (wayPoint.Position - transform.position).normalized;
+            float distanceToWayPoint = Vector3.Distance(transform.position, wayPoint.Position);
+            float dotProduct = Vector3.Dot(directionToPlayer, directionToWayPoint);
+            if ((distanceToWayPoint < minDistance) && (dotProduct > 0.0f) && (distanceToWayPoint > WAYPOINT_THRESHOLD * ARManager.Instance.SizeFactor))
+            {
+                minDistance = distanceToWayPoint;
+                nextDestination = wayPoint.Position;
+                Debug.Log(wayPoint.name + " is nearer");
+            }
+        }
+        return nextDestination;
+    }
 }
+
+
+
+

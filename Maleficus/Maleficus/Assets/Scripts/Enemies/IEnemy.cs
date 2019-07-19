@@ -12,7 +12,7 @@ public interface IEnemy {
 
     float SpawnRate { get;  }
 
-    EnemyType IsType { get; }
+    EEnemyType IsType { get; }
 
     //event Action<IEnemy> EnemyAttacked;
 

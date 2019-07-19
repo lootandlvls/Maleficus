@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 
 public static class MaleficusTypes
 {
@@ -144,6 +144,23 @@ public static class MaleficusTypes
         EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL
     };
+
+
+    public static NavMeshBuildSettings GetARNavMeshBuildSettings()
+    {
+        NavMeshBuildSettings ARNavMeshBuildSettings = NavMesh.GetSettingsByID(0);
+
+        ARNavMeshBuildSettings.agentRadius = 0.006187f;
+        ARNavMeshBuildSettings.agentHeight = 0.037122f;
+        ARNavMeshBuildSettings.agentSlope = 45.0f;
+        ARNavMeshBuildSettings.agentClimb = 0.0049496f;
+        ARNavMeshBuildSettings.overrideVoxelSize = true;
+        ARNavMeshBuildSettings.voxelSize = 0.002062333f;
+        ARNavMeshBuildSettings.minRegionArea = 2;
+        ARNavMeshBuildSettings.agentTypeID = 0;
+
+        return ARNavMeshBuildSettings;
+    }
 
     /// Convert a PlayerID enum to an int
     public static int PlayerIDToInt(EPlayerID playerID)
@@ -484,12 +501,18 @@ public enum ENetworkMessage
 #endregion
 
 #region ENEMIES
-public enum EnemyType
+public enum EEnemyType
 {
     BASIC,
     CHAMPION,
     BOSS,
     MINION
+}
+
+public enum EEnemyMovementType
+{
+    NAV_MESH,
+    WAYPOINTS
 }
 #endregion
 
