@@ -36,12 +36,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         InitializeDictionaries();
         LoadPlayerResources();
-        FindPlayerSpawnGhost();
     }
 
 
     private void Start()
     {
+        FindPlayerSpawnGhost();
+
+
         // State change events
         //AppStateManager.Instance.Instance
 
