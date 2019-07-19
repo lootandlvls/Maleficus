@@ -58,11 +58,11 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         myAudioSource = SoundUtilities.AddAudioListener(gameObject, false, 0.15f, false);
        
 
-        if (spawnParticleEffect != null)
+      /*  if (spawnParticleEffect != null)
         {
             GameObject obj = Instantiate(spawnParticleEffect, transform.position, Quaternion.identity);
             obj.transform.parent = transform;
-        }
+        }*/
         
     }
 

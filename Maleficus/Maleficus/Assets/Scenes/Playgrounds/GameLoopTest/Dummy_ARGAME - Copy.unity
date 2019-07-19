@@ -111,7 +111,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: f824b7dbcc17f3a47976869fae36963b, type: 2}
 --- !u!4 &1485019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 424888, guid: d39f9ef3f9d3b94449ee1a524428fe38,
@@ -2385,7 +2385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &89825124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35734,7 +35734,7 @@ Transform:
   m_Children:
   - {fileID: 174986381}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1987173513
 PrefabInstance:
@@ -38908,7 +38908,7 @@ Transform:
   - {fileID: 1028418790}
   - {fileID: 1878904902}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2116433233
 MonoBehaviour:
