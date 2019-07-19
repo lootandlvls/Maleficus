@@ -23,15 +23,17 @@ public class AOE : AbstractSpell
     {
         AbstractSpell abstractSpell = GetComponent<AbstractSpell>();
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
-        int i = 0;
         List<IPlayer> hitPlayers = new List<IPlayer>();
         List<IEnemy> hitEnemies = new List<IEnemy>();
-        while (i < hitColliders.Length)
+
+        foreach (Collider collider in hitColliders)
         {
-            if (hitColliders[i] != null)
+            if (collider != null)
             {
-                IPlayer otherPlayer = hitColliders[i].gameObject.GetComponent<IPlayer>();
-                IEnemy otherEnemy = hitColliders[i].gameObject.GetComponent<IEnemy>();
+                Debug.Log("Collider : " + collider.name);
+
+                IPlayer otherPlayer = collider.gameObject.GetComponent<IPlayer>();
+                IEnemy otherEnemy = collider.gameObject.GetComponent<IEnemy>();
                 if (otherPlayer != null)
                 {
                     if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
@@ -43,11 +45,10 @@ public class AOE : AbstractSpell
                 {
                     hitEnemies.Add(otherEnemy);
                 }
+
             }
-           
-            i++;
         }
-        ExplostionProcessHits(hitPlayers.ToArray());
+        ExplosionProcessHits(hitPlayers.ToArray());
 
     }
 }

@@ -42,7 +42,7 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
         /*  INSTRUCTIONS
          * 1) Assign appropriate currentState from MaleficusTypes
          * Example:
-         * currentState = MaleficusTypes.StartAppStates;
+         * startStates = MaleficusTypes.StartAppStates;
         */
 
         /* INSTRUCTIONS

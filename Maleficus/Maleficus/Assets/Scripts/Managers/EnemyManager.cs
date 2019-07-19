@@ -132,12 +132,13 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
         switch (newState)
         {
             case EAppState.IN_GAME_IN_RUNNING:
-                spawnBasicMonsters = true;
-                spawnChampionMonsters = true;
-                spawnBossMonster = true;
-                StartSpawningBasicMonsters();
-                StartSpawningChampionMonsters();
-
+                if (enemySpawnPositions.Length != 0)
+                {
+                    spawnBasicMonsters = true;
+                    spawnChampionMonsters = true;
+                    StartSpawningBasicMonsters();
+                    StartSpawningChampionMonsters();
+                }
 
                 break;
 
@@ -171,7 +172,11 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 
-            Instantiate(basicEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
+            GameObject enemyObject = Instantiate(basicEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
+            if (MotherOfManagers.Instance.IsARGame)
+            {
+                enemyObject.transform.localScale *= ARManager.Instance.SizeFactor;
+            }
             livingBasicEnemyCounter++;
             spawnedBasicEnemyCounter++;
             if (spawnedBasicEnemyCounter == basicEnemyMaxNumber)
@@ -207,8 +212,13 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 
-             GameObject enemy =  Instantiate(championEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
-            enemy.transform.parent = enemySpawnPositions[0].transform.parent;
+
+            GameObject enemyObject = Instantiate(championEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
+            if (MotherOfManagers.Instance.IsARGame)
+            {
+                enemyObject.transform.localScale *= ARManager.Instance.SizeFactor;
+            }
+
             livingChampionEnemyCounter++;
             spawnedChampionEnemyCounter++;
             if (spawnedChampionEnemyCounter == championEnemyMaxNumber)

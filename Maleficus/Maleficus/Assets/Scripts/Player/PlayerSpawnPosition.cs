@@ -12,7 +12,7 @@ public class PlayerSpawnPosition : MonoBehaviour
     [SerializeField] private bool isHideShadowMeshOnAwake;
 
 
-    private void Awake()
+    private void OnEnable()
     {
         if (isHideShadowMeshOnAwake == true)
         {

@@ -92,24 +92,25 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Game ended : " + gameModeEnded + ". Aborted : " + wasAborted.ToString());
     }
 
-    //public event Action<EGameMode> GAME_GameAborted;
-    //public void Invoke_GAME_GameAborted(EGameMode gameModeAborted)
-    //{
-    //    if (GAME_GameAborted != null)
-    //    {
-    //        GAME_GameAborted.Invoke(gameModeAborted);
-    //    }
-    //    DebugLog("Game aborted : " + gameModeAborted);
-    //}
-
-    public event Action<ETeamID, EGameMode> GAME_TeamWon;
-    public void Invoke_GAME_PlayerWon(ETeamID winnerTeamID, EGameMode gameMode)
+    public event Action<AbstractPlayerStats, EGameMode> GAME_PlayerStatsUpdated;
+    public void Invoke_GAME_PlayerStatsUpdated(AbstractPlayerStats updatedPlayerStats, EGameMode fromGameMode)
     {
-        if (GAME_TeamWon != null)
+        if (GAME_PlayerStatsUpdated != null)
         {
-            GAME_TeamWon.Invoke(winnerTeamID, gameMode);
+            GAME_PlayerStatsUpdated.Invoke(updatedPlayerStats, fromGameMode);
         }
-        DebugLog("Team " + winnerTeamID + " won the game: " + gameMode);
+        DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
+    }
+
+
+    public event Action<EGameMode> GAME_GameOver;
+    public void Invoke_GAME_GameOver(EGameMode gameMode)
+    {
+        if (GAME_GameOver != null)
+        {
+            GAME_GameOver.Invoke(gameMode);
+        }
+        DebugLog("Game over : " + gameMode);
     }
 
     #endregion
@@ -282,7 +283,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
     #endregion
 
-
     #region ENEMIES
     public event Action<IEnemy> ENEMIES_EnemyAttackedPlayer;                                        // TODO: Add reference to attacked player ID
     public void Invoke_ENEMIES_EnemyAttackedPlayer(IEnemy attackingEnemy)
@@ -311,6 +311,29 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #endregion;
 
+    #region AR
+    public event Action<EARState, EARState> AR_ARStateUpdated;                                        // TODO: Add reference to attacked player ID
+    public void Invoke_AR_TrackingStateUpdated(EARState newARState, EARState lastState)
+    {
+        if (AR_ARStateUpdated != null)
+        {
+            AR_ARStateUpdated.Invoke(newARState, lastState);
+        }
+        DebugLog("AR State updated : " + newARState);
+    }
+
+    public event Action AR_StagePlaced;                                        // TODO: Add reference to attacked player ID
+    public void Invoke_AR_AR_StagePlaced()
+    {
+        if (AR_StagePlaced != null)
+        {
+            AR_StagePlaced.Invoke();
+        }
+        DebugLog("Stage placed");
+    }
+
+
+    #endregion
 
     private void DebugLog(string messageLog)
     {

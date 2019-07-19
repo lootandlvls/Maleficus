@@ -4,10 +4,11 @@ using UnityEngine;
 using Vuforia;
 using UnityEngine.UI;
 
-public class ARManager : AbstractSingletonManager<ARManager>
+public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EARState>
 {
     public float SizeFactor { get { return sizeFactor; } }
 
+    private AnchorBehaviour midAirAnchorBehaviour;
     private ContentPositioningBehaviour[] contentPositionings;
     private AnchorInputListenerBehaviour[] anchorInputListeners;
 
@@ -17,11 +18,35 @@ public class ARManager : AbstractSingletonManager<ARManager>
 
     private bool isAnchorListeningActive = true;
 
+
     protected override void Awake()
     {
         base.Awake();
 
         FindAndBindButtonActions();
+
+        startStates = MaleficusTypes.START_AR_STATES;
+
+        debugStateID = 89;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        StateUpdateEvent += EventManager.Instance.Invoke_AR_TrackingStateUpdated;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (midAirAnchorBehaviour != null)
+        {
+            UpdateState((EARState)((int)midAirAnchorBehaviour.CurrentStatus + 1));
+        }
+
+        Debug.Log("size factor " + sizeFactor);
     }
 
     private void OnContentPlaced(GameObject placedContent)
@@ -34,20 +59,19 @@ public class ARManager : AbstractSingletonManager<ARManager>
 
     private void SetAnchorsInputActive(bool isActive)
     {
+        isAnchorListeningActive = isActive;
+
         foreach (AnchorInputListenerBehaviour listener in anchorInputListeners)
         {
             listener.enabled = isActive;
-            isAnchorListeningActive = isActive;
         }
 
-        if (isAnchorListeningActive == true)
+        if (isActive == true)
         {
-            Debug.Log("Set unlocked");
             lockButton.SetIsUnlocked();
         }
         else
         {
-            Debug.Log("Set locked");
             lockButton.SetIsLocked();
         }
     }
@@ -55,6 +79,8 @@ public class ARManager : AbstractSingletonManager<ARManager>
     protected override void FindAndBindButtonActions()
     {
         base.FindAndBindButtonActions();
+
+        midAirAnchorBehaviour = FindObjectOfType<AnchorBehaviour>();
 
         contentPositionings = FindObjectsOfType<ContentPositioningBehaviour>();
         foreach (ContentPositioningBehaviour cpb in contentPositionings)
@@ -74,21 +100,18 @@ public class ARManager : AbstractSingletonManager<ARManager>
         ARLockButton[] arLockButtons = FindObjectsOfType<ARLockButton>();
         foreach (ARLockButton arLockButton in arLockButtons)
         {
-            lockButton = arLockButton;
-
-            lockButton.ActionButtonPressed += () =>
+            if (lockButton == null)
             {
-                OnLockButtonPressed();
-            };
+                lockButton = arLockButton;
+                lockButton.SetIsUnlocked();
+
+                lockButton.ActionButtonPressed += () =>
+                {
+                    SetAnchorsInputActive(!isAnchorListeningActive);
+                };
+            }
             break;
         }
     }
-
-    private void OnLockButtonPressed()
-    {
-        SetAnchorsInputActive(!isAnchorListeningActive);                                                            // TODO: Is working?
-
-    }
-
 }
 

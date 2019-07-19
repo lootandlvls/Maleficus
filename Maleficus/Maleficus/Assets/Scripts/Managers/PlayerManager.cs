@@ -115,7 +115,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
                 activePlayers.Add(toSpawnPlayerID, spawnedPlayer);
 
-                if (MotherOfManagers.Instance.IsSpawnARPlayers == true)
+                if (MotherOfManagers.Instance.IsARGame == true)
                 {
                     spawnedPlayer.IsARPlayer = true;
                     spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
@@ -402,20 +402,26 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
 
         // Determine spawn positions relative to this transform if no PlayerSpawnPosition found in scene
-        int angle;
-        for (int i = 1; i < 5; i++)
+        if (MotherOfManagers.Instance.IsSpawnGhostPlayerPositionsIfNotFound == true)
         {
-            angle = 90 * i;
-            EPlayerID playerID = MaleficusTypes.IntToPlayerID(i);
-            if (playersSpawnGhosts.ContainsKey(playerID) == false)
+            int angle;
+            for (int i = 1; i < 5; i++)
             {
-                PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(MaleficusTypes.PATH_PLAYER_SPAWN_POSITION));
-                spawnGhost.ToSpawnPlayerID = playerID;
-                spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
-                spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
-                spawnGhost.Rotation = transform.rotation;
-
-                playersSpawnGhosts.Add(playerID, spawnGhost);
+                angle = 90 * i;
+                EPlayerID playerID = MaleficusTypes.IntToPlayerID(i);
+                if (playersSpawnGhosts.ContainsKey(playerID) == false)
+                {
+                    PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(MaleficusTypes.PATH_PLAYER_SPAWN_POSITION));
+                    spawnGhost.ToSpawnPlayerID = playerID;
+                    spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
+                    spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
+                    spawnGhost.Rotation = transform.rotation;
+                    if (MotherOfManagers.Instance.IsARGame == true)
+                    {
+                        spawnGhost.transform.localScale *= ARManager.Instance.SizeFactor;
+                    }
+                    playersSpawnGhosts.Add(playerID, spawnGhost);
+                }
             }
         }
     }

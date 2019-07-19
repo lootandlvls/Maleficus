@@ -113,7 +113,13 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 myNavAgent.destination = playerPosition;
                 transform.LookAt(playerPosition);
 
-                if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold)
+                float distanceFactor = 1.0f;
+                if (MotherOfManagers.Instance.IsARGame == true)
+                {
+                    distanceFactor = ARManager.Instance.SizeFactor;
+                }
+
+                if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold * distanceFactor)
                 {
                     UpdateState(EnemyState.ATTACKING);
                 }
@@ -148,6 +154,10 @@ public class BasicEnemy : MonoBehaviour, IEnemy
             case EnemyState.MOVING_TOWARDS_PLAYER:
                 myAnimator.SetBool("IsMoving", true);
                 myNavAgent.speed = walkingSpeed;
+                if (MotherOfManagers.Instance.IsARGame == true)
+                {
+                    myNavAgent.speed *= ARManager.Instance.SizeFactor;
+                }
                 myNavAgent.destination = playerPosition;
                 break;
 

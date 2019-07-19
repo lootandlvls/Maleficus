@@ -67,8 +67,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // Update state
         base.UpdateState(newAppState);
 
-        Debug.Log("Updated state : " + LastState + " -> " + CurrentState + " : " + CurrentScene);
-
         if (newAppState.ContainedIn(MaleficusTypes.APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
         {
             EScene newScene = MaleficusTypes.FROM_SCENE_TO[CurrentScene];
@@ -83,8 +81,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private void UpdateScene(EScene newScene)
     {
-        Debug.Log("Update scene from " + CurrentScene + " to " + newScene);
-
         EventManager.Instance.Invoke_APP_SceneWillChange(newScene);
 
         // Wait some frames before changing scene
@@ -202,8 +198,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 UpdateState(EAppState.IN_MENU_IN_STARTING_AR_GAME);
             };
         }
-
-
     }
 
 
