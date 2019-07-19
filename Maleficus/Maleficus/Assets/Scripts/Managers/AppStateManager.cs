@@ -218,6 +218,15 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
     {
         Debug.Log("Loading level done : " + newScene.name);
+        EventManager.Instance.Invoke_APP_SceneChanged(CurrentScene);
+
+        // Validity test
+        if ((newScene.name != MaleficusTypes.SCENE_GAME)
+            && (newScene.name != MaleficusTypes.SCENE_MENU)
+            && (newScene.name != MaleficusTypes.SCENE_ENTRY))
+        {
+            Debug.LogError("Loaded level doesn't match to build levels");
+        }
     }
 
     private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)

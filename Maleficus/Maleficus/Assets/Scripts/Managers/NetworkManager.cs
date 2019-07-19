@@ -16,8 +16,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private const int BYTE_SIZE = 1024;
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
-    //private const string SERVER_IP = "52.91.55.121";
-    private const string SERVER_IP = "127.0.0.1";
+    private const string SERVER_IP = "52.91.55.121";
+    //private const string SERVER_IP = "127.0.0.1";
 
 
 
@@ -163,7 +163,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             case NetOP.OnLoginRequest:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)msg);
-                SendInitLobby();
                 UpdateReceivedMessage(ENetworkMessage.LOGGED_IN);
                 allReceivedMsgs.Add((Net_OnLoginRequest)msg);
 
@@ -186,6 +185,9 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 UpdateFollow((Net_UpdateFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONUPDATEFOLLOW);
                 allReceivedMsgs.Add((Net_UpdateFollow)msg);
+                break;
+            case NetOP.OnInitLobby:
+                Debug.Log("Lobby initialized");
                 break;
             case NetOP.SpellInput:
                 Debug.Log("Received Spell Input from another Player");
@@ -358,6 +360,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #region Lobby related
     public void SendInitLobby()
     {
+        Debug.Log("Sending innit lobby");
         Net_InitLobby il = new Net_InitLobby();
 
         il.Token = token;
