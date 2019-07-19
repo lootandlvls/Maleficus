@@ -100,9 +100,12 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
         EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
 
         ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+
         if (destroyEffect != null)
         {
+            
             destroyEffect.DestroySpell();
+
         }
     }
 

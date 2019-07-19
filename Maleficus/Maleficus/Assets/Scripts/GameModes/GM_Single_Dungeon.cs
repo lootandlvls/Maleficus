@@ -37,6 +37,18 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 
         EventManager.Instance.ENEMIES_EnemyAttackedPlayer += On_ENEMIES_EnemyAttackedPlayer;
         EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
+        EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
+    }
+
+    private void On_PLAYERS_PlayerCollectedCoin()
+    {
+        foreach (PlayerStats_Dungeon playerStat in playerStats.Values)
+        {
+            playerStat.IncrementNumberOfKilledEnemies();
+
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameMode);
+        }
+        
     }
 
     private void On_ENEMIES_EnemyDied(IEnemy diedEnemy)

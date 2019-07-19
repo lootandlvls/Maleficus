@@ -55,6 +55,14 @@ public class Linear_Hit : AbstractSpell
         {
             ProcessHits(otherEnemy);
         }
+        else if (other.tag.Equals("Object"))
+        {
+            ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+            if (destroyEffect != null)
+            {
+                destroyEffect.DestroySpell();
+            }
+        }
         /*else
         {
             ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();

@@ -26,6 +26,8 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
     [Header("Minion")]
     [SerializeField] BasicEnemy minionEnemyPrefab;
 
+
+    [SerializeField] private int numberOfCollectedCoins = 0;
     EnemySpawnPosition[] enemySpawnPositions;
 
 
@@ -64,9 +66,18 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
     private void Start()
     {
         EventManager.Instance.ÁPP_AppStateUpdated += OnAppStateUpdated;
+        EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
+
+
 
         Action_OnEnemyAttacked = OnEnemyAttacked;
         Action_OnEnemyDied = OnEnemyDied;
+    }
+
+    private void On_PLAYERS_PlayerCollectedCoin()
+    { 
+        numberOfCollectedCoins++;
+        SpawnNextWave();
     }
 
     private void OnEnemyAttacked(IEnemy attackingEnemy)
@@ -127,18 +138,45 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
 
     }
 
+    private void SpawnNextWave()
+    {
+        if (enemySpawnPositions.Length != 0)
+        {
+
+            spawnedBasicEnemyCounter = 0;
+            spawnedChampionEnemyCounter = 0;
+            spawnedBossEnemyCounter = 0;
+            spawnedMinionEnemyCounter = 0;
+
+            livingBasicEnemyCounter = 0;
+            livingChampionEnemyCounter = 0;
+            livingBossEnemyCounter = 0;
+            livingMinionEnemyCounter = 0;
+
+            basicEnemyMaxNumber = CoinManager.Instance.numberOfCoins - numberOfCollectedCoins;
+
+            if (numberOfCollectedCoins != 1)
+            {
+                championEnemyMaxNumber = numberOfCollectedCoins;
+            }
+            else
+            {
+                championEnemyMaxNumber = 0;
+            }
+
+
+            spawnBasicMonsters = true;
+            spawnChampionMonsters = true;
+            StartSpawningBasicMonsters();
+            StartSpawningChampionMonsters();
+        }
+    }
+
     private void OnAppStateUpdated(EAppState newState, EAppState lastState)
     {
         switch (newState)
         {
             case EAppState.IN_GAME_IN_RUNNING:
-                if (enemySpawnPositions.Length != 0)
-                {
-                    spawnBasicMonsters = true;
-                    spawnChampionMonsters = true;
-                    StartSpawningBasicMonsters();
-                    StartSpawningChampionMonsters();
-                }
 
                 break;
 
