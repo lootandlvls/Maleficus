@@ -43,7 +43,11 @@ public class AOE : AbstractSpell
                 }
                 else if (otherEnemy != null)
                 {
-                    hitEnemies.Add(otherEnemy);
+                    if (collider.tag.Equals("Enemy"))
+                    {
+                        hitEnemies.Add(otherEnemy);
+                    }
+
                 }
 
             }

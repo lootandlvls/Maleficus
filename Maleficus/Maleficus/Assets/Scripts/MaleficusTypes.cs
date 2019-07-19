@@ -503,4 +503,10 @@ public enum EARState
     TRACKED,
     EXTENDED_TRACKED
 }
+
+public enum EPlacementMethod
+{
+    ON_PLANE,
+    MID_AIR
+}
 #endregion

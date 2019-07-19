@@ -56,13 +56,13 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         myAnimator = GetComponent<Animator>();
         myNavAgent = GetComponent<NavMeshAgent>();
         myAudioSource = SoundUtilities.AddAudioListener(gameObject, false, 0.15f, false);
+       
 
-
-        if (spawnParticleEffect != null)
+      /*  if (spawnParticleEffect != null)
         {
             GameObject obj = Instantiate(spawnParticleEffect, transform.position, Quaternion.identity);
             obj.transform.parent = transform;
-        }
+        }*/
         
     }
 
@@ -231,7 +231,12 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         float timer = Time.time;
         while (Time.time - timer < 3)
         {
-            transform.position += Vector3.down * Time.deltaTime * 0.5f;
+            Vector3 vanishDownUpdate = Vector3.down * Time.deltaTime * 0.5f;
+            if (MotherOfManagers.Instance.IsARGame == true)
+            {
+                vanishDownUpdate *= ARManager.Instance.SizeFactor;
+            }
+            transform.position += vanishDownUpdate;
             yield return new WaitForEndOfFrame();
         }
         Destroy(gameObject);

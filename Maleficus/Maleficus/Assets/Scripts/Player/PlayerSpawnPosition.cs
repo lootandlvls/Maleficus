@@ -23,6 +23,15 @@ public class PlayerSpawnPosition : MonoBehaviour
     private void Start()
     {
         EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
+        EventManager.Instance.ÁPP_AppStateUpdated += On_APP_AppStateUpdated;
+    }
+
+    private void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)
+    {
+        if (newState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            HideShadowMesh();
+        }
     }
 
     private void On_PLAYERS_PlayerSpawned(EPlayerID playerID)

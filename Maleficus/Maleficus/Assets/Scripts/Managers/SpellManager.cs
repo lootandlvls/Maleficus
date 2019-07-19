@@ -279,7 +279,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
        
         {
             activePlayers[playerID].animator.SetTrigger("shockwave");
-            Vector3 position = activePlayers[playerID].transform.position;
+            Vector3 position = new Vector3 (activePlayers[playerID].transform.position.x , activePlayers[playerID].transform.position.y + 0.01f , activePlayers[playerID].transform.position.z);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
              AbstractSpell spell = Instantiate(spellToCast, position, rotation);
             if ((MotherOfManagers.Instance.IsARGame == true))

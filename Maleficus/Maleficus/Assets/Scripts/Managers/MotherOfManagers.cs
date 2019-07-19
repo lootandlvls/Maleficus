@@ -21,6 +21,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public bool IsSpawnAllPlayers = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
     [SerializeField] public bool IsARGame = false;
+    [SerializeField] public EPlacementMethod ARPlacementMethod;
 
     [Header ("Debug")]
     [SerializeField] public bool IsDebugLogEvents = false;
