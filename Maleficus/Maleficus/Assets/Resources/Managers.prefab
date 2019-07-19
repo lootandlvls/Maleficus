@@ -1,5 +1,48 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3363053773445876045
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 545478605672680163}
+  - component: {fileID: 7072756069364542406}
+  m_Layer: 0
+  m_Name: CoinManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &545478605672680163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3363053773445876045}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5180474635525147207}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7072756069364542406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3363053773445876045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a726f62aa46dde645926d62660a88477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7179190944781286353
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100,6 +143,21 @@ PrefabInstance:
     - target: {fileID: 4335998295704777601, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: basicEnemyMaxNumber
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: championEnemyMaxNumber
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: bossEnemyMaxNumber
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3900233467615566551, guid: e016db9698da6cf4c8fe22edd976b062,
@@ -299,3 +357,9 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e016db9698da6cf4c8fe22edd976b062, type: 3}
+--- !u!4 &5180474635525147207 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2613532659259175318, guid: e016db9698da6cf4c8fe22edd976b062,
+    type: 3}
+  m_PrefabInstance: {fileID: 7179190944781286353}
+  m_PrefabAsset: {fileID: 0}
