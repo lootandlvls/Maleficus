@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public Account self;
     private string token;
     private bool isStarted;
+    public List<NetMsg> allReceivedMsgs;
 
     #region Monobehaviour
 
@@ -40,9 +42,9 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     protected void Start()
     {
-
         //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
-
+        EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
+        EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
         Init();
     }
 
@@ -81,6 +83,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 #endif
         Debug.Log(string.Format("Attempting to connect on {0}...", SERVER_IP));
         isStarted = true;
+        allReceivedMsgs = new List<NetMsg>();
     }
 
     public void Shutdown()
@@ -113,11 +116,15 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Connected to server");
                 UpdateReceivedMessage(ENetworkMessage.CONNECTED);
+                Net_Connected c = new Net_Connected();
+                allReceivedMsgs.Add(c);
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Disconnected from server");
                 UpdateReceivedMessage(ENetworkMessage.DISCONNECTED);
+                Net_Disonnected di = new Net_Disonnected();
+                allReceivedMsgs.Add(di);
                 break;
 
             case NetworkEventType.DataEvent:
@@ -151,27 +158,39 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)msg);
                 UpdateReceivedMessage(ENetworkMessage.REGISTERED);
+                allReceivedMsgs.Add((Net_OnCreateAccount)msg);
                 break;
             case NetOP.OnLoginRequest:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)msg);
+                SendInitLobby();
                 UpdateReceivedMessage(ENetworkMessage.LOGGED_IN);
+                allReceivedMsgs.Add((Net_OnLoginRequest)msg);
+
                 break;
             case NetOP.OnAddFollow:
                 Debug.Log("Add Friend");
                 OnAddFollow((Net_OnAddFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONADDFOLLOW);
+                allReceivedMsgs.Add((Net_OnAddFollow)msg);
                 break;
             case NetOP.OnRequestFollow:
                 Debug.Log("Get Friends");
                 OnRequestFollow((Net_OnRequestFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
+                allReceivedMsgs.Add((Net_OnRequestFollow)msg);
                 break;
                 //Todo change to Onupdatefollow
             case NetOP.UpdateFollow:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONUPDATEFOLLOW);
+                allReceivedMsgs.Add((Net_UpdateFollow)msg);
+                break;
+            case NetOP.SpellInput:
+                Debug.Log("Received Spell Input from another Player");
+                UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
+                allReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
         }
     }
@@ -348,5 +367,54 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     #endregion
 
+    #region Input related
+    public void SendSpellInput(EInputButton eInputButton)
+    {
+        Net_SpellInput si = new Net_SpellInput();
+
+        si.Token = token;
+        si.spellId = eInputButton;
+
+        SendServer(si);
+    }
+
+    public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
+    {
+        Net_MovementInput mi = new Net_MovementInput();
+
+        mi.Token = token;
+        mi.axis = eInputAxis;
+        mi.axisValue = axisvalue;
+
+        SendServer(mi);
+    }
+    #endregion
+
+    #endregion
+
+    #region Listeners
+    public void On_Input_ButtonReleased(EInputButton eInputButton, EPlayerID ePlayerID)
+    {
+        if(AppStateManager.Instance.CurrentScene == EScene.GAME)
+        {
+            if(ePlayerID == EPlayerID.PLAYER_1)
+            {
+                switch (eInputButton)
+                {
+                    case EInputButton.CAST_SPELL_1:
+                        SendSpellInput(eInputButton);
+                        break;
+                }
+            }
+        }
+    }
+
+    public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
+    {
+        if(ePlayerID == EPlayerID.PLAYER_1)
+        {
+            SendMovementInput(eInputAxis, axisvalue);
+        }
+    }
     #endregion
 }

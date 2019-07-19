@@ -210,7 +210,8 @@ public class Mongo
         {
             Model_Lobby newLobby = new Model_Lobby();
             newLobby.initialiserId = initialiserId;
-            newLobby.Team1.Add(self._id);
+            newLobby.Team1 = new List<ObjectId>();
+            newLobby.Team1.Add(initialiserId);
 
             // add friends to game lobby
             //Todo replace with inviting to lobby
@@ -220,16 +221,19 @@ public class Mongo
 
             if (friendListSize >= 1)
             {
+                newLobby.Team2 = new List<ObjectId>();
                 newLobby.Team2.Add(yourFriends[0]._id);
             }
 
             if(friendListSize >= 2)
             {
+                newLobby.Team3 = new List<ObjectId>();
                 newLobby.Team3.Add(yourFriends[1]._id);
             }
 
             if (friendListSize >= 3)
             {
+                newLobby.Team4 = new List<ObjectId>();
                 newLobby.Team4.Add(yourFriends[2]._id);
             }
 
@@ -359,6 +363,10 @@ public class Mongo
     {
         return lobbys.Find(u => u.initialiserId == initialiserId).FirstOrDefault<Model_Lobby>();
     }
+    public Model_Lobby FindLobbyByObjectId(ObjectId objectId)
+    {
+        return lobbys.Find(u => u._id == objectId).FirstOrDefault<Model_Lobby>();
+    }
     #endregion
 
     #endregion
@@ -375,6 +383,11 @@ public class Mongo
         accounts.UpdateOne((a => a.Email == email), Builders<Model_Account>.Update.Set("Token", account.Token)
                                                                                   .Set("ActiveConnection", account.ActiveConnection)
                                                                                   .Set("Status", account.Status));
+    }
+
+    public void UpdateAccountInLobby(ObjectId accountid, ObjectId lobbyId)
+    {
+        accounts.UpdateOne((a => a._id == accountid), Builders<Model_Account>.Update.Set("inLobby", lobbyId));
     }
     #endregion
 

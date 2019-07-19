@@ -77,6 +77,20 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             }
             UpdateScene(newScene);
         }
+
+
+        // if connected before scene loaded
+        if (CurrentState == EAppState.IN_ENTRY)
+        {
+            List<NetMsg> msgs = NetworkManager.Instance.allReceivedMsgs;
+            if (msgs.Count != 0)
+            {
+                if (msgs[NetworkManager.Instance.allReceivedMsgs.Count - 1].OP == NetOP.Connected)
+                {
+                    UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
+                }
+            }
+        }
     }
 
     private void UpdateScene(EScene newScene)
@@ -142,7 +156,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                     break;
                 case ENetworkMessage.LOGGED_IN:
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);
-                    EventManager.Instance.Invoke_APP_SceneChanged(CurrentScene);
                     break;
                 case ENetworkMessage.REGISTERED:
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);

@@ -31,6 +31,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
+        EventManager.Instance.ÁPP_AppStateUpdated += On_APP_AppStateUpdated;
 
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
@@ -50,7 +51,24 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         this.selectedButton = selectedButton;
     }
 
+    protected override void UpdateState(EMenuState newMenuState)
+    {
+        // Update state
+        base.UpdateState(newMenuState);
 
+        // if connected before scene loaded
+        if (currentState == EMenuState.IN_ENTRY)
+        {
+            List<NetMsg> msgs = NetworkManager.Instance.allReceivedMsgs;
+            if (msgs.Count != 0)
+            {
+                if (msgs[msgs.Count - 1].OP == NetOP.Connected)
+                {
+                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                }
+            }
+        }
+    }
 
     protected override void FindAndBindButtonActions()
     {
@@ -131,6 +149,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
+                Debug.Log("pressed");
                 NetworkManager.Instance.SendInitLobby();
             };
         }
@@ -186,12 +205,28 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             switch (receivedMsg)
             {
                 case ENetworkMessage.CONNECTED:
-                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    if (currentState == EMenuState.IN_ENTRY)
+                    {
+                        UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    }
                     break;
                 case ENetworkMessage.LOGGED_IN:
                     UpdateState(EMenuState.IN_MENU);
                     break;
                 case ENetworkMessage.REGISTERED:
+                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    break;
+            }
+        }
+    }
+
+    public void On_APP_AppStateUpdated(EAppState eAppState, EAppState lastEAppState)
+    {
+        if(currentState == EMenuState.IN_ENTRY)
+        {
+            switch (eAppState)
+            {
+                case EAppState.IN_ENTRY_IN_LOGIN:
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                     break;
             }

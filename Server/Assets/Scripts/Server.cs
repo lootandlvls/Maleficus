@@ -151,6 +151,9 @@ public class Server : MonoBehaviour
             case NetOP.InitLobby:
                 InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
                 break;
+            case NetOP.SpellInput:
+                ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInput)msg);
+                break;
         }
     }
 
@@ -300,8 +303,12 @@ public class Server : MonoBehaviour
 
         Model_Lobby lobby = db.FindLobbyByInitializerId(self._id);
 
+        // add lobbyID to the player
+        db.UpdateAccountInLobby(self._id, lobby._id);
+
         // send all lobby members the message that the game can start now
         // Todo change so different game modes can be initialized
+        oil.playerID = 1;
         SendClient(recHostId, cnnId, oil);
 
         if(lobby.Team2.Count != 0)
@@ -309,6 +316,8 @@ public class Server : MonoBehaviour
             Model_Account player2 = db.FindAccountByObjectId(lobby.Team2[0]);
             if (player2 != null)
             {
+                db.UpdateAccountInLobby(player2._id, lobby._id);
+                oil.playerID = 2;
                 SendClient(recHostId, player2.ActiveConnection, oil);
             }
         }
@@ -318,6 +327,8 @@ public class Server : MonoBehaviour
             Model_Account player3 = db.FindAccountByObjectId(lobby.Team3[0]);
             if(player3 != null)
             {
+                db.UpdateAccountInLobby(player3._id, lobby._id);
+                oil.playerID = 3;
                 SendClient(recHostId, player3.ActiveConnection, oil);
             }
         }
@@ -327,7 +338,60 @@ public class Server : MonoBehaviour
             Model_Account player4 = db.FindAccountByObjectId(lobby.Team4[0]);
             if (player4 != null)
             {
+                db.UpdateAccountInLobby(player4._id, lobby._id);
+                oil.playerID = 4;
                 SendClient(recHostId, player4.ActiveConnection, oil);
+            }
+        }
+
+    }
+    #endregion
+
+    #region forward
+    private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
+    {
+        Model_Account self = db.FindAccountByToken(si.Token);
+        if(self != null)
+        {
+            Model_Lobby lobby = db.FindLobbyByObjectId(self.inLobby);
+            if(lobby != null)
+            {
+                // send all other players the movement message
+                if (lobby.Team1 != null && lobby.Team1.Count != 0 && lobby.Team1[0] != self._id)
+                {
+                    Model_Account friend1 = db.FindAccountByObjectId(lobby.Team1[0]);
+                    if (friend1 != null)
+                    {
+                        SendClient(recHostId, friend1.ActiveConnection, si);
+                    }
+                }
+
+                if (lobby.Team2 != null && lobby.Team2.Count != 0 && lobby.Team2[0] != self._id)
+                {
+                    Model_Account friend2 = db.FindAccountByObjectId(lobby.Team2[0]);
+                    if(friend2 != null)
+                    {
+                        SendClient(recHostId, friend2.ActiveConnection, si);
+                    }
+                }
+
+                if (lobby.Team3 != null && lobby.Team3.Count != 0 && lobby.Team3[0] != self._id)
+                {
+                    Model_Account friend3 = db.FindAccountByObjectId(lobby.Team3[0]);
+                    if (friend3 != null)
+                    {
+                        SendClient(recHostId, friend3.ActiveConnection, si);
+                    }
+                }
+
+                if (lobby.Team4 != null && lobby.Team4.Count != 0 && lobby.Team4[0] != self._id)
+                {
+                    Model_Account friend4 = db.FindAccountByObjectId(lobby.Team4[0]);
+                    if (friend4 != null)
+                    {
+                        SendClient(recHostId, friend4.ActiveConnection, si);
+                    }
+                }
             }
         }
 

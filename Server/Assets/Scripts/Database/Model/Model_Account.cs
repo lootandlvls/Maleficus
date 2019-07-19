@@ -15,6 +15,7 @@ public class Model_Account
     public byte Status { set; get; }
     public string Token { set; get; }
     public DateTime LastLogin { set; get; }
+    public ObjectId inLobby { set; get; }
 
     public Account GetAccount()
     {

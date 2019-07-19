@@ -8,5 +8,5 @@ public class Net_OnInitLobby : NetMsg
 
     public byte Success { set; get; }
     public string Information { set; get; }
-    public int ConnectionId { set; get; }
+    public int playerID { set; get; }
 }

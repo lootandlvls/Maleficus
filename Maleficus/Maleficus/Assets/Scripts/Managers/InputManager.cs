@@ -29,6 +29,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             touchPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
         }
+        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
 
@@ -405,4 +406,58 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         return playerControllerMapping.ContainsKey(controllerID);
     }
+
+    #region Listeners
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
+    {
+        if(AppStateManager.Instance.CurrentScene == EScene.GAME)
+        {
+            switch (receivedMsg)
+            {
+                case ENetworkMessage.DATA_SPELLINPUT:
+                    List<NetMsg> msgs = NetworkManager.Instance.allReceivedMsgs;
+                    for(int i = msgs.Count - 1; i > -1; i--)
+                    {
+                        if(msgs[i].OP == 15){
+                            Net_SpellInput si = (Net_SpellInput)msgs[i];
+                            int spellid = 0;
+                            char controllerid = 'Z';
+
+                            switch(si.spellId)
+                            {
+                                case EInputButton.CAST_SPELL_1:
+                                    spellid = 1;
+                                    break;
+                                case EInputButton.CAST_SPELL_2:
+                                    spellid = 2;
+                                    break;
+                                case EInputButton.CAST_SPELL_3:
+                                    spellid = 3;
+                                    break;
+                            }
+
+                            switch (si.ePlayerID)
+                            {
+                                case EPlayerID.PLAYER_1:
+                                    controllerid = 'A';
+                                    break;
+                                case EPlayerID.PLAYER_2:
+                                    controllerid = 'B';
+                                    break;
+                                case EPlayerID.PLAYER_3:
+                                    controllerid = 'C';
+                                    break;
+                                case EPlayerID.PLAYER_4:
+                                    controllerid = 'D';
+                                    break;
+                            }
+
+                            Check_ChargingSpell(spellid, controllerid);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+    #endregion
 }

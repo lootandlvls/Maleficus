@@ -21,6 +21,12 @@
     public const int InitLobby = 11;
 
     public const int OnInitLobby = 12;
+
+    public const int Connected = 13;
+    public const int Disconnected = 14;
+
+    public const int SpellInput = 15;
+    public const int MovementInput = 16;
 }
 [System.Serializable]
 public abstract class NetMsg
