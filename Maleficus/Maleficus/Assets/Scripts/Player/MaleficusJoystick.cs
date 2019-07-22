@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
 
+    public ETouchJoystickType JoystickType      { get { return joystickType; } }
     public float Horizontal                     { get { return (snapX) ? SnapFloat(input.x, EJoystickAxisRestriction.HORIZONTAL) : input.x; } }
     public float Vertical                       { get { return (snapY) ? SnapFloat(input.y, EJoystickAxisRestriction.VERTICAL) : input.y; } }
     public Vector2 Direction                    { get { return new Vector2(Horizontal, Vertical); } }
@@ -280,6 +281,25 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
                     handleImage.color = canTriggerButtonColor;
                 }
                 break;
+        }
+    }
+
+    public void ReloadJoystick(float rechargeTime)
+    {
+        Debug.Log("reload joystick " + gameObject.name + " : " + rechargeTime);
+        StopAllCoroutines();
+
+        StartCoroutine(ReloadJoystickCoroutine(rechargeTime));
+    }
+
+    private IEnumerator ReloadJoystickCoroutine(float rechargeTime)
+    {
+        float startTime = Time.time;
+        while (Time.time - startTime < rechargeTime)
+        {
+            handleImage.fillAmount = (Time.time - startTime) / rechargeTime;
+
+            yield return new WaitForEndOfFrame();
         }
     }
 }

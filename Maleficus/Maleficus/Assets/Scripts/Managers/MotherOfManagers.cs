@@ -36,7 +36,13 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     private void Start()
     {
-        EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged; 
+        EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
+    }
+
+
+    public override void Initialize()
+    {
+
     }
 
     private void On_APP_SceneChanged(EScene newScene)
@@ -58,4 +64,5 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
         }
     }
 
+    
 }

@@ -16,7 +16,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     public float AttackTimeout { get { return attackTimeOut; } }
     public float SpawnRate { get { return spawnRate; } }
     public EEnemyType IsType { get { return isType; } }
-
+    public bool IsDead { get { return myState == EnemyState.DEAD; } }
 
     [Header("Attributes")]
     [SerializeField] protected EEnemyType isType;
@@ -27,6 +27,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     [SerializeField] protected float spawnRate = 3;
     [SerializeField] protected float walkingSpeed = 1.5f;
     [SerializeField] protected float attackingThreshold = 1.5f;
+    [SerializeField] protected float wayPointInterpolationFactor = 1.0f;
     [Header("Assign")]
     [SerializeField] protected GameObject damageParticleEffect;
     [SerializeField] protected GameObject spawnParticleEffect;
@@ -37,7 +38,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     protected Animator myAnimator;
     protected NavMeshAgent myNavAgent;
     protected AudioSource myAudioSource;
-
+    private Vector3 movementDirection;
 
     private EnemyWayPoint[] wayPoints;
 
@@ -72,7 +73,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
-        EventManager.Instance.ÁPP_AppStateUpdated   += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated   += On_APP_AppStateUpdated;
         EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
 
         // Init Enemy
@@ -83,7 +84,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     private void On_SPELLS_SpellHitEnemy(IEnemy hitEnemy)
     {
-        Debug.Log("Enemy attacked : " + ((BasicEnemy)hitEnemy == this).ToString());
         if ((BasicEnemy) hitEnemy == this)
         {
             UpdateState(EnemyState.DEAD);
@@ -123,8 +123,9 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 {
                     Vector3 destination = GetNextDestinationToPlayer();
                     Vector3 direction = (destination - transform.position).normalized;
-                    transform.position += direction * walkingSpeed * Time.deltaTime * ARManager.Instance.SizeFactor;
-                    transform.LookAt(destination);
+                    movementDirection = Vector3.Lerp(movementDirection, direction, Time.deltaTime * wayPointInterpolationFactor).normalized;
+                    transform.position += movementDirection * walkingSpeed * Time.deltaTime * ARManager.Instance.SizeFactor;
+                    transform.LookAt(transform.position + movementDirection);
                 }
 
                 if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold * ARManager.Instance.SizeFactor)
@@ -202,7 +203,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 myNavAgent.enabled = false;
 
 
-                EventManager.Instance.ÁPP_AppStateUpdated-= On_APP_AppStateUpdated;
+                EventManager.Instance.APP_AppStateUpdated-= On_APP_AppStateUpdated;
                 
                 EventManager.Instance.Invoke_ENEMIES_EnemyDied(this);
 
@@ -271,7 +272,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         yield return new WaitForSeconds(attackDelay);
         SoundUtilities.PlayRandomSound(myAudioSource, attackSounds);
 
-        EventManager.Instance.Invoke_ENEMIES_EnemyAttackedPlayer(this);
+        EventManager.Instance.Invoke_ENEMIES_EnemyHitPlayer(this);
     }
 
 
@@ -311,7 +312,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
             {
                 minDistance = distanceToWayPoint;
                 nextDestination = wayPoint.Position;
-                Debug.Log(wayPoint.name + " is nearer");
             }
         }
         return nextDestination;

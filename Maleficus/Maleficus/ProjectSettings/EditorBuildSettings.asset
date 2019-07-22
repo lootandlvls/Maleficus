@@ -6,15 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_MENU_LevelSelection 1.unity
+    path: Assets/Scenes/DungeonMode/LVL_SELECTION.unity
     guid: af9231850a86b944bb73cb4605edd16e
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_ARGame_Dungeon_lvl_1.unity
+    path: Assets/Scenes/DungeonMode/LVL_1_AR.unity
     guid: fe1d91be69be11d4ea1b49d3ba82f656
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_ARGame_Dungeon_lvl_3.unity
+    path: Assets/Scenes/DungeonMode/LVL_3_AR.unity
     guid: 0f2c461710b01664597cc386f1ac5acd
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/Dummy_ARGame_Dungeon_lvl_2.unity
+    path: Assets/Scenes/DungeonMode/LVL_2_AR.unity
     guid: 9113a6a651904714a8276ca11175ac5e
   m_configObjects: {}

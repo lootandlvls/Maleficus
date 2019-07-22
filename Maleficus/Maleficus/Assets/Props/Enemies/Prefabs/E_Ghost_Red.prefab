@@ -5305,9 +5305,10 @@ MonoBehaviour:
   damage: 1
   attackTimeOut: 3
   attackDelay: 1
-  spawnRate: 1
-  walkingSpeed: 1.5
-  attackingThreshold: 1.5
+  spawnRate: 2
+  walkingSpeed: 3
+  attackingThreshold: 3
+  wayPointInterpolationFactor: 1
   damageParticleEffect: {fileID: 0}
   spawnParticleEffect: {fileID: 0}
   attackSounds: []

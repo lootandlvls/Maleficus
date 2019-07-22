@@ -10,9 +10,6 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
     public event Action AllEnemiesDead;
     public event Action AllMinionsDead;
 
-    public Action<IEnemy> Action_OnEnemyAttacked;
-    public Action<IEnemy> Action_OnEnemyDied;
-
 
     [Header("Basic")]
     [SerializeField] BasicEnemy basicEnemyPrefab;
@@ -47,95 +44,34 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
     private bool spawnChampionMonsters = false;
     private bool spawnBossMonster = false;
 
+    private int waveCounter = 0;
 
     protected override void Awake()
     {
         base.Awake();
-
-        FindAndBindButtonActions();
-    }
-
-    protected override void FindAndBindButtonActions()
-    {
-        base.FindAndBindButtonActions();
-
-        enemySpawnPositions = FindObjectsOfType<EnemySpawnPosition>();
-
     }
 
     private void Start()
     {
-        EventManager.Instance.ÁPP_AppStateUpdated += OnAppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated += OnAppStateUpdated;
         EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
-
-
-
-        Action_OnEnemyAttacked = OnEnemyAttacked;
-        Action_OnEnemyDied = OnEnemyDied;
+        EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
     }
 
-    private void On_PLAYERS_PlayerCollectedCoin()
-    { 
-        numberOfCollectedCoins++;
-        SpawnNextWave();
-    }
-
-    private void OnEnemyAttacked(IEnemy attackingEnemy)
+    public override void Initialize()
     {
-        if (PlayersHit != null) PlayersHit.Invoke(attackingEnemy.Damage);
+        FindAndBindButtonActions();
+        waveCounter = 0;
     }
 
-    private void OnEnemyDied(IEnemy deadEnemy)
+    private void Update()
     {
-        switch (deadEnemy.IsType)
-        {
-            case EEnemyType.BASIC:
-                livingBasicEnemyCounter--;
-                break;
-
-            case EEnemyType.CHAMPION:
-                livingChampionEnemyCounter--;
-                break;
-
-            case EEnemyType.BOSS:
-                livingBossEnemyCounter--;
-                break;
-
-            case EEnemyType.MINION:
-                livingMinionEnemyCounter--;
-                break;
-        }
-
-        if ((livingMinionEnemyCounter == 0) && (spawnedMinionEnemyCounter != 0))
-        {
-            if (AllMinionsDead != null) AllMinionsDead.Invoke();
-            spawnedMinionEnemyCounter = 0;
-        }
-
-        // All basic and champion monsters died? Spawn boss
-        //if ((spawnBossMonster == false) && (livingBossEnemyCounter == 0))
-        //{
-        //    Debug.Log("Game Won!");
-        //    if (AllEnemiesDead != null) AllEnemiesDead.Invoke();
-        //}
-        //else if ((spawnBasicMonsters == false) && (livingBasicEnemyCounter == 0)
-        //    && (spawnChampionMonsters == false) && (livingChampionEnemyCounter == 0)
-        //    && (livingBossEnemyCounter == 0))
-        //{
-        //    Debug.Log("Spawn Boss");
-        //    if (bossEnemyPrefab != null)
-        //    {
-        //        SpawnBossMonster();
-        //    }
-        //    else
-        //    {
-        //        if (AllEnemiesDead != null) AllEnemiesDead.Invoke();
-        //    }
-
-        //}
-
-
-
+        DebugManager.Instance.Log(80,
+            "basicEnemyMaxNumber : " + basicEnemyMaxNumber
+            + "\nspawnedBasicEnemyCounter : " + spawnedBasicEnemyCounter
+            + "\nlivingBasicEnemyCounter : " + livingBasicEnemyCounter
+            + "\nspawnBasicMonsters : " + spawnBasicMonsters
+            );
     }
 
     private void SpawnNextWave()
@@ -153,11 +89,11 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             livingBossEnemyCounter = 0;
             livingMinionEnemyCounter = 0;
 
-            basicEnemyMaxNumber = CoinManager.Instance.NumberOfCoins - numberOfCollectedCoins;
+            basicEnemyMaxNumber = CoinManager.Instance.NumberOfCoins * 2 - numberOfCollectedCoins ;
 
             if (numberOfCollectedCoins != 1)
             {
-                championEnemyMaxNumber = numberOfCollectedCoins;
+                championEnemyMaxNumber = (int) (numberOfCollectedCoins * 1.5f);
             }
             else
             {
@@ -169,22 +105,9 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             spawnChampionMonsters = true;
             StartSpawningBasicMonsters();
             StartSpawningChampionMonsters();
+
+            waveCounter++;
         }
-    }
-
-    private void OnAppStateUpdated(EAppState newState, EAppState lastState)
-    {
-        switch (newState)
-        {
-            case EAppState.IN_GAME_IN_RUNNING:
-
-                break;
-
-            default:
-                StopAllCoroutines();
-                break;
-        }
-
     }
 
 
@@ -214,6 +137,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             if (MotherOfManagers.Instance.IsARGame)
             {
                 enemyObject.transform.localScale *= ARManager.Instance.SizeFactor;
+                enemyObject.transform.localScale *= 2.0f;
             }
             livingBasicEnemyCounter++;
             spawnedBasicEnemyCounter++;
@@ -255,6 +179,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             if (MotherOfManagers.Instance.IsARGame)
             {
                 enemyObject.transform.localScale *= ARManager.Instance.SizeFactor;
+                enemyObject.transform.localScale *= 2.0f;
             }
 
             livingChampionEnemyCounter++;
@@ -266,6 +191,99 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             yield return new WaitForSeconds(championEnemyPrefab.SpawnRate);
         }
     }
+
+    private void FindAndBindButtonActions()
+    {
+        enemySpawnPositions = FindObjectsOfType<EnemySpawnPosition>();
+    }
+
+
+    private void On_PLAYERS_PlayerCollectedCoin()
+    { 
+        numberOfCollectedCoins++;
+        SpawnNextWave();
+    }
+
+    private void OnEnemyAttacked(IEnemy attackingEnemy)
+    {
+        if (PlayersHit != null) PlayersHit.Invoke(attackingEnemy.Damage);
+    }
+
+    private void On_ENEMIES_EnemyDied(IEnemy deadEnemy)
+    {
+        switch (deadEnemy.IsType)
+        {
+            case EEnemyType.BASIC:
+                livingBasicEnemyCounter--;
+                break;
+
+            case EEnemyType.CHAMPION:
+                livingChampionEnemyCounter--;
+                break;
+
+            case EEnemyType.BOSS:
+                livingBossEnemyCounter--;
+                break;
+
+            case EEnemyType.MINION:
+                livingMinionEnemyCounter--;
+                break;
+        }
+
+        if ((livingMinionEnemyCounter == 0) && (spawnedMinionEnemyCounter != 0))
+        {
+            if (AllMinionsDead != null) AllMinionsDead.Invoke();
+            spawnedMinionEnemyCounter = 0;
+        }
+
+        // All enemies dead?
+        if ((livingBasicEnemyCounter == 0) && (livingBossEnemyCounter == 0) && (livingChampionEnemyCounter == 0) && (livingMinionEnemyCounter == 0))
+        {
+            EventManager.Instance.Invoke_ENEMIES_WaveCompleted(waveCounter);
+        }
+
+        // All basic and champion monsters died? Spawn boss
+        //if ((spawnBossMonster == false) && (livingBossEnemyCounter == 0))
+        //{
+        //    Debug.Log("Game Won!");
+        //    if (AllEnemiesDead != null) AllEnemiesDead.Invoke();
+        //}
+        //else if ((spawnBasicMonsters == false) && (livingBasicEnemyCounter == 0)
+        //    && (spawnChampionMonsters == false) && (livingChampionEnemyCounter == 0)
+        //    && (livingBossEnemyCounter == 0))
+        //{
+        //    Debug.Log("Spawn Boss");
+        //    if (bossEnemyPrefab != null)
+        //    {
+        //        SpawnBossMonster();
+        //    }
+        //    else
+        //    {
+        //        if (AllEnemiesDead != null) AllEnemiesDead.Invoke();
+        //    }
+
+        //}
+    }
+
+    
+
+    private void OnAppStateUpdated(EAppState newState, EAppState lastState)
+    {
+        switch (newState)
+        {
+            case EAppState.IN_GAME_IN_RUNNING:
+
+                break;
+
+            default:
+                StopAllCoroutines();
+                break;
+        }
+
+    }
+
+
+    
 
 
 

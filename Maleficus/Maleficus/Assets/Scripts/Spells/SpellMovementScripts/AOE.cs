@@ -32,8 +32,8 @@ public class AOE : AbstractSpell
             {
                 Debug.Log("Collider : " + collider.name);
 
-                IPlayer otherPlayer = collider.gameObject.GetComponent<IPlayer>();
-                IEnemy otherEnemy = collider.gameObject.GetComponent<IEnemy>();
+                IPlayer otherPlayer = collider.GetComponent<IPlayer>();
+                IEnemy otherEnemy = collider.GetComponent<IEnemy>();
                 if (otherPlayer != null)
                 {
                     if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
@@ -54,5 +54,14 @@ public class AOE : AbstractSpell
         }
         ExplosionProcessHits(hitPlayers.ToArray());
 
+        StartCoroutine(DestroyAfterDelay());
+    }
+
+
+    private IEnumerator DestroyAfterDelay()
+    {
+        yield return new WaitForSeconds(5.0f);
+
+        Destroy(gameObject);
     }
 }

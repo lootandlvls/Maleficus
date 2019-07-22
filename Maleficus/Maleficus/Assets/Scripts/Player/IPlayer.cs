@@ -8,12 +8,11 @@ public interface IPlayer
 
     ETeamID TeamID { get; }
 
-
     Vector3 Position { get; }
 
     Quaternion Rotation { get; }
 
-
+    bool IsDead { get; }
 
     bool IsARPlayer { get; }
 

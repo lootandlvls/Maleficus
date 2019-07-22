@@ -7,13 +7,18 @@ using UnityEngine.Networking;
 public class EventManager : AbstractSingletonManager<EventManager>
 {
 
+    public override void Initialize()
+    {
+
+    }
+
     #region APP
-    public event Action<EAppState, EAppState> ÁPP_AppStateUpdated;
+    public event Action<EAppState, EAppState> APP_AppStateUpdated;
     public void Invoke_APP_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
     {
-        if (ÁPP_AppStateUpdated != null)
+        if (APP_AppStateUpdated != null)
         {
-            ÁPP_AppStateUpdated.Invoke(newAppState, lastAppState);
+            APP_AppStateUpdated.Invoke(newAppState, lastAppState);
         }
         DebugLog("App state changed from " + lastAppState + " to " + newAppState);
     }
@@ -284,14 +289,14 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region ENEMIES
-    public event Action<IEnemy> ENEMIES_EnemyAttackedPlayer;                                        // TODO: Add reference to attacked player ID
-    public void Invoke_ENEMIES_EnemyAttackedPlayer(IEnemy attackingEnemy)
+    public event Action<IEnemy> ENEMIES_EnemyHitPlayer;                                        // TODO: Add reference to attacked player ID
+    public void Invoke_ENEMIES_EnemyHitPlayer(IEnemy attackingEnemy)
     {
-        if (ENEMIES_EnemyAttackedPlayer != null)
+        if (ENEMIES_EnemyHitPlayer != null)
         {
-            ENEMIES_EnemyAttackedPlayer.Invoke(attackingEnemy);
+            ENEMIES_EnemyHitPlayer.Invoke(attackingEnemy);
         }
-        DebugLog("Enemy " + attackingEnemy.ToString() + " attacked ");
+        DebugLog("Enemy " + attackingEnemy.ToString() + " hit player ");
     }
 
 
@@ -304,6 +309,16 @@ public class EventManager : AbstractSingletonManager<EventManager>
             ENEMIES_EnemyDied.Invoke(deadEnemy);
         }
         DebugLog("Enemy " + deadEnemy.ToString() + " died ");
+    }
+
+    public event Action<int> ENEMIES_WaveCompleted;
+    public void Invoke_ENEMIES_WaveCompleted(int waveIndex)
+    {
+        if (ENEMIES_WaveCompleted != null)
+        {
+            ENEMIES_WaveCompleted.Invoke(waveIndex);
+        }
+        DebugLog("Wave " + waveIndex + " completed");
     }
 
 
@@ -342,4 +357,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
             Debug.Log(messageLog);
         }
     }
+
+
 }

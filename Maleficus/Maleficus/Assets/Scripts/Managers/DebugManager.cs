@@ -11,6 +11,7 @@ using UnityEngine.UI;
 /// 50 - UI state
 /// 51 - App state 
 /// 52 - Scene
+/// 80 - Enemies
 /// 89 - AR Anchor status
 /// 103 - Single lives game mode stats
 /// </summary>
@@ -21,8 +22,6 @@ public class DebugManager : AbstractSingletonManager<DebugManager>
 
     public override void Initialize()
     {
-        base.Initialize();
-
         debugTexts.Clear();
         reportedDebugTexts.Clear();
 

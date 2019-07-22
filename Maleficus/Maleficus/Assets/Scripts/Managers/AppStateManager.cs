@@ -17,14 +17,9 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private EDungeonID dungeonIDtoLoad = EDungeonID.NONE;
 
-    #region Unity Functions
     protected override void Awake()
     {
         base.Awake();
-
-
-        FindAndBindButtonActions();
-
 
         // 1) Assign appropriate currentState from MaleficusTypes
         startStates = MaleficusTypes.START_APP_STATES;
@@ -35,10 +30,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     protected override void Start()
     {
         base.Start();
-
-        // Bind state machine event
-        StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
-
 
         // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
@@ -53,6 +44,11 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
+    public override void Initialize()
+    {
+        FindAndBindButtonActions();
+    }
+
     protected override void Update()
     {
         base.Update();
@@ -60,7 +56,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         DebugManager.Instance.Log(52, CurrentScene.ToString());
     }
-    #endregion
 
 
     protected override void UpdateState(EAppState newAppState)
@@ -94,6 +89,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         }
     }
 
+    #region Scene Update
     private void UpdateScene(EScene newScene)
     {
         EventManager.Instance.Invoke_APP_SceneWillChange(newScene);
@@ -113,7 +109,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         LoadScene(newScene);
     }
-
 
     private void LoadScene(EScene sceneToLoad)
     {
@@ -161,12 +156,18 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 }
                 break;
 
+            case EScene.DUNGEON_SELECTION:
+                SceneManager.LoadScene(MaleficusTypes.SCENE_DUNGEON_SELECTION);
+                currentScene = EScene.DUNGEON_SELECTION;
+                break;
 
             default:
                 Debug.LogError(sceneToLoad + " is not a valid scene to load!");
                 break;
         }
     }
+    #endregion
+
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
     {
@@ -187,10 +188,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         }
     }
 
-    protected override void FindAndBindButtonActions()
+    private void FindAndBindButtonActions()
     {
-        base.FindAndBindButtonActions();
-
         // Connect Players Action
         StartConnectingPlayersAction[] connectPlayersActions = FindObjectsOfType<StartConnectingPlayersAction>();
         foreach (StartConnectingPlayersAction action in connectPlayersActions)
@@ -227,6 +226,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
           // Launch AR game (change scene)
         foreach (StartDungeonAction action in FindObjectsOfType<StartDungeonAction>())
         {
+            Debug.Log("Found Dugeon button");
+
             action.StartDungeonPressed += (EDungeonID dungeonID) =>
             {
                 Debug.Log("Start dungeon " + dungeonID + "pressed");
@@ -246,7 +247,12 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // Validity test
         if ((newScene.name != MaleficusTypes.SCENE_GAME)
             && (newScene.name != MaleficusTypes.SCENE_MENU)
-            && (newScene.name != MaleficusTypes.SCENE_ENTRY))
+            && (newScene.name != MaleficusTypes.SCENE_ENTRY)
+            && (newScene.name != MaleficusTypes.SCENE_DUNGEON_SELECTION)
+            && (newScene.name != MaleficusTypes.SCENE_DUNGEON_1)
+            && (newScene.name != MaleficusTypes.SCENE_DUNGEON_2)
+            && (newScene.name != MaleficusTypes.SCENE_DUNGEON_3)
+            )
         {
             Debug.LogError("Loaded level doesn't match to build levels");
         }
@@ -254,8 +260,15 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
     {
-        UpdateState(EAppState.IN_GAME_IN_ENDED);
+        StartCoroutine(EndGameCoroutine());
     }
+    private IEnumerator EndGameCoroutine()
+    {
+        UpdateState(EAppState.IN_GAME_IN_ENDED);
+        yield return new WaitForSeconds(MaleficusTypes.ENG_GAME_SCENE_TRANSITION_DURATION);
+        UpdateState(EAppState.IN_GAME_IN_END_SCENE);
+    }
+
 
     private void On_GAME_GameUnPaused(EGameMode obj)
     {
@@ -278,4 +291,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     {
         currentScene = startedScene;
     }
+
+
 }

@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class SoundManager : AbstractSingletonManager<SoundManager>
 {
-    // TODO: Do sounds
+    public override void Initialize()
+    {
+
+    }
 }

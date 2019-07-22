@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class ShopManager : AbstractSingletonManager<ShopManager>
 {
-    // TODO: DO Shop
+    public override void Initialize()
+    {
+
+    }
 }

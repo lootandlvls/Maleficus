@@ -215,8 +215,11 @@ MonoBehaviour:
   InputMode: 0
   IsSpawnPlayerOnConnect: 1
   IsSpawnAllPlayers: 1
-  IsSpawnARPlayers: 0
+  IsSpawnGhostPlayerPositionsIfNotFound: 0
+  IsARGame: 0
+  ARPlacementMethod: 0
   IsDebugLogEvents: 1
+  IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,6 +510,7 @@ Transform:
   - {fileID: 5409742357272549645}
   - {fileID: 8380552848578030185}
   - {fileID: 5576756921845005498}
+  - {fileID: 6706738998479144569}
   m_Father: {fileID: 4335998295704777601}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -605,6 +609,49 @@ MonoBehaviour:
   Player_2_SpellsList: []
   Player_3_SpellsList: []
   Player_4_SpellsList: []
+--- !u!1 &7881203136435955458
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6706738998479144569}
+  - component: {fileID: 4352558592208234040}
+  m_Layer: 0
+  m_Name: CoinManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6706738998479144569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881203136435955458}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2613532659259175318}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4352558592208234040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7881203136435955458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a726f62aa46dde645926d62660a88477, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8098184902868246776
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,5 +749,4 @@ MonoBehaviour:
   bossEnemyMaxNumber: 1
   minionEnemyPrefab: {fileID: 114409282968527766, guid: 498b2932a69494a45a82e70ed955bf0b,
     type: 3}
-  enemySpawnPositions: []
-  bossSpawnPosition: {fileID: 0}
+  numberOfCollectedCoins: 0

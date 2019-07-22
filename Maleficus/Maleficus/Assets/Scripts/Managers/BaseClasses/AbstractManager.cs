@@ -18,17 +18,7 @@ public abstract class AbstractManager : MonoBehaviour
     /// <summary>
     /// Initialize Manager (called by MotherOfManagers when scene is changed)
     /// </summary>
-    public virtual void Initialize()
-    {
-        FindAndBindButtonActions();                                                                         // TODO: Pack FindAndBindButtonActions into Initialize()
-    }
+    public abstract void Initialize();
 
-    /// <summary>
-    /// Find in the scene all Button Actions and bind actions to them.
-    /// Called by default in Initialize()
-    /// </summary>
-    protected virtual void FindAndBindButtonActions()
-    {
-        // Define in child class
-    }
+ 
 }

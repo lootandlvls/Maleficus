@@ -7,6 +7,10 @@ public class EventManagerOld : AbstractSingletonManager<EventManagerOld> {
 
     public event Action<ItemBehavior, int> ItemTaken;
 
+    public override void Initialize()
+    {
+
+    }
 
     public void OnItemTaken(ItemBehavior takenItem, int playerID)
     {

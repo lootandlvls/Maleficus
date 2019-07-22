@@ -21,17 +21,11 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     {
         base.Start();
 
-        //// Debug state                                                                                            // TODO: Use debug states?
-        //if (MotherOfManagers.Instance.DebugStartMenuState != EMenuState.NONE)
-        //{
-        //    startState = MotherOfManagers.Instance.DebugStartMenuState;
-        //}
-
         // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
-        EventManager.Instance.ÁPP_AppStateUpdated += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
 
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
@@ -41,7 +35,13 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
     }
 
-   
+
+    public override void Initialize()
+    {
+        FindAndBindButtonActions();
+    }
+
+
     /// <summary>
     /// When a pressed is highlighted (selected by controller)
     /// </summary>
@@ -70,7 +70,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
     }
 
-    protected override void FindAndBindButtonActions()
+    private void FindAndBindButtonActions()
     {
         // Menu Navigation Action
         BackAction[] backActions = FindObjectsOfType<BackAction>();

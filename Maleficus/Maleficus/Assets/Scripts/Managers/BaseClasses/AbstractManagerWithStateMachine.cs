@@ -71,7 +71,6 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
         yield return new WaitForEndOfFrame();
 
         // Update state according to current Scene
-        Debug.Log("Current scene : " + AppStateManager.Instance.CurrentScene);
         EScene currentScene = AppStateManager.Instance.CurrentScene;
         if (startStates.ContainsKey(currentScene))
         {

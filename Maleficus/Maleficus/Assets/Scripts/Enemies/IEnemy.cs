@@ -14,6 +14,8 @@ public interface IEnemy {
 
     EEnemyType IsType { get; }
 
+    bool IsDead { get; }
+
     //event Action<IEnemy> EnemyAttacked;
 
 }

@@ -24,10 +24,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         base.Awake();
 
-        FindAndBindButtonActions();
-
         startStates = MaleficusTypes.START_AR_STATES;
-
         debugStateID = 89;
     }
 
@@ -36,7 +33,11 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         base.Start();
 
         StateUpdateEvent += EventManager.Instance.Invoke_AR_TrackingStateUpdated;
+    }
 
+    public override void Initialize()
+    {
+        FindReferencesInScene();
     }
 
     protected override void Update()
@@ -92,10 +93,8 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         }
     }
 
-    protected override void FindAndBindButtonActions()
+    private void FindReferencesInScene()
     {
-        base.FindAndBindButtonActions();
-
         midAirAnchorBehaviour = FindObjectOfType<AnchorBehaviour>();
 
         contentPositionings = FindObjectsOfType<ContentPositioningBehaviour>();
@@ -132,7 +131,6 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
     }
 
-
-
+  
 }
 

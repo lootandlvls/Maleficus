@@ -32,6 +32,10 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
+    public override void Initialize()
+    {
+        
+    }
 
     private void Update()
     {

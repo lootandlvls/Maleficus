@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, IPlayer
     public Vector3 Position { get { return transform.position; } }
     public Quaternion Rotation { get { return transform.rotation; } }
     public bool IsARPlayer { get; set; }
+    public bool IsDead { get { return false; } }                        // TODO: Define when player is dead
 
 
     public String playerVerticalInput;
@@ -20,6 +21,8 @@ public class Player : MonoBehaviour, IPlayer
 
     public float angularSpeed;
     public float speed;
+
+    private float lastTimeSinceRotated;
 
   
     [Header("Charging Spell Effects")] 
@@ -32,7 +35,7 @@ public class Player : MonoBehaviour, IPlayer
     
     private Vector3 movingDirection;
     private Rigidbody myRigidBody;
-    private DirectionalSprite myDirectionalSprite;
+    private DirectionalSprite[] myDirectionalSprites;
     private Dictionary<int, AbstractSpell> spellsSlot;
     public Animator animator;
 
@@ -54,7 +57,7 @@ public class Player : MonoBehaviour, IPlayer
 
     private void Awake()
     {
-        myDirectionalSprite = GetComponentInChildren<DirectionalSprite>();
+        myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
     }
 
     private void Start()
@@ -69,29 +72,58 @@ public class Player : MonoBehaviour, IPlayer
 
         myRigidBody = this.GetComponent<Rigidbody>();      
         animator = this.GetComponent<Animator>();
+        animator.SetBool("idle", true);
 
         if (IsARPlayer == true)
         {
             speed *= ARManager.Instance.SizeFactor;
         }
 
-       EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
     }
+
     private void Update()
     {
-        PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
 
-       
-        if (Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) == 0)
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            animator.SetBool("idle", true);
-        }
-        else
-        {
-            animator.SetBool("idle", false);
-        }
 
-        // Cance all forces
+            PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
+
+            if (Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) != 0.0f)
+            // Moving?
+            {
+                animator.SetBool("idle", false);
+            }
+            // Not moving?
+            else
+            {
+                animator.SetBool("idle", true);
+            }
+
+            if (Math.Abs(playerInput.Rotate_X) + Math.Abs(playerInput.Rotate_Y) != 0.0f)
+            // Rotating?
+            {
+                SetDirectionalSpritesVisible(true);
+                lastTimeSinceRotated = Time.time;
+            }
+            else
+            // Not Rotating?
+            {
+                if ((Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) != 0.0f) && (Time.time - lastTimeSinceRotated > 1.5f))
+                // Moving?
+                {
+                    float axis_X = playerInput.Move_X;
+                    float axis_Z = playerInput.Move_Y;
+                    TransformAxisToCamera(ref axis_X, ref axis_Z);
+                    transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
+                }
+                SetDirectionalSpritesVisible(false);
+
+            }
+
+        }
+            // Cance all forces
         myRigidBody.velocity = Vector3.zero;
         myRigidBody.angularVelocity = Vector3.zero;
 
@@ -118,37 +150,7 @@ public class Player : MonoBehaviour, IPlayer
   
         if (IsARPlayer == true)
         {
-            Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
-            Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
-            Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
-            Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
-            Vector2 thibautVector = (controllerAxis + cameraForward).normalized;
-            float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
-            int sign;
-            if (dotWithRight > 0.0f)
-            {
-                sign = -1;
-            }
-            else if (dotWithRight < 0.0f)
-            {
-                sign = 1;
-            }
-            else
-            {
-                sign = 0;
-            }
-            float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
-            DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
-
-            axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
-            axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
-            controllerAxis = new Vector2(axis_X, axis_Z).normalized;
-
-            axis_X = controllerAxis.x;
-            axis_Z = controllerAxis.y;
-
-            DebugManager.Instance.Log(69, "X : " + axis_X + " | Y : " + axis_Z + " | A : " + angle * Mathf.Rad2Deg);
-
+            TransformAxisToCamera(ref axis_X, ref axis_Z);
         }
    
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
@@ -162,34 +164,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             if (IsARPlayer == true)
             {
-                Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
-                Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
-                Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
-                Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
-                float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
-                int sign;
-                if (dotWithRight > 0.0f)
-                {
-                    sign = 1;
-                }
-                else if (dotWithRight < 0.0f)
-                {
-                    sign = -1;
-                }
-                else
-                {
-                    sign = 0;
-                }
-                float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
-                DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
-            
-
-                axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
-                axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
-                controllerAxis = new Vector2(axis_X, axis_Z).normalized;
-
-                axis_X = controllerAxis.x;
-                axis_Z = controllerAxis.y;
+                TransformAxisToCamera(ref axis_X, ref axis_Z, -1);
             }
 
 
@@ -209,14 +184,7 @@ public class Player : MonoBehaviour, IPlayer
             //transform.rotation = Quaternion.Lerp(CurrentRotation.normalized, targetRotation.normalized, Time.deltaTime * angularSpeed);
 
             // Update sprite
-            if ((Mathf.Abs(axis_X) > MaleficusTypes.SPELL_BUTTON_THRESHOLD) || (Mathf.Abs(axis_Z) > MaleficusTypes.SPELL_BUTTON_THRESHOLD))
-            {
-                myDirectionalSprite.ShowSprite();
-            }
-            else
-            {
-                myDirectionalSprite.HideSprite();
-            }
+            
         }
     }
 
@@ -289,25 +257,21 @@ public class Player : MonoBehaviour, IPlayer
 
     public void StartChargingSpell(int spellSlot, MovementType movementType)
     {
-       
-         if (movementType == MovementType.LINEAR_HIT)
-          {
+
+        if (movementType == MovementType.LINEAR_HIT)
+        {
             playerCharging = true;
             Debug.Log("Player started Charging");
-              StartCoroutine( spellCharging(spellSlot));
-          }
-          else if (movementType == MovementType.LINEAR_LASER)
-          {
-              StartCoroutine(PlayerCantMove());
-          }
-          // TODO: Not working here
-          // Deactivate Directional Sprite
-          myDirectionalSprite.HideSprite();
-        
+            StartCoroutine(spellCharging(spellSlot));
+        }
+        else if (movementType == MovementType.LINEAR_LASER)
+        {
+            StartCoroutine(PlayerCantMove());
+        }
+        // TODO: Not working here
+        // Deactivate Directional Sprite
     }
    
-  
-
 
    private void InitializeChargingEffects()
     {
@@ -423,6 +387,8 @@ public class Player : MonoBehaviour, IPlayer
                     
         }
         Debug.Log("spellCharging function Done!!");
+
+
         speed = 75;
         animator.SetBool("charging", false);
         Destroy(wandEffect);
@@ -453,7 +419,59 @@ public class Player : MonoBehaviour, IPlayer
     #endregion
 
 
+    private void SetDirectionalSpritesVisible(bool isVisible)
+    {
+        if (myDirectionalSprites.Length == 0)
+        {
+            Debug.Log("directional sprites empty");
+            myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
+        }
+
+        foreach (DirectionalSprite directionalSprite in myDirectionalSprites)
+        {
+            if (isVisible == true)
+            {
+                directionalSprite.ShowSprite();
+            }
+            else
+            {
+                directionalSprite.HideSprite();
+            }
+        }
+    }
+
+    private void TransformAxisToCamera(ref float axis_X, ref float axis_Z, int inversedSign = 1)
+    {
+        Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
+        Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
+        Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
+        Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+        float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
+        int sign;
+        if (dotWithRight > 0.0f)
+        {
+            sign = -1;
+        }
+        else if (dotWithRight < 0.0f)
+        {
+            sign = 1;
+        }
+        else
+        {
+            sign = 0;
+        }
+        sign *= inversedSign;
+
+        float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
+        DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
 
 
+        axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
+        axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
+        controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+
+        axis_X = controllerAxis.x;
+        axis_Z = controllerAxis.y;
+    }
 
 }

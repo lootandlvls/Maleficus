@@ -6,24 +6,27 @@ public class GameManager : AbstractSingletonManager<GameManager>
 {                    
     private EGameMode currentGameMode;
 
-    private bool isCanStartGame;
+    private bool isCanStartGame = false;
 
 
     protected override void Awake()
     {
         base.Awake();
-
-        isCanStartGame = false;
     }
 
     private void Start()
     {
         EventManager.Instance.GAME_GameOver += ON_GAME_GameOver;
         EventManager.Instance.AR_ARStateUpdated += On_AR_ARStateUpdated;
-        EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
+        // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
     }
 
- 
+    public override void Initialize()
+    {
+        FindAndBindButtonActions();
+
+        isCanStartGame = false;
+    }
 
 
 
@@ -118,25 +121,23 @@ public class GameManager : AbstractSingletonManager<GameManager>
         }
     }
 
-    private void On_AR_StagePlaced()
-    {
-        switch (AppStateManager.Instance.CurrentState)
-        {
-            case EAppState.IN_GAME_IN_NOT_STARTED:
-                StartGame(EGameMode.DUNGEON);
-                break;
+    //private void On_AR_StagePlaced()
+    //{
+    //    switch (AppStateManager.Instance.CurrentState)
+    //    {
+    //        case EAppState.IN_GAME_IN_NOT_STARTED:
+    //            StartGame(EGameMode.DUNGEON);
+    //            break;
 
-            case EAppState.IN_GAME_IN_PAUSED:
-                PauseOrUnpauseGame();
-                break;
-        }
-    }
+    //        case EAppState.IN_GAME_IN_PAUSED:
+    //            PauseOrUnpauseGame();
+    //            break;
+    //    }
+    //}
     #endregion
 
-    protected override void FindAndBindButtonActions()
+    private void FindAndBindButtonActions()
     {
-        base.FindAndBindButtonActions();
-
         /* In GAME */
         StartTestGameAction[] startTestGameActions = FindObjectsOfType<StartTestGameAction>();
         foreach (StartTestGameAction action in startTestGameActions)
@@ -174,4 +175,6 @@ public class GameManager : AbstractSingletonManager<GameManager>
             };
         }
     }
+
+
 }

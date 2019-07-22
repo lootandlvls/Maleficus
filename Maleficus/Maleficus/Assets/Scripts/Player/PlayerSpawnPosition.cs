@@ -12,7 +12,7 @@ public class PlayerSpawnPosition : MonoBehaviour
     [SerializeField] private bool isHideShadowMeshOnAwake;
 
 
-    private void OnEnable()
+    private void Awake()
     {
         if (isHideShadowMeshOnAwake == true)
         {
@@ -23,7 +23,16 @@ public class PlayerSpawnPosition : MonoBehaviour
     private void Start()
     {
         EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
-        EventManager.Instance.ÁPP_AppStateUpdated += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
+    }
+
+    private void OnDestroy()
+    {
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.PLAYERS_PlayerSpawned -= On_PLAYERS_PlayerSpawned;
+            EventManager.Instance.APP_AppStateUpdated -= On_APP_AppStateUpdated;
+        }
     }
 
     private void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)

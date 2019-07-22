@@ -5,8 +5,8 @@ using UnityEngine;
 public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 {
     // Should only be called directly after object construction (used in Start method)
-    public int TotalLives { get { return totalLives; } set { totalLives = value; } }
-    public int TotalItemsToCollect { get { return totalItemsToCollect; } set { totalItemsToCollect = value; } }
+    public int TotalLives { get { return totalLives; } }
+    public int TotalItemsToCollect { get { return totalItemsToCollect; } }
 
     private int totalLives = 10;
     private int totalItemsToCollect = 3;
@@ -17,7 +17,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         base.Awake();
 
         // Define in child class correct game mode!
-        gameMode = EGameMode.NONE;
+        gameMode = EGameMode.DUNGEON;
     }
 
 
@@ -25,7 +25,8 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
     {
         base.Start();
 
-        TotalItemsToCollect = CoinManager.Instance.NumberOfCoins;
+        totalItemsToCollect = CoinManager.Instance.NumberOfCoins;
+        totalLives = MaleficusTypes.PLAYER_LIVES_IN_DUNGEON_MODE;
 
         // Initialize player stats correctly/
         Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;             // TODO: Find a way to use playerStats from AbstractGameMode instead of reusing ConnectedPlayers
@@ -37,9 +38,19 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             }
         }
 
-        EventManager.Instance.ENEMIES_EnemyAttackedPlayer += On_ENEMIES_EnemyAttackedPlayer;
+        EventManager.Instance.ENEMIES_EnemyHitPlayer += On_ENEMIES_EnemyAttackedPlayer;
         EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
         EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
+        EventManager.Instance.ENEMIES_WaveCompleted += On_ENEMIES_WaveCompleted;
+    }
+
+    private void On_ENEMIES_WaveCompleted(int waveIndex)
+    {
+        if (waveIndex == totalItemsToCollect)
+        {
+            EventManager.Instance.Invoke_GAME_GameOver(gameMode);
+
+        }
     }
 
     private void On_PLAYERS_PlayerCollectedCoin()
@@ -49,11 +60,6 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             playerStat.DecrementNumberOfRemainingCoinsToCollect();
 
             EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameMode);
-
-            if (playerStat.RemainingNumberOfCollectedItems == 0)
-            {
-                EventManager.Instance.Invoke_GAME_GameOver(gameMode);
-            }
         }
     }
 

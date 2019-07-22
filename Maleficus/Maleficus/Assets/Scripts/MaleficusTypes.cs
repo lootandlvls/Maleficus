@@ -9,9 +9,10 @@ public static class MaleficusTypes
     public const string SCENE_ENTRY = "Dummy_ENTRY";         // TODO: Replace with correct scenes
     public const string SCENE_MENU = "Dummy_MENU";
     public const string SCENE_GAME = "Dummy_GAME";
-    public const string SCENE_DUNGEON_1 = "Dummy_ARGame_Dungeon_lvl_1";
-    public const string SCENE_DUNGEON_2 = "Dummy_ARGame_Dungeon_lvl_2";
-    public const string SCENE_DUNGEON_3 = "Dummy_ARGame_Dungeon_lvl_3";
+    public const string SCENE_DUNGEON_1 = "LVL_1_AR";
+    public const string SCENE_DUNGEON_2 = "LVL_2_AR";
+    public const string SCENE_DUNGEON_3 = "LVL_3_AR";
+    public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
 
     // Spells path
@@ -38,7 +39,10 @@ public static class MaleficusTypes
     public const string PATH_PLAYER_YELLOW = "Wizard_Yellow";
     public const string PATH_PLAYER_SPAWN_POSITION = "PlayerSpawnPosition";
 
- 
+
+    /* Tags */
+    public const string TAG_SPELL_HITTABLE = "SpellHittable";
+
 
     /* Managers path */
     public const string PATH_MANAGERS = "Managers";
@@ -52,6 +56,9 @@ public static class MaleficusTypes
 
     public const float ROTATION_THRESHOLD = 0.0f;
 
+    public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
+
+    public const int PLAYER_LIVES_IN_DUNGEON_MODE = 10;
 
     ///* Scenes switch logic */
     public static Dictionary<EScene, EScene> FROM_SCENE_TO = new Dictionary<EScene, EScene>()
@@ -105,7 +112,7 @@ public static class MaleficusTypes
         EAppState.IN_ENTRY_IN_LOADING,
         EAppState.IN_MENU_IN_STARTING_GAME,
         EAppState.IN_MENU_IN_STARTING_AR_GAME,
-        EAppState.IN_GAME_IN_ENDED
+        EAppState.IN_GAME_IN_END_SCENE
     };
 
 
@@ -251,6 +258,7 @@ public enum EAppState
     IN_GAME_IN_RUNNING,
     IN_GAME_IN_PAUSED,
     IN_GAME_IN_ENDED,
+    IN_GAME_IN_END_SCENE,
     TEST
 }
 

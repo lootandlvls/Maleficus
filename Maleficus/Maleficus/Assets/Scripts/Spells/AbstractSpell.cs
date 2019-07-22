@@ -94,31 +94,31 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     protected void ProcessHits(IPlayer hitPlayer)
     {
-        
-        // Debug.Log(dirVector);
-        SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
-        EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-
-        ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
-
-        if (destroyEffect != null)
+        if (hitPlayer.IsDead == false)
         {
-            
-            destroyEffect.DestroySpell();
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
+            EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
 
+            ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+
+            if (destroyEffect != null)
+            {
+                destroyEffect.DestroySpell();
+            }
         }
     }
 
      protected void ProcessHits(IEnemy hitEnemy)
     {
-        
-        // Debug.Log(dirVector);
-        EventManager.Instance.Invoke_SPELLS_SpellHitEnemy(hitEnemy);
-
-        ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
-        if (destroyEffect != null)
+        if(hitEnemy.IsDead == false)
         {
-            destroyEffect.DestroySpell();
+            EventManager.Instance.Invoke_SPELLS_SpellHitEnemy(hitEnemy);
+
+            ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+            if (destroyEffect != null)
+            {
+                destroyEffect.DestroySpell();
+            }
         }
     }
 

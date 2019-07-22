@@ -16,12 +16,19 @@ public class ARLockButton : AbstractUIAction
 
     public void SetIsLocked()
     {
-        GetComponentInChildren<Text>().color = Color.red;
+        //GetComponentInChildren<Text>().color = Color.red;
+        Color color = Color.red;
+        color.a = 0.25f;
+        GetComponent<Image>().color = color;
     }
 
     public void SetIsUnlocked()
     {
-        GetComponentInChildren<Text>().color = Color.green;
+        //GetComponentInChildren<Text>().color = Color.green;
+        Color color = Color.green;
+        color.a = 0.25f;
+        GetComponent<Image>().color = color;
+
     }
 }
 

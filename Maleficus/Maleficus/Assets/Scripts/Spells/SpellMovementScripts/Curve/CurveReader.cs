@@ -20,6 +20,11 @@ public class CurveReader : AbstractSingletonManager<CurveReader>
         UpdateCurves();
     }
 
+    public override void Initialize()
+    {
+
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown("u"))

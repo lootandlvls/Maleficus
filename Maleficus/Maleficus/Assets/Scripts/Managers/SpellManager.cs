@@ -5,69 +5,56 @@ using UnityEngine;
 
 public class SpellManager : AbstractSingletonManager<SpellManager>
 {
-
-
     Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
-     
+
     [SerializeField] private GameObject FrozenEffect;
     [SerializeField] private float friction;
-  
+
     public List<AbstractSpell> SpellsUpgrade = new List<AbstractSpell>();
     public List<GameObject> ChargingSpells_Effects = new List<GameObject>();
     public List<AbstractSpell> All_Spells = new List<AbstractSpell>();
 
-     public Dictionary<EPlayerID, Dictionary<int, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<int, AbstractSpell>>();
-  //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
-     public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();
-     public Dictionary<int, AbstractSpell> Player_2_Spells = new Dictionary<int, AbstractSpell>();
-     public Dictionary<int, AbstractSpell> Player_3_Spells = new Dictionary<int, AbstractSpell>();
-     public Dictionary<int, AbstractSpell> Player_4_Spells = new Dictionary<int, AbstractSpell>();
+    public Dictionary<EPlayerID, Dictionary<int, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<int, AbstractSpell>>();
+    //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
+    public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();
+    public Dictionary<int, AbstractSpell> Player_2_Spells = new Dictionary<int, AbstractSpell>();
+    public Dictionary<int, AbstractSpell> Player_3_Spells = new Dictionary<int, AbstractSpell>();
+    public Dictionary<int, AbstractSpell> Player_4_Spells = new Dictionary<int, AbstractSpell>();
     public List<AbstractSpell> Player_1_SpellsList = new List<AbstractSpell>();
     public List<AbstractSpell> Player_2_SpellsList = new List<AbstractSpell>();
     public List<AbstractSpell> Player_3_SpellsList = new List<AbstractSpell>();
     public List<AbstractSpell> Player_4_SpellsList = new List<AbstractSpell>();
 
-    protected override void  Awake()
+    private Dictionary<ETouchJoystickType, MaleficusJoystick> spellJoysticks = new Dictionary<ETouchJoystickType, MaleficusJoystick>();
+
+    protected override void Awake()
     {
         base.Awake();
 
         LoadSpellResources();
         LoadEffectsResources();
-
+        InitializeSpells();
     }
 
     private void Start()
     {
-        activePlayers = PlayerManager.Instance.ActivePlayers;
-
-        
-
-        for (int i = 0; i < 3; i++)
-        {
-            
-            Player_1_Spells[i] = Player_1_SpellsList[i];
-            Player_2_Spells[i] = Player_2_SpellsList[i];
-            Player_3_Spells[i] = Player_3_SpellsList[i];
-            Player_4_Spells[i] = Player_4_SpellsList[i];
-           
-        }
-      
-        Player_Spells[EPlayerID.PLAYER_1] = Player_1_Spells;
-        Player_Spells[EPlayerID.PLAYER_2] = Player_2_Spells;
-        Player_Spells[EPlayerID.PLAYER_3] = Player_3_Spells;
-        Player_Spells[EPlayerID.PLAYER_4] = Player_4_Spells;
-
-        for (int i = 0; i < 3; i++)
-        {
-
-            //Debug.Log(Player_Spells[EPlayerID.PLAYER_1][i].SpellName);
-            //Debug.Log(Player_Spells[EPlayerID.PLAYER_2][i].SpellName);
-            //Debug.Log(Player_Spells[EPlayerID.PLAYER_3][i].SpellName);
-            //Debug.Log(Player_Spells[EPlayerID.PLAYER_4][i].SpellName);
-
-        }
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
+
+
+        activePlayers = PlayerManager.Instance.ActivePlayers;
+    }
+
+    public override void Initialize()
+    {
+        // Find touch joysticks
+        foreach (MaleficusJoystick joystick in FindObjectsOfType<MaleficusJoystick>())
+        {
+            if (spellJoysticks.ContainsKey(joystick.JoystickType) == false)
+            {
+                spellJoysticks.Add(joystick.JoystickType, joystick);
+            }
+        }
     }
 
     private void On__SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
@@ -109,15 +96,15 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
     private IEnumerator PushPlayer(SHitInfo hitInfo)
-    {   
-        
+    {
+
         Rigidbody rgb = activePlayers[hitInfo.HitPlayerID].GetComponent<Rigidbody>();
         Transform playerTransform = activePlayers[hitInfo.HitPlayerID].GetComponent<Transform>();
         rgb.isKinematic = false;
         //  transform.position = Vector3.MoveTowards(activePlayers[hitInfo.HitPlayerID].transform.position, hitInfo.HitVelocity, Time.deltaTime * 2);
         Debug.Log(hitInfo.HitVelocity);
         Vector3 endPushPosition = new Vector3(hitInfo.HitVelocity.x, 0, hitInfo.HitVelocity.z);
-        
+
         endPushPosition = transform.TransformDirection(endPushPosition);
         playerTransform.position = Vector3.Lerp(playerTransform.position, endPushPosition, Time.deltaTime * friction);
         yield return new WaitForSeconds(0.1f);
@@ -133,7 +120,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 StartCoroutine(PlayerFrozen(playerID));
                 break;
             case SpellEffects.STUN:
-                
+
 
                 break;
 
@@ -157,8 +144,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         Debug.Log("Apply Buff on player " + playerID);
         switch (buff)
         {
-            case SpellEffects.INCREACE_SPEED:               
-                
+            case SpellEffects.INCREACE_SPEED:
+
                 break;
 
             case SpellEffects.INCREASE_CASTING_SPEED:
@@ -185,32 +172,38 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
 
 
-     
+
     }
 
-    public void CastSpell(EPlayerID playerID , int spell_Input_ID  )
+    public void CastSpell(EPlayerID playerID, int spell_Input_ID)
     {
         AbstractSpell spellToCast;
-        
-        switch (playerID)
+
+        switch (playerID)                                                       // TODO: Switch unecessary. Same code in every case
         {
             case EPlayerID.PLAYER_1:
+                                                                                // clean this mess!
+                float spellCooldown = Player_Spells[playerID][spell_Input_ID].cooldown;
+
                 switch (spell_Input_ID)
                 {
                     case 0:
-                       
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
+                        spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);
+
 
                         break;
                     case 1:
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
+                        spellJoysticks[ETouchJoystickType.SPELL_2].ReloadJoystick(spellCooldown);
 
                         break;
                     case 2:
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
+                        spellJoysticks[ETouchJoystickType.SPELL_3].ReloadJoystick(spellCooldown);
                         break;
                 }
                 break;
@@ -271,17 +264,20 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     }
 
-    private void InstantiateSpell(AbstractSpell spellToCast , EPlayerID playerID)
+    private void InstantiateSpell(AbstractSpell spellToCast, EPlayerID playerID)
     {
-        //TODO instantiate the spell object here and give it the playerID
+
         
-        if (spellToCast.GetComponent<AOE>() != null )
-       
+
+        //TODO instantiate the spell object here and give it the playerID
+
+        if (spellToCast.GetComponent<AOE>() != null)
+
         {
             activePlayers[playerID].animator.SetTrigger("shockwave");
-            Vector3 position = new Vector3 (activePlayers[playerID].transform.position.x , activePlayers[playerID].transform.position.y + 0.01f , activePlayers[playerID].transform.position.z);
+            Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.01f, activePlayers[playerID].transform.position.z);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
+            AbstractSpell spell = Instantiate(spellToCast, position, rotation);
             if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
@@ -289,61 +285,61 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
             }
             spell.CastingPlayerID = playerID;
-              spell.transform.parent = activePlayers[playerID].transform;
-               Debug.Log("AOE SPELL CASTED");
-              //spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+            spell.transform.parent = activePlayers[playerID].transform;
+            Debug.Log("AOE SPELL CASTED");
+            //spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
         }
         else if (spellToCast.GetComponent<Linear_Instant>() != null)
-       
+
         {
 
             Transform position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-                AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
-          if ((MotherOfManagers.Instance.IsARGame == true))
+            AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
+            if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.speed *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int) ARManager.Instance.SizeFactor; 
+                spell.hitPower *= (int)ARManager.Instance.SizeFactor;
             }
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
-                spell.transform.parent = activePlayers[playerID].transform;
-                spell.CastingPlayerID = playerID;
+            spell.transform.parent = activePlayers[playerID].transform;
+            spell.CastingPlayerID = playerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
         }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
             activePlayers[playerID].animator.SetTrigger("teleport");
-          
+
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-           StartCoroutine(animationDelay(spellToCast, playerID, 2));
-             Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
-             AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
+            StartCoroutine(animationDelay(spellToCast, playerID, 2));
+            Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
+            AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
             if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.speed *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int) ARManager.Instance.SizeFactor; 
+                spell.hitPower *= (int)ARManager.Instance.SizeFactor;
             }
             spell.CastingPlayerID = playerID;
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
-           // activePlayers[playerID].animator.SetBool("channeling", true);
+            // activePlayers[playerID].animator.SetBool("channeling", true);
             Transform position = activePlayers[playerID].SpellInitPosition;
-            Quaternion rotation = activePlayers[playerID].transform.rotation;    
-             AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+            AbstractSpell spell = Instantiate(spellToCast, position.position, rotation);
 
             if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale = new Vector3(spell.transform.localScale.x * 0.05f, spell.transform.localScale.y * 0.05f, spell.transform.localScale.z * 0.05f);
                 spell.speed *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int) ARManager.Instance.SizeFactor;
+                spell.hitPower *= (int)ARManager.Instance.SizeFactor;
             }
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
-              spell.transform.parent = activePlayers[playerID].transform;
-              spell.CastingPlayerID = playerID;
-           // StartCoroutine(PlayerCantMove());
+            spell.transform.parent = activePlayers[playerID].transform;
+            spell.CastingPlayerID = playerID;
+            // StartCoroutine(PlayerCantMove());
         }
         else
         {
@@ -385,8 +381,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         }
 
-       
-        
+
+
     }
     private void LoadSpellResources()
     {
@@ -406,8 +402,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_CHARGING_BODYENERGY));
         ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_CHARGING_WANDENERGY));
         ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_FROZEN));
-  }
-       
+    }
+
 
     private IEnumerator PlayerFrozen(EPlayerID playerID)
 
@@ -428,7 +424,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         activePlayers[playerID].speed = 75;
     }
 
-    IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID,int animationID)
+    IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID, int animationID)
     {
         switch (animationID)
         {
@@ -447,11 +443,26 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         {
             spell.transform.localScale *= ARManager.Instance.SizeFactor;
             spell.speed *= ARManager.Instance.SizeFactor;
-            spell.hitPower *= (int) spell.transform.localScale.x; ;
+            spell.hitPower *= (int)spell.transform.localScale.x; ;
         }
-        
+
         spell.CastingPlayerID = playerID;
         spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
     }
 
+    private void InitializeSpells()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            Player_1_Spells[i] = Player_1_SpellsList[i];
+            Player_2_Spells[i] = Player_2_SpellsList[i];
+            Player_3_Spells[i] = Player_3_SpellsList[i];
+            Player_4_Spells[i] = Player_4_SpellsList[i];
+        }
+
+        Player_Spells[EPlayerID.PLAYER_1] = Player_1_Spells;
+        Player_Spells[EPlayerID.PLAYER_2] = Player_2_Spells;
+        Player_Spells[EPlayerID.PLAYER_3] = Player_3_Spells;
+        Player_Spells[EPlayerID.PLAYER_4] = Player_4_Spells;
+    }
 }

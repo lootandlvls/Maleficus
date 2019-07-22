@@ -8,7 +8,15 @@ public class EnemyWayPoint : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.ÁPP_AppStateUpdated += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
+    }
+
+    private void OnDestroy()
+    {
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.APP_AppStateUpdated -= On_APP_AppStateUpdated;
+        }
     }
 
     private void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)

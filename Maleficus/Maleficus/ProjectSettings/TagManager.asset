@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Enemy
   - Object
+  - SpellHittable
   layers:
   - Default
   - TransparentFX

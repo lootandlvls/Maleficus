@@ -20,6 +20,9 @@ public class TODOs : MonoBehaviour
     // TODO: Define with Nassim Spells Resources
     // TODO: Define DebugIDs as const in MaleficusTypes
 
+
+    // TODO: Define spells as enum in SpellManager and clean code!
+
     //Network ------------------------------------------------------------------------
     //TODO: Resend Messages when they couldn't be sent
 

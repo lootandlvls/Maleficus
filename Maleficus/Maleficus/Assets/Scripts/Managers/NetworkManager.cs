@@ -37,20 +37,21 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     protected override void Awake()
     {
         base.Awake();
-
     }
 
     protected void Start()
-    {
-        //Instance = this;                                                                                          // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
+    { 
         EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
+    }
+
+    public override void Initialize()
+    {
         Init();
     }
 
     protected  void Update()
     {
-
         UpdateMessagePump();
     }
     #endregion

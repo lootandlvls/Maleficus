@@ -17,7 +17,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
     private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
-    private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnGhosts       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
+    private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnGhosts          = new Dictionary<EPlayerID, PlayerSpawnPosition>();
     private Dictionary<EPlayerID, PlayerInput>          playersInput                = new Dictionary<EPlayerID, PlayerInput>();
     /* Dictionaries that are defined only for active players  */
     /// Added whenever a player has spawned. Removed when he dies.
@@ -41,30 +41,25 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void Start()
     {
-        FindPlayerSpawnGhost();
-
-
-        // State change events
-        //AppStateManager.Instance.Instance
-
-
         // Input events
-
         EventManager.Instance.INPUT_ButtonPressed   += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_ButtonReleased  += On_INPUT_ButtonReleased;
         EventManager.Instance.INPUT_JoystickMoved   += On_INPUT_JoystickMoved;
        
-        StartCoroutine(LateStartCoroutine());
-    
-
-
         // Scene changed event
         EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
-        EventManager.Instance.ÁPP_AppStateUpdated += On_ÁPP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated += On_ÁPP_AppStateUpdated;
        
         StartCoroutine(LateStartCoroutine());
     }
 
+
+    public override void Initialize()
+    {
+        FindPlayerSpawnGhost();
+
+        activePlayers.Clear();
+    }
 
 
     private IEnumerator LateStartCoroutine()
@@ -80,12 +75,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    
+
     private void Update()
     {
-        MoveAndRotatePlayers();
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)  
+        {
+            MoveAndRotatePlayers();                                                             // TODO: Remove this and let players move themselves from player input
+        }
     }
-
 
 
     // TODO: Use this 
