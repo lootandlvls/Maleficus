@@ -22883,7 +22883,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   INFINITE_LOOP: 0
   DESTROY_ON_END: 1
-  duration: 2.5
+  duration: 1
   all_particles:
   - {fileID: 3886462217756752480}
   - {fileID: 3886188504940170594}
@@ -22915,8 +22915,8 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
-  cooldown: 5
-  spellDuration: 2.5
+  cooldown: 8
+  spellDuration: 1
   movementType: 6
   debuffEffects: 
   buffEffects: 
