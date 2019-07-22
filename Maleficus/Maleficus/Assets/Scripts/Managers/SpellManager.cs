@@ -48,6 +48,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public override void Initialize()
     {
         // Find touch joysticks
+        spellJoysticks.Clear();
         foreach (MaleficusJoystick joystick in FindObjectsOfType<MaleficusJoystick>())
         {
             if (spellJoysticks.ContainsKey(joystick.JoystickType) == false)

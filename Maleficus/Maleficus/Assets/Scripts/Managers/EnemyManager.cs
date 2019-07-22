@@ -89,11 +89,11 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             livingBossEnemyCounter = 0;
             livingMinionEnemyCounter = 0;
 
-            basicEnemyMaxNumber = CoinManager.Instance.NumberOfCoins * 2 - numberOfCollectedCoins ;
+            basicEnemyMaxNumber = CoinManager.Instance.NumberOfCoins * 3 - numberOfCollectedCoins ;
 
             if (numberOfCollectedCoins != 1)
             {
-                championEnemyMaxNumber = (int) (numberOfCollectedCoins * 1.5f);
+                championEnemyMaxNumber = (int) (numberOfCollectedCoins * 2.5f); 
             }
             else
             {
