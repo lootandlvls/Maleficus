@@ -10,7 +10,7 @@ public class AOE : AbstractSpell
     void Start()
     {
        
-        onExplosionEnter( transform.position, 3.5f);
+        onExplosionEnter( transform.position, 3.5f * ARManager.Instance.SizeFactor);
     }
 
     // Update is called once per frame
@@ -33,7 +33,13 @@ public class AOE : AbstractSpell
                 Debug.Log("Collider : " + collider.name);
 
                 IPlayer otherPlayer = collider.gameObject.GetComponent<IPlayer>();
-                IEnemy otherEnemy = collider.gameObject.GetComponent<IEnemy>();
+               
+                if (collider.tag.Equals("Enemy"))
+                {
+                    IEnemy otherEnemy = collider.gameObject.GetComponent<IEnemy>();
+                    hitEnemies.Add(otherEnemy);
+                    
+                }
                 if (otherPlayer != null)
                 {
                     if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
@@ -41,18 +47,12 @@ public class AOE : AbstractSpell
                         hitPlayers.Add(otherPlayer);
                     }
                 }
-                else if (otherEnemy != null)
-                {
-                    if (collider.tag.Equals("Enemy"))
-                    {
-                        hitEnemies.Add(otherEnemy);
-                    }
-
-                }
+              
 
             }
         }
         ExplosionProcessHits(hitPlayers.ToArray());
+        ExplosionProcessHits(hitEnemies.ToArray());
 
     }
 }

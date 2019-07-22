@@ -75,7 +75,8 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     {
         EventManager.Instance.APP_AppStateUpdated   += On_APP_AppStateUpdated;
         EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
-
+        transform.gameObject.tag = "Enemy";
+        Debug.Log(transform.gameObject.tag);
         // Init Enemy
         UpdateState(EnemyState.SPAWNING);
 

@@ -138,6 +138,18 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
        
        
     }
+    protected void ExplosionProcessHits(IEnemy [] hitEnemies)
+    {
+        foreach (IEnemy hitEnemy in hitEnemies)
+        {
+          
+            ProcessHits(hitEnemy);
+        }
+
+
+
+    }
+
 
 
 

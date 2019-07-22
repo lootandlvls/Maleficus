@@ -132,10 +132,11 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
                 randomPositionIndex = Utilities.GetRndIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
-
+            
             GameObject enemyObject = Instantiate(basicEnemyPrefab.gameObject, enemySpawnPositions[randomPositionIndex].Position, Quaternion.identity);
             if (MotherOfManagers.Instance.IsARGame)
             {
+                enemyObject.gameObject.tag = "Enemy";
                 enemyObject.transform.localScale *= ARManager.Instance.SizeFactor;
                 enemyObject.transform.localScale *= 2.0f;
             }

@@ -195,10 +195,13 @@ public class Player : MonoBehaviour, IPlayer
     {
         if (readyToUseSpell_1 && readyToShoot)
         {
-           
-         //   StartChargingSpell(1, movementType);
-       //     StartCoroutine(ReadyToUseSpell(spellDuration_1, 0));
-           // StartCoroutine(ReadyToUseSpell(spellCooldown_1, 1));
+            if (movementType == MovementType.LINEAR_LASER)
+            {
+                StartCoroutine(PlayerCantMove());
+            }
+            //   StartChargingSpell(1, movementType);
+            //     StartCoroutine(ReadyToUseSpell(spellDuration_1, 0));
+            // StartCoroutine(ReadyToUseSpell(spellCooldown_1, 1));
         }
         else
         {
@@ -211,9 +214,12 @@ public class Player : MonoBehaviour, IPlayer
 
         if (readyToUseSpell_2 && readyToShoot)
         {
-          
-        //    StartChargingSpell(2, movementType);
-           // StartCoroutine(ReadyToUseSpell(spellDuration_2, 0));
+            if (movementType == MovementType.LINEAR_LASER)
+            {
+                StartCoroutine(PlayerCantMove());
+            }
+            //    StartChargingSpell(2, movementType);
+            // StartCoroutine(ReadyToUseSpell(spellDuration_2, 0));
             //StartCoroutine(ReadyToUseSpell(spellCooldown_2, 2));
         }
         else
@@ -225,10 +231,13 @@ public class Player : MonoBehaviour, IPlayer
     {
         if (readyToUseSpell_3 && readyToShoot)
         {
-          
-          //  StartChargingSpell(3, movementType);
-         //   StartCoroutine(ReadyToUseSpell(spellDuration_3, 0));
-         //   StartCoroutine(ReadyToUseSpell(spellCooldown_3, 3));
+            if (movementType == MovementType.LINEAR_LASER)
+            {
+                StartCoroutine(PlayerCantMove());
+            }
+            //  StartChargingSpell(3, movementType);
+            //   StartCoroutine(ReadyToUseSpell(spellDuration_3, 0));
+            //   StartCoroutine(ReadyToUseSpell(spellCooldown_3, 3));
         }
         else
         {

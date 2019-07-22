@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 195986426064151666}
   m_Layer: 0
   m_Name: E_Ghost_Blue
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,12 +108,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isType: 0
+  movementType: 0
   damage: 1
   attackTimeOut: 3
   attackDelay: 0.5
   spawnRate: 3
   walkingSpeed: 1.5
   attackingThreshold: 1.5
+  wayPointInterpolationFactor: 1
   damageParticleEffect: {fileID: 0}
   spawnParticleEffect: {fileID: 0}
   attackSounds: []
