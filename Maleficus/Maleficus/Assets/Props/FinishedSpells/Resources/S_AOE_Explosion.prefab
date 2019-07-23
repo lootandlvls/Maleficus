@@ -18755,7 +18755,7 @@ MonoBehaviour:
   parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 50
   speed: 0
-  spellName: 
+  spellName: S_AOE
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1

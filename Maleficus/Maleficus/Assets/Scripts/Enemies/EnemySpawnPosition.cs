@@ -21,6 +21,12 @@ public class EnemySpawnPosition : MonoBehaviour
     private void Start()
     {
         EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
+        //EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
+    }
+
+    private void On_AR_StagePlaced()
+    {
+        HideShadowMesh();
     }
 
     private void OnDestroy()
@@ -28,6 +34,8 @@ public class EnemySpawnPosition : MonoBehaviour
         if (EventManager.Instance != null)
         {
             EventManager.Instance.APP_AppStateUpdated -= On_APP_AppStateUpdated;
+            //EventManager.Instance.AR_StagePlaced -= On_AR_StagePlaced;
+
         }
     }
 

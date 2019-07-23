@@ -24,6 +24,12 @@ public class PlayerSpawnPosition : MonoBehaviour
     {
         EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
         EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
+        //EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;         
+    }
+
+    private void On_AR_StagePlaced()
+    {
+        HideShadowMesh();
     }
 
     private void OnDestroy()
@@ -32,6 +38,7 @@ public class PlayerSpawnPosition : MonoBehaviour
         {
             EventManager.Instance.PLAYERS_PlayerSpawned -= On_PLAYERS_PlayerSpawned;
             EventManager.Instance.APP_AppStateUpdated -= On_APP_AppStateUpdated;
+            //EventManager.Instance.AR_StagePlaced -= On_AR_StagePlaced;
         }
     }
 

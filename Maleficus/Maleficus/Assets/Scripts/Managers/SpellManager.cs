@@ -180,6 +180,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         AbstractSpell spellToCast;
 
+
         switch (playerID)                                                       // TODO: Switch unecessary. Same code in every case
         {
             case EPlayerID.PLAYER_1:
@@ -192,6 +193,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);
+                        EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
 
 
                         break;
@@ -199,12 +201,15 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         spellJoysticks[ETouchJoystickType.SPELL_2].ReloadJoystick(spellCooldown);
+                        EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
 
                         break;
                     case 2:
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
                         spellJoysticks[ETouchJoystickType.SPELL_3].ReloadJoystick(spellCooldown);
+                        EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
+
                         break;
                 }
                 break;

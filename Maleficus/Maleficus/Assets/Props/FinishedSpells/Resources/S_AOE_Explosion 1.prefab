@@ -18755,7 +18755,7 @@ MonoBehaviour:
   parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 50
   speed: 0
-  spellName: 
+  spellName: S_AOE
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
@@ -18771,6 +18771,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7948522024305349590}
     m_Modifications:
+    - target: {fileID: 2053946591730738799, guid: 7360dcfb61b7a0846af83b88c3941cb0,
+        type: 3}
+      propertyPath: m_Name
+      value: halo
+      objectReference: {fileID: 0}
     - target: {fileID: 2056554496175301107, guid: 7360dcfb61b7a0846af83b88c3941cb0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -18825,11 +18830,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2053946591730738799, guid: 7360dcfb61b7a0846af83b88c3941cb0,
-        type: 3}
-      propertyPath: m_Name
-      value: halo
       objectReference: {fileID: 0}
     - target: {fileID: 2181934916982881713, guid: 7360dcfb61b7a0846af83b88c3941cb0,
         type: 3}
@@ -18971,6 +18971,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7948522024305349590}
     m_Modifications:
+    - target: {fileID: 8226909783497464221, guid: ae858b0c05dcb414b8ad39b69ee32544,
+        type: 3}
+      propertyPath: m_Name
+      value: glow
+      objectReference: {fileID: 0}
     - target: {fileID: 8224535605154792831, guid: ae858b0c05dcb414b8ad39b69ee32544,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19025,11 +19030,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8226909783497464221, guid: ae858b0c05dcb414b8ad39b69ee32544,
-        type: 3}
-      propertyPath: m_Name
-      value: glow
       objectReference: {fileID: 0}
     - target: {fileID: 8137825749641523987, guid: ae858b0c05dcb414b8ad39b69ee32544,
         type: 3}
@@ -19126,6 +19126,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7948522024305349590}
     m_Modifications:
+    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
+        type: 3}
+      propertyPath: m_Name
+      value: Beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6551116132212676543, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19180,16 +19190,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
-        type: 3}
-      propertyPath: m_Name
-      value: Beam
-      objectReference: {fileID: 0}
-    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6352151562051580209, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}
