@@ -1,0 +1,180 @@
+fileFormatVersion: 2
+guid: e1581d1017cd0cc428cee4e635524cf3
+timeCreated: 1481640820
+licenseType: Store
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Rig
+    100004: RigHead
+    100006: RigHeadGizmo
+    100008: RigJaw
+    100010: RigJawGizmo
+    100012: RigLArm1
+    100014: RigLArm1Gizmo
+    100016: RigLArm2
+    100018: RigLArm2Gizmo
+    100020: RigLArmFinger1
+    100022: RigLArmFinger1Gizmo
+    100024: RigLArmFinger2
+    100026: RigLArmFinger2Gizmo
+    100028: RigLArmFinger3
+    100030: RigLArmFinger3Gizmo
+    100032: RigLArmFinger4
+    100034: RigLArmFinger4Gizmo
+    100036: RigLArmPalm
+    100038: RigLArmPalmGizmo
+    100040: RigLLeg1
+    100042: RigLLeg2
+    100044: RigLLegAnkle
+    100046: RigLLegFoot1
+    100048: RigLLegPlatform
+    100050: RigNeck
+    100052: RigPelvis
+    100054: RigPelvisGizmo
+    100056: RigRArm1
+    100058: RigRArm1Gizmo
+    100060: RigRArm2
+    100062: RigRArm2Gizmo
+    100064: RigRArmFinger1
+    100066: RigRArmFinger1Gizmo
+    100068: RigRArmFinger2
+    100070: RigRArmFinger2Gizmo
+    100072: RigRArmFinger3
+    100074: RigRArmFinger3Gizmo
+    100076: RigRArmFinger4
+    100078: RigRArmFinger4Gizmo
+    100080: RigRArmPalm
+    100082: RigRArmPalmGizmo
+    100084: RigRibcage
+    100086: RigRibcageGizmo
+    100088: RigRLeg1
+    100090: RigRLeg2
+    100092: RigRLegAnkle
+    100094: RigRLegFoot1
+    100096: RigRLegPlatform
+    100098: RigSpine1
+    100100: RigSpine2
+    100102: Toon Crystal Keeper
+    400000: //RootNode
+    400002: Rig
+    400004: RigHead
+    400006: RigHeadGizmo
+    400008: RigJaw
+    400010: RigJawGizmo
+    400012: RigLArm1
+    400014: RigLArm1Gizmo
+    400016: RigLArm2
+    400018: RigLArm2Gizmo
+    400020: RigLArmFinger1
+    400022: RigLArmFinger1Gizmo
+    400024: RigLArmFinger2
+    400026: RigLArmFinger2Gizmo
+    400028: RigLArmFinger3
+    400030: RigLArmFinger3Gizmo
+    400032: RigLArmFinger4
+    400034: RigLArmFinger4Gizmo
+    400036: RigLArmPalm
+    400038: RigLArmPalmGizmo
+    400040: RigLLeg1
+    400042: RigLLeg2
+    400044: RigLLegAnkle
+    400046: RigLLegFoot1
+    400048: RigLLegPlatform
+    400050: RigNeck
+    400052: RigPelvis
+    400054: RigPelvisGizmo
+    400056: RigRArm1
+    400058: RigRArm1Gizmo
+    400060: RigRArm2
+    400062: RigRArm2Gizmo
+    400064: RigRArmFinger1
+    400066: RigRArmFinger1Gizmo
+    400068: RigRArmFinger2
+    400070: RigRArmFinger2Gizmo
+    400072: RigRArmFinger3
+    400074: RigRArmFinger3Gizmo
+    400076: RigRArmFinger4
+    400078: RigRArmFinger4Gizmo
+    400080: RigRArmPalm
+    400082: RigRArmPalmGizmo
+    400084: RigRibcage
+    400086: RigRibcageGizmo
+    400088: RigRLeg1
+    400090: RigRLeg2
+    400092: RigRLegAnkle
+    400094: RigRLegFoot1
+    400096: RigRLegPlatform
+    400098: RigSpine1
+    400100: RigSpine2
+    400102: Toon Crystal Keeper
+    2300000: //RootNode
+    2300002: Toon Crystal Keeper
+    3300000: //RootNode
+    3300002: Toon Crystal Keeper
+    4300000: Toon Crystal Keeper
+    9500000: //RootNode
+    13700000: Toon Crystal Keeper
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 3
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
