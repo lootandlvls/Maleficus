@@ -22,10 +22,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         base.Start();
 
         // 3) Bind event in start method of child class!
-        StateUpdateEvent += EventManager.Instance.Invoke_UI_MenuStateUpdated;
+        StateUpdateEvent += EventManager.Instance.UI_MenuStateUpdated.Invoke;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
-        EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
 
         EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
 
@@ -59,10 +59,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         // if connected before scene loaded
         if (currentState == EMenuState.IN_ENTRY)
         {
-            List<NetMsg> msgs = NetworkManager.Instance.allReceivedMsgs;
+            List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
             if (msgs.Count != 0)
             {
-                if (msgs[msgs.Count - 1].OP == NetOP.Connected)
+                if (msgs[msgs.Count - 1].ID == NetID.Connected)
                 {
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                 }
@@ -220,11 +220,11 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
     }
 
-    public void On_APP_AppStateUpdated(EAppState eAppState, EAppState lastEAppState)
+    public void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
         if(currentState == EMenuState.IN_ENTRY)
         {
-            switch (eAppState)
+            switch (eventHandle.NewState)
             {
                 case EAppState.IN_ENTRY_IN_LOGIN:
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);

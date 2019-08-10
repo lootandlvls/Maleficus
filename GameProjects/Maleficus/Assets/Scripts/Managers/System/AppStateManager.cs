@@ -32,7 +32,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         base.Start();
 
         // 3) Bind event in start method of child class!
-        StateUpdateEvent += EventManager.Instance.Invoke_APP_AppStateUpdated;
+        StateUpdateEvent += EventManager.Instance.APP_AppStateUpdated.Invoke;
 
         SceneManager.sceneLoaded += On_SceneLoaded;
 
@@ -78,10 +78,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // if connected before scene loaded
         if (CurrentState == EAppState.IN_ENTRY)
         {
-            List<NetMsg> msgs = NetworkManager.Instance.allReceivedMsgs;
+            List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
             if (msgs.Count != 0)
             {
-                if (msgs[NetworkManager.Instance.allReceivedMsgs.Count - 1].OP == NetOP.Connected)
+                if (msgs[NetworkManager.Instance.allReceivedMsgs.Count - 1].ID == NetID.Connected)
                 {
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                 }

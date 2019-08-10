@@ -32,7 +32,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         base.Start();
 
-        StateUpdateEvent += EventManager.Instance.Invoke_AR_TrackingStateUpdated;
+        StateUpdateEvent += EventManager.Instance.AR_ARStateUpdated.Invoke;
     }
 
     public override void Initialize()

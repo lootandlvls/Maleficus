@@ -30,7 +30,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public Account self;
     private string token;
     private bool isStarted;
-    public List<NetMsg> allReceivedMsgs;
+    public List<AbstractNetMessage> allReceivedMsgs;
 
     #region Monobehaviour
 
@@ -84,7 +84,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 #endif
         Debug.Log(string.Format("Attempting to connect on {0}...", SERVER_IP));
         isStarted = true;
-        allReceivedMsgs = new List<NetMsg>();
+        allReceivedMsgs = new List<AbstractNetMessage>();
     }
 
     public void Shutdown()
@@ -132,7 +132,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 UpdateReceivedMessage(ENetworkMessage.DATA);
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
-                NetMsg msg = (NetMsg)formatter.Deserialize(ms);
+                AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
 
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
@@ -146,51 +146,51 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
 
     #region OnData
-    private void OnData(int cnnId, int channelId, int recHostId, NetMsg msg)
+    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
     {
-        Debug.Log("receiverd a message of type " + msg.OP);
+        Debug.Log("receiverd a message of type " + msg.ID);
 
-        switch (msg.OP)
+        switch (msg.ID)
         {
-            case NetOP.None:
+            case NetID.None:
                 Debug.Log("Unexpected NetOP");
                 break;
-            case NetOP.OnCreateAccount:
+            case NetID.OnCreateAccount:
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)msg);
                 UpdateReceivedMessage(ENetworkMessage.REGISTERED);
                 allReceivedMsgs.Add((Net_OnCreateAccount)msg);
                 break;
-            case NetOP.OnLoginRequest:
+            case NetID.OnLoginRequest:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)msg);
                 UpdateReceivedMessage(ENetworkMessage.LOGGED_IN);
                 allReceivedMsgs.Add((Net_OnLoginRequest)msg);
 
                 break;
-            case NetOP.OnAddFollow:
+            case NetID.OnAddFollow:
                 Debug.Log("Add Friend");
                 OnAddFollow((Net_OnAddFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONADDFOLLOW);
                 allReceivedMsgs.Add((Net_OnAddFollow)msg);
                 break;
-            case NetOP.OnRequestFollow:
+            case NetID.OnRequestFollow:
                 Debug.Log("Get Friends");
                 OnRequestFollow((Net_OnRequestFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
                 allReceivedMsgs.Add((Net_OnRequestFollow)msg);
                 break;
                 //Todo change to Onupdatefollow
-            case NetOP.UpdateFollow:
+            case NetID.UpdateFollow:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONUPDATEFOLLOW);
                 allReceivedMsgs.Add((Net_UpdateFollow)msg);
                 break;
-            case NetOP.OnInitLobby:
+            case NetID.OnInitLobby:
                 Debug.Log("Lobby initialized");
                 break;
-            case NetOP.SpellInput:
+            case NetID.SpellInput:
                 Debug.Log("Received Spell Input from another Player");
                 UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
                 allReceivedMsgs.Add((Net_SpellInput)msg);
@@ -251,7 +251,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #endregion
 
     #region Send
-    public void SendServer(NetMsg msg)
+    public void SendServer(AbstractNetMessage msg)
     {
         // this is where we hold our data
         byte[] buffer = new byte[BYTE_SIZE];

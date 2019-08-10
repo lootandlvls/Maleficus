@@ -48,7 +48,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
        
         // Scene changed event
         EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
-        EventManager.Instance.APP_AppStateUpdated += On_ÁPP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
        
         StartCoroutine(LateStartCoroutine());
     }
@@ -348,9 +348,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_ÁPP_AppStateUpdated(EAppState newState, EAppState lastState)
+    private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
-        if (newState == EAppState.IN_GAME_IN_NOT_STARTED)
+        if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
             SpawnAllConnectedPlayers();
         }

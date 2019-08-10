@@ -73,7 +73,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
-        EventManager.Instance.APP_AppStateUpdated   += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
         transform.gameObject.tag = "Enemy";
         Debug.Log(transform.gameObject.tag);
@@ -204,7 +204,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 myNavAgent.enabled = false;
 
 
-                EventManager.Instance.APP_AppStateUpdated-= On_APP_AppStateUpdated;
+                EventManager.Instance.APP_AppStateUpdated.RemoveListener(On_APP_AppStateUpdated);
                 
                 EventManager.Instance.Invoke_ENEMIES_EnemyDied(this);
 
@@ -277,9 +277,9 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     }
 
 
-    protected void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)
+    protected void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
-        if (newState == EAppState.IN_GAME_IN_ENDED)
+        if (eventHandle.NewState == EAppState.IN_GAME_IN_ENDED)
         {
             UpdateState(EnemyState.IDLE);
         }

@@ -1,9 +1,9 @@
 ﻿[System.Serializable]
-public class Net_RemoveFollow : NetMsg
+public class Net_RemoveFollow : AbstractNetMessage
 {
     public Net_RemoveFollow()
     {
-        OP = NetOP.RemoveFollow;
+        ID = NetID.RemoveFollow;
     }
 
     public string Token { set; get; }

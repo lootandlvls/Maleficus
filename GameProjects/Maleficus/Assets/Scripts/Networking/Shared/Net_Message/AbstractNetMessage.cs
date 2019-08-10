@@ -1,4 +1,4 @@
-﻿public static class NetOP
+﻿public static class NetID
 {
     public const int None=0;
 
@@ -27,14 +27,20 @@
 
     public const int SpellInput = 15;
     public const int MovementInput = 16;
+
+
+
+
+    public const int Test = 255;  // Maximum
 }
 [System.Serializable]
-public abstract class NetMsg
+public abstract class AbstractNetMessage
 {
-    // OP = const id of the NET_ class, to differentiate between the different messages
-    public byte OP {set;get;}
-    public NetMsg()
+    /// <summary> ID = const id of the NET_ class, to differentiate between the different messages </summary>
+    public byte ID { set; get; }
+
+    public AbstractNetMessage()
     {
-        OP = NetOP.None;
+        ID = NetID.None;
     }
 }

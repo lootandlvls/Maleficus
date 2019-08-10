@@ -419,10 +419,10 @@ public class InputManager : AbstractSingletonManager<InputManager>
             switch (receivedMsg)
             {
                 case ENetworkMessage.DATA_SPELLINPUT:
-                    List<NetMsg> msgs = NetworkManager.Instance.allReceivedMsgs;
+                    List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
                     for(int i = msgs.Count - 1; i > -1; i--)
                     {
-                        if(msgs[i].OP == 15){
+                        if(msgs[i].ID == 15){
                             Net_SpellInput si = (Net_SpellInput)msgs[i];
                             int spellid = 0;
                             char controllerid = 'Z';

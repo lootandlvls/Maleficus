@@ -17,7 +17,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
     private void Start()
     {
         EventManager.Instance.GAME_GameOver += ON_GAME_GameOver;
-        EventManager.Instance.AR_ARStateUpdated += On_AR_ARStateUpdated;
+        EventManager.Instance.AR_ARStateUpdated.AddListener(On_AR_ARStateUpdated);
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
     }
 
@@ -108,9 +108,9 @@ public class GameManager : AbstractSingletonManager<GameManager>
         }
     }
 
-    private void On_AR_ARStateUpdated(EARState newState, EARState lastState)
+    private void On_AR_ARStateUpdated(StateUpdatedEventHandle<EARState> eventHandle)
     {
-        switch (newState)
+        switch (eventHandle.NewState)
         {
             case EARState.NO_POSE:
                 if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)

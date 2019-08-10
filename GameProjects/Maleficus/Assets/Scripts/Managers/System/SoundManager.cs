@@ -20,7 +20,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
     private void Start()
     {
         //AppStateManager.Instance.AppStateUpdated += OnAppStateUpdated;
-        EventManager.Instance.APP_AppStateUpdated += OnAppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated.AddListener(OnAppStateUpdated);
 
         EventManager.Instance.SPELLS_SpellSpawned += On_SPELLS_SpellSpawned;
         EventManager.Instance.SPELLS_SpellHitEnemy += On_SPELLS_SpellHitEnemy;
@@ -55,9 +55,9 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
     }
 
 
-    private void OnAppStateUpdated(EAppState newState, EAppState lastState)
+    private void OnAppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
-        switch (newState)
+        switch (eventHandle.NewState)
         {
             case EAppState.IN_MENU_IN_MAIN:
                 ambiamce_AudioSource.Play();

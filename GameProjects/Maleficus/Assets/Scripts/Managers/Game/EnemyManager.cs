@@ -53,7 +53,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
 
     private void Start()
     {
-        EventManager.Instance.APP_AppStateUpdated += OnAppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated.AddListener(OnAppStateUpdated);
         EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
         EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
     }
@@ -268,9 +268,9 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
 
     
 
-    private void OnAppStateUpdated(EAppState newState, EAppState lastState)
+    private void OnAppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
-        switch (newState)
+        switch (eventHandle.NewState)
         {
             case EAppState.IN_GAME_IN_RUNNING:
 

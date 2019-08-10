@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
 [System.Serializable]
-public class Net_MovementInput : NetMsg
+public class Net_MovementInput : AbstractNetMessage
 {
     public Net_MovementInput()
     {
-        OP = NetOP.MovementInput;
+        ID = NetID.MovementInput;
     }
 
     public string Token { set; get; }

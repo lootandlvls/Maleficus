@@ -12,16 +12,22 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     }
 
+    public MaleficusEvent<TestEventHandle> TEST_TestEvent = new MaleficusEvent<TestEventHandle>();
+
+
     #region APP
-    public event Action<EAppState, EAppState> APP_AppStateUpdated;
+    public event Action<EAppState, EAppState> APP_AppStateUpdated_old;
     public void Invoke_APP_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
     {
-        if (APP_AppStateUpdated != null)
+        if (APP_AppStateUpdated_old != null)
         {
-            APP_AppStateUpdated.Invoke(newAppState, lastAppState);
+            APP_AppStateUpdated_old.Invoke(newAppState, lastAppState);
         }
         DebugLog("App state changed from " + lastAppState + " to " + newAppState);
     }
+
+    public MaleficusEvent<StateUpdatedEventHandle<EAppState>> APP_AppStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EAppState>>();
+
 
     public event Action<EScene> APP_SceneWillChange;
     public void Invoke_APP_SceneWillChange(EScene newScene)
@@ -225,15 +231,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region UI
-    public event Action<EMenuState, EMenuState> UI_MenuStateUpdated;
-    public void Invoke_UI_MenuStateUpdated(EMenuState newState, EMenuState lastState)
-    {
-        if (UI_MenuStateUpdated != null)
-        {
-            UI_MenuStateUpdated.Invoke(newState, lastState);
-        }
-        DebugLog("Menu state changed from " + lastState + " to " + newState);
-    }
+    //public event Action<EMenuState, EMenuState> UI_MenuStateUpdated_old;
+    //public void Invoke_UI_MenuStateUpdated(EMenuState newState, EMenuState lastState)
+    //{
+    //    if (UI_MenuStateUpdated_old != null)
+    //    {
+    //        UI_MenuStateUpdated_old.Invoke(newState, lastState);
+    //    }
+    //    DebugLog("Menu state changed from " + lastState + " to " + newState);
+    //}
+    public MaleficusEvent<StateUpdatedEventHandle<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EMenuState>>();
+
     #endregion
 
     #region INPUT
@@ -327,15 +335,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion;
 
     #region AR
-    public event Action<EARState, EARState> AR_ARStateUpdated;                                        // TODO: Add reference to attacked player ID
-    public void Invoke_AR_TrackingStateUpdated(EARState newARState, EARState lastState)
-    {
-        if (AR_ARStateUpdated != null)
-        {
-            AR_ARStateUpdated.Invoke(newARState, lastState);
-        }
-        DebugLog("AR State updated : " + newARState);
-    }
+    //public event Action<EARState, EARState> AR_ARStateUpdated_old;                                       
+    //public void Invoke_AR_TrackingStateUpdated(EARState newARState, EARState lastState)
+    //{
+    //    if (AR_ARStateUpdated_old != null)
+    //    {
+    //        AR_ARStateUpdated_old.Invoke(newARState, lastState);
+    //    }
+    //    DebugLog("AR State updated : " + newARState);
+    //}
+    public MaleficusEvent<StateUpdatedEventHandle<EARState>> AR_ARStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EARState>>();
+
 
     public event Action AR_StagePlaced;                                        // TODO: Add reference to attacked player ID
     public void Invoke_AR_StagePlaced()

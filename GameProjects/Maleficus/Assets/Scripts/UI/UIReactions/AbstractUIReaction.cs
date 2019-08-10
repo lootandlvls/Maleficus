@@ -33,7 +33,7 @@ public abstract class AbstractUIReaction : MonoBehaviour {
 
     private void Start()
     {
-        EventManager.Instance.UI_MenuStateUpdated += OnMenuStateUpdated;
+        EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
 
         // Initialization
         if (isInitializeOnStart == true)
@@ -46,13 +46,13 @@ public abstract class AbstractUIReaction : MonoBehaviour {
     {
         if (EventManager.Instance != null)
         {
-            EventManager.Instance.UI_MenuStateUpdated -= OnMenuStateUpdated;
+            EventManager.Instance.UI_MenuStateUpdated.RemoveListener(On_UI_MenuStateUpdated);
         }
     }
 
-    protected virtual void OnMenuStateUpdated(EMenuState newState, EMenuState lastState)
+    protected virtual void On_UI_MenuStateUpdated(StateUpdatedEventHandle<EMenuState> eventHandle)
     {
-        PlayAppropriateReaction(newState);
+        PlayAppropriateReaction(eventHandle.NewState);
     }
 
     protected abstract void PlayAppropriateReaction(EMenuState newState);

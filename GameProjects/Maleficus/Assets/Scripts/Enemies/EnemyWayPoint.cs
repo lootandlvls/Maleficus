@@ -8,20 +8,20 @@ public class EnemyWayPoint : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.APP_AppStateUpdated += On_APP_AppStateUpdated;
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
     }
 
     private void OnDestroy()
     {
         if (EventManager.Instance != null)
         {
-            EventManager.Instance.APP_AppStateUpdated -= On_APP_AppStateUpdated;
+            EventManager.Instance.APP_AppStateUpdated.RemoveListener(On_APP_AppStateUpdated);
         }
     }
 
-    private void On_APP_AppStateUpdated(EAppState newState, EAppState lastState)
+    private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
-        if (newState == EAppState.IN_GAME_IN_RUNNING)
+        if (eventHandle.NewState == EAppState.IN_GAME_IN_RUNNING)
         {
             HideShadowMesh();
         }

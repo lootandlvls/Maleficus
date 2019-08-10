@@ -20,12 +20,12 @@ public class FriendsContext : MonoBehaviour
     {
         Instance = this;
 
-        EventManager.Instance.UI_MenuStateUpdated += On_UI_MenuStateUpdated;
+        EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
     }
 
-    private void On_UI_MenuStateUpdated(EMenuState newMsg, EMenuState lastMsg)
+    private void On_UI_MenuStateUpdated(StateUpdatedEventHandle<EMenuState> eventHandle)
     {
-        switch (newMsg)
+        switch (eventHandle.NewState)
         {
             case EMenuState.IN_MENU:
                 selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
