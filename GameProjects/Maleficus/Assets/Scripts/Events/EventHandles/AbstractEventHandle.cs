@@ -11,7 +11,5 @@ public abstract class AbstractEventHandle
     /// </summary>
     public abstract AbstractNetMessage GetNetMessage();
 
-    public abstract string GetEventDebugMessage();
-
-
+    public abstract string GetDebugMessage();
 }

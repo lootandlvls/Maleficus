@@ -5,7 +5,14 @@ using System;
 
 public class MaleficusEvent<H> where H : AbstractEventHandle
 {
+    public string Name { get; }
+
     private event Action<H> maleficusEvent;
+
+    public MaleficusEvent(string name)
+    {
+        Name = name;
+    }
 
     public void AddListener(Action<H> callbackAction)
     {
@@ -31,6 +38,11 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
         if (maleficusEvent != null)
         {
             maleficusEvent.Invoke(eventHandle);
+
+            if (MotherOfManagers.Instance.IsDebugLogEvents == true)
+            {
+                Debug.Log("[EVENT] " + Name + " : " + eventHandle.GetDebugMessage());
+            }
         }
     }
 

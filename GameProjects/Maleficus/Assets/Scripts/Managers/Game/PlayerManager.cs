@@ -47,7 +47,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.INPUT_JoystickMoved   += On_INPUT_JoystickMoved;
        
         // Scene changed event
-        EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
        
         StartCoroutine(LateStartCoroutine());
@@ -340,9 +340,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
     #region Events Callbacks
-    private void On_APP_SceneChanged(EScene newScene)
+    private void On_APP_SceneChanged(BasicEventHandle<EScene> eventHandle)
     {
-        if (newScene == EScene.GAME)
+        if (eventHandle.Arg1 == EScene.GAME)
         {
             FindPlayerSpawnGhost();
         }

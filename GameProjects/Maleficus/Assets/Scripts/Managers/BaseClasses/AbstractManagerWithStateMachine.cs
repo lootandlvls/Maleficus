@@ -61,7 +61,7 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
          *  */
 
         // Register to scene change
-        EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
         // Wait for another frame before setting state
         StartCoroutine(LateStartCoroutine());
     }
@@ -103,9 +103,8 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
         }
     }
 
-    private void On_APP_SceneChanged(EScene newScene)
+    private void On_APP_SceneChanged(BasicEventHandle<EScene> eventHandle)
     {
-        Debug.Log(gameObject.name + " > New Scene " + newScene + " . Update state from " + currentState + " to " + startStates[newScene]);
-        UpdateState(startStates[newScene]);
+        UpdateState(startStates[eventHandle.Arg1]);
     }
 }

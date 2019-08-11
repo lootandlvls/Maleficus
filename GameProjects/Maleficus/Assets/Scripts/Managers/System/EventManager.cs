@@ -12,56 +12,50 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     }
 
-    public MaleficusEvent<TestEventHandle> TEST_TestEvent = new MaleficusEvent<TestEventHandle>();
+    public MaleficusEvent<TestEventHandle> TEST_TestEvent = new MaleficusEvent<TestEventHandle>("TEST_TestEvent");
 
 
     #region APP
-    public event Action<EAppState, EAppState> APP_AppStateUpdated_old;
-    public void Invoke_APP_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
-    {
-        if (APP_AppStateUpdated_old != null)
-        {
-            APP_AppStateUpdated_old.Invoke(newAppState, lastAppState);
-        }
-        DebugLog("App state changed from " + lastAppState + " to " + newAppState);
-    }
+    //public event Action<EAppState, EAppState> APP_AppStateUpdated_old;
+    //public void Invoke_APP_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
+    //{
+    //    if (APP_AppStateUpdated_old != null)
+    //    {
+    //        APP_AppStateUpdated_old.Invoke(newAppState, lastAppState);
+    //    }
+    //    DebugLog("App state changed from " + lastAppState + " to " + newAppState);
+    //}
+    public MaleficusEvent<StateUpdatedEventHandle<EAppState>> APP_AppStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EAppState>>("APP_AppStateUpdated");
 
-    public MaleficusEvent<StateUpdatedEventHandle<EAppState>> APP_AppStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EAppState>>();
+
+    //public event Action<EScene> APP_SceneWillChange_old;
+    //public void Invoke_APP_SceneWillChange(EScene newScene)
+    //{
+    //    if (APP_SceneWillChange_old != null)
+    //    {
+    //        APP_SceneWillChange_old.Invoke(newScene);
+    //    }
+    //    DebugLog("Scene will change : " + newScene);
+    //}
+    public MaleficusEvent<BasicEventHandle<EScene>> APP_SceneWillChange = new MaleficusEvent<BasicEventHandle<EScene>>("APP_SceneWillChange");
 
 
-    public event Action<EScene> APP_SceneWillChange;
-    public void Invoke_APP_SceneWillChange(EScene newScene)
-    {
-        if (APP_SceneWillChange != null)
-        {
-            APP_SceneWillChange.Invoke(newScene);
-        }
-        DebugLog("Scene will change : " + newScene);
-    }
 
-    public event Action<EScene> APP_SceneChanged;
-    public void Invoke_APP_SceneChanged(EScene newScene)
-    {
-        if (APP_SceneChanged != null)
-        {
-            APP_SceneChanged.Invoke(newScene);
-        }
-        DebugLog("Scene changed : " + newScene);
-    }
+    //public event Action<EScene> APP_SceneChanged_old;
+    //public void Invoke_APP_SceneChanged(EScene newScene)
+    //{
+    //    if (APP_SceneChanged_old != null)
+    //    {
+    //        APP_SceneChanged_old.Invoke(newScene);
+    //    }
+    //    DebugLog("Scene changed : " + newScene);
+    //}
+    public MaleficusEvent<BasicEventHandle<EScene>> APP_SceneChanged = new MaleficusEvent<BasicEventHandle<EScene>>("APP_SceneChanged");
 
 
     #endregion
 
     #region GAME
-    //public event Action<EGameMode> GAME_GameAboutToStart;
-    //public void Invoke_GAME_GameAboutToStart(EGameMode gameModeAboutToStart)
-    //{
-    //    if (GAME_GameAboutToStart != null)
-    //    {
-    //        GAME_GameAboutToStart.Invoke(gameModeAboutToStart);
-    //    }
-    //    DebugLog("Game about to start : " + gameModeAboutToStart);
-    //}
 
     public event Action<EGameMode> GAME_GameStarted;
     public void Invoke_GAME_GameStarted(EGameMode gameModeStarted)
@@ -240,7 +234,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("Menu state changed from " + lastState + " to " + newState);
     //}
-    public MaleficusEvent<StateUpdatedEventHandle<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EMenuState>>();
+    public MaleficusEvent<StateUpdatedEventHandle<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EMenuState>>("UI_MenuStateUpdated");
 
     #endregion
 
@@ -344,7 +338,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("AR State updated : " + newARState);
     //}
-    public MaleficusEvent<StateUpdatedEventHandle<EARState>> AR_ARStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EARState>>();
+    public MaleficusEvent<StateUpdatedEventHandle<EARState>> AR_ARStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EARState>>("AR_ARStateUpdated");
 
 
     public event Action AR_StagePlaced;                                        // TODO: Add reference to attacked player ID
@@ -364,7 +358,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     {
         if (MotherOfManagers.Instance.IsDebugLogEvents == true)
         {
-            Debug.Log(messageLog);
+            Debug.Log("[EVENT (old)] " + messageLog);
         }
     }
 

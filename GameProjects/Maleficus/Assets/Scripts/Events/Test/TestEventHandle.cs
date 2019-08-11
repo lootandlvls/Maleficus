@@ -17,7 +17,7 @@ public class TestEventHandle : AbstractEventHandle
         return new Net_Test(TestMessage);
     }
 
-    public override string GetEventDebugMessage()
+    public override string GetDebugMessage()
     {
         return TestMessage;
     }

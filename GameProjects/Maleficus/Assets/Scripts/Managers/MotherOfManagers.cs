@@ -36,7 +36,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     private void Start()
     {
-        EventManager.Instance.APP_SceneChanged += On_APP_SceneChanged;
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
     }
 
 
@@ -45,7 +45,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     }
 
-    private void On_APP_SceneChanged(EScene newScene)
+    private void On_APP_SceneChanged(BasicEventHandle<EScene> eventHandle)
     {
         InitializeManagers();
     }

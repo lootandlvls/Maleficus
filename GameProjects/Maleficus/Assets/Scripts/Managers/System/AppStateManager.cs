@@ -92,7 +92,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     #region Scene Update
     private void UpdateScene(EScene newScene)
     {
-        EventManager.Instance.Invoke_APP_SceneWillChange(newScene);
+        EventManager.Instance.APP_SceneWillChange.Invoke(new BasicEventHandle<EScene>(newScene));
 
         // Wait some frames before changing scene
         StartCoroutine(LateUpdateSceneCoroutine(newScene));
@@ -226,8 +226,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
           // Launch AR game (change scene)
         foreach (StartDungeonAction action in FindObjectsOfType<StartDungeonAction>())
         {
-            Debug.Log("Found Dugeon button");
-
             action.StartDungeonPressed += (EDungeonID dungeonID) =>
             {
                 Debug.Log("Start dungeon " + dungeonID + "pressed");
@@ -242,7 +240,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
     {
         Debug.Log("Loading level done : " + newScene.name);
-        EventManager.Instance.Invoke_APP_SceneChanged(CurrentScene);
+        EventManager.Instance.APP_SceneChanged.Invoke(new BasicEventHandle<EScene>(CurrentScene));
 
         // Validity test
         if ((newScene.name != MaleficusTypes.SCENE_GAME)
