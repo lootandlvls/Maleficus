@@ -20,7 +20,7 @@ public abstract class AbstractUIReaction : MonoBehaviour {
         switch (activeOnState)
         {
             case EMenuState.IN_ENTRY_IN_LOGIN:
-                temp = new List<EMenuState>(MaleficusTypes.MENU_STATES_IN_LOGIN);
+                temp = new List<EMenuState>(MaleficusConsts.MENU_STATES_IN_LOGIN);
                 break;
       
         }

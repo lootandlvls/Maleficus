@@ -7,8 +7,12 @@ using UnityEngine.Networking;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
+    public Dictionary<EClientID, EPlayerID>     PlayerClientMapping         { get { return playerClientMapping; } }             // TODO [Bnjmo + Leon] define this
+    public bool                                 HasAuthority                { get; }                                            // TODO [Bnjmo + Leon] define this
+    public EClientID                            OwnClientID                 { get; }                                            // TODO [Bnjmo + Leon] define this
 
-    // public static NetworkManager Instance { private set; get; }                                                  // TODO: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
+
+    // public static NetworkManager Instance { private set; get; }                       // TODO [Leon]: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
     //TODO move consts to maleficus types
     private const int MAX_USER = 100;
     private const int PORT = 26002;
@@ -27,10 +31,16 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     // for lookup of error codes unitydocs networking networkError
     private byte error;
 
-    public Account self;
+    public Account self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     private string token;
     private bool isStarted;
     public List<AbstractNetMessage> allReceivedMsgs;
+
+
+
+
+    private Dictionary<EClientID, EPlayerID>    playerClientMapping         = new Dictionary<EClientID, EPlayerID>();
+
 
     #region Monobehaviour
 
@@ -152,6 +162,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
         switch (msg.ID)
         {
+                                                                                //TODO [Leon]: Add spacing between switch cases
             case NetID.None:
                 Debug.Log("Unexpected NetOP");
                 break;
@@ -180,7 +191,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
                 allReceivedMsgs.Add((Net_OnRequestFollow)msg);
                 break;
-                //Todo change to Onupdatefollow
+                                                                            //Todo [Leon]: change to Onupdatefollow
             case NetID.UpdateFollow:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
@@ -303,7 +314,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public void SendLoginRequest(string usernameOrEmail, string password)
     {
-        // todo username and token working and messages should work
+                                                                                        // todo: username and token working and messages should work
         // invalid email or username
         if (!Utility.IsUsernameAndDiscriminator(usernameOrEmail) && !Utility.IsEmail(usernameOrEmail))
         {

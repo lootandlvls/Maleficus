@@ -17,4 +17,11 @@ public class TestEventListener : MonoBehaviour
         Net_Test netTest = (Net_Test)eventHandle.GetNetMessage();
         Debug.Log("Net ID : " + netTest.ID + " | content : " + netTest.TestMessage);
     }
+
+    [ContextMenu("Do Something")]
+    void DoSomething()
+    {
+        Debug.Log("Perform operation");
+    }
+
 }

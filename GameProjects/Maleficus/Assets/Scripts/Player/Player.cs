@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IPlayer
+public class Player : MonoBehaviour, IPlayer                                                // TODO [Nassim]: Clean this class
 {
     public EPlayerID PlayerID { get; set; }
     public ETeamID TeamID { get; set; }
     public Vector3 Position { get { return transform.position; } }
     public Quaternion Rotation { get { return transform.rotation; } }
     public bool IsARPlayer { get; set; }
-    public bool IsDead { get { return false; } }                        // TODO: Define when player is dead
+    public bool IsDead { get { return false; } }                                            // TODO: Define when player is dead
 
 
     public String playerVerticalInput;
@@ -29,6 +29,7 @@ public class Player : MonoBehaviour, IPlayer
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
 
+                                                                                            // TODO [Bnjmo + Nassim]: Refactor to ESpellID
     //Spell Manager will initialize the variables for this Dictionary
     Dictionary<int, GameObject> ChargingEffects = new Dictionary<int, GameObject>();
 
@@ -43,6 +44,7 @@ public class Player : MonoBehaviour, IPlayer
 
     public bool playerCharging = false;
 
+                                                                        // TODO [Nassim]: refactor multiple variables into a dictionary
     public bool readyToUseSpell_1 = true;
     public bool readyToUseSpell_2 = true;
     public bool readyToUseSpell_3 = true;
@@ -84,51 +86,52 @@ public class Player : MonoBehaviour, IPlayer
 
     private void Update()
     {
-
         if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-
             PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
-
-            if (Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) != 0.0f)
+            if (playerInput.HasMoved() == true)
             // Moving?
             {
+                Move(playerInput.Move_X, playerInput.Move_Y);
+
                 animator.SetBool("idle", false);
             }
             // Not moving?
             else
             {
                 animator.SetBool("idle", true);
+
             }
 
-            if (Math.Abs(playerInput.Rotate_X) + Math.Abs(playerInput.Rotate_Y) != 0.0f)
+            if (playerInput.HasRotated() == true)
             // Rotating?
             {
+                Rotate(playerInput.Rotate_X, playerInput.Rotate_Y);
+
                 SetDirectionalSpritesVisible(true);
                 lastTimeSinceRotated = Time.time;
             }
             else
             // Not Rotating?
             {
-                if ((Math.Abs(playerInput.Move_X) + Math.Abs(playerInput.Move_Y) != 0.0f) && (Time.time - lastTimeSinceRotated > 1.5f))
-                // Moving?
-                {
-                    float axis_X = playerInput.Move_X;
-                    float axis_Z = playerInput.Move_Y;
-                    TransformAxisToCamera(ref axis_X, ref axis_Z);
-                    transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
-                }
                 SetDirectionalSpritesVisible(false);
 
+                if ((playerInput.HasMoved() == true)
+                    && (Time.time - lastTimeSinceRotated > 1.0f))
+                // Moving for 1 second since last rortation?
+                {
+                    LookAtMovingDirection(playerInput);
+                }
             }
-
         }
-            // Cance all forces
+
+        // Cance all forces
         myRigidBody.velocity = Vector3.zero;
         myRigidBody.angularVelocity = Vector3.zero;
 
     }
 
+    
 
 
 
@@ -144,10 +147,8 @@ public class Player : MonoBehaviour, IPlayer
 
     #region INPUT
 
-    // TODO : finish implementing it (input working now)
-    public void Move(float axis_X, float axis_Z)
+    private void Move(float axis_X, float axis_Z)
     {
-  
         if (IsARPlayer == true)
         {
             TransformAxisToCamera(ref axis_X, ref axis_Z);
@@ -157,38 +158,29 @@ public class Player : MonoBehaviour, IPlayer
         transform.position += movingDirection * speed * 0.1f * Time.deltaTime;
     }
 
-    public void Rotate(float axis_X, float axis_Z)
+    private void Rotate(float axis_X, float axis_Z)
     {
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
-        if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusTypes.ROTATION_THRESHOLD))
+        if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusConsts.ROTATION_THRESHOLD))
         {
             if (IsARPlayer == true)
             {
                 TransformAxisToCamera(ref axis_X, ref axis_Z, -1);
             }
 
-
             Vector3 lookDirection = new Vector3(axis_X, 0.0f, -axis_Z).normalized;
             Vector3 lookAtFictifPosition = transform.position + lookDirection;
             transform.LookAt(lookAtFictifPosition);
-
-
-
-            //Vector3 CurrentRotationVector = transform.rotation.eulerAngles;
-            //Quaternion CurrentRotation = transform.rotation;
-            //Vector3 targetRotationVector = new Vector3(CurrentRotationVector.x, Mathf.Atan2(axis_X, -axis_Z) * Mathf.Rad2Deg , CurrentRotationVector.z);
-            //Quaternion targetRotation = Quaternion.Euler(targetRotationVector);
-            //DebugManager.Instance.Log(3, "CurrrentRotation : " + CurrentRotation.y + " TargerRotation : " + targetRotation.y);
-
-            //  transform.rotation = targetRotation;
-            //transform.rotation = Quaternion.Lerp(CurrentRotation.normalized, targetRotation.normalized, Time.deltaTime * angularSpeed);
-
-            // Update sprite
-            
         }
     }
 
-   
+    private void LookAtMovingDirection(PlayerInput playerInput)
+    {
+        float axis_X = playerInput.Move_X;
+        float axis_Z = playerInput.Move_Y;
+        TransformAxisToCamera(ref axis_X, ref axis_Z);
+        transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
+    }
 
 
     public void StartChargingSpell_1(MovementType movementType)
@@ -246,22 +238,7 @@ public class Player : MonoBehaviour, IPlayer
     }
   
     
-    public void StopChargingSpell_1()
-    {
-        Debug.Log("player stopped charging spell 1");
-        playerCharging = false;
-       
-    }
-    public void StopChargingSpell_2()
-    {
-        Debug.Log("player stopped charging spell 2 ");
-        
-    }
-    public void StopChargingSpell_3()
-    {
-        Debug.Log("player stopped charging spell 3");
-     
-    }
+    
 
 
     public void StartChargingSpell(int spellSlot, MovementType movementType)
@@ -280,9 +257,26 @@ public class Player : MonoBehaviour, IPlayer
         // TODO: Not working here
         // Deactivate Directional Sprite
     }
-   
 
-   private void InitializeChargingEffects()
+    public void StopChargingSpell_1()
+    {
+        Debug.Log("player stopped charging spell 1");
+        playerCharging = false;
+
+    }
+    public void StopChargingSpell_2()
+    {
+        Debug.Log("player stopped charging spell 2 ");
+
+    }
+    public void StopChargingSpell_3()
+    {
+        Debug.Log("player stopped charging spell 3");
+
+    }
+
+
+    private void InitializeChargingEffects()
     {
 
     }
@@ -306,7 +300,7 @@ public class Player : MonoBehaviour, IPlayer
         animator.SetBool("channeling", false);
     }
 
-    IEnumerator ReadyToUseSpell(float time, int id)
+    IEnumerator SetReadyToUseSpell(float time, int id)                     // TODO [Nassim]: private before IEnumerator
     {
         switch (id)
         {
@@ -380,8 +374,8 @@ public class Player : MonoBehaviour, IPlayer
             if (counter == 10 )
             {
                
-                animator.SetBool("charging", true);
-                particleSystemBodyEffect.maxParticles = 1 ;
+                animator.SetBool("charging", true); 
+                particleSystemBodyEffect.maxParticles = 1;                                             // TODO [Nassim]: Fix warnings
                 particleSystemWandEffect.maxParticles = 1;
             }
             if (  counter  == 50 || counter == 100)

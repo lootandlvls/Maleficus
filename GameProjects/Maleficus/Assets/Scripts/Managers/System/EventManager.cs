@@ -291,7 +291,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region ENEMIES
-    public event Action<IEnemy> ENEMIES_EnemyHitPlayer;                                        // TODO: Add reference to attacked player ID
+    public event Action<IEnemy> ENEMIES_EnemyHitPlayer;                                        
     public void Invoke_ENEMIES_EnemyHitPlayer(IEnemy attackingEnemy)
     {
         if (ENEMIES_EnemyHitPlayer != null)
@@ -341,7 +341,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     public MaleficusEvent<StateUpdatedEventHandle<EARState>> AR_ARStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EARState>>("AR_ARStateUpdated");
 
 
-    public event Action AR_StagePlaced;                                        // TODO: Add reference to attacked player ID
+    public event Action AR_StagePlaced;                                       
     public void Invoke_AR_StagePlaced()
     {
         if (AR_StagePlaced != null)

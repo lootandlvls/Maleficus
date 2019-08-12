@@ -10,16 +10,20 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
 
     private EPlayerID touchPlayerID;
-    /// mapping from controllerID to playerID
-    private Dictionary<char, EPlayerID> playerControllerMapping;
-    /// mapping to know if a specific player can perform a directional button when using the joystick 
-    private Dictionary<EPlayerID, bool> canPerformHorizontalDirectionalButton;
-    private Dictionary<EPlayerID, bool> canPerformVerticalDirectionalButton;
+
+    /// <summary> Mapping from controllerID to playerID </summary> 
+    private Dictionary<EControllerID, EPlayerID>    playerControllerMapping                 = new Dictionary<EControllerID, EPlayerID>();
+
+    /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
+    private Dictionary<EPlayerID, bool>             canPerformHorizontalDirectionalButton   = new Dictionary<EPlayerID, bool>();
+
+    /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
+    private Dictionary<EPlayerID, bool>             canPerformVerticalDirectionalButton     = new Dictionary<EPlayerID, bool>();
 
     protected override void Awake()
     {
         base.Awake();
-        playerControllerMapping = new Dictionary<char, EPlayerID>();
+
         InitializeDirectionalMaps();
     }
 
@@ -34,161 +38,104 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     public override void Initialize()
     {
-        
+        canPerformHorizontalDirectionalButton.Clear();
+        canPerformVerticalDirectionalButton.Clear();
     }
 
     private void Update()
     {
         // Confirm
-        Check_Confirm('A');
-        Check_Confirm('B');
-        Check_Confirm('C');
-        Check_Confirm('D');
+        Check_Confirm(EControllerID.CONTROLLER_A);
+        Check_Confirm(EControllerID.CONTROLLER_B);
+        Check_Confirm(EControllerID.CONTROLLER_C);
+        Check_Confirm(EControllerID.CONTROLLER_D);
 
                                                         // TODO: Add missing Cancel buttons in Input Setting
         // Cancel
-        //Check_Cancel('A');
-        //Check_Cancel('B');
-        //Check_Cancel('C');
-        //Check_Cancel('D');
+        //Check_Cancel(EControllerID.CONTROLLER_A);
+        //Check_Cancel(EControllerID.CONTROLLER_B);
+        //Check_Cancel(EControllerID.CONTROLLER_C);
+        //Check_Cancel(EControllerID.CONTROLLER_D);
 
         /* Charging spell check */
         // Spell 1
-        Check_ChargingSpell(1, 'A');
-        Check_ChargingSpell(1, 'B');
-        Check_ChargingSpell(1, 'C');
-        Check_ChargingSpell(1, 'D');
+        Check_ChargingSpell(1, EControllerID.CONTROLLER_A);
+        Check_ChargingSpell(1, EControllerID.CONTROLLER_B);
+        Check_ChargingSpell(1, EControllerID.CONTROLLER_C);
+        Check_ChargingSpell(1, EControllerID.CONTROLLER_D);
         //spell 2
-        Check_ChargingSpell(2, 'A');
-        Check_ChargingSpell(2, 'B');
-        Check_ChargingSpell(2, 'C');
-        Check_ChargingSpell(2, 'D');
+        Check_ChargingSpell(2, EControllerID.CONTROLLER_A);
+        Check_ChargingSpell(2, EControllerID.CONTROLLER_B);
+        Check_ChargingSpell(2, EControllerID.CONTROLLER_C);
+        Check_ChargingSpell(2, EControllerID.CONTROLLER_D);
         // spell 3
-        Check_ChargingSpell(3, 'A');
-        Check_ChargingSpell(3, 'B');
-        Check_ChargingSpell(3, 'C');
-        Check_ChargingSpell(3, 'D');
+        Check_ChargingSpell(3, EControllerID.CONTROLLER_A);
+        Check_ChargingSpell(3, EControllerID.CONTROLLER_B);
+        Check_ChargingSpell(3, EControllerID.CONTROLLER_C);
+        Check_ChargingSpell(3, EControllerID.CONTROLLER_D);
 
         /* Casted spell check */
         // Spell 1
-        Check_CastedSpell(1, 'A');
-        Check_CastedSpell(1, 'B');
-        Check_CastedSpell(1, 'C');
-        Check_CastedSpell(1, 'D');
+        Check_CastedSpell(1, EControllerID.CONTROLLER_A);
+        Check_CastedSpell(1, EControllerID.CONTROLLER_B);
+        Check_CastedSpell(1, EControllerID.CONTROLLER_C);
+        Check_CastedSpell(1, EControllerID.CONTROLLER_D);
         //spell 2
-        Check_CastedSpell(2, 'A');
-        Check_CastedSpell(2, 'B');
-        Check_CastedSpell(2, 'C');
-        Check_CastedSpell(2, 'D');
+        Check_CastedSpell(2, EControllerID.CONTROLLER_A);
+        Check_CastedSpell(2, EControllerID.CONTROLLER_B);
+        Check_CastedSpell(2, EControllerID.CONTROLLER_C);
+        Check_CastedSpell(2, EControllerID.CONTROLLER_D);
         // spell 3
-        Check_CastedSpell(3, 'A');
-        Check_CastedSpell(3, 'B');        // TODO: Add missing Spell buttons in Input settings
-        Check_CastedSpell(3, 'C');
-        Check_CastedSpell(3, 'D');
+        Check_CastedSpell(3, EControllerID.CONTROLLER_A);
+        Check_CastedSpell(3, EControllerID.CONTROLLER_B);        // TODO: Add missing Spell buttons in Input settings
+        Check_CastedSpell(3, EControllerID.CONTROLLER_C);
+        Check_CastedSpell(3, EControllerID.CONTROLLER_D);
         // Spell 2                                                                                                                   
-        //CheckAndCallSpell(2, 'A');
-        //CheckAndCallSpell(2, 'B');
-        //CheckAndCallSpell(2, 'C');
-        //CheckAndCallSpell(2, 'D');
+        //CheckAndCallSpell(2, EControllerID.CONTROLLER_A);
+        //CheckAndCallSpell(2, EControllerID.CONTROLLER_B);
+        //CheckAndCallSpell(2, EControllerID.CONTROLLER_C);
+        //CheckAndCallSpell(2, EControllerID.CONTROLLER_D);
 
         // Spell 3
-        //CheckAndCallSpell(3, 'A');
-        //CheckAndCallSpell(3, 'B');
-        //CheckAndCallSpell(3, 'C');
-        //CheckAndCallSpell(3, 'D');
+        //CheckAndCallSpell(3, EControllerID.CONTROLLER_A);
+        //CheckAndCallSpell(3, EControllerID.CONTROLLER_B);
+        //CheckAndCallSpell(3, EControllerID.CONTROLLER_C);
+        //CheckAndCallSpell(3, EControllerID.CONTROLLER_D);
 
         // Horizontal 
         // Left 
-        Check_Axis("Horizontal", 'L', 'A');
-        Check_Axis("Horizontal", 'L', 'B');
-        Check_Axis("Horizontal", 'L', 'C');
-        Check_Axis("Horizontal", 'L', 'D');
+        Check_Axis("Horizontal", 'L', EControllerID.CONTROLLER_A);
+        Check_Axis("Horizontal", 'L', EControllerID.CONTROLLER_B);
+        Check_Axis("Horizontal", 'L', EControllerID.CONTROLLER_C);
+        Check_Axis("Horizontal", 'L', EControllerID.CONTROLLER_D);
 
         // Right
-        Check_Axis("Horizontal", 'R', 'A');
-        Check_Axis("Horizontal", 'R', 'B');
-        Check_Axis("Horizontal", 'R', 'C');
-        Check_Axis("Horizontal", 'R', 'D');
+        Check_Axis("Horizontal", 'R', EControllerID.CONTROLLER_A);
+        Check_Axis("Horizontal", 'R', EControllerID.CONTROLLER_B);
+        Check_Axis("Horizontal", 'R', EControllerID.CONTROLLER_C);
+        Check_Axis("Horizontal", 'R', EControllerID.CONTROLLER_D);
 
         // Vertical 
         // Left 
-        Check_Axis("Vertical", 'L', 'A');
-        Check_Axis("Vertical", 'L', 'B');
-        Check_Axis("Vertical", 'L', 'C');
-        Check_Axis("Vertical", 'L', 'D');
+        Check_Axis("Vertical", 'L', EControllerID.CONTROLLER_A);
+        Check_Axis("Vertical", 'L', EControllerID.CONTROLLER_B);
+        Check_Axis("Vertical", 'L', EControllerID.CONTROLLER_C);
+        Check_Axis("Vertical", 'L', EControllerID.CONTROLLER_D);
 
         // Right
-        Check_Axis("Vertical", 'R', 'A');
-        Check_Axis("Vertical", 'R', 'B');
-        Check_Axis("Vertical", 'R', 'C');
-        Check_Axis("Vertical", 'R', 'D');
+        Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_A);
+        Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_B);
+        Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_C);
+        Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_D);
 
     }
 
-    public void OnJoystickPressed(ETouchJoystickType joystickType)
+
+    #region Controller
+    private void Check_Confirm(EControllerID controllerID)
     {
-        if (InputMode == EInputMode.TOUCH)
-        {
-            switch (joystickType)
-            {
-                case ETouchJoystickType.SPELL_1:
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, touchPlayerID);
-                    break;
-
-                case ETouchJoystickType.SPELL_2:
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_2, touchPlayerID);
-                    break;
-
-                case ETouchJoystickType.SPELL_3:
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_3, touchPlayerID);
-                    break;
-            }
-        }
-    }
-
-    public void OnJoystickMoved(Vector2 joystickInput, ETouchJoystickType joystickType)
-    {
-        if (InputMode == EInputMode.TOUCH)
-        {
-            if (joystickType == ETouchJoystickType.MOVE)
-            { 
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, touchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, touchPlayerID);
-            }
-            else // Spell joystick
-            {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, touchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, touchPlayerID);
-            }
-        }
-    }
-
-
-
-    public void OnJoystickReleased(ETouchJoystickType joystickType)
-    {
-        if (InputMode == EInputMode.TOUCH)
-        {
-            switch (joystickType)
-            {
-                case ETouchJoystickType.SPELL_1:
-                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_1, touchPlayerID);
-                    break;
-
-                case ETouchJoystickType.SPELL_2:
-                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_2, touchPlayerID);
-                    break;
-
-                case ETouchJoystickType.SPELL_3:
-                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_3, touchPlayerID);
-                    break;
-            }
-        }
-    }
-
-    private void Check_Confirm(char controllerID)
-    {
-        if (Input.GetButtonDown("Confirm_" + controllerID))
+        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+        if (Input.GetButtonDown("Confirm_" + controllerIDName))
         {
 
 
@@ -212,10 +159,12 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
 
-    private void Check_Cancel(char controllerID)
+    private void Check_Cancel(EControllerID controllerID)
     {
-                                                                                                        // TODO: Test with controller if it works
-        if (Input.GetButtonDown("Cancel_" + controllerID))
+        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+
+        // TODO: Test with controller if it works
+        if (Input.GetButtonDown("Cancel_" + controllerIDName))
         {
             if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
@@ -236,12 +185,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
     }
     
 
-    private void Check_ChargingSpell(int spellID, char controllerID)
+    private void Check_ChargingSpell(int spellID, EControllerID controllerID)
     {
+        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+
         if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player press button?
-            if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerID))
+            if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerIDName))
             {  
                 EPlayerID playerID = GetPlayerID(controllerID);
                 if (spellID == 1)
@@ -260,12 +211,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
 
-    private void Check_CastedSpell(int spellID, char controllerID)
+    private void Check_CastedSpell(int spellID, EControllerID controllerID)
     {
+        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+
         if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player press button?
-            if (Input.GetButtonUp("CastSpell_" + spellID + '_' + controllerID))
+            if (Input.GetButtonUp("CastSpell_" + spellID + '_' + controllerIDName))
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
                 if (spellID == 1)
@@ -285,12 +238,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
     }
 
 
-    private void Check_Axis(string axisName, char axisSide, char controllerID)
+    private void Check_Axis(string axisName, char axisSide, EControllerID controllerID)
     {
+        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+
         if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
         {
             // Did player move joystick
-            float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerID);
+            float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerIDName);
             if   (axisValue != 0.0f)
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
@@ -330,40 +285,44 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 {
                     if (axisName == "Horizontal")
                     {
-                        if ((Mathf.Abs(axisValue) > MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == true))
+                        if ((Mathf.Abs(axisValue) > MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == true))
                         {
                             canPerformHorizontalDirectionalButton[playerID] = false;
-                            // Which direction?
-                            if (axisValue > 0.0f)   // positive value
+                            
+                            if (axisValue > 0.0f)  // Which direction?  
+                                // positive value
                             {
                                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.RIGHT, playerID);
                             }
-                            else                    // negative value
+                            else                    
+                                // negative value
                             {
                                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.LEFT, playerID);
                             }
                         }
-                        else if ((Mathf.Abs(axisValue) < MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
+                        else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
                         {
                             canPerformHorizontalDirectionalButton[playerID] = true;
                         }
                     }
                     else if (axisName == "Vertical")
                     {
-                        if ((Mathf.Abs(axisValue) > MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == true))
+                        if ((Mathf.Abs(axisValue) > MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == true))
                         {
                             canPerformVerticalDirectionalButton[playerID] = false;
-                            // Which direction?
-                            if (axisValue > 0.0f)   // positive value
+                            
+                            if (axisValue > 0.0f)    // Which direction?
+                                // positive value
                             {
                                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.DOWN, playerID);
                             }
-                            else                    // negative value
+                            else                    
+                                // negative value
                             {
                                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.UP, playerID);
                             }
                         }
-                        else if ((Mathf.Abs(axisValue) < MaleficusTypes.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
+                        else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
                         {
                             canPerformVerticalDirectionalButton[playerID] = true;
                         }
@@ -375,9 +334,53 @@ public class InputManager : AbstractSingletonManager<InputManager>
             DebugManager.Instance.Log(2, "joystick " + axisName + " " + axisSide + " by " + controllerID + " : " + axisValue);
         }
     }
-   
+    #endregion
 
-    private EPlayerID GetPlayerID(char controllerID)
+    #region Touch
+    public void OnTouchJoystickPressed(ETouchJoystickType joystickType)
+    {
+        if (InputMode == EInputMode.TOUCH)
+        {
+            EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
+            if (inputButton != EInputButton.NONE)
+            {
+                EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, touchPlayerID);
+            }
+        }
+    }
+
+    public void OnTouchJoystickMoved(Vector2 joystickInput, ETouchJoystickType joystickType)
+    {
+        if (InputMode == EInputMode.TOUCH)
+        {
+            if (joystickType == ETouchJoystickType.MOVE)
+            {
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, touchPlayerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, touchPlayerID);
+            }
+            else // Spell joystick
+            {
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, touchPlayerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, touchPlayerID);
+            }
+        }
+    }
+
+
+    public void OnTouchJoystickReleased(ETouchJoystickType joystickType)
+    {
+        if (InputMode == EInputMode.TOUCH)
+        {
+            EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
+            if (inputButton != EInputButton.NONE)
+            {
+                EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, touchPlayerID);
+            }
+        }
+    }
+    #endregion
+
+    private EPlayerID GetPlayerID(EControllerID controllerID)
     {
         if (InputMode == EInputMode.TEST)
         {
@@ -388,25 +391,23 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void InitializeDirectionalMaps()
     {
-        canPerformHorizontalDirectionalButton = new Dictionary<EPlayerID, bool>();
+        canPerformHorizontalDirectionalButton.Clear();
         canPerformHorizontalDirectionalButton[EPlayerID.TEST] = true; // test ID
         canPerformHorizontalDirectionalButton[EPlayerID.PLAYER_1] = true;
         canPerformHorizontalDirectionalButton[EPlayerID.PLAYER_2] = true;
         canPerformHorizontalDirectionalButton[EPlayerID.PLAYER_3] = true;
         canPerformHorizontalDirectionalButton[EPlayerID.PLAYER_4] = true;
 
-        canPerformVerticalDirectionalButton = new Dictionary<EPlayerID, bool>();
+        canPerformVerticalDirectionalButton.Clear();
         canPerformVerticalDirectionalButton[EPlayerID.TEST] = true; // test ID
         canPerformVerticalDirectionalButton[EPlayerID.PLAYER_1] = true;
         canPerformVerticalDirectionalButton[EPlayerID.PLAYER_2] = true;
         canPerformVerticalDirectionalButton[EPlayerID.PLAYER_3] = true;
         canPerformVerticalDirectionalButton[EPlayerID.PLAYER_4] = true;
-
-
     }
 
 
-    private bool IsPlayerConnected(char controllerID)
+    private bool IsPlayerConnected(EControllerID controllerID)
     {
         return playerControllerMapping.ContainsKey(controllerID);
     }
@@ -422,10 +423,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
                     List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
                     for(int i = msgs.Count - 1; i > -1; i--)
                     {
-                        if(msgs[i].ID == 15){
+                        if(msgs[i].ID == 15)                                    // TODO [Leon]:  use network ID (NetID.SpellInput)
+                        {              
                             Net_SpellInput si = (Net_SpellInput)msgs[i];
                             int spellid = 0;
-                            char controllerid = 'Z';
+                            EControllerID controllerid = EControllerID.NONE;
 
                             switch(si.spellId)
                             {
@@ -443,16 +445,16 @@ public class InputManager : AbstractSingletonManager<InputManager>
                             switch (si.ePlayerID)
                             {
                                 case EPlayerID.PLAYER_1:
-                                    controllerid = 'A';
+                                    controllerid = EControllerID.CONTROLLER_A;
                                     break;
                                 case EPlayerID.PLAYER_2:
-                                    controllerid = 'B';
+                                    controllerid = EControllerID.CONTROLLER_B;
                                     break;
                                 case EPlayerID.PLAYER_3:
-                                    controllerid = 'C';
+                                    controllerid = EControllerID.CONTROLLER_C;
                                     break;
                                 case EPlayerID.PLAYER_4:
-                                    controllerid = 'D';
+                                    controllerid = EControllerID.CONTROLLER_D;
                                     break;
                             }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 {
     // Should only be called directly after object construction (used in Start method)
-    public int TotalLives { get { return totalLives; } set { totalLives = value; } }
+    public int TotalLives { get { return totalLives; } }
 
     private int totalLives = 5;
 
@@ -15,28 +15,18 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         base.Awake();
 
         // Define in child class correct game mode!
-        gameMode = EGameMode.SINGLE_LIVES_5;
-    }
+        gameMode = EGameMode.FFA_LIVES;
 
+        totalLives = MaleficusConsts.PLAYER_LIVES_IN_FFA_MODE;
+    }
 
     protected override void Start()
     {
         base.Start();
 
-        // Initialize player stats correctly/
-        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;             // TODO: Find a way to use playerStats from AbstractGameMode instead of reusing ConnectedPlayers
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
-        {
-            if (connectedPlayers[playerID] == true)
-            {
-                playerStats[playerID] = new PlayerStats_Lives(playerID, TotalLives);                  
-            }
-        }
-
-        EventManager.Instance.PLAYERS_PlayerDied    += On_PLAYERS_PlayerDied;
+        EventManager.Instance.PLAYERS_PlayerDied += On_PLAYERS_PlayerDied;
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
     }
-
 
     private void Update()
     {
@@ -94,8 +84,20 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         if (deadPlayersCounter == PlayerStats.Count - 1)
         {
             //
-            ETeamID winnerTeamID = PlayerManager.Instance.GetPlayerTeamID(winnerPlayerID);
+            ETeamID winnerTeamID = PlayerManager.Instance.PlayersTeam[winnerPlayerID];
             EventManager.Instance.Invoke_GAME_GameOver(gameMode);
+        }
+    }
+
+    protected override void InitializePlayerStats()
+    {
+        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;
+        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        {
+            if (connectedPlayers[playerID] == true)
+            {
+                playerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ public class KillParticleSystem : MonoBehaviour {
 	void Update () 
 	{
         if ((myParitlce != null) && (myAudio != null))
+            // Particle, Audio
         {
             if ((myParitlce.IsAlive() == false) && (myAudio.isPlaying == false))
             {
@@ -22,6 +23,7 @@ public class KillParticleSystem : MonoBehaviour {
             }
         }
         else if ((myParitlce != null) && (myAudio == null))
+            // No Particle, Audio
         {
             if (myParitlce.IsAlive() == false)
             {
@@ -29,6 +31,7 @@ public class KillParticleSystem : MonoBehaviour {
             }
         }
         else if ((myParitlce == null) && (myAudio != null))
+            // Particle, No Audio
         {
             if (myAudio.isPlaying == false)
             {
@@ -36,6 +39,7 @@ public class KillParticleSystem : MonoBehaviour {
             }
         }
         else
+            // No particle, No Audio
         {
             Destroy(gameObject);
         }

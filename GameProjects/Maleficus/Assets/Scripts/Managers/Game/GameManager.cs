@@ -39,11 +39,11 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
             switch (gameModeToStart)
             {
-                case EGameMode.SINGLE_LIVES_5:
+                case EGameMode.FFA_LIVES:
                     gameObject.AddComponent<GM_FFA_Lives>();          
                     break; 
 
-                case EGameMode.SINGLE_TIME_2:
+                case EGameMode.FFA_TIME:
 
                     break;
 
@@ -91,19 +91,22 @@ public class GameManager : AbstractSingletonManager<GameManager>
         EndGame();
 
                                                                                     // TODO Show player stats according to game mode
-        switch(gameMode)
+        switch (gameMode)
         {
-            case EGameMode.SINGLE_LIVES_5:
+            case EGameMode.FFA_LIVES:
+                GM_FFA_Lives gameModeInstanceFFA = GetComponent<GM_FFA_Lives>();
+                Dictionary<EPlayerID, PlayerStats_Lives> playerStatsFFA = gameModeInstanceFFA.PlayerStats;
 
+
+                Destroy(gameModeInstanceFFA);
                 break;
 
             case EGameMode.DUNGEON:
-                GM_Single_Dungeon gameModeInstance = GetComponent<GM_Single_Dungeon>();
-                Dictionary<EPlayerID, PlayerStats_Dungeon> playerStats = gameModeInstance.PlayerStats;
+                GM_Single_Dungeon gameModeInstanceDungeon = GetComponent<GM_Single_Dungeon>();
+                Dictionary<EPlayerID, PlayerStats_Dungeon> playerStatsDungeon = gameModeInstanceDungeon.PlayerStats;
 
-                // TODO
 
-                Destroy(gameModeInstance);
+                Destroy(gameModeInstanceDungeon);
                 break;
         }
     }
@@ -144,7 +147,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         {
             action.ActionButtonPressed += () =>
             {
-                StartGame(EGameMode.SINGLE_LIVES_5);
+                StartGame(EGameMode.FFA_LIVES);
             };
         }
 

@@ -20,7 +20,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     [Header("Attributes")]
     [SerializeField] protected EEnemyType isType;
-    [SerializeField] protected EEnemyMovementType movementType;
     [SerializeField] protected int damage = 1;
     [SerializeField] protected float attackTimeOut = 3;
     [SerializeField] protected float attackDelay = 0.5f;
@@ -39,6 +38,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     protected NavMeshAgent myNavAgent;
     protected AudioSource myAudioSource;
     private Vector3 movementDirection;
+    protected EEnemyMovementMethod movementMethod;
 
     private EnemyWayPoint[] wayPoints;
 
@@ -60,11 +60,8 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     {
         myAnimator = GetComponent<Animator>();
         myNavAgent = GetComponent<NavMeshAgent>();
-        if (movementType == EEnemyMovementType.WAYPOINTS)
-        {
-            myNavAgent.enabled = false;
-        }
-        myAudioSource = SoundUtilities.AddAudioListener(gameObject, false, 0.15f, false);
+        
+        myAudioSource = MaleficusUtilities.AddAudioListener(gameObject, false, 0.15f, false);
 
         FindAllWayPoints();
     }
@@ -73,10 +70,15 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
+        movementMethod = MotherOfManagers.Instance.EnemiesMovementMethod;
+        if (movementMethod != EEnemyMovementMethod.NAV_MESH)
+        {
+            myNavAgent.enabled = false;
+        }
+
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
         transform.gameObject.tag = "Enemy";
-        Debug.Log(transform.gameObject.tag);
         // Init Enemy
         UpdateState(EnemyState.SPAWNING);
 
@@ -115,12 +117,12 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
             case EnemyState.MOVING_TOWARDS_PLAYER:
 
-                if (movementType == EEnemyMovementType.NAV_MESH)
+                if (movementMethod == EEnemyMovementMethod.NAV_MESH)
                 {
                     myNavAgent.destination = playerPosition;
                     transform.LookAt(playerPosition);
                 }
-                else if (movementType == EEnemyMovementType.WAYPOINTS)
+                else if (movementMethod == EEnemyMovementMethod.WAYPOINTS)
                 {
                     Vector3 destination = GetNextDestinationToPlayer();
                     Vector3 direction = (destination - transform.position).normalized;
@@ -167,7 +169,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
             case EnemyState.MOVING_TOWARDS_PLAYER:
                 myAnimator.SetBool("IsMoving", true);
 
-                if (movementType == EEnemyMovementType.NAV_MESH)
+                if (movementMethod == EEnemyMovementMethod.NAV_MESH)
                 {
                     myNavAgent.speed = walkingSpeed;
                     if (MotherOfManagers.Instance.IsARGame == true)
@@ -176,7 +178,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                     }
                     myNavAgent.destination = playerPosition;
                 }
-                else if (movementType == EEnemyMovementType.WAYPOINTS)
+                else if (movementMethod == EEnemyMovementMethod.WAYPOINTS)
                 {
 
                 }
@@ -271,7 +273,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     private IEnumerator InvokeAttackedEventCoroutine()
     {
         yield return new WaitForSeconds(attackDelay);
-        SoundUtilities.PlayRandomSound(myAudioSource, attackSounds);
+        MaleficusUtilities.PlayRandomSound(myAudioSource, attackSounds);
 
         EventManager.Instance.Invoke_ENEMIES_EnemyHitPlayer(this);
     }

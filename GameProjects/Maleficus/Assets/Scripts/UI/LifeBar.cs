@@ -38,8 +38,7 @@ public class LifeBar : MonoBehaviour {
         {
 
             PlayerStats_Dungeon dungeonStats = (PlayerStats_Dungeon)playerStats;
-            Debug.Log("Player remaining lives :" + dungeonStats.RemainingLives);
-            newPercentage = (dungeonStats.RemainingLives * 1.0f) / MaleficusTypes.PLAYER_LIVES_IN_DUNGEON_MODE;
+            newPercentage = (dungeonStats.RemainingLives * 1.0f) / MaleficusConsts.PLAYER_LIVES_IN_DUNGEON_MODE;
         }
     } 
 
@@ -47,14 +46,4 @@ public class LifeBar : MonoBehaviour {
     {
         contentImage.fillAmount = Mathf.Lerp(contentImage.fillAmount, newPercentage, Time.deltaTime * smoothingFactor);
     }
-
-    //public void SetPercentage(float newPercentage)
-    //{
-    //    this.newPercentage = newPercentage;
-    //}
-
-    //public void SetPercentage(int newPercentage)
-    //{
-    //    this.newPercentage = newPercentage / 100.0f;
-    //}
 }

@@ -87,7 +87,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     {
         if ((Vertical != 0.0f) || (Horizontal != 0.0f))
         {
-            InputManager.Instance.OnJoystickMoved(new Vector2(Horizontal, Vertical), joystickType);
+            InputManager.Instance.OnTouchJoystickMoved(new Vector2(Horizontal, Vertical), joystickType);
         }
     }
 
@@ -106,7 +106,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         OnDrag(eventData);
 
         // Update Joystick appearance 
-        if (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD)
+        if (input.magnitude > MaleficusConsts.SPELL_BUTTON_THRESHOLD)
         {
             UpdateState(EJoystickState.SELECTED_CAN_TRIGGER_BUTTON);
         }
@@ -133,7 +133,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         handle.anchoredPosition = input * radius * handleRange;
        
         // Update Joystick appearance 
-        if (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD)
+        if (input.magnitude > MaleficusConsts.SPELL_BUTTON_THRESHOLD)
         {
             UpdateState(EJoystickState.SELECTED_CAN_TRIGGER_BUTTON);
         }
@@ -149,7 +149,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
 
         if ((joystickType != ETouchJoystickType.MOVE) /*&& (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD)*/)
         {
-            InputManager.Instance.OnJoystickReleased(joystickType);
+            InputManager.Instance.OnTouchJoystickReleased(joystickType);
         }
 
         input = Vector2.zero;

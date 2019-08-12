@@ -7,8 +7,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 {
     Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
 
-    [SerializeField] private GameObject FrozenEffect;
+    [SerializeField] private GameObject FrozenEffect;                                               // TODO [Nassim] Inspector members after public ones + first letter small case 
     [SerializeField] private float friction;
+
+
+                                                                                                    // TODO [Nassim]: Refer to PlayerManager for how to user getters on public members
 
     public List<AbstractSpell> SpellsUpgrade = new List<AbstractSpell>();
     public List<GameObject> ChargingSpells_Effects = new List<GameObject>();
@@ -16,7 +19,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     public Dictionary<EPlayerID, Dictionary<int, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<int, AbstractSpell>>();
     //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
-    public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();
+
+                                                                                                    // TODO [Nassim]: Regroup 4 members in another single dictionary
+    public Dictionary<int, AbstractSpell> Player_1_Spells = new Dictionary<int, AbstractSpell>();                   
     public Dictionary<int, AbstractSpell> Player_2_Spells = new Dictionary<int, AbstractSpell>();
     public Dictionary<int, AbstractSpell> Player_3_Spells = new Dictionary<int, AbstractSpell>();
     public Dictionary<int, AbstractSpell> Player_4_Spells = new Dictionary<int, AbstractSpell>();
@@ -25,7 +30,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<AbstractSpell> Player_3_SpellsList = new List<AbstractSpell>();
     public List<AbstractSpell> Player_4_SpellsList = new List<AbstractSpell>();
 
+                                                                                                    // TODO [Bnjmo + Nassim]: Refactor to ESpellID
+
     private Dictionary<ETouchJoystickType, MaleficusJoystick> spellJoysticks = new Dictionary<ETouchJoystickType, MaleficusJoystick>();
+
+
 
     protected override void Awake()
     {
@@ -181,7 +190,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         AbstractSpell spellToCast;
 
 
-        switch (playerID)                                                       // TODO: Switch unecessary. Same code in every case
+        switch (playerID)                                                       // TODO [Nassim]: Switch unecessary. Same code in every case
         {
             case EPlayerID.PLAYER_1:
                                                                                 // clean this mess!
@@ -192,7 +201,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                     case 0:
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
-                        spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);
+                        //spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);         // TODO [Bnjmo]: 
                         EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
 
 
@@ -200,14 +209,14 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                     case 1:
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
-                        spellJoysticks[ETouchJoystickType.SPELL_2].ReloadJoystick(spellCooldown);
+                        //spellJoysticks[ETouchJoystickType.SPELL_2].ReloadJoystick(spellCooldown);
                         EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
 
                         break;
                     case 2:
                         spellToCast = Player_Spells[playerID][spell_Input_ID];
                         InstantiateSpell(spellToCast, playerID);
-                        spellJoysticks[ETouchJoystickType.SPELL_3].ReloadJoystick(spellCooldown);
+                        //spellJoysticks[ETouchJoystickType.SPELL_3].ReloadJoystick(spellCooldown);
                         EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
 
                         break;
@@ -275,7 +284,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         
 
-        //TODO instantiate the spell object here and give it the playerID
+                                                                            //TODO [Nassim]: instantiate the spell object here and give it the playerID
 
         if (spellToCast.GetComponent<AOE>() != null)
 
@@ -392,22 +401,22 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
     private void LoadSpellResources()
     {
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_AOE_EXPLOSION_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIREBALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIREBALL_LVL_2));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_FIRE__LASER_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_ICEBALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusTypes.PATH_SPELL_TELEPORT_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_AOE_EXPLOSION_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIREBALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIREBALL_LVL_2));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIRE__LASER_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_ICEBALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_TELEPORT_LVL_1));
 
     }
 
     private void LoadEffectsResources()
     {
-        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_CHARGING_BODYENERGY));
-        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_CHARGING_WANDENERGY));
-        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusTypes.PATH_EFFECT_FROZEN));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusConsts.PATH_EFFECT_CHARGING_BODYENERGY));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusConsts.PATH_EFFECT_CHARGING_WANDENERGY));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusConsts.PATH_EFFECT_FROZEN));
     }
 
 

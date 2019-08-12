@@ -25,16 +25,9 @@ public abstract class AbstractGameMode<T> : MonoBehaviour where T : AbstractPlay
 
     protected virtual void Start()
     {
-        // Get all connected players and initialize lives
-        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
-        {
-            if (connectedPlayers[playerID] == true)
-            {
-                playerStats.Add(playerID, new T());
-            }
-        }
-        Debug.Log(playerStats.Count + " players playings");
+        InitializePlayerStats();
     }
+
+    protected abstract void InitializePlayerStats();
 
 }

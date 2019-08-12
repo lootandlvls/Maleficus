@@ -12,7 +12,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         base.Awake();
 
         // 1) Assign appropriate currentState from MaleficusTypes
-        startStates = MaleficusTypes.START_MENU_STATES;
+        startStates = MaleficusConsts.START_MENU_STATES;
         // 2) Define "debugStateID" in Awake() of child class
         debugStateID = 50;
     }
@@ -149,7 +149,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
-                Debug.Log("pressed");
                 NetworkManager.Instance.SendInitLobby();
             };
         }
@@ -159,43 +158,42 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
     {
         //Debug.Log("Button " + buttonType + " by " + playerID);
-        if (AppStateManager.Instance.IsInAStateWithUI == true)         // test case
+
+        if (selectedButton == null)
         {
-            if (selectedButton == null)
-            {
-                Debug.Log("selected button null");
-                return;
-            }
-            MaleficusButton nextButton = null;
-            switch (buttonType)
-            {
-                case EInputButton.CONFIRM:
-                    selectedButton.Press();
-                    break;
-
-                case EInputButton.LEFT:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.LEFT);
-                    break;
-
-                case EInputButton.RIGHT:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.RIGHT);
-                    break;
-
-                case EInputButton.UP:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.UP);
-                    break;
-
-                case EInputButton.DOWN:
-                    nextButton = selectedButton.GoToNextButton(EButtonDirection.DOWN);
-                    break;
-            }
-
-            // Update selected button
-            if (nextButton != null)
-            {
-                selectedButton = nextButton;
-            }
+            return;
         }
+
+        MaleficusButton nextButton = null;
+        switch (buttonType)
+        {
+            case EInputButton.CONFIRM:
+                selectedButton.Press();
+                break;
+
+            case EInputButton.LEFT:
+                nextButton = selectedButton.GoToNextButton(EButtonDirection.LEFT);
+                break;
+
+            case EInputButton.RIGHT:
+                nextButton = selectedButton.GoToNextButton(EButtonDirection.RIGHT);
+                break;
+
+            case EInputButton.UP:
+                nextButton = selectedButton.GoToNextButton(EButtonDirection.UP);
+                break;
+
+            case EInputButton.DOWN:
+                nextButton = selectedButton.GoToNextButton(EButtonDirection.DOWN);
+                break;
+        }
+
+        // Update selected button
+        if (nextButton != null)
+        {
+            selectedButton = nextButton;
+        }
+        
     }
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)

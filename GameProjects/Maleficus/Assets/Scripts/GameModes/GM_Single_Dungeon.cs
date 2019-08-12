@@ -23,20 +23,10 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 
     protected override void Start()
     {
-        base.Start();
-
         totalItemsToCollect = CoinManager.Instance.NumberOfCoins;
-        totalLives = MaleficusTypes.PLAYER_LIVES_IN_DUNGEON_MODE;
+        totalLives = MaleficusConsts.PLAYER_LIVES_IN_DUNGEON_MODE;
 
-        // Initialize player stats correctly/
-        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;             // TODO: Find a way to use playerStats from AbstractGameMode instead of reusing ConnectedPlayers
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
-        {
-            if (connectedPlayers[playerID] == true)
-            {
-                playerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
-            }
-        }
+        base.Start();
 
         EventManager.Instance.ENEMIES_EnemyHitPlayer += On_ENEMIES_EnemyAttackedPlayer;
         EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
@@ -65,7 +55,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 
     private void On_ENEMIES_EnemyDied(IEnemy diedEnemy)
     {
-        foreach(PlayerStats_Dungeon playerStat in playerStats.Values)
+        foreach (PlayerStats_Dungeon playerStat in playerStats.Values)
         {
             playerStat.IncrementNumberOfKilledEnemies();
 
@@ -102,4 +92,17 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         }
     }
 
+
+    protected override void InitializePlayerStats()
+    {
+        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;       
+        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        {
+            if (connectedPlayers[playerID] == true)
+            {
+                playerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
+            }
+        }
+    }
 }
+

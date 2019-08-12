@@ -12,41 +12,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Managers
       objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsSpawnAllPlayers
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: InputMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsSpawnPlayerOnConnect
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsSpawnARPlayers
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsReduceLightIntensityOnSceneStart
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: IsARGame
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: ARPlacementMethod
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4335998295704777601, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -100,21 +65,6 @@ PrefabInstance:
     - target: {fileID: 4335998295704777601, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: basicEnemyMaxNumber
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: championEnemyMaxNumber
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: bossEnemyMaxNumber
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3900233467615566551, guid: e016db9698da6cf4c8fe22edd976b062,
@@ -312,5 +262,60 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072,
         type: 3}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnAllPlayers
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: InputMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnPlayerOnConnect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnARPlayers
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsReduceLightIntensityOnSceneStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsARGame
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: ARPlacementMethod
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: EnemiesMovementMethod
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: basicEnemyMaxNumber
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: championEnemyMaxNumber
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5661305601773117063, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: bossEnemyMaxNumber
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e016db9698da6cf4c8fe22edd976b062, type: 3}

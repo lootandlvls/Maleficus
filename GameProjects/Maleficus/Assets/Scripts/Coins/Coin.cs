@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-
-
-   
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("player triggered");
         Player player = other.GetComponent<Player>();
         if (player!= null && AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
@@ -17,7 +13,5 @@ public class Coin : MonoBehaviour
             EventManager.Instance.Invoke_PLAYERS_PlayerCollectedCoin();
             Destroy(this.gameObject);
         }
-
-        
     }
 }

@@ -606,11 +606,6 @@ PrefabInstance:
       propertyPath: inputMode
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4335998297404941564, guid: e016db9698da6cf4c8fe22edd976b062,
-        type: 3}
-      propertyPath: debugStartState
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4335998296438487355, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: player_1
@@ -674,6 +669,11 @@ PrefabInstance:
     - target: {fileID: 4335998295768301885, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: isDebugLogEvents
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4335998297404941564, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: debugStartState
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

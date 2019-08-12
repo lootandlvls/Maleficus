@@ -5699,13 +5699,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0219394505602af4c810864e8a06cc39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isType: 0
+  isType: 3
+  movementType: 0
   damage: 1
   attackTimeOut: 3
   attackDelay: 0.5
   spawnRate: 3
   walkingSpeed: 1.5
   attackingThreshold: 1.5
+  wayPointInterpolationFactor: 1
   damageParticleEffect: {fileID: 0}
   spawnParticleEffect: {fileID: 0}
   attackSounds: []

@@ -24,7 +24,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         base.Awake();
 
-        startStates = MaleficusTypes.START_AR_STATES;
+        startStates = MaleficusConsts.START_AR_STATES;
         debugStateID = 89;
     }
 
