@@ -9635,7 +9635,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.01
+      scalar: 0.25
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -14310,7 +14310,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.015
+      scalar: 0.375
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -18711,7 +18711,7 @@ GameObject:
   - component: {fileID: 7948522024305349590}
   - component: {fileID: 1160651867442885725}
   m_Layer: 0
-  m_Name: S_AOE_Explosion 1
+  m_Name: S_AOE_Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18750,20 +18750,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c0df8cd2f7b7b41be180d72e30b932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 50
+  hitPower: 20
   speed: 0
   spellName: S_AOE
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
-  cooldown: 5
-  spellDuration: 0
   movementType: 5
   debuffEffects: 
   buffEffects: 
+  cooldown: 1
+  spellDuration: 0
+  pushDuration: 1
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &591984408199382732
 PrefabInstance:
   m_ObjectHideFlags: 0

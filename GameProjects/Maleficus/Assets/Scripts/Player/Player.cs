@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IPlayer                                                // TODO [Nassim]: Clean this class
+public class Player : MonoBehaviour, IPlayer                                                
 {
     public EPlayerID PlayerID { get; set; }
     public ETeamID TeamID { get; set; }
@@ -11,96 +11,103 @@ public class Player : MonoBehaviour, IPlayer                                    
     public Quaternion Rotation { get { return transform.rotation; } }
     public bool IsARPlayer { get; set; }
     public bool IsDead { get { return false; } }                                            // TODO: Define when player is dead
+    public Dictionary<ESpellID, bool> ReadyToUseSpell { get { return readyToUseSpell; } }
+    public Dictionary<ESpellID, float> SpellCooldown { get { return spellCooldown; } }
+    public Dictionary<ESpellID, float> SpellDuration { get { return spellDuration; } }
+    public bool IsReadyToShoot { get; set; }
+    public bool IsPlayerCharging { get; set; }
+
+    public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
+    public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
 
 
-    public String playerVerticalInput;
-    public String playerHorizontalInput;
-
-    public Transform SpellInitPosition;
-    public Transform SpellEndPosition;
-
-    public float angularSpeed;
-    public float speed;
-
-    private float lastTimeSinceRotated;
-
-  
-    [Header("Charging Spell Effects")] 
+    [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
 
-                                                                                            // TODO [Bnjmo + Nassim]: Refactor to ESpellID
-    //Spell Manager will initialize the variables for this Dictionary
-    Dictionary<int, GameObject> ChargingEffects = new Dictionary<int, GameObject>();
+    [SerializeField] private float angularSpeed;
+    [SerializeField] private float speed;
+
+    [SerializeField] private Transform spellInitPosition;
+    [SerializeField] private Transform spellEndPosition;
+
+    private String playerVerticalInput;
+    private String playerHorizontalInput;
+
+
+    private float lastTimeSinceRotated;
+
+    private float currentSpeed;
+    private IEnumerator PushCoroutine;
+
+
+    /// <summary> Spell Manager will initialize the variables for this Dictionary </summary> 
+    Dictionary<ESpellID, GameObject> ChargingEffects = new Dictionary<ESpellID, GameObject>();
 
     
     private Vector3 movingDirection;
-    private Rigidbody myRigidBody;
+    //private Rigidbody myRigidBody;
     private DirectionalSprite[] myDirectionalSprites;
     private Dictionary<int, AbstractSpell> spellsSlot;
-    public Animator animator;
+    private Animator myAnimator;
 
-    public bool readyToShoot = true;
+    private Vector3 pushVelocity;
 
-    public bool playerCharging = false;
 
-                                                                        // TODO [Nassim]: refactor multiple variables into a dictionary
-    public bool readyToUseSpell_1 = true;
-    public bool readyToUseSpell_2 = true;
-    public bool readyToUseSpell_3 = true;
+
+    // TODO [Nassim]: refactor multiple variables into a dictionary
+    private Dictionary<ESpellID, bool> readyToUseSpell = new Dictionary<ESpellID, bool>();
+
     [Header("SpellsCooldown")]
-    public float spellCooldown_1;
-    public float spellCooldown_2;
-    public float spellCooldown_3;
+    private Dictionary<ESpellID, float> spellCooldown = new Dictionary<ESpellID, float>();
+
     [Header("SpellsDuration")]
-    public float spellDuration_1;
-    public float spellDuration_2;
-    public float spellDuration_3;
+    private Dictionary<ESpellID, float> spellDuration = new Dictionary<ESpellID, float>();
+
 
     private void Awake()
     {
         myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
+
+        currentSpeed = speed;
+
+        IsReadyToShoot = true;
+        IsPlayerCharging = false;
     }
 
     private void Start()
     {
-        /*spellsSlot = new Dictionary<int, AbstractSpell>();
-        spellsSlot[1] = spellSlot_1;
-        spellsSlot[2] = spellSlot_2;
-        spellsSlot[3] = spellSlot_3;*/
-       
-        InitializeSpellsCooldownsAndDurations();
+        InitializeDictionaries();
 
-
-        myRigidBody = this.GetComponent<Rigidbody>();      
-        animator = this.GetComponent<Animator>();
-        animator.SetBool("idle", true);
+        //myRigidBody = this.GetComponent<Rigidbody>();      
+        myAnimator = this.GetComponent<Animator>();
+        myAnimator.SetBool("idle", true);
 
         if (IsARPlayer == true)
         {
             speed *= ARManager.Instance.SizeFactor;
         }
 
-        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+        //EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
     }
 
     private void Update()
     {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
             PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
+
+            Move(playerInput.Move_X, playerInput.Move_Y);
+
             if (playerInput.HasMoved() == true)
             // Moving?
             {
-                Move(playerInput.Move_X, playerInput.Move_Y);
-
-                animator.SetBool("idle", false);
+                myAnimator.SetBool("idle", false);
             }
             // Not moving?
             else
             {
-                animator.SetBool("idle", true);
-
+                myAnimator.SetBool("idle", true);
             }
 
             if (playerInput.HasRotated() == true)
@@ -126,8 +133,8 @@ public class Player : MonoBehaviour, IPlayer                                    
         }
 
         // Cance all forces
-        myRigidBody.velocity = Vector3.zero;
-        myRigidBody.angularVelocity = Vector3.zero;
+        //myRigidBody.velocity = Vector3.zero;
+        //myRigidBody.angularVelocity = Vector3.zero;
 
     }
 
@@ -135,15 +142,15 @@ public class Player : MonoBehaviour, IPlayer                                    
 
 
 
-    private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
-    {
-        if (hitInfo.HitPlayerID == PlayerID)
-        {
-            Rigidbody rgb = GetComponent<Rigidbody>();
-            rgb.AddForceAtPosition(hitInfo.HitVelocity, transform.position, ForceMode.Impulse);
+    //private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
+    //{
+    //    if (hitInfo.HitPlayerID == PlayerID)
+    //    {
+    //        Rigidbody rgb = GetComponent<Rigidbody>();
+    //        rgb.AddForceAtPosition(hitInfo.HitVelocity, transform.position, ForceMode.Impulse);
 
-        }
-    }
+    //    }
+    //}
 
     #region INPUT
 
@@ -155,7 +162,9 @@ public class Player : MonoBehaviour, IPlayer                                    
         }
    
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
-        transform.position += movingDirection * speed * 0.1f * Time.deltaTime;
+
+        Vector3 movemetVelocity = movingDirection * speed * 0.1f;
+        transform.position += (movemetVelocity + pushVelocity) * Time.deltaTime;
     }
 
     private void Rotate(float axis_X, float axis_Z)
@@ -182,179 +191,110 @@ public class Player : MonoBehaviour, IPlayer                                    
         transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
     }
 
-
-    public void StartChargingSpell_1(MovementType movementType)
+    public void StartChargingSpell(ESpellID spellID, EMovementType movementType)
     {
-        if (readyToUseSpell_1 && readyToShoot)
+        if (readyToUseSpell[spellID] && IsReadyToShoot)
         {
-            if (movementType == MovementType.LINEAR_LASER)
+            if (movementType == EMovementType.LINEAR_HIT)
             {
-                StartCoroutine(PlayerCantMove());
+                StartCoroutine(PlayerCannotMoveCoroutine());
+
+
+                IsPlayerCharging = true;
+                Debug.Log("Player started Charging");
+                StartCoroutine(SpellChargingCoroutine(spellID));
             }
+            else if (movementType == EMovementType.LINEAR_LASER)
+            {
+                StartCoroutine(PlayerCannotMoveCoroutine());
+            }
+
             //   StartChargingSpell(1, movementType);
             //     StartCoroutine(ReadyToUseSpell(spellDuration_1, 0));
             // StartCoroutine(ReadyToUseSpell(spellCooldown_1, 1));
-        }
-        else
-        {
-            return;
-        }
 
+
+            // TODO: Not working here
+            // Deactivate Directional Sprite
+        }
     }
-    public void StartChargingSpell_2(MovementType movementType)
+
+
+
+    public void StopChargingSpell(ESpellID spellID)
     {
-
-        if (readyToUseSpell_2 && readyToShoot)
-        {
-            if (movementType == MovementType.LINEAR_LASER)
-            {
-                StartCoroutine(PlayerCantMove());
-            }
-            //    StartChargingSpell(2, movementType);
-            // StartCoroutine(ReadyToUseSpell(spellDuration_2, 0));
-            //StartCoroutine(ReadyToUseSpell(spellCooldown_2, 2));
-        }
-        else
-        {
-            return;
-        }
-    }
-    public void StartChargingSpell_3(MovementType movementType)
-    {
-        if (readyToUseSpell_3 && readyToShoot)
-        {
-            if (movementType == MovementType.LINEAR_LASER)
-            {
-                StartCoroutine(PlayerCantMove());
-            }
-            //  StartChargingSpell(3, movementType);
-            //   StartCoroutine(ReadyToUseSpell(spellDuration_3, 0));
-            //   StartCoroutine(ReadyToUseSpell(spellCooldown_3, 3));
-        }
-        else
-        {
-            return;
-        }
-    }
-  
-    
-    
-
-
-    public void StartChargingSpell(int spellSlot, MovementType movementType)
-    {
-
-        if (movementType == MovementType.LINEAR_HIT)
-        {
-            playerCharging = true;
-            Debug.Log("Player started Charging");
-            StartCoroutine(spellCharging(spellSlot));
-        }
-        else if (movementType == MovementType.LINEAR_LASER)
-        {
-            StartCoroutine(PlayerCantMove());
-        }
-        // TODO: Not working here
-        // Deactivate Directional Sprite
-    }
-
-    public void StopChargingSpell_1()
-    {
-        Debug.Log("player stopped charging spell 1");
-        playerCharging = false;
+        Debug.Log("player stopped charging " + spellID);
+        IsPlayerCharging = false;
 
     }
-    public void StopChargingSpell_2()
-    {
-        Debug.Log("player stopped charging spell 2 ");
-
-    }
-    public void StopChargingSpell_3()
-    {
-        Debug.Log("player stopped charging spell 3");
-
-    }
+ 
 
 
     private void InitializeChargingEffects()
     {
 
     }
-    private void InitializeSpellsCooldownsAndDurations()
-    {
 
-        //change to SpellManager.Instance.Player_Spells[playerID][1]
-        spellCooldown_1 = SpellManager.Instance.Player_Spells[PlayerID][0].cooldown;
-        spellCooldown_2 = SpellManager.Instance.Player_Spells[PlayerID][1].cooldown;
-        spellCooldown_3 = SpellManager.Instance.Player_Spells[PlayerID][2].cooldown;
-        spellDuration_1 = SpellManager.Instance.Player_Spells[PlayerID][0].spellDuration;
-        spellDuration_2 = SpellManager.Instance.Player_Spells[PlayerID][1].spellDuration;
-        spellDuration_3 = SpellManager.Instance.Player_Spells[PlayerID][2].spellDuration;
-    }
-        IEnumerator PlayerCantMove()
+    private void InitializeDictionaries()
     {
-        animator.SetBool("channeling", true);
-        speed = 0;
+        readyToUseSpell[ESpellID.SPELL_1] = true;
+        readyToUseSpell[ESpellID.SPELL_2] = true;
+        readyToUseSpell[ESpellID.SPELL_3] = true;
+
+        spellCooldown[ESpellID.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_1].Cooldown;
+        spellCooldown[ESpellID.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_2].Cooldown;
+        spellCooldown[ESpellID.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_3].Cooldown;
+
+        spellDuration[ESpellID.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_1].CastingDuration;
+        spellDuration[ESpellID.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_2].CastingDuration;
+        spellDuration[ESpellID.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_3].CastingDuration;
+    }
+
+
+    private IEnumerator PlayerCannotMoveCoroutine()
+    {
+        myAnimator.SetBool("channeling", true);
+        currentSpeed = 0;
+
         yield return new WaitForSeconds(2.5f);
-        speed = 75;
-        animator.SetBool("channeling", false);
+
+        currentSpeed = speed;
+        myAnimator.SetBool("channeling", false);
     }
 
-    IEnumerator SetReadyToUseSpell(float time, int id)                     // TODO [Nassim]: private before IEnumerator
+    private IEnumerator SetReadyToUseSpellCoroutine(float time, ESpellID spellID)                    
     {
-        switch (id)
-        {
-            case 0:
-                yield return new WaitForSeconds(time);
-                readyToShoot = true;
+        yield return new WaitForSeconds(time);
 
-                break;
-            case 1:
-                yield return new WaitForSeconds(time);
-                readyToUseSpell_1 = true;
-                            
-                break;
-
-            case 2:
-                yield return new WaitForSeconds(time);
-                readyToUseSpell_2 = true;              
-               
-                break;
-
-            case 3:
-                yield return new WaitForSeconds(time);
-                readyToUseSpell_3 = true;
-                break;
-
-        }
-
+        IsReadyToShoot = true;
+        readyToUseSpell[spellID] = true;
 
         Debug.Log("ready to use the spell again");
     }
-    IEnumerator animationDelay(AbstractSpell spellToCast , int animationID)
+
+
+    private IEnumerator AnimationDelayCoroutine(AbstractSpell spellToCast , int animationID)
     {
         switch (animationID)
         {
             case 1:
-                animator.SetTrigger("projectileAttack");
+                myAnimator.SetTrigger("projectileAttack");
                 break;
             case 2:
-                animator.SetTrigger("teleport");
+                myAnimator.SetTrigger("teleport");
                 break;
         }
         
         yield return new WaitForSeconds(0.3f);
-        AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition.position, transform.rotation);
+        AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition, transform.rotation);
         spell.CastingPlayerID = PlayerID;
         spell.parabolicSpell_EndPosition = SpellEndPosition;
     }
 
-    IEnumerator  spellCharging(int spellSlot)
+    private IEnumerator SpellChargingCoroutine(ESpellID spellID)
     {
-
-
         int counter = 0;
-        int spellLVL;
+        int spellChargingLVL;
         // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
         Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         GameObject wandEffect = Instantiate(chargingWandEnergy, position, chargingBodyEnergy.transform.rotation);
@@ -364,17 +304,14 @@ public class Player : MonoBehaviour, IPlayer                                    
         ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
         ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
        
-        
-        speed = 50;
+        currentSpeed = speed / 2;
         Debug.Log("spellCharging function working...");
-        while (playerCharging)
+        while (IsPlayerCharging)
         {
-
-           
             if (counter == 10 )
             {
                
-                animator.SetBool("charging", true); 
+                myAnimator.SetBool("charging", true); 
                 particleSystemBodyEffect.maxParticles = 1;                                             // TODO [Nassim]: Fix warnings
                 particleSystemWandEffect.maxParticles = 1;
             }
@@ -384,7 +321,6 @@ public class Player : MonoBehaviour, IPlayer                                    
                 particleSystemWandEffect.maxParticles = counter;
             }
             
-          
             yield return new WaitForSeconds(0.0f);
             counter++;
                     
@@ -392,18 +328,19 @@ public class Player : MonoBehaviour, IPlayer                                    
         Debug.Log("spellCharging function Done!!");
 
 
-        speed = 75;
-        animator.SetBool("charging", false);
+        currentSpeed = speed;
+
+        myAnimator.SetBool("charging", false);
         Destroy(wandEffect);
         Destroy(particleSystemBodyEffect);
         Debug.Log("counter = " + counter);
         if (counter > 100)
         {
-            spellLVL = 2;
+            spellChargingLVL = 2;
         }
         else
         {
-            spellLVL = 1;
+            spellChargingLVL = 1;
         }
      /*   AbstractSpell spellUpgrade = spellToCast;
         foreach (AbstractSpell spell in SpellManager.Instance.SpellsUpgrade)
@@ -475,6 +412,81 @@ public class Player : MonoBehaviour, IPlayer                                    
 
         axis_X = controllerAxis.x;
         axis_Z = controllerAxis.y;
+    }
+
+
+    public void DoShockwaveAnimation()
+    {
+        myAnimator.SetTrigger("shockwave");
+    }
+
+    public void DoTeleportAnimation()
+    {
+        myAnimator.SetTrigger("teleport");
+    }
+
+    public void DoProjectileAttackAnimation()
+    {
+        myAnimator.SetTrigger("projectileAttack");
+    }
+
+
+    public void SetPlayerFrozen(bool isFrozen)
+    {
+        if (isFrozen == true)
+        {
+            currentSpeed = 0;
+        }
+        else
+        {
+            currentSpeed = speed;
+        }
+    }
+
+    public void SetPlayerStunned(bool isStunned)
+    {
+        if (isStunned == true)
+        {
+            currentSpeed = 0;
+        }
+        else
+        {
+            currentSpeed = speed;
+        }
+    }
+
+
+    public void PushPlayer(Vector3 velocity, float duration)
+    {
+        pushVelocity = velocity;
+
+        if (PushCoroutine != null)
+        {
+            StopCoroutine(PushCoroutine);
+        }
+        if (duration <= 0.0f)
+        {
+            duration = 0.1f;
+        }
+        PushCoroutine = UpdatePushVelocityCoroutine(duration);
+        StartCoroutine(PushCoroutine);
+    }
+
+    private IEnumerator UpdatePushVelocityCoroutine(float duration)
+    {
+        float startTime = Time.time;
+        Vector3 startVelocity = pushVelocity;
+
+        float progress = (Time.time - startTime) / duration;
+        while (progress < 1.0f)
+        {
+            progress = (Time.time - startTime) / duration;
+
+            pushVelocity = Vector3.Lerp(startVelocity, Vector3.zero, progress);
+
+            yield return new WaitForEndOfFrame();
+        }
+
     }
 
 }

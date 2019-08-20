@@ -73,7 +73,7 @@ public enum ESpellID
     SPELL_3
 }
 
-public enum SpellType                       // TODO [Nassim]: enums start with 'E' + define NONE
+public enum ESpellType                       
 {
     BUFF_ONSELF,
     PUSH,
@@ -82,7 +82,7 @@ public enum SpellType                       // TODO [Nassim]: enums start with '
 
 
 
-public enum SpellEffects                    // TODO [Nassim]: enums start with 'E' + define NONE
+public enum ESpellEffects                   
 {
     PROTECT,
     INCREASE_DAMAGE,
@@ -99,7 +99,7 @@ public enum SpellEffects                    // TODO [Nassim]: enums start with '
 
 
 
-public enum MovementType                    // TODO [Nassim]: enums start with 'E' + define NONE
+public enum EMovementType         
 {
     LINEAR_HIT,
     LINEAR_EXPLOSIVE,
@@ -134,7 +134,7 @@ public enum ETeamID
 
 public struct SHitInfo
 {
-    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<SpellEffects> debuffEffects, List<SpellEffects> buffEffects)
+    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;
@@ -150,10 +150,10 @@ public struct SHitInfo
     public EPlayerID CastingPlayerID { get { return castingPlayerID; } }
     public EPlayerID HitPlayerID { get { return hitPlayerID; } }
     public Vector3 HitPosition { get { return hitPosition; } }
-    public Vector3 HitVelocity { get { return hitPosition + castedSpell.Direction ; } }
-    public bool HasPower { get { return hasPower; } }
-    public List<SpellEffects> DebuffEffects { get {return debuffEffects; }}
-    public List<SpellEffects> BuffEffects { get { return buffEffects; } }
+    public Vector3 HitVelocity { get { return castedSpell.Direction * castedSpell.HitPower ; } }
+    public bool HasPushPower { get { return hasPower; } }
+    public List<ESpellEffects> DebuffEffects { get {return debuffEffects; }}
+    public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
 
 
     private ISpell castedSpell;
@@ -161,8 +161,8 @@ public struct SHitInfo
     private EPlayerID hitPlayerID;
     private Vector3 hitPosition;
     private bool hasPower;
-    private List<SpellEffects> debuffEffects;
-    private List<SpellEffects> buffEffects;
+    private List<ESpellEffects> debuffEffects;
+    private List<ESpellEffects> buffEffects;
 }
 #endregion 
 

@@ -24,10 +24,7 @@ public class Parabolic_Explosive : AbstractSpell
 
     private void Start()
     {
-        
-        
-        endTransform = parabolicSpell_EndPosition;
-        endPosition = endTransform.position;
+        endPosition = parabolicSpell_EndPosition;
         endRotation = endTransform.rotation;
         startTransform = this.transform;
         startRotation = startTransform.rotation;

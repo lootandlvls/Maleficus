@@ -10,7 +10,7 @@ public class AOE : AbstractSpell
     void Start()
     {
        
-        onExplosionEnter( transform.position, 7f * ARManager.Instance.SizeFactor);
+        OnExplosionEnter( transform.position, 7f * ARManager.Instance.SizeFactor);
     }
 
     // Update is called once per frame
@@ -18,8 +18,9 @@ public class AOE : AbstractSpell
     {
 
     }
+
   //  && (this.GetComponent<AbstractSpell>().CastingPlayerID != hitColliders[i].GetComponent<IPlayer>().PlayerID)
-    void onExplosionEnter(Vector3 center , float radius)
+    private void OnExplosionEnter(Vector3 center , float radius)
     {
         AbstractSpell abstractSpell = GetComponent<AbstractSpell>();
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);

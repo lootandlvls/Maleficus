@@ -25,8 +25,7 @@ public class CurveTestSpeed : AbstractSpell
     private void Start()
     {
         AbstractSpell abstracSpell = this.GetComponent<AbstractSpell>();
-        endTransform = abstracSpell.parabolicSpell_EndPosition;
-        endPosition = endTransform.position;
+        endPosition = abstracSpell.parabolicSpell_EndPosition;
         endRotation = endTransform.rotation;
         startTransform = this.transform;
         startRotation = startTransform.rotation;

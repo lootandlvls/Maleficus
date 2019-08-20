@@ -20,7 +20,7 @@ public class CurveTestTime : MonoBehaviour
     {
         startTransform.position = transform.position ;
         AbstractSpell abstracSpell = this.GetComponent<AbstractSpell>();
-        endTransform = abstracSpell.parabolicSpell_EndPosition;
+        //endTransform = abstracSpell.parabolicSpell_EndPosition;
     }
     private void Update()
     {
