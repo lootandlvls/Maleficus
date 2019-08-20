@@ -42,8 +42,8 @@ public class Linear_Hit : AbstractSpell
     private void OnTriggerEnter(Collider other)
     {
 
-        Vector3 pushingDirection = Vector3.forward * HitPower;
-        dirVector = transform.TransformDirection(pushingDirection);
+        Vector3 pushingDirection = Vector3.forward;
+        direction = transform.TransformDirection(pushingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
 

@@ -5,11 +5,7 @@ using UnityEngine;
 public abstract class AbstractSpell : MonoBehaviour, ISpell
 {
   //  private Vector3 movingDirection;
-    public Rigidbody myRigidBody;
-    public Vector3 dirVector;
-    public EPlayerID CastingPlayerID { get; set; }
-    public Transform parabolicSpell_EndPosition;
-    
+
   
 
 
@@ -17,7 +13,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public float Speed { get { return speed; } }
 
-    public Vector3 Direction { get { return dirVector; } }
+    public Vector3 Direction { get { return direction; } }
 
     public Vector3 EndDestination { get; set; }
 
@@ -27,11 +23,19 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public bool HasPower { get { return hasPower; } }
 
-    public MovementType MovementType { get {  return movementType; } }
+    public EMovementType MovementType { get {  return movementType; } }
 
-    public List<SpellEffects> DebuffEffects { get { return debuffEffects; } }
+    public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
 
-    public List<SpellEffects> BuffEffects { get { return buffEffects; } }
+    public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
+
+    public EPlayerID CastingPlayerID { get; set; }
+
+    public float Cooldown { get { return cooldown; } }
+
+    public float CastingDuration { get { return spellDuration; } }
+
+    public float PushDuration { get { return pushDuration; } }
 
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
@@ -40,38 +44,38 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPower;
 
-    public float cooldown;
-    public float spellDuration;
   
-    [SerializeField] private  MovementType movementType;
-    [SerializeField] private  List<SpellEffects> debuffEffects;
-    [SerializeField] private  List<SpellEffects> buffEffects;
-    
-   
+    [SerializeField] private  EMovementType movementType;
+    [SerializeField] private  List<ESpellEffects> debuffEffects;
+    [SerializeField] private  List<ESpellEffects> buffEffects;
 
-    
-// Start is called before the first frame update
+    [SerializeField]  private float cooldown;
+    [SerializeField]  private float spellDuration;
+    [SerializeField]  private float pushDuration;
+
+    protected Rigidbody myRigidBody;
+
+    protected Vector3 direction;
+
+
+
+    public Vector3 parabolicSpell_EndPosition;
+
+
+
+    // Start is called before the first frame update
     private void Start()
     {  
 
-        dirVector = new Vector3(0, 0, 0);
+        direction = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
+
         if (OnSelfEffect)
         {
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID,  CastingPlayerID, transform.position, hasPower, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
-        
-       
     }
-
-    // Update is called once per frame
-    private void Update()
-    {
-      
-    }
-
- 
 
 
     protected void ProcessHits(IPlayer[] hitPlayers)
@@ -130,8 +134,8 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     {
         foreach (IPlayer hitPlayer in hitPlayers)
         {   
-            Vector3 movingDirection =  (hitPlayer.Position - transform.position).normalized  * HitPower;
-            dirVector = movingDirection;
+            Vector3 movingDirection =  (hitPlayer.Position - transform.position).normalized;
+            direction = new Vector3(movingDirection.x, 0.0f, movingDirection.z);
             ProcessHits(hitPlayer);
         }
            

@@ -5947,10 +5947,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1516624554419814651}
   - component: {fileID: 1464117566350752285}
-  - component: {fileID: 1568295349694429993}
   - component: {fileID: 1506201097449065619}
   - component: {fileID: 4285941913085856244}
   - component: {fileID: 490479312750579945}
+  - component: {fileID: 5407023651269880443}
   m_Layer: 0
   m_Name: Wizard_Base
   m_TagString: Player1
@@ -5995,22 +5995,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &1568295349694429993
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1515304141566281053}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 116
-  m_CollisionDetection: 0
 --- !u!136 &1506201097449065619
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6037,28 +6021,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerVerticalInput: 
-  playerHorizontalInput: 
-  SpellInitPosition: {fileID: 608549788462845129}
-  SpellEndPosition: {fileID: 7339631618129149989}
-  angularSpeed: 28
-  speed: 75
   chargingBodyEnergy: {fileID: 1820421771836070987, guid: 8fe5d31d8d3b7f4408c5ce8686c271de,
     type: 3}
   chargingWandEnergy: {fileID: 5551467226034161610, guid: 2b649d7e1c9688b4788d9cf712bcefcc,
     type: 3}
-  animator: {fileID: 1464117566350752285}
-  readyToShoot: 1
-  playerCharging: 0
-  readyToUseSpell_1: 1
-  readyToUseSpell_2: 1
-  readyToUseSpell_3: 1
-  spellCooldown_1: 0
-  spellCooldown_2: 0
-  spellCooldown_3: 0
-  spellDuration_1: 0
-  spellDuration_2: 0
-  spellDuration_3: 0
+  angularSpeed: 28
+  speed: 75
+  spellInitPosition: {fileID: 608549788462845129}
+  spellEndPosition: {fileID: 7339631618129149989}
 --- !u!65 &490479312750579945
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6072,6 +6042,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.4039502, z: 1}
   m_Center: {x: 0, y: 1.0027745, z: 0}
+--- !u!54 &5407023651269880443
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515304141566281053}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!1 &1515340630872704857
 GameObject:
   m_ObjectHideFlags: 0

@@ -13796,20 +13796,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2aca8fc163479549b5bf1528ae0eb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 1
+  hitPower: 17
   speed: 0
   spellName: S_FireLaser
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
-  cooldown: 5
-  spellDuration: 2.5
   movementType: 6
   debuffEffects: 
   buffEffects: 
+  cooldown: 5
+  spellDuration: 2.5
+  pushDuration: 0.2
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &8270885389934248921
 BoxCollider:
   m_ObjectHideFlags: 0

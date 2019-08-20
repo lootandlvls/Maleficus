@@ -6,8 +6,8 @@ public class Linear_Laser : AbstractSpell
 {
     private void OnTriggerStay(Collider other)
     {
-        Vector3 movingDirection = Vector3.forward * HitPower;
-        dirVector = transform.TransformDirection(movingDirection);
+        Vector3 movingDirection = Vector3.forward;
+        direction = transform.TransformDirection(movingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
 

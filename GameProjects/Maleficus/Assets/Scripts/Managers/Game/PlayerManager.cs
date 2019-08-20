@@ -218,52 +218,25 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (playerID == EPlayerID.TEST) return;
 
-        switch (inputButton)
+        ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
+        if (spellID == ESpellID.NONE)
         {
-            case EInputButton.CAST_SPELL_1:
-                //change to  SpellManager.Instance.Player_Spells[playerID][1].MovementType; when dictionary are ready to use
-                if (ActivePlayers[playerID].readyToUseSpell_1 && ActivePlayers[playerID].readyToShoot)
-                {
+            return;
+        }
+        
+        if (ActivePlayers[playerID].ReadyToUseSpell[spellID] && ActivePlayers[playerID].IsReadyToShoot)
+        {
+            EMovementType movementType = SpellManager.Instance.Player_Spells[playerID][spellID].MovementType;
 
-
-                    MovementType movementType = SpellManager.Instance.Player_Spells[playerID][0].MovementType;
-
-                    ActivePlayers[playerID].StartChargingSpell_1(movementType);
-                    ActivePlayers[playerID].playerCharging = true;
-                }
-
-                break;
-
-            case EInputButton.CAST_SPELL_2:
-
-                if (ActivePlayers[playerID].readyToUseSpell_2 && ActivePlayers[playerID].readyToShoot)
-                {
-
-                    MovementType movementType = SpellManager.Instance.Player_Spells[playerID][1].MovementType;
-
-                    ActivePlayers[playerID].StartChargingSpell_2(movementType);
-                    ActivePlayers[playerID].playerCharging = true;
-                }
-
-                break;
-
-            case EInputButton.CAST_SPELL_3:
-
-                if (ActivePlayers[playerID].readyToUseSpell_3 && ActivePlayers[playerID].readyToShoot)
-                {
-
-                    MovementType movementType = SpellManager.Instance.Player_Spells[playerID][2].MovementType;
-
-                    ActivePlayers[playerID].StartChargingSpell_3(movementType);
-                    ActivePlayers[playerID].playerCharging = true;
-                }
-                break;
+            ActivePlayers[playerID].StartChargingSpell(spellID, movementType);
+            ActivePlayers[playerID].IsPlayerCharging = true;
         }
     }
 
     private void On_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
     {
         if (playerID == EPlayerID.TEST) return;
+
         switch (axisType)
         {
             case EInputAxis.MOVE_X:
@@ -286,48 +259,18 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonReleased(EInputButton inputButton, EPlayerID playerID)
     {
-      
-        switch (inputButton)                                                                                    // TODO [Nassim]: Clean the switch
+        ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
+
+        Debug.Log(spellID + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellID]);
+
+        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellID])
         {
+            ActivePlayers[playerID].IsReadyToShoot = false;
+            ActivePlayers[playerID].ReadyToUseSpell[spellID] = false;
+            ActivePlayers[playerID].StopChargingSpell(spellID);
 
-            case EInputButton.CAST_SPELL_1:
-                if (ActivePlayers[playerID].readyToShoot && ActivePlayers[playerID].readyToUseSpell_1)
-                {
-                    ActivePlayers[playerID].readyToShoot = false;
-                    ActivePlayers[playerID].readyToUseSpell_1 = false;
-                    ActivePlayers[playerID].StopChargingSpell_1();
-                    
-                    SpellManager.Instance.CastSpell(playerID, 0);
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, ActivePlayers[playerID].spellDuration_1, 0));
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, ActivePlayers[playerID].spellCooldown_1 + ActivePlayers[playerID].spellDuration_1, 1));
-                }
-                break;
-
-            case EInputButton.CAST_SPELL_2:
-                if (ActivePlayers[playerID].readyToShoot && ActivePlayers[playerID].readyToUseSpell_2)
-                {
-                    ActivePlayers[playerID].readyToShoot = false;
-                    ActivePlayers[playerID].readyToUseSpell_2 = false;
-                    ActivePlayers[playerID].StopChargingSpell_2();
-                   
-                    SpellManager.Instance.CastSpell(playerID, 1);
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, ActivePlayers[playerID].spellDuration_2, 0));
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, ActivePlayers[playerID].spellCooldown_2 + ActivePlayers[playerID].spellDuration_2, 2));
-                }
-                break;
-
-            case EInputButton.CAST_SPELL_3:
-                if (ActivePlayers[playerID].readyToShoot && ActivePlayers[playerID].readyToUseSpell_3)
-                {
-                    ActivePlayers[playerID].readyToShoot = false;
-                    ActivePlayers[playerID].readyToUseSpell_3 = false;
-                  
-                    ActivePlayers[playerID].StopChargingSpell_3();
-                    SpellManager.Instance.CastSpell(playerID, 2);
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, ActivePlayers[playerID].spellDuration_3, 0));
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, ActivePlayers[playerID].spellCooldown_3 + ActivePlayers[playerID].spellDuration_3 , 3));
-                }
-                break;
+            SpellManager.Instance.CastSpell(playerID, spellID);
+            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellID));
         }
     }
 
@@ -461,31 +404,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return Teams[inTeamID].ToArray();
     }
 
-    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, float time, int id)                 
+    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellID spellID)                 
     {
-        switch (id)
-        {
-            case 0:
-                yield return new WaitForSeconds(time);
-                ActivePlayers[playerID].readyToShoot = true;
+        yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellID]);
+        ActivePlayers[playerID].IsReadyToShoot = true;
 
-                break;
-            case 1:
-                yield return new WaitForSeconds(time);
-                ActivePlayers[playerID].readyToUseSpell_1 = true;
+        yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellID]);
+        ActivePlayers[playerID].ReadyToUseSpell[spellID] = true;
 
-                break;
-
-            case 2:
-                yield return new WaitForSeconds(time);
-                ActivePlayers[playerID].readyToUseSpell_2 = true;
-
-                break;
-
-            case 3:
-                yield return new WaitForSeconds(time);
-                ActivePlayers[playerID].readyToUseSpell_3 = true;
-                break;
-        }
+        
     }
 }

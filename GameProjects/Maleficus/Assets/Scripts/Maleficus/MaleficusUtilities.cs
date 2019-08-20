@@ -197,6 +197,25 @@ public static class MaleficusUtilities
                 break;
         }
         return id;
+    }       
+    
+    /// <summary> Convert an int to a SpellID enum </summary>
+    public static ESpellID IntToSpellID(int spellID)
+    {
+        ESpellID id = ESpellID.NONE;
+        switch (spellID)
+        {
+            case 1:
+                id = ESpellID.SPELL_1;
+                break;
+            case 2:
+                id = ESpellID.SPELL_2;
+                break;
+            case 3:
+                id = ESpellID.SPELL_3;
+                break;
+        }
+        return id;
     }    
     
     /// <summary> Convert a ControllerID enum to an Char </summary>

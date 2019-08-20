@@ -137,11 +137,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
         if (Input.GetButtonDown("Confirm_" + controllerIDName))
         {
-
-
             if ((IsPlayerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
             {
-                Debug.Log("Confrim " + controllerID);
                 // Send Input
                 EPlayerID playerID = GetPlayerID(controllerID);
                 EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
@@ -152,7 +149,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
                 if (connectedPlayerID != EPlayerID.TEST)
                 {
-                    Debug.Log("Confrim " + controllerID);
                     playerControllerMapping[controllerID] = connectedPlayerID;
                 }
            }
