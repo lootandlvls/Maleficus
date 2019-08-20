@@ -18,7 +18,7 @@ public class BasicEventHandle<A> : AbstractEventHandle
 
     public override AbstractNetMessage GetNetMessage()
     {
-        return null;
+        return new Net_NONE();
     }
 }
 

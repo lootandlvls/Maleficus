@@ -37,11 +37,20 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
     {
         if (maleficusEvent != null)
         {
+            // Invoke event to all listeners
             maleficusEvent.Invoke(eventHandle);
 
+            // Debug event
             if (MotherOfManagers.Instance.IsDebugLogEvents == true)
             {
                 Debug.Log("[EVENT] " + Name + " : " + eventHandle.GetDebugMessage());
+            }
+
+            // Broadcast event to server if not None
+            AbstractNetMessage netMessage =  eventHandle.GetNetMessage();
+            if (netMessage.ID != NetID.None)
+            {
+                NetworkManager.Instance.BroadcastNetMessage(netMessage);
             }
         }
     }

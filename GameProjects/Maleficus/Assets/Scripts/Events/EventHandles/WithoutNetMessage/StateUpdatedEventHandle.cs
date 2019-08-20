@@ -15,7 +15,7 @@ public class StateUpdatedEventHandle<E> : AbstractEventHandle
 
     public override AbstractNetMessage GetNetMessage()
     {
-        return null;
+        return new Net_NONE();
     }
 
     public override string GetDebugMessage()

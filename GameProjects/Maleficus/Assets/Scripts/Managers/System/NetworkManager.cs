@@ -66,6 +66,11 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
     #endregion
 
+    public void BroadcastNetMessage(AbstractNetMessage netMessage)
+    {
+        // TODO: Implement
+    }
+
     protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
     {
         EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
