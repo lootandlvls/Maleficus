@@ -198,6 +198,30 @@ public static class MaleficusUtilities
         }
         return id;
     }       
+    /// <summary> Convert an int to a ClientID enum </summary>
+    public static EClientID IntToClientID(int clientID)
+    {
+        EClientID id = EClientID.NONE;
+        switch (clientID)
+        {
+            case 0:
+                id = EClientID.SERVER;
+                break;
+            case 1:
+                id = EClientID.CLIENT_1;
+                break;
+            case 2:
+                id = EClientID.CLIENT_2;
+                break;
+            case 3:
+                id = EClientID.CLIENT_3;
+                break;
+            case 4:
+                id = EClientID.CLIENT_4;
+                break;
+        }
+        return id;
+    }       
     
     /// <summary> Convert an int to a SpellID enum </summary>
     public static ESpellID IntToSpellID(int spellID)
@@ -324,6 +348,33 @@ public static class MaleficusUtilities
         }
         return button;
     }
+
+    /// <summary> Convert a ClientID enum to a PlayerID enum </summary>
+    public static EPlayerID GetPlayerIDFrom(EClientID clientID)
+    {
+        EPlayerID id = EPlayerID.NONE;
+        switch (clientID)
+        {
+            case EClientID.CLIENT_1:
+                id = EPlayerID.PLAYER_1;
+                break;
+
+            case EClientID.CLIENT_2:
+                id = EPlayerID.PLAYER_2;
+                break;
+
+            case EClientID.CLIENT_3:
+                id = EPlayerID.PLAYER_3;
+                break;
+
+            case EClientID.CLIENT_4:
+                id = EPlayerID.PLAYER_4;
+                break;
+        }
+        return id;
+    }
+
+
 
     #endregion
 }

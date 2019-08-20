@@ -325,10 +325,12 @@ public enum ENetworkMessage
 public enum EClientID
 {
     NONE,
+    SERVER,
     CLIENT_1,
     CLIENT_2,
     CLIENT_3,
-    CLIENT_4
+    CLIENT_4,
+    TEST
 }
 #endregion
 

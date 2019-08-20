@@ -19,7 +19,7 @@ public class FriendsContext : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
+        selfInformation.text = NetworkManager.Instance.Self.Username + "#" + NetworkManager.Instance.Self.Discriminator;
         NetworkManager.Instance.SendRequestFollow();
     }
 
