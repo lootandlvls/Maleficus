@@ -1,8 +1,8 @@
 ﻿[System.Serializable]
-public class Net_Disonnected : NetMsg
+public class Net_Disonnected : AbstractNetMessage
 {
     public Net_Disonnected()
     {
-        OP = NetOP.Disconnected;
+        ID = NetID.Disconnected;
     }
 }

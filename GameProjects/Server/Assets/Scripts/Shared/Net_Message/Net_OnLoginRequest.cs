@@ -1,9 +1,9 @@
 ﻿[System.Serializable]
-public class Net_OnLoginRequest : NetMsg
+public class Net_OnLoginRequest : AbstractNetMessage
 {
     public Net_OnLoginRequest()
     {
-        OP = NetOP.OnLoginRequest;
+        ID = NetID.OnLoginRequest;
     }
     public byte Success { set; get; }
     public string Information { set; get; }

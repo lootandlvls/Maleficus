@@ -28,6 +28,9 @@
     public const int SpellInput = 15;
     public const int MovementInput = 16;
 
+    public const int RequestGameInfo = 17;
+    public const int OnRequestGameInfo = 18;
+
 
 
 

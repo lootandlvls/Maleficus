@@ -1,9 +1,9 @@
 ﻿[System.Serializable]
-public class Net_UpdateFollow : NetMsg
+public class Net_UpdateFollow : AbstractNetMessage
 {
     public Net_UpdateFollow()
     {
-        OP = NetOP.UpdateFollow;
+        ID = NetID.UpdateFollow;
     }
     public Account Follow { set; get; }
 }

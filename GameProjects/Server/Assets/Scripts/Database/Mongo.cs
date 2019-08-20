@@ -209,6 +209,12 @@ public class Mongo
         if (self != null)
         {
             Model_Lobby newLobby = new Model_Lobby();
+            int lobbyID = (int) lobbys.CountDocuments(u => u.LobbyID != -1) + 1;
+            while(FindLobbyByLobbyID(lobbyID) != null)
+            {
+                lobbyID++;
+            }
+            newLobby.LobbyID = lobbyID;
             newLobby.initialiserId = initialiserId;
             newLobby.Team1 = new List<ObjectId>();
             newLobby.Team1.Add(initialiserId);
@@ -366,6 +372,10 @@ public class Mongo
     public Model_Lobby FindLobbyByObjectId(ObjectId objectId)
     {
         return lobbys.Find(u => u._id == objectId).FirstOrDefault<Model_Lobby>();
+    }
+    public Model_Lobby FindLobbyByLobbyID(int lobbyID)
+    {
+        return lobbys.Find(u => u.LobbyID == lobbyID).FirstOrDefault<Model_Lobby>();
     }
     #endregion
 

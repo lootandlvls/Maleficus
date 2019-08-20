@@ -6,6 +6,8 @@ public class Model_Lobby
 {
     public ObjectId _id { set; get; }
 
+    public int LobbyID { set; get; }
+
     public ObjectId initialiserId { set; get; }
 
     public EGameMode GameMode { set; get; }

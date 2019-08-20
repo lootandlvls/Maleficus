@@ -19,20 +19,8 @@ public class FriendsContext : MonoBehaviour
     private void Start()
     {
         Instance = this;
-
-        EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
-    }
-
-    private void On_UI_MenuStateUpdated(StateUpdatedEventHandle<EMenuState> eventHandle)
-    {
-        switch (eventHandle.NewState)
-        {
-            case EMenuState.IN_MENU:
-                selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
-                NetworkManager.Instance.SendRequestFollow();
-                Debug.Log("now friends should be requested");
-                break;
-        }
+        selfInformation.text = NetworkManager.Instance.self.Username + "#" + NetworkManager.Instance.self.Discriminator;
+        NetworkManager.Instance.SendRequestFollow();
     }
 
     public void AddFollowToUi(Account follow)
@@ -57,7 +45,7 @@ public class FriendsContext : MonoBehaviour
     {
         string usernameDiscriminator = addFollowInput.text;
 
-        if(!Utility.IsUsernameAndDiscriminator(usernameDiscriminator) && !Utility.IsEmail(usernameDiscriminator))
+        if (!Utility.IsUsernameAndDiscriminator(usernameDiscriminator) && !Utility.IsEmail(usernameDiscriminator))
         {
             Debug.Log("Invalid format!");
             return;

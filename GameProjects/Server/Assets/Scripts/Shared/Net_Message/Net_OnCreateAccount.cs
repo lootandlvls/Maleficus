@@ -1,9 +1,9 @@
 ﻿[System.Serializable]
-public class Net_OnCreateAccount : NetMsg
+public class Net_OnCreateAccount : AbstractNetMessage
 {
     public Net_OnCreateAccount()
     {
-        OP = NetOP.OnCreateAccount;
+        ID = NetID.OnCreateAccount;
     }
     public byte Success { set; get; }
     public string Information { set; get; }

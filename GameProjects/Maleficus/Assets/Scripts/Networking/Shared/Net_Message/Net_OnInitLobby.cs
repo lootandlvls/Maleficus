@@ -8,5 +8,5 @@ public class Net_OnInitLobby : AbstractNetMessage
 
     public byte Success { set; get; }
     public string Information { set; get; }
-    public int playerID { set; get; }
+    public int lobbyID { set; get; }
 }
