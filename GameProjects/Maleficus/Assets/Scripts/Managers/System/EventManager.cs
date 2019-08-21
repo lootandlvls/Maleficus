@@ -259,14 +259,16 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog(buttonType + " released by " + playerID);
     }
 
-    public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved;
+    public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved_old;
     public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
     {
-        if (INPUT_JoystickMoved != null)
+        if (INPUT_JoystickMoved_old != null)
         {
-            INPUT_JoystickMoved.Invoke(axisType, axisValue, playerID);
+            INPUT_JoystickMoved_old.Invoke(axisType, axisValue, playerID);
         }
     }
+    public MaleficusEvent<JoystickMovedEventHandle> INPUT_JoystickMoved = new MaleficusEvent<JoystickMovedEventHandle>("INPUT_JoystickMoved");
+
 
     /* public event Action<EInputButton, EPlayerID> INPUT_ButtonStillBeingPressed;
      public void Invoke_INPUT_ButtonStillBeingPressed(EInputButton buttonType, EPlayerID playerID)

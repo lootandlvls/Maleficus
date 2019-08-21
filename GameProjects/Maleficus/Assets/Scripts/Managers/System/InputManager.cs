@@ -268,7 +268,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 }
 
                 // Axis event
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(inputAxis, axisValue, playerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(inputAxis, axisValue, playerID));
 
 
                 // Directional button event                                                                                              
@@ -346,13 +346,17 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             if (joystickType == ETouchJoystickType.MOVE)
             {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID);
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID));
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID));
             }
             else // Spell joystick
             {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID);
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID));
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID));
             }
         }
     }

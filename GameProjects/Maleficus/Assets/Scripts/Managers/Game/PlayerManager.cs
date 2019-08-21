@@ -59,7 +59,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // Input events
         EventManager.Instance.INPUT_ButtonPressed   += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_ButtonReleased  += On_INPUT_ButtonReleased;
-        EventManager.Instance.INPUT_JoystickMoved   += On_INPUT_JoystickMoved;
+        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
        
         // Scene changed event
         EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
@@ -268,8 +268,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
+    private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
     {
+        EInputAxis axisType = eventHandle.AxisType;
+        float axisValue = eventHandle.AxisValue;
+        EPlayerID playerID = eventHandle.PlayerID;
+
         if (playerID == EPlayerID.TEST) return;
 
         switch (axisType)

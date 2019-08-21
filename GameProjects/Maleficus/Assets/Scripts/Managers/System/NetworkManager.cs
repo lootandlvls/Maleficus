@@ -50,7 +50,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
-        EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
+        //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
     }
 
     public override void Initialize()
@@ -66,7 +66,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
-        // TODO: Implement
+        SendServer(netMessage);
     }
 
     protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
@@ -222,6 +222,17 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
                 OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
+
+            case NetID.MovementInput:
+                Debug.Log("Game input received");
+                Net_MovementInput movementInput = (Net_MovementInput)msg;
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
+
+
         }
     }
 
@@ -467,16 +478,16 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         SendServer(si);
     }
 
-    public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
-    {
-        Net_MovementInput mi = new Net_MovementInput();
+    //public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
+    //{
+    //    Net_MovementInput mi = new Net_MovementInput();
 
-        mi.Token = token;
-        mi.axis = eInputAxis;
-        mi.axisValue = axisvalue;
+    //    mi.Token = token;
+    //    mi.axis = eInputAxis;
+    //    mi.axisValue = axisvalue;
 
-        SendServer(mi);
-    }
+    //    SendServer(mi);
+    //}
     #endregion
 
     #endregion
@@ -492,13 +503,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             }
         }
     }
-    public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
-    {
-        if(ePlayerID == EPlayerID.PLAYER_1)
-        {
-            SendMovementInput(eInputAxis, axisvalue);
-        }
-    }
+    //public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
+    //{
+    //    if(ePlayerID == EPlayerID.PLAYER_1)
+    //    {
+    //        SendMovementInput(eInputAxis, axisvalue);
+    //    }
+    //}
     private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)

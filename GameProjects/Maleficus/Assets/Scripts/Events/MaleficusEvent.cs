@@ -6,13 +6,21 @@ using System;
 public class MaleficusEvent<H> where H : AbstractEventHandle
 {
     public string Name { get; }
+    //public byte NetMessageID { get; }
 
     private event Action<H> maleficusEvent;
 
     public MaleficusEvent(string name)
     {
         Name = name;
+        //NetMessageID = NetID.None;
     }
+
+    //public MaleficusEvent(string name, byte netMessageID)
+    //{
+    //    Name = name;
+    //    NetMessageID = netMessageID;
+    //}
 
     public void AddListener(Action<H> callbackAction)
     {

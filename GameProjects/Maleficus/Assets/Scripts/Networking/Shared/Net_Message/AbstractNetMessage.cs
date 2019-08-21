@@ -41,6 +41,7 @@ public abstract class AbstractNetMessage
 {
     /// <summary> ID = const id of the NET_ class, to differentiate between the different messages </summary>
     public byte ID { set; get; }
+    public string Token { set; get; }
 
     public AbstractNetMessage()
     {
