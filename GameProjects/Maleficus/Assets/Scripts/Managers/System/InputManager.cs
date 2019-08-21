@@ -34,8 +34,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     public override void Initialize()
     {
-        canPerformHorizontalDirectionalButton.Clear();
-        canPerformVerticalDirectionalButton.Clear();
+        InitializeDirectionalMaps();
     }
 
     private void Update()
@@ -269,7 +268,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 }
 
                 // Axis event
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(inputAxis, axisValue, playerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(inputAxis, axisValue, playerID));
 
 
                 // Directional button event                                                                                              
@@ -347,13 +346,17 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             if (joystickType == ETouchJoystickType.MOVE)
             {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID);
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID));
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID));
             }
             else // Spell joystick
             {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID);
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID));
+                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID));
             }
         }
     }
@@ -379,6 +382,27 @@ public class InputManager : AbstractSingletonManager<InputManager>
             return EPlayerID.TEST;
         }
         return playerControllerMapping[controllerID];
+    }
+
+    private EControllerID GetControllerID(EPlayerID playerID)
+    {
+        if(playerControllerMapping[EControllerID.CONTROLLER_A] == playerID)
+        {
+            return EControllerID.CONTROLLER_A;
+        }
+        if(playerControllerMapping[EControllerID.CONTROLLER_B] == playerID)
+        {
+            return EControllerID.CONTROLLER_B;
+        }
+        if (playerControllerMapping[EControllerID.CONTROLLER_C] == playerID)
+        {
+            return EControllerID.CONTROLLER_C;
+        }
+        if (playerControllerMapping[EControllerID.CONTROLLER_D] == playerID)
+        {
+            return EControllerID.CONTROLLER_D;
+        }
+        return EControllerID.NONE;
     }
 
     private void InitializeDirectionalMaps()
@@ -412,48 +436,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
             switch (receivedMsg)
             {
                 case ENetworkMessage.DATA_SPELLINPUT:
-                    List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
-                    for(int i = msgs.Count - 1; i > -1; i--)
-                    {
-                        if(msgs[i].ID == NetID.SpellInput)
-                        {
-                            Net_SpellInput si = (Net_SpellInput)msgs[i];
-                            int spellid = 0;
-                            EControllerID controllerid = EControllerID.NONE;
+                    Net_SpellInput spellInput = NetworkManager.Instance.CastedSpells[NetworkManager.Instance.CastedSpells.Count - 1];
+                    int spellId = (int)spellInput.spellId;
 
-                            switch(si.spellId)
-                            {
-                                case EInputButton.CAST_SPELL_1:
-                                    spellid = 1;
-                                    break;
-                                case EInputButton.CAST_SPELL_2:
-                                    spellid = 2;
-                                    break;
-                                case EInputButton.CAST_SPELL_3:
-                                    spellid = 3;
-                                    break;
-                            }
+                    EControllerID controllerid = GetControllerID(spellInput.ePlayerID);
 
-                            switch (si.ePlayerID)
-                            {
-                                case EPlayerID.PLAYER_1:
-                                    controllerid = EControllerID.CONTROLLER_A;
-                                    break;
-                                case EPlayerID.PLAYER_2:
-                                    controllerid = EControllerID.CONTROLLER_B;
-                                    break;
-                                case EPlayerID.PLAYER_3:
-                                    controllerid = EControllerID.CONTROLLER_C;
-                                    break;
-                                case EPlayerID.PLAYER_4:
-                                    controllerid = EControllerID.CONTROLLER_D;
-                                    break;
-                            }
-
-                            Check_ChargingSpell(spellid, controllerid);
-                        }
-                    }
-                    break;
+                    Check_CastedSpell(spellId, controllerid);
+                break;
             }
         }
     }

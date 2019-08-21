@@ -17,8 +17,8 @@ public class Net_OnRequestGameInfo : AbstractNetMessage
     // TODO [Leon]: add array with connected players
 
 
-    public Account[] Team1 { set; get; }
-    public Account[] Team2 { set; get; }
-    public Account[] Team3 { set; get; }
-    public Account[] Team4 { set; get; }
+    public Account Player1 { set; get; }
+    public Account Player2 { set; get; }
+    public Account Player3 { set; get; }
+    public Account Player4 { set; get; }
 }

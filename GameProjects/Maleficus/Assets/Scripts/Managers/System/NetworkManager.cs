@@ -9,7 +9,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
     public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
     public EClientID                            OwnClientID                 { get { return ownClientID; } }
-
+    public List<Net_SpellInput>                 CastedSpells                { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs;
 
@@ -36,7 +36,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private bool isStarted;
     private int ownLobbyID;
     private EClientID ownClientID;
-
+    private List<Net_SpellInput> castedSpells;
 
 
     #region Monobehaviour
@@ -50,7 +50,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
-        EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
+        //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
     }
 
     public override void Initialize()
@@ -66,7 +66,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
-        // TODO: Implement
+        SendServer(netMessage);
     }
 
     protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
@@ -222,6 +222,17 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
                 OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
+
+            case NetID.MovementInput:
+                Debug.Log("Game input received");
+                Net_MovementInput movementInput = (Net_MovementInput)msg;
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
+
+
         }
     }
 
@@ -283,25 +294,22 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             Debug.LogError("Couldn't convert Client ID");
         }
 
-        GameObject.Find("pid").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = ""+ownClientID;
-        Debug.Log("own player id: " + ownClientID);
-
 
         // TODO [Leon]: Change this after presentation
         List<EPlayerID> connectedPlayers = new List<EPlayerID>();
-        if (orgi.Team1.Length != 0)
+        if (orgi.Player1 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_1);
         }
-        if (orgi.Team2.Length != 0)
+        if (orgi.Player2 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_2);
         }
-        if (orgi.Team3.Length != 0)
+        if (orgi.Player3 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_3);
         }
-        if (orgi.Team4.Length != 0)
+        if (orgi.Player4 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_4);
         }
@@ -450,22 +458,36 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Net_SpellInput si = new Net_SpellInput();
 
         si.Token = token;
-        si.spellId = eInputButton;
+        switch (eInputButton)
+        {
+            case EInputButton.CAST_SPELL_1:
+                si.spellId = ESpellID.SPELL_1;
+                break;
+            case EInputButton.CAST_SPELL_2:
+                si.spellId = ESpellID.SPELL_2;
+                break;
+            case EInputButton.CAST_SPELL_3:
+                si.spellId = ESpellID.SPELL_3;
+                break;
+            default:
+                si.spellId = ESpellID.NONE;
+                break;
+        }
         si.ePlayerID = playerID;
 
         SendServer(si);
     }
 
-    public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
-    {
-        Net_MovementInput mi = new Net_MovementInput();
+    //public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
+    //{
+    //    Net_MovementInput mi = new Net_MovementInput();
 
-        mi.Token = token;
-        mi.axis = eInputAxis;
-        mi.axisValue = axisvalue;
+    //    mi.Token = token;
+    //    mi.axis = eInputAxis;
+    //    mi.axisValue = axisvalue;
 
-        SendServer(mi);
-    }
+    //    SendServer(mi);
+    //}
     #endregion
 
     #endregion
@@ -481,13 +503,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             }
         }
     }
-    public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
-    {
-        if(ePlayerID == EPlayerID.PLAYER_1)
-        {
-            SendMovementInput(eInputAxis, axisvalue);
-        }
-    }
+    //public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
+    //{
+    //    if(ePlayerID == EPlayerID.PLAYER_1)
+    //    {
+    //        SendMovementInput(eInputAxis, axisvalue);
+    //    }
+    //}
     private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)

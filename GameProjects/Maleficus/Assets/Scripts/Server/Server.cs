@@ -4,20 +4,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 using MongoDB.Bson;
+using System.Collections.Generic;
 
-public class Server : MonoBehaviour
+public class Server : NetworkManager
 {
-    private const int MAX_USER = 10000;
-    private const int PORT = 26002;
-    private const int WEB_PORT = 26004;
-    private const int INSTANCE_MANAGER_PORT = 9999;
-    private const int BYTE_SIZE = 1024;
+    private const int SERVER_MAX_USER = 10000;
+    private const int SERVER_PORT = 26002;
+    private const int SERVER_WEB_PORT = 26004;
+    private const int SERVER_INSTANCE_MANAGER_PORT = 9999;
+    private const int SERVER_BYTE_SIZE = 1024;
     
     // Networktransport for clients
-    private byte reliableChannel;
-    private int hostId;
-    private int instanceManagerHostId;
-    private int webHostId;
+    private byte server_reliableChannel;
+    private int server_hostId;
+    private int server_instanceManagerHostId;
+    private int server_webHostId;
 
     // Networktransport for Instance Manager
     private int InstanceManagerConnectionId;
@@ -27,20 +28,25 @@ public class Server : MonoBehaviour
     //private byte reliableChannel_InstanceManager;
     //private int hostId_InstanceManager;
 
-    public readonly bool isPlayer = true;
-    private bool isStarted;
+    public readonly bool isPlayer = false;
+    private bool server_isStarted;
     private byte error;
+    private List<Net_SpellInput> castedSpells;
 
     private Mongo db;
 
     #region Monobehaviour
-    private void Start()
+    public override void Initialize()
     {
-        DontDestroyOnLoad(gameObject);
         Init();
     }
 
-    private void Update()
+    protected override void Awake()
+    {
+
+    }
+
+    protected void Update()
     {
         UpdateMessagePump();
     }
@@ -55,33 +61,38 @@ public class Server : MonoBehaviour
 
         ConnectionConfig cc = new ConnectionConfig();
 
-        reliableChannel = cc.AddChannel(QosType.Reliable);
+        server_reliableChannel = cc.AddChannel(QosType.Reliable);
 
-        HostTopology topo = new HostTopology(cc, MAX_USER);
+        HostTopology topo = new HostTopology(cc, SERVER_MAX_USER);
 
 
         // Server only code
 
-        hostId = NetworkTransport.AddHost(topo, PORT, null);
+        server_hostId = NetworkTransport.AddHost(topo, SERVER_PORT, null);
         Debug.Log("added host with Port 26002");
-        webHostId = NetworkTransport.AddWebsocketHost(topo, WEB_PORT, null);
+        server_webHostId = NetworkTransport.AddWebsocketHost(topo, SERVER_WEB_PORT, null);
         Debug.Log("added host with Port 26004");
-        InstanceManagerConnectionId = NetworkTransport.Connect(hostId, INSTANCE_MANAGER_SERVER_IP, INSTANCE_MANAGER_PORT, 0, out error);
+        InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, INSTANCE_MANAGER_SERVER_IP, SERVER_INSTANCE_MANAGER_PORT, 0, out error);
         Debug.Log("connected to Instance Manager Port 9999");
 
-        Debug.Log(string.Format("Opening connection on port {0} and webport {1}", PORT, WEB_PORT));
-        isStarted = true;
+        Debug.Log(string.Format("Opening connection on port {0} and webport {1}", SERVER_PORT, SERVER_WEB_PORT));
+        server_isStarted = true;
     }
 
     public void Shutdown()
     {
-        isStarted = false;
+        server_isStarted = false;
         NetworkTransport.Shutdown();
+    }
+
+    protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
+    {
+        EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
 
     public void UpdateMessagePump()
     {
-        if (!isStarted)
+        if (!server_isStarted)
         {
             return;
         }
@@ -90,10 +101,10 @@ public class Server : MonoBehaviour
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
 
-        byte[] recBuffer = new byte[BYTE_SIZE];
+        byte[] recBuffer = new byte[SERVER_BYTE_SIZE];
         int dataSize;
 
-        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
+        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, SERVER_BYTE_SIZE, out dataSize, out error);
         switch (type)
         {
             case NetworkEventType.Nothing:
@@ -115,7 +126,6 @@ public class Server : MonoBehaviour
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
                 AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
-
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
             default:
@@ -154,11 +164,22 @@ public class Server : MonoBehaviour
                 InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
                 break;
             case NetID.SpellInput:
+                Debug.Log("Received Spell Input from another Player");
                 ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInput)msg);
+                UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
                 break;
             case NetID.RequestGameInfo:
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
+            case NetID.MovementInput:
+                Debug.Log("Game input received");
+                Net_MovementInput movementInput = (Net_MovementInput)msg;
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
+
         }
     }
 
@@ -297,6 +318,29 @@ public class Server : MonoBehaviour
 
             // send msg to InstanceManager to run new Instance
             //SendClient(2, cnnId, il);
+            EPlayerID playerID = EPlayerID.NONE;
+            List<EPlayerID> connectedPlayers = new List<EPlayerID>();
+
+            Model_Lobby thislobby = db.FindLobbyByInitializerId(self._id);
+            
+            if(thislobby.Team1 != null)
+            {
+                connectedPlayers.Add(EPlayerID.PLAYER_1);
+            }
+            if(thislobby.Team2 != null)
+            {
+                connectedPlayers.Add(EPlayerID.PLAYER_2);
+            }
+            if (thislobby.Team3 != null)
+            {
+                connectedPlayers.Add(EPlayerID.PLAYER_3);
+            }
+            if (thislobby.Team4 != null)
+            {
+                connectedPlayers.Add(EPlayerID.PLAYER_4);
+            }
+            EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new BasicEventHandle<List<EPlayerID>, EPlayerID>
+            (connectedPlayers, playerID));
         }
         else
         {
@@ -315,7 +359,7 @@ public class Server : MonoBehaviour
         // Todo change so different game modes can be initialized
         SendClient(recHostId, cnnId, oil);
 
-        if(lobby.Team2.Count != 0)
+        if ((lobby.Team2 != null) && (lobby.Team2.Count != 0))
         {
             Model_Account player2 = db.FindAccountByObjectId(lobby.Team2[0]);
             if (player2 != null)
@@ -325,7 +369,7 @@ public class Server : MonoBehaviour
             }
         }
 
-        if (lobby.Team3.Count != 0)
+        if ((lobby.Team3 != null) && (lobby.Team3.Count != 0))
         {
             Model_Account player3 = db.FindAccountByObjectId(lobby.Team3[0]);
             if(player3 != null)
@@ -335,7 +379,7 @@ public class Server : MonoBehaviour
             }
         }
 
-        if(lobby.Team4.Count != 0)
+        if ((lobby.Team4 != null) && (lobby.Team4.Count != 0))
         {
             Model_Account player4 = db.FindAccountByObjectId(lobby.Team4[0]);
             if (player4 != null)
@@ -360,41 +404,51 @@ public class Server : MonoBehaviour
         {
             org.ownPlayerId = 1;
         }
-        if (db.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token)
+        if ((lobby.Team2 != null) && (db.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token))
         {
             org.ownPlayerId = 2;
         }
-        if (db.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token)
+        if ((lobby.Team3 != null) && (db.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token))
         {
             org.ownPlayerId = 3;
         }
-        if (db.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token)
+        if ((lobby.Team4 != null) && (db.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token))
         {
             org.ownPlayerId = 4;
         }
 
         org.initialiser = db.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
 
+        if (lobby.Team1 != null)
+        {
+            for (int i = 0; i < lobby.Team1.Count; ++i)
+            {
+                org.Player1 = db.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+            }
+        }
 
-        for (int i = 0; i < lobby.Team1.Count; ++i)
+        if (lobby.Team2 != null)
         {
-            org.Team1 = new Account[lobby.Team1.Count];
-            org.Team1[i] =  db.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+            for (int i = 0; i < lobby.Team2.Count; ++i)
+            {
+                org.Player2 = db.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+            }
         }
-        for (int i = 0; i < lobby.Team2.Count; ++i)
+
+        if (lobby.Team3 != null)
         {
-            org.Team2 = new Account[lobby.Team2.Count];
-            org.Team2[i] = db.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+            for (int i = 0; i < lobby.Team3.Count; ++i)
+            {
+                org.Player3 = db.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
+            }
         }
-        for (int i = 0; i < lobby.Team3.Count; ++i)
+
+        if (lobby.Team4 != null)
         {
-            org.Team3 = new Account[lobby.Team3.Count];
-            org.Team3[i] = db.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
-        }
-        for (int i = 0; i < lobby.Team4.Count; ++i)
-        {
-            org.Team4 = new Account[lobby.Team4.Count];
-            org.Team4[i] = db.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+            for (int i = 0; i < lobby.Team4.Count; ++i)
+            {
+                org.Player4 = db.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+            }
         }
         SendClient(recHostId, cnnId, org);
     }
@@ -456,7 +510,7 @@ public class Server : MonoBehaviour
     public void SendClient(int recHost, int cnnId, AbstractNetMessage msg)
     {
         // this is where we hold our data
-        byte[] buffer = new byte[BYTE_SIZE];
+        byte[] buffer = new byte[SERVER_BYTE_SIZE];
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
@@ -465,15 +519,15 @@ public class Server : MonoBehaviour
 
         if (recHost == 0)
         {
-            NetworkTransport.Send(hostId, cnnId, reliableChannel, buffer, BYTE_SIZE, out error);
+            NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
         }
         else if(recHost == 1)
         {
-            NetworkTransport.Send(webHostId, cnnId, reliableChannel, buffer, BYTE_SIZE, out error);
+            NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
         }
         else
         {
-            NetworkTransport.Send(instanceManagerHostId, InstanceManagerConnectionId, reliableChannel, buffer, BYTE_SIZE, out error);
+            NetworkTransport.Send(server_instanceManagerHostId, InstanceManagerConnectionId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
             Debug.Log("sent to im");
         }
     }

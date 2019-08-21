@@ -9,6 +9,6 @@ public class Net_SpellInput : AbstractNetMessage
     }
 
     public string Token { set; get; }
-    public EInputButton spellId { set; get; }
+    public ESpellID spellId { set; get; }
     public EPlayerID ePlayerID { set; get; }
 }
