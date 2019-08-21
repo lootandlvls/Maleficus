@@ -77,6 +77,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         List<EPlayerID> connectedPlayers = eventHandle.Arg1;
         EPlayerID ownPlayer = eventHandle.Arg2;
 
+        // Assign own player as player controlling touch joysticks
         if (ownPlayer != EPlayerID.NONE)
         {
             InputManager.Instance.TouchPlayerID = ownPlayer;
