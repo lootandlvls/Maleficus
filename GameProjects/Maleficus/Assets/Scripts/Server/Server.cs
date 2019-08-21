@@ -378,23 +378,19 @@ public class Server : MonoBehaviour
 
         for (int i = 0; i < lobby.Team1.Count; ++i)
         {
-            org.Team1 = new Account[lobby.Team1.Count];
-            org.Team1[i] =  db.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+            org.Player1 =  db.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
         }
         for (int i = 0; i < lobby.Team2.Count; ++i)
         {
-            org.Team2 = new Account[lobby.Team2.Count];
-            org.Team2[i] = db.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+            org.Player2 = db.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
         }
         for (int i = 0; i < lobby.Team3.Count; ++i)
         {
-            org.Team3 = new Account[lobby.Team3.Count];
-            org.Team3[i] = db.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
+            org.Player3 = db.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
         }
         for (int i = 0; i < lobby.Team4.Count; ++i)
         {
-            org.Team4 = new Account[lobby.Team4.Count];
-            org.Team4[i] = db.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+            org.Player4 = db.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
         }
         SendClient(recHostId, cnnId, org);
     }

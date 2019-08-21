@@ -9,7 +9,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
     public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
     public EClientID                            OwnClientID                 { get { return ownClientID; } }
-
+    public List<Net_SpellInput>                 CastedSpells                { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs;
 
@@ -36,7 +36,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private bool isStarted;
     private int ownLobbyID;
     private EClientID ownClientID;
-
+    private List<Net_SpellInput> castedSpells;
 
 
     #region Monobehaviour
@@ -283,25 +283,22 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             Debug.LogError("Couldn't convert Client ID");
         }
 
-        GameObject.Find("pid").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = ""+ownClientID;
-        Debug.Log("own player id: " + ownClientID);
-
 
         // TODO [Leon]: Change this after presentation
         List<EPlayerID> connectedPlayers = new List<EPlayerID>();
-        if (orgi.Team1.Length != 0)
+        if (orgi.Player1 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_1);
         }
-        if (orgi.Team2.Length != 0)
+        if (orgi.Player2 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_2);
         }
-        if (orgi.Team3.Length != 0)
+        if (orgi.Player3 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_3);
         }
-        if (orgi.Team4.Length != 0)
+        if (orgi.Player4 != null)
         {
             connectedPlayers.Add(EPlayerID.PLAYER_4);
         }
@@ -450,7 +447,21 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Net_SpellInput si = new Net_SpellInput();
 
         si.Token = token;
-        si.spellId = eInputButton;
+        switch (eInputButton)
+        {
+            case EInputButton.CAST_SPELL_1:
+                si.spellId = ESpellID.SPELL_1;
+                break;
+            case EInputButton.CAST_SPELL_2:
+                si.spellId = ESpellID.SPELL_2;
+                break;
+            case EInputButton.CAST_SPELL_3:
+                si.spellId = ESpellID.SPELL_3;
+                break;
+            default:
+                si.spellId = ESpellID.NONE;
+                break;
+        }
         si.ePlayerID = playerID;
 
         SendServer(si);

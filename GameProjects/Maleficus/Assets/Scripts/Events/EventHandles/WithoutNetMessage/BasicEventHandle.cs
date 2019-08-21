@@ -40,7 +40,7 @@ public class BasicEventHandle<A, B> : AbstractEventHandle
 
     public override AbstractNetMessage GetNetMessage()
     {
-        return null;
+        return new Net_NONE();
     }
 }
 
@@ -64,6 +64,6 @@ public class BasicEventHandle<A, B, C> : AbstractEventHandle
 
     public override AbstractNetMessage GetNetMessage()
     {
-        return null;
+        return new Net_NONE();
     }
 }
