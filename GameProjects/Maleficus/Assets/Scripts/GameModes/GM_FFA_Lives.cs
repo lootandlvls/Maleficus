@@ -56,7 +56,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
     {
         // if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_RUNNING)          // TODO: check for right state
-
+        Debug.Log("PLAYER DIED : " + diedPlayerID);
         // Update remaining lives and kills counter
         PlayerStats_Lives killedPlayer = PlayerStats[diedPlayerID];
         killedPlayer.DecrementPlayerLives();
@@ -69,6 +69,12 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
             EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
         }
 
+
+        if (killedPlayer.RemainingLives > 0)
+        {
+            Debug.Log("Respawn Player");
+            PlayerManager.Instance.SpawnPlayer(diedPlayerID);
+        }
         // Check if game over (only one player still alive)
         int deadPlayersCounter = 0;
         EPlayerID winnerPlayerID = EPlayerID.NONE;
@@ -83,12 +89,14 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
                 winnerPlayerID = playerID;
             }
         }
+        //TODO[BNJMO] fix this when only one player is connected
         if (deadPlayersCounter == PlayerStats.Count - 1)
         {
             //
             ETeamID winnerTeamID = PlayerManager.Instance.PlayersTeam[winnerPlayerID];
             EventManager.Instance.Invoke_GAME_GameOver(gameMode);
         }
+
     }
 
     protected override void InitializePlayerStats()

@@ -66,6 +66,8 @@ public static class MaleficusConsts
 
     public const int PLAYER_FALLING_TIME = 2;
 
+    public const int PLAYER_RESPAWNING_TIME = 4;
+
     /// <summary> Scenes switch logic </summary>
     public static readonly Dictionary<EScene, EScene> FROM_SCENE_TO = new Dictionary<EScene, EScene>()
     {

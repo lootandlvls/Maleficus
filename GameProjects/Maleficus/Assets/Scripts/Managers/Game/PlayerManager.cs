@@ -125,14 +125,18 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
     #region Players Management
-    private void SpawnPlayer(EPlayerID toSpawnPlayerID)
+    public void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
+       
         if ((ConnectedPlayers[toSpawnPlayerID] == true) 
             || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
                 && (AppStateManager.Instance.CurrentScene == EScene.GAME)))
+               
         {
+            
             if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
             {
+                Debug.Log("Respawning Player...");
                 Player playerPrefab = PlayerPrefabs[toSpawnPlayerID];
                 PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[toSpawnPlayerID];
                 Vector3 playerPosition = playerSpawnPosition.Position;
@@ -460,7 +464,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (activePlayers.ContainsKey(playerID))
         {
-            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
+            
 
             StartCoroutine(DestroyPlayerCoroutine(playerID));
         }
@@ -473,5 +477,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         Player playerToDestroy = ActivePlayers[playerID];
         ActivePlayers.Remove(playerID);
         playerToDestroy.DestroyPlayer();
+        EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
     }
 }
