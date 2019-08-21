@@ -77,10 +77,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // if connected before scene loaded
         if (CurrentState == EAppState.IN_ENTRY)
         {
-            List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
+            List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if (msgs.Count != 0)
             {
-                if (msgs[NetworkManager.Instance.allReceivedMsgs.Count - 1].ID == NetID.Connected)
+                if (msgs[NetworkManager.Instance.AllReceivedMsgs.Count - 1].ID == NetID.Connected)
                 {
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                 }

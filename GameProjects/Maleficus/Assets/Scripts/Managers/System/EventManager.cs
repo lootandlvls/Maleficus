@@ -288,6 +288,8 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         DebugLog("Client received Message: " + receivedMsg);
     }
+
+    public MaleficusEvent<BasicEventHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo = new MaleficusEvent<BasicEventHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
     #endregion
 
     #region ENEMIES

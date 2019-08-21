@@ -50,6 +50,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void Start()
     {
+        // Connect Touch player as player 1
+        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH) && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true))
+        {
+            InputManager.Instance.TouchPlayerID = Instance.ConnectNextPlayerToController();
+        }
+
         // Input events
         EventManager.Instance.INPUT_ButtonPressed   += On_INPUT_ButtonPressed;
         EventManager.Instance.INPUT_ButtonReleased  += On_INPUT_ButtonReleased;
@@ -58,10 +64,29 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // Scene changed event
         EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+
+        //Network
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener(On_NETWORK_ReceivedGameSessionInfo);
        
         StartCoroutine(LateStartCoroutine());
     }
 
+
+    private void On_NETWORK_ReceivedGameSessionInfo(BasicEventHandle<List<EPlayerID>, EPlayerID> eventHandle)
+    {
+        List<EPlayerID> connectedPlayers = eventHandle.Arg1;
+        EPlayerID ownPlayer = eventHandle.Arg2;
+
+        if (ownPlayer != EPlayerID.NONE)
+        {
+            InputManager.Instance.TouchPlayerID = ownPlayer;
+        }
+
+        foreach (EPlayerID playerID in connectedPlayers)
+        {
+            // TODO [BNJMO]: Connect players
+        }
+    }
 
     public override void Initialize()
     {
@@ -92,7 +117,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             playerInput.Flush();
         }
     }
-
 
 
 

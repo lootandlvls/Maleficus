@@ -59,7 +59,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         // if connected before scene loaded
         if (currentState == EMenuState.IN_ENTRY)
         {
-            List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
+            List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if (msgs.Count != 0)
             {
                 if (msgs[msgs.Count - 1].ID == NetID.Connected)
