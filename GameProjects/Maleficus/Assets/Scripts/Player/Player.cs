@@ -16,11 +16,11 @@ public class Player : MonoBehaviour, IPlayer
     public Dictionary<ESpellID, float> SpellDuration { get { return spellDuration; } }
     public bool IsReadyToShoot { get; set; }
     public bool IsPlayerCharging { get; set; }
-
+    public bool ButtonPressedWhenReadyToShoot{ get; set; }
     public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
     public int SpellChargingLVL { get { return spellChargingLVL; } }
-
+   
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
@@ -76,6 +76,7 @@ public class Player : MonoBehaviour, IPlayer
 
         IsReadyToShoot = true;
         IsPlayerCharging = false;
+        ButtonPressedWhenReadyToShoot = true;
     }
 
     private void Start()
@@ -166,7 +167,7 @@ public class Player : MonoBehaviour, IPlayer
    
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
-        Vector3 movemetVelocity = movingDirection * speed * 0.1f;
+        Vector3 movemetVelocity = movingDirection * currentSpeed * 0.1f;
         transform.position += (movemetVelocity + pushVelocity + GravityVelocity) * Time.deltaTime;
     }
 
@@ -196,26 +197,26 @@ public class Player : MonoBehaviour, IPlayer
 
     public void StartChargingSpell(ESpellID spellID, EMovementType movementType)
     {
-        if (readyToUseSpell[spellID] && IsReadyToShoot)
+
+        if (readyToUseSpell[spellID] && IsReadyToShoot && IsPlayerCharging == false)
         {
+
             if (movementType == EMovementType.LINEAR_HIT)
             {
-                StartCoroutine(PlayerCannotMoveCoroutine());
-
-
                 IsPlayerCharging = true;
                 Debug.Log("Player started Charging");
                 StartCoroutine(SpellChargingCoroutine(spellID));
             }
             else if (movementType == EMovementType.LINEAR_LASER)
             {
+              
+                Debug.Log("PlAYER CHANNELING LASER");
                 StartCoroutine(PlayerCannotMoveCoroutine());
             }
-
-            //   StartChargingSpell(1, movementType);
-            //     StartCoroutine(ReadyToUseSpell(spellDuration_1, 0));
-            // StartCoroutine(ReadyToUseSpell(spellCooldown_1, 1));
-
+            else
+            {
+                return;
+            }
 
             // TODO: Not working here
             // Deactivate Directional Sprite
@@ -265,37 +266,14 @@ public class Player : MonoBehaviour, IPlayer
         myAnimator.SetBool("channeling", false);
     }
 
-    private IEnumerator SetReadyToUseSpellCoroutine(float time, ESpellID spellID)                    
-    {
-        yield return new WaitForSeconds(time);
-
-        IsReadyToShoot = true;
-        readyToUseSpell[spellID] = true;
-
-        Debug.Log("ready to use the spell again");
-    }
+   
 
 
-    private IEnumerator AnimationDelayCoroutine(AbstractSpell spellToCast , int animationID)
-    {
-        switch (animationID)
-        {
-            case 1:
-                myAnimator.SetTrigger("projectileAttack");
-                break;
-            case 2:
-                myAnimator.SetTrigger("teleport");
-                break;
-        }
-        
-        yield return new WaitForSeconds(0.3f);
-        AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition, transform.rotation);
-        spell.CastingPlayerID = PlayerID;
-        spell.parabolicSpell_EndPosition = SpellEndPosition;
-    }
+   
 
     private IEnumerator SpellChargingCoroutine(ESpellID spellID)
     {
+
         int counter = 0;
         
         // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
@@ -307,11 +285,11 @@ public class Player : MonoBehaviour, IPlayer
         ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
         ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
        
-        currentSpeed = speed / 2;
-        Debug.Log("spellCharging function working...");
+        currentSpeed = currentSpeed / 2;
+        
         while (IsPlayerCharging)
         {
-            if (counter == 10 )
+            if (counter == 20 )
             {
                
                 myAnimator.SetBool("charging", true); 
@@ -326,26 +304,28 @@ public class Player : MonoBehaviour, IPlayer
             
             yield return new WaitForSeconds(0.0f);
             counter++;
-            if (counter > 100)
+            if (counter >= 100)
             {
                 spellChargingLVL = 2;
-                Debug.Log("Spell upgraded to lvl 2");
+                
             }
             else
             {
                 spellChargingLVL = 1;
-                Debug.Log("Spell upgraded to lvl 1");
+               
             }
 
         }
-        Debug.Log("spellCharging function Done!!");
+       
        
         currentSpeed = speed;
 
         myAnimator.SetBool("charging", false);
         Destroy(wandEffect);
         Destroy(particleSystemBodyEffect);
+
         Debug.Log("counter = " + counter);
+       
     }
     #endregion
 

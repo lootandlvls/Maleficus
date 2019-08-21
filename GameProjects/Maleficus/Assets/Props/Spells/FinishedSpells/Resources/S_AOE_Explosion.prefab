@@ -18760,8 +18760,8 @@ MonoBehaviour:
   movementType: 5
   debuffEffects: 
   buffEffects: 
-  cooldown: 1
-  spellDuration: 0
+  cooldown: 4
+  spellDuration: 0.2
   pushDuration: 1
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &591984408199382732

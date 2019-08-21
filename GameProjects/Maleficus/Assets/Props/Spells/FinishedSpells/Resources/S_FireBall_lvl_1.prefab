@@ -4857,6 +4857,7 @@ MonoBehaviour:
   spellLevel: 1
   OnSelfEffect: 0
   hasPower: 1
+  spell: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 

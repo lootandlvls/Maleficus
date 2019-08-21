@@ -38,6 +38,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private Dictionary<ETeamID, List<EPlayerID>>        teams                       = new Dictionary<ETeamID, List<EPlayerID>>();
     private Dictionary<EPlayerID, ETeamID>              playersTeam                 = new Dictionary<EPlayerID, ETeamID>();
 
+ 
 
     protected override void Awake()
     {
@@ -258,19 +259,27 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonPressed(EInputButton inputButton, EPlayerID playerID)
     {
+       
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
+        ActivePlayers[playerID].ButtonPressedWhenReadyToShoot = true;
         if ((spellID == ESpellID.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
-        {
-            return;
-        }
-        
-        if (ActivePlayers[playerID].ReadyToUseSpell[spellID] && ActivePlayers[playerID].IsReadyToShoot)
-        {
-            EMovementType movementType = SpellManager.Instance.Player_Spells[playerID][spellID].MovementType;
+            {
+                return;
+            }
 
-            ActivePlayers[playerID].StartChargingSpell(spellID, movementType);
-            ActivePlayers[playerID].IsPlayerCharging = true;
-        }
+            if (ActivePlayers[playerID].ReadyToUseSpell[spellID] && ActivePlayers[playerID].IsReadyToShoot )
+            {
+
+               EMovementType movementType = SpellManager.Instance.Player_Spells[playerID][spellID].MovementType;
+               ActivePlayers[playerID].StartChargingSpell(spellID, movementType);
+                
+            }
+            else
+           {
+            ActivePlayers[playerID].ButtonPressedWhenReadyToShoot = false;
+           }
+           
+        
     }
 
     private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
@@ -303,7 +312,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonReleased(EInputButton inputButton, EPlayerID playerID)
     {
+        int spellLVL = ActivePlayers[playerID].SpellChargingLVL;
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
+        ActivePlayers[playerID].StopChargingSpell(spellID);
+        ActivePlayers[playerID].resetSpellChargingLVL();
         if ((spellID == ESpellID.NONE) || (activePlayers.ContainsKey(playerID) == false))
         {
             return;
@@ -312,15 +324,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         Debug.Log(spellID + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellID]);
 
-        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellID])
+        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellID]  &&  ActivePlayers[playerID].ButtonPressedWhenReadyToShoot)
         {
             ActivePlayers[playerID].IsReadyToShoot = false;
             ActivePlayers[playerID].ReadyToUseSpell[spellID] = false;
-            ActivePlayers[playerID].StopChargingSpell(spellID);
-          
-            SpellManager.Instance.CastSpell(playerID, spellID, ActivePlayers[playerID].SpellChargingLVL);
-            
+
+            SpellManager.Instance.CastSpell(playerID, spellID, spellLVL);
+           // ActivePlayers[playerID].resetSpellChargingLVL();
             StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellID));
+           
         }
     }
 
@@ -454,15 +466,17 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return Teams[inTeamID].ToArray();
     }
 
-    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellID spellID)                 
+    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellID spellID)
     {
         yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellID]);
         ActivePlayers[playerID].IsReadyToShoot = true;
+        ActivePlayers[playerID].ButtonPressedWhenReadyToShoot = true;
 
         yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellID]);
         ActivePlayers[playerID].ReadyToUseSpell[spellID] = true;
 
-        
+
+
     }
 
     public void OnPlayerOutOfBound(EPlayerID playerID)

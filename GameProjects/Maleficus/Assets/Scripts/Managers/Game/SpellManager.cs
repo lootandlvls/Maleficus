@@ -173,6 +173,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     public void CastSpell(EPlayerID playerID, ESpellID spellID , int spellChargingLVL)
     {
+        activePlayers[playerID].resetSpellChargingLVL();
         AbstractSpell spellToCast ;
         Debug.Log("Spell lvl " + spellChargingLVL);
         float spellCooldown = Player_Spells[playerID][spellID].Cooldown;      
@@ -279,9 +280,17 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Debug.Log("Spell spawned");
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            activePlayers[playerID].DoProjectileAttackAnimation();
-            StartCoroutine(animationDelay(spellToCast, playerID, 1));
-            
+            activePlayers[playerID].DoProjectileAttackAnimation();         
+            AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
+            spell.CastingPlayerID = playerID;
+            spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+            if ((MotherOfManagers.Instance.IsARGame == true))
+            {
+                spell.transform.localScale *= ARManager.Instance.SizeFactor;
+                spell.speed *= ARManager.Instance.SizeFactor;
+                spell.hitPower *= (int)spell.transform.localScale.x; ;
+            }         
+
 
         }
 
@@ -346,7 +355,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 break;
         }
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.0f);
 
         AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
         spell.CastingPlayerID = playerID;
