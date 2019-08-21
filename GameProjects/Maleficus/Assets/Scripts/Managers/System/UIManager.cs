@@ -59,7 +59,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         // if connected before scene loaded
         if (currentState == EMenuState.IN_ENTRY)
         {
-            List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
+            List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if (msgs.Count != 0)
             {
                 if (msgs[msgs.Count - 1].ID == NetID.Connected)
@@ -198,6 +198,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
     {
+        // if, to prevent scene change through loss of connection during game
         if (AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY || AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
         {
             switch (receivedMsg)
@@ -215,6 +216,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                     break;
             }
+        }
+        switch(receivedMsg)
+        {
+
         }
     }
 

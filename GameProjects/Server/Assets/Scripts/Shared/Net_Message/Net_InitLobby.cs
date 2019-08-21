@@ -1,9 +1,9 @@
 ﻿[System.Serializable]
-public class Net_InitLobby : NetMsg
+public class Net_InitLobby : AbstractNetMessage
 {
     public Net_InitLobby()
     {
-        OP = NetOP.InitLobby;
+        ID = NetID.InitLobby;
     }
 
     public string Token { set; get; }

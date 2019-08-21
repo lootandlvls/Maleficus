@@ -1,9 +1,9 @@
 ﻿[System.Serializable]
-public class Net_AddFollow : NetMsg
+public class Net_AddFollow : AbstractNetMessage
 {
     public Net_AddFollow()
     {
-        OP = NetOP.AddFollow;
+        ID = NetID.AddFollow;
     }
 
     public string Token { set; get; }

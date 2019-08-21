@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
 [System.Serializable]
-public class Net_SpellInput : NetMsg
+public class Net_SpellInput : AbstractNetMessage
 {
     public Net_SpellInput()
     {
-        OP = NetOP.SpellInput;
+        ID = NetID.SpellInput;
     }
 
     public string Token { set; get; }

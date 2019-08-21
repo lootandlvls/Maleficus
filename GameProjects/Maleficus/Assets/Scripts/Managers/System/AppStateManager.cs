@@ -77,10 +77,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // if connected before scene loaded
         if (CurrentState == EAppState.IN_ENTRY)
         {
-            List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
+            List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if (msgs.Count != 0)
             {
-                if (msgs[NetworkManager.Instance.allReceivedMsgs.Count - 1].ID == NetID.Connected)
+                if (msgs[NetworkManager.Instance.AllReceivedMsgs.Count - 1].ID == NetID.Connected)
                 {
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                 }
@@ -170,6 +170,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
     {
+        // if, to prevent scene change through loss of connection during game
         if (CurrentState == EAppState.IN_ENTRY || CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context
         {
             switch (receivedMsg)
@@ -184,6 +185,13 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);
                     break;
             }
+        }
+
+        switch (receivedMsg)
+        {
+            case ENetworkMessage.DATA_ONINITLOBBY:
+                UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
+                break;
         }
     }
 

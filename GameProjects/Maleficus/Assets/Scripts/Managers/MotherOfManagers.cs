@@ -20,6 +20,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public bool IsSpawnPlayerOnConnect = false;
     [SerializeField] public bool IsSpawnAllPlayers = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
+    [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
 
     [Header ("AR")]
     [SerializeField] public bool IsARGame = false;

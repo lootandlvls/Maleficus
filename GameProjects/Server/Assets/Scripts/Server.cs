@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
+using MongoDB.Bson;
 
 public class Server : MonoBehaviour
 {
@@ -112,7 +113,7 @@ public class Server : MonoBehaviour
             case NetworkEventType.DataEvent:
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
-                NetMsg msg = (NetMsg)formatter.Deserialize(ms);
+                AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
 
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
@@ -124,35 +125,38 @@ public class Server : MonoBehaviour
     }
 
     #region OnData
-    private void OnData(int cnnId, int channelId, int recHostId, NetMsg msg)
+    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
     {
-        Debug.Log("receiverd a message of type " + msg.OP);
+        Debug.Log("receiverd a message of type " + msg.ID);
 
-        switch (msg.OP)
+        switch (msg.ID)
         {
-            case NetOP.None:
-                Debug.Log("Unexpected NetOP");
+            case NetID.None:
+                Debug.Log("Unexpected NetID");
                 break;
-            case NetOP.CreateAccount:
+            case NetID.CreateAccount:
                 CreateAccount(cnnId, channelId, recHostId, (Net_CreateAccount)msg);
                 break;
-            case NetOP.LoginRequest:
+            case NetID.LoginRequest:
                 LoginRequest(cnnId, channelId, recHostId, (Net_LoginRequest)msg);
                 break;
-            case NetOP.AddFollow:
+            case NetID.AddFollow:
                 AddFollow(cnnId, channelId, recHostId, (Net_AddFollow)msg);
                 break;
-            case NetOP.RemoveFollow:
+            case NetID.RemoveFollow:
                 RemoveFollow(cnnId, channelId, recHostId, (Net_RemoveFollow)msg);
                 break;
-            case NetOP.RequestFollow:
+            case NetID.RequestFollow:
                 RequestFollow(cnnId, channelId, recHostId, (Net_RequestFollow)msg);
                 break;
-            case NetOP.InitLobby:
+            case NetID.InitLobby:
                 InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
                 break;
-            case NetOP.SpellInput:
+            case NetID.SpellInput:
                 ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInput)msg);
+                break;
+            case NetID.RequestGameInfo:
+                Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
         }
     }
@@ -302,13 +306,12 @@ public class Server : MonoBehaviour
         }
 
         Model_Lobby lobby = db.FindLobbyByInitializerId(self._id);
-
+        oil.lobbyID = lobby.LobbyID;
         // add lobbyID to the player
         db.UpdateAccountInLobby(self._id, lobby._id);
 
         // send all lobby members the message that the game can start now
         // Todo change so different game modes can be initialized
-        oil.playerID = 1;
         SendClient(recHostId, cnnId, oil);
 
         if(lobby.Team2.Count != 0)
@@ -317,7 +320,6 @@ public class Server : MonoBehaviour
             if (player2 != null)
             {
                 db.UpdateAccountInLobby(player2._id, lobby._id);
-                oil.playerID = 2;
                 SendClient(recHostId, player2.ActiveConnection, oil);
             }
         }
@@ -328,7 +330,6 @@ public class Server : MonoBehaviour
             if(player3 != null)
             {
                 db.UpdateAccountInLobby(player3._id, lobby._id);
-                oil.playerID = 3;
                 SendClient(recHostId, player3.ActiveConnection, oil);
             }
         }
@@ -339,15 +340,63 @@ public class Server : MonoBehaviour
             if (player4 != null)
             {
                 db.UpdateAccountInLobby(player4._id, lobby._id);
-                oil.playerID = 4;
                 SendClient(recHostId, player4.ActiveConnection, oil);
             }
         }
-
     }
     #endregion
 
-    #region forward
+    #region Game
+    private void Net_OnRequestGameInfo(int cnnId, int channelId, int recHostId, Net_RequestGameInfo rgi)
+    {
+        Net_OnRequestGameInfo org = new Net_OnRequestGameInfo();
+        Model_Account self = db.FindAccountByToken(rgi.Token);
+        Model_Lobby lobby = db.FindLobbyByLobbyID(rgi.lobbyID);
+
+        org.Token = rgi.Token;
+
+        if (db.FindAccountByObjectId(lobby.Team1[0]).Token == rgi.Token)
+        {
+            org.ownPlayerId = 1;
+        }
+        if (db.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token)
+        {
+            org.ownPlayerId = 2;
+        }
+        if (db.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token)
+        {
+            org.ownPlayerId = 3;
+        }
+        if (db.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token)
+        {
+            org.ownPlayerId = 4;
+        }
+
+        org.initialiser = db.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
+
+
+        for (int i = 0; i < lobby.Team1.Count; ++i)
+        {
+            org.Team1 = new Account[lobby.Team1.Count];
+            org.Team1[i] =  db.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+        }
+        for (int i = 0; i < lobby.Team2.Count; ++i)
+        {
+            org.Team2 = new Account[lobby.Team2.Count];
+            org.Team2[i] = db.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+        }
+        for (int i = 0; i < lobby.Team3.Count; ++i)
+        {
+            org.Team3 = new Account[lobby.Team3.Count];
+            org.Team3[i] = db.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
+        }
+        for (int i = 0; i < lobby.Team4.Count; ++i)
+        {
+            org.Team4 = new Account[lobby.Team4.Count];
+            org.Team4[i] = db.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+        }
+        SendClient(recHostId, cnnId, org);
+    }
     private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
     {
         Model_Account self = db.FindAccountByToken(si.Token);
@@ -398,10 +447,12 @@ public class Server : MonoBehaviour
     }
     #endregion
 
+
+
     #endregion
 
     #region Send
-    public void SendClient(int recHost, int cnnId, NetMsg msg)
+    public void SendClient(int recHost, int cnnId, AbstractNetMessage msg)
     {
         // this is where we hold our data
         byte[] buffer = new byte[BYTE_SIZE];

@@ -320,6 +320,9 @@ public enum ENetworkMessage
     DATA_ONADDFOLLOW,
     DATA_ONREQUESTFOLLOW,
     DATA_ONUPDATEFOLLOW,
+    DATA_ONINITLOBBY,
+    DATA_REQUESTGAMEINFO,
+    DATA_ONREQUESTGAMEINFO,
     DATA_SPELLINPUT,
     BROADCAST,
     LOGGED_IN,
@@ -330,10 +333,12 @@ public enum ENetworkMessage
 public enum EClientID
 {
     NONE,
+    SERVER,
     CLIENT_1,
     CLIENT_2,
     CLIENT_3,
-    CLIENT_4
+    CLIENT_4,
+    TEST
 }
 #endregion
 

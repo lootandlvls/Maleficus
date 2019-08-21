@@ -8,8 +8,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 {
     public EInputMode InputMode { get { return MotherOfManagers.Instance.InputMode; } }
 
-
-    private EPlayerID touchPlayerID;
+    public EPlayerID TouchPlayerID { get; set; }
 
     /// <summary> Mapping from controllerID to playerID </summary> 
     private Dictionary<EControllerID, EPlayerID>    playerControllerMapping                 = new Dictionary<EControllerID, EPlayerID>();
@@ -29,10 +28,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void Start()
     {
-        if (InputMode == EInputMode.TOUCH)
-        {
-            touchPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
-        }
+ 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
@@ -340,7 +336,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
             if (inputButton != EInputButton.NONE)
             {
-                EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, touchPlayerID);
+                EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, TouchPlayerID);
             }
         }
     }
@@ -351,13 +347,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             if (joystickType == ETouchJoystickType.MOVE)
             {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, touchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, touchPlayerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID);
             }
             else // Spell joystick
             {
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, touchPlayerID);
-                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, touchPlayerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID);
+                EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID);
             }
         }
     }
@@ -370,7 +366,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
             if (inputButton != EInputButton.NONE)
             {
-                EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, touchPlayerID);
+                EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, TouchPlayerID);
             }
         }
     }
@@ -416,11 +412,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
             switch (receivedMsg)
             {
                 case ENetworkMessage.DATA_SPELLINPUT:
-                    List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
+                    List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
                     for(int i = msgs.Count - 1; i > -1; i--)
                     {
-                        if(msgs[i].ID == 15)                                    // TODO [Leon]:  use network ID (NetID.SpellInput)
-                        {              
+                        if(msgs[i].ID == NetID.SpellInput)
+                        {
                             Net_SpellInput si = (Net_SpellInput)msgs[i];
                             int spellid = 0;
                             EControllerID controllerid = EControllerID.NONE;

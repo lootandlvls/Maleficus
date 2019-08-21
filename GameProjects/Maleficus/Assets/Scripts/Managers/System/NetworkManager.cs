@@ -7,21 +7,22 @@ using UnityEngine.Networking;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
-    public Dictionary<EClientID, EPlayerID>     PlayerClientMapping         { get { return playerClientMapping; } }             // TODO [Bnjmo + Leon] define this
-    public bool                                 HasAuthority                { get; }                                            // TODO [Bnjmo + Leon] define this
-    public EClientID                            OwnClientID                 { get; }                                            // TODO [Bnjmo + Leon] define this
+    public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
+    public EClientID                            OwnClientID                 { get { return ownClientID; } }
+
+    public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
+    public List<AbstractNetMessage> AllReceivedMsgs;
 
 
-    // public static NetworkManager Instance { private set; get; }                       // TODO [Leon]: Removed this member as it hides the one in parent class. remove the comments if this makes sense or revert
-    //TODO move consts to maleficus types
+    //TODO [Leon]: move consts to maleficus types
     private const int MAX_USER = 100;
     private const int PORT = 26002;
     private const int WEB_PORT = 26004;
     private const int BYTE_SIZE = 1024;
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
-    private const string SERVER_IP = "52.91.55.121";
-    //private const string SERVER_IP = "127.0.0.1";
+    //private const string SERVER_IP = "52.91.55.121";
+    private const string SERVER_IP = "127.0.0.1";
 
 
 
@@ -31,15 +32,11 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     // for lookup of error codes unitydocs networking networkError
     private byte error;
 
-    public Account self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     private string token;
     private bool isStarted;
-    public List<AbstractNetMessage> allReceivedMsgs;
+    private int ownLobbyID;
+    private EClientID ownClientID;
 
-
-
-
-    private Dictionary<EClientID, EPlayerID>    playerClientMapping         = new Dictionary<EClientID, EPlayerID>();
 
 
     #region Monobehaviour
@@ -50,7 +47,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
 
     protected void Start()
-    { 
+    {
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
         EventManager.Instance.INPUT_JoystickMoved += On_INPUT_JoystickMoved;
     }
@@ -78,28 +76,31 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public void Init()
     {
-        NetworkTransport.Init();
+        if (!isStarted)
+        {
+            NetworkTransport.Init();
 
-        ConnectionConfig cc = new ConnectionConfig();
-        reliableChannel = cc.AddChannel(QosType.Reliable);
+            ConnectionConfig cc = new ConnectionConfig();
+            reliableChannel = cc.AddChannel(QosType.Reliable);
 
-        HostTopology topo = new HostTopology(cc, MAX_USER);
+            HostTopology topo = new HostTopology(cc, MAX_USER);
 
-        // Client only code
-        hostId = NetworkTransport.AddHost(topo, 0);
+            // Client only code
+            hostId = NetworkTransport.AddHost(topo, 0);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         // Web Client
         connectionId = NetworkTransport.Connect(hostId, SERVER_IP, WEB_PORT, 0, out error);
         Debug.Log("Connecting from Web");
 #else
-        // Standalone Client
-        connectionId = NetworkTransport.Connect(hostId, SERVER_IP, PORT, 0, out error);
-        Debug.Log("Connecting from Standalone");
+            // Standalone Client
+            connectionId = NetworkTransport.Connect(hostId, SERVER_IP, PORT, 0, out error);
+            Debug.Log("Connecting from Standalone");
 #endif
-        Debug.Log(string.Format("Attempting to connect on {0}...", SERVER_IP));
-        isStarted = true;
-        allReceivedMsgs = new List<AbstractNetMessage>();
+            Debug.Log(string.Format("Attempting to connect on {0}...", SERVER_IP));
+            isStarted = true;
+            AllReceivedMsgs = new List<AbstractNetMessage>();
+        }
     }
 
     public void Shutdown()
@@ -133,14 +134,14 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Debug.Log("Connected to server");
                 UpdateReceivedMessage(ENetworkMessage.CONNECTED);
                 Net_Connected c = new Net_Connected();
-                allReceivedMsgs.Add(c);
+                AllReceivedMsgs.Add(c);
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Disconnected from server");
                 UpdateReceivedMessage(ENetworkMessage.DISCONNECTED);
                 Net_Disonnected di = new Net_Disonnected();
-                allReceivedMsgs.Add(di);
+                AllReceivedMsgs.Add(di);
                 break;
 
             case NetworkEventType.DataEvent:
@@ -175,41 +176,51 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)msg);
                 UpdateReceivedMessage(ENetworkMessage.REGISTERED);
-                allReceivedMsgs.Add((Net_OnCreateAccount)msg);
+                AllReceivedMsgs.Add((Net_OnCreateAccount)msg);
                 break;
             case NetID.OnLoginRequest:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)msg);
                 UpdateReceivedMessage(ENetworkMessage.LOGGED_IN);
-                allReceivedMsgs.Add((Net_OnLoginRequest)msg);
+                AllReceivedMsgs.Add((Net_OnLoginRequest)msg);
 
                 break;
             case NetID.OnAddFollow:
                 Debug.Log("Add Friend");
                 OnAddFollow((Net_OnAddFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONADDFOLLOW);
-                allReceivedMsgs.Add((Net_OnAddFollow)msg);
+                AllReceivedMsgs.Add((Net_OnAddFollow)msg);
                 break;
             case NetID.OnRequestFollow:
-                Debug.Log("Get Friends");
+                Debug.Log("Get Some Friends");
                 OnRequestFollow((Net_OnRequestFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
-                allReceivedMsgs.Add((Net_OnRequestFollow)msg);
+                AllReceivedMsgs.Add((Net_OnRequestFollow)msg);
                 break;
                                                                             //Todo [Leon]: change to Onupdatefollow
             case NetID.UpdateFollow:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONUPDATEFOLLOW);
-                allReceivedMsgs.Add((Net_UpdateFollow)msg);
+                AllReceivedMsgs.Add((Net_UpdateFollow)msg);
                 break;
             case NetID.OnInitLobby:
                 Debug.Log("Lobby initialized");
+                UpdateReceivedMessage(ENetworkMessage.DATA_ONINITLOBBY);
+                AllReceivedMsgs.Add((Net_OnInitLobby)msg);
+                Net_OnInitLobby oil = (Net_OnInitLobby)msg;
+                ownLobbyID = oil.lobbyID;
                 break;
             case NetID.SpellInput:
                 Debug.Log("Received Spell Input from another Player");
                 UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
-                allReceivedMsgs.Add((Net_SpellInput)msg);
+                AllReceivedMsgs.Add((Net_SpellInput)msg);
+                break;
+            case NetID.OnRequestGameInfo:
+                Debug.Log("Game info received");
+                UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTGAMEINFO);
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
         }
     }
@@ -233,10 +244,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             // successfull login
 
             // this is where we save data about ourself
-            self = new Account();
-            self.ActiveConnection = olr.ConnectionId;
-            self.Username = olr.Username;
-            self.Discriminator = olr.Discriminator;
+            Self = new Account();
+            Self.ActiveConnection = olr.ConnectionId;
+            Self.Username = olr.Username;
+            Self.Discriminator = olr.Discriminator;
 
             token = olr.Token;
             Debug.Log("token: " + token);
@@ -263,6 +274,41 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private void UpdateFollow(Net_UpdateFollow fu)
     {
         FriendsContext.Instance.UpdateFollow(fu.Follow);
+    }
+    private void OnRequestGameInfo(Net_OnRequestGameInfo orgi)
+    {
+        ownClientID = MaleficusUtilities.IntToClientID(orgi.ownPlayerId);
+        if (ownClientID == EClientID.NONE)
+        {
+            Debug.LogError("Couldn't convert Client ID");
+        }
+
+        GameObject.Find("pid").gameObject.GetComponent<TMPro.TextMeshProUGUI>().text = ""+ownClientID;
+        Debug.Log("own player id: " + ownClientID);
+
+
+        // TODO [Leon]: Change this after presentation
+        List<EPlayerID> connectedPlayers = new List<EPlayerID>();
+        if (orgi.Team1.Length != 0)
+        {
+            connectedPlayers.Add(EPlayerID.PLAYER_1);
+        }
+        if (orgi.Team2.Length != 0)
+        {
+            connectedPlayers.Add(EPlayerID.PLAYER_2);
+        }
+        if (orgi.Team3.Length != 0)
+        {
+            connectedPlayers.Add(EPlayerID.PLAYER_3);
+        }
+        if (orgi.Team4.Length != 0)
+        {
+            connectedPlayers.Add(EPlayerID.PLAYER_4);
+        }
+
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(ownClientID);
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new BasicEventHandle<List<EPlayerID>, EPlayerID>
+            (connectedPlayers, playerID));
     }
     #endregion
 
@@ -370,6 +416,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         rf.Token = token;
 
         SendServer(rf);
+        Debug.Log("trying to send requestollow");
     }
 
     #endregion
@@ -384,16 +431,27 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
         SendServer(il);
     }
+    public void SendRequestGameInfo()
+    {
+        Debug.Log("Sending game info request");
+        Net_RequestGameInfo rgi = new Net_RequestGameInfo();
+
+        rgi.Token = token;
+        rgi.lobbyID = ownLobbyID;
+
+        SendServer(rgi);
+    }
 
     #endregion
 
     #region Input related
-    public void SendSpellInput(EInputButton eInputButton)
+    public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
     {
         Net_SpellInput si = new Net_SpellInput();
 
         si.Token = token;
         si.spellId = eInputButton;
+        si.ePlayerID = playerID;
 
         SendServer(si);
     }
@@ -417,18 +475,12 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         if(AppStateManager.Instance.CurrentScene == EScene.GAME)
         {
-            if(ePlayerID == EPlayerID.PLAYER_1)
+            if(eInputButton == EInputButton.CAST_SPELL_1 || eInputButton == EInputButton.CAST_SPELL_2 || eInputButton == EInputButton.CAST_SPELL_3)
             {
-                switch (eInputButton)
-                {
-                    case EInputButton.CAST_SPELL_1:
-                        SendSpellInput(eInputButton);
-                        break;
-                }
+                SendSpellInput(eInputButton, ePlayerID);
             }
         }
     }
-
     public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
     {
         if(ePlayerID == EPlayerID.PLAYER_1)
@@ -436,5 +488,15 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             SendMovementInput(eInputAxis, axisvalue);
         }
     }
+    private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    {
+        switch (eventHandle.NewState)
+        {
+            case EAppState.IN_GAME_IN_NOT_STARTED:
+                SendRequestGameInfo();
+                break;
+        }
+    }
+
     #endregion
 }
