@@ -67,11 +67,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         //Network
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener(On_NETWORK_ReceivedGameSessionInfo);
-       
+
+      
+
         StartCoroutine(LateStartCoroutine());
     }
 
-
+    
     private void On_NETWORK_ReceivedGameSessionInfo(BasicEventHandle<List<EPlayerID>, EPlayerID> eventHandle)
     {
         List<EPlayerID> connectedPlayers = eventHandle.Arg1;
@@ -240,10 +242,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonPressed(EInputButton inputButton, EPlayerID playerID)
     {
-        if (playerID == EPlayerID.TEST) return;
-
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
-        if (spellID == ESpellID.NONE)
+        if ((spellID == ESpellID.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
         {
             return;
         }
@@ -284,6 +284,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ButtonReleased(EInputButton inputButton, EPlayerID playerID)
     {
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
+        if ((spellID == ESpellID.NONE) || (activePlayers.ContainsKey(playerID) == false))
+        {
+            return;
+        }
+
 
         Debug.Log(spellID + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellID]);
 
@@ -438,5 +443,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         ActivePlayers[playerID].ReadyToUseSpell[spellID] = true;
 
         
+    }
+
+    public void OnPlayerOutOfBound(EPlayerID playerID)
+    {
+        if (activePlayers.ContainsKey(playerID))
+        {
+            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
+
+            StartCoroutine(DestroyPlayerCoroutine(playerID));
+        }
+    }
+
+    private IEnumerator DestroyPlayerCoroutine(EPlayerID playerID)
+    {
+        yield return new WaitForSeconds(MaleficusConsts.PLAYER_FALLING_TIME);
+
+        Player playerToDestroy = ActivePlayers[playerID];
+        ActivePlayers.Remove(playerID);
+        playerToDestroy.DestroyPlayer();
     }
 }

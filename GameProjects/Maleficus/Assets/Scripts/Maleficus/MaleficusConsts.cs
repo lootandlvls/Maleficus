@@ -64,6 +64,8 @@ public static class MaleficusConsts
     public const int PLAYER_LIVES_IN_DUNGEON_MODE = 10;
     public const int PLAYER_LIVES_IN_FFA_MODE = 5;
 
+    public const int PLAYER_FALLING_TIME = 2;
+
     /// <summary> Scenes switch logic </summary>
     public static readonly Dictionary<EScene, EScene> FROM_SCENE_TO = new Dictionary<EScene, EScene>()
     {

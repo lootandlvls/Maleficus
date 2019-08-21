@@ -7,7 +7,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
     // Should only be called directly after object construction (used in Start method)
     public int TotalLives { get { return totalLives; } }
 
-    private int totalLives = 5;
+    private int totalLives;
 
 
     protected override void Awake()
@@ -59,13 +59,15 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 
         // Update remaining lives and kills counter
         PlayerStats_Lives killedPlayer = PlayerStats[diedPlayerID];
-        PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
         killedPlayer.DecrementPlayerLives();
-        killingPlayer.IncrementNumberOfKilledPlayers();
-
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayer, GameMode);
-        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
 
+        if (killedPlayer.LastHitBy != EPlayerID.NONE)
+        {
+            PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
+            killingPlayer.IncrementNumberOfKilledPlayers();
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
+        }
 
         // Check if game over (only one player still alive)
         int deadPlayersCounter = 0;

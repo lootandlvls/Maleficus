@@ -10,7 +10,7 @@ public class Player : MonoBehaviour, IPlayer
     public Vector3 Position { get { return transform.position; } }
     public Quaternion Rotation { get { return transform.rotation; } }
     public bool IsARPlayer { get; set; }
-    public bool IsDead { get { return false; } }                                            // TODO: Define when player is dead
+    public bool IsDead { get { return isDead; } }                                            // TODO: Define when player is dead
     public Dictionary<ESpellID, bool> ReadyToUseSpell { get { return readyToUseSpell; } }
     public Dictionary<ESpellID, float> SpellCooldown { get { return spellCooldown; } }
     public Dictionary<ESpellID, float> SpellDuration { get { return spellDuration; } }
@@ -53,7 +53,9 @@ public class Player : MonoBehaviour, IPlayer
     private Animator myAnimator;
 
     private Vector3 pushVelocity;
+    private Vector3 GravityVelocity;
 
+    private bool isDead = false;
 
 
     // TODO [Nassim]: refactor multiple variables into a dictionary
@@ -88,8 +90,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             speed *= ARManager.Instance.SizeFactor;
         }
-
-        //EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+       
     }
 
     private void Update()
@@ -131,6 +132,7 @@ public class Player : MonoBehaviour, IPlayer
                     LookAtMovingDirection(playerInput);
                 }
             }
+            
         }
 
         // Cance all forces
@@ -165,7 +167,7 @@ public class Player : MonoBehaviour, IPlayer
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
         Vector3 movemetVelocity = movingDirection * speed * 0.1f;
-        transform.position += (movemetVelocity + pushVelocity) * Time.deltaTime;
+        transform.position += (movemetVelocity + pushVelocity + GravityVelocity) * Time.deltaTime;
     }
 
     private void Rotate(float axis_X, float axis_Z)
@@ -480,6 +482,23 @@ public class Player : MonoBehaviour, IPlayer
             yield return new WaitForEndOfFrame();
         }
 
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag.Equals("Ground"))
+        {
+            GravityVelocity = new Vector3(0, -9.81f, 0);
+            isDead = true;
+            StopAllCoroutines();
+            IsReadyToShoot = false;
+            PlayerManager.Instance.OnPlayerOutOfBound(PlayerID);
+        }
+    }
+
+    public void DestroyPlayer()
+    {
+        Destroy(gameObject);
     }
 
 }
