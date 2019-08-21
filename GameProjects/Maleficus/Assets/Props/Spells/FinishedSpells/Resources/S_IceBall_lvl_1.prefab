@@ -91,20 +91,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
   hitPower: 20
   speed: 800
   spellName: S_IceBall
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 0
-  cooldown: 3
-  spellDuration: 0
+  spell: 3
   movementType: 0
   debuffEffects: 06000000
   buffEffects: 
+  cooldown: 3
+  spellDuration: 0
+  pushDuration: 0
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0
 --- !u!54 &6536862604725729376

@@ -445,12 +445,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #endregion
 
     #region Input related
-    public void SendSpellInput(EInputButton eInputButton)
+    public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
     {
         Net_SpellInput si = new Net_SpellInput();
 
         si.Token = token;
         si.spellId = eInputButton;
+        si.ePlayerID = playerID;
 
         SendServer(si);
     }
@@ -474,14 +475,9 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         if(AppStateManager.Instance.CurrentScene == EScene.GAME)
         {
-            if(ePlayerID == EPlayerID.PLAYER_1)
+            if(eInputButton == EInputButton.CAST_SPELL_1 || eInputButton == EInputButton.CAST_SPELL_2 || eInputButton == EInputButton.CAST_SPELL_3)
             {
-                switch (eInputButton)
-                {
-                    case EInputButton.CAST_SPELL_1:
-                        SendSpellInput(eInputButton);
-                        break;
-                }
+                SendSpellInput(eInputButton, ePlayerID);
             }
         }
     }

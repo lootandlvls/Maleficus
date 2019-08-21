@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface ISpell
 {
+    ESpells Spell { get; }
+
     string SpellName { get; }
 
     int SpellLevel { get; }

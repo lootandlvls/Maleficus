@@ -19,7 +19,7 @@ public class Player : MonoBehaviour, IPlayer
 
     public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
-
+    public int SpellChargingLVL { get { return spellChargingLVL; } }
 
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
@@ -34,6 +34,7 @@ public class Player : MonoBehaviour, IPlayer
     private String playerVerticalInput;
     private String playerHorizontalInput;
 
+    private int spellChargingLVL = 1;
 
     private float lastTimeSinceRotated;
 
@@ -294,7 +295,7 @@ public class Player : MonoBehaviour, IPlayer
     private IEnumerator SpellChargingCoroutine(ESpellID spellID)
     {
         int counter = 0;
-        int spellChargingLVL;
+        
         // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
         Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
         GameObject wandEffect = Instantiate(chargingWandEnergy, position, chargingBodyEnergy.transform.rotation);
@@ -323,38 +324,26 @@ public class Player : MonoBehaviour, IPlayer
             
             yield return new WaitForSeconds(0.0f);
             counter++;
-                    
+            if (counter > 100)
+            {
+                spellChargingLVL = 2;
+                Debug.Log("Spell upgraded to lvl 2");
+            }
+            else
+            {
+                spellChargingLVL = 1;
+                Debug.Log("Spell upgraded to lvl 1");
+            }
+
         }
         Debug.Log("spellCharging function Done!!");
-
-
+       
         currentSpeed = speed;
 
         myAnimator.SetBool("charging", false);
         Destroy(wandEffect);
         Destroy(particleSystemBodyEffect);
         Debug.Log("counter = " + counter);
-        if (counter > 100)
-        {
-            spellChargingLVL = 2;
-        }
-        else
-        {
-            spellChargingLVL = 1;
-        }
-     /*   AbstractSpell spellUpgrade = spellToCast;
-        foreach (AbstractSpell spell in SpellManager.Instance.SpellsUpgrade)
-        {
-
-            if (spell.SpellName.Equals(spellToCast.SpellName + spellLVL))
-            {
-                Debug.Log(spellToCast.SpellName + counter + "has been chosen");
-                spellUpgrade = spell;
-            }
-        }*/
-       // animator.SetTrigger("projectileAttack");
-       // StartCoroutine(animationDelay(spellUpgrade, 1));
-
     }
     #endregion
 
@@ -455,6 +444,10 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
+    public void resetSpellChargingLVL()
+    {
+        spellChargingLVL = 1;
+    }
 
     public void PushPlayer(Vector3 velocity, float duration)
     {

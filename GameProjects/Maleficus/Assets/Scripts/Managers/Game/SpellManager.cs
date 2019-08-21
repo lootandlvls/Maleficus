@@ -7,22 +7,23 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 {
     Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
 
-    [SerializeField] private GameObject frozenEffect;                                              
-    [SerializeField] private float friction;
 
 
-                                                                                                   
+
 
     public List<AbstractSpell> SpellsUpgrade { get { return spellsUpgrade; } }
     public List<GameObject> ChargingSpells_Effects { get { return chargingSpells_Effects; } }
     public List<AbstractSpell> All_Spells { get { return all_Spells; } }
-                                                                                                   
 
-    private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
+    public Dictionary<EPlayerID, Dictionary<ESpellID, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellID, AbstractSpell>>();
+
+    [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
+    [SerializeField] private GameObject frozenEffect;
+    [SerializeField] private float friction;
+
     private List<GameObject> chargingSpells_Effects = new List<GameObject>();
     private List<AbstractSpell> all_Spells = new List<AbstractSpell>();
 
-    public Dictionary<EPlayerID, Dictionary<ESpellID, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellID, AbstractSpell>>();
     //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
 
 
@@ -170,13 +171,28 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     }
 
-    public void CastSpell(EPlayerID playerID, ESpellID spellID)
+    public void CastSpell(EPlayerID playerID, ESpellID spellID , int spellChargingLVL)
     {
-        AbstractSpell spellToCast;
-        float spellCooldown = Player_Spells[playerID][spellID].Cooldown;
-
+        AbstractSpell spellToCast ;
+        Debug.Log("Spell lvl " + spellChargingLVL);
+        float spellCooldown = Player_Spells[playerID][spellID].Cooldown;      
         spellToCast = Player_Spells[playerID][spellID];
+    
+        if (spellChargingLVL == 2)
+        {
+            foreach ( AbstractSpell upgrade in spellsUpgrade)
+            {
+                if (upgrade.Spell == spellToCast.Spell && upgrade.SpellLevel == 2)
+                {
+                    Debug.Log("Spell Upgraded");
+                    spellToCast = upgrade;
+                    break;
+                }
+            }
+        }
+
         InstantiateSpell(spellToCast, playerID);
+
         //spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);         // TODO [Bnjmo]: Readapt this
         EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
     }
@@ -256,7 +272,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
             spell.transform.parent = activePlayers[playerID].transform;
             spell.CastingPlayerID = playerID;
-            // StartCoroutine(PlayerCantMove());
+          //  StartCoroutine(PlayerCantMove());
         }
         else
         {
@@ -265,40 +281,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             activePlayers[playerID].DoProjectileAttackAnimation();
             StartCoroutine(animationDelay(spellToCast, playerID, 1));
-            //   StartCoroutine(spellCharging(spellToCast));
-            /* int counter = 1;
-             while (counter < 4)
-              {
-                  if (Input.GetButton("CastSpell_1_A"))
-                  {
-                     StartCoroutine(spellCharging());
-                     counter++;
-                  }
-                  else
-                  {
-                      return;
-                  }
-                  */
-
-            /* AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition.position, transform.rotation);
-               spell.CastingPlayerID = playerID;
-               spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
-           }*/
-
-            /* AbstractSpell spellUpgrade = spellToCast;
-             foreach(AbstractSpell spell in SpellManager.Instance.spellsUpgrade)
-            {
-
-                if (spell.SpellName.Equals(spellToCast.SpellName + counter))
-                {
-                    Debug.Log(spellToCast.SpellName + counter + "has been chosen");
-                    spellUpgrade = spell;
-                }
-            }*/
+            
 
         }
 
-
+        activePlayers[playerID].resetSpellChargingLVL();
 
     }
     private void LoadSpellResources()
@@ -343,6 +330,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         activePlayers[playerID].SetPlayerStunned(false);
     }
+
+    
 
     IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID, int animationID)
     {
