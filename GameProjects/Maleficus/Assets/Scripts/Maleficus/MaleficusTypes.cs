@@ -110,6 +110,14 @@ public enum EMovementType
     LINEAR_LASER
 
 }
+
+public enum ESpells
+{
+  FIREBALL,
+  FIRE_LASER,
+  FIRE_EXPLOSION,
+  ICEBALL
+}
 #endregion
 
 #region Player

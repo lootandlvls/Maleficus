@@ -726,6 +726,7 @@ MonoBehaviour:
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsARGame: 0
   ARPlacementMethod: 0
+  EnemiesMovementMethod: 0
   IsDebugLogEvents: 1
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
@@ -1379,15 +1380,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512cf275eaaa21b4393825f97f72fd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FrozenEffect: {fileID: 0}
+  spellsUpgrade:
+  - {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac, type: 3}
+  frozenEffect: {fileID: 8333159550493524451, guid: 041befb866d1ae646b3760d7ec3b284f,
+    type: 3}
   friction: 0
-  SpellsUpgrade: []
-  ChargingSpells_Effects: []
-  All_Spells: []
-  Player_1_SpellsList: []
-  Player_2_SpellsList: []
-  Player_3_SpellsList: []
-  Player_4_SpellsList: []
+  Player_1_SpellsList:
+  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
+  - {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639, type: 3}
+  Player_2_SpellsList:
+  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
+  - {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639, type: 3}
+  Player_3_SpellsList:
+  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
+  - {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639, type: 3}
+  Player_4_SpellsList:
+  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
+  - {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639, type: 3}
 --- !u!1 &7511327389560579781
 GameObject:
   m_ObjectHideFlags: 0

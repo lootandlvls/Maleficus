@@ -18753,9 +18753,10 @@ MonoBehaviour:
   hitPower: 20
   speed: 0
   spellName: S_AOE
-  spellLevel: 0
+  spellLevel: 1
   OnSelfEffect: 0
   hasPower: 1
+  spell: 2
   movementType: 5
   debuffEffects: 
   buffEffects: 

@@ -18756,6 +18756,7 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPower: 1
+  spell: 2
   movementType: 5
   debuffEffects: 
   buffEffects: 
@@ -19125,16 +19126,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7948522024305349590}
     m_Modifications:
-    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
-        type: 3}
-      propertyPath: m_Name
-      value: Beam
-      objectReference: {fileID: 0}
-    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6551116132212676543, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19189,6 +19180,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
+        type: 3}
+      propertyPath: m_Name
+      value: Beam
+      objectReference: {fileID: 0}
+    - target: {fileID: 6549155946158257613, guid: 61196b01a43acbf429a3224acad1c380,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6352151562051580209, guid: 61196b01a43acbf429a3224acad1c380,
         type: 3}

@@ -268,8 +268,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             ActivePlayers[playerID].IsReadyToShoot = false;
             ActivePlayers[playerID].ReadyToUseSpell[spellID] = false;
             ActivePlayers[playerID].StopChargingSpell(spellID);
-
-            SpellManager.Instance.CastSpell(playerID, spellID);
+          
+            SpellManager.Instance.CastSpell(playerID, spellID, ActivePlayers[playerID].SpellChargingLVL);
+            
             StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellID));
         }
     }

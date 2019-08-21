@@ -14175,7 +14175,7 @@ GameObject:
   - component: {fileID: 4978913634343584972}
   - component: {fileID: 5294786610899391332}
   m_Layer: 0
-  m_Name: FireBall_lvl_2
+  m_Name: S_FireBall_lvl_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14266,22 +14266,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 50
-  speed: 5
+  hitPower: 40
+  speed: 800
   spellName: FireBall_lvl_2
   spellLevel: 2
   OnSelfEffect: 0
   hasPower: 1
-  cooldown: 0
-  spellDuration: 0
+  spell: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 
+  cooldown: 1
+  spellDuration: 0
+  pushDuration: 1
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
-  Spellspeed: 0
   shoot: 0
 --- !u!135 &5294786610899391332
 SphereCollider:

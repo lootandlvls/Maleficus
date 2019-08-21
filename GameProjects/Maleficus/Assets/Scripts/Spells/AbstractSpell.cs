@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class AbstractSpell : MonoBehaviour, ISpell
 {
-  //  private Vector3 movingDirection;
+    //  private Vector3 movingDirection;
 
-  
+
 
 
     public int HitPower { get { return hitPower; } }
@@ -23,7 +23,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public bool HasPower { get { return hasPower; } }
 
-    public EMovementType MovementType { get {  return movementType; } }
+    public EMovementType MovementType { get { return movementType; } }
 
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
 
@@ -37,21 +37,24 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public float PushDuration { get { return pushDuration; } }
 
+    public ESpells Spell { get { return spell; } }
+
+
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
     [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPower;
+    [SerializeField] private ESpells spell;
 
-  
-    [SerializeField] private  EMovementType movementType;
-    [SerializeField] private  List<ESpellEffects> debuffEffects;
-    [SerializeField] private  List<ESpellEffects> buffEffects;
+    [SerializeField] private EMovementType movementType;
+    [SerializeField] private List<ESpellEffects> debuffEffects;
+    [SerializeField] private List<ESpellEffects> buffEffects;
 
-    [SerializeField]  private float cooldown;
-    [SerializeField]  private float spellDuration;
-    [SerializeField]  private float pushDuration;
+    [SerializeField] private float cooldown;
+    [SerializeField] private float spellDuration;
+    [SerializeField] private float pushDuration;
 
     protected Rigidbody myRigidBody;
 
@@ -65,14 +68,14 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     // Start is called before the first frame update
     private void Start()
-    {  
+    {
 
         direction = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
 
         if (OnSelfEffect)
         {
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID,  CastingPlayerID, transform.position, hasPower, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPower, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
     }
@@ -82,7 +85,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     {
         foreach (IPlayer hitPlayer in hitPlayers)
         {
-           
+
             // Debug.Log(dirVector);
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
@@ -112,9 +115,9 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
         }
     }
 
-     protected void ProcessHits(IEnemy hitEnemy)
+    protected void ProcessHits(IEnemy hitEnemy)
     {
-        if(hitEnemy.IsDead == false)
+        if (hitEnemy.IsDead == false)
         {
             EventManager.Instance.Invoke_SPELLS_SpellHitEnemy(hitEnemy);
 
@@ -133,20 +136,20 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     protected void ExplosionProcessHits(IPlayer[] hitPlayers)
     {
         foreach (IPlayer hitPlayer in hitPlayers)
-        {   
-            Vector3 movingDirection =  (hitPlayer.Position - transform.position).normalized;
+        {
+            Vector3 movingDirection = (hitPlayer.Position - transform.position).normalized;
             direction = new Vector3(movingDirection.x, 0.0f, movingDirection.z);
             ProcessHits(hitPlayer);
         }
-           
-       
-       
+
+
+
     }
-    protected void ExplosionProcessHits(IEnemy [] hitEnemies)
+    protected void ExplosionProcessHits(IEnemy[] hitEnemies)
     {
         foreach (IEnemy hitEnemy in hitEnemies)
         {
-          
+
             ProcessHits(hitEnemy);
         }
 
