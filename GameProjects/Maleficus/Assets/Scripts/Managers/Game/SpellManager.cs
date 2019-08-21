@@ -56,7 +56,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         activePlayers = PlayerManager.Instance.ActivePlayers;
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         // Find touch joysticks
         spellJoysticks.Clear();
@@ -73,10 +73,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         Debug.Log("Teleportation spell executed");
 
-        PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(castingPlayerID);
+        ControllerInput playerInput = PlayerManager.Instance.GetPlayerInput(castingPlayerID);
 
-        float InputH = playerInput.Move_X;
-        float InputV = playerInput.Move_Y;
+        float InputH = playerInput.JoystickValues[EInputAxis.MOVE_X];
+        float InputV = playerInput.JoystickValues[EInputAxis.MOVE_Y];
         Debug.Log(InputH + " and " + InputV);
         Vector3 TeleportDirection = new Vector3();
         TeleportDirection.x = InputH * Time.deltaTime * 10;

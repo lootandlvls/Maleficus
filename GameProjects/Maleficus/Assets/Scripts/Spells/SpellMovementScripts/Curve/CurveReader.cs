@@ -20,7 +20,7 @@ public class CurveReader : AbstractSingletonManager<CurveReader>
         UpdateCurves();
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
 
     }

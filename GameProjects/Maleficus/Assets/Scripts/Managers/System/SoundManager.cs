@@ -31,7 +31,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
         
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
 
     }

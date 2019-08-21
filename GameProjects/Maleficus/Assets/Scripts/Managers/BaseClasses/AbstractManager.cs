@@ -18,7 +18,7 @@ public abstract class AbstractManager : MonoBehaviour
     /// <summary>
     /// Initialize Manager (called by MotherOfManagers when scene is changed)
     /// </summary>
-    public abstract void Initialize();
+    public abstract void OnSceneStartReinitialize();
 
  
 }

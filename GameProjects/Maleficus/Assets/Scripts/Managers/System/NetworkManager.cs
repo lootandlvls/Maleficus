@@ -9,7 +9,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
     public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
     public EClientID                            OwnClientID                 { get { return ownClientID; } }
-    public List<Net_SpellInput>                 CastedSpells                { get { return castedSpells; } }
+    public List<Net_SpellInputPressed>                 CastedSpells                { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs;
 
@@ -36,7 +36,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private bool isStarted;
     private int ownLobbyID;
     private EClientID ownClientID;
-    private List<Net_SpellInput> castedSpells;
+    private List<Net_SpellInputPressed> castedSpells;
 
 
     #region Monobehaviour
@@ -48,12 +48,12 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     protected void Start()
     {
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
-        EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
+        EventManager.Instance.APP_AppStateUpdated.AddListener       (On_APP_AppStateUpdated);
+        //EventManager.Instance.INPUT_ButtonReleased.AddListener      (On_Input_ButtonReleased);
         //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         Init();
     }
@@ -214,7 +214,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             case NetID.SpellInput:
                 Debug.Log("Received Spell Input from another Player");
                 UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
-                AllReceivedMsgs.Add((Net_SpellInput)msg);
+                AllReceivedMsgs.Add((Net_SpellInputPressed)msg);
                 break;
             case NetID.OnRequestGameInfo:
                 Debug.Log("Game info received");
@@ -225,8 +225,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
             case NetID.MovementInput:
                 Debug.Log("Game input received");
-                Net_MovementInput movementInput = (Net_MovementInput)msg;
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                Net_JoystickInput movementInput = (Net_JoystickInput)msg;
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.JoystickType, movementInput.Joystick_X, movementInput.Joystick_Y, movementInput.PlayerID);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
 
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
@@ -453,30 +453,30 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #endregion
 
     #region Input related
-    public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
-    {
-        Net_SpellInput si = new Net_SpellInput();
+    //public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
+    //{
+    //    Net_SpellInputPressed si = new Net_SpellInputPressed();
 
-        si.Token = token;
-        switch (eInputButton)
-        {
-            case EInputButton.CAST_SPELL_1:
-                si.spellId = ESpellID.SPELL_1;
-                break;
-            case EInputButton.CAST_SPELL_2:
-                si.spellId = ESpellID.SPELL_2;
-                break;
-            case EInputButton.CAST_SPELL_3:
-                si.spellId = ESpellID.SPELL_3;
-                break;
-            default:
-                si.spellId = ESpellID.NONE;
-                break;
-        }
-        si.ePlayerID = playerID;
+    //    si.Token = token;
+    //    switch (eInputButton)
+    //    {
+    //        case EInputButton.CAST_SPELL_1:
+    //            si.spellId = ESpellID.SPELL_1;
+    //            break;
+    //        case EInputButton.CAST_SPELL_2:
+    //            si.spellId = ESpellID.SPELL_2;
+    //            break;
+    //        case EInputButton.CAST_SPELL_3:
+    //            si.spellId = ESpellID.SPELL_3;
+    //            break;
+    //        default:
+    //            si.spellId = ESpellID.NONE;
+    //            break;
+    //    }
+    //    si.ePlayerID = playerID;
 
-        SendServer(si);
-    }
+    //    SendServer(si);
+    //}
 
     //public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
     //{
@@ -493,16 +493,19 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #endregion
 
     #region Listeners
-    public void On_Input_ButtonReleased(EInputButton eInputButton, EPlayerID ePlayerID)
-    {
-        if(AppStateManager.Instance.CurrentScene == EScene.GAME)
-        {
-            if(eInputButton == EInputButton.CAST_SPELL_1 || eInputButton == EInputButton.CAST_SPELL_2 || eInputButton == EInputButton.CAST_SPELL_3)
-            {
-                SendSpellInput(eInputButton, ePlayerID);
-            }
-        }
-    }
+    //public void On_Input_ButtonReleased(ButtonReleasedEventHandle eventHandle)
+    //{
+    //    EInputButton inputButton = eventHandle.InputButton;
+    //    EPlayerID playerID = eventHandle.PlayerID;
+
+    //    if (AppStateManager.Instance.CurrentScene == EScene.GAME)
+    //    {
+    //        if(inputButton == EInputButton.CAST_SPELL_1 || inputButton == EInputButton.CAST_SPELL_2 || inputButton == EInputButton.CAST_SPELL_3)
+    //        {
+    //            SendSpellInput(inputButton, playerID);
+    //        }
+    //    }
+    //}
     //public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
     //{
     //    if(ePlayerID == EPlayerID.PLAYER_1)

@@ -44,7 +44,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     }
 
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
 
     }
@@ -63,7 +63,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
         {
             if (abstractManager != this)
             {
-                abstractManager.Initialize();
+                abstractManager.OnSceneStartReinitialize();
             }
         }
     }

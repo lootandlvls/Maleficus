@@ -21,7 +21,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         FindAndBindButtonActions();
 

@@ -20,7 +20,7 @@ public class CoinManager : AbstractSingletonManager<CoinManager>
         EventManager.Instance.ENEMIES_WaveCompleted += On_ENEMIES_WaveCompleted;
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         numberOfCoins = 0;
         AllCoins.Clear();

@@ -31,12 +31,12 @@ public class Server : NetworkManager
     public readonly bool isPlayer = false;
     private bool server_isStarted;
     private byte error;
-    private List<Net_SpellInput> castedSpells;
+    private List<Net_SpellInputPressed> castedSpells;
 
     private Mongo db;
 
     #region Monobehaviour
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         Init();
     }
@@ -165,7 +165,7 @@ public class Server : NetworkManager
                 break;
             case NetID.SpellInput:
                 Debug.Log("Received Spell Input from another Player");
-                ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInput)msg);
+                ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInputPressed)msg);
                 UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
                 break;
             case NetID.RequestGameInfo:
@@ -173,8 +173,8 @@ public class Server : NetworkManager
                 break;
             case NetID.MovementInput:
                 Debug.Log("Game input received");
-                Net_MovementInput movementInput = (Net_MovementInput)msg;
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                Net_JoystickInput movementInput = (Net_JoystickInput)msg;
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.JoystickType, movementInput.Joystick_X, movementInput.Joystick_Y, movementInput.PlayerID);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
 
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
@@ -452,7 +452,7 @@ public class Server : NetworkManager
         }
         SendClient(recHostId, cnnId, org);
     }
-    private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
+    private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInputPressed si)
     {
         Model_Account self = db.FindAccountByToken(si.Token);
         if(self != null)

@@ -35,7 +35,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         StateUpdateEvent += EventManager.Instance.AR_ARStateUpdated.Invoke;
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         FindReferencesInScene();
     }

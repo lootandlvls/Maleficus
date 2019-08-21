@@ -186,10 +186,16 @@ public enum EInputMode
 public enum EControllerID
 {
     NONE = 'X',
-    CONTROLLER_A,
-    CONTROLLER_B,
-    CONTROLLER_C,
-    CONTROLLER_D
+    TOUCH,
+    AI,
+    GAMEPAD_A,
+    GAMEPAD_B,
+    GAMEPAD_C,
+    GAMEPAD_D,
+    NETWORK_1,
+    NETWORK_2,
+    NETWORK_3,
+    NETWORK_4
 }
 
 public enum EInputButton
@@ -213,6 +219,12 @@ public enum EInputAxis
     MOVE_Y,
     ROTATE_X,
     ROTATE_Y
+}
+
+public enum EJoystickType
+{
+    MOVEMENT,
+    ROTATION
 }
 
 public enum ETouchJoystickType
@@ -240,32 +252,85 @@ public enum EJoystickState
     SELECTED_CANNOT_TRIGGER_BUTTON
 }
 
-public class PlayerInput
+public class ControllerInput
 {
-    public float Move_X;
-    public float Move_Y;
-    public float Rotate_X;
-    public float Rotate_Y;
-    public bool IsButtonPressed_1;
-    public bool IsButtonPressed_2;
-    public bool IsButtonPressed_3;
+    public Dictionary<EInputAxis, float> JoystickValues = new Dictionary<EInputAxis, float>();
+    public Dictionary<EInputButton, bool> IsButtonPressed = new Dictionary<EInputButton, bool>();
+    public Dictionary<EInputButton, bool> IsButtonReleased = new Dictionary<EInputButton, bool>();
+
+    public ControllerInput()
+    {
+        Flush();
+
+        //IsJoystickMoved.Add(EInputAxis.MOVE_X, 0.0f);
+        //IsJoystickMoved.Add(EInputAxis.MOVE_Y, 0.0f);
+        //IsJoystickMoved.Add(EInputAxis.ROTATE_X, 0.0f);
+        //IsJoystickMoved.Add(EInputAxis.ROTATE_Y, 0.0f);
+
+        //IsButtonPressed.Add(EInputButton.CONFIRM, false);
+        //IsButtonPressed.Add(EInputButton.CANCEL, false);
+        //IsButtonPressed.Add(EInputButton.CAST_SPELL_1, false);
+        //IsButtonPressed.Add(EInputButton.CAST_SPELL_2, false);
+        //IsButtonPressed.Add(EInputButton.CAST_SPELL_3, false);
+
+        //IsButtonPressed.Add(EInputButton.LEFT, false);
+        //IsButtonPressed.Add(EInputButton.UP, false);
+        //IsButtonPressed.Add(EInputButton.RIGHT, false);
+        //IsButtonPressed.Add(EInputButton.DOWN, false);
+
+        //IsButtonReleased.Add(EInputButton.CONFIRM, false);
+        //IsButtonReleased.Add(EInputButton.CANCEL, false);
+        //IsButtonReleased.Add(EInputButton.CAST_SPELL_1, false);
+        //IsButtonReleased.Add(EInputButton.CAST_SPELL_2, false);
+        //IsButtonReleased.Add(EInputButton.CAST_SPELL_3, false);
+
+        //IsButtonReleased.Add(EInputButton.LEFT, false);
+        //IsButtonReleased.Add(EInputButton.UP, false);
+        //IsButtonReleased.Add(EInputButton.RIGHT, false);
+        //IsButtonReleased.Add(EInputButton.DOWN, false);
+    }
 
     public void Flush()
     {
-        Move_X = 0.0f;
-        Move_Y = 0.0f;
-        Rotate_X = 0.0f;
-        Rotate_Y = 0.0f;
+        // Initialize joystick moved
+        JoystickValues[EInputAxis.MOVE_X] = 0.0f;
+        JoystickValues[EInputAxis.MOVE_Y] = 0.0f;
+        JoystickValues[EInputAxis.ROTATE_X] = 0.0f;
+        JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
+
+        // Initialize button pressed
+        IsButtonPressed[EInputButton.CONFIRM] = false;
+        IsButtonPressed[EInputButton.CANCEL] = false;
+        IsButtonPressed[EInputButton.CAST_SPELL_1] = false;
+        IsButtonPressed[EInputButton.CAST_SPELL_2] = false;
+        IsButtonPressed[EInputButton.CAST_SPELL_3] = false;
+
+        IsButtonPressed[EInputButton.LEFT] = false;
+        IsButtonPressed[EInputButton.UP] = false;
+        IsButtonPressed[EInputButton.RIGHT] = false;
+        IsButtonPressed[EInputButton.DOWN] = false;
+
+        // Initialize button released
+        IsButtonReleased[EInputButton.CONFIRM] = false;
+        IsButtonReleased[EInputButton.CANCEL] = false;
+        IsButtonReleased[EInputButton.CAST_SPELL_1] = false;
+        IsButtonReleased[EInputButton.CAST_SPELL_2] = false;
+        IsButtonReleased[EInputButton.CAST_SPELL_3] = false;
+
+        IsButtonReleased[EInputButton.LEFT] = false;
+        IsButtonReleased[EInputButton.UP] = false;
+        IsButtonReleased[EInputButton.RIGHT] = false;
+        IsButtonReleased[EInputButton.DOWN] = false;
     }
 
     public bool HasMoved()
     {
-        return ((Move_X != 0.0f) || (Move_Y != 0.0f));
+        return ((JoystickValues[EInputAxis.MOVE_X] != 0.0f) || (JoystickValues[EInputAxis.MOVE_Y] != 0.0f));
     }
 
     public bool HasRotated()
     {
-        return ((Rotate_X != 0.0f) || (Rotate_Y != 0.0f));
+        return ((JoystickValues[EInputAxis.ROTATE_X] != 0.0f) || (JoystickValues[EInputAxis.ROTATE_Y] != 0.0f));
     }
 }
 #endregion

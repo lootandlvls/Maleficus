@@ -43,7 +43,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         FindAndBindButtonActions();
     }

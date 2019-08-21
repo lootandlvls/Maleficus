@@ -20,7 +20,7 @@ public class DebugManager : AbstractSingletonManager<DebugManager>
     private Dictionary<int, DebugText> debugTexts = new Dictionary<int, DebugText>();
     private Dictionary<int, bool> reportedDebugTexts = new Dictionary<int, bool>();
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
         debugTexts.Clear();
         reportedDebugTexts.Clear();

@@ -97,9 +97,14 @@ public class Player : MonoBehaviour, IPlayer
     {
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            PlayerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
+            ControllerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
 
-            Move(playerInput.Move_X, playerInput.Move_Y);
+            float Move_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
+            float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
+            float Rotate_X = playerInput.JoystickValues[EInputAxis.ROTATE_X];
+            float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
+            Move(Move_X, Move_Y);
+            Rotate(Rotate_X, Rotate_Y);
 
             if (playerInput.HasMoved() == true)
             // Moving?
@@ -115,7 +120,6 @@ public class Player : MonoBehaviour, IPlayer
             if (playerInput.HasRotated() == true)
             // Rotating?
             {
-                Rotate(playerInput.Rotate_X, playerInput.Rotate_Y);
 
                 SetDirectionalSpritesVisible(true);
                 lastTimeSinceRotated = Time.time;
@@ -159,10 +163,10 @@ public class Player : MonoBehaviour, IPlayer
 
     private void Move(float axis_X, float axis_Z)
     {
-        if (IsARPlayer == true)
-        {
-            TransformAxisToCamera(ref axis_X, ref axis_Z);
-        }
+        //if (IsARPlayer == true)
+        //{
+        //    MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
+        //}
    
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
@@ -175,10 +179,10 @@ public class Player : MonoBehaviour, IPlayer
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
         if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusConsts.ROTATION_THRESHOLD))
         {
-            if (IsARPlayer == true)
-            {
-                TransformAxisToCamera(ref axis_X, ref axis_Z, -1);
-            }
+            //if (IsARPlayer == true)
+            //{
+            //    MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward , true);
+            //}
 
             Vector3 lookDirection = new Vector3(axis_X, 0.0f, -axis_Z).normalized;
             Vector3 lookAtFictifPosition = transform.position + lookDirection;
@@ -186,11 +190,11 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    private void LookAtMovingDirection(PlayerInput playerInput)
+    private void LookAtMovingDirection(ControllerInput playerInput)
     {
-        float axis_X = playerInput.Move_X;
-        float axis_Z = playerInput.Move_Y;
-        TransformAxisToCamera(ref axis_X, ref axis_Z);
+        float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
+        float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
+        MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
         transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
     }
 

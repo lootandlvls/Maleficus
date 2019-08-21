@@ -7,7 +7,7 @@ public class EventManagerOld : AbstractSingletonManager<EventManagerOld> {
 
     public event Action<ItemBehavior, int> ItemTaken;
 
-    public override void Initialize()
+    public override void OnSceneStartReinitialize()
     {
 
     }
