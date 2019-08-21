@@ -7,7 +7,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
     // Should only be called directly after object construction (used in Start method)
     public int TotalLives { get { return totalLives; } }
 
-    private int totalLives = 5;
+    private int totalLives;
 
 
     protected override void Awake()
@@ -56,17 +56,25 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
     {
         // if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_RUNNING)          // TODO: check for right state
-
+        Debug.Log("PLAYER DIED : " + diedPlayerID);
         // Update remaining lives and kills counter
         PlayerStats_Lives killedPlayer = PlayerStats[diedPlayerID];
-        PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
         killedPlayer.DecrementPlayerLives();
-        killingPlayer.IncrementNumberOfKilledPlayers();
-
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayer, GameMode);
-        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
+
+        if (killedPlayer.LastHitBy != EPlayerID.NONE)
+        {
+            PlayerStats_Lives killingPlayer = PlayerStats[killedPlayer.LastHitBy];
+            killingPlayer.IncrementNumberOfKilledPlayers();
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
+        }
 
 
+        if (killedPlayer.RemainingLives > 0)
+        {
+            Debug.Log("Respawn Player");
+            PlayerManager.Instance.SpawnPlayer(diedPlayerID);
+        }
         // Check if game over (only one player still alive)
         int deadPlayersCounter = 0;
         EPlayerID winnerPlayerID = EPlayerID.NONE;
@@ -81,12 +89,14 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
                 winnerPlayerID = playerID;
             }
         }
+        //TODO[BNJMO] fix this when only one player is connected
         if (deadPlayersCounter == PlayerStats.Count - 1)
         {
             //
             ETeamID winnerTeamID = PlayerManager.Instance.PlayersTeam[winnerPlayerID];
             EventManager.Instance.Invoke_GAME_GameOver(gameMode);
         }
+
     }
 
     protected override void InitializePlayerStats()

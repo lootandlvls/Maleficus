@@ -720,10 +720,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6cd55cde3b0ed4682f0d471db7c139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputMode: 0
+  InputMode: 1
   IsSpawnPlayerOnConnect: 1
-  IsSpawnAllPlayers: 1
+  IsSpawnAllPlayers: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
+  IsSpawnTouchAsPlayer1: 0
   IsARGame: 0
   ARPlacementMethod: 0
   EnemiesMovementMethod: 0
