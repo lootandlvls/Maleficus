@@ -82,9 +82,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             InputManager.Instance.TouchPlayerID = ownPlayer;
         }
 
+        // Connect and spawn player
         foreach (EPlayerID playerID in connectedPlayers)
         {
-            // TODO [BNJMO]: Connect players
+            ConnectPlayer(playerID);
+            SpawnPlayer(playerID);
         }
     }
 
@@ -217,6 +219,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             Debug.Log("Can't connect new player. All 4 players are already connected");
             return 0;
+        }
+    }
+
+    private void ConnectPlayer(EPlayerID playerID)
+    {
+        if (ConnectedPlayers[playerID] == false)
+        {
+            ConnectedPlayers[playerID] = true;
+            AssignPlayerToTeam(EPlayerID.PLAYER_1, ETeamID.TEAM_1);
         }
     }
 
