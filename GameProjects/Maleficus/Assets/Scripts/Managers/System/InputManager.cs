@@ -419,8 +419,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
                     List<AbstractNetMessage> msgs = NetworkManager.Instance.allReceivedMsgs;
                     for(int i = msgs.Count - 1; i > -1; i--)
                     {
-                        if(msgs[i].ID == 15)                                    // TODO [Leon]:  use network ID (NetID.SpellInput)
-                        {              
+                        if(msgs[i].ID == NetID.SpellInput)
+                        {
                             Net_SpellInput si = (Net_SpellInput)msgs[i];
                             int spellid = 0;
                             EControllerID controllerid = EControllerID.NONE;
