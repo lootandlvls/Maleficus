@@ -171,6 +171,15 @@ public class Server : NetworkManager
             case NetID.RequestGameInfo:
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
+            case NetID.MovementInput:
+                Debug.Log("Game input received");
+                Net_MovementInput movementInput = (Net_MovementInput)msg;
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
+
         }
     }
 
