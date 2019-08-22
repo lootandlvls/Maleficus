@@ -573,15 +573,16 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         foreach(EControllerID controllerID in ControllersInput.Keys)
         {
-            ControllersInput[controllerID] = new ControllerInput();
+            ControllersInput[controllerID].Flush();
         }
 
-        foreach (EControllerID controllerID in canPerformHorizontalDirectionalButton.Keys)
+        foreach (EControllerID controllerID in ControllersInput.Keys)
         {
+            Debug.Log("QWDQDQWDQ : " + controllerID);
             canPerformHorizontalDirectionalButton[controllerID] = true;
         }
 
-        foreach (EControllerID controllerID in canPerformVerticalDirectionalButton.Keys)
+        foreach (EControllerID controllerID in ControllersInput.Keys)
         {
             canPerformVerticalDirectionalButton[controllerID] = true;
         }

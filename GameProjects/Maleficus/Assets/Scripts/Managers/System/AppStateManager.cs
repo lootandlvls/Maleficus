@@ -78,7 +78,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         if (CurrentState == EAppState.IN_ENTRY)
         {
             List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
-            if (msgs.Count != 0)
+            if ((msgs != null) && (msgs.Count != 0))
             {
                 if (msgs[NetworkManager.Instance.AllReceivedMsgs.Count - 1].ID == NetID.Connected)
                 {

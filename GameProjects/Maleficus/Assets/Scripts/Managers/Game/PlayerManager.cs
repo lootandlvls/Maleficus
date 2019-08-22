@@ -50,11 +50,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void Start()
     {
-        // Connect Touch player as first player
-        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH) && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true) && (playerControllerMapping.ContainsValue(EControllerID.TOUCH) == false))
-        {
-            ConnectPlayer(EPlayerID.PLAYER_1, EControllerID.TOUCH);
-        }
+
 
         // Input events
         //EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
@@ -74,6 +70,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private IEnumerator LateStartCoroutine()
     {
         yield return new WaitForEndOfFrame();
+
+        // Connect Touch player as first player
+        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH) && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true) && (playerControllerMapping.ContainsValue(EControllerID.TOUCH) == false))
+        {
+            Debug.Log("QWDQDQWDQ : Connecting Touhc");
+            ConnectPlayer(EPlayerID.PLAYER_1, EControllerID.TOUCH);
+            Debug.Log("QWDQDQWDQ : Connected Touhc");
+
+        }
 
         if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
         {
@@ -224,6 +229,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             ConnectedPlayers[playerID] = true;
             AssignPlayerToTeam(EPlayerID.PLAYER_1, ETeamID.TEAM_1);
             playerControllerMapping[playerID] = controllerID;
+            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
+            {
+                SpawnPlayer(EPlayerID.PLAYER_1);
+            }
             InputManager.Instance.ConnectController(controllerID);
         }
     }
@@ -409,7 +418,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
                     spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
                     spawnGhost.Rotation = transform.rotation;
-                    if (MotherOfManagers.Instance.IsARGame == true)
+                    if ((MotherOfManagers.Instance.IsARGame == true) && (ARManager.IsInstanceSet == true))
                     {
                         spawnGhost.transform.localScale *= ARManager.Instance.SizeFactor;
                     }

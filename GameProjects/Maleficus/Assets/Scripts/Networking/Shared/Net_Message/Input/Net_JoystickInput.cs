@@ -10,6 +10,7 @@ public class Net_JoystickInput : AbstractNetMessage
 
     public Net_JoystickInput(EJoystickType joystickType, float joystick_X, float joystick_Y, EPlayerID playerID)
     {
+        ID = NetID.MovementInput;
         JoystickType = joystickType;
         Joystick_X = joystick_X;
         Joystick_Y = joystick_Y;
