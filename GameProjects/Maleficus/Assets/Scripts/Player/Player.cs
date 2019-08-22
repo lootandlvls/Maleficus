@@ -194,7 +194,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
         float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
-        MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
+        //MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
         transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
     }
 

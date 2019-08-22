@@ -428,7 +428,12 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
                 if (inputDistance > 0.3f)
                 {
-                    // TODO: Transform to camera
+
+                    newInput.Normalize();
+                    float x = newInput.x;
+                    float y = newInput.y;
+                    MaleficusUtilities.TransformAxisToCamera(ref x, ref y, Camera.main.transform.forward);
+                    newInput = new Vector2(x, y);
 
                     joystickValues[EInputAxis.MOVE_X] = newInput.x;
                     joystickValues[EInputAxis.MOVE_Y] = newInput.y;
@@ -450,7 +455,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
                     if (inputDistance > 0.05f)
                     {
-                        // TODO: Transform to camera
+                        newInput.Normalize();
+                        float x = newInput.x;
+                        float y = newInput.y;
+                        MaleficusUtilities.TransformAxisToCamera(ref x, ref y, Camera.main.transform.forward, true);
+                        newInput = new Vector2(x, y);
 
                         joystickValues[EInputAxis.ROTATE_X] = newInput.x;
                         joystickValues[EInputAxis.ROTATE_Y] = newInput.y;

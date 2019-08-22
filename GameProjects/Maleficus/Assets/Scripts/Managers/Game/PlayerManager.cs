@@ -128,11 +128,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Players Management
     public void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
-       
         if ((ConnectedPlayers[toSpawnPlayerID] == true) 
             || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
                 && (AppStateManager.Instance.CurrentScene == EScene.GAME)))
-               
         {
             
             if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
@@ -229,11 +227,17 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             ConnectedPlayers[playerID] = true;
             AssignPlayerToTeam(EPlayerID.PLAYER_1, ETeamID.TEAM_1);
             playerControllerMapping[playerID] = controllerID;
-            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
+
+            InputManager.Instance.ConnectController(controllerID);
+
+            // Debug Spawn player
+            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
+                && (ActivePlayers.ContainsKey(playerID) == false)
+                && (AppStateManager.Instance.CurrentScene == EScene.GAME))
             {
                 SpawnPlayer(EPlayerID.PLAYER_1);
             }
-            InputManager.Instance.ConnectController(controllerID);
+
         }
     }
 
