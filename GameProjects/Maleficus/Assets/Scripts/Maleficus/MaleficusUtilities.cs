@@ -22,6 +22,43 @@ public static class MaleficusUtilities
     {
         return Quaternion.Euler(new Vector3(0, Random.Range(0, 360), 0));
     }
+
+    public static void TransformAxisToCamera(ref float axis_X, ref float axis_Z, Vector3 cameraForwardDirection, bool isRotation = false)
+    {
+        Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
+        Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
+        Vector2 cameraForward = new Vector2(cameraForwardDirection.normalized.x, cameraForwardDirection.normalized.z).normalized;
+        Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+        float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
+        int sign;
+        if (dotWithRight > 0.0f)
+        {
+            sign = -1;
+        }
+        else if (dotWithRight < 0.0f)
+        {
+            sign = 1;
+        }
+        else
+        {
+            sign = 0;
+        }
+        if (isRotation == true)
+        {
+            sign *= -1;
+        }
+
+        float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
+        DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
+
+
+        axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
+        axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
+        controllerAxis = new Vector2(axis_X, axis_Z).normalized;
+
+        axis_X = controllerAxis.x;
+        axis_Z = controllerAxis.y;
+    }
     #endregion
 
     #region Sound
@@ -154,7 +191,7 @@ public static class MaleficusUtilities
     }
     #endregion
 
-    #region Maleficus specific
+    #region Maleficus Conversions
     /// <summary> Convert a PlayerID enum to an int </summary>
     public static int PlayerIDToInt(EPlayerID playerID)
     {
@@ -328,7 +365,7 @@ public static class MaleficusUtilities
         return id;
     }
 
-    /// <summary> Convert a TouchJoystickType enum to a SpellID enum </summary>
+    /// <summary> Convert a TouchJoystickType enum to a InputButton enum </summary>
     public static EInputButton GetInputButtonFrom(ETouchJoystickType touchJoystickType)
     {
         EInputButton button = EInputButton.NONE;
@@ -343,6 +380,27 @@ public static class MaleficusUtilities
                 break;
 
             case ETouchJoystickType.SPELL_3:
+                button = EInputButton.CAST_SPELL_3;
+                break;
+        }
+        return button;
+    }
+
+    /// <summary> Convert a SpellID enum to a InputButton enum </summary>
+    public static EInputButton GetInputButtonFrom(ESpellID spellID)
+    {
+        EInputButton button = EInputButton.NONE;
+        switch (spellID)
+        {
+            case ESpellID.SPELL_1:
+                button = EInputButton.CAST_SPELL_1;
+                break;
+
+            case ESpellID.SPELL_2:
+                button = EInputButton.CAST_SPELL_2;
+                break;
+
+            case ESpellID.SPELL_3:
                 button = EInputButton.CAST_SPELL_3;
                 break;
         }
@@ -374,7 +432,30 @@ public static class MaleficusUtilities
         return id;
     }
 
+    /// <summary> Returns the same team ID as the player ID (e.g. Player 2 -> Team 2)</summary>
+    public static ETeamID GetIdenticPlayerTeam(EPlayerID playerID)
+    {
+        ETeamID id = ETeamID.NONE;
+        switch (playerID)
+        {
+            case EPlayerID.PLAYER_1:
+                id = ETeamID.TEAM_1;
+                break;
 
+            case EPlayerID.PLAYER_2:
+                id = ETeamID.TEAM_2;
+                break;
+
+            case EPlayerID.PLAYER_3:
+                id = ETeamID.TEAM_3;
+                break;
+
+            case EPlayerID.PLAYER_4:
+                id = ETeamID.TEAM_4;
+                break;
+        }
+        return id;
+    }
 
     #endregion
 }

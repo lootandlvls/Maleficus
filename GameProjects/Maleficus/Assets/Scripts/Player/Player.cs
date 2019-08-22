@@ -160,10 +160,10 @@ public class Player : MonoBehaviour, IPlayer
 
     private void Move(float axis_X, float axis_Z)
     {
-        if (IsARPlayer == true)
-        {
-            TransformAxisToCamera(ref axis_X, ref axis_Z);
-        }
+        //if (IsARPlayer == true)
+        //{
+        //    MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
+        //}
    
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
@@ -176,10 +176,10 @@ public class Player : MonoBehaviour, IPlayer
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
         if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusConsts.ROTATION_THRESHOLD))
         {
-            if (IsARPlayer == true)
-            {
-                TransformAxisToCamera(ref axis_X, ref axis_Z, -1);
-            }
+            //if (IsARPlayer == true)
+            //{
+            //    MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward, -1);
+            //}
 
             Vector3 lookDirection = new Vector3(axis_X, 0.0f, -axis_Z).normalized;
             Vector3 lookAtFictifPosition = transform.position + lookDirection;

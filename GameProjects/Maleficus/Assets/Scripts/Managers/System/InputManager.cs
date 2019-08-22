@@ -38,6 +38,15 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void Update()
     {
+        CheckButtonsAndJoysticks();
+
+    }
+
+
+
+    #region Controller
+    private void CheckButtonsAndJoysticks()
+    {
         // Confirm
         Check_Confirm(EControllerID.CONTROLLER_A);
         Check_Confirm(EControllerID.CONTROLLER_B);
@@ -81,20 +90,9 @@ public class InputManager : AbstractSingletonManager<InputManager>
         Check_CastedSpell(2, EControllerID.CONTROLLER_D);
         // spell 3
         Check_CastedSpell(3, EControllerID.CONTROLLER_A);
-        Check_CastedSpell(3, EControllerID.CONTROLLER_B);        // TODO: Add missing Spell buttons in Input settings
+        Check_CastedSpell(3, EControllerID.CONTROLLER_B);
         Check_CastedSpell(3, EControllerID.CONTROLLER_C);
         Check_CastedSpell(3, EControllerID.CONTROLLER_D);
-        // Spell 2                                                                                                                   
-        //CheckAndCallSpell(2, EControllerID.CONTROLLER_A);
-        //CheckAndCallSpell(2, EControllerID.CONTROLLER_B);
-        //CheckAndCallSpell(2, EControllerID.CONTROLLER_C);
-        //CheckAndCallSpell(2, EControllerID.CONTROLLER_D);
-
-        // Spell 3
-        //CheckAndCallSpell(3, EControllerID.CONTROLLER_A);
-        //CheckAndCallSpell(3, EControllerID.CONTROLLER_B);
-        //CheckAndCallSpell(3, EControllerID.CONTROLLER_C);
-        //CheckAndCallSpell(3, EControllerID.CONTROLLER_D);
 
         // Horizontal 
         // Left 
@@ -121,11 +119,9 @@ public class InputManager : AbstractSingletonManager<InputManager>
         Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_B);
         Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_C);
         Check_Axis("Vertical", 'R', EControllerID.CONTROLLER_D);
-
     }
 
 
-    #region Controller
     private void Check_Confirm(EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
@@ -349,13 +345,23 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             if (joystickType == ETouchJoystickType.MOVE)
             {
-                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID));
-                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID));
+                float x = joystickInput.x;
+                float y = joystickInput.y;
+                Vector3 cameraForward = Camera.main.transform.forward;
+                MaleficusUtilities.TransformAxisToCamera(ref x, ref y, cameraForward);
+
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.MOVE_X, x, TouchPlayerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.MOVE_Y, y, TouchPlayerID));
             }
             else // Spell joystick
             {
-                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID));
-                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID));
+                float x = joystickInput.x;
+                float y = -joystickInput.y;
+                Vector3 cameraForward = Camera.main.transform.forward;
+                MaleficusUtilities.TransformAxisToCamera(ref x, ref y, cameraForward, true);
+
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.ROTATE_X, x, TouchPlayerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.ROTATE_Y, y, TouchPlayerID));
             }
         }
     }
