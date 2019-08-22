@@ -9,7 +9,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
     public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
     public EClientID                            OwnClientID                 { get { return ownClientID; } }
-    public List<Net_SpellInputPressed>                 CastedSpells                { get { return castedSpells; } }
+    public List<Net_SpellInput>                 CastedSpells                { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs;
 
@@ -36,7 +36,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private bool isStarted;
     private int ownLobbyID;
     private EClientID ownClientID;
-    private List<Net_SpellInputPressed> castedSpells;
+    private List<Net_SpellInput> castedSpells;
 
 
     #region Monobehaviour
@@ -211,11 +211,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Net_OnInitLobby oil = (Net_OnInitLobby)msg;
                 ownLobbyID = oil.lobbyID;
                 break;
-            case NetID.SpellInput:
-                Debug.Log("Received Spell Input from another Player");
-                UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
-                AllReceivedMsgs.Add((Net_SpellInputPressed)msg);
-                break;
+
             case NetID.OnRequestGameInfo:
                 Debug.Log("Game info received");
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTGAMEINFO);
@@ -223,13 +219,35 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
 
+
+                // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
-                Net_JoystickInput movementInput = (Net_JoystickInput)msg;
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.JoystickType, movementInput.Joystick_X, movementInput.Joystick_Y, movementInput.PlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+
+                Net_JoystickInput movementMessage = (Net_JoystickInput)msg;
+                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle(movementMessage.JoystickType, movementMessage.Joystick_X, movementMessage.Joystick_Y, movementMessage.PlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
+
+            case NetID.SpellInput:
+                Debug.Log("Received Spell Input from another Player");
+
+                Net_SpellInput spellMessage = (Net_SpellInput)msg;
+                if (spellMessage.IsPressed == true)
+                {
+                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle);
+                }
+                else // released
+                {
+                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
+                }
+     
+
+                AllReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
 
 

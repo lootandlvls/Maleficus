@@ -20,6 +20,6 @@ public class ButtonReleasedEventHandle : AbstractEventHandle
 
     public override AbstractNetMessage GetNetMessage()
     {
-        return new Net_SpellInputReleased(PlayerID, InputButton);
+        return new Net_SpellInput(PlayerID, InputButton, false);
     }
 }

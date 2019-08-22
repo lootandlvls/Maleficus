@@ -31,7 +31,7 @@ public class Server : NetworkManager
     public readonly bool isPlayer = false;
     private bool server_isStarted;
     private byte error;
-    private List<Net_SpellInputPressed> castedSpells;
+    private List<Net_SpellInput> castedSpells;
 
     private Mongo db;
 
@@ -163,23 +163,36 @@ public class Server : NetworkManager
             case NetID.InitLobby:
                 InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
                 break;
-            case NetID.SpellInput:
-                Debug.Log("Received Spell Input from another Player");
-                ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInputPressed)msg);
-                UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
-                break;
             case NetID.RequestGameInfo:
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
+
+            // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
-                Net_JoystickInput movementInput = (Net_JoystickInput)msg;
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.JoystickType, movementInput.Joystick_X, movementInput.Joystick_Y, movementInput.PlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+
+                Net_JoystickInput movementMessage = (Net_JoystickInput)msg;
+                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle(movementMessage.JoystickType, movementMessage.Joystick_X, movementMessage.Joystick_Y, movementMessage.PlayerID);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
                 break;
 
+            case NetID.SpellInput:
+                Debug.Log("Received Spell Input from another Player");
+
+                Net_SpellInput spellMessage = (Net_SpellInput)msg;
+                if (spellMessage.IsPressed == true)
+                {
+                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle);
+                }
+                else // released
+                {
+                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
+                }
+                break;
         }
     }
 
@@ -452,7 +465,7 @@ public class Server : NetworkManager
         }
         SendClient(recHostId, cnnId, org);
     }
-    private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInputPressed si)
+    private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
     {
         Model_Account self = db.FindAccountByToken(si.Token);
         if(self != null)
