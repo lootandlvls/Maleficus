@@ -49,9 +49,10 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
             maleficusEvent.Invoke(eventHandle);
 
             // Debug event
-            if (MotherOfManagers.Instance.IsDebugLogEvents == true)
+            string debugMessage = eventHandle.GetDebugMessage();
+            if ((MotherOfManagers.Instance.IsDebugLogEvents == true) && (debugMessage != ""))
             {
-                Debug.Log("[EVENT] " + Name + " : " + eventHandle.GetDebugMessage());
+                Debug.Log("[EVENT] " + Name + " : " + debugMessage);
             }
 
             // Broadcast event to server if not None

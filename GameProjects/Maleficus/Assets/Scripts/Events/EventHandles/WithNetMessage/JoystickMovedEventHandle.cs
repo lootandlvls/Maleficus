@@ -21,7 +21,7 @@ public class JoystickMovedEventHandle : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        return PlayerID + " moved " + JoystickType + " | X : " + Joystick_X + ", Y : " + Joystick_Y;
+        return "";// PlayerID + " moved " + JoystickType + " | X : " + Joystick_X + ", Y : " + Joystick_Y;
     }
 
     public override AbstractNetMessage GetNetMessage()

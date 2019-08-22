@@ -174,4 +174,14 @@ public static class MaleficusConsts
         EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL
     };
+
+    public static EControllerID[] NETWORK_CONTROLLERS = new EControllerID[]
+    {
+        EControllerID.NETWORK_1,
+        EControllerID.NETWORK_2,
+        EControllerID.NETWORK_3,
+        EControllerID.NETWORK_4
+    };
+
+
 }

@@ -223,6 +223,7 @@ public enum EInputAxis
 
 public enum EJoystickType
 {
+    NONE,
     MOVEMENT,
     ROTATION
 }

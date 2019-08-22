@@ -57,9 +57,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
 
         // Input events
-        EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
-        EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
-        EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
+        //EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
+        //EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
+        //EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
        
         // Scene changed event
         EventManager.Instance.APP_SceneChanged.AddListener                      (On_APP_SceneChanged);
@@ -86,10 +86,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void Update()
     {
-        
+        UpdateControllersInput();
     }
-
-
 
 
     private void On_NETWORK_ReceivedGameSessionInfo(BasicEventHandle<List<EPlayerID>, EPlayerID> eventHandle)
@@ -304,6 +302,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonReleased(ButtonReleasedEventHandle eventHandle)
     {
+        Debug.Log("here");
+
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = eventHandle.PlayerID;
 
@@ -496,4 +496,67 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return result;
     }
 
+    public EControllerID GetControllerFrom(EPlayerID playerID)
+    {
+        if (playerControllerMapping.ContainsKey(playerID))
+        {
+            return playerControllerMapping[playerID];
+        }
+        return EControllerID.NONE;
+    }
+
+
+    private void UpdateControllersInput()
+    {
+        var controllersInput = InputManager.Instance.ControllersInput;
+        foreach (EControllerID controllerID in controllersInput.Keys)
+        {
+            ControllerInput controllerInput = controllersInput[controllerID];
+            EPlayerID playerID = GetPlayerIDFrom(controllerID);
+
+            // Movement
+            if (controllerInput.HasMoved())
+            {
+                Debug.Log("HasMoved");
+                float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
+                float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
+
+                On_INPUT_JoystickMoved(eventHandle);
+            }
+
+            // Rotation
+            if (controllerInput.HasRotated())
+            {
+                float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
+                float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
+                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
+
+                On_INPUT_JoystickMoved(eventHandle);
+            }
+
+            // Button pressesd
+            var isButtonPressed = controllerInput.IsButtonPressed;
+            foreach (EInputButton inputButton in isButtonPressed.Keys)
+            {
+                if (isButtonPressed[inputButton] == true)
+                {
+                    ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
+                    On_INPUT_ButtonPressed(eventHandle);
+                }
+            }
+
+            // Button Released
+            var isButtonReleased = controllerInput.IsButtonReleased;
+            foreach (EInputButton inputButton in isButtonReleased.Keys)
+            {
+                if (isButtonReleased[inputButton] == true)
+                {
+                    Debug.Log("inputButton : " + inputButton + " | controller : " + controllerID);
+                    ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
+                    On_INPUT_ButtonReleased(eventHandle);
+                }
+            }
+        }
+    }
 }
