@@ -443,7 +443,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 {
                     newInput.y = -newInput.y;
 
-                    EJoystickType joysticksType = EJoystickType.MOVEMENT;
+                    EJoystickType joysticksType = EJoystickType.ROTATION;
                     var joystickValues = ControllersInput[EControllerID.TOUCH].JoystickValues;
                     Vector2 oldInput = new Vector2(joystickValues[EInputAxis.ROTATE_X], joystickValues[EInputAxis.ROTATE_Y]);
                     float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
