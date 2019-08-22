@@ -130,30 +130,19 @@ public class Player : MonoBehaviour, IPlayer
                 SetDirectionalSpritesVisible(false);
 
                 if ((playerInput.HasMoved() == true)
-                    && (Time.time - lastTimeSinceRotated > 1.0f))
+                    && (Time.time - lastTimeSinceRotated > 0.5f))
                 // Moving for 1 second since last rortation?
                 {
                     LookAtMovingDirection(playerInput);
                 }
             }
-            
         }
-
-        // Cance all forces
-        //myRigidBody.velocity = Vector3.zero;
-        //myRigidBody.angularVelocity = Vector3.zero;
-
     }
 
     
     #region INPUT
     private void Move(float axis_X, float axis_Z)
     {
-        //if (IsARPlayer == true)
-        //{
-        //    MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
-        //}
-   
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
         Vector3 movemetVelocity = movingDirection * currentSpeed * 0.1f;
@@ -163,13 +152,8 @@ public class Player : MonoBehaviour, IPlayer
     private void Rotate(float axis_X, float axis_Z)
     {
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
-        if ((axis_X != 0.0f || axis_Z != 0.0f) && (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > MaleficusConsts.ROTATION_THRESHOLD))
+        if (axis_X != 0.0f || axis_Z != 0.0f)
         {
-            //if (IsARPlayer == true)
-            //{
-            //    MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward , true);
-            //}
-
             Vector3 lookDirection = new Vector3(axis_X, 0.0f, -axis_Z).normalized;
             Vector3 lookAtFictifPosition = transform.position + lookDirection;
             transform.LookAt(lookAtFictifPosition);
@@ -321,8 +305,6 @@ public class Player : MonoBehaviour, IPlayer
             myAnimator.SetBool("charging", false);
             StopSlowDownPlayer();
 
-            //Destroy(wandEffect);
-            //Destroy(particleSystemBodyEffect);
             particleSystemBodyEffect.Stop();
             particleSystemWandEffect.Stop();
 

@@ -57,7 +57,10 @@ public static class MaleficusConsts
     /// <summary> Threshold to know when a touch joystick can perform a spell button </summary>
     public const float SPELL_BUTTON_THRESHOLD = 0.3f;
 
-    public const float ROTATION_THRESHOLD = 0.0f;
+    // Input
+    public const float THRESHOLD_JOYSTICK_ACTIVATION = 0.2f;
+    public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.3f;
+    public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.05f;
 
     public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
 

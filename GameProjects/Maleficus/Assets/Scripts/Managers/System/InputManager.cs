@@ -352,7 +352,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         Vector2 newInput = joystickInput;
 
-        if (InputMode == EInputMode.TOUCH)
+        if ((InputMode == EInputMode.TOUCH)
+            && (Mathf.Abs(newInput.x) + Mathf.Abs(newInput.y) > MaleficusConsts.THRESHOLD_JOYSTICK_ACTIVATION))
         {
             EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
 
@@ -367,9 +368,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 //    "\n newInput : " + newInput.ToString() + 
                 //    "\n oldInput : " + oldInput.ToString());
 
-                if (inputDistance > 0.3f)
+                if (inputDistance > MaleficusConsts.THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT)
                 {
-
                     newInput.Normalize();
                     float x = newInput.x;
                     float y = newInput.y;
@@ -381,35 +381,35 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
                     EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
                 }
-
             }
             else // Spell joystick
             {
+                newInput.y = -newInput.y;
 
-                if (Mathf.Abs(newInput.x + newInput.y) > 0.3f)
+                EJoystickType joysticksType = EJoystickType.ROTATION;
+                var joystickValues = ControllersInput[EControllerID.TOUCH].JoystickValues;
+                Vector2 oldInput = new Vector2(joystickValues[EInputAxis.ROTATE_X], joystickValues[EInputAxis.ROTATE_Y]);
+                float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
+
+                DebugManager.Instance.Log(535, "dotProd : " + (Mathf.Abs(newInput.x) + Mathf.Abs(newInput.y)) +
+                                                "\n newInput : " + newInput.ToString());// +
+                                                //"\n oldInput : " + oldInput.ToString());
+
+                if (inputDistance > MaleficusConsts.THRESHOLD_JOYSTICK_DISTANCE_ROTATION)
                 {
-                    newInput.y = -newInput.y;
+                    newInput.Normalize();
+                    float x = newInput.x;
+                    float y = newInput.y;
+                    MaleficusUtilities.TransformAxisToCamera(ref x, ref y, Camera.main.transform.forward, true);
+                    newInput = new Vector2(x, y);
 
-                    EJoystickType joysticksType = EJoystickType.ROTATION;
-                    var joystickValues = ControllersInput[EControllerID.TOUCH].JoystickValues;
-                    Vector2 oldInput = new Vector2(joystickValues[EInputAxis.ROTATE_X], joystickValues[EInputAxis.ROTATE_Y]);
-                    float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
+                    joystickValues[EInputAxis.ROTATE_X] = newInput.x;
+                    joystickValues[EInputAxis.ROTATE_Y] = newInput.y;
 
-                    if (inputDistance > 0.05f)
-                    {
-                        newInput.Normalize();
-                        float x = newInput.x;
-                        float y = newInput.y;
-                        MaleficusUtilities.TransformAxisToCamera(ref x, ref y, Camera.main.transform.forward, true);
-                        newInput = new Vector2(x, y);
-
-                        joystickValues[EInputAxis.ROTATE_X] = newInput.x;
-                        joystickValues[EInputAxis.ROTATE_Y] = newInput.y;
-
-                        EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
-                    }
+                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
                 }
             }
+
         }
     }
 
@@ -450,7 +450,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
     #endregion
-
 
     #region Network Input
     private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
