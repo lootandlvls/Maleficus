@@ -5,19 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/DungeonMode/LVL_SELECTION.unity
-    guid: af9231850a86b944bb73cb4605edd16e
-  - enabled: 1
-    path: Assets/Scenes/DungeonMode/LVL_2_AR.unity
-    guid: 9113a6a651904714a8276ca11175ac5e
-  - enabled: 1
-    path: Assets/Scenes/DungeonMode/LVL_3_AR.unity
-    guid: 0f2c461710b01664597cc386f1ac5acd
-  - enabled: 1
-    path: Assets/Scenes/DungeonMode/LVL_1_AR.unity
-    guid: 79f8fb482e36a9f4182368e3d124cd58
   - enabled: 0
-    path: Assets/__DELETED_GUID_Trash/fe1d91be69be11d4ea1b49d3ba82f656
-    guid: fe1d91be69be11d4ea1b49d3ba82f656
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/GameLoopTest/ENTRY.unity
+    guid: edafa10ac17dcf04783721d91dc6fa85
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/GameLoopTest/GAME.unity
+    guid: 748ea2def2649e446b27d5fd8cc8d5f7
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/GameLoopTest/MENU.unity
+    guid: bddb1906bfb8023448416c99f8fc2d3a
   m_configObjects: {}
