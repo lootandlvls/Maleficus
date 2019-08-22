@@ -98,11 +98,8 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
             background.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
         }
 
-        //if (joystickType != ETouchJoystickType.MOVE)              // TODO: Add Joystick pressed for charging
-        //{
-        //    InputManager.Instance.OnJoystickPressed(joystickType);
-        //}
-
+        InputManager.Instance.OnTouchJoystickPressed(joystickType);
+        
         OnDrag(eventData);
 
         // Update Joystick appearance 

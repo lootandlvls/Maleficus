@@ -53,10 +53,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
         // Input events
-        //EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
-        //EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
+        EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
+        EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
         //EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
-       
+
         // Scene changed event
         EventManager.Instance.APP_SceneChanged.AddListener                      (On_APP_SceneChanged);
         EventManager.Instance.APP_AppStateUpdated.AddListener                   (On_APP_AppStateUpdated);
@@ -268,7 +268,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = eventHandle.PlayerID;
 
-
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
         if ((spellID == ESpellID.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
         {
@@ -315,8 +314,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonReleased(ButtonReleasedEventHandle eventHandle)
     {
-        Debug.Log("here");
-
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = eventHandle.PlayerID;
 

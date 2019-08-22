@@ -333,12 +333,12 @@ public class Player : MonoBehaviour, IPlayer
             if (counter > 100)
             {
                 spellChargingLVL = 2;
-                Debug.Log("Spell upgraded to lvl 2");
+                //Debug.Log("Spell upgraded to lvl 2");
             }
             else
             {
                 spellChargingLVL = 1;
-                Debug.Log("Spell upgraded to lvl 1");
+                //Debug.Log("Spell upgraded to lvl 1");
             }
 
         }
