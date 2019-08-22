@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
-    public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
+    //public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
     public EClientID                            OwnClientID                 { get { return ownClientID; } }
     public List<Net_SpellInput>                 CastedSpells                { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
@@ -63,6 +63,11 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         UpdateMessagePump();
     }
     #endregion
+
+    public virtual bool HasAuthority()
+    {
+        return false;
+    }
 
     public void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
@@ -162,7 +167,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
 
     #region OnData
-    protected void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
+    protected virtual void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
     {
         Debug.Log("receiverd a message of type " + msg.ID);
 

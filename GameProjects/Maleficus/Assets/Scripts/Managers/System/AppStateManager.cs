@@ -24,6 +24,11 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         startStates = MaleficusConsts.START_APP_STATES;
         // 2) Define "debugStateID" in Awake() of child class
         debugStateID = 51;
+
+        if (MotherOfManagers.Instance.DebugStartScene != EScene.NONE)
+        {
+            SetUpDebugStartScene(MotherOfManagers.Instance.DebugStartScene);
+        }
     }
 
     protected override void Start()

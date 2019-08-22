@@ -59,7 +59,12 @@ public class Server : NetworkManager
 
     #endregion
 
-        // override!
+
+    public override bool HasAuthority()
+    {
+        return true;
+    }
+
     public override void Init()
     {
         db = new Mongo();
@@ -144,7 +149,7 @@ public class Server : NetworkManager
     }
 
     #region OnData
-    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
+    protected override void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
     {
         Debug.Log("receiverd a message of type " + msg.ID);
 
@@ -180,8 +185,8 @@ public class Server : NetworkManager
                 Debug.Log("Game input received");
                 Net_MovementInput movementInput = (Net_MovementInput)msg;
                 MovementInputEventHandle eventHandle = new MovementInputEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
-                EventManager.Instance.INPUT_Movement.Invoke(eventHandle);
-                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                EventManager.Instance.INPUT_Movement.Invoke(eventHandle, false);
+                AllReceivedMsgs.Add((Net_MovementInput)msg);
                 break;
 
             case NetID.SpellInput:
@@ -196,7 +201,7 @@ public class Server : NetworkManager
                 {
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle, false);
                 }
-                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                AllReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
 
         }

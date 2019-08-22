@@ -27,7 +27,8 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public EPlacementMethod ARPlacementMethod;
     [SerializeField] public EEnemyMovementMethod EnemiesMovementMethod;
 
-    [Header ("Debug")]
+    [Header("Debug")]
+    [SerializeField] public EScene DebugStartScene = EScene.NONE;
     [SerializeField] public bool IsDebugLogEvents = false;
     [SerializeField] public bool IsReduceLightIntensityOnSceneStart = false;
 
