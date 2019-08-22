@@ -268,19 +268,34 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = eventHandle.PlayerID;
 
-        ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
-        if ((spellID == ESpellID.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
+        ESpellSlot spellSlot = MaleficusUtilities.GetSpellSlotFrom(inputButton);
+        if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
         {
             return;
         }
-        
-        if (ActivePlayers[playerID].ReadyToUseSpell[spellID] && ActivePlayers[playerID].IsReadyToShoot)
-        {
-            EMovementType movementType = SpellManager.Instance.Player_Spells[playerID][spellID].MovementType;
 
-            ActivePlayers[playerID].StartChargingSpell(spellID, movementType);
-            ActivePlayers[playerID].IsPlayerCharging = true;
+        ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
+
+
+        // Instantiate spell now ?
+        if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+        {
+            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            {
+                ActivePlayers[playerID].IsReadyToShoot = false;
+                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+
+                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+            }
         }
+        else
+        {
+            ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
+        }
+
     }
 
     private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
@@ -317,24 +332,29 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = eventHandle.PlayerID;
 
-        ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
-        if ((spellID == ESpellID.NONE) || (activePlayers.ContainsKey(playerID) == false))
+        ESpellSlot spellSlot = MaleficusUtilities.GetSpellSlotFrom(inputButton);
+        if ((spellSlot == ESpellSlot.NONE) || (activePlayers.ContainsKey(playerID) == false))
         {
             return;
         }
 
+        ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
 
-        Debug.Log(spellID + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellID]);
 
-        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellID])
+        Debug.Log(spellSlot + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellSlot]);
+
+        if (spell.MovementType != ESpellMovementType.LINEAR_LASER)
         {
-            ActivePlayers[playerID].IsReadyToShoot = false;
-            ActivePlayers[playerID].ReadyToUseSpell[spellID] = false;
-            ActivePlayers[playerID].StopChargingSpell(spellID);
-          
-            SpellManager.Instance.CastSpell(playerID, spellID, ActivePlayers[playerID].SpellChargingLVL);
-            
-            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellID));
+            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            {
+                ActivePlayers[playerID].IsReadyToShoot = false;
+                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+
+                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+            }
         }
     }
 
@@ -447,6 +467,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     public ControllerInput GetPlayerInput(EPlayerID playerID)
     {
+        if (playerControllerMapping.ContainsKey(playerID) == false)
+        {
+            return new ControllerInput();
+        }
         EControllerID controllerID = playerControllerMapping[playerID];
 
         return InputManager.Instance.ControllersInput[controllerID];
@@ -462,13 +486,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return Teams[inTeamID].ToArray();
     }
 
-    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellID spellID)                 
+    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellSlot spellSlot)                 
     {
-        yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellID]);
+        yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellSlot]);
         ActivePlayers[playerID].IsReadyToShoot = true;
 
-        yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellID]);
-        ActivePlayers[playerID].ReadyToUseSpell[spellID] = true;
+        yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellSlot]);
+        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
 
         
     }

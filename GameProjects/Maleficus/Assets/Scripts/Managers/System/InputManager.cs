@@ -74,37 +74,37 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         /* Charging spell check */
         // Spell 1
-        Check_ChargingSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_A);
-        Check_ChargingSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_B);
-        Check_ChargingSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_C);
-        Check_ChargingSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_D);
+        Check_ChargingSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_A);
+        Check_ChargingSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_B);
+        Check_ChargingSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_C);
+        Check_ChargingSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_D);
         //spell 2
-        Check_ChargingSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_A);
-        Check_ChargingSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_B);
-        Check_ChargingSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_C);
-        Check_ChargingSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_D);
+        Check_ChargingSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_A);
+        Check_ChargingSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_B);
+        Check_ChargingSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_C);
+        Check_ChargingSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_D);
         // spell 3
-        Check_ChargingSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_A);
-        Check_ChargingSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_B);
-        Check_ChargingSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_C);
-        Check_ChargingSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_D);
+        Check_ChargingSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_A);
+        Check_ChargingSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_B);
+        Check_ChargingSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_C);
+        Check_ChargingSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_D);
 
         /* Casted spell check */
         // Spell 1
-        Check_CastedSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_A);
-        Check_CastedSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_B);
-        Check_CastedSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_C);
-        Check_CastedSpell(ESpellID.SPELL_1, EControllerID.GAMEPAD_D);
+        Check_CastedSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_A);
+        Check_CastedSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_B);
+        Check_CastedSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_C);
+        Check_CastedSpell(ESpellSlot.SPELL_1, EControllerID.GAMEPAD_D);
         //spell 2
-        Check_CastedSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_A);
-        Check_CastedSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_B);
-        Check_CastedSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_C);
-        Check_CastedSpell(ESpellID.SPELL_2, EControllerID.GAMEPAD_D);
+        Check_CastedSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_A);
+        Check_CastedSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_B);
+        Check_CastedSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_C);
+        Check_CastedSpell(ESpellSlot.SPELL_2, EControllerID.GAMEPAD_D);
         // spell 3
-        Check_CastedSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_A);
-        Check_CastedSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_B);
-        Check_CastedSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_C);
-        Check_CastedSpell(ESpellID.SPELL_3, EControllerID.GAMEPAD_D);
+        Check_CastedSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_A);
+        Check_CastedSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_B);
+        Check_CastedSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_C);
+        Check_CastedSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_D);
 
         // Horizontal 
         // Left 
@@ -186,7 +186,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     }
     
 
-    private void Check_ChargingSpell(ESpellID spellID, EControllerID controllerID)
+    private void Check_ChargingSpell(ESpellSlot spellID, EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
         EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellID);
@@ -207,7 +207,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
 
-    private void Check_CastedSpell(ESpellID spellID, EControllerID controllerID)
+    private void Check_CastedSpell(ESpellSlot spellID, EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
         EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellID);

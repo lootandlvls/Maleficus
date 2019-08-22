@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface ISpell
 {
-    ESpells Spell { get; }
+    ESpellID SpellID { get; }
 
     string SpellName { get; }
 
@@ -24,7 +24,7 @@ public interface ISpell
 
     List<ESpellEffects> BuffEffects { get; }
 
-    EMovementType MovementType { get;}
+    ESpellMovementType MovementType { get;}
 
     float Cooldown { get; }
 

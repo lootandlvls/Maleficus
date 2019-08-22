@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1822600135407670495}
   - component: {fileID: 1983709247790683235}
   - component: {fileID: 1982091387149003819}
+  - component: {fileID: 2731127350859942324}
   m_Layer: 0
   m_Name: BodyEnergyEffect
   m_TagString: Untagged
@@ -4527,3 +4528,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &2731127350859942324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820421771836070987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9a9e8dc496c1a47b89ba71f0b402d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

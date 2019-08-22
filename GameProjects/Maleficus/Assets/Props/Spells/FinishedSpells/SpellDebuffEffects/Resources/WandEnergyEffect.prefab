@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5548713386392041538}
   - component: {fileID: 5751008142766733564}
   - component: {fileID: 5750294854816351494}
+  - component: {fileID: 5051041931977434340}
   m_Layer: 0
   m_Name: WandEnergyEffect
   m_TagString: Untagged
@@ -4720,3 +4721,15 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &5051041931977434340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5551467226034161610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e9a9e8dc496c1a47b89ba71f0b402d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -59,6 +59,7 @@ public static class MaleficusUtilities
         axis_X = controllerAxis.x;
         axis_Z = controllerAxis.y;
     }
+
     #endregion
 
     #region Sound
@@ -261,19 +262,19 @@ public static class MaleficusUtilities
     }       
     
     /// <summary> Convert an int to a SpellID enum </summary>
-    public static ESpellID IntToSpellID(int spellID)
+    public static ESpellSlot IntToSpellID(int spellID)
     {
-        ESpellID id = ESpellID.NONE;
+        ESpellSlot id = ESpellSlot.NONE;
         switch (spellID)
         {
             case 1:
-                id = ESpellID.SPELL_1;
+                id = ESpellSlot.SPELL_1;
                 break;
             case 2:
-                id = ESpellID.SPELL_2;
+                id = ESpellSlot.SPELL_2;
                 break;
             case 3:
-                id = ESpellID.SPELL_3;
+                id = ESpellSlot.SPELL_3;
                 break;
         }
         return id;
@@ -324,42 +325,42 @@ public static class MaleficusUtilities
     }
 
     /// <summary> Convert an InputButton enum to a SpellID enum </summary>
-    public static ESpellID GetSpellIDFrom(EInputButton inputButton)
+    public static ESpellSlot GetSpellSlotFrom(EInputButton inputButton)
     {
-        ESpellID id = ESpellID.NONE;
+        ESpellSlot id = ESpellSlot.NONE;
         switch (inputButton)
         {
             case EInputButton.CAST_SPELL_1:
-                id = ESpellID.SPELL_1;
+                id = ESpellSlot.SPELL_1;
                 break;
 
             case EInputButton.CAST_SPELL_2:
-                id = ESpellID.SPELL_2;
+                id = ESpellSlot.SPELL_2;
                 break;
 
             case EInputButton.CAST_SPELL_3:
-                id = ESpellID.SPELL_3;
+                id = ESpellSlot.SPELL_3;
                 break;
         }
         return id;
     }
 
     /// <summary> Convert a TouchJoystickType enum to a SpellID enum </summary>
-    public static ESpellID GetSpellIDFrom(ETouchJoystickType inputButton)
+    public static ESpellSlot GetSpellIDFrom(ETouchJoystickType inputButton)
     {
-        ESpellID id = ESpellID.NONE;
+        ESpellSlot id = ESpellSlot.NONE;
         switch (inputButton)
         {
             case ETouchJoystickType.SPELL_1:
-                id = ESpellID.SPELL_1;
+                id = ESpellSlot.SPELL_1;
                 break;
 
             case ETouchJoystickType.SPELL_2:
-                id = ESpellID.SPELL_2;
+                id = ESpellSlot.SPELL_2;
                 break;
 
             case ETouchJoystickType.SPELL_3:
-                id = ESpellID.SPELL_3;
+                id = ESpellSlot.SPELL_3;
                 break;
         }
         return id;
@@ -387,20 +388,20 @@ public static class MaleficusUtilities
     }
 
     /// <summary> Convert a SpellID enum to a InputButton enum </summary>
-    public static EInputButton GetInputButtonFrom(ESpellID spellID)
+    public static EInputButton GetInputButtonFrom(ESpellSlot spellID)
     {
         EInputButton button = EInputButton.NONE;
         switch (spellID)
         {
-            case ESpellID.SPELL_1:
+            case ESpellSlot.SPELL_1:
                 button = EInputButton.CAST_SPELL_1;
                 break;
 
-            case ESpellID.SPELL_2:
+            case ESpellSlot.SPELL_2:
                 button = EInputButton.CAST_SPELL_2;
                 break;
 
-            case ESpellID.SPELL_3:
+            case ESpellSlot.SPELL_3:
                 button = EInputButton.CAST_SPELL_3;
                 break;
         }

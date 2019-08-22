@@ -15,7 +15,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<GameObject> ChargingSpells_Effects { get { return chargingSpells_Effects; } }
     public List<AbstractSpell> All_Spells { get { return all_Spells; } }
 
-    public Dictionary<EPlayerID, Dictionary<ESpellID, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellID, AbstractSpell>>();
+    public Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
 
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
     [SerializeField] private GameObject frozenEffect;
@@ -171,7 +171,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     }
 
-    public void CastSpell(EPlayerID playerID, ESpellID spellID , int spellChargingLVL)
+    public void CastSpell(EPlayerID playerID, ESpellSlot spellID , int spellChargingLVL)
     {
         AbstractSpell spellToCast ;
         Debug.Log("Spell lvl " + spellChargingLVL);
@@ -182,7 +182,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         {
             foreach ( AbstractSpell upgrade in spellsUpgrade)
             {
-                if (upgrade.Spell == spellToCast.Spell && upgrade.SpellLevel == 2)
+                if (upgrade.SpellID == spellToCast.SpellID && upgrade.SpellLevel == 2)
                 {
                     Debug.Log("Spell Upgraded");
                     spellToCast = upgrade;
@@ -363,15 +363,15 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void InitializeSpells()
     {
-        Player_Spells[EPlayerID.PLAYER_1] = new Dictionary<ESpellID, AbstractSpell>();
-        Player_Spells[EPlayerID.PLAYER_2] = new Dictionary<ESpellID, AbstractSpell>();
-        Player_Spells[EPlayerID.PLAYER_3] = new Dictionary<ESpellID, AbstractSpell>();
-        Player_Spells[EPlayerID.PLAYER_4] = new Dictionary<ESpellID, AbstractSpell>();
+        Player_Spells[EPlayerID.PLAYER_1] = new Dictionary<ESpellSlot, AbstractSpell>();
+        Player_Spells[EPlayerID.PLAYER_2] = new Dictionary<ESpellSlot, AbstractSpell>();
+        Player_Spells[EPlayerID.PLAYER_3] = new Dictionary<ESpellSlot, AbstractSpell>();
+        Player_Spells[EPlayerID.PLAYER_4] = new Dictionary<ESpellSlot, AbstractSpell>();
 
 
         for (int j = 0; j < 3; j++)
         {
-            ESpellID spellID = MaleficusUtilities.IntToSpellID(j + 1);
+            ESpellSlot spellID = MaleficusUtilities.IntToSpellID(j + 1);
 
             Player_Spells[EPlayerID.PLAYER_1][spellID] = Player_1_SpellsList[j];
             Player_Spells[EPlayerID.PLAYER_2][spellID] = Player_2_SpellsList[j];

@@ -23,7 +23,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public bool HasPower { get { return hasPower; } }
 
-    public EMovementType MovementType { get { return movementType; } }
+    public ESpellMovementType MovementType { get { return movementType; } }
 
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
 
@@ -37,7 +37,7 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
     public float PushDuration { get { return pushDuration; } }
 
-    public ESpells Spell { get { return spell; } }
+    public ESpellID SpellID { get { return spell; } }
 
 
     [SerializeField] public int hitPower;
@@ -46,9 +46,9 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPower;
-    [SerializeField] private ESpells spell;
+    [SerializeField] private ESpellID spell;
 
-    [SerializeField] private EMovementType movementType;
+    [SerializeField] private ESpellMovementType movementType;
     [SerializeField] private List<ESpellEffects> debuffEffects;
     [SerializeField] private List<ESpellEffects> buffEffects;
 

@@ -65,7 +65,7 @@ public enum EGameMode
 
 #region Spells
 
-public enum ESpellID
+public enum ESpellSlot
 {
     NONE,
     SPELL_1,
@@ -99,7 +99,7 @@ public enum ESpellEffects
 
 
 
-public enum EMovementType         
+public enum ESpellMovementType         
 {
     LINEAR_HIT,
     LINEAR_EXPLOSIVE,
@@ -111,7 +111,7 @@ public enum EMovementType
 
 }
 
-public enum ESpells
+public enum ESpellID
 {
   FIREBALL,
   FIRE_LASER,

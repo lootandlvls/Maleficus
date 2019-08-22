@@ -11,9 +11,9 @@ public class Player : MonoBehaviour, IPlayer
     public Quaternion Rotation { get { return transform.rotation; } }
     public bool IsARPlayer { get; set; }
     public bool IsDead { get { return isDead; } }                                            // TODO: Define when player is dead
-    public Dictionary<ESpellID, bool> ReadyToUseSpell { get { return readyToUseSpell; } }
-    public Dictionary<ESpellID, float> SpellCooldown { get { return spellCooldown; } }
-    public Dictionary<ESpellID, float> SpellDuration { get { return spellDuration; } }
+    public Dictionary<ESpellSlot, bool> ReadyToUseSpell { get { return readyToUseSpell; } }
+    public Dictionary<ESpellSlot, float> SpellCooldown { get { return spellCooldown; } }
+    public Dictionary<ESpellSlot, float> SpellDuration { get { return spellDuration; } }
     public bool IsReadyToShoot { get; set; }
     public bool IsPlayerCharging { get; set; }
 
@@ -39,11 +39,11 @@ public class Player : MonoBehaviour, IPlayer
     private float lastTimeSinceRotated;
 
     private float currentSpeed;
-    private IEnumerator PushCoroutine;
-
+    private IEnumerator UpdatePushVelocityEnumerator;
+    private IEnumerator SpellChargingEnumerator;
 
     /// <summary> Spell Manager will initialize the variables for this Dictionary </summary> 
-    Dictionary<ESpellID, GameObject> ChargingEffects = new Dictionary<ESpellID, GameObject>();
+    Dictionary<ESpellSlot, GameObject> ChargingEffects = new Dictionary<ESpellSlot, GameObject>();
 
     
     private Vector3 movingDirection;
@@ -59,13 +59,13 @@ public class Player : MonoBehaviour, IPlayer
 
 
     // TODO [Nassim]: refactor multiple variables into a dictionary
-    private Dictionary<ESpellID, bool> readyToUseSpell = new Dictionary<ESpellID, bool>();
+    private Dictionary<ESpellSlot, bool> readyToUseSpell = new Dictionary<ESpellSlot, bool>();
 
     [Header("SpellsCooldown")]
-    private Dictionary<ESpellID, float> spellCooldown = new Dictionary<ESpellID, float>();
+    private Dictionary<ESpellSlot, float> spellCooldown = new Dictionary<ESpellSlot, float>();
 
     [Header("SpellsDuration")]
-    private Dictionary<ESpellID, float> spellDuration = new Dictionary<ESpellID, float>();
+    private Dictionary<ESpellSlot, float> spellDuration = new Dictionary<ESpellSlot, float>();
 
 
     private void Awake()
@@ -146,21 +146,7 @@ public class Player : MonoBehaviour, IPlayer
     }
 
     
-
-
-
-    //private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
-    //{
-    //    if (hitInfo.HitPlayerID == PlayerID)
-    //    {
-    //        Rigidbody rgb = GetComponent<Rigidbody>();
-    //        rgb.AddForceAtPosition(hitInfo.HitVelocity, transform.position, ForceMode.Impulse);
-
-    //    }
-    //}
-
     #region INPUT
-
     private void Move(float axis_X, float axis_Z)
     {
         //if (IsARPlayer == true)
@@ -170,7 +156,7 @@ public class Player : MonoBehaviour, IPlayer
    
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
-        Vector3 movemetVelocity = movingDirection * speed * 0.1f;
+        Vector3 movemetVelocity = movingDirection * currentSpeed * 0.1f;
         transform.position += (movemetVelocity + pushVelocity + GravityVelocity) * Time.deltaTime;
     }
 
@@ -190,53 +176,41 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    private void LookAtMovingDirection(ControllerInput playerInput)
-    {
-        float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
-        float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
-        //MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
-        transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
-    }
 
-    public void StartChargingSpell(ESpellID spellID, EMovementType movementType)
+
+    public void StartChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        if (readyToUseSpell[spellID] && IsReadyToShoot)
+        if (spell.MovementType == ESpellMovementType.LINEAR_HIT)
         {
-            if (movementType == EMovementType.LINEAR_HIT)
-            {
-                StartCoroutine(PlayerCannotMoveCoroutine());
-
-
-                IsPlayerCharging = true;
-                Debug.Log("Player started Charging");
-                StartCoroutine(SpellChargingCoroutine(spellID));
-            }
-            else if (movementType == EMovementType.LINEAR_LASER)
-            {
-                StartCoroutine(PlayerCannotMoveCoroutine());
-            }
-
-            //   StartChargingSpell(1, movementType);
-            //     StartCoroutine(ReadyToUseSpell(spellDuration_1, 0));
-            // StartCoroutine(ReadyToUseSpell(spellCooldown_1, 1));
-
-
-            // TODO: Not working here
-            // Deactivate Directional Sprite
+            IsPlayerCharging = true;
+            
+            Debug.Log("Player started Charging");
+            StartNewCoroutine(SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
+            //StartCoroutine(SpellChargingCoroutine(spellSlot));
         }
+        else if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+        {
+            StartCoroutine(SlowDownPlayerCoroutine(0.25f, spell.CastingDuration));
+        }
+
     }
 
-
-
-    public void StopChargingSpell(ESpellID spellID)
+    public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        Debug.Log("player stopped charging " + spellID);
+        Debug.Log("player stopped charging " + spellSlot);
         IsPlayerCharging = false;
 
+        if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+        {
+            StartCoroutine(SlowDownPlayerCoroutine(speed / 3.0f, spell.CastingDuration));
+        }
+        else
+        {
+            StopSlowDownPlayer();
+
+        }
     }
  
-
-
     private void InitializeChargingEffects()
     {
 
@@ -244,112 +218,116 @@ public class Player : MonoBehaviour, IPlayer
 
     private void InitializeDictionaries()
     {
-        readyToUseSpell[ESpellID.SPELL_1] = true;
-        readyToUseSpell[ESpellID.SPELL_2] = true;
-        readyToUseSpell[ESpellID.SPELL_3] = true;
+        readyToUseSpell[ESpellSlot.SPELL_1] = true;
+        readyToUseSpell[ESpellSlot.SPELL_2] = true;
+        readyToUseSpell[ESpellSlot.SPELL_3] = true;
 
-        spellCooldown[ESpellID.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_1].Cooldown;
-        spellCooldown[ESpellID.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_2].Cooldown;
-        spellCooldown[ESpellID.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_3].Cooldown;
+        spellCooldown[ESpellSlot.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_1].Cooldown;
+        spellCooldown[ESpellSlot.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_2].Cooldown;
+        spellCooldown[ESpellSlot.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_3].Cooldown;
 
-        spellDuration[ESpellID.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_1].CastingDuration;
-        spellDuration[ESpellID.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_2].CastingDuration;
-        spellDuration[ESpellID.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellID.SPELL_3].CastingDuration;
+        spellDuration[ESpellSlot.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_1].CastingDuration;
+        spellDuration[ESpellSlot.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_2].CastingDuration;
+        spellDuration[ESpellSlot.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_3].CastingDuration;
     }
 
 
-    private IEnumerator PlayerCannotMoveCoroutine()
+    private IEnumerator SlowDownPlayerCoroutine(float slowDownSpeed, float duration)
     {
         myAnimator.SetBool("channeling", true);
-        currentSpeed = 0;
+        currentSpeed = slowDownSpeed;
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(duration);
 
         currentSpeed = speed;
         myAnimator.SetBool("channeling", false);
     }
 
-    private IEnumerator SetReadyToUseSpellCoroutine(float time, ESpellID spellID)                    
+    private void SlowDownPlayer(float slowDownSpeed)
+    {
+        myAnimator.SetBool("channeling", true);
+        currentSpeed = slowDownSpeed;
+    }
+
+    private void StopSlowDownPlayer()
+    {
+        myAnimator.SetBool("channeling", false);
+        currentSpeed = speed;
+    }
+
+    private IEnumerator SetReadyToUseSpellCoroutine(float time, ESpellSlot spellSlot)                    
     {
         yield return new WaitForSeconds(time);
 
         IsReadyToShoot = true;
-        readyToUseSpell[spellID] = true;
+        readyToUseSpell[spellSlot] = true;
 
         Debug.Log("ready to use the spell again");
     }
 
 
-    private IEnumerator AnimationDelayCoroutine(AbstractSpell spellToCast , int animationID)
-    {
-        switch (animationID)
-        {
-            case 1:
-                myAnimator.SetTrigger("projectileAttack");
-                break;
-            case 2:
-                myAnimator.SetTrigger("teleport");
-                break;
-        }
-        
-        yield return new WaitForSeconds(0.3f);
-        AbstractSpell spell = Instantiate(spellToCast, SpellInitPosition, transform.rotation);
-        spell.CastingPlayerID = PlayerID;
-        spell.parabolicSpell_EndPosition = SpellEndPosition;
-    }
 
-    private IEnumerator SpellChargingCoroutine(ESpellID spellID)
+    private IEnumerator SpellChargingCoroutine(ESpellSlot spellSlot)
     {
-        int counter = 0;
-        
-        // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
-        Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-        GameObject wandEffect = Instantiate(chargingWandEnergy, position, chargingBodyEnergy.transform.rotation);
-        GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, chargingBodyEnergy.transform.rotation);
-        bodyEffect.transform.parent = this.transform;
-        wandEffect.transform.parent = this.transform;
-        ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
-        ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
-       
-        currentSpeed = speed / 2;
-        Debug.Log("spellCharging function working...");
-        while (IsPlayerCharging)
+        Debug.Log("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot);
+        while ((IsPlayerCharging == true)
+            && ((readyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
         {
-            if (counter == 10 )
+            Debug.Log("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot);
+            yield return new WaitForEndOfFrame();
+        }
+
+        if (IsPlayerCharging == true)
+        {
+            SlowDownPlayer(speed / 2.0f);
+            myAnimator.SetBool("charging", true);
+            int counter = 0;
+
+            // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
+            Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
+            GameObject wandEffect = Instantiate(chargingWandEnergy, position, chargingBodyEnergy.transform.rotation);
+            GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, chargingBodyEnergy.transform.rotation);
+            bodyEffect.transform.parent = this.transform;
+            wandEffect.transform.parent = this.transform;
+            ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
+            ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
+
+            Debug.Log("34563463463 spellCharging function working...");
+            while (IsPlayerCharging)
             {
-               
-                myAnimator.SetBool("charging", true); 
-                particleSystemBodyEffect.maxParticles = 1;                                             // TODO [Nassim]: Fix warnings
-                particleSystemWandEffect.maxParticles = 1;
-            }
-            if (  counter  == 50 || counter == 100)
-            {
+                Debug.Log("34563463463 charging");
+
+
                 particleSystemBodyEffect.maxParticles = counter;
                 particleSystemWandEffect.maxParticles = counter;
-            }
-            
-            yield return new WaitForSeconds(0.0f);
-            counter++;
-            if (counter > 100)
-            {
-                spellChargingLVL = 2;
-                //Debug.Log("Spell upgraded to lvl 2");
-            }
-            else
-            {
-                spellChargingLVL = 1;
-                //Debug.Log("Spell upgraded to lvl 1");
-            }
 
+
+                yield return new WaitForSeconds(0.0f);
+                counter += 4;       // TODO: Add how an attribute in spell to influence how fast second level is charged
+                if (counter > 100)
+                {
+                    spellChargingLVL = 2;
+                    //Debug.Log("Spell upgraded to lvl 2");
+                }
+                else
+                {
+                    spellChargingLVL = 1;
+                    //Debug.Log("Spell upgraded to lvl 1");
+                }
+                yield return new WaitForEndOfFrame();
+            }
+            Debug.Log("spellCharging function Done!!");
+
+            myAnimator.SetBool("charging", false);
+            StopSlowDownPlayer();
+
+            //Destroy(wandEffect);
+            //Destroy(particleSystemBodyEffect);
+            particleSystemBodyEffect.Stop();
+            particleSystemWandEffect.Stop();
+
+            Debug.Log("counter = " + counter);
         }
-        Debug.Log("spellCharging function Done!!");
-       
-        currentSpeed = speed;
-
-        myAnimator.SetBool("charging", false);
-        Destroy(wandEffect);
-        Destroy(particleSystemBodyEffect);
-        Debug.Log("counter = " + counter);
     }
     #endregion
 
@@ -374,41 +352,6 @@ public class Player : MonoBehaviour, IPlayer
             }
         }
     }
-
-    private void TransformAxisToCamera(ref float axis_X, ref float axis_Z, int inversedSign = 1)
-    {
-        Vector2 coordinateForward = new Vector2(0.0f, 1.0f);
-        Vector2 coordinateRight = new Vector2(1.0f, 0.0f);
-        Vector2 cameraForward = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z).normalized;
-        Vector2 controllerAxis = new Vector2(axis_X, axis_Z).normalized;
-        float dotWithRight = Vector2.Dot(coordinateRight, cameraForward);
-        int sign;
-        if (dotWithRight > 0.0f)
-        {
-            sign = -1;
-        }
-        else if (dotWithRight < 0.0f)
-        {
-            sign = 1;
-        }
-        else
-        {
-            sign = 0;
-        }
-        sign *= inversedSign;
-
-        float angle = Mathf.Acos(Vector2.Dot(coordinateForward, cameraForward)) * sign;
-        DebugManager.Instance.Log(68, "X : " + controllerAxis.x + " | Y : " + controllerAxis.y + " | A : " + angle * Mathf.Rad2Deg);
-
-
-        axis_Z = controllerAxis.y * Mathf.Cos(angle) + controllerAxis.x * Mathf.Sin(angle);
-        axis_X = controllerAxis.x * Mathf.Cos(angle) - controllerAxis.y * Mathf.Sin(angle);
-        controllerAxis = new Vector2(axis_X, axis_Z).normalized;
-
-        axis_X = controllerAxis.x;
-        axis_Z = controllerAxis.y;
-    }
-
 
     public void DoShockwaveAnimation()
     {
@@ -459,17 +402,22 @@ public class Player : MonoBehaviour, IPlayer
     {
         pushVelocity = velocity;
 
-        if (PushCoroutine != null)
-        {
-            StopCoroutine(PushCoroutine);
-        }
         if (duration <= 0.0f)
         {
             duration = 0.1f;
         }
-        PushCoroutine = UpdatePushVelocityCoroutine(duration);
-        StartCoroutine(PushCoroutine);
+        StartNewCoroutine(UpdatePushVelocityEnumerator, UpdatePushVelocityCoroutine(duration));
+
+        //if (PushCoroutine != null)
+        //{
+        //    StopCoroutine(PushCoroutine);
+        //}
+        //PushCoroutine = UpdatePushVelocityCoroutine(duration);
+        //StartCoroutine(PushCoroutine);
     }
+
+    
+
 
     private IEnumerator UpdatePushVelocityCoroutine(float duration)
     {
@@ -505,4 +453,21 @@ public class Player : MonoBehaviour, IPlayer
         Destroy(gameObject);
     }
 
+    private void LookAtMovingDirection(ControllerInput playerInput)
+    {
+        float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
+        float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
+        //MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
+        transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
+    }
+
+    private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)
+    {
+        if (enumerator != null)
+        {
+            StopCoroutine(enumerator);
+        }
+        enumerator = coroutine;
+        StartCoroutine(enumerator);
+    }
 }
