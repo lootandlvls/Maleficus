@@ -58,16 +58,16 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
 
         // Input events
-        EventManager.Instance.INPUT_ButtonPressed   += On_INPUT_ButtonPressed;
-        EventManager.Instance.INPUT_ButtonReleased  += On_INPUT_ButtonReleased;
-        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
+        EventManager.Instance.INPUT_ButtonPressed.AddListener               (On_INPUT_ButtonPressed);
+        EventManager.Instance.INPUT_ButtonReleased.AddListener              (On_INPUT_ButtonReleased);
+        EventManager.Instance.INPUT_Movement.AddListener                    (On_INPUT_JoystickMoved);
        
         // Scene changed event
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+        EventManager.Instance.APP_SceneChanged.AddListener                  (On_APP_SceneChanged);
+        EventManager.Instance.APP_AppStateUpdated.AddListener               (On_APP_AppStateUpdated);
 
         //Network
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener(On_NETWORK_ReceivedGameSessionInfo);
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener   (On_NETWORK_ReceivedGameSessionInfo);
 
       
 
@@ -257,9 +257,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
 
-    private void On_INPUT_ButtonPressed(EInputButton inputButton, EPlayerID playerID)
+    private void On_INPUT_ButtonPressed(SpellInputEventHandle eventHandle)
     {
-       
+        EInputButton inputButton    = eventHandle.InputButton;
+        EPlayerID playerID          = eventHandle.PlayerID;
+
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
         ActivePlayers[playerID].ButtonPressedWhenReadyToShoot = true;
         if ((spellID == ESpellID.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
@@ -282,7 +284,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         
     }
 
-    private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
+    private void On_INPUT_JoystickMoved(MovementInputEventHandle eventHandle)
     {
         EInputAxis axisType = eventHandle.AxisType;
         float axisValue = eventHandle.AxisValue;
@@ -310,8 +312,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_INPUT_ButtonReleased(EInputButton inputButton, EPlayerID playerID)
+    private void On_INPUT_ButtonReleased(SpellInputEventHandle eventHandle)
     {
+        EInputButton inputButton = eventHandle.InputButton;
+        EPlayerID playerID = eventHandle.PlayerID;
+
+
         int spellLVL = ActivePlayers[playerID].SpellChargingLVL;
         ESpellID spellID = MaleficusUtilities.GetSpellIDFrom(inputButton);
         ActivePlayers[playerID].StopChargingSpell(spellID);

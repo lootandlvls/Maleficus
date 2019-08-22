@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JoystickMovedEventHandle : AbstractEventHandle
+public class MovementInputEventHandle : AbstractEventHandle
 {
     public EInputAxis AxisType { get; }
     public float AxisValue { get; }
     public EPlayerID PlayerID { get; }
 
 
-    public JoystickMovedEventHandle(EInputAxis axisType, float axisValue, EPlayerID playerID)
+    public MovementInputEventHandle(EInputAxis axisType, float axisValue, EPlayerID playerID)
     {
         AxisType = axisType;
         AxisValue = axisValue;

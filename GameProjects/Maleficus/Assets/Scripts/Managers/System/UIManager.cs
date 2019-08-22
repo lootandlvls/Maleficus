@@ -25,9 +25,9 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         StateUpdateEvent += EventManager.Instance.UI_MenuStateUpdated.Invoke;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+        EventManager.Instance.APP_AppStateUpdated.AddListener               (On_APP_AppStateUpdated);
 
-        EventManager.Instance.INPUT_ButtonPressed += On_INPUT_ButtonPressed;
+        EventManager.Instance.INPUT_ButtonPressed.AddListener               (On_INPUT_ButtonPressed);
 
         EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
         EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
@@ -155,9 +155,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     }
         
     #region Events Callbacks
-    private void On_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
+    private void On_INPUT_ButtonPressed(SpellInputEventHandle eventHandle)
     {
-        //Debug.Log("Button " + buttonType + " by " + playerID);
+        EInputButton inputButton = eventHandle.InputButton;
+        EPlayerID playerID = eventHandle.PlayerID;
 
         if (selectedButton == null)
         {
@@ -165,7 +166,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         MaleficusButton nextButton = null;
-        switch (buttonType)
+        switch (inputButton)
         {
             case EInputButton.CONFIRM:
                 selectedButton.Press();

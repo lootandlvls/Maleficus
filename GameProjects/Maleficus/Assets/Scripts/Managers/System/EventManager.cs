@@ -239,35 +239,37 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region INPUT
-    public event Action<EInputButton, EPlayerID> INPUT_ButtonPressed;
-    public void Invoke_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
-    {
-        if (INPUT_ButtonPressed != null)
-        {
-            INPUT_ButtonPressed.Invoke(buttonType, playerID);
-        }
-        DebugLog(buttonType + " pressed by " + playerID);
-    }
+    //public event Action<EInputButton, EPlayerID> INPUT_ButtonPressed_old;
+    //public void Invoke_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
+    //{
+    //    if (INPUT_ButtonPressed_old != null)
+    //    {
+    //        INPUT_ButtonPressed_old.Invoke(buttonType, playerID);
+    //    }
+    //    DebugLog(buttonType + " pressed by " + playerID);
+    //}
+    public MaleficusEvent<SpellInputEventHandle> INPUT_ButtonPressed = new MaleficusEvent<SpellInputEventHandle>("INPUT_ButtonPressed");
 
-    public event Action<EInputButton, EPlayerID> INPUT_ButtonReleased;
-    public void Invoke_INPUT_ButtonReleased(EInputButton buttonType, EPlayerID playerID)
-    {
-        if (INPUT_ButtonReleased != null)
-        {
-            INPUT_ButtonReleased.Invoke(buttonType, playerID);
-        }
-        DebugLog(buttonType + " released by " + playerID);
-    }
+    //public event Action<EInputButton, EPlayerID> INPUT_ButtonReleased_old;
+    //public void Invoke_INPUT_ButtonReleased(EInputButton buttonType, EPlayerID playerID)
+    //{
+    //    if (INPUT_ButtonReleased_old != null)
+    //    {
+    //        INPUT_ButtonReleased_old.Invoke(buttonType, playerID);
+    //    }
+    //    DebugLog(buttonType + " released by " + playerID);
+    //}
+    public MaleficusEvent<SpellInputEventHandle> INPUT_ButtonReleased = new MaleficusEvent<SpellInputEventHandle>("INPUT_ButtonReleased");
 
-    public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved_old;
-    public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
-    {
-        if (INPUT_JoystickMoved_old != null)
-        {
-            INPUT_JoystickMoved_old.Invoke(axisType, axisValue, playerID);
-        }
-    }
-    public MaleficusEvent<JoystickMovedEventHandle> INPUT_JoystickMoved = new MaleficusEvent<JoystickMovedEventHandle>("INPUT_JoystickMoved");
+    //public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved_old;
+    //public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
+    //{
+    //    if (INPUT_JoystickMoved_old != null)
+    //    {
+    //        INPUT_JoystickMoved_old.Invoke(axisType, axisValue, playerID);
+    //    }
+    //}
+    public MaleficusEvent<MovementInputEventHandle> INPUT_Movement = new MaleficusEvent<MovementInputEventHandle>("INPUT_Movement");
 
 
     /* public event Action<EInputButton, EPlayerID> INPUT_ButtonStillBeingPressed;

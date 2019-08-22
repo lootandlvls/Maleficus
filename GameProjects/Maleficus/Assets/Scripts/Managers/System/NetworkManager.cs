@@ -49,7 +49,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     protected void Start()
     {
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
-        EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
+        //EventManager.Instance.INPUT_ButtonReleased += On_Input_ButtonReleased;
         //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
     }
 
@@ -58,7 +58,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Init();
     }
 
-    protected  void Update()
+    protected void Update()
     {
         UpdateMessagePump();
     }
@@ -74,7 +74,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
 
-    public void Init()
+    public virtual void Init()
     {
         if (!isStarted)
         {
@@ -109,7 +109,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         NetworkTransport.Shutdown();
     }
 
-    public void UpdateMessagePump()
+    public virtual void UpdateMessagePump()
     {
         if (!isStarted)
         {
@@ -162,7 +162,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
 
     #region OnData
-    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
+    protected void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
     {
         Debug.Log("receiverd a message of type " + msg.ID);
 
@@ -211,11 +211,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Net_OnInitLobby oil = (Net_OnInitLobby)msg;
                 ownLobbyID = oil.lobbyID;
                 break;
-            case NetID.SpellInput:
-                Debug.Log("Received Spell Input from another Player");
-                UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
-                AllReceivedMsgs.Add((Net_SpellInput)msg);
-                break;
+
             case NetID.OnRequestGameInfo:
                 Debug.Log("Game info received");
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTGAMEINFO);
@@ -223,14 +219,30 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
 
+                // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
                 Net_MovementInput movementInput = (Net_MovementInput)msg;
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
-
+                MovementInputEventHandle movementEventHandle = new MovementInputEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                EventManager.Instance.INPUT_Movement.Invoke(movementEventHandle, false);
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
                 break;
+
+            case NetID.SpellInput:
+                Debug.Log("Game input received");
+                Net_SpellInput spellInput = (Net_SpellInput)msg;
+                SpellInputEventHandle spellEventHandle = new SpellInputEventHandle(spellInput.InputButton, spellInput.PlayerID, spellInput.IsPressed);
+                if (spellInput.IsPressed == true)
+                {
+                    EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle, false);
+                }
+                else
+                {
+                    EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle, false);
+                }
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
+
 
 
         }
@@ -453,30 +465,30 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #endregion
 
     #region Input related
-    public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
-    {
-        Net_SpellInput si = new Net_SpellInput();
+    //public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
+    //{
+    //    Net_SpellInput si = new Net_SpellInput();
 
-        si.Token = token;
-        switch (eInputButton)
-        {
-            case EInputButton.CAST_SPELL_1:
-                si.spellId = ESpellID.SPELL_1;
-                break;
-            case EInputButton.CAST_SPELL_2:
-                si.spellId = ESpellID.SPELL_2;
-                break;
-            case EInputButton.CAST_SPELL_3:
-                si.spellId = ESpellID.SPELL_3;
-                break;
-            default:
-                si.spellId = ESpellID.NONE;
-                break;
-        }
-        si.ePlayerID = playerID;
+    //    si.Token = token;
+    //    switch (eInputButton)
+    //    {
+    //        case EInputButton.CAST_SPELL_1:
+    //            si.spellId = ESpellID.SPELL_1;
+    //            break;
+    //        case EInputButton.CAST_SPELL_2:
+    //            si.spellId = ESpellID.SPELL_2;
+    //            break;
+    //        case EInputButton.CAST_SPELL_3:
+    //            si.spellId = ESpellID.SPELL_3;
+    //            break;
+    //        default:
+    //            si.spellId = ESpellID.NONE;
+    //            break;
+    //    }
+    //    si.ePlayerID = playerID;
 
-        SendServer(si);
-    }
+    //    SendServer(si);
+    //}
 
     //public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
     //{
@@ -493,16 +505,16 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     #endregion
 
     #region Listeners
-    public void On_Input_ButtonReleased(EInputButton eInputButton, EPlayerID ePlayerID)
-    {
-        if(AppStateManager.Instance.CurrentScene == EScene.GAME)
-        {
-            if(eInputButton == EInputButton.CAST_SPELL_1 || eInputButton == EInputButton.CAST_SPELL_2 || eInputButton == EInputButton.CAST_SPELL_3)
-            {
-                SendSpellInput(eInputButton, ePlayerID);
-            }
-        }
-    }
+    //public void On_Input_ButtonReleased(EInputButton eInputButton, EPlayerID ePlayerID)
+    //{
+    //    if(AppStateManager.Instance.CurrentScene == EScene.GAME)
+    //    {
+    //        if(eInputButton == EInputButton.CAST_SPELL_1 || eInputButton == EInputButton.CAST_SPELL_2 || eInputButton == EInputButton.CAST_SPELL_3)
+    //        {
+    //            SendSpellInput(eInputButton, ePlayerID);
+    //        }
+    //    }
+    //}
     //public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
     //{
     //    if(ePlayerID == EPlayerID.PLAYER_1)

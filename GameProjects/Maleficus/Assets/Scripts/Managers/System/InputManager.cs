@@ -11,13 +11,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
     public EPlayerID TouchPlayerID { get; set; }
 
     /// <summary> Mapping from controllerID to playerID </summary> 
-    private Dictionary<EControllerID, EPlayerID>    playerControllerMapping                 = new Dictionary<EControllerID, EPlayerID>();
+    private Dictionary<EControllerID, EPlayerID> playerControllerMapping = new Dictionary<EControllerID, EPlayerID>();
 
     /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
-    private Dictionary<EPlayerID, bool>             canPerformHorizontalDirectionalButton   = new Dictionary<EPlayerID, bool>();
+    private Dictionary<EPlayerID, bool> canPerformHorizontalDirectionalButton = new Dictionary<EPlayerID, bool>();
 
     /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
-    private Dictionary<EPlayerID, bool>             canPerformVerticalDirectionalButton     = new Dictionary<EPlayerID, bool>();
+    private Dictionary<EPlayerID, bool> canPerformVerticalDirectionalButton = new Dictionary<EPlayerID, bool>();
 
     protected override void Awake()
     {
@@ -28,8 +28,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void Start()
     {
- 
-        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
+
     }
 
     public override void Initialize()
@@ -45,7 +44,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         Check_Confirm(EControllerID.CONTROLLER_C);
         Check_Confirm(EControllerID.CONTROLLER_D);
 
-                                                        // TODO: Add missing Cancel buttons in Input Setting
+        // TODO: Add missing Cancel buttons in Input Setting
         // Cancel
         //Check_Cancel(EControllerID.CONTROLLER_A);
         //Check_Cancel(EControllerID.CONTROLLER_B);
@@ -54,7 +53,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         /* Charging spell check */
         // Spell 1
-        Check_ChargingSpell(1, EControllerID.CONTROLLER_A);
+        Check_ChargingSpell(1, EControllerID.CONTROLLER_A);     // TODO [BNJMO]: Change to SpellID
         Check_ChargingSpell(1, EControllerID.CONTROLLER_B);
         Check_ChargingSpell(1, EControllerID.CONTROLLER_C);
         Check_ChargingSpell(1, EControllerID.CONTROLLER_D);
@@ -136,17 +135,17 @@ public class InputManager : AbstractSingletonManager<InputManager>
             {
                 // Send Input
                 EPlayerID playerID = GetPlayerID(controllerID);
-                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(EInputButton.CONFIRM, playerID, true), false);
             }
             else //if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
-                // Connect players
+                 // Connect players
             {
                 EPlayerID connectedPlayerID = PlayerManager.Instance.ConnectNextPlayerToController();
                 if (connectedPlayerID != EPlayerID.TEST)
                 {
                     playerControllerMapping[controllerID] = connectedPlayerID;
                 }
-           }
+            }
         }
     }
 
@@ -162,19 +161,19 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 EPlayerID playerID = GetPlayerID(controllerID);
 
                 if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
-                    // Disconnect Player
+                // Disconnect Player
                 {
                     PlayerManager.Instance.DisconnectPlayer(playerID);
                     playerControllerMapping.Remove(controllerID);
                 }
                 else // Not in connecting players state
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CANCEL, playerID);
+                    EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(EInputButton.CANCEL, playerID, true), false);
                 }
             }
-        }                                                                                                                    
+        }
     }
-    
+
 
     private void Check_ChargingSpell(int spellID, EControllerID controllerID)
     {
@@ -184,20 +183,22 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             // Did player press button?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerIDName))
-            {  
+            {
                 EPlayerID playerID = GetPlayerID(controllerID);
+                SpellInputEventHandle eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_1, playerID, true);
                 if (spellID == 1)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_1, playerID);                
+                    eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_1, playerID, true);
                 }
                 else if (spellID == 2)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_2, playerID);
+                    eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_2, playerID, true);
                 }
                 else if (spellID == 3)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CAST_SPELL_3, playerID);
+                    eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_3, playerID, true);
                 }
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(eventHandle);
             }
         }
     }
@@ -212,18 +213,20 @@ public class InputManager : AbstractSingletonManager<InputManager>
             if (Input.GetButtonUp("CastSpell_" + spellID + '_' + controllerIDName))
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
+                SpellInputEventHandle eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_1, playerID, false);
                 if (spellID == 1)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_1, playerID);                
+                    eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_1, playerID, false);
                 }
                 else if (spellID == 2)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_2, playerID);
+                    eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_2, playerID, false);
                 }
                 else if (spellID == 3)
                 {
-                    EventManager.Instance.Invoke_INPUT_ButtonReleased(EInputButton.CAST_SPELL_3, playerID);
+                    eventHandle = new SpellInputEventHandle(EInputButton.CAST_SPELL_3, playerID, false);
                 }
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(eventHandle);
             }
         }
     }
@@ -237,7 +240,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             // Did player move joystick
             float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerIDName);
-            if   (axisValue != 0.0f)
+            if (axisValue != 0.0f)
             {
                 EPlayerID playerID = GetPlayerID(controllerID);
 
@@ -268,7 +271,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 }
 
                 // Axis event
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(inputAxis, axisValue, playerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(inputAxis, axisValue, playerID));
 
 
                 // Directional button event                                                                                              
@@ -279,16 +282,16 @@ public class InputManager : AbstractSingletonManager<InputManager>
                         if ((Mathf.Abs(axisValue) > MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == true))
                         {
                             canPerformHorizontalDirectionalButton[playerID] = false;
-                            
+
                             if (axisValue > 0.0f)  // Which direction?  
-                                // positive value
+                                                   // positive value
                             {
-                                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.RIGHT, playerID);
+                                EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(EInputButton.RIGHT, playerID, true));
                             }
-                            else                    
-                                // negative value
+                            else
+                            // negative value
                             {
-                                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.LEFT, playerID);
+                                EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(EInputButton.LEFT, playerID, true));
                             }
                         }
                         else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[playerID] == false))
@@ -301,16 +304,16 @@ public class InputManager : AbstractSingletonManager<InputManager>
                         if ((Mathf.Abs(axisValue) > MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == true))
                         {
                             canPerformVerticalDirectionalButton[playerID] = false;
-                            
+
                             if (axisValue > 0.0f)    // Which direction?
-                                // positive value
+                                                     // positive value
                             {
-                                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.DOWN, playerID);
+                                EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(EInputButton.DOWN, playerID, true));
                             }
-                            else                    
-                                // negative value
+                            else
+                            // negative value
                             {
-                                EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.UP, playerID);
+                                EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(EInputButton.UP, playerID, true));
                             }
                         }
                         else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[playerID] == false))
@@ -335,28 +338,24 @@ public class InputManager : AbstractSingletonManager<InputManager>
             EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
             if (inputButton != EInputButton.NONE)
             {
-                EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, TouchPlayerID);
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(new SpellInputEventHandle(inputButton, TouchPlayerID, true));
             }
         }
     }
 
     public void OnTouchJoystickMoved(Vector2 joystickInput, ETouchJoystickType joystickType)
     {
-        if (InputMode == EInputMode.TOUCH)
+        if ((InputMode == EInputMode.TOUCH) && (TouchPlayerID != EPlayerID.NONE))
         {
             if (joystickType == ETouchJoystickType.MOVE)
             {
-                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID));
-                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.MOVE_X, joystickInput.x, TouchPlayerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.MOVE_Y, joystickInput.y, TouchPlayerID));
             }
             else // Spell joystick
             {
-                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID));
-                //EventManager.Instance.Invoke_INPUT_JoystickMoved(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.ROTATE_X, joystickInput.x, TouchPlayerID));
+                EventManager.Instance.INPUT_Movement.Invoke(new MovementInputEventHandle(EInputAxis.ROTATE_Y, -joystickInput.y, TouchPlayerID));
             }
         }
     }
@@ -369,7 +368,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
             if (inputButton != EInputButton.NONE)
             {
-                EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, TouchPlayerID);
+                EventManager.Instance.INPUT_ButtonReleased.Invoke(new SpellInputEventHandle(inputButton, TouchPlayerID, false));
             }
         }
     }
@@ -386,11 +385,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private EControllerID GetControllerID(EPlayerID playerID)
     {
-        if(playerControllerMapping[EControllerID.CONTROLLER_A] == playerID)
+        if (playerControllerMapping[EControllerID.CONTROLLER_A] == playerID)
         {
             return EControllerID.CONTROLLER_A;
         }
-        if(playerControllerMapping[EControllerID.CONTROLLER_B] == playerID)
+        if (playerControllerMapping[EControllerID.CONTROLLER_B] == playerID)
         {
             return EControllerID.CONTROLLER_B;
         }
@@ -428,23 +427,4 @@ public class InputManager : AbstractSingletonManager<InputManager>
         return playerControllerMapping.ContainsKey(controllerID);
     }
 
-    #region Listeners
-    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
-    {
-        if(AppStateManager.Instance.CurrentScene == EScene.GAME)
-        {
-            switch (receivedMsg)
-            {
-                case ENetworkMessage.DATA_SPELLINPUT:
-                    Net_SpellInput spellInput = NetworkManager.Instance.CastedSpells[NetworkManager.Instance.CastedSpells.Count - 1];
-                    int spellId = (int)spellInput.spellId;
-
-                    EControllerID controllerid = GetControllerID(spellInput.ePlayerID);
-
-                    Check_CastedSpell(spellId, controllerid);
-                break;
-            }
-        }
-    }
-    #endregion
 }

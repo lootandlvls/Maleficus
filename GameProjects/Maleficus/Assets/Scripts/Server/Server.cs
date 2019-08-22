@@ -36,23 +36,31 @@ public class Server : NetworkManager
     private Mongo db;
 
     #region Monobehaviour
-    public override void Initialize()
-    {
-        Init();
-    }
 
     protected override void Awake()
     {
-
+        // Do not override Instance
     }
 
-    protected void Update()
-    {
-        UpdateMessagePump();
-    }
+
+
+    // TODO [Leon]: As you are inheriting from NetworkManager, you can use these same methods from parent class. Remove comments if you agree
+
+    //public override void Initialize()
+    //{
+    //    Init();
+    //}
+
+    //protected void Update()
+    //{
+    //    UpdateMessagePump();
+    //}
+
+
     #endregion
 
-    public void Init()
+        // override!
+    public override void Init()
     {
         db = new Mongo();
         db.Init();
@@ -79,18 +87,18 @@ public class Server : NetworkManager
         server_isStarted = true;
     }
 
-    public void Shutdown()
-    {
-        server_isStarted = false;
-        NetworkTransport.Shutdown();
-    }
+    //public void Shutdown()
+    //{
+    //    server_isStarted = false;
+    //    NetworkTransport.Shutdown();
+    //}
 
-    protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
-    {
-        EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
-    }
+    //protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
+    //{
+    //    EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
+    //}
 
-    public void UpdateMessagePump()
+    public override void UpdateMessagePump()
     {
         if (!server_isStarted)
         {
@@ -163,20 +171,31 @@ public class Server : NetworkManager
             case NetID.InitLobby:
                 InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
                 break;
-            case NetID.SpellInput:
-                Debug.Log("Received Spell Input from another Player");
-                ForwardSpellInput(cnnId, channelId, recHostId, (Net_SpellInput)msg);
-                UpdateReceivedMessage(ENetworkMessage.DATA_SPELLINPUT);
-                break;
             case NetID.RequestGameInfo:
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
+
+                // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
                 Net_MovementInput movementInput = (Net_MovementInput)msg;
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+                MovementInputEventHandle eventHandle = new MovementInputEventHandle(movementInput.AxisType, movementInput.AxisValue, movementInput.PlayerID);
+                EventManager.Instance.INPUT_Movement.Invoke(eventHandle);
+                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                break;
 
+            case NetID.SpellInput:
+                Debug.Log("Game input received");
+                Net_SpellInput spellInput = (Net_SpellInput)msg;
+                SpellInputEventHandle spellEventHandle = new SpellInputEventHandle(spellInput.InputButton, spellInput.PlayerID, spellInput.IsPressed);
+                if (spellInput.IsPressed == true)
+                {
+                    EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle, false);
+                }
+                else
+                {
+                    EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle, false);
+                }
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
                 break;
 

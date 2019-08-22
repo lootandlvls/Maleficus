@@ -112,6 +112,11 @@ PrefabInstance:
       propertyPath: IsSpawnGhostPlayerPositionsIfNotFound
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: IsSpawnTouchAsPlayer1
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3900233467615566551, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: Player_1_Spells.Array.size
