@@ -256,8 +256,8 @@ public enum EJoystickState
 public class ControllerInput
 {
     public Dictionary<EInputAxis, float> JoystickValues = new Dictionary<EInputAxis, float>();
-    public Dictionary<EInputButton, bool> IsButtonPressed = new Dictionary<EInputButton, bool>();
-    public Dictionary<EInputButton, bool> IsButtonReleased = new Dictionary<EInputButton, bool>();
+    //public Dictionary<EInputButton, bool> IsButtonPressed = new Dictionary<EInputButton, bool>();
+    //public Dictionary<EInputButton, bool> IsButtonReleased = new Dictionary<EInputButton, bool>();
 
     public ControllerInput()
     {
@@ -299,29 +299,29 @@ public class ControllerInput
         JoystickValues[EInputAxis.ROTATE_X] = 0.0f;
         JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
 
-        // Initialize button pressed
-        IsButtonPressed[EInputButton.CONFIRM] = false;
-        IsButtonPressed[EInputButton.CANCEL] = false;
-        IsButtonPressed[EInputButton.CAST_SPELL_1] = false;
-        IsButtonPressed[EInputButton.CAST_SPELL_2] = false;
-        IsButtonPressed[EInputButton.CAST_SPELL_3] = false;
+        //// Initialize button pressed
+        //IsButtonPressed[EInputButton.CONFIRM] = false;
+        //IsButtonPressed[EInputButton.CANCEL] = false;
+        //IsButtonPressed[EInputButton.CAST_SPELL_1] = false;
+        //IsButtonPressed[EInputButton.CAST_SPELL_2] = false;
+        //IsButtonPressed[EInputButton.CAST_SPELL_3] = false;
 
-        IsButtonPressed[EInputButton.LEFT] = false;
-        IsButtonPressed[EInputButton.UP] = false;
-        IsButtonPressed[EInputButton.RIGHT] = false;
-        IsButtonPressed[EInputButton.DOWN] = false;
+        //IsButtonPressed[EInputButton.LEFT] = false;
+        //IsButtonPressed[EInputButton.UP] = false;
+        //IsButtonPressed[EInputButton.RIGHT] = false;
+        //IsButtonPressed[EInputButton.DOWN] = false;
 
-        // Initialize button released
-        IsButtonReleased[EInputButton.CONFIRM] = false;
-        IsButtonReleased[EInputButton.CANCEL] = false;
-        IsButtonReleased[EInputButton.CAST_SPELL_1] = false;
-        IsButtonReleased[EInputButton.CAST_SPELL_2] = false;
-        IsButtonReleased[EInputButton.CAST_SPELL_3] = false;
+        //// Initialize button released
+        //IsButtonReleased[EInputButton.CONFIRM] = false;
+        //IsButtonReleased[EInputButton.CANCEL] = false;
+        //IsButtonReleased[EInputButton.CAST_SPELL_1] = false;
+        //IsButtonReleased[EInputButton.CAST_SPELL_2] = false;
+        //IsButtonReleased[EInputButton.CAST_SPELL_3] = false;
 
-        IsButtonReleased[EInputButton.LEFT] = false;
-        IsButtonReleased[EInputButton.UP] = false;
-        IsButtonReleased[EInputButton.RIGHT] = false;
-        IsButtonReleased[EInputButton.DOWN] = false;
+        //IsButtonReleased[EInputButton.LEFT] = false;
+        //IsButtonReleased[EInputButton.UP] = false;
+        //IsButtonReleased[EInputButton.RIGHT] = false;
+        //IsButtonReleased[EInputButton.DOWN] = false;
     }
 
     public bool HasMoved()

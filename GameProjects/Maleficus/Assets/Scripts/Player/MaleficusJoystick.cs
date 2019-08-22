@@ -147,10 +147,9 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     {
         background.anchoredPosition = fixedPosition;
 
-        if ((joystickType != ETouchJoystickType.MOVE) /*&& (input.magnitude > MaleficusTypes.SPELL_BUTTON_THRESHOLD)*/)
-        {
-            InputManager.Instance.OnTouchJoystickReleased(joystickType);
-        }
+
+        InputManager.Instance.OnTouchJoystickReleased(joystickType);
+        
 
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;

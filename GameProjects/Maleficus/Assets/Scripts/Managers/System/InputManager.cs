@@ -43,7 +43,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void Update()
     {
-        FlushControllersInput();
+        //FlushControllersInput();
 
         CheckButtonsAndJoysticksInput();
 
@@ -51,7 +51,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void LateUpdate()
     {
-        BroadcastLocalControllersInput();
+        //BroadcastLocalControllersInput();
     }
 
 
@@ -202,7 +202,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 // Send Input
                 //EPlayerID playerID = GetPlayerIDTo(controllerID);
                 //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CONFIRM, playerID);
-                controllersInput[controllerID].IsButtonPressed[EInputButton.CONFIRM] = true;
+                //controllersInput[controllerID].IsButtonPressed[EInputButton.CONFIRM] = true;
             }
             else //if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_PLAYERS)
                 // Connect players
@@ -238,7 +238,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 else // Not in connecting players state
                 {
                     //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CANCEL, playerID);
-                    controllersInput[controllerID].IsButtonPressed[EInputButton.CANCEL] = true;
+                    //controllersInput[controllerID].IsButtonPressed[EInputButton.CANCEL] = true;
                 }
             }
         }                                                                                                                    
@@ -261,7 +261,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             {  
                 //EPlayerID playerID = GetPlayerIDTo(controllerID);
                 //EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, playerID);
-                controllersInput[controllerID].IsButtonPressed[inputButton] = true;
+                //controllersInput[controllerID].IsButtonPressed[inputButton] = true;
             }
         }
     }
@@ -282,7 +282,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             {
                 //EPlayerID playerID = GetPlayerIDTo(controllerID);
                 //EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, playerID);
-                controllersInput[controllerID].IsButtonReleased[inputButton] = true;
+                //controllersInput[controllerID].IsButtonReleased[inputButton] = true;
             }
         }
     }
@@ -343,14 +343,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
                                 // positive value
                             {
                                 //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.RIGHT, playerID);
-                                controllersInput[controllerID].IsButtonPressed[EInputButton.RIGHT] = true;
+                                //controllersInput[controllerID].IsButtonPressed[EInputButton.RIGHT] = true;
 
                             }
                             else                    
                                 // negative value
                             {
                                 //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.LEFT, playerID);
-                                controllersInput[controllerID].IsButtonPressed[EInputButton.LEFT] = true;
+                                //controllersInput[controllerID].IsButtonPressed[EInputButton.LEFT] = true;
                             }
                         }
                         else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[controllerID] == false))
@@ -368,13 +368,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
                                 // positive value
                             {
                                 //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.DOWN, playerID);
-                                controllersInput[controllerID].IsButtonPressed[EInputButton.DOWN] = true;
+                                //controllersInput[controllerID].IsButtonPressed[EInputButton.DOWN] = true;
                             }
                             else                    
                                 // negative value
                             {
                                 //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.UP, playerID);
-                                controllersInput[controllerID].IsButtonPressed[EInputButton.UP] = true;
+                                //controllersInput[controllerID].IsButtonPressed[EInputButton.UP] = true;
                             }
                         }
                         else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[controllerID] == false))
@@ -392,56 +392,108 @@ public class InputManager : AbstractSingletonManager<InputManager>
     #endregion
 
     #region Touch
-    public void OnTouchJoystickPressed(ETouchJoystickType joystickType)
+    public void OnTouchJoystickPressed(ETouchJoystickType touchJoystickType)
     {
         if (InputMode == EInputMode.TOUCH)
         {
             //EPlayerID playerID = playerControllerMapping[EControllerID.TOUCH];
-            EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
-            Debug.Log("inputButton : " + inputButton + " | joystickType : " + joystickType);
+            EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(touchJoystickType);
+            Debug.Log("inputButton : " + inputButton + " | joystickType : " + touchJoystickType);
             if (inputButton != EInputButton.NONE)
             {
-                //EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, playerID);
-                controllersInput[EControllerID.TOUCH].IsButtonPressed[inputButton] = true;
+                //EventManager.Instance.INPUT_ButtonPressed(inputButton, playerID);
+                //controllersInput[EControllerID.TOUCH].IsButtonPressed[inputButton] = true;
             }
         }
     }
 
-    public void OnTouchJoystickMoved(Vector2 joystickInput, ETouchJoystickType joystickType)
+    public void OnTouchJoystickMoved(Vector2 joystickInput, ETouchJoystickType touchJoystickType)
     {
+        Vector2 newInput = joystickInput;
+
         if (InputMode == EInputMode.TOUCH)
         {
-            //EPlayerID playerID = playerControllerMapping[EControllerID.TOUCH];
+            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
 
-            if (joystickType == ETouchJoystickType.MOVE)
+            if (touchJoystickType == ETouchJoystickType.MOVE)
             {
-                //EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_X, joystickInput.x, playerID));
-                //EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.MOVE_Y, joystickInput.y, playerID));
-                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_X] = joystickInput.x;
-                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_Y] = joystickInput.y;
+                EJoystickType joysticksType = EJoystickType.MOVEMENT;
+                var joystickValues = ControllersInput[EControllerID.TOUCH].JoystickValues;
+                Vector2 oldInput = new Vector2(joystickValues[EInputAxis.MOVE_X], joystickValues[EInputAxis.MOVE_Y]);
+                float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
+
+                //DebugManager.Instance.Log(535, "dotProd : " + dotProd + 
+                //    "\n newInput : " + newInput.ToString() + 
+                //    "\n oldInput : " + oldInput.ToString());
+
+                if (inputDistance > 0.3f)
+                {
+                    // TODO: Transform to camera
+
+                    joystickValues[EInputAxis.MOVE_X] = newInput.x;
+                    joystickValues[EInputAxis.MOVE_Y] = newInput.y;
+
+                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
+                }
+
             }
             else // Spell joystick
             {
-                //EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_X, joystickInput.x, playerID));
-                //EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(EInputAxis.ROTATE_Y, -joystickInput.y, playerID));
-                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_X] = joystickInput.x;
-                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_Y] = -joystickInput.y;
+                if (Mathf.Abs(newInput.x + newInput.y) > 0.3f)
+                {
+                    newInput.y = -newInput.y;
+
+                    EJoystickType joysticksType = EJoystickType.MOVEMENT;
+                    var joystickValues = ControllersInput[EControllerID.TOUCH].JoystickValues;
+                    Vector2 oldInput = new Vector2(joystickValues[EInputAxis.ROTATE_X], joystickValues[EInputAxis.ROTATE_Y]);
+                    float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
+
+                    if (inputDistance > 0.05f)
+                    {
+                        // TODO: Transform to camera
+
+                        joystickValues[EInputAxis.ROTATE_X] = newInput.x;
+                        joystickValues[EInputAxis.ROTATE_Y] = newInput.y;
+
+                        EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
+                    }
+                }
             }
         }
     }
 
 
-    public void OnTouchJoystickReleased(ETouchJoystickType joystickType)
+    public void OnTouchJoystickReleased(ETouchJoystickType touchJoystickType)
     {
         if (InputMode == EInputMode.TOUCH)
         {
-            //EPlayerID playerID = playerControllerMapping[EControllerID.TOUCH];
-            EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(joystickType);
-            Debug.Log("inputButton : " + inputButton + " | joystickType : " + joystickType);
+            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
+
+            Debug.Log("Joystick released : " + touchJoystickType);
+            if (touchJoystickType == ETouchJoystickType.MOVE)
+            {
+                EJoystickType joystickType = EJoystickType.MOVEMENT;
+
+                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_X] = 0.0f;
+                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_Y] = 0.0f;
+
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joystickType, 0.0f, 0.0f, playerID));
+            }
+            else
+            {
+                EJoystickType joystickType = EJoystickType.ROTATION;
+
+                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_X] = 0.0f;
+                ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
+
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joystickType, 0.0f, 0.0f, playerID));
+            }
+
+            EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(touchJoystickType);
             if (inputButton != EInputButton.NONE)
             {
                 //EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, playerID);
-                ControllersInput[EControllerID.TOUCH].IsButtonReleased[inputButton] = true;
+                //ControllersInput[EControllerID.TOUCH].IsButtonReleased[inputButton] = true;
             }
         }
     }
@@ -449,60 +501,60 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void BroadcastLocalControllersInput()
     {
-        foreach (EControllerID controllerID in ControllersInput.Keys)
-        {
-            if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS) == true)
-            {
-                continue;
-            }
+        //foreach (EControllerID controllerID in ControllersInput.Keys)
+        //{
+        //    if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS) == true)
+        //    {
+        //        continue;
+        //    }
 
-            ControllerInput controllerInput = ControllersInput[controllerID];
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(controllerID);
+        //    ControllerInput controllerInput = ControllersInput[controllerID];
+        //    EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(controllerID);
 
-            // Movement
-            if (true)//controllerInput.HasMoved())
-            {
-                float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
-                float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
+        //    // Movement
+        //    if (true)//controllerInput.HasMoved())
+        //    {
+        //        float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
+        //        float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
+        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
 
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
-            }
+        //        EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+        //    }
 
-            // Rotation
-            if (true)//controllerInput.HasRotated())
-            {
-                float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
-                float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
+        //    // Rotation
+        //    if (true)//controllerInput.HasRotated())
+        //    {
+        //        float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
+        //        float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
+        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
 
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
-            }
+        //        EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
+        //    }
 
-            // Button pressesd
-            var isButtonPressed = controllerInput.IsButtonPressed;
-            foreach (EInputButton inputButton in isButtonPressed.Keys)
-            {
-                if (isButtonPressed[inputButton] == true)
-                {
-                    Debug.Log(inputButton + " pressed by " + controllerID + " : " + playerID);
-                    ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
-                    EventManager.Instance.INPUT_ButtonPressed.Invoke(eventHandle);
-                }
-            }
+        //    // Button pressesd
+        //    //var isButtonPressed = controllerInput.IsButtonPressed;
+        //    foreach (EInputButton inputButton in isButtonPressed.Keys)
+        //    {
+        //        if (isButtonPressed[inputButton] == true)
+        //        {
+        //            Debug.Log(inputButton + " pressed by " + controllerID + " : " + playerID);
+        //            ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
+        //            EventManager.Instance.INPUT_ButtonPressed.Invoke(eventHandle);
+        //        }
+        //    }
 
-            // Button Released
-            var isButtonReleased = controllerInput.IsButtonReleased;
-            foreach (EInputButton inputButton in isButtonReleased.Keys)
-            {
-                if (isButtonReleased[inputButton] == true)
-                {
-                    ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
-                    EventManager.Instance.INPUT_ButtonReleased.Invoke(eventHandle);
-                }
-            }
+        //    // Button Released
+        //    //var isButtonReleased = controllerInput.IsButtonReleased;
+        //    foreach (EInputButton inputButton in isButtonReleased.Keys)
+        //    {
+        //        if (isButtonReleased[inputButton] == true)
+        //        {
+        //            ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
+        //            EventManager.Instance.INPUT_ButtonReleased.Invoke(eventHandle);
+        //        }
+        //    }
 
-        }
+        //}
     }
 
     private void FlushControllersInput()

@@ -86,7 +86,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void Update()
     {
-        UpdateControllersInput();
+        //UpdateControllersInput();
     }
 
 
@@ -508,55 +508,54 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void UpdateControllersInput()
     {
-        var controllersInput = InputManager.Instance.ControllersInput;
-        foreach (EControllerID controllerID in controllersInput.Keys)
-        {
-            ControllerInput controllerInput = controllersInput[controllerID];
-            EPlayerID playerID = GetPlayerIDFrom(controllerID);
+        //var controllersInput = InputManager.Instance.ControllersInput;
+        //foreach (EControllerID controllerID in controllersInput.Keys)
+        //{
+        //    ControllerInput controllerInput = controllersInput[controllerID];
+        //    EPlayerID playerID = GetPlayerIDFrom(controllerID);
 
-            // Movement
-            if (controllerInput.HasMoved())
-            {
-                Debug.Log("HasMoved");
-                float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
-                float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
+        //    // Movement
+        //    if (controllerInput.HasMoved())
+        //    {
+        //        float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
+        //        float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
+        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
 
-                On_INPUT_JoystickMoved(eventHandle);
-            }
+        //        On_INPUT_JoystickMoved(eventHandle);
+        //    }
 
-            // Rotation
-            if (controllerInput.HasRotated())
-            {
-                float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
-                float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
-                JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
+        //    // Rotation
+        //    if (controllerInput.HasRotated())
+        //    {
+        //        float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
+        //        float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
+        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
 
-                On_INPUT_JoystickMoved(eventHandle);
-            }
+        //        On_INPUT_JoystickMoved(eventHandle);
+        //    }
 
-            // Button pressesd
-            var isButtonPressed = controllerInput.IsButtonPressed;
-            foreach (EInputButton inputButton in isButtonPressed.Keys)
-            {
-                if (isButtonPressed[inputButton] == true)
-                {
-                    ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
-                    On_INPUT_ButtonPressed(eventHandle);
-                }
-            }
+        //    // Button pressesd
+        //    var isButtonPressed = controllerInput.IsButtonPressed;
+        //    foreach (EInputButton inputButton in isButtonPressed.Keys)
+        //    {
+        //        if (isButtonPressed[inputButton] == true)
+        //        {
+        //            ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
+        //            On_INPUT_ButtonPressed(eventHandle);
+        //        }
+        //    }
 
-            // Button Released
-            var isButtonReleased = controllerInput.IsButtonReleased;
-            foreach (EInputButton inputButton in isButtonReleased.Keys)
-            {
-                if (isButtonReleased[inputButton] == true)
-                {
-                    Debug.Log("inputButton : " + inputButton + " | controller : " + controllerID);
-                    ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
-                    On_INPUT_ButtonReleased(eventHandle);
-                }
-            }
-        }
+        //    // Button Released
+        //    var isButtonReleased = controllerInput.IsButtonReleased;
+        //    foreach (EInputButton inputButton in isButtonReleased.Keys)
+        //    {
+        //        if (isButtonReleased[inputButton] == true)
+        //        {
+        //            Debug.Log("inputButton : " + inputButton + " | controller : " + controllerID);
+        //            ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
+        //            //On_INPUT_ButtonReleased(eventHandle);
+        //        }
+        //    }
+        //}
     }
 }
