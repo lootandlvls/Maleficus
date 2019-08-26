@@ -13,7 +13,7 @@ public class Server : NetworkManager
     private const int SERVER_WEB_PORT = 26004;
     private const int SERVER_INSTANCE_MANAGER_PORT = 9999;
     private const int SERVER_BYTE_SIZE = 1024;
-    
+
     // Networktransport for clients
     private byte server_reliableChannel;
     private int server_hostId;
@@ -35,6 +35,9 @@ public class Server : NetworkManager
 
     private Mongo db;
 
+    private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
+
+
     #region Monobehaviour
     public override void OnSceneStartReinitialize()
     {
@@ -43,16 +46,13 @@ public class Server : NetworkManager
 
     protected override void Awake()
     {
-
+        base.Awake();
     }
 
-    protected void Update()
-    {
-        UpdateMessagePump();
-    }
+
     #endregion
 
-    public void Init()
+    public override void Init()
     {
         db = new Mongo();
         db.Init();
@@ -79,18 +79,8 @@ public class Server : NetworkManager
         server_isStarted = true;
     }
 
-    public void Shutdown()
-    {
-        server_isStarted = false;
-        NetworkTransport.Shutdown();
-    }
 
-    protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
-    {
-        EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
-    }
-
-    public void UpdateMessagePump()
+    public override void UpdateMessagePump()
     {
         if (!server_isStarted)
         {
@@ -136,6 +126,12 @@ public class Server : NetworkManager
     }
 
     #region OnData
+    //public override void BroadcastNetMessage(AbstractNetMessage netMessage)
+    //{
+    //    SendClient(netMessage);
+    //}
+
+
     private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
     {
         Debug.Log("receiverd a message of type " + msg.ID);
@@ -175,7 +171,7 @@ public class Server : NetworkManager
                 JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle(movementMessage.JoystickType, movementMessage.Joystick_X, movementMessage.Joystick_Y, movementMessage.PlayerID);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
-                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                AllReceivedMsgs.Add((Net_JoystickInput)msg);
                 break;
 
             case NetID.SpellInput:
@@ -208,7 +204,7 @@ public class Server : NetworkManager
         {
             return;
         }
-        
+
         db.UpdateAccountAfterDisconnection(account.Email);
 
         // prepare and send our update message
@@ -217,21 +213,22 @@ public class Server : NetworkManager
         Model_Account updateAccount = db.FindAccountByEmail(account.Email);
         fu.Follow = updateAccount.GetAccount();
 
-        foreach(var f in db.FindAllFollowBy(account.Email))
+        foreach (var f in db.FindAllFollowBy(account.Email))
         {
-            if(f.ActiveConnection != 0)
+            if (f.ActiveConnection != 0)
             {
                 SendClient(recHostId, f.ActiveConnection, fu);
             }
-        }      
+        }
     }
+
 
     #region Account
     private void CreateAccount(int cnnId, int channelId, int recHostId, Net_CreateAccount ca)
     {
         Net_OnCreateAccount oca = new Net_OnCreateAccount();
 
-        if(db.InsertAccount(ca.Username, ca.Password, ca.Email))
+        if (db.InsertAccount(ca.Username, ca.Password, ca.Email))
         {
             oca.Success = 1;
             oca.Information = "Account was created";
@@ -282,10 +279,10 @@ public class Server : NetworkManager
     {
         Net_OnAddFollow oaf = new Net_OnAddFollow();
 
-        if(db.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
+        if (db.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
         {
             oaf.Success = 1;
-            if(Utility.IsEmail(msg.UsernameDiscriminatorOrEmail))
+            if (Utility.IsEmail(msg.UsernameDiscriminatorOrEmail))
             {
                 // this is email
                 oaf.Follow = db.FindAccountByEmail(msg.UsernameDiscriminatorOrEmail).GetAccount();
@@ -294,7 +291,7 @@ public class Server : NetworkManager
             {
                 // this is username
                 string[] data = msg.UsernameDiscriminatorOrEmail.Split('#');
-                if(data[1] == null)
+                if (data[1] == null)
                 {
                     return;
                 }
@@ -332,28 +329,36 @@ public class Server : NetworkManager
             // send msg to InstanceManager to run new Instance
             //SendClient(2, cnnId, il);
             EPlayerID playerID = EPlayerID.NONE;
-            List<EPlayerID> connectedPlayers = new List<EPlayerID>();
 
             Model_Lobby thislobby = db.FindLobbyByInitializerId(self._id);
-            
-            if(thislobby.Team1 != null)
+            List<EPlayerID> players = new List<EPlayerID>();
+
+            if (thislobby.Team1 != null)
             {
-                connectedPlayers.Add(EPlayerID.PLAYER_1);
+                players.Add(EPlayerID.PLAYER_1);
+                Model_Account player1 = db.FindAccountByObjectId(thislobby.Team1[0]);
+                connectedPlayers.Add(EPlayerID.PLAYER_1, player1.ActiveConnection);
             }
-            if(thislobby.Team2 != null)
+            if (thislobby.Team2 != null)
             {
-                connectedPlayers.Add(EPlayerID.PLAYER_2);
+                players.Add(EPlayerID.PLAYER_2);
+                Model_Account player2 = db.FindAccountByObjectId(thislobby.Team2[0]);
+                connectedPlayers.Add(EPlayerID.PLAYER_2, player2.ActiveConnection);
             }
             if (thislobby.Team3 != null)
             {
-                connectedPlayers.Add(EPlayerID.PLAYER_3);
+                players.Add(EPlayerID.PLAYER_3);
+                Model_Account player3 = db.FindAccountByObjectId(thislobby.Team3[0]);
+                connectedPlayers.Add(EPlayerID.PLAYER_3, player3.ActiveConnection);
             }
             if (thislobby.Team4 != null)
             {
-                connectedPlayers.Add(EPlayerID.PLAYER_4);
+                players.Add(EPlayerID.PLAYER_4);
+                Model_Account player4 = db.FindAccountByObjectId(thislobby.Team4[0]);
+                connectedPlayers.Add(EPlayerID.PLAYER_4, player4.ActiveConnection);
             }
             EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new BasicEventHandle<List<EPlayerID>, EPlayerID>
-            (connectedPlayers, playerID));
+            (players, playerID));
         }
         else
         {
@@ -364,6 +369,7 @@ public class Server : NetworkManager
         }
 
         Model_Lobby lobby = db.FindLobbyByInitializerId(self._id);
+
         oil.lobbyID = lobby.LobbyID;
         // add lobbyID to the player
         db.UpdateAccountInLobby(self._id, lobby._id);
@@ -385,7 +391,7 @@ public class Server : NetworkManager
         if ((lobby.Team3 != null) && (lobby.Team3.Count != 0))
         {
             Model_Account player3 = db.FindAccountByObjectId(lobby.Team3[0]);
-            if(player3 != null)
+            if (player3 != null)
             {
                 db.UpdateAccountInLobby(player3._id, lobby._id);
                 SendClient(recHostId, player3.ActiveConnection, oil);
@@ -468,10 +474,10 @@ public class Server : NetworkManager
     private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
     {
         Model_Account self = db.FindAccountByToken(si.Token);
-        if(self != null)
+        if (self != null)
         {
             Model_Lobby lobby = db.FindLobbyByObjectId(self.inLobby);
-            if(lobby != null)
+            if (lobby != null)
             {
                 // send all other players the movement message
                 if (lobby.Team1 != null && lobby.Team1.Count != 0 && lobby.Team1[0] != self._id)
@@ -486,7 +492,7 @@ public class Server : NetworkManager
                 if (lobby.Team2 != null && lobby.Team2.Count != 0 && lobby.Team2[0] != self._id)
                 {
                     Model_Account friend2 = db.FindAccountByObjectId(lobby.Team2[0]);
-                    if(friend2 != null)
+                    if (friend2 != null)
                     {
                         SendClient(recHostId, friend2.ActiveConnection, si);
                     }
@@ -534,7 +540,7 @@ public class Server : NetworkManager
         {
             NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
         }
-        else if(recHost == 1)
+        else if (recHost == 1)
         {
             NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
         }

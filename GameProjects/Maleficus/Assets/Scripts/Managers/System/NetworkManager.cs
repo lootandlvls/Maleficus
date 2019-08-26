@@ -7,11 +7,11 @@ using UnityEngine.Networking;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
-    public bool                                 HasAuthority                { get { return ownClientID == EClientID.SERVER; } }                                   
-    public EClientID                            OwnClientID                 { get { return ownClientID; } }
-    public List<Net_SpellInput>                 CastedSpells                { get { return castedSpells; } }
+    public bool HasAuthority { get { return ownClientID == EClientID.SERVER; } }
+    public EClientID OwnClientID { get { return ownClientID; } }
+    public List<Net_SpellInput> CastedSpells { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
-    public List<AbstractNetMessage> AllReceivedMsgs;
+    public List<AbstractNetMessage> AllReceivedMsgs = new List<AbstractNetMessage>();
 
 
     //TODO [Leon]: move consts to maleficus types
@@ -48,7 +48,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     protected void Start()
     {
-        EventManager.Instance.APP_AppStateUpdated.AddListener       (On_APP_AppStateUpdated);
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         //EventManager.Instance.INPUT_ButtonReleased.AddListener      (On_Input_ButtonReleased);
         //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
     }
@@ -58,13 +58,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Init();
     }
 
-    protected  void Update()
+    protected void Update()
     {
         UpdateMessagePump();
     }
     #endregion
 
-    public void BroadcastNetMessage(AbstractNetMessage netMessage)
+    public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
         SendServer(netMessage);
     }
@@ -74,7 +74,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
 
-    public void Init()
+    public virtual void Init()
     {
         if (!isStarted)
         {
@@ -109,7 +109,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         NetworkTransport.Shutdown();
     }
 
-    public void UpdateMessagePump()
+    public virtual void UpdateMessagePump()
     {
         if (!isStarted)
         {
@@ -153,11 +153,11 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
 
-            //default:
-            //case NetworkEventType.BroadcastEvent:
-            //    UpdateState(ENetworkMessage.BROADCAST);
-            //    Debug.Log("Unexpected network event type");
-            //    break;
+                //default:
+                //case NetworkEventType.BroadcastEvent:
+                //    UpdateState(ENetworkMessage.BROADCAST);
+                //    Debug.Log("Unexpected network event type");
+                //    break;
         }
     }
 
@@ -168,7 +168,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
         switch (msg.ID)
         {
-                                                                                //TODO [Leon]: Add spacing between switch cases
+            //TODO [Leon]: Add spacing between switch cases
             case NetID.None:
                 Debug.Log("Unexpected NetOP");
                 break;
@@ -197,7 +197,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
                 AllReceivedMsgs.Add((Net_OnRequestFollow)msg);
                 break;
-                                                                            //Todo [Leon]: change to Onupdatefollow
+            //Todo [Leon]: change to Onupdatefollow
             case NetID.UpdateFollow:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)msg);
@@ -220,7 +220,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 break;
 
 
-                // Input
+            // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
 
@@ -245,7 +245,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                     ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
                 }
-     
+
 
                 AllReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
@@ -311,7 +311,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         {
             Debug.LogError("Couldn't convert Client ID");
         }
-
 
         // TODO [Leon]: Change this after presentation
         List<EPlayerID> connectedPlayers = new List<EPlayerID>();
@@ -391,7 +390,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public void SendLoginRequest(string usernameOrEmail, string password)
     {
-                                                                                        // todo: username and token working and messages should work
+        // todo: username and token working and messages should work
         // invalid email or username
         if (!Utility.IsUsernameAndDiscriminator(usernameOrEmail) && !Utility.IsEmail(usernameOrEmail))
         {
