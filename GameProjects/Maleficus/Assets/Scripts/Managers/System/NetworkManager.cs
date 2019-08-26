@@ -67,6 +67,23 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
+        switch (netMessage.ID)
+        {
+            case NetID.MovementInput:
+                Net_JoystickInput joystickInput = (Net_JoystickInput)netMessage;
+                if (joystickInput.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
+                {
+                    return;
+                }
+                break;
+            case NetID.SpellInput:
+                Net_SpellInput spellInput = (Net_SpellInput)netMessage;
+                if (spellInput.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
+                {
+                    return;
+                }
+                break;
+        }
         SendServer(netMessage);
     }
 
@@ -350,6 +367,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         formatter.Serialize(ms, msg);
 
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, BYTE_SIZE, out error);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        SendServer(new Net_Disonnected());
     }
 
     #region Account related
