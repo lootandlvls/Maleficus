@@ -33,7 +33,7 @@ public class Server : NetworkManager
     private byte error;
     private List<Net_SpellInput> castedSpells;
 
-    private Mongo db;
+    private Mongo dataBank;
 
     private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
 
@@ -56,8 +56,8 @@ public class Server : NetworkManager
 
     public override void Init()
     {
-        db = new Mongo();
-        db.Init();
+        dataBank = new Mongo();
+        dataBank.Init();
 
         NetworkTransport.Init();
 
@@ -166,6 +166,11 @@ public class Server : NetworkManager
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
 
+                // Disconnect event
+            case NetID.Disconnected:
+                DisconnectEvent(recHostId, cnnId);
+                break;
+
             // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
@@ -215,7 +220,7 @@ public class Server : NetworkManager
         Debug.Log(string.Format("User {0} has disconnected!", connectionId));
 
         // get a reference to the connected account
-        Model_Account account = db.FindAccountByConnectionId(connectionId);
+        Model_Account account = dataBank.FindAccountByConnectionId(connectionId);
 
         // if user is logged in
         if (account == null)
@@ -223,15 +228,15 @@ public class Server : NetworkManager
             return;
         }
 
-        db.UpdateAccountAfterDisconnection(account.Email);
+        dataBank.UpdateAccountAfterDisconnection(account.Email);
 
         // prepare and send our update message
         Net_UpdateFollow fu = new Net_UpdateFollow();
         //Todo strip this down to only nessesary info
-        Model_Account updateAccount = db.FindAccountByEmail(account.Email);
+        Model_Account updateAccount = dataBank.FindAccountByEmail(account.Email);
         fu.Follow = updateAccount.GetAccount();
 
-        foreach (var f in db.FindAllFollowBy(account.Email))
+        foreach (var f in dataBank.FindAllFollowBy(account.Email))
         {
             if (f.ActiveConnection != 0)
             {
@@ -246,7 +251,7 @@ public class Server : NetworkManager
     {
         Net_OnCreateAccount oca = new Net_OnCreateAccount();
 
-        if (db.InsertAccount(ca.Username, ca.Password, ca.Email))
+        if (dataBank.InsertAccount(ca.Username, ca.Password, ca.Email))
         {
             oca.Success = 1;
             oca.Information = "Account was created";
@@ -262,7 +267,7 @@ public class Server : NetworkManager
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
         string randomToken = Utility.GenerateRandom(128);
-        Model_Account account = db.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
+        Model_Account account = dataBank.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
         Net_OnLoginRequest olr = new Net_OnLoginRequest();
         if (account != null)
         {
@@ -277,7 +282,7 @@ public class Server : NetworkManager
             Net_UpdateFollow fu = new Net_UpdateFollow();
             fu.Follow = account.GetAccount();
 
-            foreach (var f in db.FindAllFollowBy(account.Email))
+            foreach (var f in dataBank.FindAllFollowBy(account.Email))
             {
                 if (f.ActiveConnection != 0)
                 {
@@ -297,13 +302,13 @@ public class Server : NetworkManager
     {
         Net_OnAddFollow oaf = new Net_OnAddFollow();
 
-        if (db.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
+        if (dataBank.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
         {
             oaf.Success = 1;
             if (Utility.IsEmail(msg.UsernameDiscriminatorOrEmail))
             {
                 // this is email
-                oaf.Follow = db.FindAccountByEmail(msg.UsernameDiscriminatorOrEmail).GetAccount();
+                oaf.Follow = dataBank.FindAccountByEmail(msg.UsernameDiscriminatorOrEmail).GetAccount();
             }
             else
             {
@@ -314,7 +319,7 @@ public class Server : NetworkManager
                     return;
                 }
 
-                oaf.Follow = db.FindAccountByUsernameAndDiscriminator(data[0], data[1]).GetAccount();
+                oaf.Follow = dataBank.FindAccountByUsernameAndDiscriminator(data[0], data[1]).GetAccount();
             }
         }
 
@@ -322,13 +327,13 @@ public class Server : NetworkManager
     }
     private void RemoveFollow(int cnnId, int channelId, int recHostId, Net_RemoveFollow msg)
     {
-        db.RemoveFollow(msg.Token, msg.UsernameDiscriminator);
+        dataBank.RemoveFollow(msg.Token, msg.UsernameDiscriminator);
     }
     private void RequestFollow(int cnnId, int channelId, int recHostId, Net_RequestFollow msg)
     {
         Net_OnRequestFollow orf = new Net_OnRequestFollow();
 
-        orf.Follows = db.FindAllFollowFrom(msg.Token);
+        orf.Follows = dataBank.FindAllFollowFrom(msg.Token);
 
         SendClient(recHostId, cnnId, orf);
     }
@@ -338,8 +343,8 @@ public class Server : NetworkManager
     private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
     {
         Net_OnInitLobby oil = new Net_OnInitLobby();
-        Model_Account self = db.FindAccountByToken(il.Token);
-        if (db.InitLobby(self._id))
+        Model_Account self = dataBank.FindAccountByToken(il.Token);
+        if (dataBank.InitLobby(self._id))
         {
             oil.Success = 1;
             oil.Information = "Lobby has been initialized";
@@ -348,33 +353,38 @@ public class Server : NetworkManager
             //SendClient(2, cnnId, il);
             EPlayerID playerID = EPlayerID.NONE;
 
-            Model_Lobby thislobby = db.FindLobbyByInitializerId(self._id);
+            Model_Lobby thislobby = dataBank.FindLobbyByInitializerId(self._id);
             List<EPlayerID> players = new List<EPlayerID>();
 
             if (thislobby.Team1 != null)
             {
                 players.Add(EPlayerID.PLAYER_1);
-                Model_Account player1 = db.FindAccountByObjectId(thislobby.Team1[0]);
+                Model_Account player1 = dataBank.FindAccountByObjectId(thislobby.Team1[0]);
                 connectedPlayers.Add(EPlayerID.PLAYER_1, player1.ActiveConnection);
             }
             if (thislobby.Team2 != null)
             {
                 players.Add(EPlayerID.PLAYER_2);
-                Model_Account player2 = db.FindAccountByObjectId(thislobby.Team2[0]);
+                Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
                 connectedPlayers.Add(EPlayerID.PLAYER_2, player2.ActiveConnection);
             }
             if (thislobby.Team3 != null)
             {
                 players.Add(EPlayerID.PLAYER_3);
-                Model_Account player3 = db.FindAccountByObjectId(thislobby.Team3[0]);
+                Model_Account player3 = dataBank.FindAccountByObjectId(thislobby.Team3[0]);
                 connectedPlayers.Add(EPlayerID.PLAYER_3, player3.ActiveConnection);
             }
             if (thislobby.Team4 != null)
             {
                 players.Add(EPlayerID.PLAYER_4);
-                Model_Account player4 = db.FindAccountByObjectId(thislobby.Team4[0]);
+                Model_Account player4 = dataBank.FindAccountByObjectId(thislobby.Team4[0]);
                 connectedPlayers.Add(EPlayerID.PLAYER_4, player4.ActiveConnection);
             }
+            foreach(EPlayerID playeerID in connectedPlayers.Keys)
+            {
+                Debug.Log(playeerID + " is connected : " + connectedPlayers[playeerID]);
+            }
+
             EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new BasicEventHandle<List<EPlayerID>, EPlayerID>
             (players, playerID));
         }
@@ -386,42 +396,45 @@ public class Server : NetworkManager
             return;
         }
 
-        Model_Lobby lobby = db.FindLobbyByInitializerId(self._id);
+        Model_Lobby lobby = dataBank.FindLobbyByInitializerId(self._id);
 
         oil.lobbyID = lobby.LobbyID;
         // add lobbyID to the player
-        db.UpdateAccountInLobby(self._id, lobby._id);
+        dataBank.UpdateAccountInLobby(self._id, lobby._id);
 
         // send all lobby members the message that the game can start now
         // Todo change so different game modes can be initialized
         SendClient(recHostId, cnnId, oil);
 
+        Debug.Log("trying to send second client");
+
         if ((lobby.Team2 != null) && (lobby.Team2.Count != 0))
         {
-            Model_Account player2 = db.FindAccountByObjectId(lobby.Team2[0]);
+            Model_Account player2 = dataBank.FindAccountByObjectId(lobby.Team2[0]);
             if (player2 != null)
             {
-                db.UpdateAccountInLobby(player2._id, lobby._id);
+                Debug.Log("trying to send second client " + player2.ActiveConnection);
+                dataBank.UpdateAccountInLobby(player2._id, lobby._id);
                 SendClient(recHostId, player2.ActiveConnection, oil);
             }
         }
 
         if ((lobby.Team3 != null) && (lobby.Team3.Count != 0))
         {
-            Model_Account player3 = db.FindAccountByObjectId(lobby.Team3[0]);
+            Model_Account player3 = dataBank.FindAccountByObjectId(lobby.Team3[0]);
             if (player3 != null)
             {
-                db.UpdateAccountInLobby(player3._id, lobby._id);
+                dataBank.UpdateAccountInLobby(player3._id, lobby._id);
                 SendClient(recHostId, player3.ActiveConnection, oil);
             }
         }
 
         if ((lobby.Team4 != null) && (lobby.Team4.Count != 0))
         {
-            Model_Account player4 = db.FindAccountByObjectId(lobby.Team4[0]);
+            Model_Account player4 = dataBank.FindAccountByObjectId(lobby.Team4[0]);
             if (player4 != null)
             {
-                db.UpdateAccountInLobby(player4._id, lobby._id);
+                dataBank.UpdateAccountInLobby(player4._id, lobby._id);
                 SendClient(recHostId, player4.ActiveConnection, oil);
             }
         }
@@ -432,35 +445,35 @@ public class Server : NetworkManager
     private void Net_OnRequestGameInfo(int cnnId, int channelId, int recHostId, Net_RequestGameInfo rgi)
     {
         Net_OnRequestGameInfo org = new Net_OnRequestGameInfo();
-        Model_Account self = db.FindAccountByToken(rgi.Token);
-        Model_Lobby lobby = db.FindLobbyByLobbyID(rgi.lobbyID);
+        Model_Account self = dataBank.FindAccountByToken(rgi.Token);
+        Model_Lobby lobby = dataBank.FindLobbyByLobbyID(rgi.lobbyID);
 
         org.Token = rgi.Token;
 
-        if (db.FindAccountByObjectId(lobby.Team1[0]).Token == rgi.Token)
+        if (dataBank.FindAccountByObjectId(lobby.Team1[0]).Token == rgi.Token)
         {
             org.ownPlayerId = 1;
         }
-        if ((lobby.Team2 != null) && (db.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token))
+        if ((lobby.Team2 != null) && (dataBank.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token))
         {
             org.ownPlayerId = 2;
         }
-        if ((lobby.Team3 != null) && (db.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token))
+        if ((lobby.Team3 != null) && (dataBank.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token))
         {
             org.ownPlayerId = 3;
         }
-        if ((lobby.Team4 != null) && (db.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token))
+        if ((lobby.Team4 != null) && (dataBank.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token))
         {
             org.ownPlayerId = 4;
         }
 
-        org.initialiser = db.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
+        org.initialiser = dataBank.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
 
         if (lobby.Team1 != null)
         {
             for (int i = 0; i < lobby.Team1.Count; ++i)
             {
-                org.Player1 = db.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+                org.Player1 = dataBank.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
             }
         }
 
@@ -468,7 +481,7 @@ public class Server : NetworkManager
         {
             for (int i = 0; i < lobby.Team2.Count; ++i)
             {
-                org.Player2 = db.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+                org.Player2 = dataBank.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
             }
         }
 
@@ -476,7 +489,7 @@ public class Server : NetworkManager
         {
             for (int i = 0; i < lobby.Team3.Count; ++i)
             {
-                org.Player3 = db.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
+                org.Player3 = dataBank.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
             }
         }
 
@@ -484,23 +497,23 @@ public class Server : NetworkManager
         {
             for (int i = 0; i < lobby.Team4.Count; ++i)
             {
-                org.Player4 = db.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+                org.Player4 = dataBank.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
             }
         }
         SendClient(recHostId, cnnId, org);
     }
     private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
     {
-        Model_Account self = db.FindAccountByToken(si.Token);
+        Model_Account self = dataBank.FindAccountByToken(si.Token);
         if (self != null)
         {
-            Model_Lobby lobby = db.FindLobbyByObjectId(self.inLobby);
+            Model_Lobby lobby = dataBank.FindLobbyByObjectId(self.inLobby);
             if (lobby != null)
             {
                 // send all other players the movement message
                 if (lobby.Team1 != null && lobby.Team1.Count != 0 && lobby.Team1[0] != self._id)
                 {
-                    Model_Account friend1 = db.FindAccountByObjectId(lobby.Team1[0]);
+                    Model_Account friend1 = dataBank.FindAccountByObjectId(lobby.Team1[0]);
                     if (friend1 != null)
                     {
                         SendClient(recHostId, friend1.ActiveConnection, si);
@@ -509,7 +522,7 @@ public class Server : NetworkManager
 
                 if (lobby.Team2 != null && lobby.Team2.Count != 0 && lobby.Team2[0] != self._id)
                 {
-                    Model_Account friend2 = db.FindAccountByObjectId(lobby.Team2[0]);
+                    Model_Account friend2 = dataBank.FindAccountByObjectId(lobby.Team2[0]);
                     if (friend2 != null)
                     {
                         SendClient(recHostId, friend2.ActiveConnection, si);
@@ -518,7 +531,7 @@ public class Server : NetworkManager
 
                 if (lobby.Team3 != null && lobby.Team3.Count != 0 && lobby.Team3[0] != self._id)
                 {
-                    Model_Account friend3 = db.FindAccountByObjectId(lobby.Team3[0]);
+                    Model_Account friend3 = dataBank.FindAccountByObjectId(lobby.Team3[0]);
                     if (friend3 != null)
                     {
                         SendClient(recHostId, friend3.ActiveConnection, si);
@@ -527,7 +540,7 @@ public class Server : NetworkManager
 
                 if (lobby.Team4 != null && lobby.Team4.Count != 0 && lobby.Team4[0] != self._id)
                 {
-                    Model_Account friend4 = db.FindAccountByObjectId(lobby.Team4[0]);
+                    Model_Account friend4 = dataBank.FindAccountByObjectId(lobby.Team4[0]);
                     if (friend4 != null)
                     {
                         SendClient(recHostId, friend4.ActiveConnection, si);

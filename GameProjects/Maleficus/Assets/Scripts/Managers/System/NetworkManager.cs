@@ -352,6 +352,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, BYTE_SIZE, out error);
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        SendServer(new Net_Disonnected());
+    }
+
     #region Account related
     public void SendCreateAccount(string username, string password, string email)
     {
