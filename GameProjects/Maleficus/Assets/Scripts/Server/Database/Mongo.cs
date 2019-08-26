@@ -361,10 +361,6 @@ public class Mongo
     #endregion
 
     #region Lobby
-    public Model_Lobby FindLobbyByInitializerId(ObjectId initialiserId)
-    {
-        return lobbys.Find(u => u.initialiserId == initialiserId).FirstOrDefault<Model_Lobby>();
-    }
     public Model_Lobby FindLobbyByObjectId(ObjectId objectId)
     {
         return lobbys.Find(u => u._id == objectId).FirstOrDefault<Model_Lobby>();
