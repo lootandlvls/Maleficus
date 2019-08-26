@@ -203,17 +203,13 @@ public class Mongo
         return false;
     }
 
-    public bool InitLobby(ObjectId initialiserId)
+    public int InitLobby(ObjectId initialiserId)
     {
         Model_Account self = FindAccountByObjectId(initialiserId);
         if (self != null)
         {
             Model_Lobby newLobby = new Model_Lobby();
-            int lobbyID = (int) lobbys.CountDocuments(u => u.LobbyID != -1) + 1;
-            while(FindLobbyByLobbyID(lobbyID) != null)
-            {
-                lobbyID++;
-            }
+            int lobbyID = (int) lobbys.CountDocuments(u => u.LobbyID != -1);
             newLobby.LobbyID = lobbyID;
             newLobby.initialiserId = initialiserId;
             newLobby.Team1 = new List<ObjectId>();
@@ -245,10 +241,10 @@ public class Mongo
 
             // insert lobby into mongodb
             lobbys.InsertOne(newLobby);
-            return true;
+            return lobbyID;
         }
 
-        return false;
+        return -1;
     }
     #endregion
 

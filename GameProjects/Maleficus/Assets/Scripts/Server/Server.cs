@@ -344,7 +344,8 @@ public class Server : NetworkManager
     {
         Net_OnInitLobby oil = new Net_OnInitLobby();
         Model_Account self = dataBank.FindAccountByToken(il.Token);
-        if (dataBank.InitLobby(self._id))
+        int lobbyID = dataBank.InitLobby(self._id);
+        if (lobbyID != -1)
         {
             oil.Success = 1;
             oil.Information = "Lobby has been initialized";
@@ -352,8 +353,7 @@ public class Server : NetworkManager
             // send msg to InstanceManager to run new Instance
             //SendClient(2, cnnId, il);
             EPlayerID playerID = EPlayerID.NONE;
-
-            Model_Lobby thislobby = dataBank.FindLobbyByInitializerId(self._id);
+            Model_Lobby thislobby = dataBank.FindLobbyByLobbyID(lobbyID);
             List<EPlayerID> players = new List<EPlayerID>();
 
             if (thislobby.Team1 != null)
@@ -396,7 +396,7 @@ public class Server : NetworkManager
             return;
         }
 
-        Model_Lobby lobby = dataBank.FindLobbyByInitializerId(self._id);
+        Model_Lobby lobby = dataBank.FindLobbyByLobbyID(lobbyID);
 
         oil.lobbyID = lobby.LobbyID;
         // add lobbyID to the player
