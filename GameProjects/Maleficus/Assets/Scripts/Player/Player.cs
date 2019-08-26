@@ -174,7 +174,7 @@ public class Player : MonoBehaviour, IPlayer
         }
         else if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
         {
-            StartCoroutine(SlowDownPlayerCoroutine(0.25f, spell.CastingDuration));
+            StartCoroutine(SlowDownPlayerCoroutine(speed / 2.0f, spell.CastingDuration));
         }
 
     }
@@ -186,7 +186,7 @@ public class Player : MonoBehaviour, IPlayer
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
         {
-            StartCoroutine(SlowDownPlayerCoroutine(speed / 3.0f, spell.CastingDuration));
+            StartCoroutine(SlowDownPlayerCoroutine(speed / 10.0f, spell.CastingDuration));
         }
         else
         {
@@ -389,13 +389,6 @@ public class Player : MonoBehaviour, IPlayer
             duration = 0.1f;
         }
         StartNewCoroutine(UpdatePushVelocityEnumerator, UpdatePushVelocityCoroutine(duration));
-
-        //if (PushCoroutine != null)
-        //{
-        //    StopCoroutine(PushCoroutine);
-        //}
-        //PushCoroutine = UpdatePushVelocityCoroutine(duration);
-        //StartCoroutine(PushCoroutine);
     }
 
     
