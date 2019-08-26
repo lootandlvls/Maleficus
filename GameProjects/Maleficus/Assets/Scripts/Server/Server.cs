@@ -47,6 +47,8 @@ public class Server : NetworkManager
     protected override void Awake()
     {
         base.Awake();
+
+        ownClientID = EClientID.SERVER;
     }
 
 
@@ -128,6 +130,7 @@ public class Server : NetworkManager
     #region OnData
     //public override void BroadcastNetMessage(AbstractNetMessage netMessage)
     //{
+    //    foreach ()
     //    SendClient(netMessage);
     //}
 
@@ -171,6 +174,8 @@ public class Server : NetworkManager
                 JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle(movementMessage.JoystickType, movementMessage.Joystick_X, movementMessage.Joystick_Y, movementMessage.PlayerID);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
+                BroadcastMessageToAllOtherClients(movementMessage, movementMessage.PlayerID);
+
                 AllReceivedMsgs.Add((Net_JoystickInput)msg);
                 break;
 
@@ -188,7 +193,20 @@ public class Server : NetworkManager
                     ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
                 }
+                BroadcastMessageToAllOtherClients(spellMessage, spellMessage.PlayerID);
                 break;
+        }
+    }
+
+    private void BroadcastMessageToAllOtherClients(AbstractNetMessage movementMessage, EPlayerID sendingClientPlayerID)
+    {
+        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        {
+            if (playerID != sendingClientPlayerID)
+            {
+                int connectionID = connectedPlayers[playerID];
+                SendClient(0, connectionID, movementMessage);
+            }
         }
     }
 

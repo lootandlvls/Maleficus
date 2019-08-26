@@ -57,7 +57,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
 
             // Broadcast event to server if not None
             AbstractNetMessage netMessage =  eventHandle.GetNetMessage();
-            if (netMessage.ID != NetID.None)
+            if ((netMessage.ID != NetID.None) && (NetworkManager.Instance.HasAuthority == false))
             {
                 NetworkManager.Instance.BroadcastNetMessage(netMessage);
             }

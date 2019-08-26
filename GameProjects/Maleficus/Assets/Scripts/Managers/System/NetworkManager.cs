@@ -35,7 +35,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private string token;
     private bool isStarted;
     private int ownLobbyID;
-    private EClientID ownClientID;
+    protected EClientID ownClientID;
     private List<Net_SpellInput> castedSpells;
 
 
@@ -44,6 +44,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     protected override void Awake()
     {
         base.Awake();
+
     }
 
     protected void Start()
