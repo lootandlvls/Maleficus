@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +19,13 @@ public class GameManager : AbstractSingletonManager<GameManager>
     {
         EventManager.Instance.GAME_GameOver += ON_GAME_GameOver;
         EventManager.Instance.AR_ARStateUpdated.AddListener(On_AR_ARStateUpdated);
+        EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlayerd);
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
+    }
+
+    private void On_AR_ARStagePlayerd(ARStagePlacedEventHandle obj)
+    {
+        throw new NotImplementedException();
     }
 
     public override void OnSceneStartReinitialize()

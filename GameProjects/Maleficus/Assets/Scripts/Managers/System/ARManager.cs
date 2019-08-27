@@ -70,8 +70,8 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                 }
                 break;
         }
-
-        EventManager.Instance.Invoke_AR_StagePlaced();
+        EventManager.Instance.AR_ARStagePlaced.Invoke(new ARStagePlacedEventHandle());
+       // EventManager.Instance.Invoke_AR_StagePlaced();
     }
 
     private void SetAnchorsInputActive(bool isActive)

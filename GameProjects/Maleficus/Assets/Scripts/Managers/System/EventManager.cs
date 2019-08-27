@@ -348,16 +348,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
     public MaleficusEvent<StateUpdatedEventHandle<EARState>> AR_ARStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EARState>>("AR_ARStateUpdated");
 
 
-    public event Action AR_StagePlaced;                                       
-    public void Invoke_AR_StagePlaced()
-    {
-        if (AR_StagePlaced != null)
-        {
-            AR_StagePlaced.Invoke();
-        }
-        DebugLog("Stage placed");
-    }
+    //public event Action AR_StagePlaced;                                       
+    //public void Invoke_AR_StagePlaced()
+    //{
+    //    if (AR_StagePlaced != null)
+    //    {
+    //        AR_StagePlaced.Invoke();
+    //    }
+    //    DebugLog("Stage placed");
+    //}
 
+    public MaleficusEvent<ARStagePlacedEventHandle> AR_ARStagePlaced = new MaleficusEvent<ARStagePlacedEventHandle>("AR_ARStagePlayed");
 
     #endregion
 
