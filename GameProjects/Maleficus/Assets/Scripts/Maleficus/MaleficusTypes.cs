@@ -449,7 +449,8 @@ public enum EPlacementMethod
 {
     NONE,
     ON_PLANE,
-    MID_AIR
+    MID_AIR,
+    ImageMarker
 }
 #endregion
 

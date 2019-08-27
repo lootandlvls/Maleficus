@@ -69,6 +69,16 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                     augmentedStage.ShowStage();
                 }
                 break;
+
+            case EPlacementMethod.ImageMarker:
+                if (placedContent.name == "ImageTarget")
+                {
+                    SetAnchorsInputActive(false);
+                    augmentedStage.ShowStage();
+                }
+                break;
+
+
         }
         EventManager.Instance.AR_ARStagePlaced.Invoke(new ARStagePlacedEventHandle());
        // EventManager.Instance.Invoke_AR_StagePlaced();
