@@ -129,7 +129,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (activePlayers.ContainsKey(playerID))
         {
             activePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
-            activePlayers[playerID].transform.localRotation = Quaternion.Euler(new Vector3(playerRotation[0], playerRotation[1], playerRotation[2]));
+            //activePlayers[playerID].transform.localRotation = Quaternion.Euler(new Vector3(playerRotation[0], playerRotation[1], playerRotation[2]));
         }
     }
 
