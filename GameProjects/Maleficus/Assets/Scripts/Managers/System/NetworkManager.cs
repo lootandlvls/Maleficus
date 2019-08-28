@@ -47,7 +47,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     }
 
-    protected void Start()
+    protected virtual void Start()
     {
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         //EventManager.Instance.INPUT_ButtonReleased.AddListener      (On_Input_ButtonReleased);
@@ -79,6 +79,14 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             case NetID.SpellInput:
                 Net_SpellInput spellInput = (Net_SpellInput)netMessage;
                 if (spellInput.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
+                {
+                    return;
+                }
+                break;
+
+            case NetID.GameStarted:
+                Net_GameStarted gameStarted = (Net_GameStarted)netMessage;
+                if (gameStarted.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
                 {
                     return;
                 }
@@ -236,7 +244,30 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
                 OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
+            case NetID.GameStarted:
+                Debug.Log("Game Started");
 
+                Net_GameStarted gameStartedMessage = (Net_GameStarted)msg;
+               
+                GameStartedEventHandle gameStartedEventHandle = new GameStartedEventHandle(gameStartedMessage.PlayerID);
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle);
+
+                AllReceivedMsgs.Add((Net_GameStarted)msg);
+
+                break;
+            case NetID.GameStateReplicate:
+                Debug.Log("Game state replicated");
+                Net_GameStateReplicate gameStateReplicateMessage = (Net_GameStateReplicate)msg;
+                GameStateReplicateEventhandle gameStateReplicate = new GameStateReplicateEventhandle
+                    (
+                    gameStateReplicateMessage.playerID,
+                    gameStateReplicateMessage.playerPosition,
+                    gameStateReplicateMessage.playerRotation
+
+                    );
+                EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicate);
+                AllReceivedMsgs.Add((Net_GameStateReplicate)msg);
+                break;
 
             // Input
             case NetID.MovementInput:
@@ -264,9 +295,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
                 }
 
-
                 AllReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
+
+         
 
 
         }
@@ -555,7 +587,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     //        SendMovementInput(eInputAxis, axisvalue);
     //    }
     //}
-    private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    protected virtual void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
         {

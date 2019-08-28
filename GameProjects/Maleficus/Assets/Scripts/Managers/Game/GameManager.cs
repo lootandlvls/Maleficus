@@ -20,7 +20,13 @@ public class GameManager : AbstractSingletonManager<GameManager>
         EventManager.Instance.GAME_GameOver += ON_GAME_GameOver;
         EventManager.Instance.AR_ARStateUpdated.AddListener(On_AR_ARStateUpdated);
         EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlayerd);
+        EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
+    }
+
+    private void On_NETWORK_GameStarted(GameStartedEventHandle obj)
+    {
+        StartGame(EGameMode.FFA_LIVES);
     }
 
     private void On_AR_ARStagePlayerd(ARStagePlacedEventHandle obj)
@@ -167,14 +173,14 @@ public class GameManager : AbstractSingletonManager<GameManager>
             };
         }
 
-        StartGameAction[] startGameActions = FindObjectsOfType<StartGameAction>();
-        foreach (StartGameAction action in startGameActions)
-        {
-            action.ActionButtonPressed += () =>
-            {
-                StartGame(EGameMode.FFA_LIVES);
-            };
-        }
+        //StartGameAction[] startGameActions = FindObjectsOfType<StartGameAction>();
+        //foreach (StartGameAction action in startGameActions)
+        //{
+        //    action.ActionButtonPressed += () =>
+        //    {
+        //       // StartGame(EGameMode.FFA_LIVES);
+        //    };
+        //}
 
 
 

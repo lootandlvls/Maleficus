@@ -31,6 +31,9 @@
     public const int RequestGameInfo = 17;
     public const int OnRequestGameInfo = 18;
 
+    public const int GameStateReplicate = 19;
+
+    public const int GameStarted = 20;
 
 
 

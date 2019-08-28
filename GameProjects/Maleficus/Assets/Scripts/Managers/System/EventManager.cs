@@ -295,6 +295,12 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
 
     public MaleficusEvent<BasicEventHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo = new MaleficusEvent<BasicEventHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
+    
+    //Event to restore the game state in case of lost connection
+    public MaleficusEvent<GameStateReplicateEventhandle> NETWORK_GameStateReplicate = new MaleficusEvent<GameStateReplicateEventhandle>("NETWORK_GameStateReplicate") ;
+
+    public MaleficusEvent<GameStartedEventHandle> NETWORK_GameStarted = new MaleficusEvent<GameStartedEventHandle>("NETWORK_GameStarted");
+
     #endregion
 
     #region ENEMIES

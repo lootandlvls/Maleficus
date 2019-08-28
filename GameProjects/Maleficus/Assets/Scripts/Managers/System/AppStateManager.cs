@@ -41,6 +41,12 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
+        EventManager.Instance.NETWORK_GameStarted.AddListener                (On_NETWORK_GameStarted);
+    }
+
+    private void On_NETWORK_GameStarted(GameStartedEventHandle obj)
+    {
+        UpdateState(EAppState.IN_GAME_IN_RUNNING);
     }
 
     public override void OnSceneStartReinitialize()
@@ -245,7 +251,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             action.ActionButtonPressed += () =>
             {
-                UpdateState(EAppState.IN_GAME_IN_RUNNING);
+                //UpdateState(EAppState.IN_GAME_IN_RUNNING);
+               // EventManager.Instance.NETWORK_GameStarted.Invoke(new GameStartedEventHandle(NetworkManager.Instance.));
             };
         }
     }
