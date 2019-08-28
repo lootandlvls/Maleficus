@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
     [SerializeField] private AudioSource Hitspell_FireBall_AudioSource;
     [SerializeField] private AudioSource castSpell_AOE_AudioSource;
     [SerializeField] private AudioSource castSpell_Laser_AudioSource;
+    [SerializeField] private AudioSource stagePlaced;
 
 
     private void Start()
@@ -24,6 +26,13 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
 
         EventManager.Instance.SPELLS_SpellSpawned += On_SPELLS_SpellSpawned;
         EventManager.Instance.SPELLS_SpellHitEnemy += On_SPELLS_SpellHitEnemy;
+
+        EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlaced);
+    }
+
+    private void On_AR_ARStagePlaced(ARStagePlacedEventHandle eventHandle)
+    {
+        stagePlaced.Play();
     }
 
     private void On_SPELLS_SpellHitEnemy(IEnemy obj)

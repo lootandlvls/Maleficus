@@ -365,6 +365,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
 
                 if (inputDistance > MaleficusConsts.THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT)
+                // Is new joystick input different enough from last registred one?
                 {
                     newInput.Normalize();
                     float x = newInput.x;
@@ -376,8 +377,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
                     joystickValues[EInputAxis.MOVE_Y] = newInput.y;
 
 
-                    Debug.Log("input send");
-                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
+                    
+                                                                                                                // TODO:  check if correct state
+
+                    //if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+                    //{
+                        EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
+                    //}
                 }
             }
             else // Spell joystick
@@ -390,6 +396,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
 
                 if (inputDistance > MaleficusConsts.THRESHOLD_JOYSTICK_DISTANCE_ROTATION)
+                // Is new joystick input different enough from last registred one?
                 {
                     newInput.Normalize();
                     float x = newInput.x;
@@ -400,6 +407,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
                     joystickValues[EInputAxis.ROTATE_X] = newInput.x;
                     joystickValues[EInputAxis.ROTATE_Y] = newInput.y;
 
+
+                                                                                                                // TODO:  check if correct state
                     EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
                 }
             }
@@ -421,6 +430,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_X] = 0.0f;
                 ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_Y] = 0.0f;
 
+                                                                                                        // TODO:  check if correct state
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joystickType, 0.0f, 0.0f, playerID));
             }
             else
@@ -429,7 +439,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
                 ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_X] = 0.0f;
                 ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
-
+                
+                                                                                                            // TODO:  check if correct state
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joystickType, 0.0f, 0.0f, playerID));
             }
 
@@ -437,6 +448,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(touchJoystickType);
             if (inputButton != EInputButton.NONE)
             {
+                                                                                                                    // TODO:  check if correct state
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(new ButtonReleasedEventHandle(playerID, inputButton));
 
                 //ControllersInput[EControllerID.TOUCH].IsButtonReleased[inputButton] = true;

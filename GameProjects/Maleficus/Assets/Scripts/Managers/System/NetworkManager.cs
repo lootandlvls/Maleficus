@@ -22,8 +22,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private const int BYTE_SIZE = 1024;
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
-    //private const string SERVER_IP = "185.223.30.253";
-    private const string SERVER_IP = "127.0.0.1";
+    private const string SERVER_IP = "83.171.237.227";
+    //private const string SERVER_IP = "127.0.0.1"; 
 
 
 
@@ -68,23 +68,35 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
+        // Prevent that other clients who recieve an event Triggered by a different client, to broadcast the same event again
         switch (netMessage.ID)
         {
             case NetID.MovementInput:
                 Net_JoystickInput joystickInput = (Net_JoystickInput)netMessage;
-                if (joystickInput.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
+                if (joystickInput.PlayerID != OwnPlayerID)
                 {
                     return;
                 }
                 break;
+
             case NetID.SpellInput:
                 Net_SpellInput spellInput = (Net_SpellInput)netMessage;
-                if (spellInput.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
+                if (spellInput.PlayerID != OwnPlayerID)
+                {
+                    return;
+                }
+                break;
+
+            case NetID.ARStagePlaced:
+                Net_ARStagePlaced aRStagePlaced = (Net_ARStagePlaced)netMessage;
+                if (aRStagePlaced.PlayerID != OwnPlayerID)
                 {
                     return;
                 }
                 break;
         }
+
+        // Broadcast event if main sender
         SendServer(netMessage);
     }
 
@@ -238,16 +250,37 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 OnRequestGameInfo((Net_OnRequestGameInfo)msg);
                 break;
 
+            case NetID.ARStagePlaced:
+                Net_ARStagePlaced arStageMessage = (Net_ARStagePlaced)msg;
+                ARStagePlacedEventHandle arStageEventHandle = new ARStagePlacedEventHandle
+                    (
+                    arStageMessage.PlayerID,
+                    arStageMessage.X_TrackerRotation,
+                    arStageMessage.Y_TrackerRotation,
+                    arStageMessage.Z_TrackerRotation,
+                    arStageMessage.X_TrackerRotation,
+                    arStageMessage.Y_TrackerRotation,
+                    arStageMessage.Z_TrackerRotation
+                    );
+
+                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageEventHandle);
+
+                AllReceivedMsgs.Add((Net_ARStagePlaced)msg);
+                break;
 
             // Input
             case NetID.MovementInput:
                 Debug.Log("Game input received");
 
                 Net_JoystickInput movementMessage = (Net_JoystickInput)msg;
-                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle(movementMessage.JoystickType, movementMessage.Joystick_X, movementMessage.Joystick_Y, movementMessage.PlayerID);
+                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle
+                    (movementMessage.JoystickType, 
+                    movementMessage.Joystick_X, 
+                    movementMessage.Joystick_Y, 
+                    movementMessage.PlayerID);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
-                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
+                AllReceivedMsgs.Add((Net_JoystickInput)msg);
                 break;
 
             case NetID.SpellInput:
@@ -256,16 +289,18 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Net_SpellInput spellMessage = (Net_SpellInput)msg;
                 if (spellMessage.IsPressed == true)
                 {
-                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle
+                        (spellMessage.PlayerID, 
+                        spellMessage.InputButton);
                     EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle);
                 }
                 else // released
                 {
-                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle
+                        (spellMessage.PlayerID, 
+                        spellMessage.InputButton);
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
                 }
-
-
                 AllReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
 

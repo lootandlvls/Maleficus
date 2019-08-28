@@ -32,7 +32,7 @@
     public const int OnRequestGameInfo = 18;
 
 
-
+    public const int ARStagePlaced = 21;
 
     public const int Test = 255;  // Maximum
 }

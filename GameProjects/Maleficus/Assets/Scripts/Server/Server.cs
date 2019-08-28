@@ -166,6 +166,24 @@ public class Server : NetworkManager
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
                 break;
 
+            case NetID.ARStagePlaced:
+                Net_ARStagePlaced arStageMessage = (Net_ARStagePlaced)msg;
+                ARStagePlacedEventHandle arStageEventHandle = new ARStagePlacedEventHandle
+                    (
+                    arStageMessage.PlayerID,
+                    arStageMessage.X_TrackerRotation,
+                    arStageMessage.Y_TrackerRotation,
+                    arStageMessage.Z_TrackerRotation,
+                    arStageMessage.X_TrackerRotation,
+                    arStageMessage.Y_TrackerRotation,
+                    arStageMessage.Z_TrackerRotation
+                    );
+
+                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageEventHandle);
+
+                BroadcastMessageToAllOtherClients(arStageMessage, arStageEventHandle.PlayerID);
+                break;
+
                 // Disconnect event
             case NetID.Disconnected:
                 DisconnectEvent(recHostId, cnnId);
@@ -176,12 +194,16 @@ public class Server : NetworkManager
                 Debug.Log("Game input received");
 
                 Net_JoystickInput movementMessage = (Net_JoystickInput)msg;
-                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle(movementMessage.JoystickType, movementMessage.Joystick_X, movementMessage.Joystick_Y, movementMessage.PlayerID);
+                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle
+                    (movementMessage.JoystickType, 
+                    movementMessage.Joystick_X, 
+                    movementMessage.Joystick_Y, 
+                    movementMessage.PlayerID
+                    );
+
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
                 BroadcastMessageToAllOtherClients(movementMessage, movementMessage.PlayerID);
-
-                AllReceivedMsgs.Add((Net_JoystickInput)msg);
                 break;
 
             case NetID.SpellInput:
@@ -190,16 +212,24 @@ public class Server : NetworkManager
                 Net_SpellInput spellMessage = (Net_SpellInput)msg;
                 if (spellMessage.IsPressed == true)
                 {
-                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle
+                        (spellMessage.PlayerID, 
+                        spellMessage.InputButton);
+
                     EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle);
                 }
                 else // released
                 {
-                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle(spellMessage.PlayerID, spellMessage.InputButton);
+                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle
+                        (spellMessage.PlayerID, 
+                        spellMessage.InputButton);
+
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
                 }
                 BroadcastMessageToAllOtherClients(spellMessage, spellMessage.PlayerID);
                 break;
+
+                
         }
     }
 

@@ -23,8 +23,11 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     private bool isAnchorListeningActive = true;
 
     private Vector3 stagePosition;
+    private bool isStagePlaced = false;
+
     private Vector3 trackerPosition;
     private Vector3 trackerRotation;
+    private bool isTrackerTracked = false;
 
     protected override void Awake()
     {
@@ -69,6 +72,14 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                 {
                     SetAnchorsInputActive(false);
                     stagePosition = placedContent.transform.position;
+
+                    // Broadcast event only first time both objects tracked
+                    if ((isTrackerTracked == true) && (isStagePlaced == false))
+                    {
+                        BroadcastStagePosition();
+                    }
+
+                    isStagePlaced = true;
                 }
                 break;
 
@@ -95,18 +106,24 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
         }
 
-        // Broadcast event
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID);
-        Vector3 trackerToStage = trackerPosition - stagePosition;
-        ARStagePlacedEventHandle eventHanlde = new ARStagePlacedEventHandle(
-            playerID, 
-            trackerRotation.x, 
-            trackerRotation.y, 
-            trackerRotation.z, 
-            trackerToStage.x, 
-            trackerToStage.y, 
-            trackerToStage.z);
-        EventManager.Instance.AR_ARStagePlaced.Invoke(eventHanlde);
+
+    }
+
+    
+
+    private void OnImageTracked(Transform trackerTransform)
+    {
+        trackerPosition = trackerTransform.position;
+        trackerRotation = trackerTransform.rotation.eulerAngles;
+
+        // Broadcast event only first time both objects tracked
+        if ((isTrackerTracked == false) && (isStagePlaced == true))
+        {
+            BroadcastStagePosition();
+        }
+
+        isTrackerTracked = true;
+
 
     }
 
@@ -128,6 +145,9 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             lockButton.SetIsLocked();
         }
     }
+ 
+
+   
 
     private void FindReferencesInScene()
     {
@@ -183,31 +203,51 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         }
     }
 
-    private void OnImageTracked(Transform trackerTransform)
-    {
-        trackerPosition = trackerTransform.position;
-        trackerRotation = trackerTransform.rotation.eulerAngles;
-    }
 
+
+    #region NETWORK
     private void On_AR_ARStagePlaced(ARStagePlacedEventHandle eventHandle)
     {
 
-        EPlayerID playerID = eventHandle.PlayerID; 
+        EPlayerID playerID = eventHandle.PlayerID;
         Vector3 trackerToStage = new Vector3
             (
-            eventHandle.X_ImageToStage,
-            eventHandle.Y_ImageToStage,
-            eventHandle.Z_ImageToStage
+            eventHandle.X_TrackerToStage,
+            eventHandle.Y_TrackerToStage,
+            eventHandle.Z_TrackerToStage
             );
         Vector3 trackerRotation = new Vector3
             (
-            eventHandle.X_Imagerotation,
-            eventHandle.Y_Imagerotation,
-            eventHandle.Z_Imagerotation
+            eventHandle.X_TrackerRotation,
+            eventHandle.Y_TrackerRotation,
+            eventHandle.Z_TrackerRotation
             );
 
-         
+        // Update local coordinate
+        this.stagePosition = trackerPosition + trackerToStage;
+        this.trackerRotation = trackerRotation;
 
+        if (augmentedStage != null)
+        {
+            augmentedStage.transform.position = stagePosition;
+        }
     }
+
+
+    private void BroadcastStagePosition()
+    {
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID);
+        Vector3 trackerToStage = stagePosition - trackerPosition;
+        ARStagePlacedEventHandle eventHanlde = new ARStagePlacedEventHandle(
+            playerID,
+            trackerRotation.x,
+            trackerRotation.y,
+            trackerRotation.z,
+            trackerToStage.x,
+            trackerToStage.y,
+            trackerToStage.z);
+        EventManager.Instance.AR_ARStagePlaced.Invoke(eventHanlde);
+    }
+    #endregion
 }
 
