@@ -265,7 +265,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 Net_GameStarted gameStartedMessage = (Net_GameStarted)msg;
                
                 GameStartedEventHandle gameStartedEventHandle = new GameStartedEventHandle(gameStartedMessage.PlayerID);
-                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle);
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle, EEventInvocationType.LOCAL_ONLY);
 
                 AllReceivedMsgs.Add((Net_GameStarted)msg);
                 break;
@@ -298,7 +298,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                     gameStateReplicateMessage.playerRotation
 
                     );
-                EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicate);
+                EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicate, EEventInvocationType.LOCAL_ONLY);
                 AllReceivedMsgs.Add((Net_GameStateReplicate)msg);
                 break;
 

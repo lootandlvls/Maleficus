@@ -34,7 +34,7 @@ public class Server : NetworkManager
     private byte error;
     private List<Net_SpellInput> castedSpells;
 
-    private float gameStateUpdateFrequency = 3.0f;
+    private float gameStateUpdateFrequency = 1.0f;
     private Mongo dataBank;
 
     private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
@@ -647,6 +647,7 @@ public class Server : NetworkManager
 
             foreach (EPlayerID playerID in connectedPlayers.Keys)
             {
+                Debug.Log("Updating client : " + playerID);
                 if (PlayerManager.Instance.ActivePlayers.ContainsKey(playerID))
                 {
                     playerPosition[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.x;
@@ -658,6 +659,10 @@ public class Server : NetworkManager
                     Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(playerID, playerPosition, playerRotation);
 
                     SendClient(0, connectedPlayers[playerID], msg_gameState);
+                }
+                else
+                {
+                    Debug.Log(playerID + " not found in Active");
                 }
                 yield return new WaitForSeconds(0.2f);
             }
