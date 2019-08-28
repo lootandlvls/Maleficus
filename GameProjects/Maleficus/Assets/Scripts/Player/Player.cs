@@ -427,6 +427,10 @@ public class Player : MonoBehaviour, IPlayer
         if (other.tag.Equals("Ground"))
         {
             GravityVelocity = new Vector3(0, -9.81f, 0);
+            if (MotherOfManagers.Instance.IsARGame == true)
+            {
+                GravityVelocity *= ARManager.Instance.SizeFactor;
+            }
             isDead = true;
             StopAllCoroutines();
             IsReadyToShoot = false;
