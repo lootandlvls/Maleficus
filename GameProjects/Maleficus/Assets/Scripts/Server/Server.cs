@@ -34,7 +34,7 @@ public class Server : NetworkManager
     private byte error;
     private List<Net_SpellInput> castedSpells;
 
-    private float GameStateUpdateFrequency;
+    private float gameStateUpdateFrequency = 3.0f;
     private Mongo dataBank;
 
     private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
@@ -192,7 +192,7 @@ public class Server : NetworkManager
 
                 EventManager.Instance.AR_ARStagePlaced.Invoke(arStageEventHandle);
 
-                BroadcastMessageToAllOtherClients(arStageMessage, arStageEventHandle.PlayerID);
+                BroadcastMessageToAllClients(arStageMessage, arStageEventHandle.PlayerID, true);
                 break;
 
                 // Disconnect event
@@ -214,7 +214,7 @@ public class Server : NetworkManager
 
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
 
-                BroadcastMessageToAllOtherClients(movementMessage, movementMessage.PlayerID);
+                BroadcastMessageToAllClients(movementMessage, movementMessage.PlayerID, true);
                 break;
 
             case NetID.SpellInput:
@@ -237,7 +237,7 @@ public class Server : NetworkManager
 
                     EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
                 }
-                BroadcastMessageToAllOtherClients(spellMessage, spellMessage.PlayerID);
+                BroadcastMessageToAllClients(spellMessage, spellMessage.PlayerID, true);
                 break;
 
             case NetID.GameStarted:
@@ -246,23 +246,26 @@ public class Server : NetworkManager
                 Net_GameStarted gameStartedMessage = (Net_GameStarted)msg;
                 GameStartedEventHandle gameStartedEventHandle = new GameStartedEventHandle(gameStartedMessage.PlayerID);
                 EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle);
-                BroadcastMessageToAllOtherClients(gameStartedMessage, gameStartedMessage.PlayerID);
+
+                BroadcastMessageToAllClients(gameStartedMessage, gameStartedMessage.PlayerID, false);
 
                 break;
         }
     }
 
-    private void BroadcastMessageToAllOtherClients(AbstractNetMessage movementMessage, EPlayerID sendingClientPlayerID)
+    private void BroadcastMessageToAllClients(AbstractNetMessage netMessage, EPlayerID sendingClientPlayerID, bool isExcludeSenderClient)
     {
         foreach (EPlayerID playerID in connectedPlayers.Keys)
         {
-            if (playerID != sendingClientPlayerID)
+            if (((isExcludeSenderClient == true) && (playerID != sendingClientPlayerID))
+                || (isExcludeSenderClient == false))
             {
                 int connectionID = connectedPlayers[playerID];
-                SendClient(0, connectionID, movementMessage);
+                SendClient(0, connectionID, netMessage);
             }
         }
     }
+
 
     private void DisconnectEvent(int recHostId, int connectionId)
     {
@@ -640,20 +643,22 @@ public class Server : NetworkManager
 
         while (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            yield return new WaitForSeconds(GameStateUpdateFrequency);
+            yield return new WaitForSeconds(gameStateUpdateFrequency);
 
             foreach (EPlayerID playerID in connectedPlayers.Keys)
             {
-                playerPosition[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.x;
-                playerPosition[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.y;
-                playerPosition[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.z;
-                playerRotation[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.x;
-                playerRotation[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.y;
-                playerRotation[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.z;
-                Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(playerID, playerPosition, playerRotation);
+                if (PlayerManager.Instance.ActivePlayers.ContainsKey(playerID))
+                {
+                    playerPosition[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.x;
+                    playerPosition[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.y;
+                    playerPosition[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.z;
+                    playerRotation[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.x;
+                    playerRotation[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.y;
+                    playerRotation[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.z;
+                    Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(playerID, playerPosition, playerRotation);
 
-                SendClient(0, connectedPlayers[playerID], msg_gameState);
-
+                    SendClient(0, connectedPlayers[playerID], msg_gameState);
+                }
                 yield return new WaitForSeconds(0.2f);
             }
 
