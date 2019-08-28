@@ -645,28 +645,22 @@ public class Server : NetworkManager
         {
             yield return new WaitForSeconds(gameStateUpdateFrequency);
 
-            foreach (EPlayerID playerID in connectedPlayers.Keys)
+            foreach (EPlayerID activePlayerID in PlayerManager.Instance.ActivePlayers.Keys)
             {
-                Debug.Log("Updating client : " + playerID);
-                if (PlayerManager.Instance.ActivePlayers.ContainsKey(playerID))
+                foreach (EPlayerID connectedPlayerID in connectedPlayers.Keys)
                 {
-                    playerPosition[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.x;
-                    playerPosition[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.y;
-                    playerPosition[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.z;
-                    playerRotation[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.x;
-                    playerRotation[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.y;
-                    playerRotation[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.z;
-                    Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(playerID, playerPosition, playerRotation);
+                    playerPosition[0] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.x;
+                    playerPosition[1] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.y;
+                    playerPosition[2] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.z;
+                    playerRotation[0] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.x;
+                    playerRotation[1] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.y;
+                    playerRotation[2] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.z;
+                    Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(activePlayerID, playerPosition, playerRotation);
 
-                    SendClient(0, connectedPlayers[playerID], msg_gameState);
+                    SendClient(0, connectedPlayers[connectedPlayerID], msg_gameState);
+                    yield return new WaitForSeconds(0.05f);
                 }
-                else
-                {
-                    Debug.Log(playerID + " not found in Active");
-                }
-                yield return new WaitForSeconds(0.2f);
             }
-
         }
     }
 
