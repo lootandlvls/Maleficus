@@ -240,6 +240,14 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 UpdateState(EAppState.IN_MENU_IN_STARTING_AR_GAME);
             };
         }
+
+        foreach(StartGameAction action in FindObjectsOfType<StartGameAction>())
+        {
+            action.ActionButtonPressed += () =>
+            {
+                UpdateState(EAppState.IN_GAME_IN_RUNNING);
+            };
+        }
     }
 
 

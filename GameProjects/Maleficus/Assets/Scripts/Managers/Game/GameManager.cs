@@ -167,6 +167,17 @@ public class GameManager : AbstractSingletonManager<GameManager>
             };
         }
 
+        StartGameAction[] startGameActions = FindObjectsOfType<StartGameAction>();
+        foreach (StartGameAction action in startGameActions)
+        {
+            action.ActionButtonPressed += () =>
+            {
+                StartGame(EGameMode.FFA_LIVES);
+            };
+        }
+
+
+
         PauseGameAction[] pauseGameActions = FindObjectsOfType<PauseGameAction>();
         foreach (PauseGameAction action in pauseGameActions)
         {

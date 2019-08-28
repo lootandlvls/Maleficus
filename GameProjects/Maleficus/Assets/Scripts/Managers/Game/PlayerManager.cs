@@ -111,7 +111,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             {
                 ConnectPlayer(playerID, MaleficusUtilities.GetPlayerNeteworkID(playerID));
             }
-            SpawnPlayer(playerID);
         }
     }
 
@@ -377,6 +376,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
             SpawnAllConnectedPlayers();
+        }
+        if(eventHandle.NewState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            foreach(EPlayerID playerID in connectedPlayers.Keys)
+            {
+                SpawnPlayer(playerID);
+            }
         }
     }
     #endregion
