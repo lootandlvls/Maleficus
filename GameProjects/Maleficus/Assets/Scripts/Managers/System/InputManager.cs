@@ -30,9 +30,9 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void Start()
     {
-        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
-        //EventManager.Instance.INPUT_ButtonPressed.AddListener(On_INPUT_ButtonPressed); 
-        //EventManager.Instance.INPUT_ButtonReleased.AddListener(On_INPUT_ButtonReleased);
+        // Listen to broadcasted inputs 
+        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_NeT_INPUT_JoystickMoved);
+
     }
 
     
@@ -364,10 +364,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 Vector2 oldInput = new Vector2(joystickValues[EInputAxis.MOVE_X], joystickValues[EInputAxis.MOVE_Y]);
                 float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
 
-                //DebugManager.Instance.Log(535, "dotProd : " + dotProd + 
-                //    "\n newInput : " + newInput.ToString() + 
-                //    "\n oldInput : " + oldInput.ToString());
-
                 if (inputDistance > MaleficusConsts.THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT)
                 {
                     newInput.Normalize();
@@ -379,6 +375,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
                     joystickValues[EInputAxis.MOVE_X] = newInput.x;
                     joystickValues[EInputAxis.MOVE_Y] = newInput.y;
 
+
+                    Debug.Log("input send");
                     EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(joysticksType, newInput.x, newInput.y, playerID));
                 }
             }
@@ -390,10 +388,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 var joystickValues = ControllersInput[EControllerID.TOUCH].JoystickValues;
                 Vector2 oldInput = new Vector2(joystickValues[EInputAxis.ROTATE_X], joystickValues[EInputAxis.ROTATE_Y]);
                 float inputDistance = Vector2.Distance(oldInput.normalized, newInput.normalized);
-
-                DebugManager.Instance.Log(535, "dotProd : " + (Mathf.Abs(newInput.x) + Mathf.Abs(newInput.y)) +
-                                                "\n newInput : " + newInput.ToString());// +
-                                                //"\n oldInput : " + oldInput.ToString());
 
                 if (inputDistance > MaleficusConsts.THRESHOLD_JOYSTICK_DISTANCE_ROTATION)
                 {
@@ -452,25 +446,29 @@ public class InputManager : AbstractSingletonManager<InputManager>
     #endregion
 
     #region Network Input
-    private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
+    private void On_NeT_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
     {
         EJoystickType joystickType = eventHandle.JoystickType;
         float joystick_X = eventHandle.Joystick_X;
         float joystick_Y = eventHandle.Joystick_Y;
         EPlayerID playerID = eventHandle.PlayerID;
 
-        EControllerID controllerID = PlayerManager.Instance.GetControllerFrom(playerID);
-        if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS))
+        if (playerID != NetworkManager.Instance.OwnPlayerID)
         {
-            if (joystickType == EJoystickType.MOVEMENT)
+
+            EControllerID controllerID = PlayerManager.Instance.GetControllerFrom(playerID);
+            if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS))
             {
-                controllersInput[controllerID].JoystickValues[EInputAxis.MOVE_X] = joystick_X;
-                controllersInput[controllerID].JoystickValues[EInputAxis.MOVE_Y] = joystick_Y;
-            }
-            else if (joystickType == EJoystickType.ROTATION)
-            {
-                controllersInput[controllerID].JoystickValues[EInputAxis.ROTATE_X] = joystick_X;
-                controllersInput[controllerID].JoystickValues[EInputAxis.ROTATE_Y] = joystick_Y;
+                if (joystickType == EJoystickType.MOVEMENT)
+                {
+                    controllersInput[controllerID].JoystickValues[EInputAxis.MOVE_X] = joystick_X;
+                    controllersInput[controllerID].JoystickValues[EInputAxis.MOVE_Y] = joystick_Y;
+                }
+                else if (joystickType == EJoystickType.ROTATION)
+                {
+                    controllersInput[controllerID].JoystickValues[EInputAxis.ROTATE_X] = joystick_X;
+                    controllersInput[controllerID].JoystickValues[EInputAxis.ROTATE_Y] = joystick_Y;
+                }
             }
         }
     }
@@ -510,65 +508,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         ControllersInput.Remove(controllerID);
         canPerformHorizontalDirectionalButton.Remove(controllerID);
         canPerformVerticalDirectionalButton.Remove(controllerID);
-    }
-
-
-    private void BroadcastLocalControllersInput()
-    {
-        //foreach (EControllerID controllerID in ControllersInput.Keys)
-        //{
-        //    if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS) == true)
-        //    {
-        //        continue;
-        //    }
-
-        //    ControllerInput controllerInput = ControllersInput[controllerID];
-        //    EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(controllerID);
-
-        //    // Movement
-        //    if (true)//controllerInput.HasMoved())
-        //    {
-        //        float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
-        //        float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
-        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
-
-        //        EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
-        //    }
-
-        //    // Rotation
-        //    if (true)//controllerInput.HasRotated())
-        //    {
-        //        float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
-        //        float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
-        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
-
-        //        EventManager.Instance.INPUT_JoystickMoved.Invoke(eventHandle);
-        //    }
-
-        //    // Button pressesd
-        //    //var isButtonPressed = controllerInput.IsButtonPressed;
-        //    foreach (EInputButton inputButton in isButtonPressed.Keys)
-        //    {
-        //        if (isButtonPressed[inputButton] == true)
-        //        {
-        //            Debug.Log(inputButton + " pressed by " + controllerID + " : " + playerID);
-        //            ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
-        //            EventManager.Instance.INPUT_ButtonPressed.Invoke(eventHandle);
-        //        }
-        //    }
-
-        //    // Button Released
-        //    //var isButtonReleased = controllerInput.IsButtonReleased;
-        //    foreach (EInputButton inputButton in isButtonReleased.Keys)
-        //    {
-        //        if (isButtonReleased[inputButton] == true)
-        //        {
-        //            ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
-        //            EventManager.Instance.INPUT_ButtonReleased.Invoke(eventHandle);
-        //        }
-        //    }
-
-        //}
     }
 
     private void FlushControllersInput()

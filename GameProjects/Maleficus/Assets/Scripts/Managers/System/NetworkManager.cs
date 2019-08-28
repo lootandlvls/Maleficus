@@ -7,9 +7,10 @@ using UnityEngine.Networking;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
-    public bool HasAuthority { get { return ownClientID == EClientID.SERVER; } }
-    public EClientID OwnClientID { get { return ownClientID; } }
-    public List<Net_SpellInput> CastedSpells { get { return castedSpells; } }
+    public bool HasAuthority                        { get { return ownClientID == EClientID.SERVER; } }
+    public EClientID OwnClientID                    { get { return ownClientID; } }
+    public EPlayerID OwnPlayerID                    { get { return MaleficusUtilities.GetPlayerIDFrom(OwnClientID); } }
+    public List<Net_SpellInput> CastedSpells        { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs = new List<AbstractNetMessage>();
 
@@ -21,8 +22,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private const int BYTE_SIZE = 1024;
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
-    private const string SERVER_IP = "185.223.30.253";
-    //private const string SERVER_IP = "127.0.0.1";
+    //private const string SERVER_IP = "185.223.30.253";
+    private const string SERVER_IP = "127.0.0.1";
 
 
 
