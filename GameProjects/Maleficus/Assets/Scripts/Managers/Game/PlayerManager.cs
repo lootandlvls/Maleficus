@@ -63,8 +63,23 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         //Network
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
-
+        EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
         StartCoroutine(LateStartCoroutine());
+    }
+
+    private void On_NETWORK_GameStateReplicate(GameStateReplicateEventhandle gameState)
+    {       
+        EPlayerID  playerID = gameState.playerID;
+        float[] playerPosition = gameState.playerPosition;
+        float[] playerRotation = gameState.playerRotation;
+
+        if (activePlayers.ContainsKey(playerID))
+        {
+            activePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
+            activePlayers[playerID].transform.localRotation = new Quaternion(playerRotation[0], playerRotation[1], playerRotation[2],0);
+        }
+
+       
     }
 
     private IEnumerator LateStartCoroutine()

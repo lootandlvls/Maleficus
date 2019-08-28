@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using MongoDB.Bson;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Server : NetworkManager
 {
@@ -33,10 +34,12 @@ public class Server : NetworkManager
     private byte error;
     private List<Net_SpellInput> castedSpells;
 
+    private float GameStateUpdateFrequency;
     private Mongo dataBank;
 
     private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
 
+    private IEnumerator UpdateGameStateEnumerator;
 
     #region Monobehaviour
     public override void OnSceneStartReinitialize()
@@ -49,6 +52,13 @@ public class Server : NetworkManager
         base.Awake();
 
         ownClientID = EClientID.SERVER;
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+
     }
 
 
@@ -125,6 +135,7 @@ public class Server : NetworkManager
                 Debug.Log("Unexpected network event type");
                 break;
         }
+
     }
 
     #region OnData
@@ -229,7 +240,15 @@ public class Server : NetworkManager
                 BroadcastMessageToAllOtherClients(spellMessage, spellMessage.PlayerID);
                 break;
 
+            case NetID.GameStarted:
+                Debug.Log("Game starting received");
                 
+                Net_GameStarted gameStartedMessage = (Net_GameStarted)msg;
+                GameStartedEventHandle gameStartedEventHandle = new GameStartedEventHandle(gameStartedMessage.PlayerID);
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle);
+                BroadcastMessageToAllOtherClients(gameStartedMessage, gameStartedMessage.PlayerID);
+
+                break;
         }
     }
 
@@ -612,4 +631,63 @@ public class Server : NetworkManager
         }
     }
     #endregion
+
+    private IEnumerator UpdateGameStateCoroutine()
+    {
+        float[] playerPosition = new float[3];
+        float[] playerRotation = new float[3];
+
+
+        while (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            yield return new WaitForSeconds(GameStateUpdateFrequency);
+
+            foreach (EPlayerID playerID in connectedPlayers.Keys)
+            {
+                playerPosition[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.x;
+                playerPosition[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.y;
+                playerPosition[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localPosition.z;
+                playerRotation[0] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.x;
+                playerRotation[1] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.y;
+                playerRotation[2] = PlayerManager.Instance.ActivePlayers[playerID].transform.localRotation.z;
+                Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(playerID, playerPosition, playerRotation);
+
+                SendClient(0, connectedPlayers[playerID], msg_gameState);
+
+                yield return new WaitForSeconds(0.2f);
+            }
+
+        }
+    }
+
+    protected override void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    {
+        base.On_APP_AppStateUpdated(eventHandle);
+
+        if (UpdateGameStateEnumerator != null)
+        {
+            StopCoroutine(UpdateGameStateEnumerator);
+        }
+
+        switch(eventHandle.NewState)
+        {
+            case EAppState.IN_GAME_IN_RUNNING:
+                StartNewCoroutine(UpdateGameStateEnumerator, UpdateGameStateCoroutine());
+                break;
+        }
+    }
+
+
+
+
+
+    private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)
+    {
+        if (enumerator != null)
+        {
+            StopCoroutine(enumerator);
+        }
+        enumerator = coroutine;
+        StartCoroutine(enumerator);
+    }
 }
