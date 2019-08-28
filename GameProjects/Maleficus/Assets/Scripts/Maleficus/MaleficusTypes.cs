@@ -355,6 +355,14 @@ public enum EClientID
     CLIENT_4,
     TEST
 }
+
+public enum EEventInvocationType
+{
+    TO_ALL,
+    LOCAL_ONLY,
+    TO_SERVER_ONLY,
+
+}
 #endregion
 
 #region ENEMIES

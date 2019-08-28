@@ -30,6 +30,11 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     {
         base.Start();
 
+        if (MotherOfManagers.Instance.IsServer == true)
+        {
+            currentScene = EScene.GAME;
+        }
+
         // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.APP_AppStateUpdated.Invoke;
 
@@ -253,7 +258,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             {
                 //UpdateState(EAppState.IN_GAME_IN_RUNNING);
                 EPlayerID playerID = NetworkManager.Instance.OwnPlayerID;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(new GameStartedEventHandle(playerID));
+                EventManager.Instance.NETWORK_GameStarted.Invoke(new GameStartedEventHandle(playerID), EEventInvocationType.TO_SERVER_ONLY);
             };
         }
     }

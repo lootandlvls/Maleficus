@@ -33,27 +33,39 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
         }
     }
 
-    public void Invoke(H eventHandle)
+    public void Invoke(H eventHandle, EEventInvocationType eventInvocationType = EEventInvocationType.TO_ALL)
     {
         if (maleficusEvent != null)
         {
-            // Invoke event to all local listeners
-            maleficusEvent.Invoke(eventHandle);
-
-            // Debug event
-            string debugMessage = eventHandle.GetDebugMessage();
-            if ((MotherOfManagers.Instance.IsDebugLogEvents == true) && (debugMessage != ""))
+            if (eventInvocationType != EEventInvocationType.TO_SERVER_ONLY)
             {
-                Debug.Log("[EVENT] " + Name + " : " + debugMessage);
+                // Invoke event to all local listeners
+                maleficusEvent.Invoke(eventHandle);
+
+                // Debug event
+                string debugMessage = eventHandle.GetDebugMessage();
+                if ((MotherOfManagers.Instance.IsDebugLogEvents == true) && (debugMessage != ""))
+                {
+                    Debug.Log("[EVENT] " + Name + " : " + debugMessage);
+                }
             }
 
-            // Broadcast event message to server if not None and if not server
-            AbstractNetMessage netMessage =  eventHandle.GetNetMessage();
-            if ((netMessage.ID != NetID.None) && (NetworkManager.Instance.HasAuthority == false))
+            if (eventInvocationType != EEventInvocationType.LOCAL_ONLY)
             {
-                NetworkManager.Instance.BroadcastNetMessage(netMessage);
+                // Broadcast event message to server if not None and if not server
+                AbstractNetMessage netMessage = eventHandle.GetNetMessage();
+                if ((netMessage.ID != NetID.None) && (NetworkManager.Instance.HasAuthority == false))
+                {
+                    NetworkManager.Instance.BroadcastNetMessage(netMessage);
+                }
             }
         }
+    }
+
+
+    public void Invoke(H eventHandle)
+    {
+        Invoke(eventHandle, EEventInvocationType.TO_ALL);
     }
 
 }

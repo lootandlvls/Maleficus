@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {
-
-    //[Header ("States")]
-    //[Tooltip("Scene to load if currently in the ENTRY scene.")]
-    //[SerializeField] public EScene StartSceneOnEntry        = EScene.MENU;
-    //[Tooltip("Keep NONE if you want to use default start state from AppStateManager")]
-    //[SerializeField] public EAppState DebugStartAppState    = EAppState.NONE;           
-    //[Tooltip("Keep NONE if you want to use default start state from UIStateManagers")]
-    //[SerializeField] public EMenuState DebugStartMenuState  = EMenuState.NONE;
+    [Header("Server AppState")]
+    [SerializeField] public bool IsServer = false;
 
     [Header ("Input")]
     [SerializeField] public EInputMode InputMode = EInputMode.CONTROLLER;
@@ -30,6 +24,9 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [Header ("Debug")]
     [SerializeField] public bool IsDebugLogEvents = false;
     [SerializeField] public bool IsReduceLightIntensityOnSceneStart = false;
+
+
+
 
     protected override void Awake()
     {
