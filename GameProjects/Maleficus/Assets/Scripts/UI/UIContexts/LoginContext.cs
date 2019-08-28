@@ -10,7 +10,7 @@ public class LoginContext : MonoBehaviour
     [SerializeField] protected TMP_InputField loginUsernameOrEmail;
     [SerializeField] protected TMP_InputField loginPassword;
 
-    [SerializeField] protected TextMeshProUGUI authenticationMessageText;
+    //[SerializeField] protected TextMeshProUGUI authenticationMessageText;
 
     private void Start()
     {
@@ -29,7 +29,7 @@ public class LoginContext : MonoBehaviour
 
     public void ChangeAuthenticationMessage(string msg)
     {
-        authenticationMessageText.text = msg;
+        //authenticationMessageText.text = msg;
     }
     public void EnableInputs()
     {
