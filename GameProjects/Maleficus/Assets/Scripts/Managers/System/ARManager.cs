@@ -171,7 +171,10 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
 
         trackableEventHandler = FindObjectOfType<DefaultTrackableEventHandler>();
-        trackableEventHandler.ImageTracked += OnImageTracked;
+        if (trackableEventHandler != null)
+        {
+            trackableEventHandler.ImageTracked += OnImageTracked;
+        }
     }
 
     private void OnImageTracked(Transform trackerTransform)
