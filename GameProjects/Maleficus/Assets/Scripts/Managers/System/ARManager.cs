@@ -40,9 +40,10 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
         StateUpdateEvent += EventManager.Instance.AR_ARStateUpdated.Invoke;
 
-        // TODO: Listen to ARStage PLaced
-        //EventManager.Instance
+        EventManager.Instance.AR_ARStagePlaced.AddListener          (On_AR_ARStagePlaced);
     }
+
+
 
     public override void OnSceneStartReinitialize()
     {
@@ -94,6 +95,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
         }
 
+        // Broadcast event
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID);
         Vector3 trackerToStage = trackerPosition - stagePosition;
         ARStagePlacedEventHandle eventHanlde = new ARStagePlacedEventHandle(
@@ -105,7 +107,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             trackerToStage.y, 
             trackerToStage.z);
         EventManager.Instance.AR_ARStagePlaced.Invoke(eventHanlde);
-        // EventManager.Instance.Invoke_AR_StagePlaced();
+
     }
 
     private void SetAnchorsInputActive(bool isActive)
@@ -185,6 +187,27 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         trackerPosition = trackerTransform.position;
         trackerRotation = trackerTransform.rotation.eulerAngles;
+    }
+
+    private void On_AR_ARStagePlaced(ARStagePlacedEventHandle eventHandle)
+    {
+
+        EPlayerID playerID = eventHandle.PlayerID; 
+        Vector3 trackerToStage = new Vector3
+            (
+            eventHandle.X_ImageToStage,
+            eventHandle.Y_ImageToStage,
+            eventHandle.Z_ImageToStage
+            );
+        Vector3 trackerRotation = new Vector3
+            (
+            eventHandle.X_Imagerotation,
+            eventHandle.Y_Imagerotation,
+            eventHandle.Z_Imagerotation
+            );
+
+         
+
     }
 }
 

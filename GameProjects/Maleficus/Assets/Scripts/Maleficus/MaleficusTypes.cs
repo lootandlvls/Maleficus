@@ -258,39 +258,10 @@ public enum EJoystickState
 public class ControllerInput
 {
     public Dictionary<EInputAxis, float> JoystickValues = new Dictionary<EInputAxis, float>();
-    //public Dictionary<EInputButton, bool> IsButtonPressed = new Dictionary<EInputButton, bool>();
-    //public Dictionary<EInputButton, bool> IsButtonReleased = new Dictionary<EInputButton, bool>();
 
     public ControllerInput()
     {
         Flush();
-
-        //IsJoystickMoved.Add(EInputAxis.MOVE_X, 0.0f);
-        //IsJoystickMoved.Add(EInputAxis.MOVE_Y, 0.0f);
-        //IsJoystickMoved.Add(EInputAxis.ROTATE_X, 0.0f);
-        //IsJoystickMoved.Add(EInputAxis.ROTATE_Y, 0.0f);
-
-        //IsButtonPressed.Add(EInputButton.CONFIRM, false);
-        //IsButtonPressed.Add(EInputButton.CANCEL, false);
-        //IsButtonPressed.Add(EInputButton.CAST_SPELL_1, false);
-        //IsButtonPressed.Add(EInputButton.CAST_SPELL_2, false);
-        //IsButtonPressed.Add(EInputButton.CAST_SPELL_3, false);
-
-        //IsButtonPressed.Add(EInputButton.LEFT, false);
-        //IsButtonPressed.Add(EInputButton.UP, false);
-        //IsButtonPressed.Add(EInputButton.RIGHT, false);
-        //IsButtonPressed.Add(EInputButton.DOWN, false);
-
-        //IsButtonReleased.Add(EInputButton.CONFIRM, false);
-        //IsButtonReleased.Add(EInputButton.CANCEL, false);
-        //IsButtonReleased.Add(EInputButton.CAST_SPELL_1, false);
-        //IsButtonReleased.Add(EInputButton.CAST_SPELL_2, false);
-        //IsButtonReleased.Add(EInputButton.CAST_SPELL_3, false);
-
-        //IsButtonReleased.Add(EInputButton.LEFT, false);
-        //IsButtonReleased.Add(EInputButton.UP, false);
-        //IsButtonReleased.Add(EInputButton.RIGHT, false);
-        //IsButtonReleased.Add(EInputButton.DOWN, false);
     }
 
     public void Flush()
@@ -300,30 +271,6 @@ public class ControllerInput
         JoystickValues[EInputAxis.MOVE_Y] = 0.0f;
         JoystickValues[EInputAxis.ROTATE_X] = 0.0f;
         JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
-
-        //// Initialize button pressed
-        //IsButtonPressed[EInputButton.CONFIRM] = false;
-        //IsButtonPressed[EInputButton.CANCEL] = false;
-        //IsButtonPressed[EInputButton.CAST_SPELL_1] = false;
-        //IsButtonPressed[EInputButton.CAST_SPELL_2] = false;
-        //IsButtonPressed[EInputButton.CAST_SPELL_3] = false;
-
-        //IsButtonPressed[EInputButton.LEFT] = false;
-        //IsButtonPressed[EInputButton.UP] = false;
-        //IsButtonPressed[EInputButton.RIGHT] = false;
-        //IsButtonPressed[EInputButton.DOWN] = false;
-
-        //// Initialize button released
-        //IsButtonReleased[EInputButton.CONFIRM] = false;
-        //IsButtonReleased[EInputButton.CANCEL] = false;
-        //IsButtonReleased[EInputButton.CAST_SPELL_1] = false;
-        //IsButtonReleased[EInputButton.CAST_SPELL_2] = false;
-        //IsButtonReleased[EInputButton.CAST_SPELL_3] = false;
-
-        //IsButtonReleased[EInputButton.LEFT] = false;
-        //IsButtonReleased[EInputButton.UP] = false;
-        //IsButtonReleased[EInputButton.RIGHT] = false;
-        //IsButtonReleased[EInputButton.DOWN] = false;
     }
 
     public bool HasMoved()

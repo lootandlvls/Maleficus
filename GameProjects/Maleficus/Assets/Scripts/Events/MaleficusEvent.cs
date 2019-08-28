@@ -6,21 +6,13 @@ using System;
 public class MaleficusEvent<H> where H : AbstractEventHandle
 {
     public string Name { get; }
-    //public byte NetMessageID { get; }
 
     private event Action<H> maleficusEvent;
 
     public MaleficusEvent(string name)
     {
         Name = name;
-        //NetMessageID = NetID.None;
     }
-
-    //public MaleficusEvent(string name, byte netMessageID)
-    //{
-    //    Name = name;
-    //    NetMessageID = netMessageID;
-    //}
 
     public void AddListener(Action<H> callbackAction)
     {
@@ -45,7 +37,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
     {
         if (maleficusEvent != null)
         {
-            // Invoke event to all listeners
+            // Invoke event to all local listeners
             maleficusEvent.Invoke(eventHandle);
 
             // Debug event
@@ -55,7 +47,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
                 Debug.Log("[EVENT] " + Name + " : " + debugMessage);
             }
 
-            // Broadcast event to server if not None
+            // Broadcast event message to server if not None and if not server
             AbstractNetMessage netMessage =  eventHandle.GetNetMessage();
             if ((netMessage.ID != NetID.None) && (NetworkManager.Instance.HasAuthority == false))
             {
