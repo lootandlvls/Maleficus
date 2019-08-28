@@ -34,7 +34,7 @@ public class Server : NetworkManager
     private byte error;
     private List<Net_SpellInput> castedSpells;
 
-    private float gameStateUpdateFrequency = 1.0f;
+    private float gameStateUpdateFrequency = 0.3f;
     private Mongo dataBank;
 
     private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
