@@ -393,7 +393,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
     private void UpdateFollow(Net_UpdateFollow fu)
     {
-        FriendsContext.Instance.UpdateFollow(fu.Follow);
+        if (FriendsContext.Instance != null)
+        {
+            FriendsContext.Instance.UpdateFollow(fu.Follow);
+        }
     }
     private void OnRequestGameInfo(Net_OnRequestGameInfo orgi)
     {
