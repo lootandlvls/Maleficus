@@ -161,10 +161,16 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
                 ActivePlayers.Add(toSpawnPlayerID, spawnedPlayer);
 
+                // Place player under parent of SpawnPosition
+                if (playerSpawnPosition.transform.parent != null)
+                {
+                    spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
+                }
+
+                // Set AR Player
                 if (MotherOfManagers.Instance.IsARGame == true)
                 {
                     spawnedPlayer.IsARPlayer = true;
-                    spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
                     spawnedPlayer.transform.localScale = playerSpawnPosition.transform.localScale;
                 }
 

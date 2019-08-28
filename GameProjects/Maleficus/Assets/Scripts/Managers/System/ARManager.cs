@@ -7,7 +7,8 @@ using UnityEngine.AI;
 
 public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EARState>
 {
-    public float SizeFactor { get { return sizeFactor; } }
+    public float SizeFactor                                 { get { return sizeFactor; } }
+    public Transform AugmentedStageTransform                { get { return augmentedStage.transform; } }
 
     private AnchorBehaviour midAirAnchorBehaviour;
     private ContentPositioningBehaviour[] contentPositionings;
@@ -246,7 +247,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             trackerToStage.x,
             trackerToStage.y,
             trackerToStage.z);
-        EventManager.Instance.AR_ARStagePlaced.Invoke(eventHanlde);
+        EventManager.Instance.AR_ARStagePlaced.Invoke(eventHanlde, EEventInvocationType.TO_SERVER_ONLY);
     }
     #endregion
 }
