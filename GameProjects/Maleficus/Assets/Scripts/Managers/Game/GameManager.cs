@@ -25,7 +25,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void On_AR_ARStagePlayerd(ARStagePlacedEventHandle obj)
     {
-        throw new NotImplementedException();
+        // TODO Implement
     }
 
     public override void OnSceneStartReinitialize()

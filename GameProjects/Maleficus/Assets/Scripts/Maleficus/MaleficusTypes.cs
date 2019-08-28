@@ -158,7 +158,9 @@ public struct SHitInfo
     public EPlayerID CastingPlayerID { get { return castingPlayerID; } }
     public EPlayerID HitPlayerID { get { return hitPlayerID; } }
     public Vector3 HitPosition { get { return hitPosition; } }
-    public Vector3 HitVelocity { get { return castedSpell.Direction * castedSpell.HitPower ; } }
+    public Vector3 HitVelocity { get {
+            Debug.Log("§$%§$%§ dir : " + castedSpell.Direction + " | pow : " + castedSpell.HitPower);
+            return castedSpell.Direction * castedSpell.HitPower ; } }
     public bool HasPushPower { get { return hasPower; } }
     public List<ESpellEffects> DebuffEffects { get {return debuffEffects; }}
     public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
@@ -450,7 +452,7 @@ public enum EPlacementMethod
     NONE,
     ON_PLANE,
     MID_AIR,
-    ImageMarker
+    IMAGE_TRACKER
 }
 #endregion
 

@@ -11,8 +11,10 @@ public class Linear_Hit : AbstractSpell
     [SerializeField] bool shoot;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         AbstractSpell abstractSpell = this.GetComponent<AbstractSpell>();
       
         myRigidBody = this.GetComponent<Rigidbody>();

@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class Linear_Explosive : AbstractSpell
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        
-    }
+        base.Start();
 
-    // Update is called once per frame
-    void Update()
+    }
+        // Update is called once per frame
+        void Update()
     {
         
     }

@@ -22,8 +22,10 @@ public class Parabolic_Explosive : AbstractSpell
     private float percentageProgress;
     private bool animationStarted = true;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         endPosition = parabolicSpell_EndPosition;
         endRotation = endTransform.rotation;
         startTransform = this.transform;

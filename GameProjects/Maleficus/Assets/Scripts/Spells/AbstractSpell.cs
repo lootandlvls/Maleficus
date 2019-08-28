@@ -9,7 +9,9 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
 
 
-    public int HitPower { get { return hitPower; } }
+    public int HitPower { get {
+            Debug.Log("$%&$/$%& Hit power : " + hitPower);
+            return hitPower; } }
 
     public float Speed { get { return speed; } }
 
@@ -67,9 +69,9 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
 
     // Start is called before the first frame update
-    private void Start()
+    protected virtual void Start()
     {
-
+        Debug.Log("3$&$%& Start  hit power : " + hitPower);
         direction = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
 

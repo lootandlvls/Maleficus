@@ -6026,7 +6026,7 @@ MonoBehaviour:
   chargingWandEnergy: {fileID: 5551467226034161610, guid: 2b649d7e1c9688b4788d9cf712bcefcc,
     type: 3}
   angularSpeed: 28
-  speed: 1
+  speed: 75
   spellInitPosition: {fileID: 608549788462845129}
   spellEndPosition: {fileID: 7339631618129149989}
 --- !u!65 &490479312750579945

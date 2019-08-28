@@ -28,11 +28,18 @@ public class ARStagePlacedEventHandle : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        throw new System.NotImplementedException();
+        return "";
     }
 
     public override AbstractNetMessage GetNetMessage()
     {
-        throw new System.NotImplementedException();
+        return new Net_ARStagePlaced(
+            PlayerID, 
+            X_Imagerotation, 
+            Y_Imagerotation, 
+            Z_Imagerotation, 
+            X_ImageToStage, 
+            Y_ImageToStage, 
+            Z_ImageToStage);
     }
 }

@@ -180,7 +180,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     
         if (spellChargingLVL == 2)
         {
-            foreach ( AbstractSpell upgrade in spellsUpgrade)
+            foreach (AbstractSpell upgrade in spellsUpgrade)
             {
                 if (upgrade.SpellID == spellToCast.SpellID && upgrade.SpellLevel == 2)
                 {
@@ -214,9 +214,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             if ((MotherOfManagers.Instance.IsARGame == true))
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int)spell.transform.localScale.x; ;
-
             }
+
             spell.CastingPlayerID = playerID;
             spell.transform.parent = activePlayers[playerID].transform;
             Debug.Log("AOE SPELL CASTED");
@@ -233,8 +232,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.speed *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int)ARManager.Instance.SizeFactor;
             }
+
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
             spell.transform.parent = activePlayers[playerID].transform;
             spell.CastingPlayerID = playerID;
@@ -252,8 +251,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             {
                 spell.transform.localScale *= ARManager.Instance.SizeFactor;
                 spell.speed *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int)ARManager.Instance.SizeFactor;
             }
+
             spell.CastingPlayerID = playerID;
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
@@ -267,8 +266,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             {
                 spell.transform.localScale = new Vector3(spell.transform.localScale.x * 0.05f, spell.transform.localScale.y * 0.05f, spell.transform.localScale.z * 0.05f);
                 spell.speed *= ARManager.Instance.SizeFactor;
-                spell.hitPower *= (int)ARManager.Instance.SizeFactor;
             }
+
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
             spell.transform.parent = activePlayers[playerID].transform;
             spell.CastingPlayerID = playerID;
@@ -354,7 +353,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         {
             spell.transform.localScale *= ARManager.Instance.SizeFactor;
             spell.speed *= ARManager.Instance.SizeFactor;
-            spell.hitPower *= (int)spell.transform.localScale.x; ;
         }
 
         spell.CastingPlayerID = playerID;

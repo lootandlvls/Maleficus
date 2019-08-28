@@ -72,8 +72,6 @@ public class Player : MonoBehaviour, IPlayer
     {
         myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
 
-        currentSpeed = speed;
-
         IsReadyToShoot = true;
         IsPlayerCharging = false;
     }
@@ -90,7 +88,8 @@ public class Player : MonoBehaviour, IPlayer
         {
             speed *= ARManager.Instance.SizeFactor;
         }
-       
+        currentSpeed = speed;
+
     }
 
     private void Update()
@@ -271,6 +270,12 @@ public class Player : MonoBehaviour, IPlayer
             Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
             GameObject wandEffect = Instantiate(chargingWandEnergy, position, chargingBodyEnergy.transform.rotation);
             GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, chargingBodyEnergy.transform.rotation);
+            if (MotherOfManagers.Instance.IsARGame == true)
+            {
+                wandEffect.transform.localScale *= ARManager.Instance.SizeFactor;
+                bodyEffect.transform.localScale *= ARManager.Instance.SizeFactor;
+            }
+
             bodyEffect.transform.parent = this.transform;
             wandEffect.transform.parent = this.transform;
             ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
@@ -383,6 +388,12 @@ public class Player : MonoBehaviour, IPlayer
     public void PushPlayer(Vector3 velocity, float duration)
     {
         pushVelocity = velocity;
+        if (MotherOfManagers.Instance.IsARGame == true)
+        {
+            pushVelocity *= ARManager.Instance.SizeFactor;
+        }
+
+        Debug.Log("§$%§$% Player pushed : " + velocity);
 
         if (duration <= 0.0f)
         {
