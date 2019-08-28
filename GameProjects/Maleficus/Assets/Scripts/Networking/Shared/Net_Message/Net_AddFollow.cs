@@ -6,6 +6,5 @@ public class Net_AddFollow : AbstractNetMessage
         ID = NetID.AddFollow;
     }
 
-    public string Token { set; get; }
     public string UsernameDiscriminatorOrEmail { set; get; }
 }

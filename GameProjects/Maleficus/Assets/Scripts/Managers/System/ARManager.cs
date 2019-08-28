@@ -12,13 +12,19 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     private AnchorBehaviour midAirAnchorBehaviour;
     private ContentPositioningBehaviour[] contentPositionings;
     private AnchorInputListenerBehaviour[] anchorInputListeners;
+    private DefaultTrackableEventHandler trackableEventHandler;
 
     private ARLockButton lockButton;
+    private ImageTrackedIndicator imageTrackedIndicator;
     private AugmentedStage augmentedStage;
 
     private float sizeFactor = 1.0f;
 
     private bool isAnchorListeningActive = true;
+
+    private Vector3 stagePosition;
+    private Vector3 trackerPosition;
+    private Vector3 trackerRotation;
 
     protected override void Awake()
     {
@@ -33,6 +39,9 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         base.Start();
 
         StateUpdateEvent += EventManager.Instance.AR_ARStateUpdated.Invoke;
+
+        // TODO: Listen to ARStage PLaced
+        //EventManager.Instance
     }
 
     public override void OnSceneStartReinitialize()
@@ -58,6 +67,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                 if (placedContent.name == "Mid Air Stage")
                 {
                     SetAnchorsInputActive(false);
+                    stagePosition = placedContent.transform.position;
                 }
                 break;
 
@@ -73,15 +83,29 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             case EPlacementMethod.ImageMarker:
                 if (placedContent.name == "ImageTarget")
                 {
-                    SetAnchorsInputActive(false);
-                    augmentedStage.ShowStage();
+                    trackerPosition = placedContent.transform.position;
+                    if (imageTrackedIndicator != null)
+                    {
+                        imageTrackedIndicator.SetIsTracked();
+                    }
                 }
                 break;
 
 
         }
-        EventManager.Instance.AR_ARStagePlaced.Invoke(new ARStagePlacedEventHandle());
-       // EventManager.Instance.Invoke_AR_StagePlaced();
+
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID);
+        Vector3 trackerToStage = trackerPosition - stagePosition;
+        ARStagePlacedEventHandle eventHanlde = new ARStagePlacedEventHandle(
+            playerID, 
+            trackerRotation.x, 
+            trackerRotation.y, 
+            trackerRotation.z, 
+            trackerToStage.x, 
+            trackerToStage.y, 
+            trackerToStage.z);
+        EventManager.Instance.AR_ARStagePlaced.Invoke(eventHanlde);
+        // EventManager.Instance.Invoke_AR_StagePlaced();
     }
 
     private void SetAnchorsInputActive(bool isActive)
@@ -139,8 +163,21 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             break;
         }
 
+        imageTrackedIndicator = FindObjectOfType<ImageTrackedIndicator>();
+        if (imageTrackedIndicator != null)
+        {
+            imageTrackedIndicator.SetIsUntracked();
+        }
+
+
+        trackableEventHandler = FindObjectOfType<DefaultTrackableEventHandler>();
+        trackableEventHandler.ImageTracked += OnImageTracked;
     }
 
-  
+    private void OnImageTracked(Transform trackerTransform)
+    {
+        trackerPosition = trackerTransform.position;
+        trackerRotation = trackerTransform.rotation.eulerAngles;
+    }
 }
 
