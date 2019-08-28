@@ -530,8 +530,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (activePlayers.ContainsKey(playerID))
         {
-            
-
             StartCoroutine(DestroyPlayerCoroutine(playerID));
         }
     }
@@ -539,11 +537,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private IEnumerator DestroyPlayerCoroutine(EPlayerID playerID)
     {
         yield return new WaitForSeconds(MaleficusConsts.PLAYER_FALLING_TIME);
-
-        Player playerToDestroy = ActivePlayers[playerID];
-        ActivePlayers.Remove(playerID);
-        playerToDestroy.DestroyPlayer();
-        EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
+        if (ActivePlayers.ContainsKey(playerID))
+        {
+            Player playerToDestroy = ActivePlayers[playerID];
+            ActivePlayers.Remove(playerID);
+            playerToDestroy.DestroyPlayer();
+            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
+        }
     }
 
     public EPlayerID GetPlayerIDFrom(EControllerID controllerID)
