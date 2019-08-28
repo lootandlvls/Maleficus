@@ -22,8 +22,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private const int BYTE_SIZE = 1024;
     // 127.0.0.1 or localhost for connecting to yourself
     //ubuntu_server_ip
-    private const string SERVER_IP = "83.171.237.227";
-    //private const string SERVER_IP = "127.0.0.1"; 
+    //private const string SERVER_IP = "83.171.237.227";  // Server
+    private const string SERVER_IP = "192.168.137.1";  // BNJMO
+
+    //private const string SERVER_IP = "127.0.0.1"; // Local
 
 
 
