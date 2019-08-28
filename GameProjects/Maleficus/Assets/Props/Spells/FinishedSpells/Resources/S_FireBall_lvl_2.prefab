@@ -14266,7 +14266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 40
+  hitPower: 20
   speed: 800
   spellName: FireBall_lvl_2
   spellLevel: 2

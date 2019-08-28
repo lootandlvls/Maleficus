@@ -72,7 +72,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 
         if (killedPlayer.RemainingLives > 0)
         {
-            Debug.Log("Respawn Player");
+            Debug.Log("$%&$%&$%&b Respawn Player");
             PlayerManager.Instance.SpawnPlayer(diedPlayerID);
         }
         // Check if game over (only one player still alive)

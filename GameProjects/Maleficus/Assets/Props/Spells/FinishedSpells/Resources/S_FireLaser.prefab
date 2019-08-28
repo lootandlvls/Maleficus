@@ -13796,7 +13796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2aca8fc163479549b5bf1528ae0eb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 17
+  hitPower: 21
   speed: 0
   spellName: S_FireLaser
   spellLevel: 0

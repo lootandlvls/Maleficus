@@ -64,23 +64,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         //Network
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
         EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
+        EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
+
         StartCoroutine(LateStartCoroutine());
     }
 
-    private void On_NETWORK_GameStateReplicate(GameStateReplicateEventhandle gameState)
-    {       
-        EPlayerID  playerID = gameState.playerID;
-        float[] playerPosition = gameState.playerPosition;
-        float[] playerRotation = gameState.playerRotation;
+    
 
-        if (activePlayers.ContainsKey(playerID))
-        {
-            activePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
-            activePlayers[playerID].transform.localRotation = Quaternion.Euler(new Vector3(playerRotation[0], playerRotation[1], playerRotation[2]));
-        }
-
-       
-    }
+    
 
     private IEnumerator LateStartCoroutine()
     {
@@ -127,6 +118,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 ConnectPlayer(playerID, MaleficusUtilities.GetPlayerNeteworkID(playerID));
             }
         }
+    }
+
+    private void On_NETWORK_GameStateReplicate(GameStateReplicateEventhandle gameState)
+    {
+        EPlayerID playerID = gameState.playerID;
+        float[] playerPosition = gameState.playerPosition;
+        float[] playerRotation = gameState.playerRotation;
+
+        if (activePlayers.ContainsKey(playerID))
+        {
+            activePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
+            activePlayers[playerID].transform.localRotation = Quaternion.Euler(new Vector3(playerRotation[0], playerRotation[1], playerRotation[2]));
+        }
+    }
+
+    private void On_NETWORK_GameStarted(GameStartedEventHandle eventHandle)
+    {
+        SpawnAllConnectedPlayers();
     }
 
     public override void OnSceneStartReinitialize()
@@ -397,13 +406,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
             SpawnAllConnectedPlayers();
-        }
-        if(eventHandle.NewState == EAppState.IN_GAME_IN_RUNNING)
-        {
-            foreach(EPlayerID playerID in connectedPlayers.Keys)
-            {
-                SpawnPlayer(playerID);
-            }
         }
     }
     #endregion

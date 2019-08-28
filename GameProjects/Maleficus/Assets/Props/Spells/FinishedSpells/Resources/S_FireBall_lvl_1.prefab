@@ -4851,12 +4851,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 23
+  hitPower: 11
   speed: 800
   spellName: FireBall_lvl_
   spellLevel: 1
   OnSelfEffect: 0
   hasPower: 1
+  spell: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 
