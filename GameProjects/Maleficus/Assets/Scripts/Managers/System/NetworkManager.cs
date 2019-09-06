@@ -86,7 +86,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             NetworkTransport.Init();
 
             ConnectionConfig cc = new ConnectionConfig();
-            reliableChannel = cc.AddChannel(QosType.Reliable);
+            reliableChannel = cc.AddChannel(QosType.Unreliable);
 
             HostTopology topo = new HostTopology(cc, MAX_USER);
 
