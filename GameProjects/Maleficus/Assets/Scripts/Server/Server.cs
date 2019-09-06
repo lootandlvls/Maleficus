@@ -74,7 +74,7 @@ public class Server : NetworkManager
 
         ConnectionConfig cc = new ConnectionConfig();
 
-        server_reliableChannel = cc.AddChannel(QosType.Reliable);
+        server_reliableChannel = cc.AddChannel(QosType.Unreliable);
 
         HostTopology topo = new HostTopology(cc, SERVER_MAX_USER);
 
