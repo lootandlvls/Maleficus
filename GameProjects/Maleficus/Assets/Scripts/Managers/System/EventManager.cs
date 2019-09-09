@@ -107,16 +107,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
     }
 
-
-    public event Action<EGameMode> GAME_GameOver;
-    public void Invoke_GAME_GameOver(EGameMode gameMode)
-    {
-        if (GAME_GameOver != null)
-        {
-            GAME_GameOver.Invoke(gameMode);
-        }
-        DebugLog("Game over : " + gameMode);
-    }
+    public MaleficusEvent<GameOverEventHandle> GAME_GameOver = new MaleficusEvent<GameOverEventHandle>("Game_GameOver");
 
     #endregion
 

@@ -58,7 +58,7 @@ public class Server : NetworkManager
     {
         base.Start();
 
-
+        EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
     }
 
 
@@ -73,7 +73,7 @@ public class Server : NetworkManager
 
         ConnectionConfig cc = new ConnectionConfig();
 
-        server_reliableChannel = cc.AddChannel(QosType.Reliable);
+        server_reliableChannel = cc.AddChannel(QosType.Unreliable);
 
         HostTopology topo = new HostTopology(cc, SERVER_MAX_USER);
 
@@ -681,8 +681,17 @@ public class Server : NetworkManager
         }
     }
 
-
-
+    private void On_GameOver(GameOverEventHandle gameOverEventHandle)
+    {
+        Net_GameOver net_GameOver = new Net_GameOver();
+        foreach (EPlayerID activePlayerID in PlayerManager.Instance.ActivePlayers.Keys)
+        {
+            foreach (EPlayerID connectedPlayerID in connectedPlayers.Keys)
+            {
+                SendClient(0, connectedPlayers[connectedPlayerID], net_GameOver);
+            }
+        }
+    }
 
 
     private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)

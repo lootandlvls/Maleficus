@@ -122,7 +122,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             NetworkTransport.Init();
 
             ConnectionConfig cc = new ConnectionConfig();
-            reliableChannel = cc.AddChannel(QosType.Reliable);
+            reliableChannel = cc.AddChannel(QosType.Unreliable);
 
             HostTopology topo = new HostTopology(cc, MAX_USER);
 
@@ -338,10 +338,14 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
                 AllReceivedMsgs.Add((Net_SpellInput)msg);
                 break;
+            case NetID.GameOver:
+                Debug.Log("Game Over");
 
-         
-
-
+                Net_GameOver gameOver = (Net_GameOver)msg;
+                ETeamID teamID = ETeamID.NONE;
+                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
+                EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
+                break;
         }
     }
 

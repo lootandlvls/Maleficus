@@ -36,6 +36,8 @@
     public const int GameStarted = 20;
 
     public const int ARStagePlaced = 21;
+    
+    public const int GameOver = 22;
 
     public const int Test = 255;  // Maximum
 }

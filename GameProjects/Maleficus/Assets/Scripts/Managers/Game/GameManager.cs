@@ -17,7 +17,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void Start()
     {
-        EventManager.Instance.GAME_GameOver += ON_GAME_GameOver;
+        EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver);
         EventManager.Instance.AR_ARStateUpdated.AddListener(On_AR_ARStateUpdated);
         EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlayerd);
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
@@ -99,10 +99,11 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
 
 #region Event Callbacks 
-    private void ON_GAME_GameOver(EGameMode gameMode)
+    private void ON_GAME_GameOver(GameOverEventHandle eventHandle)
     {
         EndGame();
-
+        //Todo change back to enable other game modes
+        EGameMode gameMode = EGameMode.FFA_LIVES;
                                                                                     // TODO Show player stats according to game mode
         switch (gameMode)
         {

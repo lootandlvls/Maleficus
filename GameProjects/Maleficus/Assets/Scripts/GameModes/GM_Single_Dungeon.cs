@@ -38,7 +38,9 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
     {
         if (waveIndex == totalItemsToCollect)
         {
-            EventManager.Instance.Invoke_GAME_GameOver(gameMode);
+            ETeamID teamID = ETeamID.NONE;
+            GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
+            EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
 
         }
     }
@@ -74,7 +76,9 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             // Check if player is dead
             if (playerStat.IsGameOver == true)
             {
-                EventManager.Instance.Invoke_GAME_GameOver(gameMode);
+                ETeamID teamID = ETeamID.NONE;
+                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
+                EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
             }
         }
     }
