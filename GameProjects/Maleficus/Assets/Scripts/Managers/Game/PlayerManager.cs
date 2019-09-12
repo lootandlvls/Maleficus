@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -66,12 +67,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
         EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
 
+        EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
+
         StartCoroutine(LateStartCoroutine());
     }
 
-    
-
-    
+ 
 
     private IEnumerator LateStartCoroutine()
     {
@@ -136,6 +137,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_NETWORK_GameStarted(GameStartedEventHandle eventHandle)
     {
         SpawnAllConnectedPlayers();
+    }
+
+    private void On_GAME_GameOver(GameOverEventHandle eventHandle)
+    {
+        DisconnectAllPlayers();
     }
 
     public override void OnSceneStartReinitialize()
@@ -286,7 +292,17 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    
+    private void DisconnectAllPlayers()
+    {
+        EPlayerID[] temp = ConnectedPlayers.Keys.ToArray();
+        foreach (EPlayerID playerID in temp)
+        {
+            EControllerID controllerID = GetControllerFrom(playerID);
+            DisconnectPlayer(controllerID);
+        }
+    }
+
+
     #endregion
 
     #region Input
@@ -491,7 +507,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     /* public player information getter functions */
     public bool IsPlayerConnected(EPlayerID playerID)
     {
-        return ConnectedPlayers[playerID];
+        if (ConnectedPlayers.Keys.Contains(playerID))
+        {
+            return ConnectedPlayers[playerID];
+        }
+        return false;
     }
 
     public ControllerInput GetPlayerInput(EPlayerID playerID)
