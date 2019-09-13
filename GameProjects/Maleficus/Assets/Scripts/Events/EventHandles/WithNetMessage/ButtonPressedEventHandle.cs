@@ -2,24 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class ButtonPressedEventHandle : AbstractEventHandle
 {
-    public EPlayerID PlayerID { get; }
     public EInputButton InputButton { get; }
 
-    public ButtonPressedEventHandle(EPlayerID playerID, EInputButton inputButton)
+    public ButtonPressedEventHandle(EClientID senderID, EInputButton inputButton)
     {
-        PlayerID = playerID;
+        ID = ENetMessageID.BUTTON_PRESSED;
+        SenderID = senderID;
+
         InputButton = inputButton;
     }
 
     public override string GetDebugMessage()
     {
-        return PlayerID + " pressed " + InputButton;
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(SenderID);
+        return playerID + " pressed " + InputButton;
     }
 
-    public override AbstractNetMessage GetNetMessage()
-    {
-        return new Net_SpellInput(PlayerID, InputButton, true);
-    }
+    //public override AbstractNetMessage GetNetMessage()
+    //{
+    //    return new Net_SpellInput(PlayerID, InputButton, true);
+    //}
 }

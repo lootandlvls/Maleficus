@@ -320,10 +320,55 @@ public enum EButtonDirection
     DOWN
 }
 #endregion
-
-                                                            //Todo [Leon]: move data_ to own enums
+//Todo [Leon]: move data_ to own enums
 #region NETWORK
-public enum ENetworkMessage
+
+public enum ENetMessageID
+{
+    NONE                                                = 0,
+
+    CREATE_ACCOUNT                                      = 1,
+    LOGIN_REQUEST                                       = 2,
+
+    ON_CREATE_ACCOUNT                                   = 3,
+    ON_LOGIN_REQUEST                                    = 4,
+
+    ADD_FOLLOW                                          = 5,
+    REMOVE_FOLLOW                                       = 6,
+    REQUEST_FOLLOW                                      = 7,
+
+    ON_ADD_FOLLOW                                       = 8,
+    ON_REQUEST_FOLLOW                                   = 9,
+    UPDATE_FOLLOW                                       = 10,
+
+    INIT_LOBBY                                          = 11,
+
+    ON_INITI_LOBBY                                      = 12,
+
+    CONNECTED                                           = 13,
+    DISCONNECTED                                        = 14,
+
+    REQUEST_GAME_SESSION_INFO                           = 17,
+    ON_REQUEST_GAME__SESSION_INFO                       = 18,
+
+    GAME_STATE_REPLICATION                              = 19,
+
+    GAME_STARTED                                        = 20,
+
+    AR_STAGE_PLACED                                     = 21,
+
+    GAME_OVER                                           = 22,
+
+    BUTTON_PRESSED                                      = 30,
+    BUTTON_RELEASEED                                    = 31,
+    JOYSTICK_MOVED                                      = 32
+
+
+
+
+}
+
+public enum ENetworkMessageType
 {
     NONE,
     CONNECTED,
@@ -344,6 +389,7 @@ public enum ENetworkMessage
     LOGGED_OUT,
     REGISTERED
 }
+
 
 public enum EClientID
 {

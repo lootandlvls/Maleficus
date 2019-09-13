@@ -62,7 +62,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if (msgs.Count != 0)
             {
-                if (msgs[msgs.Count - 1].ID == NetID.Connected)
+                if (msgs[msgs.Count - 1].ID == ENetMessageID.CONNECTED)
                 {
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                 }
@@ -158,7 +158,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     private void On_INPUT_ButtonPressed(ButtonPressedEventHandle eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = eventHandle.PlayerID;
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
 
         if (selectedButton == null)
         {
@@ -197,23 +197,23 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         
     }
 
-    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)
     {
         // if, to prevent scene change through loss of connection during game
         if (AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY || AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
         {
             switch (receivedMsg)
             {
-                case ENetworkMessage.CONNECTED:
+                case ENetworkMessageType.CONNECTED:
                     if (currentState == EMenuState.IN_ENTRY)
                     {
                         UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                     }
                     break;
-                case ENetworkMessage.LOGGED_IN:
+                case ENetworkMessageType.LOGGED_IN:
                     UpdateState(EMenuState.IN_MENU);
                     break;
-                case ENetworkMessage.REGISTERED:
+                case ENetworkMessageType.REGISTERED:
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                     break;
             }

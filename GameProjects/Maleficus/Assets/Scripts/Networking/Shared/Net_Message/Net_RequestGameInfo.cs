@@ -3,9 +3,8 @@ public class Net_RequestGameInfo : AbstractNetMessage
 {
     public Net_RequestGameInfo()
     {
-        ID = NetID.RequestGameInfo;
+        ID = ENetMessageID.REQUEST_GAME_SESSION_INFO;
     }
 
-    public string Token { set; get; }
     public int lobbyID { set; get; }
 }

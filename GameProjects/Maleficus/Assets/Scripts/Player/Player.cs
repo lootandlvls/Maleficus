@@ -284,9 +284,6 @@ public class Player : MonoBehaviour, IPlayer
             Debug.Log("34563463463 spellCharging function working...");
             while (IsPlayerCharging)
             {
-                Debug.Log("34563463463 charging");
-
-
                 particleSystemBodyEffect.maxParticles = counter;
                 particleSystemWandEffect.maxParticles = counter;
 

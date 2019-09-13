@@ -3,7 +3,7 @@ public class Net_AddFollow : AbstractNetMessage
 {
     public Net_AddFollow()
     {
-        ID = NetID.AddFollow;
+        ID = ENetMessageID.ADD_FOLLOW;
     }
 
     public string UsernameDiscriminatorOrEmail { set; get; }

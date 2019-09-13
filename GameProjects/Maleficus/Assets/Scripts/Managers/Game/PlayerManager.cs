@@ -116,16 +116,16 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             }
             else
             {
-                ConnectPlayer(playerID, MaleficusUtilities.GetPlayerNeteworkID(playerID));
+                ConnectPlayer(playerID, MaleficusUtilities.GetControllerNeteworkID(playerID));
             }
         }
     }
 
-    private void On_NETWORK_GameStateReplicate(GameStateReplicateEventhandle gameState)
+    private void On_NETWORK_GameStateReplicate(GameStateReplicateEventhandle eventHandle)
     {
-        EPlayerID playerID = gameState.playerID;
-        float[] playerPosition = gameState.playerPosition;
-        float[] playerRotation = gameState.playerRotation;
+        EPlayerID playerID      = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        float[] playerPosition  = eventHandle.playerPosition;
+        float[] playerRotation  = eventHandle.playerRotation;
 
         if (activePlayers.ContainsKey(playerID))
         {
@@ -311,7 +311,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ButtonPressed(ButtonPressedEventHandle eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = eventHandle.PlayerID;
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
 
         ESpellSlot spellSlot = MaleficusUtilities.GetSpellSlotFrom(inputButton);
         if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
@@ -348,7 +348,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EJoystickType joystickType = eventHandle.JoystickType;
         float joystick_X = eventHandle.Joystick_X;
         float joystick_Y = eventHandle.Joystick_Y;
-        EPlayerID playerID = eventHandle.PlayerID;
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
 
         if (playerID == EPlayerID.TEST) return;
 
@@ -375,7 +375,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ButtonReleased(ButtonReleasedEventHandle eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = eventHandle.PlayerID;
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
 
         ESpellSlot spellSlot = MaleficusUtilities.GetSpellSlotFrom(inputButton);
         if ((spellSlot == ESpellSlot.NONE) || (activePlayers.ContainsKey(playerID) == false))

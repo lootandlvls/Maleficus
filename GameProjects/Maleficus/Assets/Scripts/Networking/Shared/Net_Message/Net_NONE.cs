@@ -6,6 +6,6 @@ public class Net_NONE : AbstractNetMessage
 {
     public Net_NONE()
     {
-        ID = NetID.None;
+        ID = ENetMessageID.NONE;
     }
 }

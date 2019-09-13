@@ -5,7 +5,7 @@ public class Net_OnRequestFollow : AbstractNetMessage
 {
     public Net_OnRequestFollow()
     {
-        ID = NetID.OnRequestFollow;
+        ID = ENetMessageID.ON_REQUEST_FOLLOW;
     }
 
     public List<Account> Follows { set; get; }

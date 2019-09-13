@@ -275,8 +275,8 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region NETWORK
-    public event Action<ENetworkMessage> NETWORK_ReceivedMessageUpdated;
-    public void Invoke_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
+    public event Action<ENetworkMessageType> NETWORK_ReceivedMessageUpdated;
+    public void Invoke_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)
     {
         if (NETWORK_ReceivedMessageUpdated != null)
         {

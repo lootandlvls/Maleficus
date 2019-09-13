@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class ARStagePlacedEventHandle : AbstractEventHandle
 {
-    public EPlayerID PlayerID { get; }
-
     public float X_TrackerRotation;
     public float Y_TrackerRotation;
     public float Z_TrackerRotation;
@@ -15,9 +14,11 @@ public class ARStagePlacedEventHandle : AbstractEventHandle
     public float Z_TrackerToStage;
 
 
-    public ARStagePlacedEventHandle(EPlayerID playerID, float x_Imagerotation, float y_Imagerotation, float z_Imagerotation, float x_ImageToStage, float y_ImageToStage, float z_ImageToStage)
+    public ARStagePlacedEventHandle(EClientID senderID, float x_Imagerotation, float y_Imagerotation, float z_Imagerotation, float x_ImageToStage, float y_ImageToStage, float z_ImageToStage)
     {
-        PlayerID = playerID;
+        ID = ENetMessageID.AR_STAGE_PLACED;
+        SenderID = senderID;
+
         X_TrackerRotation = x_Imagerotation;
         Y_TrackerRotation = y_Imagerotation;
         Z_TrackerRotation = z_Imagerotation;
@@ -31,15 +32,15 @@ public class ARStagePlacedEventHandle : AbstractEventHandle
         return "";
     }
 
-    public override AbstractNetMessage GetNetMessage()
-    {
-        return new Net_ARStagePlaced(
-            PlayerID, 
-            X_TrackerRotation, 
-            Y_TrackerRotation, 
-            Z_TrackerRotation, 
-            X_TrackerToStage, 
-            Y_TrackerToStage, 
-            Z_TrackerToStage);
-    }
+    //public override AbstractNetMessage GetNetMessage()
+    //{
+    //    return new Net_ARStagePlaced(
+    //        PlayerID, 
+    //        X_TrackerRotation, 
+    //        Y_TrackerRotation, 
+    //        Z_TrackerRotation, 
+    //        X_TrackerToStage, 
+    //        Y_TrackerToStage, 
+    //        Z_TrackerToStage);
+    //}
 }

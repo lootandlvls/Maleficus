@@ -91,7 +91,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if ((msgs != null) && (msgs.Count != 0))
             {
-                if (msgs[NetworkManager.Instance.AllReceivedMsgs.Count - 1].ID == NetID.Connected)
+                if (msgs[NetworkManager.Instance.AllReceivedMsgs.Count - 1].ID == ENetMessageID.CONNECTED)
                 {
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                 }
@@ -179,20 +179,20 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     #endregion
 
 
-    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessage receivedMsg)
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)
     {
         // if, to prevent scene change through loss of connection during game
         if (CurrentState == EAppState.IN_ENTRY || CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context
         {
             switch (receivedMsg)
             {
-                case ENetworkMessage.CONNECTED:
+                case ENetworkMessageType.CONNECTED:
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                     break;
-                case ENetworkMessage.LOGGED_IN:
+                case ENetworkMessageType.LOGGED_IN:
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);
                     break;
-                case ENetworkMessage.REGISTERED:
+                case ENetworkMessageType.REGISTERED:
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);
                     break;
             }
@@ -200,7 +200,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         switch (receivedMsg)
         {
-            case ENetworkMessage.DATA_ONINITLOBBY:
+            case ENetworkMessageType.DATA_ONINITLOBBY:
                 UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
                 break;
         }
@@ -257,8 +257,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             action.ActionButtonPressed += () =>
             {
                 //UpdateState(EAppState.IN_GAME_IN_RUNNING);
-                EPlayerID playerID = NetworkManager.Instance.OwnPlayerID;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(new GameStartedEventHandle(playerID), EEventInvocationType.TO_SERVER_ONLY);
+                EClientID clientID = NetworkManager.Instance.OwnClientID;
+                EventManager.Instance.NETWORK_GameStarted.Invoke(new GameStartedEventHandle(clientID), EEventInvocationType.TO_SERVER_ONLY);
             };
         }
     }

@@ -3,8 +3,7 @@ public class Net_RequestFollow : AbstractNetMessage
 {
     public Net_RequestFollow()
     {
-        ID = NetID.RequestFollow;
+        ID = ENetMessageID.REQUEST_FOLLOW;
     }
 
-    public string Token { set; get; }
 }

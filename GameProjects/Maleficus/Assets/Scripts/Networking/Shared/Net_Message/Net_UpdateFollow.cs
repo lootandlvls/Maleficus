@@ -3,7 +3,7 @@ public class Net_UpdateFollow : AbstractNetMessage
 {
     public Net_UpdateFollow()
     {
-        ID = NetID.UpdateFollow;
+        ID = ENetMessageID.UPDATE_FOLLOW;
     }
     public Account Follow { set; get; }
 }

@@ -8,14 +8,16 @@ public class TestEventHandle : AbstractEventHandle
 
     public TestEventHandle(string text)
     {
+        ID = ENetMessageID.NONE;
+
         TestMessage = text;
     }
 
-    public override AbstractNetMessage GetNetMessage()
-    {
+    //public override AbstractNetMessage GetNetMessage()
+    //{
         
-        return new Net_Test(TestMessage);
-    }
+    //    return new Net_Test(TestMessage);
+    //}
 
     public override string GetDebugMessage()
     {
@@ -26,12 +28,12 @@ public class TestEventHandle : AbstractEventHandle
 [System.Serializable]
 public class Net_Test : AbstractNetMessage
 {
-    public string TestMessage { get; }
+    //public string TestMessage { get; }
 
-    public Net_Test(string testMessage)
-    {
-        ID = NetID.Test;
-        TestMessage = testMessage;
-    }
+    //public Net_Test(string testMessage)
+    //{
+    //    ID = NetID.Test;
+    //    TestMessage = testMessage;
+    //}
 }
 

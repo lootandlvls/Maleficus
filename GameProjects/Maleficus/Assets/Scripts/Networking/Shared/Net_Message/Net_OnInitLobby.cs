@@ -3,7 +3,7 @@ public class Net_OnInitLobby : AbstractNetMessage
 {
     public Net_OnInitLobby()
     {
-        ID = NetID.OnInitLobby;
+        ID = ENetMessageID.ON_INITI_LOBBY;
     }
 
     public byte Success { set; get; }

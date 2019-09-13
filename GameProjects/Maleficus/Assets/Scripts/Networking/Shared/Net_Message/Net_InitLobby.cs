@@ -3,8 +3,7 @@ public class Net_InitLobby : AbstractNetMessage
 {
     public Net_InitLobby()
     {
-        ID = NetID.InitLobby;
+        ID = ENetMessageID.INIT_LOBBY;
     }
 
-    public string Token { set; get; }
 }

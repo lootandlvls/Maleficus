@@ -9,14 +9,16 @@ public class StateUpdatedEventHandle<E> : AbstractEventHandle
 
     public StateUpdatedEventHandle(E newState, E lastState)
     {
+        ID = ENetMessageID.NONE;
+
         NewState = newState;
         lastState = LastState;
     }
 
-    public override AbstractNetMessage GetNetMessage()
-    {
-        return new Net_NONE();
-    }
+    //public override AbstractNetMessage GetNetMessage()
+    //{
+    //    return new Net_NONE();
+    //}
 
     public override string GetDebugMessage()
     {

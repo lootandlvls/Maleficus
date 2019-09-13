@@ -3,9 +3,8 @@ public class Net_RemoveFollow : AbstractNetMessage
 {
     public Net_RemoveFollow()
     {
-        ID = NetID.RemoveFollow;
+        ID = ENetMessageID.REMOVE_FOLLOW;
     }
 
-    public string Token { set; get; }
     public string UsernameDiscriminator { set; get; }
 }

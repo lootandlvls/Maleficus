@@ -5,10 +5,9 @@ public class Net_OnRequestGameInfo : AbstractNetMessage
 {
     public Net_OnRequestGameInfo()
     {
-        ID = NetID.OnRequestGameInfo;
+        ID = ENetMessageID.ON_REQUEST_GAME__SESSION_INFO;
     }
 
-    public string Token { set; get; }
     public byte ownPlayerId { set; get; }
     public Account initialiser { set; get; }
 

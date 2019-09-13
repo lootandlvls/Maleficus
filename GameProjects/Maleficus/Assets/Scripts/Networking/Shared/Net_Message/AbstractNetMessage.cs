@@ -1,55 +1,74 @@
-﻿public static class NetID
-{
-    public const int None=0;
+﻿//public static class NetID
+//{
 
-    public const int CreateAccount = 1;
-    public const int LoginRequest = 2;
-
-    public const int OnCreateAccount = 3;
-    public const int OnLoginRequest = 4;
-
-
-    public const int AddFollow = 5;
-    public const int RemoveFollow = 6;
-    public const int RequestFollow = 7;
-
-    public const int OnAddFollow = 8;
-    public const int OnRequestFollow = 9;
-    public const int UpdateFollow = 10;
-
-
-    public const int InitLobby = 11;
-
-    public const int OnInitLobby = 12;
-
-    public const int Connected = 13;
-    public const int Disconnected = 14;
-
-    public const int SpellInput = 15;
-    public const int MovementInput = 16;
-
-    public const int RequestGameInfo = 17;
-    public const int OnRequestGameInfo = 18;
-
-    public const int GameStateReplicate = 19;
-
-    public const int GameStarted = 20;
-
-    public const int ARStagePlaced = 21;
     
-    public const int GameOver = 22;
 
-    public const int Test = 255;  // Maximum
-}
+//    //public const int None=0;
+
+//    //public const int CreateAccount = 1;
+//    //public const int LoginRequest = 2;
+
+//    //public const int OnCreateAccount = 3;
+//    //public const int OnLoginRequest = 4;
+
+
+//    //public const int AddFollow = 5;
+//    //public const int RemoveFollow = 6;
+//    //public const int RequestFollow = 7;
+
+//    //public const int OnAddFollow = 8;
+//    //public const int OnRequestFollow = 9;
+//    //public const int UpdateFollow = 10;
+
+
+//    //public const int InitLobby = 11;
+
+//    //public const int OnInitLobby = 12;
+
+//    //public const int Connected = 13;
+//    //public const int Disconnected = 14;
+
+//    ////public const int SpellInput = 15;
+//    ////public const int MovementInput = 16;
+
+//    //public const int RequestGameInfo = 17;
+//    //public const int OnRequestGameInfo = 18;
+
+//    //public const int GameStateReplicate = 19;
+
+//    //public const int GameStarted = 20;
+
+//    //public const int ARStagePlaced = 21;
+    
+//    //public const int GameOver = 22;
+
+//    //public const int ButtonPressed = 30;
+//    //public const int ButtonRleased = 31;
+//    //public const int JoystickMoved = 32;
+
+
+
+    
+
+//    //public const int Test = 255;  // Maximum
+//}
+
+
+
 [System.Serializable]
 public abstract class AbstractNetMessage
 {
-    /// <summary> ID = const id of the NET_ class, to differentiate between the different messages </summary>
-    public byte ID { set; get; }
-    public string Token { set; get; }
+    /// <summary> Differentiate between the different messages </summary>
+    public ENetMessageID ID         { get; set; }
+
+    /// <summary> Client ID of the message sender </summary>
+    public EClientID SenderID       { get; set; }
+
+    /// <summary> #define# </summary>
+    public string Token             { get; set; }
 
     public AbstractNetMessage()
     {
-        ID = NetID.None;
+        ID = ENetMessageID.NONE;
     }
 }

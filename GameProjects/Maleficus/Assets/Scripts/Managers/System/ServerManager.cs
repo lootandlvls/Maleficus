@@ -7,7 +7,7 @@ using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Collections;
 
-public class Server : NetworkManager
+public class ServerManager : NetworkManager
 {
     private const int SERVER_MAX_USER = 10000;
     private const int SERVER_PORT = 26002;
@@ -32,12 +32,12 @@ public class Server : NetworkManager
     public readonly bool isPlayer = false;
     private bool server_isStarted;
     private byte error;
-    private List<Net_SpellInput> castedSpells;
+    //private List<Net_SpellInput> castedSpells;
 
     private float gameStateUpdateFrequency = 0.3f;
     private Mongo dataBank;
 
-    private Dictionary<EPlayerID, int> connectedPlayers = new Dictionary<EPlayerID, int>();
+    private Dictionary<EClientID, int> connectedPlayers = new Dictionary<EClientID, int>();
 
     private IEnumerator UpdateGameStateEnumerator;
 
@@ -146,121 +146,100 @@ public class Server : NetworkManager
     //}
 
 
-    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
+    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage netMessage)
     {
-        Debug.Log("receiverd a message of type " + msg.ID);
+        Debug.Log("receiverd a message of type " + netMessage.ID);
 
-        switch (msg.ID)
+        switch (netMessage.ID)
         {
-            case NetID.None:
-                Debug.Log("Unexpected NetID");
-                break;
-            case NetID.CreateAccount:
-                CreateAccount(cnnId, channelId, recHostId, (Net_CreateAccount)msg);
-                break;
-            case NetID.LoginRequest:
-                LoginRequest(cnnId, channelId, recHostId, (Net_LoginRequest)msg);
-                break;
-            case NetID.AddFollow:
-                AddFollow(cnnId, channelId, recHostId, (Net_AddFollow)msg);
-                break;
-            case NetID.RemoveFollow:
-                RemoveFollow(cnnId, channelId, recHostId, (Net_RemoveFollow)msg);
-                break;
-            case NetID.RequestFollow:
-                RequestFollow(cnnId, channelId, recHostId, (Net_RequestFollow)msg);
-                break;
-            case NetID.InitLobby:
-                InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)msg);
-                break;
-            case NetID.RequestGameInfo:
-                Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)msg);
+            case ENetMessageID.NONE:
+                Debug.Log("Unexpected ENetMessageID");
                 break;
 
-            case NetID.ARStagePlaced:
-                Net_ARStagePlaced arStageMessage = (Net_ARStagePlaced)msg;
-                ARStagePlacedEventHandle arStageEventHandle = new ARStagePlacedEventHandle
-                    (
-                    arStageMessage.PlayerID,
-                    arStageMessage.X_TrackerRotation,
-                    arStageMessage.Y_TrackerRotation,
-                    arStageMessage.Z_TrackerRotation,
-                    arStageMessage.X_TrackerRotation,
-                    arStageMessage.Y_TrackerRotation,
-                    arStageMessage.Z_TrackerRotation
-                    );
+            case ENetMessageID.CREATE_ACCOUNT:
+                CreateAccount(cnnId, channelId, recHostId, (Net_CreateAccount)netMessage);
+                break;
 
-                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageEventHandle);
+            case ENetMessageID.LOGIN_REQUEST:
+                LoginRequest(cnnId, channelId, recHostId, (Net_LoginRequest)netMessage);
+                break;
 
-                BroadcastMessageToAllClients(arStageMessage, arStageEventHandle.PlayerID, true);
+            case ENetMessageID.ADD_FOLLOW:
+                AddFollow(cnnId, channelId, recHostId, (Net_AddFollow)netMessage);
+                break;
+
+            case ENetMessageID.REMOVE_FOLLOW:
+                RemoveFollow(cnnId, channelId, recHostId, (Net_RemoveFollow)netMessage);
+                break;
+
+            case ENetMessageID.REQUEST_FOLLOW:
+                RequestFollow(cnnId, channelId, recHostId, (Net_RequestFollow)netMessage);
+                break;
+
+            case ENetMessageID.INIT_LOBBY:
+                InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)netMessage);
+                break;
+
+            case ENetMessageID.REQUEST_GAME_SESSION_INFO:
+                Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo) netMessage);
+                break;
+
+            case ENetMessageID.AR_STAGE_PLACED:
+                ARStagePlacedEventHandle arStageMessage = (ARStagePlacedEventHandle)netMessage;
+                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage);
+                BroadcastMessageToAllClients(arStageMessage, true);
                 break;
 
                 // Disconnect event
-            case NetID.Disconnected:
+            case ENetMessageID.DISCONNECTED:
                 DisconnectEvent(recHostId, cnnId);
                 break;
 
             // Input
-            case NetID.MovementInput:
+            case ENetMessageID.JOYSTICK_MOVED:
                 Debug.Log("Game input received");
 
-                Net_JoystickInput movementMessage = (Net_JoystickInput)msg;
-                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle
-                    (movementMessage.JoystickType, 
-                    movementMessage.Joystick_X, 
-                    movementMessage.Joystick_Y, 
-                    movementMessage.PlayerID
-                    );
-
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
-
-                BroadcastMessageToAllClients(movementMessage, movementMessage.PlayerID, true);
+                JoystickMovedEventHandle movementMessage = (JoystickMovedEventHandle)netMessage;
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementMessage);
+                BroadcastMessageToAllClients(movementMessage, true);
                 break;
 
-            case NetID.SpellInput:
+            case ENetMessageID.BUTTON_PRESSED:
                 Debug.Log("Received Spell Input from another Player");
 
-                Net_SpellInput spellMessage = (Net_SpellInput)msg;
-                if (spellMessage.IsPressed == true)
-                {
-                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle
-                        (spellMessage.PlayerID, 
-                        spellMessage.InputButton);
-
-                    EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle);
-                }
-                else // released
-                {
-                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle
-                        (spellMessage.PlayerID, 
-                        spellMessage.InputButton);
-
-                    EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
-                }
-                BroadcastMessageToAllClients(spellMessage, spellMessage.PlayerID, true);
+                ButtonPressedEventHandle buttonPressed = (ButtonPressedEventHandle)netMessage;
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed);
+                BroadcastMessageToAllClients(buttonPressed, true);
                 break;
 
-            case NetID.GameStarted:
+
+            case ENetMessageID.BUTTON_RELEASEED:
+                Debug.Log("Received Spell Input from another Player");
+
+                ButtonReleasedEventHandle buttonReleased = (ButtonReleasedEventHandle)netMessage;
+                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased);
+                BroadcastMessageToAllClients(buttonReleased,  true);
+                break;
+
+            case ENetMessageID.GAME_STARTED:
                 Debug.Log("Game starting received");
                 
-                Net_GameStarted gameStartedMessage = (Net_GameStarted)msg;
-                GameStartedEventHandle gameStartedEventHandle = new GameStartedEventHandle(gameStartedMessage.PlayerID);
-                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle);
-
-                BroadcastMessageToAllClients(gameStartedMessage, gameStartedMessage.PlayerID, false);
-
+                GameStartedEventHandle gameStartedMessage = (GameStartedEventHandle)netMessage;
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage);
+                BroadcastMessageToAllClients(gameStartedMessage, false);
                 break;
         }
     }
 
-    private void BroadcastMessageToAllClients(AbstractNetMessage netMessage, EPlayerID sendingClientPlayerID, bool isExcludeSenderClient)
+    private void BroadcastMessageToAllClients(AbstractNetMessage netMessage, bool isExcludeSenderClient)
     {
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        foreach (EClientID clientID in connectedPlayers.Keys)
         {
-            if (((isExcludeSenderClient == true) && (playerID != sendingClientPlayerID))
+            if (((isExcludeSenderClient == true) && (clientID != netMessage.SenderID))
                 || (isExcludeSenderClient == false))
+                // Send message to original sender too ?
             {
-                int connectionID = connectedPlayers[playerID];
+                int connectionID = connectedPlayers[clientID];
                 SendClient(0, connectionID, netMessage);
             }
         }
@@ -412,33 +391,33 @@ public class Server : NetworkManager
             {
                 players.Add(EPlayerID.PLAYER_1);
                 Model_Account player1 = dataBank.FindAccountByObjectId(thislobby.Team1[0]);
-                connectedPlayers.Add(EPlayerID.PLAYER_1, player1.ActiveConnection);
+                connectedPlayers.Add(EClientID.CLIENT_1, player1.ActiveConnection);
             }
             if (thislobby.Team2 != null)
             {
                 players.Add(EPlayerID.PLAYER_2);
                 Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
-                connectedPlayers.Add(EPlayerID.PLAYER_2, player2.ActiveConnection);
+                connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);
             }
             if (thislobby.Team3 != null)
             {
                 players.Add(EPlayerID.PLAYER_3);
                 Model_Account player3 = dataBank.FindAccountByObjectId(thislobby.Team3[0]);
-                connectedPlayers.Add(EPlayerID.PLAYER_3, player3.ActiveConnection);
+                connectedPlayers.Add(EClientID.CLIENT_3, player3.ActiveConnection);
             }
             if (thislobby.Team4 != null)
             {
                 players.Add(EPlayerID.PLAYER_4);
                 Model_Account player4 = dataBank.FindAccountByObjectId(thislobby.Team4[0]);
-                connectedPlayers.Add(EPlayerID.PLAYER_4, player4.ActiveConnection);
+                connectedPlayers.Add(EClientID.CLIENT_4, player4.ActiveConnection);
             }
-            foreach(EPlayerID playeerID in connectedPlayers.Keys)
+            foreach(EClientID clientID in connectedPlayers.Keys)
             {
-                Debug.Log(playeerID + " is connected : " + connectedPlayers[playeerID]);
+                Debug.Log(clientID + " is connected : " + connectedPlayers[clientID]);
             }
 
-            EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new BasicEventHandle<List<EPlayerID>, EPlayerID>
-            (players, playerID));
+            var eventHandle = new BasicEventHandle<List<EPlayerID>, EPlayerID>(players, playerID);
+            EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(eventHandle);
         }
         else
         {
@@ -554,54 +533,55 @@ public class Server : NetworkManager
         }
         SendClient(recHostId, cnnId, org);
     }
-    private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
-    {
-        Model_Account self = dataBank.FindAccountByToken(si.Token);
-        if (self != null)
-        {
-            Model_Lobby lobby = dataBank.FindLobbyByObjectId(self.inLobby);
-            if (lobby != null)
-            {
-                // send all other players the movement message
-                if (lobby.Team1 != null && lobby.Team1.Count != 0 && lobby.Team1[0] != self._id)
-                {
-                    Model_Account friend1 = dataBank.FindAccountByObjectId(lobby.Team1[0]);
-                    if (friend1 != null)
-                    {
-                        SendClient(recHostId, friend1.ActiveConnection, si);
-                    }
-                }
 
-                if (lobby.Team2 != null && lobby.Team2.Count != 0 && lobby.Team2[0] != self._id)
-                {
-                    Model_Account friend2 = dataBank.FindAccountByObjectId(lobby.Team2[0]);
-                    if (friend2 != null)
-                    {
-                        SendClient(recHostId, friend2.ActiveConnection, si);
-                    }
-                }
+    //private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
+    //{
+    //    Model_Account self = dataBank.FindAccountByToken(si.Token);
+    //    if (self != null)
+    //    {
+    //        Model_Lobby lobby = dataBank.FindLobbyByObjectId(self.inLobby);
+    //        if (lobby != null)
+    //        {
+    //            // send all other players the movement message
+    //            if (lobby.Team1 != null && lobby.Team1.Count != 0 && lobby.Team1[0] != self._id)
+    //            {
+    //                Model_Account friend1 = dataBank.FindAccountByObjectId(lobby.Team1[0]);
+    //                if (friend1 != null)
+    //                {
+    //                    SendClient(recHostId, friend1.ActiveConnection, si);
+    //                }
+    //            }
 
-                if (lobby.Team3 != null && lobby.Team3.Count != 0 && lobby.Team3[0] != self._id)
-                {
-                    Model_Account friend3 = dataBank.FindAccountByObjectId(lobby.Team3[0]);
-                    if (friend3 != null)
-                    {
-                        SendClient(recHostId, friend3.ActiveConnection, si);
-                    }
-                }
+    //            if (lobby.Team2 != null && lobby.Team2.Count != 0 && lobby.Team2[0] != self._id)
+    //            {
+    //                Model_Account friend2 = dataBank.FindAccountByObjectId(lobby.Team2[0]);
+    //                if (friend2 != null)
+    //                {
+    //                    SendClient(recHostId, friend2.ActiveConnection, si);
+    //                }
+    //            }
 
-                if (lobby.Team4 != null && lobby.Team4.Count != 0 && lobby.Team4[0] != self._id)
-                {
-                    Model_Account friend4 = dataBank.FindAccountByObjectId(lobby.Team4[0]);
-                    if (friend4 != null)
-                    {
-                        SendClient(recHostId, friend4.ActiveConnection, si);
-                    }
-                }
-            }
-        }
+    //            if (lobby.Team3 != null && lobby.Team3.Count != 0 && lobby.Team3[0] != self._id)
+    //            {
+    //                Model_Account friend3 = dataBank.FindAccountByObjectId(lobby.Team3[0]);
+    //                if (friend3 != null)
+    //                {
+    //                    SendClient(recHostId, friend3.ActiveConnection, si);
+    //                }
+    //            }
 
-    }
+    //            if (lobby.Team4 != null && lobby.Team4.Count != 0 && lobby.Team4[0] != self._id)
+    //            {
+    //                Model_Account friend4 = dataBank.FindAccountByObjectId(lobby.Team4[0]);
+    //                if (friend4 != null)
+    //                {
+    //                    SendClient(recHostId, friend4.ActiveConnection, si);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    //}
     #endregion
 
 
@@ -655,9 +635,10 @@ public class Server : NetworkManager
                     playerRotation[0] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.x;
                     playerRotation[1] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.y;
                     playerRotation[2] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.z;
-                    Net_GameStateReplicate msg_gameState = new Net_GameStateReplicate(activePlayerID, playerPosition, playerRotation);
+                    GameStateReplicateEventhandle msg_gameState = new GameStateReplicateEventhandle(EClientID.SERVER, activePlayerID, playerPosition, playerRotation);
 
-                    SendClient(0, connectedPlayers[connectedPlayerID], msg_gameState);
+                    EClientID updatedClientID = MaleficusUtilities.GetClientIDFrom(connectedPlayerID);
+                    SendClient(0, connectedPlayers[updatedClientID], msg_gameState);
                     yield return new WaitForSeconds(0.05f);
                 }
             }
@@ -683,13 +664,9 @@ public class Server : NetworkManager
 
     private void On_GameOver(GameOverEventHandle gameOverEventHandle)
     {
-        Net_GameOver net_GameOver = new Net_GameOver();
-        foreach (EPlayerID activePlayerID in PlayerManager.Instance.ActivePlayers.Keys)
+        foreach (EClientID connectedClientID in connectedPlayers.Keys)
         {
-            foreach (EPlayerID connectedPlayerID in connectedPlayers.Keys)
-            {
-                SendClient(0, connectedPlayers[connectedPlayerID], net_GameOver);
-            }
+            SendClient(0, connectedPlayers[connectedClientID], gameOverEventHandle);
         }
     }
 

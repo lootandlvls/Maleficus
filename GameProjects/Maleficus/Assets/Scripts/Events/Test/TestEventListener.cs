@@ -14,8 +14,8 @@ public class TestEventListener : MonoBehaviour
     void On_TEST_TestEvent(TestEventHandle eventHandle)
     {
         Debug.Log("Test event broadcasted: " + eventHandle.TestMessage);
-        Net_Test netTest = (Net_Test)eventHandle.GetNetMessage();
-        Debug.Log("Net ID : " + netTest.ID + " | content : " + netTest.TestMessage);
+        //Net_Test netTest = (Net_Test)eventHandle.GetNetMessage();
+        //Debug.Log("Net ID : " + netTest.ID + " | content : " + netTest.TestMessage);
     }
 
     [ContextMenu("Do Something")]

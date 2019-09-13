@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class GameStartedEventHandle : AbstractEventHandle
 {
-    EPlayerID PlayerID;
-
-    public  GameStartedEventHandle(EPlayerID playerID)
+    public  GameStartedEventHandle(EClientID senderID)
     {
-        this.PlayerID = playerID;
+        ID = ENetMessageID.GAME_STARTED;
+        SenderID = senderID;
     }
+
     public override string GetDebugMessage()
     {
         return "Game Started";
     }
 
-    public override AbstractNetMessage GetNetMessage()
-    {
-        return new Net_GameStarted(PlayerID);
-    }
+    //public override AbstractNetMessage GetNetMessage()
+    //{
+    //    return new Net_GameStarted(PlayerID);
+    //}
 }

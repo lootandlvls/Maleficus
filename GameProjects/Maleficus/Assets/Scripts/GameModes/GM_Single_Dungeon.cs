@@ -39,8 +39,9 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         if (waveIndex == totalItemsToCollect)
         {
             ETeamID teamID = ETeamID.NONE;
-            GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
-            EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
+            EClientID clientID = NetworkManager.Instance.OwnClientID;
+            GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(clientID, teamID);
+            EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.LOCAL_ONLY);
 
         }
     }
@@ -77,8 +78,9 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             if (playerStat.IsGameOver == true)
             {
                 ETeamID teamID = ETeamID.NONE;
-                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
-                EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
+                EClientID clientID = NetworkManager.Instance.OwnClientID;
+                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(clientID, teamID);
+                EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.LOCAL_ONLY);
             }
         }
     }

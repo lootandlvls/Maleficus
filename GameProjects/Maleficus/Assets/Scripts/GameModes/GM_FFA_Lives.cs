@@ -95,8 +95,13 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
             //
             ETeamID winnerTeamID = PlayerManager.Instance.PlayersTeam[winnerPlayerID];
             ETeamID teamID = ETeamID.NONE;
-            GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
-            EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
+
+            if (NetworkManager.Instance.HasAuthority == true)
+            {
+                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(EClientID.SERVER, teamID);
+                EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.TO_ALL);
+            }
+            
         }
 
     }

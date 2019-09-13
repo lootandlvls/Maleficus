@@ -10,7 +10,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public bool HasAuthority                        { get { return ownClientID == EClientID.SERVER; } }
     public EClientID OwnClientID                    { get { return ownClientID; } }
     public EPlayerID OwnPlayerID                    { get { return MaleficusUtilities.GetPlayerIDFrom(OwnClientID); } }
-    public List<Net_SpellInput> CastedSpells        { get { return castedSpells; } }
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs = new List<AbstractNetMessage>();
 
@@ -39,7 +38,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private bool isStarted;
     private int ownLobbyID;
     protected EClientID ownClientID;
-    private List<Net_SpellInput> castedSpells;
 
 
     #region Monobehaviour
@@ -71,46 +69,61 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
         // Prevent that other clients who recieve an event Triggered by a different client, to broadcast the same event again
-        switch (netMessage.ID)
+        if (netMessage.SenderID != OwnClientID)
         {
-            case NetID.MovementInput:
-                Net_JoystickInput joystickInput = (Net_JoystickInput)netMessage;
-                if (joystickInput.PlayerID != OwnPlayerID)
-                {
-                    return;
-                }
-                break;
-
-            case NetID.SpellInput:
-                Net_SpellInput spellInput = (Net_SpellInput)netMessage;
-                if (spellInput.PlayerID != OwnPlayerID)
-                {
-                    return;
-                }
-                break;
-
-            case NetID.ARStagePlaced:
-                Net_ARStagePlaced aRStagePlaced = (Net_ARStagePlaced)netMessage;
-                if (aRStagePlaced.PlayerID != OwnPlayerID)
-                {
-                    return;
-                }
-                break;
-
-            case NetID.GameStarted:
-                Net_GameStarted gameStarted = (Net_GameStarted)netMessage;
-                if (gameStarted.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
-                {
-                    return;
-                }
-                break;
+            return;
         }
+
+        //switch (netMessage.ID)
+        //{
+        //    case ENetMessageID.JOYSTICK_MOVED:
+        //        JoystickMovedEventHandle joystickInput = (JoystickMovedEventHandle)netMessage;
+        //        if (joystickInput.PlayerID != OwnPlayerID)
+        //        {
+        //            return;
+        //        }
+        //        break;
+
+        //    case ENetMessageID.BUTTON_PRESSED:
+        //        ButtonPressedEventHandle buttonPressed = (ButtonPressedEventHandle)netMessage;
+        //        if (buttonPressed.PlayerID != OwnPlayerID)
+        //        {
+        //            return;
+        //        }
+        //        break;
+
+        //    case ENetMessageID.BUTTON_RELEASEED:
+        //        ButtonReleasedEventHandle buttonReleased = (ButtonReleasedEventHandle)netMessage;
+        //        if (buttonReleased.PlayerID != OwnPlayerID)
+        //        {
+        //            return;
+        //        }
+        //        break;
+
+
+
+        //    case ENetMessageID.ARStagePlaced:
+        //        Net_ARStagePlaced aRStagePlaced = (Net_ARStagePlaced)netMessage;
+        //        if (aRStagePlaced.PlayerID != OwnPlayerID)
+        //        {
+        //            return;
+        //        }
+        //        break;
+
+        //    case NetID.GameStarted:
+        //        Net_GameStarted gameStarted = (Net_GameStarted)netMessage;
+        //        if (gameStarted.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
+        //        {
+        //            return;
+        //        }
+        //        break;
+        //}
 
         // Broadcast event if main sender
         SendServer(netMessage);
     }
 
-    protected void UpdateReceivedMessage(ENetworkMessage receivedMessage)
+    protected void UpdateReceivedMessage(ENetworkMessageType receivedMessage)
     {
         EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
@@ -173,20 +186,20 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Connected to server");
-                UpdateReceivedMessage(ENetworkMessage.CONNECTED);
+                UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
                 Net_Connected c = new Net_Connected();
                 AllReceivedMsgs.Add(c);
                 break;
 
             case NetworkEventType.DisconnectEvent:
                 Debug.Log("Disconnected from server");
-                UpdateReceivedMessage(ENetworkMessage.DISCONNECTED);
+                UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
                 Net_Disonnected di = new Net_Disonnected();
                 AllReceivedMsgs.Add(di);
                 break;
 
             case NetworkEventType.DataEvent:
-                UpdateReceivedMessage(ENetworkMessage.DATA);
+                UpdateReceivedMessage(ENetworkMessageType.DATA);
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
                 AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
@@ -203,150 +216,109 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
 
     #region OnData
-    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage msg)
+    private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage netMessage)
     {
-        Debug.Log("receiverd a message of type " + msg.ID);
+        Debug.Log("receiverd a message of type " + netMessage.ID);
 
-        switch (msg.ID)
+        switch (netMessage.ID)
         {
-            //TODO [Leon]: Add spacing between switch cases
-            case NetID.None:
+            /** Connection and Social Logic **/
+            case ENetMessageID.NONE:
                 Debug.Log("Unexpected NetOP");
                 break;
-            case NetID.OnCreateAccount:
-                Debug.Log("Account Created.");
-                OnCreateAccount((Net_OnCreateAccount)msg);
-                UpdateReceivedMessage(ENetworkMessage.REGISTERED);
-                AllReceivedMsgs.Add((Net_OnCreateAccount)msg);
-                break;
-            case NetID.OnLoginRequest:
-                Debug.Log("Login");
-                OnLoginRequest((Net_OnLoginRequest)msg);
-                UpdateReceivedMessage(ENetworkMessage.LOGGED_IN);
-                AllReceivedMsgs.Add((Net_OnLoginRequest)msg);
 
+            case ENetMessageID.ON_CREATE_ACCOUNT:
+                Debug.Log("Account Created.");
+                OnCreateAccount((Net_OnCreateAccount)netMessage);
+                UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
                 break;
-            case NetID.OnAddFollow:
+
+            case ENetMessageID.ON_LOGIN_REQUEST:
+                Debug.Log("Login");
+                OnLoginRequest((Net_OnLoginRequest)netMessage);
+                UpdateReceivedMessage(ENetworkMessageType.LOGGED_IN);
+                break;
+
+            case ENetMessageID.ON_ADD_FOLLOW:
                 Debug.Log("Add Friend");
-                OnAddFollow((Net_OnAddFollow)msg);
-                UpdateReceivedMessage(ENetworkMessage.DATA_ONADDFOLLOW);
-                AllReceivedMsgs.Add((Net_OnAddFollow)msg);
+                OnAddFollow((Net_OnAddFollow)netMessage);
+                UpdateReceivedMessage(ENetworkMessageType.DATA_ONADDFOLLOW);
                 break;
-            case NetID.OnRequestFollow:
+
+            case ENetMessageID.ON_REQUEST_FOLLOW:
                 Debug.Log("Get Some Friends");
-                OnRequestFollow((Net_OnRequestFollow)msg);
-                UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTFOLLOW);
-                AllReceivedMsgs.Add((Net_OnRequestFollow)msg);
+                OnRequestFollow((Net_OnRequestFollow)netMessage);
+                UpdateReceivedMessage(ENetworkMessageType.DATA_ONREQUESTFOLLOW);
                 break;
             //Todo [Leon]: change to Onupdatefollow
-            case NetID.UpdateFollow:
+
+            case ENetMessageID.UPDATE_FOLLOW:
                 Debug.Log("Update Friends");
-                UpdateFollow((Net_UpdateFollow)msg);
-                UpdateReceivedMessage(ENetworkMessage.DATA_ONUPDATEFOLLOW);
-                AllReceivedMsgs.Add((Net_UpdateFollow)msg);
+                UpdateFollow((Net_UpdateFollow)netMessage);
+                UpdateReceivedMessage(ENetworkMessageType.DATA_ONUPDATEFOLLOW);
                 break;
-            case NetID.OnInitLobby:
+
+            case ENetMessageID.ON_INITI_LOBBY:
                 Debug.Log("Lobby initialized");
-                UpdateReceivedMessage(ENetworkMessage.DATA_ONINITLOBBY);
-                AllReceivedMsgs.Add((Net_OnInitLobby)msg);
-                Net_OnInitLobby oil = (Net_OnInitLobby)msg;
+                UpdateReceivedMessage(ENetworkMessageType.DATA_ONINITLOBBY);
+                Net_OnInitLobby oil = (Net_OnInitLobby)netMessage;
                 ownLobbyID = oil.lobbyID;
                 break;
 
-            case NetID.OnRequestGameInfo:
-                Debug.Log("Game info received");
-                UpdateReceivedMessage(ENetworkMessage.DATA_ONREQUESTGAMEINFO);
-                AllReceivedMsgs.Add((Net_OnRequestGameInfo)msg);
-                OnRequestGameInfo((Net_OnRequestGameInfo)msg);
+            case ENetMessageID.ON_REQUEST_GAME__SESSION_INFO:
+                Debug.Log("Game session info received");
+                UpdateReceivedMessage(ENetworkMessageType.DATA_ONREQUESTGAMEINFO);
+                OnRequestGameInfo((Net_OnRequestGameInfo)netMessage);
                 break;
-            case NetID.GameStarted:
+
+
+                /** Game Logic **/
+            case ENetMessageID.GAME_STARTED:
                 Debug.Log("Game Started");
-
-                Net_GameStarted gameStartedMessage = (Net_GameStarted)msg;
-               
-                GameStartedEventHandle gameStartedEventHandle = new GameStartedEventHandle(gameStartedMessage.PlayerID);
-                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedEventHandle, EEventInvocationType.LOCAL_ONLY);
-
-                AllReceivedMsgs.Add((Net_GameStarted)msg);
+                GameStartedEventHandle gameStartedMessage = (GameStartedEventHandle)netMessage;
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case NetID.ARStagePlaced:
-                Net_ARStagePlaced arStageMessage = (Net_ARStagePlaced)msg;
-                ARStagePlacedEventHandle arStageEventHandle = new ARStagePlacedEventHandle
-                    (
-                    arStageMessage.PlayerID,
-                    arStageMessage.X_TrackerRotation,
-                    arStageMessage.Y_TrackerRotation,
-                    arStageMessage.Z_TrackerRotation,
-                    arStageMessage.X_TrackerRotation,
-                    arStageMessage.Y_TrackerRotation,
-                    arStageMessage.Z_TrackerRotation
-                    );
-
-                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageEventHandle);
-
-                AllReceivedMsgs.Add((Net_ARStagePlaced)msg);
+            case ENetMessageID.AR_STAGE_PLACED:
+                ARStagePlacedEventHandle arStageMessage = (ARStagePlacedEventHandle)netMessage;
+                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case NetID.GameStateReplicate:
+            case ENetMessageID.GAME_STATE_REPLICATION:
                 Debug.Log("Game state replicated");
-                Net_GameStateReplicate gameStateReplicateMessage = (Net_GameStateReplicate)msg;
-                GameStateReplicateEventhandle gameStateReplicate = new GameStateReplicateEventhandle
-                    (
-                    gameStateReplicateMessage.playerID,
-                    gameStateReplicateMessage.playerPosition,
-                    gameStateReplicateMessage.playerRotation
-
-                    );
-                EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicate, EEventInvocationType.LOCAL_ONLY);
-                AllReceivedMsgs.Add((Net_GameStateReplicate)msg);
+                GameStateReplicateEventhandle gameStateReplicateMessage = (GameStateReplicateEventhandle)netMessage;
+                EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicateMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             // Input
-            case NetID.MovementInput:
+            case ENetMessageID.JOYSTICK_MOVED:
                 Debug.Log("Game input received");
-
-                Net_JoystickInput movementMessage = (Net_JoystickInput)msg;
-                JoystickMovedEventHandle movementEventHandle = new JoystickMovedEventHandle
-                    (movementMessage.JoystickType, 
-                    movementMessage.Joystick_X, 
-                    movementMessage.Joystick_Y, 
-                    movementMessage.PlayerID);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementEventHandle);
-
-                AllReceivedMsgs.Add((Net_JoystickInput)msg);
+                JoystickMovedEventHandle joystickMoved = (JoystickMovedEventHandle)netMessage;
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case NetID.SpellInput:
-                Debug.Log("Received Spell Input from another Player");
-
-                Net_SpellInput spellMessage = (Net_SpellInput)msg;
-                if (spellMessage.IsPressed == true)
-                {
-                    ButtonPressedEventHandle spellEventHandle = new ButtonPressedEventHandle
-                        (spellMessage.PlayerID, 
-                        spellMessage.InputButton);
-                    EventManager.Instance.INPUT_ButtonPressed.Invoke(spellEventHandle);
-                }
-                else // released
-                {
-                    ButtonReleasedEventHandle spellEventHandle = new ButtonReleasedEventHandle
-                        (spellMessage.PlayerID, 
-                        spellMessage.InputButton);
-                    EventManager.Instance.INPUT_ButtonReleased.Invoke(spellEventHandle);
-                }
-
-                AllReceivedMsgs.Add((Net_SpellInput)msg);
+            case ENetMessageID.BUTTON_PRESSED:
+                Debug.Log("Received Spell Input pressed from another Player");
+                ButtonPressedEventHandle buttonPressed = (ButtonPressedEventHandle)netMessage;
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.LOCAL_ONLY);
                 break;
-            case NetID.GameOver:
+
+            case ENetMessageID.BUTTON_RELEASEED:
+                Debug.Log("Received Spell Input released from another Player");
+                ButtonReleasedEventHandle buttonReleased = (ButtonReleasedEventHandle)netMessage;
+                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
+                break;
+
+            case ENetMessageID.GAME_OVER:
                 Debug.Log("Game Over");
-
-                Net_GameOver gameOver = (Net_GameOver)msg;
-                ETeamID teamID = ETeamID.NONE;
-                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(teamID);
-                EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle);
+                GameOverEventHandle gameOver = (GameOverEventHandle)netMessage;
+                EventManager.Instance.GAME_GameOver.Invoke(gameOver, EEventInvocationType.LOCAL_ONLY);
                 break;
         }
+
+        // Add message to the dispatcher
+        AllReceivedMsgs.Add(netMessage);
+
     }
 
     private void OnCreateAccount(Net_OnCreateAccount oca)

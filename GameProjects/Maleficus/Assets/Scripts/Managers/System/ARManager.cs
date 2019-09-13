@@ -137,13 +137,16 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             listener.enabled = isActive;
         }
 
-        if (isActive == true)
+        if (lockButton != null)
         {
-            lockButton.SetIsUnlocked();
-        }
-        else
-        {
-            lockButton.SetIsLocked();
+            if (isActive == true)
+            {
+                lockButton.SetIsUnlocked();
+            }
+            else
+            {
+                lockButton.SetIsLocked();
+            }
         }
     }
  
@@ -209,8 +212,6 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     #region NETWORK
     private void On_AR_ARStagePlaced(ARStagePlacedEventHandle eventHandle)
     {
-
-        EPlayerID playerID = eventHandle.PlayerID;
         Vector3 trackerToStage = new Vector3
             (
             eventHandle.X_TrackerToStage,
@@ -237,10 +238,10 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
     private void BroadcastStagePosition()
     {
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID);
+        EClientID clientID = NetworkManager.Instance.OwnClientID;
         Vector3 trackerToStage = stagePosition - trackerPosition;
         ARStagePlacedEventHandle eventHanlde = new ARStagePlacedEventHandle(
-            playerID,
+            clientID,
             trackerRotation.x,
             trackerRotation.y,
             trackerRotation.z,

@@ -433,6 +433,31 @@ public static class MaleficusUtilities
         return id;
     }
 
+    /// <summary> Convert a PlayerID enum to a ClientID enum </summary>
+    public static EClientID GetClientIDFrom(EPlayerID playerID)
+    {
+        EClientID id = EClientID.NONE;
+        switch (playerID)
+        {
+            case EPlayerID.PLAYER_1:
+                id = EClientID.CLIENT_1;
+                break;
+
+            case EPlayerID.PLAYER_2:
+                id = EClientID.CLIENT_1;
+                break;
+
+            case EPlayerID.PLAYER_3:
+                id = EClientID.CLIENT_1;
+                break;
+
+            case EPlayerID.PLAYER_4:
+                id = EClientID.CLIENT_1;
+                break;
+        }
+        return id;
+    }
+
     /// <summary> Returns the same team ID as the player ID (e.g. Player 2 -> Team 2)</summary>
     public static ETeamID GetIdenticPlayerTeam(EPlayerID playerID)
     {
@@ -459,7 +484,7 @@ public static class MaleficusUtilities
     }
 
     /// <summary> Returns the same team ID as the player ID (e.g. Player 2 -> Team 2)</summary>
-    public static EControllerID GetPlayerNeteworkID(EPlayerID playerID)
+    public static EControllerID GetControllerNeteworkID(EPlayerID playerID)
     {
         EControllerID id = EControllerID.NONE;
         switch (playerID)
