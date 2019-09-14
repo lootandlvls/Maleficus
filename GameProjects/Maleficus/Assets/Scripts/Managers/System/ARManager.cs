@@ -168,7 +168,8 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         {
             this.augmentedStage = augmentedStage;
             sizeFactor = augmentedStage.transform.localScale.x;
-            if (MotherOfManagers.Instance.ARPlacementMethod == EPlacementMethod.IMAGE_TRACKER)
+            if ((MotherOfManagers.Instance.ARPlacementMethod == EPlacementMethod.IMAGE_TRACKER)
+                && (augmentedStage != null) && (augmentedStage.transform.parent != null))
             {
                 sizeFactor *= augmentedStage.transform.parent.localScale.x;
             }
