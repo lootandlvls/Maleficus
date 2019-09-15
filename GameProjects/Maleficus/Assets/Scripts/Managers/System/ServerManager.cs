@@ -181,7 +181,8 @@ public class ServerManager : NetworkManager
                 break;
 
             case ENetMessageID.REQUEST_GAME_SESSION_INFO:
-                Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo) netMessage);
+                Debug.Log("&/(&/(  recieve request game info");
+                Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)netMessage);
                 break;
 
             case ENetMessageID.AR_STAGE_PLACED:
@@ -473,38 +474,38 @@ public class ServerManager : NetworkManager
     #endregion
 
     #region Game
-    private void Net_OnRequestGameInfo(int cnnId, int channelId, int recHostId, Net_RequestGameInfo rgi)
+    private void Net_OnRequestGameInfo(int connectionID, int channelId, int recHostId, Net_RequestGameInfo rgi)
     {
-        Net_OnRequestGameInfo org = new Net_OnRequestGameInfo();
+        Net_OnRequestGameInfo onRequestGameSessionInfo = new Net_OnRequestGameInfo();
         Model_Account self = dataBank.FindAccountByToken(rgi.Token);
         Model_Lobby lobby = dataBank.FindLobbyByLobbyID(rgi.lobbyID);
 
-        org.Token = rgi.Token;
+        onRequestGameSessionInfo.Token = rgi.Token;
 
         if (dataBank.FindAccountByObjectId(lobby.Team1[0]).Token == rgi.Token)
         {
-            org.ownPlayerId = 1;
+            onRequestGameSessionInfo.ownPlayerId = 1;
         }
         if ((lobby.Team2 != null) && (dataBank.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token))
         {
-            org.ownPlayerId = 2;
+            onRequestGameSessionInfo.ownPlayerId = 2;
         }
         if ((lobby.Team3 != null) && (dataBank.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token))
         {
-            org.ownPlayerId = 3;
+            onRequestGameSessionInfo.ownPlayerId = 3;
         }
         if ((lobby.Team4 != null) && (dataBank.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token))
         {
-            org.ownPlayerId = 4;
+            onRequestGameSessionInfo.ownPlayerId = 4;
         }
 
-        org.initialiser = dataBank.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
+        onRequestGameSessionInfo.initialiser = dataBank.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
 
         if (lobby.Team1 != null)
         {
             for (int i = 0; i < lobby.Team1.Count; ++i)
             {
-                org.Player1 = dataBank.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+                onRequestGameSessionInfo.Player1 = dataBank.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
             }
         }
 
@@ -512,7 +513,7 @@ public class ServerManager : NetworkManager
         {
             for (int i = 0; i < lobby.Team2.Count; ++i)
             {
-                org.Player2 = dataBank.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+                onRequestGameSessionInfo.Player2 = dataBank.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
             }
         }
 
@@ -520,7 +521,7 @@ public class ServerManager : NetworkManager
         {
             for (int i = 0; i < lobby.Team3.Count; ++i)
             {
-                org.Player3 = dataBank.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
+                onRequestGameSessionInfo.Player3 = dataBank.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
             }
         }
 
@@ -528,10 +529,12 @@ public class ServerManager : NetworkManager
         {
             for (int i = 0; i < lobby.Team4.Count; ++i)
             {
-                org.Player4 = dataBank.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+                onRequestGameSessionInfo.Player4 = dataBank.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
             }
         }
-        SendClient(recHostId, cnnId, org);
+
+        Debug.Log("&/(&/(  send request game info");
+        SendClient(recHostId, connectionID, onRequestGameSessionInfo);
     }
 
     //private void ForwardSpellInput(int cnnId, int channelId, int recHostId, Net_SpellInput si)
@@ -589,22 +592,23 @@ public class ServerManager : NetworkManager
     #endregion
 
     #region Send
-    public void SendClient(int recHost, int cnnId, AbstractNetMessage msg)
+    public void SendClient(int recHost, int cnnId, AbstractNetMessage message)
     {
         // this is where we hold our data
         byte[] buffer = new byte[SERVER_BYTE_SIZE];
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
-        MemoryStream ms = new MemoryStream(buffer);
-        formatter.Serialize(ms, msg);
-
+        MemoryStream memoryStream = new MemoryStream(buffer);
+        formatter.Serialize(memoryStream, message);
         if (recHost == 0)
         {
+            Debug.Log("recHost : " + recHost);
             NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
         }
         else if (recHost == 1)
         {
+            Debug.Log("recHost : " + recHost);
             NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
         }
         else
@@ -647,7 +651,7 @@ public class ServerManager : NetworkManager
 
     protected override void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
     {
-        base.On_APP_AppStateUpdated(eventHandle);
+        //base.On_APP_AppStateUpdated(eventHandle);
 
         if (UpdateGameStateEnumerator != null)
         {

@@ -349,7 +349,7 @@ public enum ENetMessageID
     DISCONNECTED                                        = 14,
 
     REQUEST_GAME_SESSION_INFO                           = 17,
-    ON_REQUEST_GAME__SESSION_INFO                       = 18,
+    ON_REQUEST_GAME_SESSION_INFO                        = 18,
 
     GAME_STATE_REPLICATION                              = 19,
 

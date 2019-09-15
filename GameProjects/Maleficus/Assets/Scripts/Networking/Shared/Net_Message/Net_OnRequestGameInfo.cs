@@ -5,13 +5,13 @@ public class Net_OnRequestGameInfo : AbstractNetMessage
 {
     public Net_OnRequestGameInfo()
     {
-        ID = ENetMessageID.ON_REQUEST_GAME__SESSION_INFO;
+        ID = ENetMessageID.ON_REQUEST_GAME_SESSION_INFO;
     }
 
     public byte ownPlayerId { set; get; }
     public Account initialiser { set; get; }
 
-    public EGameMode GameMode { set; get; }
+   // public EGameMode GameMode { set; get; }
 
     // TODO [Leon]: add array with connected players
 

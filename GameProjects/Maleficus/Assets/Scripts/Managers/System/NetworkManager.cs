@@ -265,7 +265,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 ownLobbyID = oil.lobbyID;
                 break;
 
-            case ENetMessageID.ON_REQUEST_GAME__SESSION_INFO:
+            case ENetMessageID.ON_REQUEST_GAME_SESSION_INFO:
                 Debug.Log("Game session info received");
                 UpdateReceivedMessage(ENetworkMessageType.DATA_ONREQUESTGAMEINFO);
                 OnRequestGameInfo((Net_OnRequestGameInfo)netMessage);
