@@ -773,6 +773,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef8e6c4bf0929e4591fb8093ec21509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsServer: 0
+  ConnectMode: 2
+  InputMode: 2
+  IsSpawnPlayerOnConnect: 0
+  IsSpawnAllPlayers: 0
+  IsSpawnTouchAsPlayer1: 0
+  IsSpawnGhostPlayerPositionsIfNotFound: 0
+  IsARGame: 0
+  ARPlacementMethod: 0
+  EnemiesMovementMethod: 0
+  IsDebugLogEvents: 1
+  IsReduceLightIntensityOnSceneStart: 0
   currentScene: 2
 --- !u!4 &539954624
 Transform:

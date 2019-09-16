@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 4335998295704777600, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: m_Name
-      value: Managers
+      value: Managers_CloudServer
       objectReference: {fileID: 0}
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
@@ -25,7 +25,7 @@ PrefabInstance:
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: IsSpawnPlayerOnConnect
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
@@ -40,7 +40,7 @@ PrefabInstance:
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: IsARGame
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
@@ -55,11 +55,21 @@ PrefabInstance:
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: IsSpawnGhostPlayerPositionsIfNotFound
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: IsSpawnTouchAsPlayer1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: ConnectTo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: ConnectMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4335998295704777601, guid: e016db9698da6cf4c8fe22edd976b062,

@@ -258,7 +258,14 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             {
                 //UpdateState(EAppState.IN_GAME_IN_RUNNING);
                 EClientID clientID = NetworkManager.Instance.OwnClientID;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(new NetEvent_GameStarted(clientID), EEventInvocationType.TO_SERVER_ONLY);
+                if (MotherOfManagers.Instance.ConnectMode == EConnectionMode.EVRYTHING_LOCAL)
+                {
+                    EventManager.Instance.NETWORK_GameStarted.Invoke(new NetEvent_GameStarted(clientID), EEventInvocationType.TO_ALL);
+                }
+                else // LOCAL_SERVER or CLOUD_SERVER
+                {
+                    EventManager.Instance.NETWORK_GameStarted.Invoke(new NetEvent_GameStarted(clientID), EEventInvocationType.TO_SERVER_ONLY);
+                }
             };
         }
     }

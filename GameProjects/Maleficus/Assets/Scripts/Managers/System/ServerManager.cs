@@ -9,12 +9,6 @@ using System.Collections;
 
 public class ServerManager : NetworkManager
 {
-    private const int SERVER_MAX_USER = 10000;
-    private const int SERVER_PORT = 26002;
-    private const int SERVER_WEB_PORT = 26004;
-    private const int SERVER_INSTANCE_MANAGER_PORT = 9999;
-    private const int SERVER_BYTE_SIZE = 1024;
-
     // Networktransport for clients
     private byte server_reliableChannel;
     private int server_hostId;
@@ -23,8 +17,6 @@ public class ServerManager : NetworkManager
 
     // Networktransport for Instance Manager
     private int InstanceManagerConnectionId;
-    private const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
-    //private const string INSTANCE_MANAGER_SERVER_IP = "127.0.0.1";
 
     //private byte reliableChannel_InstanceManager;
     //private int hostId_InstanceManager; 
@@ -74,19 +66,20 @@ public class ServerManager : NetworkManager
 
         server_reliableChannel = cc.AddChannel(QosType.Unreliable);
 
-        HostTopology topo = new HostTopology(cc, SERVER_MAX_USER);
+
+        HostTopology topo = new HostTopology(cc, MaleficusConsts.SERVER_MAX_USER);
 
 
         // Server only code
 
-        server_hostId = NetworkTransport.AddHost(topo, SERVER_PORT, null);
+        server_hostId = NetworkTransport.AddHost(topo, MaleficusConsts.PORT, null);
         Debug.Log("added host with Port 26002");
-        server_webHostId = NetworkTransport.AddWebsocketHost(topo, SERVER_WEB_PORT, null);
+        server_webHostId = NetworkTransport.AddWebsocketHost(topo, MaleficusConsts.WEB_PORT, null);
         Debug.Log("added host with Port 26004");
-        InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, INSTANCE_MANAGER_SERVER_IP, SERVER_INSTANCE_MANAGER_PORT, 0, out error);
+        InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
         Debug.Log("connected to Instance Manager Port 9999");
 
-        Debug.Log(string.Format("Opening connection on port {0} and webport {1}", SERVER_PORT, SERVER_WEB_PORT));
+        Debug.Log(string.Format("Opening connection on port {0} and webport {1}", MaleficusConsts.PORT, MaleficusConsts.WEB_PORT));
         server_isStarted = true;
     }
 
@@ -102,10 +95,10 @@ public class ServerManager : NetworkManager
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
 
-        byte[] recBuffer = new byte[SERVER_BYTE_SIZE];
+        byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
         int dataSize;
 
-        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, SERVER_BYTE_SIZE, out dataSize, out error);
+        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
         switch (type)
         {
             case NetworkEventType.Nothing:
@@ -539,7 +532,7 @@ public class ServerManager : NetworkManager
     public void SendClient(int recHost, int cnnId, AbstractNetMessage message)
     {
         // this is where we hold our data
-        byte[] buffer = new byte[SERVER_BYTE_SIZE];
+        byte[] buffer = new byte[MaleficusConsts.BYTE_SIZE];
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
@@ -548,16 +541,16 @@ public class ServerManager : NetworkManager
         if (recHost == 0)
         {
             Debug.Log("recHost : " + recHost);
-            NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
+            NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
         }
         else if (recHost == 1)
         {
             Debug.Log("recHost : " + recHost);
-            NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
+            NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
         }
         else
         {
-            NetworkTransport.Send(server_instanceManagerHostId, InstanceManagerConnectionId, server_reliableChannel, buffer, SERVER_BYTE_SIZE, out error);
+            NetworkTransport.Send(server_instanceManagerHostId, InstanceManagerConnectionId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
             Debug.Log("sent to im");
         }
     }

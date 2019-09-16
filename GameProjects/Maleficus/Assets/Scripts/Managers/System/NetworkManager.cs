@@ -13,21 +13,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public Account Self;                                                                    // TODO [Leon]: public members on top + first letter uppercase
     public List<AbstractNetMessage> AllReceivedMsgs = new List<AbstractNetMessage>();
 
-
-    //TODO [Leon]: move consts to maleficus types
-    private const int MAX_USER = 100;
-    private const int PORT = 26002;
-    private const int WEB_PORT = 26004;
-    private const int BYTE_SIZE = 1024;
-    // 127.0.0.1 or localhost for connecting to yourself
-    //ubuntu_server_ip
-    //private const string SERVER_IP = "83.171.237.227";  // Server
-    private const string SERVER_IP = "192.168.137.1";  // BNJMO
-
-    //private const string SERVER_IP = "127.0.0.1"; // Local
-
-
-
     private byte reliableChannel;
     private int connectionId;
     private int hostId;
@@ -91,7 +76,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             ConnectionConfig cc = new ConnectionConfig();
             reliableChannel = cc.AddChannel(QosType.Unreliable);
 
-            HostTopology topo = new HostTopology(cc, MAX_USER);
+            HostTopology topo = new HostTopology(cc, MaleficusConsts.CLIENT_MAX_USER);
 
             // Client only code
             hostId = NetworkTransport.AddHost(topo, 0);
@@ -102,10 +87,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Debug.Log("Connecting from Web");
 #else
             // Standalone Client
-            connectionId = NetworkTransport.Connect(hostId, SERVER_IP, PORT, 0, out error);
+            connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, MaleficusConsts.PORT, 0, out error);
             Debug.Log("Connecting from Standalone");
 #endif
-            Debug.Log(string.Format("Attempting to connect on {0}...", SERVER_IP));
+            Debug.Log(string.Format("Attempting to connect on {0}...", MotherOfManagers.Instance.ServerIP));
             isStarted = true;
             AllReceivedMsgs = new List<AbstractNetMessage>();
         }
@@ -128,10 +113,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
 
-        byte[] recBuffer = new byte[BYTE_SIZE];
+        byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
         int dataSize;
 
-        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
+        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
         switch (type)
         {
             case NetworkEventType.ConnectEvent:
@@ -355,14 +340,14 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public void SendServer(AbstractNetMessage msg)
     {
         // this is where we hold our data
-        byte[] buffer = new byte[BYTE_SIZE];
+        byte[] buffer = new byte[MaleficusConsts.BYTE_SIZE];
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
         MemoryStream ms = new MemoryStream(buffer);
         formatter.Serialize(ms, msg);
 
-        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, BYTE_SIZE, out error);
+        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
     }
 
     protected override void OnDestroy()

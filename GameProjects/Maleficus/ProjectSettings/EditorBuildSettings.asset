@@ -9,16 +9,16 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/ENTRY.unity
+    path: Assets/Scenes/Main/ENTRY.unity
     guid: edafa10ac17dcf04783721d91dc6fa85
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/GAME.unity
+    path: Assets/Scenes/Main/GAME.unity
     guid: 748ea2def2649e446b27d5fd8cc8d5f7
   - enabled: 1
-    path: Assets/Scenes/Playgrounds/GameLoopTest/MENU.unity
+    path: Assets/Scenes/Main/MENU.unity
     guid: bddb1906bfb8023448416c99f8fc2d3a
   - enabled: 0
-    path: Assets/Scenes/Playgrounds/GameLoopTest/ARGame.unity
+    path: Assets/Scenes/Main/ARGame.unity
     guid: d9e68e0f5bd7eff4fbd46a7b8a03ee68
   - enabled: 0
     path: Assets/Scenes/Playgrounds/ImageMarkerTest.unity

@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public static class MaleficusConsts
 {
+    /* GameObjects Tags */
+    public const string TAG_SPELL_HITTABLE = "SpellHittable";
+
     /* Scene names (in build settings) */
     public const string SCENE_ENTRY = "ENTRY";
     public const string SCENE_MENU = "MENU";
@@ -16,8 +19,10 @@ public static class MaleficusConsts
     public const string SCENE_DUNGEON_3 = "LVL_3_AR";
     public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
+    /* Managers path */
+    public const string PATH_MANAGERS = "Managers";
 
-    // Spells path
+    /* Spells path */
     public const string PATH_SPELL_FIREBALL_LVL_1 = "S_FireBall_lvl_1";
     public const string PATH_SPELL_FIREBALL_LVL_2 = "S_FireBall_lvl_2";
     public const string PATH_SPELL_ICEBALL_LVL_1 = "S_IceBall_lvl_1";
@@ -27,7 +32,7 @@ public static class MaleficusConsts
     public const string PATH_SPELL_FIRE__LASER_LVL_1 = "S_FireLaser";
     public const string PATH_SPELL_TELEPORT_LVL_1 = "S_Teleportation";
 
-    //Effects path
+    /* Effects path */
     public const string PATH_EFFECT_FROZEN = "E_Snowman";
     public const string PATH_EFFECT_CHARGING_BODYENERGY = "BodyEnergyEffect";
     public const string PATH_EFFECT_CHARGING_WANDENERGY = "WandEnergyEffect";
@@ -41,13 +46,16 @@ public static class MaleficusConsts
     public const string PATH_PLAYER_YELLOW = "Wizard_Yellow";
     public const string PATH_PLAYER_SPAWN_POSITION = "PlayerSpawnPosition";
 
-
-    /* Tags */
-    public const string TAG_SPELL_HITTABLE = "SpellHittable";
-
-
-    /* Managers path */
-    public const string PATH_MANAGERS = "Managers";
+    /* Networking */
+    public const int CLIENT_MAX_USER = 100;
+    public const int SERVER_MAX_USER = 10000;
+    public const int SERVER_INSTANCE_MANAGER_PORT = 9999;
+    public const int PORT = 26002;
+    public const int WEB_PORT = 26004;
+    public const int BYTE_SIZE = 1024;
+    public const string LOCAL_SERVER_IP = "127.0.0.1";
+    public const string CLOUD_SERVER_IP = "83.171.237.227";
+    public const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
 
 
 

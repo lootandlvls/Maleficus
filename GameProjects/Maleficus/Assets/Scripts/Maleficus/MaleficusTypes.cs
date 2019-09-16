@@ -320,7 +320,7 @@ public enum EButtonDirection
     DOWN
 }
 #endregion
-//Todo [Leon]: move data_ to own enums
+
 #region NETWORK
 
 public enum ENetMessageID
@@ -363,9 +363,6 @@ public enum ENetMessageID
     BUTTON_RELEASEED                                    = 31,
     JOYSTICK_MOVED                                      = 32
 
-
-
-
 }
 
 public enum ENetworkMessageType
@@ -407,7 +404,13 @@ public enum EEventInvocationType
     TO_ALL,
     LOCAL_ONLY,
     TO_SERVER_ONLY,
+}
 
+public enum EConnectionMode
+{
+    LOCAL_SERVER,
+    CLOUD_SERVER,
+    EVRYTHING_LOCAL
 }
 #endregion
 
@@ -456,4 +459,3 @@ public enum EPlacementMethod
     IMAGE_TRACKER
 }
 #endregion
-
