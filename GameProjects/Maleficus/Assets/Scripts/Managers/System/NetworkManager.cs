@@ -57,7 +57,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             return;
         }
 
-
         // Broadcast event if main sender
         SendServer(netMessage);
     }
@@ -87,6 +86,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Debug.Log("Connecting from Web");
 #else
             // Standalone Client
+            Debug.Log(MotherOfManagers.Instance.ServerIP);
             connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, MaleficusConsts.PORT, 0, out error);
             Debug.Log("Connecting from Standalone");
 #endif
@@ -201,11 +201,17 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 break;
 
 
-                /** Game Logic **/
+            /** Game Logic **/
             case ENetMessageID.GAME_STARTED:
                 Debug.Log("Game Started");
                 NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
                 EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
+                break;
+
+            case ENetMessageID.GAME_OVER:
+                Debug.Log("Game Over");
+                NetEvent_GameOver gameOver = (NetEvent_GameOver)netMessage;
+                EventManager.Instance.GAME_GameOver.Invoke(gameOver, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             case ENetMessageID.AR_STAGE_PLACED:
@@ -237,12 +243,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
                 break;
-
-            case ENetMessageID.GAME_OVER:
-                Debug.Log("Game Over");
-                NetEvent_GameOver gameOver = (NetEvent_GameOver)netMessage;
-                EventManager.Instance.GAME_GameOver.Invoke(gameOver, EEventInvocationType.LOCAL_ONLY);
-                break;
+  
         }
 
         // Add message to the dispatcher

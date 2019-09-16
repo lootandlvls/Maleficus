@@ -81,10 +81,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // Connect Touch player as first player
         if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH) && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true) && (playerControllerMapping.ContainsValue(EControllerID.TOUCH) == false))
         {
-            Debug.Log("QWDQDQWDQ : Connecting Touhc");
             ConnectPlayer(EPlayerID.PLAYER_1, EControllerID.TOUCH);
-            Debug.Log("QWDQDQWDQ : Connected Touhc");
-
         }
 
         if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
@@ -164,7 +161,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             
             if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
             {
-                Debug.Log("Respawning Player...");
                 Player playerPrefab = PlayerPrefabs[toSpawnPlayerID];
                 PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[toSpawnPlayerID];
                 Vector3 playerPosition = playerSpawnPosition.Position;
@@ -343,35 +339,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     }
 
-    private void On_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
-    {
-        EJoystickType joystickType = eventHandle.JoystickType;
-        float joystick_X = eventHandle.Joystick_X;
-        float joystick_Y = eventHandle.Joystick_Y;
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
-
-        if (playerID == EPlayerID.TEST) return;
-
-        //switch (axisType)
-        //{
-        //    case EInputAxis.MOVE_X:
-        //        PlayersInput[playerID].Move_X = axisValue;
-        //        break;
-
-        //    case EInputAxis.MOVE_Y:
-        //        PlayersInput[playerID].Move_Y = axisValue;
-        //        break;
-
-        //    case EInputAxis.ROTATE_X:
-        //        PlayersInput[playerID].Rotate_X = axisValue;
-        //        break;
-
-        //    case EInputAxis.ROTATE_Y:
-        //        PlayersInput[playerID].Rotate_Y = axisValue;
-        //        break;
-        //}
-    }
-
     private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
@@ -386,7 +353,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
 
 
-        Debug.Log(spellSlot + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellSlot]);
+        //Debug.Log(spellSlot + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellSlot]);
 
         if (spell.MovementType != ESpellMovementType.LINEAR_LASER)
         {

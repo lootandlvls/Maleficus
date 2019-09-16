@@ -182,6 +182,14 @@ public class ServerManager : NetworkManager
                 DisconnectEvent(recHostId, cnnId);
                 break;
 
+            case ENetMessageID.GAME_STARTED:
+                Debug.Log("Game starting received");
+
+                NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage);
+                BroadcastMessageToAllClients(gameStartedMessage, false);
+                break;
+
             // Input
             case ENetMessageID.JOYSTICK_MOVED:
                 Debug.Log("Game input received");
@@ -208,13 +216,7 @@ public class ServerManager : NetworkManager
                 BroadcastMessageToAllClients(buttonReleased,  true);
                 break;
 
-            case ENetMessageID.GAME_STARTED:
-                Debug.Log("Game starting received");
-                
-                NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage);
-                BroadcastMessageToAllClients(gameStartedMessage, false);
-                break;
+
         }
     }
 

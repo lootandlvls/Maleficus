@@ -16,40 +16,11 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
 
     #region APP
-    //public event Action<EAppState, EAppState> APP_AppStateUpdated_old;
-    //public void Invoke_APP_AppStateUpdated(EAppState newAppState, EAppState lastAppState)
-    //{
-    //    if (APP_AppStateUpdated_old != null)
-    //    {
-    //        APP_AppStateUpdated_old.Invoke(newAppState, lastAppState);
-    //    }
-    //    DebugLog("App state changed from " + lastAppState + " to " + newAppState);
-    //}
+
     public MaleficusEvent<Event_StateUpdated<EAppState>> APP_AppStateUpdated = new MaleficusEvent<Event_StateUpdated<EAppState>>("APP_AppStateUpdated");
 
-
-    //public event Action<EScene> APP_SceneWillChange_old;
-    //public void Invoke_APP_SceneWillChange(EScene newScene)
-    //{
-    //    if (APP_SceneWillChange_old != null)
-    //    {
-    //        APP_SceneWillChange_old.Invoke(newScene);
-    //    }
-    //    DebugLog("Scene will change : " + newScene);
-    //}
     public MaleficusEvent<Event_AbstractHandle<EScene>> APP_SceneWillChange = new MaleficusEvent<Event_AbstractHandle<EScene>>("APP_SceneWillChange");
 
-
-
-    //public event Action<EScene> APP_SceneChanged_old;
-    //public void Invoke_APP_SceneChanged(EScene newScene)
-    //{
-    //    if (APP_SceneChanged_old != null)
-    //    {
-    //        APP_SceneChanged_old.Invoke(newScene);
-    //    }
-    //    DebugLog("Scene changed : " + newScene);
-    //}
     public MaleficusEvent<Event_AbstractHandle<EScene>> APP_SceneChanged = new MaleficusEvent<Event_AbstractHandle<EScene>>("APP_SceneChanged");
 
 
@@ -230,48 +201,14 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region INPUT
-    //public event Action<EInputButton, EPlayerID> INPUT_ButtonPressed_old;
-    //public void Invoke_INPUT_ButtonPressed(EInputButton buttonType, EPlayerID playerID)
-    //{
-    //    if (INPUT_ButtonPressed_old != null)
-    //    {
-    //        INPUT_ButtonPressed_old.Invoke(buttonType, playerID);
-    //    }
-    //    DebugLog(buttonType + " pressed by " + playerID);
-    //}
+
     public MaleficusEvent<NetEvent_ButtonPressed> INPUT_ButtonPressed = new MaleficusEvent<NetEvent_ButtonPressed>("INPUT_ButtonPressed");
 
-
-    //public event Action<EInputButton, EPlayerID> INPUT_ButtonReleased_old;
-    //public void Invoke_INPUT_ButtonReleased(EInputButton buttonType, EPlayerID playerID)
-    //{
-    //    if (INPUT_ButtonReleased_old != null)
-    //    {
-    //        INPUT_ButtonReleased_old.Invoke(buttonType, playerID);
-    //    }
-    //    DebugLog(buttonType + " released by " + playerID);
-    //}
     public MaleficusEvent<NetEvent_ButtonReleased> INPUT_ButtonReleased = new MaleficusEvent<NetEvent_ButtonReleased>("INPUT_ButtonReleased");
 
-    //public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved_old;
-    //public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
-    //{
-    //    if (INPUT_JoystickMoved_old != null)
-    //    {
-    //        INPUT_JoystickMoved_old.Invoke(axisType, axisValue, playerID);
-    //    }
-    //}
     public MaleficusEvent<NetEvent_JoystickMoved> INPUT_JoystickMoved = new MaleficusEvent<NetEvent_JoystickMoved>("INPUT_JoystickMoved");
 
 
-    /* public event Action<EInputButton, EPlayerID> INPUT_ButtonStillBeingPressed;
-     public void Invoke_INPUT_ButtonStillBeingPressed(EInputButton buttonType, EPlayerID playerID)
-     {
-         if (INPUT_ButtonStillBeingPressed != null)
-         {
-             INPUT_ButtonStillBeingPressed.Invoke(buttonType, playerID);
-         }
-     }*/
     #endregion
 
     #region NETWORK
@@ -286,8 +223,8 @@ public class EventManager : AbstractSingletonManager<EventManager>
     }
 
     public MaleficusEvent<Event_AbstractHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo = new MaleficusEvent<Event_AbstractHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
-    
-    //Event to restore the game state in case of lost connection
+
+    /// <summary> Event to restore the game state in case of lost connection </summary>
     public MaleficusEvent<NetEvent_GameStateReplicate> NETWORK_GameStateReplicate = new MaleficusEvent<NetEvent_GameStateReplicate>("NETWORK_GameStateReplicate") ;
 
     public MaleficusEvent<NetEvent_GameStarted> NETWORK_GameStarted = new MaleficusEvent<NetEvent_GameStarted>("NETWORK_GameStarted");

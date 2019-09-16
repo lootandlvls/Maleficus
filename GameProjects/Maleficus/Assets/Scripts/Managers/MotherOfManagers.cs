@@ -74,13 +74,14 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
             switch (ConnectionMode)
             {
                 case EConnectionMode.LOCAL_SERVER:
+                    Debug.Log(MaleficusConsts.LOCAL_SERVER_IP);
                     return MaleficusConsts.LOCAL_SERVER_IP;
 
                 case EConnectionMode.CLOUD_SERVER:
                     return MaleficusConsts.CLOUD_SERVER_IP;
 
                 default:
-                    return "";
+                    return "0.0.0.0";
             }
         }
     }

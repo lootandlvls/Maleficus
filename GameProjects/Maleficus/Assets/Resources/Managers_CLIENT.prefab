@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 4335998295704777600, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
       propertyPath: m_Name
-      value: Managers_CloudServer
+      value: Managers_CLIENT
       objectReference: {fileID: 0}
     - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}
@@ -71,6 +71,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ConnectMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3612836632577155832, guid: e016db9698da6cf4c8fe22edd976b062,
+        type: 3}
+      propertyPath: ConnectionMode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4335998295704777601, guid: e016db9698da6cf4c8fe22edd976b062,
         type: 3}

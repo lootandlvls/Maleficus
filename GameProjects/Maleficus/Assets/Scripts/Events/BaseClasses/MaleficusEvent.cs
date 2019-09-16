@@ -37,7 +37,9 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
     {
         if (maleficusEvent != null)
         {
-            if (eventInvocationType != EEventInvocationType.TO_SERVER_ONLY)
+            // Invoke event locally
+            if ((eventInvocationType != EEventInvocationType.TO_SERVER_ONLY)
+                || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.EVRYTHING_LOCAL))
             {
                 // Invoke event to all local listeners
                 maleficusEvent.Invoke(eventHandle);
@@ -50,6 +52,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
                 }
             }
 
+            // Broadcast event to the Server
             if (eventInvocationType != EEventInvocationType.LOCAL_ONLY)
             {
                 // Broadcast event message to server if not None and if not server

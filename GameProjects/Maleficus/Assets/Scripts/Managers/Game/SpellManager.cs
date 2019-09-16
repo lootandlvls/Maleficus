@@ -174,7 +174,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public void CastSpell(EPlayerID playerID, ESpellSlot spellID , int spellChargingLVL)
     {
         AbstractSpell spellToCast ;
-        Debug.Log("Spell lvl " + spellChargingLVL);
         float spellCooldown = Player_Spells[playerID][spellID].Cooldown;      
         spellToCast = Player_Spells[playerID][spellID];
     
@@ -184,7 +183,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             {
                 if (upgrade.SpellID == spellToCast.SpellID && upgrade.SpellLevel == 2)
                 {
-                    Debug.Log("Spell Upgraded");
                     spellToCast = upgrade;
                     break;
                 }
@@ -275,13 +273,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else
         {
-            Debug.Log("Spell spawned");
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             activePlayers[playerID].DoProjectileAttackAnimation();
             StartCoroutine(animationDelay(spellToCast, playerID, 1));
-            
-
         }
 
         activePlayers[playerID].resetSpellChargingLVL();

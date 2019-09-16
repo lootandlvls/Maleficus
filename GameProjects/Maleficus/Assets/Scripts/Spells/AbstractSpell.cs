@@ -71,7 +71,6 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        Debug.Log("3$&$%& Start  hit power : " + hitPower);
         direction = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
 

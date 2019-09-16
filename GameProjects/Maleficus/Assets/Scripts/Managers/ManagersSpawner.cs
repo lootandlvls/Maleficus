@@ -18,19 +18,19 @@ public class ManagersSpawner : MotherOfManagers
         MotherOfManagers managersInstance = FindObjectOfType<MotherOfManagers>();
         if ((managersInstance == null) || (managersInstance == this))
         {
-            // Spawn Managers
-            GameObject spawnedObject;
+            // Load managers prefab 
+            GameObject prefabToSpawn;
             if (IsServer == true)
             {
-                spawnedObject = Instantiate(Resources.Load<GameObject>(MaleficusConsts.PATH_MANAGERS_SERVER));
+                prefabToSpawn = Resources.Load<GameObject>(MaleficusConsts.PATH_MANAGERS_SERVER);
             }
             else // Client
             {
-                spawnedObject = Instantiate(Resources.Load<GameObject>(MaleficusConsts.PATH_MANAGERS_CLIENT));
+                prefabToSpawn = Resources.Load<GameObject>(MaleficusConsts.PATH_MANAGERS_CLIENT);
             }
 
             // Set up Mother Of Managers Profile
-            managersInstance = spawnedObject.GetComponent<MotherOfManagers>();
+            managersInstance = prefabToSpawn.GetComponent<MotherOfManagers>();
             managersInstance.IsServer = IsServer;
             managersInstance.ConnectionMode = ConnectionMode;
             managersInstance.InputMode = InputMode;
@@ -43,6 +43,9 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.EnemiesMovementMethod = EnemiesMovementMethod;
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;
+
+            // Spawn managers prefab
+            GameObject spawnedObject = Instantiate(prefabToSpawn);
 
             // Set up current scene
             AppStateManager appStateManager = spawnedObject.GetComponentInChildren<AppStateManager>();
