@@ -20,7 +20,8 @@ public static class MaleficusConsts
     public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
     /* Managers path */
-    public const string PATH_MANAGERS = "Managers";
+    public const string PATH_MANAGERS_CLIENT = "Managers_CLIENT";
+    public const string PATH_MANAGERS_SERVER = "Managers_SERVER";
 
     /* Spells path */
     public const string PATH_SPELL_FIREBALL_LVL_1 = "S_FireBall_lvl_1";

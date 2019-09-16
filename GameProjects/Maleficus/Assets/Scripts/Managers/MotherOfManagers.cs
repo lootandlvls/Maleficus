@@ -1,33 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyBox;
 
 public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {
     // When adding a new attribute here, remember to add profile setup in SpawnManager class
 
-    [Header("Server AppState")]
+    [Separator("Networking")]
     [SerializeField] public bool IsServer = false;
+    [ConditionalField(nameof(IsServer), inverse:true)] [SerializeField] public EConnectionMode ConnectionMode = EConnectionMode.EVRYTHING_LOCAL;
 
-    [Header("Networking")]
-    [SerializeField] public EConnectionMode ConnectMode = EConnectionMode.EVRYTHING_LOCAL;
-
-    [Header ("Input")]
+    [Separator("Input")]
     [SerializeField] public EInputMode InputMode = EInputMode.CONTROLLER;
 
-    [Header ("Player")]
+    [Separator("Player")]
     [SerializeField] public bool IsSpawnPlayerOnConnect = false;
     [SerializeField] public bool IsSpawnAllPlayers = false;
     [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
 
-    [Header ("AR")]
+    [Separator("AR")]
     [SerializeField] public bool IsARGame = false;
-    [SerializeField] public EPlacementMethod ARPlacementMethod;
-    [SerializeField] public EEnemyMovementMethod EnemiesMovementMethod;
+    [ConditionalField(nameof(IsARGame))] [SerializeField] public EPlacementMethod ARPlacementMethod;
+    [ConditionalField(nameof(IsARGame))] [SerializeField] public EEnemyMovementMethod EnemiesMovementMethod;
 
-    [Header ("Debug")]
-    [SerializeField] public bool IsDebugLogEvents = false;
+    [Separator("Debug")]
+    [SerializeField] public bool IsDebugLogEvents = true;
     [SerializeField] public bool IsReduceLightIntensityOnSceneStart = false;
 
 
@@ -72,7 +71,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     {
         get
         {
-            switch (ConnectMode)
+            switch (ConnectionMode)
             {
                 case EConnectionMode.LOCAL_SERVER:
                     return MaleficusConsts.LOCAL_SERVER_IP;
@@ -86,3 +85,22 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
         }
     }
 }
+
+
+//[CustomEditor(typeof(MotherOfManagers))]
+//public class MotherOfManagersEditor : Editor
+//{
+//    public override void OnInspectorGUI()
+//    {
+//        var myScript = target as MotherOfManagers;
+
+//        myScript.IsServer = GUILayout.Toggle(myScript.IsServer, "IsServer");
+
+//        if (myScript.IsServer)
+//        {
+//            myScript.i = EditorGUILayout.IntSlider("I field:", myScript.i, 1, 100);
+
+//        }
+
+//    }
+//}
