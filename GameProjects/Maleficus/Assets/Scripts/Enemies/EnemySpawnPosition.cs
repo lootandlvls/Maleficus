@@ -39,7 +39,7 @@ public class EnemySpawnPosition : MonoBehaviour
         }
     }
 
-    private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         if (eventHandle.NewState == EAppState.IN_GAME_IN_RUNNING)
         {

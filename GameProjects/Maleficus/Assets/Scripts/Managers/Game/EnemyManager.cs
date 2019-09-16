@@ -268,7 +268,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
 
     
 
-    private void OnAppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    private void OnAppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
         {

@@ -25,7 +25,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("App state changed from " + lastAppState + " to " + newAppState);
     //}
-    public MaleficusEvent<StateUpdatedEventHandle<EAppState>> APP_AppStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EAppState>>("APP_AppStateUpdated");
+    public MaleficusEvent<Event_StateUpdated<EAppState>> APP_AppStateUpdated = new MaleficusEvent<Event_StateUpdated<EAppState>>("APP_AppStateUpdated");
 
 
     //public event Action<EScene> APP_SceneWillChange_old;
@@ -37,7 +37,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("Scene will change : " + newScene);
     //}
-    public MaleficusEvent<BasicEventHandle<EScene>> APP_SceneWillChange = new MaleficusEvent<BasicEventHandle<EScene>>("APP_SceneWillChange");
+    public MaleficusEvent<Event_AbstractHandle<EScene>> APP_SceneWillChange = new MaleficusEvent<Event_AbstractHandle<EScene>>("APP_SceneWillChange");
 
 
 
@@ -50,7 +50,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("Scene changed : " + newScene);
     //}
-    public MaleficusEvent<BasicEventHandle<EScene>> APP_SceneChanged = new MaleficusEvent<BasicEventHandle<EScene>>("APP_SceneChanged");
+    public MaleficusEvent<Event_AbstractHandle<EScene>> APP_SceneChanged = new MaleficusEvent<Event_AbstractHandle<EScene>>("APP_SceneChanged");
 
 
     #endregion
@@ -107,7 +107,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
     }
 
-    public MaleficusEvent<GameOverEventHandle> GAME_GameOver = new MaleficusEvent<GameOverEventHandle>("Game_GameOver");
+    public MaleficusEvent<NetEvent_GameOver> GAME_GameOver = new MaleficusEvent<NetEvent_GameOver>("Game_GameOver");
 
     #endregion
 
@@ -225,7 +225,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("Menu state changed from " + lastState + " to " + newState);
     //}
-    public MaleficusEvent<StateUpdatedEventHandle<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EMenuState>>("UI_MenuStateUpdated");
+    public MaleficusEvent<Event_StateUpdated<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<Event_StateUpdated<EMenuState>>("UI_MenuStateUpdated");
 
     #endregion
 
@@ -239,7 +239,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog(buttonType + " pressed by " + playerID);
     //}
-    public MaleficusEvent<ButtonPressedEventHandle> INPUT_ButtonPressed = new MaleficusEvent<ButtonPressedEventHandle>("INPUT_ButtonPressed");
+    public MaleficusEvent<NetEvent_ButtonPressed> INPUT_ButtonPressed = new MaleficusEvent<NetEvent_ButtonPressed>("INPUT_ButtonPressed");
 
 
     //public event Action<EInputButton, EPlayerID> INPUT_ButtonReleased_old;
@@ -251,7 +251,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog(buttonType + " released by " + playerID);
     //}
-    public MaleficusEvent<ButtonReleasedEventHandle> INPUT_ButtonReleased = new MaleficusEvent<ButtonReleasedEventHandle>("INPUT_ButtonReleased");
+    public MaleficusEvent<NetEvent_ButtonReleased> INPUT_ButtonReleased = new MaleficusEvent<NetEvent_ButtonReleased>("INPUT_ButtonReleased");
 
     //public event Action<EInputAxis, float, EPlayerID> INPUT_JoystickMoved_old;
     //public void Invoke_INPUT_JoystickMoved(EInputAxis axisType, float axisValue, EPlayerID playerID)
@@ -261,7 +261,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //        INPUT_JoystickMoved_old.Invoke(axisType, axisValue, playerID);
     //    }
     //}
-    public MaleficusEvent<JoystickMovedEventHandle> INPUT_JoystickMoved = new MaleficusEvent<JoystickMovedEventHandle>("INPUT_JoystickMoved");
+    public MaleficusEvent<NetEvent_JoystickMoved> INPUT_JoystickMoved = new MaleficusEvent<NetEvent_JoystickMoved>("INPUT_JoystickMoved");
 
 
     /* public event Action<EInputButton, EPlayerID> INPUT_ButtonStillBeingPressed;
@@ -285,12 +285,12 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Client received Message: " + receivedMsg);
     }
 
-    public MaleficusEvent<BasicEventHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo = new MaleficusEvent<BasicEventHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
+    public MaleficusEvent<Event_AbstractHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo = new MaleficusEvent<Event_AbstractHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
     
     //Event to restore the game state in case of lost connection
-    public MaleficusEvent<GameStateReplicateEventhandle> NETWORK_GameStateReplicate = new MaleficusEvent<GameStateReplicateEventhandle>("NETWORK_GameStateReplicate") ;
+    public MaleficusEvent<NetEvent_GameStateReplicate> NETWORK_GameStateReplicate = new MaleficusEvent<NetEvent_GameStateReplicate>("NETWORK_GameStateReplicate") ;
 
-    public MaleficusEvent<GameStartedEventHandle> NETWORK_GameStarted = new MaleficusEvent<GameStartedEventHandle>("NETWORK_GameStarted");
+    public MaleficusEvent<NetEvent_GameStarted> NETWORK_GameStarted = new MaleficusEvent<NetEvent_GameStarted>("NETWORK_GameStarted");
 
     #endregion
 
@@ -342,7 +342,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    }
     //    DebugLog("AR State updated : " + newARState);
     //}
-    public MaleficusEvent<StateUpdatedEventHandle<EARState>> AR_ARStateUpdated = new MaleficusEvent<StateUpdatedEventHandle<EARState>>("AR_ARStateUpdated");
+    public MaleficusEvent<Event_StateUpdated<EARState>> AR_ARStateUpdated = new MaleficusEvent<Event_StateUpdated<EARState>>("AR_ARStateUpdated");
 
 
     //public event Action AR_StagePlaced;                                       
@@ -355,7 +355,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //    DebugLog("Stage placed");
     //}
 
-    public MaleficusEvent<ARStagePlacedEventHandle> AR_ARStagePlaced = new MaleficusEvent<ARStagePlacedEventHandle>("AR_ARStagePlayed");
+    public MaleficusEvent<NetEvent_ARStagePlaced> AR_ARStagePlaced = new MaleficusEvent<NetEvent_ARStagePlaced>("AR_ARStagePlayed");
 
     #endregion
 

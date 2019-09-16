@@ -98,7 +98,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 
             if (NetworkManager.Instance.HasAuthority == true)
             {
-                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(EClientID.SERVER, teamID);
+                NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(EClientID.SERVER, teamID);
                 EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.TO_ALL);
             }
             

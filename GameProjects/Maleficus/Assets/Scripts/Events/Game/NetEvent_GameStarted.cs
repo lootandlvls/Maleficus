@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class GameStartedEventHandle : AbstractEventHandle
+public class NetEvent_GameStarted : AbstractEventHandle
 {
-    public  GameStartedEventHandle(EClientID senderID)
+    public  NetEvent_GameStarted(EClientID senderID)
     {
         ID = ENetMessageID.GAME_STARTED;
         SenderID = senderID;
@@ -15,9 +15,4 @@ public class GameStartedEventHandle : AbstractEventHandle
     {
         return "Game Started";
     }
-
-    //public override AbstractNetMessage GetNetMessage()
-    //{
-    //    return new Net_GameStarted(PlayerID);
-    //}
 }

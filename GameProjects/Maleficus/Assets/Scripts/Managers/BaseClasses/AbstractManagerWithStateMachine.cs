@@ -15,7 +15,7 @@ using System;
 public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractSingletonManager<T> where T : AbstractSingletonManager<T>
 {
 
-    protected event Action<StateUpdatedEventHandle<E>> StateUpdateEvent;
+    protected event Action<Event_StateUpdated<E>> StateUpdateEvent;
 
     /// <summary>
     /// Start default state according to scene
@@ -99,11 +99,11 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
 
         if (StateUpdateEvent != null)
         {
-            StateUpdateEvent.Invoke(new StateUpdatedEventHandle<E>(newState, lastState));
+            StateUpdateEvent.Invoke(new Event_StateUpdated<E>(newState, lastState));
         }
     }
 
-    private void On_APP_SceneChanged(BasicEventHandle<EScene> eventHandle)
+    private void On_APP_SceneChanged(Event_AbstractHandle<EScene> eventHandle)
     {
         UpdateState(startStates[eventHandle.Arg1]);
     }

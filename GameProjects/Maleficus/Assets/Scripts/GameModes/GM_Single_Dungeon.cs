@@ -40,7 +40,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         {
             ETeamID teamID = ETeamID.NONE;
             EClientID clientID = NetworkManager.Instance.OwnClientID;
-            GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(clientID, teamID);
+            NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(clientID, teamID);
             EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.LOCAL_ONLY);
 
         }
@@ -79,7 +79,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             {
                 ETeamID teamID = ETeamID.NONE;
                 EClientID clientID = NetworkManager.Instance.OwnClientID;
-                GameOverEventHandle gameOverEventHandle = new GameOverEventHandle(clientID, teamID);
+                NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(clientID, teamID);
                 EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.LOCAL_ONLY);
             }
         }

@@ -50,7 +50,7 @@ public abstract class AbstractUIReaction : MonoBehaviour {
         }
     }
 
-    protected virtual void On_UI_MenuStateUpdated(StateUpdatedEventHandle<EMenuState> eventHandle)
+    protected virtual void On_UI_MenuStateUpdated(Event_StateUpdated<EMenuState> eventHandle)
     {
         PlayAppropriateReaction(eventHandle.NewState);
     }

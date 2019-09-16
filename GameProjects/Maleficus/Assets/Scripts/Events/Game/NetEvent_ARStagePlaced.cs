@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ARStagePlacedEventHandle : AbstractEventHandle
+public class NetEvent_ARStagePlaced : AbstractEventHandle
 {
     public float X_TrackerRotation;
     public float Y_TrackerRotation;
@@ -14,7 +14,7 @@ public class ARStagePlacedEventHandle : AbstractEventHandle
     public float Z_TrackerToStage;
 
 
-    public ARStagePlacedEventHandle(EClientID senderID, float x_Imagerotation, float y_Imagerotation, float z_Imagerotation, float x_ImageToStage, float y_ImageToStage, float z_ImageToStage)
+    public NetEvent_ARStagePlaced(EClientID senderID, float x_Imagerotation, float y_Imagerotation, float z_Imagerotation, float x_ImageToStage, float y_ImageToStage, float z_ImageToStage)
     {
         ID = ENetMessageID.AR_STAGE_PLACED;
         SenderID = senderID;
@@ -29,18 +29,6 @@ public class ARStagePlacedEventHandle : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        return "";
+        return "Ar Stage placed";
     }
-
-    //public override AbstractNetMessage GetNetMessage()
-    //{
-    //    return new Net_ARStagePlaced(
-    //        PlayerID, 
-    //        X_TrackerRotation, 
-    //        Y_TrackerRotation, 
-    //        Z_TrackerRotation, 
-    //        X_TrackerToStage, 
-    //        Y_TrackerToStage, 
-    //        Z_TrackerToStage);
-    //}
 }

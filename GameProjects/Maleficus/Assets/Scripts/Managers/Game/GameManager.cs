@@ -24,12 +24,12 @@ public class GameManager : AbstractSingletonManager<GameManager>
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
     }
 
-    private void On_NETWORK_GameStarted(GameStartedEventHandle obj)
+    private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
     {
         StartGame(EGameMode.FFA_LIVES);
     }
 
-    private void On_AR_ARStagePlayerd(ARStagePlacedEventHandle obj)
+    private void On_AR_ARStagePlayerd(NetEvent_ARStagePlaced obj)
     {
         // TODO Implement
     }
@@ -99,7 +99,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
 
 #region Event Callbacks 
-    private void ON_GAME_GameOver(GameOverEventHandle eventHandle)
+    private void ON_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
         EndGame();
         //Todo change back to enable other game modes
@@ -125,7 +125,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         }
     }
 
-    private void On_AR_ARStateUpdated(StateUpdatedEventHandle<EARState> eventHandle)
+    private void On_AR_ARStateUpdated(Event_StateUpdated<EARState> eventHandle)
     {
         switch (eventHandle.NewState)
         {

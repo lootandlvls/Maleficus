@@ -30,7 +30,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
         EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlaced);
     }
 
-    private void On_AR_ARStagePlaced(ARStagePlacedEventHandle eventHandle)
+    private void On_AR_ARStagePlaced(NetEvent_ARStagePlaced eventHandle)
     {
         stagePlaced.Play();
     }
@@ -64,7 +64,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
     }
 
 
-    private void OnAppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    private void OnAppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
         {

@@ -211,7 +211,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
 
     #region NETWORK
-    private void On_AR_ARStagePlaced(ARStagePlacedEventHandle eventHandle)
+    private void On_AR_ARStagePlaced(NetEvent_ARStagePlaced eventHandle)
     {
         Vector3 trackerToStage = new Vector3
             (
@@ -241,7 +241,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         EClientID clientID = NetworkManager.Instance.OwnClientID;
         Vector3 trackerToStage = stagePosition - trackerPosition;
-        ARStagePlacedEventHandle eventHanlde = new ARStagePlacedEventHandle(
+        NetEvent_ARStagePlaced eventHanlde = new NetEvent_ARStagePlaced(
             clientID,
             trackerRotation.x,
             trackerRotation.y,

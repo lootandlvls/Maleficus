@@ -344,7 +344,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             Debug.Log("inputButton : " + inputButton + " | joystickType : " + touchJoystickType);
             if (inputButton != EInputButton.NONE)
             {
-                EventManager.Instance.INPUT_ButtonPressed.Invoke(new ButtonPressedEventHandle(clientID, inputButton));
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(new NetEvent_ButtonPressed(clientID, inputButton));
                 //controllersInput[EControllerID.TOUCH].IsButtonPressed[inputButton] = true;
             }
         }
@@ -384,7 +384,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
                     // TODO:  check if correct state
 
-                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(clientID, joysticksType, newInput.x, newInput.y));
+                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new NetEvent_JoystickMoved(clientID, joysticksType, newInput.x, newInput.y));
                 }
             }
             else // Spell joystick
@@ -410,7 +410,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
 
                     // TODO:  check if correct state
-                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(clientID, joysticksType, newInput.x, newInput.y));
+                    EventManager.Instance.INPUT_JoystickMoved.Invoke(new NetEvent_JoystickMoved(clientID, joysticksType, newInput.x, newInput.y));
                 }
             }
 
@@ -434,7 +434,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.MOVE_Y] = 0.0f;
 
                                                                                                         // TODO:  check if correct state
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(clientID, joystickType, 0.0f, 0.0f));
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new NetEvent_JoystickMoved(clientID, joystickType, 0.0f, 0.0f));
             }
             else
             {
@@ -444,7 +444,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
                 ControllersInput[EControllerID.TOUCH].JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
                 
                                                                                                             // TODO:  check if correct state
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(clientID, joystickType, 0.0f, 0.0f));
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(new NetEvent_JoystickMoved(clientID, joystickType, 0.0f, 0.0f));
             }
 
             // Specific Button Released
@@ -452,7 +452,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             if (inputButton != EInputButton.NONE)
             {
                                                                                                                     // TODO:  check if correct state
-                EventManager.Instance.INPUT_ButtonReleased.Invoke(new ButtonReleasedEventHandle(clientID, inputButton));
+                EventManager.Instance.INPUT_ButtonReleased.Invoke(new NetEvent_ButtonReleased(clientID, inputButton));
 
                 //ControllersInput[EControllerID.TOUCH].IsButtonReleased[inputButton] = true;
             }
@@ -461,7 +461,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     #endregion
 
     #region Network Input
-    private void On_NeT_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
+    private void On_NeT_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
     {
         EJoystickType joystickType = eventHandle.JoystickType;
         float joystick_X = eventHandle.Joystick_X;

@@ -51,8 +51,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     protected virtual void Start()
     {
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
-        //EventManager.Instance.INPUT_ButtonReleased.AddListener      (On_Input_ButtonReleased);
-        //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
     }
 
     public override void OnSceneStartReinitialize()
@@ -74,50 +72,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
             return;
         }
 
-        //switch (netMessage.ID)
-        //{
-        //    case ENetMessageID.JOYSTICK_MOVED:
-        //        JoystickMovedEventHandle joystickInput = (JoystickMovedEventHandle)netMessage;
-        //        if (joystickInput.PlayerID != OwnPlayerID)
-        //        {
-        //            return;
-        //        }
-        //        break;
-
-        //    case ENetMessageID.BUTTON_PRESSED:
-        //        ButtonPressedEventHandle buttonPressed = (ButtonPressedEventHandle)netMessage;
-        //        if (buttonPressed.PlayerID != OwnPlayerID)
-        //        {
-        //            return;
-        //        }
-        //        break;
-
-        //    case ENetMessageID.BUTTON_RELEASEED:
-        //        ButtonReleasedEventHandle buttonReleased = (ButtonReleasedEventHandle)netMessage;
-        //        if (buttonReleased.PlayerID != OwnPlayerID)
-        //        {
-        //            return;
-        //        }
-        //        break;
-
-
-
-        //    case ENetMessageID.ARStagePlaced:
-        //        Net_ARStagePlaced aRStagePlaced = (Net_ARStagePlaced)netMessage;
-        //        if (aRStagePlaced.PlayerID != OwnPlayerID)
-        //        {
-        //            return;
-        //        }
-        //        break;
-
-        //    case NetID.GameStarted:
-        //        Net_GameStarted gameStarted = (Net_GameStarted)netMessage;
-        //        if (gameStarted.PlayerID != MaleficusUtilities.GetPlayerIDFrom(ownClientID))
-        //        {
-        //            return;
-        //        }
-        //        break;
-        //}
 
         // Broadcast event if main sender
         SendServer(netMessage);
@@ -180,10 +134,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
         switch (type)
         {
-            //case NetworkEventType.Nothing:
-            //    UpdateState(ENetworkMessage.NONE);
-            //    break;
-
             case NetworkEventType.ConnectEvent:
                 Debug.Log("Connected to server");
                 UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
@@ -206,12 +156,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
-
-                //default:
-                //case NetworkEventType.BroadcastEvent:
-                //    UpdateState(ENetworkMessage.BROADCAST);
-                //    Debug.Log("Unexpected network event type");
-                //    break;
         }
     }
 
@@ -275,43 +219,43 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 /** Game Logic **/
             case ENetMessageID.GAME_STARTED:
                 Debug.Log("Game Started");
-                GameStartedEventHandle gameStartedMessage = (GameStartedEventHandle)netMessage;
+                NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
                 EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             case ENetMessageID.AR_STAGE_PLACED:
-                ARStagePlacedEventHandle arStageMessage = (ARStagePlacedEventHandle)netMessage;
+                NetEvent_ARStagePlaced arStageMessage = (NetEvent_ARStagePlaced)netMessage;
                 EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             case ENetMessageID.GAME_STATE_REPLICATION:
                 Debug.Log("Game state replicated");
-                GameStateReplicateEventhandle gameStateReplicateMessage = (GameStateReplicateEventhandle)netMessage;
+                NetEvent_GameStateReplicate gameStateReplicateMessage = (NetEvent_GameStateReplicate)netMessage;
                 EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicateMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             // Input
             case ENetMessageID.JOYSTICK_MOVED:
                 Debug.Log("Game input received");
-                JoystickMovedEventHandle joystickMoved = (JoystickMovedEventHandle)netMessage;
+                NetEvent_JoystickMoved joystickMoved = (NetEvent_JoystickMoved)netMessage;
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             case ENetMessageID.BUTTON_PRESSED:
                 Debug.Log("Received Spell Input pressed from another Player");
-                ButtonPressedEventHandle buttonPressed = (ButtonPressedEventHandle)netMessage;
+                NetEvent_ButtonPressed buttonPressed = (NetEvent_ButtonPressed)netMessage;
                 EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             case ENetMessageID.BUTTON_RELEASEED:
                 Debug.Log("Received Spell Input released from another Player");
-                ButtonReleasedEventHandle buttonReleased = (ButtonReleasedEventHandle)netMessage;
+                NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             case ENetMessageID.GAME_OVER:
                 Debug.Log("Game Over");
-                GameOverEventHandle gameOver = (GameOverEventHandle)netMessage;
+                NetEvent_GameOver gameOver = (NetEvent_GameOver)netMessage;
                 EventManager.Instance.GAME_GameOver.Invoke(gameOver, EEventInvocationType.LOCAL_ONLY);
                 break;
         }
@@ -402,7 +346,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         }
 
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(ownClientID);
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new BasicEventHandle<List<EPlayerID>, EPlayerID>
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new Event_AbstractHandle<List<EPlayerID>, EPlayerID>
             (connectedPlayers, playerID));
     }
     #endregion
@@ -427,13 +371,14 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
         SendServer(new Net_Disonnected());
     }
+    #endregion
 
     #region Account related
     public void SendCreateAccount(string username, string password, string email)
     {
 
         // invalid username
-        if (!Utility.IsUsername(username))
+        if (!MaleficusUtilities.IsUsername(username))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Username is invalid");
             LoginContext.Instance.EnableInputs();
@@ -441,7 +386,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         }
 
         // invalid email
-        if (!Utility.IsEmail(email))
+        if (!MaleficusUtilities.IsEmail(email))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Email is invalid");
             LoginContext.Instance.EnableInputs();
@@ -449,7 +394,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         }
 
         // invalid password
-        if (!Utility.IsPassword(password))
+        if (!MaleficusUtilities.IsPassword(password))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
             LoginContext.Instance.EnableInputs();
@@ -458,7 +403,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
         Net_CreateAccount ca = new Net_CreateAccount();
         ca.Username = username;
-        ca.Password = Utility.Sha256FromString(password);
+        ca.Password = MaleficusUtilities.Sha256FromString(password);
         ca.Email = email;
 
         LoginContext.Instance.ChangeAuthenticationMessage("Sending request...");
@@ -469,7 +414,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         // todo: username and token working and messages should work
         // invalid email or username
-        if (!Utility.IsUsernameAndDiscriminator(usernameOrEmail) && !Utility.IsEmail(usernameOrEmail))
+        if (!MaleficusUtilities.IsUsernameAndDiscriminator(usernameOrEmail) && !MaleficusUtilities.IsEmail(usernameOrEmail))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
             LoginContext.Instance.EnableInputs();
@@ -477,7 +422,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         }
 
         // invalid password
-        if (!Utility.IsPassword(password))
+        if (!MaleficusUtilities.IsPassword(password))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
             LoginContext.Instance.EnableInputs();
@@ -487,7 +432,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Net_LoginRequest lr = new Net_LoginRequest();
 
         lr.UsernameOrEmail = usernameOrEmail;
-        lr.Password = Utility.Sha256FromString(password);
+        lr.Password = MaleficusUtilities.Sha256FromString(password);
 
         LoginContext.Instance.ChangeAuthenticationMessage("Sending Login request...");
         SendServer(lr);
@@ -546,68 +491,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     #endregion
 
-    #region Input related
-    //public void SendSpellInput(EInputButton eInputButton, EPlayerID playerID)
-    //{
-    //    Net_SpellInputPressed si = new Net_SpellInputPressed();
 
-    //    si.Token = token;
-    //    switch (eInputButton)
-    //    {
-    //        case EInputButton.CAST_SPELL_1:
-    //            si.spellId = ESpellID.SPELL_1;
-    //            break;
-    //        case EInputButton.CAST_SPELL_2:
-    //            si.spellId = ESpellID.SPELL_2;
-    //            break;
-    //        case EInputButton.CAST_SPELL_3:
-    //            si.spellId = ESpellID.SPELL_3;
-    //            break;
-    //        default:
-    //            si.spellId = ESpellID.NONE;
-    //            break;
-    //    }
-    //    si.ePlayerID = playerID;
-
-    //    SendServer(si);
-    //}
-
-    //public void SendMovementInput(EInputAxis eInputAxis, float axisvalue)
-    //{
-    //    Net_MovementInput mi = new Net_MovementInput();
-
-    //    mi.Token = token;
-    //    mi.axis = eInputAxis;
-    //    mi.axisValue = axisvalue;
-
-    //    SendServer(mi);
-    //}
-    #endregion
-
-    #endregion
 
     #region Listeners
-    //public void On_Input_ButtonReleased(ButtonReleasedEventHandle eventHandle)
-    //{
-    //    EInputButton inputButton = eventHandle.InputButton;
-    //    EPlayerID playerID = eventHandle.PlayerID;
-
-    //    if (AppStateManager.Instance.CurrentScene == EScene.GAME)
-    //    {
-    //        if(inputButton == EInputButton.CAST_SPELL_1 || inputButton == EInputButton.CAST_SPELL_2 || inputButton == EInputButton.CAST_SPELL_3)
-    //        {
-    //            SendSpellInput(inputButton, playerID);
-    //        }
-    //    }
-    //}
-    //public void On_INPUT_JoystickMoved(EInputAxis eInputAxis, float axisvalue, EPlayerID ePlayerID)
-    //{
-    //    if(ePlayerID == EPlayerID.PLAYER_1)
-    //    {
-    //        SendMovementInput(eInputAxis, axisvalue);
-    //    }
-    //}
-    protected virtual void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    protected virtual void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
         {

@@ -279,7 +279,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     }
 
 
-    protected void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    protected void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         if (eventHandle.NewState == EAppState.IN_GAME_IN_ENDED)
         {

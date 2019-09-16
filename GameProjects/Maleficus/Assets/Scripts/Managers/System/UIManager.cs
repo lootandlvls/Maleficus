@@ -155,7 +155,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     }
         
     #region Events Callbacks
-    private void On_INPUT_ButtonPressed(ButtonPressedEventHandle eventHandle)
+    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
@@ -224,7 +224,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
     }
 
-    public void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    public void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         if(currentState == EMenuState.IN_ENTRY)
         {

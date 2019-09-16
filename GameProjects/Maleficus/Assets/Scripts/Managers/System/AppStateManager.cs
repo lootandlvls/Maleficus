@@ -49,7 +49,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.NETWORK_GameStarted.AddListener                (On_NETWORK_GameStarted);
     }
 
-    private void On_NETWORK_GameStarted(GameStartedEventHandle obj)
+    private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
     {
         UpdateState(EAppState.IN_GAME_IN_RUNNING);
     }
@@ -102,7 +102,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     #region Scene Update
     private void UpdateScene(EScene newScene)
     {
-        EventManager.Instance.APP_SceneWillChange.Invoke(new BasicEventHandle<EScene>(newScene));
+        EventManager.Instance.APP_SceneWillChange.Invoke(new Event_AbstractHandle<EScene>(newScene));
 
         // Wait some frames before changing scene
         StartCoroutine(LateUpdateSceneCoroutine(newScene));
@@ -258,7 +258,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             {
                 //UpdateState(EAppState.IN_GAME_IN_RUNNING);
                 EClientID clientID = NetworkManager.Instance.OwnClientID;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(new GameStartedEventHandle(clientID), EEventInvocationType.TO_SERVER_ONLY);
+                EventManager.Instance.NETWORK_GameStarted.Invoke(new NetEvent_GameStarted(clientID), EEventInvocationType.TO_SERVER_ONLY);
             };
         }
     }
@@ -268,7 +268,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
     {
         Debug.Log("Loading level done : " + newScene.name);
-        EventManager.Instance.APP_SceneChanged.Invoke(new BasicEventHandle<EScene>(CurrentScene));
+        EventManager.Instance.APP_SceneChanged.Invoke(new Event_AbstractHandle<EScene>(CurrentScene));
 
         // Validity test
         if ((newScene.name != MaleficusConsts.SCENE_GAME)

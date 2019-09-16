@@ -46,7 +46,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     }
 
-    private void On_APP_SceneChanged(BasicEventHandle<EScene> eventHandle)
+    private void On_APP_SceneChanged(Event_AbstractHandle<EScene> eventHandle)
     {
         InitializeManagers();
     }

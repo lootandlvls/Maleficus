@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class GameStateReplicateEventhandle : AbstractEventHandle
+public class NetEvent_GameStateReplicate : AbstractEventHandle
 {   
     public EPlayerID UpdatedPlayerID    { get; set; }
     public float[] playerPosition = new float[3];
     public float[] playerRotation = new float[3];
 
-    public GameStateReplicateEventhandle(EClientID senderID, EPlayerID updatedPlayerID, float[] playerPosition, float[] playerRotation)
+    public NetEvent_GameStateReplicate(EClientID senderID, EPlayerID updatedPlayerID, float[] playerPosition, float[] playerRotation)
     {
         ID = ENetMessageID.GAME_STATE_REPLICATION;
         SenderID = senderID;
@@ -21,12 +21,6 @@ public class GameStateReplicateEventhandle : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        return "";
+        return "Game state replicated for " + UpdatedPlayerID;
     }
-
-    //public override AbstractNetMessage GetNetMessage()
-    //{
-    //    return new Net_GameStateReplicate(playerID, playerPosition, playerRotation);
-    //}
-
 }

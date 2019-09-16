@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ButtonPressedEventHandle : AbstractEventHandle
+public class NetEvent_ButtonPressed : AbstractEventHandle
 {
     public EInputButton InputButton { get; }
 
-    public ButtonPressedEventHandle(EClientID senderID, EInputButton inputButton)
+    public NetEvent_ButtonPressed(EClientID senderID, EInputButton inputButton)
     {
         ID = ENetMessageID.BUTTON_PRESSED;
         SenderID = senderID;
@@ -20,9 +20,4 @@ public class ButtonPressedEventHandle : AbstractEventHandle
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(SenderID);
         return playerID + " pressed " + InputButton;
     }
-
-    //public override AbstractNetMessage GetNetMessage()
-    //{
-    //    return new Net_SpellInput(PlayerID, InputButton, true);
-    //}
 }

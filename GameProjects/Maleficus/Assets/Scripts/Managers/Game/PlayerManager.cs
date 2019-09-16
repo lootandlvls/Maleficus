@@ -102,7 +102,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
 
 
-    private void On_NETWORK_ReceivedGameSessionInfo(BasicEventHandle<List<EPlayerID>, EPlayerID> eventHandle)
+    private void On_NETWORK_ReceivedGameSessionInfo(Event_AbstractHandle<List<EPlayerID>, EPlayerID> eventHandle)
     {
         List<EPlayerID> connectedPlayers = eventHandle.Arg1;
         EPlayerID ownPlayer = eventHandle.Arg2;
@@ -121,7 +121,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_NETWORK_GameStateReplicate(GameStateReplicateEventhandle eventHandle)
+    private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplicate eventHandle)
     {
         EPlayerID playerID      = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
         float[] playerPosition  = eventHandle.playerPosition;
@@ -134,12 +134,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_NETWORK_GameStarted(GameStartedEventHandle eventHandle)
+    private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
         SpawnAllConnectedPlayers();
     }
 
-    private void On_GAME_GameOver(GameOverEventHandle eventHandle)
+    private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
         DisconnectAllPlayers();
     }
@@ -308,7 +308,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Input
 
 
-    private void On_INPUT_ButtonPressed(ButtonPressedEventHandle eventHandle)
+    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
@@ -343,7 +343,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     }
 
-    private void On_INPUT_JoystickMoved(JoystickMovedEventHandle eventHandle)
+    private void On_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
     {
         EJoystickType joystickType = eventHandle.JoystickType;
         float joystick_X = eventHandle.Joystick_X;
@@ -372,7 +372,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         //}
     }
 
-    private void On_INPUT_ButtonReleased(ButtonReleasedEventHandle eventHandle)
+    private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
@@ -409,7 +409,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #endregion
 
     #region Events Callbacks
-    private void On_APP_SceneChanged(BasicEventHandle<EScene> eventHandle)
+    private void On_APP_SceneChanged(Event_AbstractHandle<EScene> eventHandle)
     {
         if (eventHandle.Arg1 == EScene.GAME)
         {
@@ -417,7 +417,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_APP_AppStateUpdated(StateUpdatedEventHandle<EAppState> eventHandle)
+    private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {

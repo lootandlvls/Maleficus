@@ -40,14 +40,14 @@ public class Mongo
     public bool InsertAccount(string username, string password, string email)
     {
         // check if email is valid
-        if (!Utility.IsEmail(email))
+        if (!MaleficusUtilities.IsEmail(email))
         {
             Debug.Log(email + " is not an email!");
             return false;
         }
 
         // check if username is valid
-        if (!Utility.IsUsername(username))
+        if (!MaleficusUtilities.IsUsername(username))
         {
             Debug.Log(username + " is not a username!");
             return false;
@@ -89,7 +89,7 @@ public class Mongo
         Model_Account myAccount = null;
         // soll eig leer sein
         // find my account
-        if (Utility.IsEmail(usernameOrEmail))
+        if (MaleficusUtilities.IsEmail(usernameOrEmail))
         {
             // if i logged in using an email
             myAccount = accounts.Find(u => u.Email == usernameOrEmail && u.ShaPassword == password).FirstOrDefault<Model_Account>();
@@ -116,7 +116,7 @@ public class Mongo
         else
         {
             // if i logged in using an username#discriminator
-            if(Utility.IsUsernameAndDiscriminator(usernameOrEmail))
+            if(MaleficusUtilities.IsUsernameAndDiscriminator(usernameOrEmail))
             {
                 string[] data = usernameOrEmail.Split('#');
                 if (data[1] != null)
@@ -158,7 +158,7 @@ public class Mongo
 
         // start by getting the refenrence to our follow
 
-        if (!Utility.IsEmail(emailOrUsername))
+        if (!MaleficusUtilities.IsEmail(emailOrUsername))
         {
             // if its username#discriminator
             string[] data = emailOrUsername.Split('#');
