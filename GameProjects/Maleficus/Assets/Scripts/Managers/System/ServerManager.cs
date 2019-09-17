@@ -103,6 +103,7 @@ public class ServerManager : NetworkManager
         {
             case NetworkEventType.Nothing:
                 break;
+
             case NetworkEventType.ConnectEvent:
                 if (recHostId != 2)
                 {
@@ -113,15 +114,18 @@ public class ServerManager : NetworkManager
                     Debug.Log(string.Format("The Instance Manager has connected through host {0}!", recHostId));
                 }
                 break;
+
             case NetworkEventType.DisconnectEvent:
                 DisconnectEvent(recHostId, connectionId);
                 break;
+
             case NetworkEventType.DataEvent:
                 System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
                 MemoryStream ms = new MemoryStream(recBuffer);
                 AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
                 OnData(connectionId, channelId, recHostId, msg);
                 break;
+
             default:
             case NetworkEventType.BroadcastEvent:
                 Debug.Log("Unexpected network event type");
@@ -173,7 +177,7 @@ public class ServerManager : NetworkManager
 
             case ENetMessageID.AR_STAGE_PLACED:
                 NetEvent_ARStagePlaced arStageMessage = (NetEvent_ARStagePlaced)netMessage;
-                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage);
+                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage, EEventInvocationType.LOCAL_ONLY);
                 BroadcastMessageToAllClients(arStageMessage, true);
                 break;
 
@@ -186,7 +190,7 @@ public class ServerManager : NetworkManager
                 Debug.Log("Game starting received");
 
                 NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage);
+                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
                 BroadcastMessageToAllClients(gameStartedMessage, false);
                 break;
 
@@ -195,16 +199,16 @@ public class ServerManager : NetworkManager
                 Debug.Log("Game input received");
 
                 NetEvent_JoystickMoved movementMessage = (NetEvent_JoystickMoved)netMessage;
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementMessage);
-                BroadcastMessageToAllClients(movementMessage, true);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementMessage, EEventInvocationType.LOCAL_ONLY);
+                BroadcastMessageToAllClients(movementMessage, false);
                 break;
 
             case ENetMessageID.BUTTON_PRESSED:
                 Debug.Log("Received Spell Input from another Player");
 
                 NetEvent_ButtonPressed buttonPressed = (NetEvent_ButtonPressed)netMessage;
-                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed);
-                BroadcastMessageToAllClients(buttonPressed, true);
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.LOCAL_ONLY);
+                BroadcastMessageToAllClients(buttonPressed, false);
                 break;
 
 
@@ -212,8 +216,8 @@ public class ServerManager : NetworkManager
                 Debug.Log("Received Spell Input from another Player");
 
                 NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
-                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased);
-                BroadcastMessageToAllClients(buttonReleased,  true);
+                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
+                BroadcastMessageToAllClients(buttonReleased,  false);
                 break;
 
 
@@ -406,7 +410,7 @@ public class ServerManager : NetworkManager
             }
 
             var eventHandle = new Event_AbstractHandle<List<EPlayerID>, EPlayerID>(players, playerID);
-            EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(eventHandle);
+            EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(eventHandle, EEventInvocationType.LOCAL_ONLY);
         }
         else
         {
