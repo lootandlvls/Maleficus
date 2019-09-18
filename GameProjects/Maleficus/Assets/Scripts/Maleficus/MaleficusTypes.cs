@@ -41,8 +41,9 @@ public enum EScene
     ENTRY,
     MENU,
     GAME,
-    AR_GAME,
-    DUNGEON_SELECTION
+    GAME_AR,
+    GAME_DUNGEON,
+    MENU_DUNGEON
 }
 #endregion
 

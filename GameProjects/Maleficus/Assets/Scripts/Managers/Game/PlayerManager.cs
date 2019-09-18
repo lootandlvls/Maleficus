@@ -84,7 +84,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             ConnectPlayer(EPlayerID.PLAYER_1, EControllerID.TOUCH);
         }
 
-        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
+        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
+            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
         {
             SpawnPlayer(EPlayerID.PLAYER_1);
             SpawnPlayer(EPlayerID.PLAYER_2);
@@ -120,14 +121,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplicate eventHandle)
     {
-        EPlayerID playerID      = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID      = eventHandle.UpdatedPlayerID;
         float[] playerPosition  = eventHandle.playerPosition;
-        float[] playerRotation  = eventHandle.playerRotation;
 
         if (activePlayers.ContainsKey(playerID))
         {
             activePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
-            //activePlayers[playerID].transform.localRotation = Quaternion.Euler(new Vector3(playerRotation[0], playerRotation[1], playerRotation[2]));
         }
     }
 
@@ -156,7 +155,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if ((ConnectedPlayers[toSpawnPlayerID] == true) 
             || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
-                && (AppStateManager.Instance.CurrentScene == EScene.GAME)))
+                && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES))))
         {
             
             if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
@@ -237,7 +236,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             EventManager.Instance.Invoke_PLAYERS_PlayerConnected(playerIDToConnect);
 
-            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) && (AppStateManager.Instance.CurrentScene == EScene.GAME))
+            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
+                && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
             {
                 SpawnPlayer(playerIDToConnect);
             }
@@ -264,7 +264,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             // Debug Spawn player
             if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
                 && (ActivePlayers.ContainsKey(playerID) == false)
-                && (AppStateManager.Instance.CurrentScene == EScene.GAME))
+                && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
             {
                 SpawnPlayer(EPlayerID.PLAYER_1);
             }
@@ -378,7 +378,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Events Callbacks
     private void On_APP_SceneChanged(Event_AbstractHandle<EScene> eventHandle)
     {
-        if (eventHandle.Arg1 == EScene.GAME)
+        EScene newScene = eventHandle.Arg1;
+        if (newScene.ContainedIn(MaleficusConsts.GAME_SCENES))
         {
             FindPlayerSpawnGhost();
         }

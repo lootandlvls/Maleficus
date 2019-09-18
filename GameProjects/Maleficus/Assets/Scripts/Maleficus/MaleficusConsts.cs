@@ -14,6 +14,7 @@ public static class MaleficusConsts
     public const string SCENE_ENTRY = "ENTRY";
     public const string SCENE_MENU = "MENU";
     public const string SCENE_GAME = "GAME";
+    public const string SCENE_GAME_AR = "GAME_AR";
     public const string SCENE_DUNGEON_1 = "LVL_1_AR";
     public const string SCENE_DUNGEON_2 = "LVL_2_AR";
     public const string SCENE_DUNGEON_3 = "LVL_3_AR";
@@ -58,6 +59,7 @@ public static class MaleficusConsts
     public const string CLOUD_SERVER_IP = "83.171.237.227";
     public const string BNJMO_SERVER_IP = "192.168.1.40";
     public const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
+    public const float GAME_STATE_UPDATE_FREQUENCY = 1.0f;
 
 
 
@@ -84,50 +86,56 @@ public static class MaleficusConsts
     /// <summary> Scenes switch logic </summary>
     public static readonly Dictionary<EScene, EScene> FROM_SCENE_TO = new Dictionary<EScene, EScene>()
     {
-        { EScene.NONE,  EScene.NONE },
-        { EScene.ENTRY, EScene.MENU },
-        { EScene.MENU,  EScene.GAME },
-        { EScene.GAME,  EScene.MENU },
+        { EScene.NONE,              EScene.NONE },
+        { EScene.ENTRY,             EScene.MENU },
+        { EScene.MENU,              EScene.GAME },
+        { EScene.GAME,              EScene.MENU },
+        { EScene.GAME_AR,           EScene.MENU },
 
         // AR Mode
-        { EScene.DUNGEON_SELECTION,     EScene.AR_GAME },
-        { EScene.AR_GAME,               EScene.DUNGEON_SELECTION },
+        { EScene.MENU_DUNGEON,      EScene.GAME_DUNGEON },
+        { EScene.GAME_DUNGEON,      EScene.MENU_DUNGEON },
     };
 
     /* Start states for the different scenes*/
     public static Dictionary<EScene, EAppState> START_APP_STATES = new Dictionary<EScene, EAppState>()
     {
-        { EScene.NONE,                  EAppState.NONE},
-        { EScene.ENTRY,                 EAppState.IN_ENTRY },
-        { EScene.MENU,                  EAppState.IN_MENU_IN_MAIN },
-        { EScene.GAME,                  EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.NONE,              EAppState.NONE},
+        { EScene.ENTRY,             EAppState.IN_ENTRY },
+        { EScene.MENU,              EAppState.IN_MENU_IN_MAIN },
+        { EScene.GAME,              EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.GAME_AR,           EAppState.IN_GAME_IN_NOT_STARTED },
 
         // AR Mode
-        { EScene.AR_GAME,               EAppState.IN_GAME_IN_NOT_STARTED },
-        { EScene.DUNGEON_SELECTION,     EAppState.IN_MENU_IN_MAIN },
+        { EScene.GAME_DUNGEON,      EAppState.IN_GAME_IN_NOT_STARTED },
+        { EScene.MENU_DUNGEON,      EAppState.IN_MENU_IN_MAIN },
     };
     public static Dictionary<EScene, EMenuState> START_MENU_STATES = new Dictionary<EScene, EMenuState>()
     {
-        { EScene.NONE,                  EMenuState.NONE},
-        { EScene.ENTRY,                 EMenuState.IN_ENTRY},
-        { EScene.MENU,                  EMenuState.IN_MENU},
-        { EScene.GAME,                  EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.NONE,              EMenuState.NONE},
+        { EScene.ENTRY,             EMenuState.IN_ENTRY},
+        { EScene.MENU,              EMenuState.IN_MENU},
+        { EScene.GAME,              EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.GAME_AR,           EMenuState.IN_GAME_NOT_STARTED},
 
         // AR Mode
-        { EScene.AR_GAME,               EMenuState.IN_GAME_NOT_STARTED},
-        { EScene.DUNGEON_SELECTION,     EMenuState.IN_MENU},
+        { EScene.GAME_DUNGEON,      EMenuState.IN_GAME_NOT_STARTED},
+        { EScene.MENU_DUNGEON,      EMenuState.IN_MENU},
     };
     public static Dictionary<EScene, EARState> START_AR_STATES = new Dictionary<EScene, EARState>()
     {
-        { EScene.NONE,                  EARState.NO_POSE},
-        { EScene.ENTRY,                 EARState.NO_POSE},
-        { EScene.MENU,                  EARState.NO_POSE},
-        { EScene.GAME,                  EARState.NO_POSE},
+        { EScene.NONE,              EARState.NO_POSE},
+        { EScene.ENTRY,             EARState.NO_POSE},
+        { EScene.MENU,              EARState.NO_POSE},
+        { EScene.GAME,              EARState.NO_POSE},
+        { EScene.GAME_AR,           EARState.NO_POSE},
 
         // AR Mode
-        { EScene.AR_GAME,               EARState.NO_POSE},
-        { EScene.DUNGEON_SELECTION,     EARState.NO_POSE},
+        { EScene.GAME_DUNGEON,      EARState.NO_POSE},
+        { EScene.MENU_DUNGEON,      EARState.NO_POSE},
     };
+
+
     public static EAppState[] APP_STATES_THAT_TRIGGER_SCENE_CHANGE = new EAppState[]
     {
         EAppState.IN_ENTRY_IN_LOADING,
@@ -187,6 +195,14 @@ public static class MaleficusConsts
         EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL
     };
+
+    /// <summary> Scenes in that are equivalent to the GAME scene </summary>
+    public static readonly EScene[] GAME_SCENES = new EScene[]
+{
+        EScene.GAME,
+        EScene.GAME_AR,
+        EScene.GAME_DUNGEON
+};
 
     public static EControllerID[] NETWORK_CONTROLLERS = new EControllerID[]
     {

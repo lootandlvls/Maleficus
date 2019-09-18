@@ -76,11 +76,19 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         if (newAppState.ContainedIn(MaleficusConsts.APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
         {
             EScene newScene = MaleficusConsts.FROM_SCENE_TO[CurrentScene];
+
             // For AR 
+            if (MotherOfManagers.Instance.IsARGame == true)
+            {
+                newScene = EScene.GAME_AR;
+            }
+
+            // Dungeon
             if (CurrentState == EAppState.IN_MENU_IN_STARTING_AR_GAME)
             {
-                newScene = EScene.AR_GAME;
+                newScene = EScene.GAME_DUNGEON;
             }
+
             UpdateScene(newScene);
         }
 
@@ -138,7 +146,12 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 currentScene = EScene.GAME;
                 break;
 
-            case EScene.AR_GAME:
+            case EScene.GAME_AR:
+                SceneManager.LoadScene(MaleficusConsts.SCENE_GAME_AR);
+                currentScene = EScene.GAME_AR;
+                break;
+
+            case EScene.GAME_DUNGEON:
                 string ScenePath = "";
                 switch (dungeonIDtoLoad)
                 {
@@ -162,13 +175,13 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 if (ScenePath != "")
                 {
                     SceneManager.LoadScene(ScenePath);
-                    currentScene = EScene.AR_GAME;
+                    currentScene = EScene.GAME_DUNGEON;
                 }
                 break;
 
-            case EScene.DUNGEON_SELECTION:
+            case EScene.MENU_DUNGEON:
                 SceneManager.LoadScene(MaleficusConsts.SCENE_DUNGEON_SELECTION);
-                currentScene = EScene.DUNGEON_SELECTION;
+                currentScene = EScene.MENU_DUNGEON;
                 break;
 
             default:
@@ -272,6 +285,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         // Validity test
         if ((newScene.name != MaleficusConsts.SCENE_GAME)
+            && (newScene.name != MaleficusConsts.SCENE_GAME_AR)
             && (newScene.name != MaleficusConsts.SCENE_MENU)
             && (newScene.name != MaleficusConsts.SCENE_ENTRY)
             && (newScene.name != MaleficusConsts.SCENE_DUNGEON_SELECTION)

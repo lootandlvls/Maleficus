@@ -17,8 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main/MENU.unity
     guid: bddb1906bfb8023448416c99f8fc2d3a
-  - enabled: 0
-    path: Assets/Scenes/Main/ARGame.unity
+  - enabled: 1
+    path: Assets/Scenes/Main/GAME_AR.unity
     guid: d9e68e0f5bd7eff4fbd46a7b8a03ee68
   - enabled: 0
     path: Assets/Scenes/Playgrounds/ImageMarkerTest.unity

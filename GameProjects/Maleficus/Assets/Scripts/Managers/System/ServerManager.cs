@@ -25,7 +25,6 @@ public class ServerManager : NetworkManager
     private bool server_isStarted;
     private byte error;
 
-    private float gameStateUpdateFrequency = 0.3f;
     private Mongo dataBank;
 
     private Dictionary<EClientID, int> connectedPlayers = new Dictionary<EClientID, int>();
@@ -525,7 +524,6 @@ public class ServerManager : NetworkManager
             }
         }
 
-        Debug.Log("&/(&/(  send request game info");
         SendClient(recHostId, connectionID, onRequestGameSessionInfo);
     }
     #endregion
@@ -546,12 +544,10 @@ public class ServerManager : NetworkManager
         formatter.Serialize(memoryStream, message);
         if (recHost == 0)
         {
-            Debug.Log("recHost : " + recHost);
             NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
         }
         else if (recHost == 1)
         {
-            Debug.Log("recHost : " + recHost);
             NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
         }
         else
@@ -565,12 +561,10 @@ public class ServerManager : NetworkManager
     private IEnumerator UpdateGameStateCoroutine()
     {
         float[] playerPosition = new float[3];
-        float[] playerRotation = new float[3];
-
 
         while (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            yield return new WaitForSeconds(gameStateUpdateFrequency);
+            yield return new WaitForSeconds(MaleficusConsts.GAME_STATE_UPDATE_FREQUENCY);
 
             foreach (EPlayerID activePlayerID in PlayerManager.Instance.ActivePlayers.Keys)
             {
@@ -579,14 +573,11 @@ public class ServerManager : NetworkManager
                     playerPosition[0] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.x;
                     playerPosition[1] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.y;
                     playerPosition[2] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.z;
-                    playerRotation[0] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.x;
-                    playerRotation[1] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.y;
-                    playerRotation[2] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localRotation.z;
-                    NetEvent_GameStateReplicate msg_gameState = new NetEvent_GameStateReplicate(EClientID.SERVER, activePlayerID, playerPosition, playerRotation);
+                    NetEvent_GameStateReplicate msg_gameState = new NetEvent_GameStateReplicate(EClientID.SERVER, activePlayerID, playerPosition);
 
                     EClientID updatedClientID = MaleficusUtilities.GetClientIDFrom(connectedPlayerID);
                     SendClient(0, connectedPlayers[updatedClientID], msg_gameState);
-                    yield return new WaitForSeconds(0.05f);
+                    yield return new WaitForSeconds(0.2f);
                 }
             }
         }
@@ -594,7 +585,7 @@ public class ServerManager : NetworkManager
 
     protected override void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
-        //base.On_APP_AppStateUpdated(eventHandle);
+        // Do not call base method. Need to be overrid.
 
         if (UpdateGameStateEnumerator != null)
         {

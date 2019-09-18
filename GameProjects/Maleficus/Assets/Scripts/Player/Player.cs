@@ -476,6 +476,11 @@ public class Player : MonoBehaviour, IPlayer
 
     private Transform GetGrandFatherTransfrom()
     {
+        if (MotherOfManagers.Instance.IsARGame == true)
+        {
+            return ARManager.Instance.AugmentedStageTransform;
+        }
+
         Transform myGrandParentTransform = transform;
         while (myGrandParentTransform.parent != null)
         {
