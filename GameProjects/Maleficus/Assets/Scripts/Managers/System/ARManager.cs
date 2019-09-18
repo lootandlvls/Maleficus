@@ -28,7 +28,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
     private Vector3 trackerPosition;
     private Vector3 trackerRotation;
-    private bool isTrackerTracked = false;
+    private bool isImageTracked = false;
 
     protected override void Awake()
     {
@@ -75,7 +75,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                     stagePosition = placedContent.transform.position;
 
                     // Broadcast event only first time both objects tracked
-                    if ((isTrackerTracked == true) && (isStagePlaced == false))
+                    if ((isImageTracked == true) && (isStagePlaced == false))
                     {
                         BroadcastStagePosition();
                     }
@@ -118,14 +118,12 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         trackerRotation = trackerTransform.rotation.eulerAngles;
 
         // Broadcast event only first time both objects tracked
-        if ((isTrackerTracked == false) && (isStagePlaced == true))
+        if ((isImageTracked == false) && (isStagePlaced == true))
         {
             BroadcastStagePosition();
         }
 
-        isTrackerTracked = true;
-
-
+        isImageTracked = true;
     }
 
     private void SetAnchorsInputActive(bool isActive)
@@ -150,9 +148,6 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
         }
     }
  
-
-   
-
     private void FindReferencesInScene()
     {
         midAirAnchorBehaviour = FindObjectOfType<AnchorBehaviour>();

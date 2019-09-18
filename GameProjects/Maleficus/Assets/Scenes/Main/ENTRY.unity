@@ -4448,15 +4448,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsServer: 0
-  ConnectionMode: 0
+  ConnectionMode: 3
   InputMode: 2
   IsSpawnPlayerOnConnect: 0
   IsSpawnAllPlayers: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsARGame: 0
-  ARPlacementMethod: 0
-  EnemiesMovementMethod: 0
+  IsARGame: 1
+  ARPlacementMethod: 2
+  EnemiesMovementMethod: 2
   IsDebugLogEvents: 1
   IsReduceLightIntensityOnSceneStart: 0
   currentScene: 1

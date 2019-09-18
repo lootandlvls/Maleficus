@@ -410,7 +410,8 @@ public enum EConnectionMode
 {
     LOCAL_SERVER,
     CLOUD_SERVER,
-    EVRYTHING_LOCAL
+    EVRYTHING_LOCAL,
+    BNJMO_SERVER
 }
 #endregion
 

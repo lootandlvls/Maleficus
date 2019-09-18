@@ -144,8 +144,15 @@ public class Player : MonoBehaviour, IPlayer
     {
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
 
-        Vector3 movemetVelocity = movingDirection * currentSpeed * 0.1f;
-        transform.position += (movemetVelocity + pushVelocity + GravityVelocity) * Time.deltaTime;
+        Vector3 movementVelocity = movingDirection * currentSpeed * 0.1f;
+        
+        Vector3 finalVelocity = movementVelocity + pushVelocity + GravityVelocity;
+        if (MotherOfManagers.Instance.IsARGame == true)
+        {
+            finalVelocity /= ARManager.Instance.SizeFactor;
+            
+        }
+        transform.localPosition += finalVelocity * Time.deltaTime;
     }
 
     private void Rotate(float axis_X, float axis_Z)
@@ -153,12 +160,25 @@ public class Player : MonoBehaviour, IPlayer
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
         if (axis_X != 0.0f || axis_Z != 0.0f)
         {
-            Vector3 lookDirection = new Vector3(axis_X, 0.0f, -axis_Z).normalized;
-            Vector3 lookAtFictifPosition = transform.position + lookDirection;
-            transform.LookAt(lookAtFictifPosition);
+            RotateRelativeToGrandParentRotation(axis_X, -axis_Z);
         }
     }
 
+    private void LookAtMovingDirection(ControllerInput playerInput)
+    {
+        float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
+        float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
+
+        RotateRelativeToGrandParentRotation(axis_X, axis_Z);
+    }
+
+    private void RotateRelativeToGrandParentRotation(float axis_X, float axis_Z)
+    {
+        Transform myGrandTransform = GetGrandFatherTransfrom();
+        Vector3 newForwardDirection = myGrandTransform.TransformDirection(new Vector3(axis_X, 0.0f, axis_Z));
+        Quaternion newRotation = Quaternion.LookRotation(newForwardDirection, transform.up);
+        transform.rotation = newRotation;
+    }
 
 
     public void StartChargingSpell(ISpell spell, ESpellSlot spellSlot)
@@ -268,8 +288,10 @@ public class Player : MonoBehaviour, IPlayer
 
             // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
             Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-            GameObject wandEffect = Instantiate(chargingWandEnergy, position, chargingBodyEnergy.transform.rotation);
-            GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, chargingBodyEnergy.transform.rotation);
+            GameObject wandEffect = Instantiate(chargingWandEnergy, position, transform.rotation);
+            wandEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+            GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, transform.rotation);
+            bodyEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
             if (MotherOfManagers.Instance.IsARGame == true)
             {
                 wandEffect.transform.localScale *= ARManager.Instance.SizeFactor;
@@ -440,13 +462,7 @@ public class Player : MonoBehaviour, IPlayer
         Destroy(gameObject);
     }
 
-    private void LookAtMovingDirection(ControllerInput playerInput)
-    {
-        float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
-        float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
-        //MaleficusUtilities.TransformAxisToCamera(ref axis_X, ref axis_Z, Camera.main.transform.forward);
-        transform.LookAt(transform.position + new Vector3(axis_X, 0.0f, axis_Z));
-    }
+    
 
     private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)
     {
@@ -456,5 +472,16 @@ public class Player : MonoBehaviour, IPlayer
         }
         enumerator = coroutine;
         StartCoroutine(enumerator);
+    }
+
+    private Transform GetGrandFatherTransfrom()
+    {
+        Transform myGrandParentTransform = transform;
+        while (myGrandParentTransform.parent != null)
+        {
+            myGrandParentTransform = myGrandParentTransform.parent;
+        }
+
+        return myGrandParentTransform;
     }
 }

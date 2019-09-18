@@ -80,6 +80,9 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
                 case EConnectionMode.CLOUD_SERVER:
                     return MaleficusConsts.CLOUD_SERVER_IP;
 
+                case EConnectionMode.BNJMO_SERVER:
+                    return MaleficusConsts.BNJMO_SERVER_IP;
+
                 default:
                     return "0.0.0.0";
             }
