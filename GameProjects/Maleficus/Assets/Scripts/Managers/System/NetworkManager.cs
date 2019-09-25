@@ -306,6 +306,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     }
     private void OnRequestGameInfo(Net_OnRequestGameInfo orgi)
     {
+        Debug.Log("&/(&/(&(/&/(&( M Player ID : " + orgi.ownPlayerId);
         ownClientID = MaleficusUtilities.IntToClientID(orgi.ownPlayerId);
         if (ownClientID == EClientID.NONE)
         {
@@ -333,7 +334,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(ownClientID);
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new Event_AbstractHandle<List<EPlayerID>, EPlayerID>
-            (connectedPlayers, playerID));
+            (connectedPlayers, playerID), EEventInvocationType.LOCAL_ONLY);
     }
     #endregion
 

@@ -337,8 +337,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         if (InputMode == EInputMode.TOUCH)
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+            //EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
+            //EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+
+            EClientID clientID = NetworkManager.Instance.OwnClientID;
+            Debug.Log("moving client ID " + clientID);
 
             EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(touchJoystickType);
             if (inputButton != EInputButton.NONE)
@@ -358,8 +361,10 @@ public class InputManager : AbstractSingletonManager<InputManager>
             && (ControllersInput.ContainsKey(EControllerID.TOUCH))
             && (Mathf.Abs(newInput.x) + Mathf.Abs(newInput.y) > MaleficusConsts.THRESHOLD_JOYSTICK_ACTIVATION))
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+            //EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
+            //EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+
+            EClientID clientID = NetworkManager.Instance.OwnClientID;
 
             // Move joystick
             if (touchJoystickType == ETouchJoystickType.MOVE)
@@ -415,8 +420,10 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if ((InputMode == EInputMode.TOUCH)
             && (ControllersInput.ContainsKey(EControllerID.TOUCH)))
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+            //EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
+            //EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+
+            EClientID clientID = NetworkManager.Instance.OwnClientID;
 
             // Reinitialize Movement and Rotation
             if (touchJoystickType == ETouchJoystickType.MOVE)

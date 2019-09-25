@@ -28,6 +28,8 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
 
     private Vector3 trackerPosition;
     private Vector3 trackerRotation;
+    private Transform trackerTransform;
+
     private bool isImageTracked = false;
 
     protected override void Awake()
@@ -75,10 +77,10 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
                     stagePosition = placedContent.transform.position;
 
                     // Broadcast event only first time both objects tracked
-                    if ((isImageTracked == true) && (isStagePlaced == false))
-                    {
+                    //if ((isImageTracked == true) && (isStagePlaced == false))
+                    //{
                         BroadcastStagePosition();
-                    }
+                    //}
 
                     isStagePlaced = true;
                 }
@@ -116,12 +118,13 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         trackerPosition = trackerTransform.position;
         trackerRotation = trackerTransform.rotation.eulerAngles;
+        this.trackerTransform = trackerTransform; 
 
         // Broadcast event only first time both objects tracked
-        if ((isImageTracked == false) && (isStagePlaced == true))
-        {
+        //if ((isImageTracked == false) && (isStagePlaced == true))
+        //{
             BroadcastStagePosition();
-        }
+        //}
 
         isImageTracked = true;
     }
@@ -214,6 +217,8 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             eventHandle.Y_TrackerToStage,
             eventHandle.Z_TrackerToStage
             );
+        trackerToStage = trackerTransform.TransformDirection(trackerToStage);
+
         Vector3 trackerRotation = new Vector3
             (
             eventHandle.X_TrackerRotation,
@@ -222,7 +227,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
             );
 
         // Update local coordinate
-        this.stagePosition = trackerPosition + trackerToStage;
+        this.stagePosition = augmentedStage.transform.position + trackerToStage;
         this.trackerRotation = trackerRotation;
 
         if (augmentedStage != null)
@@ -235,7 +240,10 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     private void BroadcastStagePosition()
     {
         EClientID clientID = NetworkManager.Instance.OwnClientID;
-        Vector3 trackerToStage = stagePosition - trackerPosition;
+        Vector3 trackerToStage = augmentedStage.transform.position - trackerTransform.position;
+        trackerToStage = trackerTransform.InverseTransformDirection(trackerToStage);
+
+
         NetEvent_ARStagePlaced eventHanlde = new NetEvent_ARStagePlaced(
             clientID,
             trackerRotation.x,

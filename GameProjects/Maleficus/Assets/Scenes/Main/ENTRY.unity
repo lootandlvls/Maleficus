@@ -4454,7 +4454,7 @@ MonoBehaviour:
   IsSpawnAllPlayers: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsARGame: 1
+  IsARGame: 0
   ARPlacementMethod: 2
   EnemiesMovementMethod: 2
   IsDebugLogEvents: 1

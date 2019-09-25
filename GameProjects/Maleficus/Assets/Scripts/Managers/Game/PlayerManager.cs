@@ -110,6 +110,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             if (playerID == ownPlayer)
             {
+                Debug.Log("(/(&/(&(& connecting Touch as : " + ownPlayer);
                 ConnectPlayer(playerID, EControllerID.TOUCH);
             }
             else
@@ -256,8 +257,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (ConnectedPlayers[playerID] == false)
         {
             ConnectedPlayers[playerID] = true;
-            AssignPlayerToTeam(EPlayerID.PLAYER_1, ETeamID.TEAM_1);
+            AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
             playerControllerMapping[playerID] = controllerID;
+
+            Debug.Log("(&/(&/( Connecting : " + playerID + " to " + controllerID);
+            Debug.Log("/%&/&%/ Own Player ID " + NetworkManager.Instance.OwnPlayerID);
 
             InputManager.Instance.ConnectController(controllerID);
 
@@ -268,7 +272,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             {
                 SpawnPlayer(EPlayerID.PLAYER_1);
             }
-
+            
         }
     }
 

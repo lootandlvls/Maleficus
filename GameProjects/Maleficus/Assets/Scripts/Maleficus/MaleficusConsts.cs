@@ -72,7 +72,7 @@ public static class MaleficusConsts
     // Input
     public const float THRESHOLD_JOYSTICK_ACTIVATION = 0.2f;
     public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.3f;
-    public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.05f;
+    public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.2f;
 
     public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
 
