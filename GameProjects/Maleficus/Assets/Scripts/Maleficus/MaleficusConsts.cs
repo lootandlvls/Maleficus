@@ -57,7 +57,7 @@ public static class MaleficusConsts
     public const int BYTE_SIZE = 1024;
     public const string LOCAL_SERVER_IP = "127.0.0.1";
     public const string CLOUD_SERVER_IP = "83.171.237.227";
-    public const string BNJMO_SERVER_IP = "192.168.1.40";
+    public const string BNJMO_SERVER_IP = "192.168.137.1";
     public const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
     public const float GAME_STATE_UPDATE_FREQUENCY = 1.0f;
 
