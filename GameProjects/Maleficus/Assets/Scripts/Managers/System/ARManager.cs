@@ -118,7 +118,9 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     {
         trackerPosition = trackerTransform.position;
         trackerRotation = trackerTransform.rotation.eulerAngles;
-        this.trackerTransform = trackerTransform; 
+        this.trackerTransform = trackerTransform;
+
+        augmentedStage.transform.rotation = trackerTransform.rotation;
 
         // Broadcast event only first time both objects tracked
         //if ((isImageTracked == false) && (isStagePlaced == true))

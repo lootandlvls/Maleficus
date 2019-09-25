@@ -4448,7 +4448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsServer: 0
-  ConnectionMode: 0
+  ConnectionMode: 3
   InputMode: 2
   IsSpawnPlayerOnConnect: 0
   IsSpawnAllPlayers: 0

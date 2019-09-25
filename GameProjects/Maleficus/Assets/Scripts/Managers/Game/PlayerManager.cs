@@ -110,7 +110,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             if (playerID == ownPlayer)
             {
-                Debug.Log("(/(&/(&(& connecting Touch as : " + ownPlayer);
                 ConnectPlayer(playerID, EControllerID.TOUCH);
             }
             else
