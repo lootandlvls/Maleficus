@@ -242,6 +242,7 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     private void BroadcastStagePosition()
     {
         EClientID clientID = NetworkManager.Instance.OwnClientID;
+
         Vector3 trackerToStage = augmentedStage.transform.position - trackerTransform.position;
         trackerToStage = trackerTransform.InverseTransformDirection(trackerToStage);
 

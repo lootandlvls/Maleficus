@@ -14266,7 +14266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 20
+  hitPower: 24
   speed: 800
   spellName: FireBall_lvl_2
   spellLevel: 2
@@ -14293,7 +14293,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.6882646
+  m_Radius: 1.3
   m_Center: {x: 0.069638014, y: 0.101252556, z: 0}
 --- !u!1 &9020541765673529008
 GameObject:

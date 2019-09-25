@@ -10,7 +10,7 @@ public class AOE : AbstractSpell
     void Start()
     {
        
-        OnExplosionEnter( transform.position, 7f * ARManager.Instance.SizeFactor);
+        OnExplosionEnter( transform.position, 10f * ARManager.Instance.SizeFactor);
     }
 
     // Update is called once per frame

@@ -1094,8 +1094,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a188a9e6bfa11c4898cbe9d88878fb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userName: BNJMO#0000
-  password: SSSsss69!
+  userName: bbbb#0000
+  password: bbbB123#
 --- !u!114 &362527120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4454,7 +4454,7 @@ MonoBehaviour:
   IsSpawnAllPlayers: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsARGame: 0
+  IsARGame: 1
   ARPlacementMethod: 2
   EnemiesMovementMethod: 2
   IsDebugLogEvents: 1

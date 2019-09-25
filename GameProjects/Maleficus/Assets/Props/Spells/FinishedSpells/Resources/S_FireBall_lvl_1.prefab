@@ -4851,7 +4851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 11
+  hitPower: 19
   speed: 800
   spellName: FireBall_lvl_
   spellLevel: 1
@@ -9564,7 +9564,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 0.8
+  m_Radius: 1.3
   m_Height: 0.8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0.1}
