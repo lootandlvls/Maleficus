@@ -31,6 +31,8 @@ public class ServerManager : NetworkManager
 
     private IEnumerator UpdateGameStateEnumerator;
 
+    private bool isLobbyInitialized = false;
+
     #region Monobehaviour
     public override void OnSceneStartReinitialize()
     {
@@ -166,7 +168,11 @@ public class ServerManager : NetworkManager
                 break;
 
             case ENetMessageID.INIT_LOBBY:
-                InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)netMessage);
+                if (isLobbyInitialized == false)
+                {
+                    InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)netMessage);
+                    isLobbyInitialized = true;
+                }
                 break;
 
             case ENetMessageID.REQUEST_GAME_SESSION_INFO:
@@ -177,7 +183,7 @@ public class ServerManager : NetworkManager
             case ENetMessageID.AR_STAGE_PLACED:
                 NetEvent_ARStagePlaced arStageMessage = (NetEvent_ARStagePlaced)netMessage;
                 EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage, EEventInvocationType.LOCAL_ONLY);
-                BroadcastMessageToAllClients(arStageMessage, true);
+                //BroadcastMessageToAllClients(arStageMessage, true);
                 break;
 
                 // Disconnect event
@@ -389,13 +395,14 @@ public class ServerManager : NetworkManager
             {
                 players.Add(EPlayerID.PLAYER_2);
                 Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
-                connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);
+                connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);         // INVERTED!!!
             }
             if (thislobby.Team3 != null)
             {
+                Debug.Log("Adding fucking player 3");
                 players.Add(EPlayerID.PLAYER_3);
                 Model_Account player3 = dataBank.FindAccountByObjectId(thislobby.Team3[0]);
-                connectedPlayers.Add(EClientID.CLIENT_3, player3.ActiveConnection);
+                connectedPlayers.Add(EClientID.CLIENT_3, player3.ActiveConnection);         // INVERTED!!!
             }
             if (thislobby.Team4 != null)
             {
@@ -427,9 +434,22 @@ public class ServerManager : NetworkManager
 
         // send all lobby members the message that the game can start now
         // Todo change so different game modes can be initialized
-        SendClient(recHostId, cnnId, oil);
+
+        //SendClient(recHostId, cnnId, oil);
 
         Debug.Log("trying to send second client");
+
+
+        if ((lobby.Team1 != null) && (lobby.Team1.Count != 0))
+        {
+            Model_Account player1 = dataBank.FindAccountByObjectId(lobby.Team1[0]);
+            if (player1 != null)
+            {
+                Debug.Log("trying to send second client " + player1.ActiveConnection);
+                dataBank.UpdateAccountInLobby(player1._id, lobby._id);
+                SendClient(recHostId, player1.ActiveConnection, oil);
+            }
+        }
 
         if ((lobby.Team2 != null) && (lobby.Team2.Count != 0))
         {
@@ -566,18 +586,26 @@ public class ServerManager : NetworkManager
         {
             yield return new WaitForSeconds(MaleficusConsts.GAME_STATE_UPDATE_FREQUENCY);
 
-            foreach (EPlayerID activePlayerID in PlayerManager.Instance.ActivePlayers.Keys)
+            foreach (EPlayerID connectedPlayerIDj in PlayerManager.Instance.ConnectedPlayers.Keys)
             {
-                foreach (EPlayerID connectedPlayerID in connectedPlayers.Keys)
+                foreach (EPlayerID activePlayerIDi in PlayerManager.Instance.ConnectedPlayers.Keys)
                 {
-                    playerPosition[0] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.x;
-                    playerPosition[1] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.y;
-                    playerPosition[2] = PlayerManager.Instance.ActivePlayers[activePlayerID].transform.localPosition.z;
-                    NetEvent_GameStateReplicate msg_gameState = new NetEvent_GameStateReplicate(EClientID.SERVER, activePlayerID, playerPosition);
+                    if (PlayerManager.Instance.ActivePlayers.ContainsKey(activePlayerIDi))
+                    {
+                        Debug.Log("Updating player : " + activePlayerIDi + " for player : " + connectedPlayerIDj);
+                        playerPosition[0] = PlayerManager.Instance.ActivePlayers[activePlayerIDi].transform.localPosition.x;
+                        playerPosition[1] = PlayerManager.Instance.ActivePlayers[activePlayerIDi].transform.localPosition.y;
+                        playerPosition[2] = PlayerManager.Instance.ActivePlayers[activePlayerIDi].transform.localPosition.z;
+                        NetEvent_GameStateReplicate msg_gameState = new NetEvent_GameStateReplicate(EClientID.SERVER, activePlayerIDi, playerPosition);
 
-                    EClientID updatedClientID = MaleficusUtilities.GetClientIDFrom(connectedPlayerID);
-                    SendClient(0, connectedPlayers[updatedClientID], msg_gameState);
-                    yield return new WaitForSeconds(0.2f);
+                        EClientID updatedClientID = MaleficusUtilities.GetClientIDFrom(connectedPlayerIDj);
+                        Debug.Log("Sending game replication to client : " + updatedClientID);
+                        if (connectedPlayers.ContainsKey(updatedClientID))
+                        {
+                            SendClient(0, connectedPlayers[updatedClientID], msg_gameState);
+                        }
+                        yield return new WaitForSeconds(0.2f);
+                    }
                 }
             }
         }

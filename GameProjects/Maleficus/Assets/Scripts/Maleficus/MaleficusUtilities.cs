@@ -537,15 +537,15 @@ public static class MaleficusUtilities
                 break;
 
             case EPlayerID.PLAYER_2:
-                id = EClientID.CLIENT_1;
+                id = EClientID.CLIENT_2;
                 break;
 
             case EPlayerID.PLAYER_3:
-                id = EClientID.CLIENT_1;
+                id = EClientID.CLIENT_3;
                 break;
 
             case EPlayerID.PLAYER_4:
-                id = EClientID.CLIENT_1;
+                id = EClientID.CLIENT_4;
                 break;
         }
         return id;

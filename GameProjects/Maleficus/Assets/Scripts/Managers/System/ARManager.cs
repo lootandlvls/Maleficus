@@ -213,28 +213,31 @@ public class ARManager : AbstractSingletonManagerWithStateMachine<ARManager, EAR
     #region NETWORK
     private void On_AR_ARStagePlaced(NetEvent_ARStagePlaced eventHandle)
     {
-        Vector3 trackerToStage = new Vector3
-            (
-            eventHandle.X_TrackerToStage,
-            eventHandle.Y_TrackerToStage,
-            eventHandle.Z_TrackerToStage
-            );
-        trackerToStage = trackerTransform.TransformDirection(trackerToStage);
-
-        Vector3 trackerRotation = new Vector3
-            (
-            eventHandle.X_TrackerRotation,
-            eventHandle.Y_TrackerRotation,
-            eventHandle.Z_TrackerRotation
-            );
-
-        // Update local coordinate
-        this.stagePosition = augmentedStage.transform.position + trackerToStage;
-        this.trackerRotation = trackerRotation;
-
-        if (augmentedStage != null)
+        if (MotherOfManagers.Instance.IsARGame == true)
         {
-            augmentedStage.transform.position = stagePosition;
+            Vector3 trackerToStage = new Vector3
+                (
+                eventHandle.X_TrackerToStage,
+                eventHandle.Y_TrackerToStage,
+                eventHandle.Z_TrackerToStage
+                );
+            trackerToStage = trackerTransform.TransformDirection(trackerToStage);
+
+            Vector3 trackerRotation = new Vector3
+                (
+                eventHandle.X_TrackerRotation,
+                eventHandle.Y_TrackerRotation,
+                eventHandle.Z_TrackerRotation
+                );
+
+            // Update local coordinate
+            this.stagePosition = augmentedStage.transform.position + trackerToStage;
+            this.trackerRotation = trackerRotation;
+
+            if (augmentedStage != null)
+            {
+                augmentedStage.transform.position = stagePosition;
+            }
         }
     }
 
