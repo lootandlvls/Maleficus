@@ -99,39 +99,46 @@ public class ServerManager : NetworkManager
         byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
         int dataSize;
 
-        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
-        switch (type)
+
+        bool isContinue = true;
+        while (isContinue)
         {
-            case NetworkEventType.Nothing:
-                break;
+            NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
+            switch (type)
+            {
+                case NetworkEventType.Nothing:
+                    isContinue = false;
+                    break;
 
-            case NetworkEventType.ConnectEvent:
-                if (recHostId != 2)
-                {
-                    Debug.Log(string.Format("User {0} has connected through host {1}!", connectionId, recHostId));
-                }
-                else
-                {
-                    Debug.Log(string.Format("The Instance Manager has connected through host {0}!", recHostId));
-                }
-                break;
+                case NetworkEventType.ConnectEvent:
+                    if (recHostId != 2)
+                    {
+                        Debug.Log(string.Format("User {0} has connected through host {1}!", connectionId, recHostId));
+                    }
+                    else
+                    {
+                        Debug.Log(string.Format("The Instance Manager has connected through host {0}!", recHostId));
+                    }
+                    break;
 
-            case NetworkEventType.DisconnectEvent:
-                DisconnectEvent(recHostId, connectionId);
-                break;
+                case NetworkEventType.DisconnectEvent:
+                    DisconnectEvent(recHostId, connectionId);
+                    break;
 
-            case NetworkEventType.DataEvent:
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
-                MemoryStream ms = new MemoryStream(recBuffer);
-                AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
-                OnData(connectionId, channelId, recHostId, msg);
-                break;
+                case NetworkEventType.DataEvent:
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
+                    MemoryStream ms = new MemoryStream(recBuffer);
+                    AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
+                    OnData(connectionId, channelId, recHostId, msg);
+                    break;
 
-            default:
-            case NetworkEventType.BroadcastEvent:
-                Debug.Log("Unexpected network event type");
-                break;
+                default:
+                case NetworkEventType.BroadcastEvent:
+                    Debug.Log("Unexpected network event type");
+                    break;
+            }
         }
+        
 
     }
 
