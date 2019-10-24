@@ -116,32 +116,41 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
         int dataSize;
 
-        NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
-        switch (type)
+        bool isContinue = true;
+        while (isContinue)
         {
-            case NetworkEventType.ConnectEvent:
-                Debug.Log("Connected to server");
-                UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
-                Net_Connected c = new Net_Connected();
-                AllReceivedMsgs.Add(c);
-                break;
+            NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
+            switch (type)
+            {
+                case NetworkEventType.ConnectEvent:
+                    Debug.Log("Connected to server");
+                    UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
+                    Net_Connected c = new Net_Connected();
+                    AllReceivedMsgs.Add(c);
+                    break;
 
-            case NetworkEventType.DisconnectEvent:
-                Debug.Log("Disconnected from server");
-                UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
-                Net_Disonnected di = new Net_Disonnected();
-                AllReceivedMsgs.Add(di);
-                break;
+                case NetworkEventType.DisconnectEvent:
+                    Debug.Log("Disconnected from server");
+                    UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
+                    Net_Disonnected di = new Net_Disonnected();
+                    AllReceivedMsgs.Add(di);
+                    break;
 
-            case NetworkEventType.DataEvent:
-                UpdateReceivedMessage(ENetworkMessageType.DATA);
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
-                MemoryStream ms = new MemoryStream(recBuffer);
-                AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
+                case NetworkEventType.DataEvent:
+                    UpdateReceivedMessage(ENetworkMessageType.DATA);
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
+                    MemoryStream ms = new MemoryStream(recBuffer);
+                    AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
 
-                OnData(connectionId, channelId, recHostId, msg);
-                break;
+                    OnData(connectionId, channelId, recHostId, msg);
+                    break;
+
+                case NetworkEventType.Nothing:
+                    isContinue = false;
+                    break;
+            }
         }
+        
     }
 
     #region OnData
