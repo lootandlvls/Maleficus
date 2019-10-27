@@ -73,7 +73,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         Debug.Log("Teleportation spell executed");
 
-        ControllerInput playerInput = PlayerManager.Instance.GetPlayerInput(castingPlayerID);
+        JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(castingPlayerID);
 
         float InputH = playerInput.JoystickValues[EInputAxis.MOVE_X];
         float InputV = playerInput.JoystickValues[EInputAxis.MOVE_Y];

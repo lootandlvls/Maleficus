@@ -21,7 +21,7 @@ public enum EAppState
     IN_ENTRY_IN_LOGIN,
     IN_ENTRY_IN_LOADING,
     IN_MENU_IN_MAIN,
-    IN_MENU_IN_CONNECTING_PLAYERS,
+    IN_MENU_IN_CONNECTING_GAMEPADS,
     IN_MENU_IN_LOGING_IN,
     IN_MENU_IN_SHOP,
     IN_MENU_IN_STARTING_GAME,
@@ -256,11 +256,11 @@ public enum EJoystickState
     SELECTED_CANNOT_TRIGGER_BUTTON
 }
 
-public class ControllerInput
+public class JoystickInput
 {
     public Dictionary<EInputAxis, float> JoystickValues = new Dictionary<EInputAxis, float>();
 
-    public ControllerInput()
+    public JoystickInput()
     {
         Flush();
     }

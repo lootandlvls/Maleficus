@@ -27,10 +27,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     /// <summary> Assigned team of every player </summary>
     public Dictionary<EPlayerID, ETeamID>               PlayersTeam                 { get { return playersTeam; } }
 
+    /// <summary> Joysticks inputs for every player (movement, rotation). </summary>
+    public Dictionary<EPlayerID, JoystickInput>         PlayersMovement             { get { return playersMovement; } }
 
 
-    /// <summary> Mapping from controllerID to playerID </summary> 
-    private Dictionary<EPlayerID, EControllerID>        playerControllerMapping     = new Dictionary<EPlayerID, EControllerID>();
 
     private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
     private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnPositions       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
@@ -38,6 +38,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
     private Dictionary<ETeamID, List<EPlayerID>>        teams                       = new Dictionary<ETeamID, List<EPlayerID>>();
     private Dictionary<EPlayerID, ETeamID>              playersTeam                 = new Dictionary<EPlayerID, ETeamID>();
+    private Dictionary<EPlayerID, JoystickInput>        playersMovement             = new Dictionary<EPlayerID, JoystickInput>();
 
 
     protected override void Awake()
@@ -54,16 +55,20 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
         // Input events
+        EventManager.Instance.INPUT_ControllerConnected.AddListener             (On_INPUT_ControllerConnected);            
+        EventManager.Instance.INPUT_ControllerDisconnected.AddListener          (On_INPUT_ControllerDisconnected);            
         EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
         EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
         //EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
+        // Listen to broadcasted inputs 
+        EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_SERVER_INPUT_JoystickMoved);
 
         // Scene changed event
         EventManager.Instance.APP_SceneChanged.AddListener                      (On_APP_SceneChanged);
         EventManager.Instance.APP_AppStateUpdated.AddListener                   (On_APP_AppStateUpdated);
 
         //Network
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
+        //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
         EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
         EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
 
@@ -72,17 +77,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         StartCoroutine(LateStartCoroutine());
     }
 
- 
+    
+
+    
 
     private IEnumerator LateStartCoroutine()
     {
         yield return new WaitForEndOfFrame();
 
-        // Connect Touch player as first player
-        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH) && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true) && (playerControllerMapping.ContainsValue(EControllerID.TOUCH) == false))
-        {
-            ConnectPlayer(EPlayerID.PLAYER_1, EControllerID.TOUCH);
-        }
+
 
         if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
             && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
@@ -97,27 +100,28 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void Update()
     {
         //UpdateControllersInput();
+
     }
 
 
-    private void On_NETWORK_ReceivedGameSessionInfo(Event_AbstractHandle<List<EPlayerID>, EPlayerID> eventHandle)
-    {
-        List<EPlayerID> connectedPlayers = eventHandle.Arg1;
-        EPlayerID ownPlayer = eventHandle.Arg2;
+    //private void On_NETWORK_ReceivedGameSessionInfo(Event_GenericHandle<List<EPlayerID>, EPlayerID> eventHandle)
+    //{
+    //    List<EPlayerID> connectedPlayers = eventHandle.Arg1;
+    //    EPlayerID ownPlayer = eventHandle.Arg2;
 
-        // Connect and spawn player
-        foreach (EPlayerID playerID in connectedPlayers)
-        {
-            if (playerID == ownPlayer)
-            {
-                ConnectPlayer(playerID, EControllerID.TOUCH);
-            }
-            else
-            {
-                ConnectPlayer(playerID, MaleficusUtilities.GetControllerNeteworkID(playerID));
-            }
-        }
-    }
+    //    // Connect and spawn player
+    //    foreach (EPlayerID playerID in connectedPlayers)
+    //    {
+    //        if (playerID == ownPlayer)
+    //        {
+    //            ConnectPlayer(playerID, EControllerID.TOUCH);
+    //        }
+    //        else
+    //        {
+    //            ConnectPlayer(playerID, MaleficusUtilities.GetControllerNeteworkID(playerID));
+    //        }
+    //    }
+    //}
 
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplicate eventHandle)
     {
@@ -211,60 +215,75 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // TODO: Implement removing player from team
     }
 
-    /// <summary>
-    /// Connect new player to a free spot
-    /// </summary>
-    /// <returns> The ID of the connected player </returns>
-    public EPlayerID ConnectNextPlayerToController(EControllerID controllerID)
-    {
-        EPlayerID playerIDToConnect = EPlayerID.NONE;
+    ///// <summary>
+    ///// Connect new player to a free spot
+    ///// </summary>
+    ///// <returns> The ID of the connected player </returns>
+    //public EPlayerID ConnectNextPlayerToController(EControllerID controllerID)
+    //{
+    //    EPlayerID playerIDToConnect = EPlayerID.NONE;
 
-        // Look for a free slot to connect player
+    //    // Look for a free slot to connect player
+    //    foreach (EPlayerID playerID in connectedPlayers.Keys)
+    //    {
+    //        if (ConnectedPlayers[playerID] == false)
+    //        {
+    //            ConnectedPlayers[playerID] = true;
+    //            AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
+    //            playerIDToConnect = playerID;
+    //            playerControllerMapping[playerID] = controllerID;
+    //            break;         
+    //        }
+    //    }
+
+    //    if (playerIDToConnect != EPlayerID.NONE)
+    //    {
+    //        //EventManager.Instance.Invoke_PLAYERS_PlayerConnected(playerIDToConnect);
+
+    //        if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
+    //            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
+    //        {
+    //            SpawnPlayer(playerIDToConnect);
+    //        }
+
+    //        return playerIDToConnect;
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Can't connect new player. All 4 players are already connected");
+    //        return 0;
+    //    }
+    //}
+
+    /// <summary>
+    /// Looks for the next possibe free slot of a PlayerID
+    /// </summary>
+    /// <returns> The ID of the PlayerID free spot (NONE if none found)</returns>
+    public EPlayerID GetNextFreePlayerID()
+    {
+        EPlayerID result = EPlayerID.NONE;
         foreach (EPlayerID playerID in connectedPlayers.Keys)
         {
             if (ConnectedPlayers[playerID] == false)
             {
-                ConnectedPlayers[playerID] = true;
-                AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
-                playerIDToConnect = playerID;
-                playerControllerMapping[playerID] = controllerID;
-                continue;
+                result = playerID;
+                break;
             }
         }
-
-        if (playerIDToConnect != EPlayerID.NONE)
-        {
-            EventManager.Instance.Invoke_PLAYERS_PlayerConnected(playerIDToConnect);
-
-            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
-                && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
-            {
-                SpawnPlayer(playerIDToConnect);
-            }
-
-            return playerIDToConnect;
-        }
-        else
-        {
-            Debug.Log("Can't connect new player. All 4 players are already connected");
-            return 0;
-        }
+        return result;
     }
 
-    private void ConnectPlayer(EPlayerID playerID, EControllerID controllerID)
+    private void ConnectPlayer(EPlayerID playerID)
     {
         if (ConnectedPlayers[playerID] == false)
         {
             ConnectedPlayers[playerID] = true;
             AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
-            playerControllerMapping[playerID] = controllerID;
 
-            Debug.Log("(&/(&/( Connecting : " + playerID + " to " + controllerID);
-            Debug.Log("/%&/&%/ Own Player ID " + NetworkManager.Instance.OwnPlayerID);
+            //// Controller mapping
+            //playerControllerMapping[playerID] = controllerID;
 
-            InputManager.Instance.ConnectController(controllerID);
-
-            // Debug Spawn player
+            // Spawn player On Connect?
             if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
                 && (ActivePlayers.ContainsKey(playerID) == false)
                 && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
@@ -275,13 +294,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    public void DisconnectPlayer(EControllerID controllerID)
+    public void DisconnectPlayerWithController(EControllerID controllerID)
     {
         EPlayerID playerID = GetPlayerIDFrom(controllerID);
 
         if (IsPlayerConnected(playerID) == true)
         {
-            EventManager.Instance.Invoke_PLAYERS_PlayerDisconnected(playerID);
+            //EventManager.Instance.Invoke_PLAYERS_PlayerDisconnected(playerID);
             ConnectedPlayers[playerID] = false;
             InputManager.Instance.DisconnectController(controllerID);
         }
@@ -297,7 +316,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         foreach (EPlayerID playerID in temp)
         {
             EControllerID controllerID = GetControllerFrom(playerID);
-            DisconnectPlayer(controllerID);
+            DisconnectPlayerWithController(controllerID);
         }
     }
 
@@ -373,13 +392,38 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    
 
-    
+    private void On_SERVER_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
+    {
+        EJoystickType joystickType = eventHandle.JoystickType;
+        float joystick_X = eventHandle.Joystick_X;
+        float joystick_Y = eventHandle.Joystick_Y;
+        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EControllerID controllerID = GetControllerFrom(playerID);
+
+        if ((controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS))
+        || (controllerID == EControllerID.TOUCH))
+        {
+            if (joystickType == EJoystickType.MOVEMENT)
+            {
+                PlayersMovement[playerID].JoystickValues[EInputAxis.MOVE_X] = joystick_X;
+                PlayersMovement[playerID].JoystickValues[EInputAxis.MOVE_Y] = joystick_Y;
+            }
+            else if (joystickType == EJoystickType.ROTATION)
+            {
+                PlayersMovement[playerID].JoystickValues[EInputAxis.ROTATE_X] = joystick_X;
+                PlayersMovement[playerID].JoystickValues[EInputAxis.ROTATE_Y] = joystick_Y;
+            }
+        }
+    }
+
+
+
+
     #endregion
 
     #region Events Callbacks
-    private void On_APP_SceneChanged(Event_AbstractHandle<EScene> eventHandle)
+    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {
         EScene newScene = eventHandle.Arg1;
         if (newScene.ContainedIn(MaleficusConsts.GAME_SCENES))
@@ -485,15 +529,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return false;
     }
 
-    public ControllerInput GetPlayerInput(EPlayerID playerID)
+    public JoystickInput GetPlayerInput(EPlayerID playerID)
     {
-        if (playerControllerMapping.ContainsKey(playerID) == false)
+        if (PlayersMovement.ContainsKey(playerID) == false)
         {
-            return new ControllerInput();
+            return null;
         }
-        EControllerID controllerID = playerControllerMapping[playerID];
 
-        return InputManager.Instance.ControllersInput[controllerID];
+        return PlayersMovement[playerID];
     }
 
     public bool IsPlayerActive(EPlayerID playerID)
@@ -537,28 +580,38 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    public EPlayerID GetPlayerIDFrom(EControllerID controllerID)
+    //public EPlayerID GetPlayerIDFrom(EControllerID controllerID)
+    //{
+    //    EPlayerID result = EPlayerID.NONE;
+    //    foreach (EPlayerID playerID in playerControllerMapping.Keys)
+    //    {
+    //        if (controllerID == playerControllerMapping[playerID])
+    //        {
+    //            result = playerID;
+    //        }
+    //    }
+    //    return result;
+    //}
+
+    //public EControllerID GetControllerFrom(EPlayerID playerID)
+    //{
+    //    if (playerControllerMapping.ContainsKey(playerID))
+    //    {
+    //        return playerControllerMapping[playerID];
+    //    }
+    //    return EControllerID.NONE;
+    //}
+
+
+    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHande)
     {
-        EPlayerID result = EPlayerID.NONE;
-        foreach (EPlayerID playerID in playerControllerMapping.Keys)
-        {
-            if (controllerID == playerControllerMapping[playerID])
-            {
-                result = playerID;
-            }
-        }
-        return result;
+        
     }
 
-    public EControllerID GetControllerFrom(EPlayerID playerID)
+    private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHande)
     {
-        if (playerControllerMapping.ContainsKey(playerID))
-        {
-            return playerControllerMapping[playerID];
-        }
-        return EControllerID.NONE;
+        throw new NotImplementedException();
     }
-
 
     private void UpdateControllersInput()
     {

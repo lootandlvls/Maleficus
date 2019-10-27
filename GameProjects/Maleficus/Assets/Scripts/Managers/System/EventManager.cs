@@ -12,16 +12,20 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     }
 
-    public MaleficusEvent<TestEventHandle> TEST_TestEvent = new MaleficusEvent<TestEventHandle>("TEST_TestEvent");
+    public MaleficusEvent<TestEventHandle> TEST_TestEvent 
+        = new MaleficusEvent<TestEventHandle>("TEST_TestEvent");
 
 
     #region APP
 
-    public MaleficusEvent<Event_StateUpdated<EAppState>> APP_AppStateUpdated = new MaleficusEvent<Event_StateUpdated<EAppState>>("APP_AppStateUpdated");
+    public MaleficusEvent<Event_StateUpdated<EAppState>> APP_AppStateUpdated 
+        = new MaleficusEvent<Event_StateUpdated<EAppState>>("APP_AppStateUpdated");
 
-    public MaleficusEvent<Event_AbstractHandle<EScene>> APP_SceneWillChange = new MaleficusEvent<Event_AbstractHandle<EScene>>("APP_SceneWillChange");
+    public MaleficusEvent<Event_GenericHandle<EScene>> APP_SceneWillChange 
+        = new MaleficusEvent<Event_GenericHandle<EScene>>("APP_SceneWillChange");
 
-    public MaleficusEvent<Event_AbstractHandle<EScene>> APP_SceneChanged = new MaleficusEvent<Event_AbstractHandle<EScene>>("APP_SceneChanged");
+    public MaleficusEvent<Event_GenericHandle<EScene>> APP_SceneChanged 
+        = new MaleficusEvent<Event_GenericHandle<EScene>>("APP_SceneChanged");
 
 
     #endregion
@@ -78,30 +82,12 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
     }
 
-    public MaleficusEvent<NetEvent_GameOver> GAME_GameOver = new MaleficusEvent<NetEvent_GameOver>("Game_GameOver");
+    public MaleficusEvent<NetEvent_GameOver> GAME_GameOver 
+        = new MaleficusEvent<NetEvent_GameOver>("Game_GameOver");
 
     #endregion
 
     #region PLAYERS
-    public event Action<EPlayerID> PLAYERS_PlayerConnected;
-    public void Invoke_PLAYERS_PlayerConnected(EPlayerID playerID)
-    {
-        if (PLAYERS_PlayerConnected != null)
-        {
-            PLAYERS_PlayerConnected.Invoke(playerID);
-        }
-        DebugLog(playerID + " connected");
-    }
-
-    public event Action<EPlayerID> PLAYERS_PlayerDisconnected;
-    public void Invoke_PLAYERS_PlayerDisconnected(EPlayerID playerID)
-    {
-        if (PLAYERS_PlayerDisconnected != null)
-        {
-            PLAYERS_PlayerDisconnected.Invoke(playerID);
-        }
-        DebugLog(playerID + " disconnected");
-    }
 
     public event Action<EPlayerID> PLAYERS_PlayerSpawned;
     public void Invoke_PLAYERS_PlayerSpawned(EPlayerID playerID)
@@ -202,11 +188,20 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #region INPUT
 
-    public MaleficusEvent<NetEvent_ButtonPressed> INPUT_ButtonPressed = new MaleficusEvent<NetEvent_ButtonPressed>("INPUT_ButtonPressed");
+    public MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>> INPUT_ControllerConnected
+        = new MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>>("INPUT_ControllerConnected");
 
-    public MaleficusEvent<NetEvent_ButtonReleased> INPUT_ButtonReleased = new MaleficusEvent<NetEvent_ButtonReleased>("INPUT_ButtonReleased");
+    public MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>> INPUT_ControllerDisconnected
+        = new MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>>("INPUT_ControllerDisconnected");
 
-    public MaleficusEvent<NetEvent_JoystickMoved> INPUT_JoystickMoved = new MaleficusEvent<NetEvent_JoystickMoved>("INPUT_JoystickMoved");
+    public MaleficusEvent<NetEvent_ButtonPressed> INPUT_ButtonPressed 
+        = new MaleficusEvent<NetEvent_ButtonPressed>("INPUT_ButtonPressed");
+
+    public MaleficusEvent<NetEvent_ButtonReleased> INPUT_ButtonReleased 
+        = new MaleficusEvent<NetEvent_ButtonReleased>("INPUT_ButtonReleased");
+
+    public MaleficusEvent<NetEvent_JoystickMoved> INPUT_JoystickMoved 
+        = new MaleficusEvent<NetEvent_JoystickMoved>("INPUT_JoystickMoved");
 
 
     #endregion
@@ -222,12 +217,15 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Client received Message: " + receivedMsg);
     }
 
-    public MaleficusEvent<Event_AbstractHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo = new MaleficusEvent<Event_AbstractHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
+    public MaleficusEvent<Event_GenericHandle<List<EPlayerID>, EPlayerID>> NETWORK_ReceivedGameSessionInfo 
+        = new MaleficusEvent<Event_GenericHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
 
     /// <summary> Event to restore the game state in case of lost connection </summary>
-    public MaleficusEvent<NetEvent_GameStateReplicate> NETWORK_GameStateReplicate = new MaleficusEvent<NetEvent_GameStateReplicate>("NETWORK_GameStateReplicate") ;
+    public MaleficusEvent<NetEvent_GameStateReplicate> NETWORK_GameStateReplicate 
+        = new MaleficusEvent<NetEvent_GameStateReplicate>("NETWORK_GameStateReplicate") ;
 
-    public MaleficusEvent<NetEvent_GameStarted> NETWORK_GameStarted = new MaleficusEvent<NetEvent_GameStarted>("NETWORK_GameStarted");
+    public MaleficusEvent<NetEvent_GameStarted> NETWORK_GameStarted 
+        = new MaleficusEvent<NetEvent_GameStarted>("NETWORK_GameStarted");
 
     #endregion
 
@@ -271,10 +269,12 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #region AR
 
-    public MaleficusEvent<Event_StateUpdated<EARState>> AR_ARStateUpdated = new MaleficusEvent<Event_StateUpdated<EARState>>("AR_ARStateUpdated");
+    public MaleficusEvent<Event_StateUpdated<EARState>> AR_ARStateUpdated 
+        = new MaleficusEvent<Event_StateUpdated<EARState>>("AR_ARStateUpdated");
 
 
-    public MaleficusEvent<NetEvent_ARStagePlaced> AR_ARStagePlaced = new MaleficusEvent<NetEvent_ARStagePlaced>("AR_ARStagePlayed");
+    public MaleficusEvent<NetEvent_ARStagePlaced> AR_ARStagePlaced 
+        = new MaleficusEvent<NetEvent_ARStagePlaced>("AR_ARStagePlayed");
 
     #endregion
 

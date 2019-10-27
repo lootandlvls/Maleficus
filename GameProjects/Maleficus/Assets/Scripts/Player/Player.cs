@@ -96,7 +96,7 @@ public class Player : MonoBehaviour, IPlayer
     {
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            ControllerInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
+            JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
 
             float Move_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
             float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
@@ -164,7 +164,7 @@ public class Player : MonoBehaviour, IPlayer
         }
     }
 
-    private void LookAtMovingDirection(ControllerInput playerInput)
+    private void LookAtMovingDirection(JoystickInput playerInput)
     {
         float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
         float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];

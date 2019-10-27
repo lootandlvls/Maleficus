@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
+    public event Action<ETouchJoystickType> TouchJoystickPressed;
+    public event Action<ETouchJoystickType, Vector2> TouchJoystickMoved;
+    public event Action<ETouchJoystickType> TouchJoystickReleased;
+
 
     public ETouchJoystickType JoystickType      { get { return joystickType; } }
     public float Horizontal                     { get { return (snapX) ? SnapFloat(input.x, EJoystickAxisRestriction.HORIZONTAL) : input.x; } }
@@ -87,7 +92,10 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     {
         if ((Vertical != 0.0f) || (Horizontal != 0.0f))
         {
-            InputManager.Instance.OnTouchJoystickMoved(new Vector2(Horizontal, Vertical), joystickType);
+            if (TouchJoystickMoved != null)
+            {
+                TouchJoystickMoved.Invoke(joystickType, new Vector2(Horizontal, Vertical));
+            }
         }
     }
 
@@ -98,7 +106,10 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
             background.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
         }
 
-        InputManager.Instance.OnTouchJoystickPressed(joystickType);
+        if (TouchJoystickPressed != null)
+        {
+            TouchJoystickPressed.Invoke(joystickType);
+        }
         
         OnDrag(eventData);
 
@@ -144,9 +155,10 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     {
         background.anchoredPosition = fixedPosition;
 
-
-        InputManager.Instance.OnTouchJoystickReleased(joystickType);
-        
+        if (TouchJoystickReleased != null)
+        {
+            TouchJoystickReleased.Invoke(joystickType);
+        }
 
         input = Vector2.zero;
         handle.anchoredPosition = Vector2.zero;
