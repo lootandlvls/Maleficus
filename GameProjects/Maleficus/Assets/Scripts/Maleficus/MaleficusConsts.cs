@@ -56,6 +56,8 @@ public static class MaleficusConsts
     public const string BNJMO_SERVER_IP = "192.168.137.1";
     public const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
     public const float GAME_STATE_UPDATE_FREQUENCY = 1.0f;
+    public const float NETWORK_UPDATE_FREQUENCY = 0.001f;
+    public const float NETWORK_CONNECT_FREQUENCY = 0.1f;
 
 
 

@@ -26,6 +26,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     /// <summary> Assigned team of every player </summary>
     public Dictionary<EPlayerID, ETeamID>               PlayersTeam                 { get { return playersTeam; } }
+    public EPlayerID OwnPlayerID { get { return MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID); } }
 
 
 
@@ -253,7 +254,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             playerControllerMapping[playerID] = controllerID;
 
             Debug.Log("(&/(&/( Connecting : " + playerID + " to " + controllerID);
-            Debug.Log("/%&/&%/ Own Player ID " + NetworkManager.Instance.OwnPlayerID);
+            Debug.Log("/%&/&%/ Own Player ID " + PlayerManager.Instance.OwnPlayerID);
 
             InputManager.Instance.ConnectController(controllerID);
 

@@ -56,8 +56,8 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         // Update state
         base.UpdateState(newMenuState);
 
-        // if connected before scene loaded
-        if (currentState == EMenuState.IN_ENTRY)
+        //TODO if connected before scene loaded [Leon]
+        /*if (currentState == EMenuState.IN_ENTRY)
         {
             List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
             if (msgs.Count != 0)
@@ -67,7 +67,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
                 }
             }
-        }
+        }*/
     }
 
     private void FindAndBindButtonActions()

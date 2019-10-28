@@ -22,15 +22,12 @@ public class ServerManager : NetworkManager
     //private int hostId_InstanceManager; 
 
     public readonly bool isPlayer = false;
-    private bool server_isStarted;
+
     private byte error;
-
+    private bool connected = false;
     private Mongo dataBank;
-
     private Dictionary<EClientID, int> connectedPlayers = new Dictionary<EClientID, int>();
-
     private IEnumerator UpdateGameStateEnumerator;
-
     private bool isLobbyInitialized = false;
 
     #region Monobehaviour
@@ -53,45 +50,55 @@ public class ServerManager : NetworkManager
         EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
     }
 
-
-    #endregion
-
-    public override void Init()
+    protected override void Update()
     {
-        dataBank = new Mongo();
-        dataBank.Init();
-
-        NetworkTransport.Init();
-
-        ConnectionConfig cc = new ConnectionConfig();
-
-        server_reliableChannel = cc.AddChannel(QosType.Unreliable);
-
-
-        HostTopology topo = new HostTopology(cc, MaleficusConsts.SERVER_MAX_USER);
-
-
-        // Server only code
-
-        server_hostId = NetworkTransport.AddHost(topo, MaleficusConsts.PORT, null);
-        Debug.Log("added host with Port 26002");
-        server_webHostId = NetworkTransport.AddWebsocketHost(topo, MaleficusConsts.WEB_PORT, null);
-        Debug.Log("added host with Port 26004");
-        InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
-        Debug.Log("connected to Instance Manager Port 9999");
-
-        Debug.Log(string.Format("Opening connection on port {0} and webport {1}", MaleficusConsts.PORT, MaleficusConsts.WEB_PORT));
-        server_isStarted = true;
+        if (!connected)
+        {
+            StartCoroutine("SetUpConnections");
+        }
+        else
+        {
+            StartCoroutine("UpdateMessagePump");
+        }
     }
 
 
-    public override void UpdateMessagePump()
-    {
-        if (!server_isStarted)
-        {
-            return;
-        }
+    #endregion
 
+    System.Collections.IEnumerator SetUpConnections()
+    {
+        yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
+        dataBank = new Mongo();
+        if (dataBank.Init())
+        {
+            NetworkTransport.Init();
+
+            ConnectionConfig cc = new ConnectionConfig();
+
+            server_reliableChannel = cc.AddChannel(QosType.Unreliable);
+
+
+            HostTopology topo = new HostTopology(cc, MaleficusConsts.SERVER_MAX_USER);
+
+
+            // Server only code
+
+            server_hostId = NetworkTransport.AddHost(topo, MaleficusConsts.PORT, null);
+            Debug.Log("added host with Port 26002");
+            /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
+            Debug.Log("connected to Instance Manager Port 9999");
+
+            Debug.Log(string.Format("Opening connection on port {0} and webport {1}", MaleficusConsts.PORT, MaleficusConsts.WEB_PORT));*/
+        }
+        if(dataBank != null && (server_hostId != -1))
+        {
+            connected = true;
+        }
+    }
+
+
+    System.Collections.IEnumerator UpdateMessagePump()
+    {
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
@@ -99,10 +106,10 @@ public class ServerManager : NetworkManager
         byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
         int dataSize;
 
-
         bool isContinue = true;
         while (isContinue)
         {
+            yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
             NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
             switch (type)
             {
@@ -138,8 +145,6 @@ public class ServerManager : NetworkManager
                     break;
             }
         }
-        
-
     }
 
     #region OnData

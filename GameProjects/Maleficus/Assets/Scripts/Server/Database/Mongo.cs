@@ -17,7 +17,7 @@ public class Mongo
     private IMongoCollection<Model_Lobby> lobbys;
 
     // initialize the connection to the database
-    public void Init() { 
+    public bool Init() { 
         
         client = new MongoClient(MONGO_URI);
         db = client.GetDatabase(DATABASE_NAME);
@@ -26,7 +26,12 @@ public class Mongo
         follows = db.GetCollection<Model_Follow>("follow");
         lobbys = db.GetCollection<Model_Lobby>("lobby");
         
-        Debug.Log("Database has been initialized");
+        if(db != null)
+        {
+            Debug.Log("Database has been initialized");
+            return true;
+        }
+        return false;
     }
 
     // set the connection to the database to null

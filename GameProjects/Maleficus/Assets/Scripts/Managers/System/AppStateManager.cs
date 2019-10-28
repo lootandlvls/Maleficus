@@ -81,7 +81,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         }
 
 
-        // if connected before scene loaded
+        //TODO  if connected before scene loaded [Leon]
+        /*
         if (CurrentState == EAppState.IN_ENTRY)
         {
             List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
@@ -92,7 +93,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                 }
             }
-        }
+        }*/
     }
 
     #region Scene Update
