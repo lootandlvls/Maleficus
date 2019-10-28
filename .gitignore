@@ -22,7 +22,7 @@
 # Visual Studio cache directory
 .vs/
 
-/[Aa]ssets/Packages/GabrielAguiarProductions
+**/[Aa]ssets/Packages/GabrielAguiarProductions
 
 # Gradle cache directory
 .gradle/
