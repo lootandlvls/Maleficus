@@ -9,7 +9,6 @@
 **/QCAR
 
 
-**/GabrielAguiarProductions
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
@@ -66,3 +65,5 @@ Maleficus/Maleficus/obj/Debug/Assembly-CSharp-Editor.csproj.CoreCompileInputs.ca
 Maleficus/Maleficus/obj/Debug/Assembly-CSharp-Editor.csprojAssemblyReference.cache
 Maleficus/Maleficus/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache
 Maleficus/Maleficus/obj/Debug/Assembly-CSharp-Editor.csprojAssemblyReference.cache
+
+!
