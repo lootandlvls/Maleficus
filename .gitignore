@@ -9,7 +9,6 @@
 **/QCAR
 
 
-
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 
@@ -22,7 +21,9 @@
 # Visual Studio cache directory
 .vs/
 
+#Plugins
 **/[Aa]ssets/Packages/GabrielAguiarProductions
+
 
 # Gradle cache directory
 .gradle/
@@ -56,6 +57,8 @@ sysinfo.txt
 # Builds (allow builds under Relases folder)
 # *.apk
 # *.unitypackage
+/buildclient
+/ServerBuild
 
 # Crashlytics generated file
 crashlytics-build.properties
