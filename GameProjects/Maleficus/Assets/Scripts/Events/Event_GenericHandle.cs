@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// An abstract event handle with 1 parameter
+/// A generic event handle with 1 parameter
 /// </summary>
-public class Event_AbstractHandle<A> : AbstractEventHandle
+public class Event_GenericHandle<A> : AbstractEventHandle
 {
     public A Arg1 { get; }
 
-    public Event_AbstractHandle(A arg1)
+    public Event_GenericHandle(A arg1)
     {
         ID = ENetMessageID.NONE;
 
@@ -23,14 +23,14 @@ public class Event_AbstractHandle<A> : AbstractEventHandle
 }
 
 /// <summary>
-/// An abstract event handle with 2 parameters
+/// A generic event handle with 2 parameters
 /// </summary>
-public class Event_AbstractHandle<A, B> : AbstractEventHandle
+public class Event_GenericHandle<A, B> : AbstractEventHandle
 {
     public A Arg1 { get; }
     public B Arg2 { get; }
 
-    public Event_AbstractHandle(A arg1, B arg2)
+    public Event_GenericHandle(A arg1, B arg2)
     {
         ID = ENetMessageID.NONE;
 
@@ -45,15 +45,15 @@ public class Event_AbstractHandle<A, B> : AbstractEventHandle
 }
 
 /// <summary>
-/// An abstract event handle with 3 parameters
+/// A generic event handle with 3 parameters
 /// </summary>
-public class Event_AbstractHandle<A, B, C> : AbstractEventHandle
+public class Event_GenericHandle<A, B, C> : AbstractEventHandle
 {
     public A Arg1 { get; }
     public B Arg2 { get; }
     public C Arg3 { get; }
 
-    public Event_AbstractHandle(A arg1, B arg2, C arg3)
+    public Event_GenericHandle(A arg1, B arg2, C arg3)
     {
         ID = ENetMessageID.NONE;
 
@@ -69,16 +69,16 @@ public class Event_AbstractHandle<A, B, C> : AbstractEventHandle
 }
 
 /// <summary>
-/// An abstract event handle with 4 parameters
+/// A generic event handle with 4 parameters
 /// </summary>
-public class Event_AbstractHandle<A, B, C, D> : AbstractEventHandle
+public class Event_GenericHandle<A, B, C, D> : AbstractEventHandle
 {
     public A Arg1 { get; }
     public B Arg2 { get; }
     public C Arg3 { get; }
     public D Arg4 { get; }
 
-    public Event_AbstractHandle(A arg1, B arg2, C arg3, D arg4)
+    public Event_GenericHandle(A arg1, B arg2, C arg3, D arg4)
     {
         ID = ENetMessageID.NONE;
 

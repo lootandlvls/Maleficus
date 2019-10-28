@@ -424,7 +424,7 @@ public class ServerManager : NetworkManager
                 Debug.Log(clientID + " is connected : " + connectedPlayers[clientID]);
             }
 
-            var eventHandle = new Event_AbstractHandle<List<EPlayerID>, EPlayerID>(players, playerID);
+            var eventHandle = new Event_GenericHandle<List<EPlayerID>, EPlayerID>(players, playerID);
             EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(eventHandle, EEventInvocationType.LOCAL_ONLY);
         }
         else
@@ -595,9 +595,9 @@ public class ServerManager : NetworkManager
         {
             yield return new WaitForSeconds(MaleficusConsts.GAME_STATE_UPDATE_FREQUENCY);
 
-            foreach (EPlayerID connectedPlayerIDj in PlayerManager.Instance.ConnectedPlayers.Keys)
+            foreach (EPlayerID connectedPlayerIDj in PlayerManager.Instance.GetConnectedPlayers())
             {
-                foreach (EPlayerID activePlayerIDi in PlayerManager.Instance.ConnectedPlayers.Keys)
+                foreach (EPlayerID activePlayerIDi in PlayerManager.Instance.GetConnectedPlayers())
                 {
                     if (PlayerManager.Instance.ActivePlayers.ContainsKey(activePlayerIDi))
                     {

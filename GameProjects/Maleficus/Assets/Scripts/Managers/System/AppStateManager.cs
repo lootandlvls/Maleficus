@@ -99,7 +99,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     #region Scene Update
     private void UpdateScene(EScene newScene)
     {
-        EventManager.Instance.APP_SceneWillChange.Invoke(new Event_AbstractHandle<EScene>(newScene));
+        EventManager.Instance.APP_SceneWillChange.Invoke(new Event_GenericHandle<EScene>(newScene));
 
         // Wait some frames before changing scene
         StartCoroutine(LateUpdateSceneCoroutine(newScene));
@@ -182,7 +182,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             action.ActionButtonPressed += () =>
             {
-                UpdateState(EAppState.IN_MENU_IN_CONNECTING_PLAYERS);
+                UpdateState(EAppState.IN_MENU_IN_CONNECTING_GAMEPADS);
             };
         }
 
@@ -236,7 +236,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
     {
         Debug.Log("Loading level done : " + newScene.name);
-        EventManager.Instance.APP_SceneChanged.Invoke(new Event_AbstractHandle<EScene>(CurrentScene));
+        EventManager.Instance.APP_SceneChanged.Invoke(new Event_GenericHandle<EScene>(CurrentScene));
 
         // Validity test
         if ((newScene.name != MaleficusConsts.SCENE_GAME)

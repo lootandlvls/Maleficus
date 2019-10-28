@@ -289,174 +289,212 @@ public static class MaleficusUtilities
     /// <summary> Convert a PlayerID enum to an int </summary>
     public static int PlayerIDToInt(EPlayerID playerID)
     {
-        int id = 0;
+        int result = 0;
         switch (playerID)
         {
             case EPlayerID.PLAYER_1:
-                id = 1;
+                result = 1;
                 break;
             case EPlayerID.PLAYER_2:
-                id = 2;
+                result = 2;
                 break;
             case EPlayerID.PLAYER_3:
-                id = 3;
+                result = 3;
                 break;
             case EPlayerID.PLAYER_4:
-                id = 4;
+                result = 4;
                 break;
         }
-        return id;
+        return result;
     }
 
     /// <summary> Convert an int to a PlayerID enum </summary>
     public static EPlayerID IntToPlayerID(int playerID)
     {
-        EPlayerID id = EPlayerID.NONE;
+        EPlayerID result = EPlayerID.NONE;
         switch (playerID)
         {
             case 1:
-                id = EPlayerID.PLAYER_1;
+                result = EPlayerID.PLAYER_1;
                 break;
             case 2:
-                id = EPlayerID.PLAYER_2;
+                result = EPlayerID.PLAYER_2;
                 break;
             case 3:
-                id = EPlayerID.PLAYER_3;
+                result = EPlayerID.PLAYER_3;
                 break;
             case 4:
-                id = EPlayerID.PLAYER_4;
+                result = EPlayerID.PLAYER_4;
                 break;
         }
-        return id;
+        return result;
     }       
     /// <summary> Convert an int to a ClientID enum </summary>
     public static EClientID IntToClientID(int clientID)
     {
-        EClientID id = EClientID.NONE;
+        EClientID result = EClientID.NONE;
         switch (clientID)
         {
             case 0:
-                id = EClientID.SERVER;
+                result = EClientID.SERVER;
                 break;
             case 1:
-                id = EClientID.CLIENT_1;
+                result = EClientID.CLIENT_1;
                 break;
             case 2:
-                id = EClientID.CLIENT_2;
+                result = EClientID.CLIENT_2;
                 break;
             case 3:
-                id = EClientID.CLIENT_3;
+                result = EClientID.CLIENT_3;
                 break;
             case 4:
-                id = EClientID.CLIENT_4;
+                result = EClientID.CLIENT_4;
                 break;
         }
-        return id;
+        return result;
     }       
     
     /// <summary> Convert an int to a SpellID enum </summary>
     public static ESpellSlot IntToSpellID(int spellID)
     {
-        ESpellSlot id = ESpellSlot.NONE;
+        ESpellSlot result = ESpellSlot.NONE;
         switch (spellID)
         {
             case 1:
-                id = ESpellSlot.SPELL_1;
+                result = ESpellSlot.SPELL_1;
                 break;
             case 2:
-                id = ESpellSlot.SPELL_2;
+                result = ESpellSlot.SPELL_2;
                 break;
             case 3:
-                id = ESpellSlot.SPELL_3;
+                result = ESpellSlot.SPELL_3;
                 break;
         }
-        return id;
+        return result;
     }    
     
     /// <summary> Convert a ControllerID enum to an Char </summary>
     public static char ControllerIDToChar(EControllerID ControllerID)
     {
-        char id = 'X';
+        char result = 'X';
         switch (ControllerID)
         {
             case EControllerID.GAMEPAD_A:
-                id = 'A';
+                result = 'A';
                 break;
             case EControllerID.GAMEPAD_B:
-                id = 'B';
+                result = 'B';
                 break;
             case EControllerID.GAMEPAD_C:
-                id = 'C';
+                result = 'C';
                 break;
             case EControllerID.GAMEPAD_D:
-                id = 'D';
+                result = 'D';
                 break;
         }
-        return id;
+        return result;
     }
 
-    /// <summary> Convert an Char to a ControllerID enum </summary>
+    /// <summary> Convert a Char to a ControllerID enum </summary>
     public static EControllerID CharToControllerID(char ControllerID)
     {
-        EControllerID id = EControllerID.NONE;
+        EControllerID result = EControllerID.NONE;
         switch (ControllerID)
         {
             case 'A':
-                id = EControllerID.GAMEPAD_A;
+                result = EControllerID.GAMEPAD_A;
                 break;
             case 'B':
-                id = EControllerID.GAMEPAD_B;
+                result = EControllerID.GAMEPAD_B;
                 break;
             case 'C':
-                id = EControllerID.GAMEPAD_C;
+                result = EControllerID.GAMEPAD_C;
                 break;
             case 'D':
-                id = EControllerID.GAMEPAD_D;
+                result = EControllerID.GAMEPAD_D;
                 break;
         }
-        return id;
+        return result;
+    }
+
+    /// <summary> Convert a joystickType enum to a char</summary>
+    public static char JoystickTypeToChar(EJoystickType joystickType)
+    {
+        char resut = 'X';
+        switch (joystickType)
+        {
+            case EJoystickType.MOVEMENT:
+                resut = 'L';
+                break;
+
+            case EJoystickType.ROTATION:
+                resut = 'R';
+                break;
+        }
+        return resut;  
     }
 
     /// <summary> Convert an InputButton enum to a SpellID enum </summary>
     public static ESpellSlot GetSpellSlotFrom(EInputButton inputButton)
     {
-        ESpellSlot id = ESpellSlot.NONE;
+        ESpellSlot result = ESpellSlot.NONE;
         switch (inputButton)
         {
             case EInputButton.CAST_SPELL_1:
-                id = ESpellSlot.SPELL_1;
+                result = ESpellSlot.SPELL_1;
                 break;
 
             case EInputButton.CAST_SPELL_2:
-                id = ESpellSlot.SPELL_2;
+                result = ESpellSlot.SPELL_2;
                 break;
 
             case EInputButton.CAST_SPELL_3:
-                id = ESpellSlot.SPELL_3;
+                result = ESpellSlot.SPELL_3;
                 break;
         }
-        return id;
+        return result;
+    }
+
+    /// <summary> Convert a SpellSlot enum to an int </summary>
+    public static int SpellSlotToInt(ESpellSlot spellSlot)
+    {
+        int result = 0;
+        switch (spellSlot)
+        {
+            case ESpellSlot.SPELL_1:
+                result = 1;
+                break;
+
+            case ESpellSlot.SPELL_2:
+                result = 2;
+                break;
+
+            case ESpellSlot.SPELL_3:
+                result = 3;
+                break;
+        }
+        return result;
     }
 
     /// <summary> Convert a TouchJoystickType enum to a SpellID enum </summary>
     public static ESpellSlot GetSpellIDFrom(ETouchJoystickType inputButton)
     {
-        ESpellSlot id = ESpellSlot.NONE;
+        ESpellSlot result = ESpellSlot.NONE;
         switch (inputButton)
         {
             case ETouchJoystickType.SPELL_1:
-                id = ESpellSlot.SPELL_1;
+                result = ESpellSlot.SPELL_1;
                 break;
 
             case ETouchJoystickType.SPELL_2:
-                id = ESpellSlot.SPELL_2;
+                result = ESpellSlot.SPELL_2;
                 break;
 
             case ETouchJoystickType.SPELL_3:
-                id = ESpellSlot.SPELL_3;
+                result = ESpellSlot.SPELL_3;
                 break;
         }
-        return id;
+        return result;
     }
 
     /// <summary> Convert a TouchJoystickType enum to a InputButton enum </summary>
@@ -483,122 +521,122 @@ public static class MaleficusUtilities
     /// <summary> Convert a SpellID enum to a InputButton enum </summary>
     public static EInputButton GetInputButtonFrom(ESpellSlot spellID)
     {
-        EInputButton button = EInputButton.NONE;
+        EInputButton result = EInputButton.NONE;
         switch (spellID)
         {
             case ESpellSlot.SPELL_1:
-                button = EInputButton.CAST_SPELL_1;
+                result = EInputButton.CAST_SPELL_1;
                 break;
 
             case ESpellSlot.SPELL_2:
-                button = EInputButton.CAST_SPELL_2;
+                result = EInputButton.CAST_SPELL_2;
                 break;
 
             case ESpellSlot.SPELL_3:
-                button = EInputButton.CAST_SPELL_3;
+                result = EInputButton.CAST_SPELL_3;
                 break;
         }
-        return button;
+        return result;
     }
 
     /// <summary> Convert a ClientID enum to a PlayerID enum </summary>
     public static EPlayerID GetPlayerIDFrom(EClientID clientID)
     {
-        EPlayerID id = EPlayerID.NONE;
+        EPlayerID result = EPlayerID.NONE;
         switch (clientID)
         {
             case EClientID.CLIENT_1:
-                id = EPlayerID.PLAYER_1;
+                result = EPlayerID.PLAYER_1;
                 break;
 
             case EClientID.CLIENT_2:
-                id = EPlayerID.PLAYER_2;
+                result = EPlayerID.PLAYER_2;
                 break;
 
             case EClientID.CLIENT_3:
-                id = EPlayerID.PLAYER_3;
+                result = EPlayerID.PLAYER_3;
                 break;
 
             case EClientID.CLIENT_4:
-                id = EPlayerID.PLAYER_4;
+                result = EPlayerID.PLAYER_4;
                 break;
         }
-        return id;
+        return result;
     }
 
     /// <summary> Convert a PlayerID enum to a ClientID enum </summary>
     public static EClientID GetClientIDFrom(EPlayerID playerID)
     {
-        EClientID id = EClientID.NONE;
+        EClientID result = EClientID.NONE;
         switch (playerID)
         {
             case EPlayerID.PLAYER_1:
-                id = EClientID.CLIENT_1;
+                result = EClientID.CLIENT_1;
                 break;
 
             case EPlayerID.PLAYER_2:
-                id = EClientID.CLIENT_2;
+                result = EClientID.CLIENT_2;
                 break;
 
             case EPlayerID.PLAYER_3:
-                id = EClientID.CLIENT_3;
+                result = EClientID.CLIENT_3;
                 break;
 
             case EPlayerID.PLAYER_4:
-                id = EClientID.CLIENT_4;
+                result = EClientID.CLIENT_4;
                 break;
         }
-        return id;
+        return result;
     }
 
     /// <summary> Returns the same team ID as the player ID (e.g. Player 2 -> Team 2)</summary>
     public static ETeamID GetIdenticPlayerTeam(EPlayerID playerID)
     {
-        ETeamID id = ETeamID.NONE;
+        ETeamID result = ETeamID.NONE;
         switch (playerID)
         {
             case EPlayerID.PLAYER_1:
-                id = ETeamID.TEAM_1;
+                result = ETeamID.TEAM_1;
                 break;
 
             case EPlayerID.PLAYER_2:
-                id = ETeamID.TEAM_2;
+                result = ETeamID.TEAM_2;
                 break;
 
             case EPlayerID.PLAYER_3:
-                id = ETeamID.TEAM_3;
+                result = ETeamID.TEAM_3;
                 break;
 
             case EPlayerID.PLAYER_4:
-                id = ETeamID.TEAM_4;
+                result = ETeamID.TEAM_4;
                 break;
         }
-        return id;
+        return result;
     }
 
     /// <summary> Returns the same team ID as the player ID (e.g. Player 2 -> Team 2)</summary>
     public static EControllerID GetControllerNeteworkID(EPlayerID playerID)
     {
-        EControllerID id = EControllerID.NONE;
+        EControllerID result = EControllerID.NONE;
         switch (playerID)
         {
             case EPlayerID.PLAYER_1:
-                id = EControllerID.NETWORK_1;
+                result = EControllerID.NETWORK_1;
                 break;
 
             case EPlayerID.PLAYER_2:
-                id = EControllerID.NETWORK_2;
+                result = EControllerID.NETWORK_2;
                 break;
 
             case EPlayerID.PLAYER_3:
-                id = EControllerID.NETWORK_3;
+                result = EControllerID.NETWORK_3;
                 break;
 
             case EPlayerID.PLAYER_4:
-                id = EControllerID.NETWORK_4;
+                result = EControllerID.NETWORK_4;
                 break;
         }
-        return id;
+        return result;
     }
 
 
