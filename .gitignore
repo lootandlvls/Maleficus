@@ -22,6 +22,8 @@
 # Visual Studio cache directory
 .vs/
 
+/[Aa]ssets/Packages/GabrielAguiarProductions
+
 # Gradle cache directory
 .gradle/
 
@@ -65,5 +67,3 @@ Maleficus/Maleficus/obj/Debug/Assembly-CSharp-Editor.csproj.CoreCompileInputs.ca
 Maleficus/Maleficus/obj/Debug/Assembly-CSharp-Editor.csprojAssemblyReference.cache
 Maleficus/Maleficus/obj/Debug/Assembly-CSharp.csproj.CoreCompileInputs.cache
 Maleficus/Maleficus/obj/Debug/Assembly-CSharp-Editor.csprojAssemblyReference.cache
-
-!
