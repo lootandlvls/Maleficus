@@ -70,11 +70,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
-        movementMethod = MotherOfManagers.Instance.EnemiesMovementMethod;
-        if (movementMethod != EEnemyMovementMethod.NAV_MESH)
-        {
-            myNavAgent.enabled = false;
-        }
 
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.SPELLS_SpellHitEnemy  += On_SPELLS_SpellHitEnemy;
@@ -127,11 +122,11 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                     Vector3 destination = GetNextDestinationToPlayer();
                     Vector3 direction = (destination - transform.position).normalized;
                     movementDirection = Vector3.Lerp(movementDirection, direction, Time.deltaTime * wayPointInterpolationFactor).normalized;
-                    transform.position += movementDirection * walkingSpeed * Time.deltaTime * ARManager.Instance.SizeFactor;
+                    transform.position += movementDirection * walkingSpeed * Time.deltaTime * 1f;
                     transform.LookAt(transform.position + movementDirection);
                 }
 
-                if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold * ARManager.Instance.SizeFactor)
+                if (Vector3.Distance(transform.position, playerPosition) < attackingThreshold * 1f)// 1f was ar sizefactor in ar
                 {
                     UpdateState(EnemyState.ATTACKING);
                 }
@@ -141,7 +136,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 Vector3 playersDir = (playerPosition - transform.position).normalized;
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(playersDir, transform.up), Time.deltaTime * 1);
 
-                if (Vector3.Distance(transform.position, playerPosition) > attackingThreshold * ARManager.Instance.SizeFactor)
+                if (Vector3.Distance(transform.position, playerPosition) > attackingThreshold * 1f)// 1f was ar sizefactor in ar
                 {
                     UpdateState(EnemyState.MOVING_TOWARDS_PLAYER);
                 }
@@ -172,10 +167,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
                 if (movementMethod == EEnemyMovementMethod.NAV_MESH)
                 {
                     myNavAgent.speed = walkingSpeed;
-                    if (MotherOfManagers.Instance.IsARGame == true)
-                    {
-                        myNavAgent.speed *= ARManager.Instance.SizeFactor;
-                    }
                     myNavAgent.destination = playerPosition;
                 }
                 else if (movementMethod == EEnemyMovementMethod.WAYPOINTS)
@@ -256,10 +247,6 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         while (Time.time - timer < 3)
         {
             Vector3 vanishDownUpdate = Vector3.down * Time.deltaTime * 0.5f;
-            if (MotherOfManagers.Instance.IsARGame == true)
-            {
-                vanishDownUpdate *= ARManager.Instance.SizeFactor;
-            }
             transform.position += vanishDownUpdate;
             yield return new WaitForEndOfFrame();
         }
@@ -311,7 +298,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
             Vector3 directionToWayPoint = (wayPoint.Position - transform.position).normalized;
             float distanceToWayPoint = Vector3.Distance(transform.position, wayPoint.Position);
             float dotProduct = Vector3.Dot(directionToPlayer, directionToWayPoint);
-            if ((distanceToWayPoint < minDistance) && (dotProduct > 0.0f) && (distanceToWayPoint > WAYPOINT_THRESHOLD * ARManager.Instance.SizeFactor))
+            if ((distanceToWayPoint < minDistance) && (dotProduct > 0.0f) && (distanceToWayPoint > WAYPOINT_THRESHOLD * 1f))// 1f was sizefactor in ar
             {
                 minDistance = distanceToWayPoint;
                 nextDestination = wayPoint.Position;

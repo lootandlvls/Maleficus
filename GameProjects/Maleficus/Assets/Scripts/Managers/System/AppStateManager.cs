@@ -77,19 +77,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             EScene newScene = MaleficusConsts.FROM_SCENE_TO[CurrentScene];
 
-            // For AR 
-            if ((MotherOfManagers.Instance.IsARGame == true) 
-                && (currentScene == EScene.MENU))
-            {
-                newScene = EScene.GAME_AR;
-            }
-
-            // Dungeon
-            if (CurrentState == EAppState.IN_MENU_IN_STARTING_AR_GAME)
-            {
-                newScene = EScene.GAME_DUNGEON;
-            }
-
             UpdateScene(newScene);
         }
 

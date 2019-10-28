@@ -38,9 +38,6 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsSpawnAllPlayers = IsSpawnAllPlayers;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
-            managersInstance.IsARGame = IsARGame;
-            managersInstance.ARPlacementMethod = ARPlacementMethod;
-            managersInstance.EnemiesMovementMethod = EnemiesMovementMethod;
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;
 

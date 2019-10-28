@@ -14,6 +14,4 @@ public interface IPlayer
 
     bool IsDead { get; }
 
-    bool IsARPlayer { get; }
-
 }

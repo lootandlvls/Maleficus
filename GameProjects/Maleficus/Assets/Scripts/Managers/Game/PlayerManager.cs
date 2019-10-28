@@ -177,13 +177,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
                 }
 
-                // Set AR Player
-                if (MotherOfManagers.Instance.IsARGame == true)
-                {
-                    spawnedPlayer.IsARPlayer = true;
-                    spawnedPlayer.transform.localScale = playerSpawnPosition.transform.localScale;
-                }
-
                 EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(toSpawnPlayerID);
             }
             else
@@ -455,10 +448,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
                     spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
                     spawnGhost.Rotation = transform.rotation;
-                    if ((MotherOfManagers.Instance.IsARGame == true) && (ARManager.IsInstanceSet == true))
-                    {
-                        spawnGhost.transform.localScale *= ARManager.Instance.SizeFactor;
-                    }
                     PlayersSpawnPositions.Add(playerID, spawnGhost);
                 }
             }

@@ -9,7 +9,6 @@ public class Player : MonoBehaviour, IPlayer
     public ETeamID TeamID { get; set; }
     public Vector3 Position { get { return transform.position; } }
     public Quaternion Rotation { get { return transform.rotation; } }
-    public bool IsARPlayer { get; set; }
     public bool IsDead { get { return isDead; } }                                            // TODO: Define when player is dead
     public Dictionary<ESpellSlot, bool> ReadyToUseSpell { get { return readyToUseSpell; } }
     public Dictionary<ESpellSlot, float> SpellCooldown { get { return spellCooldown; } }
@@ -84,10 +83,6 @@ public class Player : MonoBehaviour, IPlayer
         myAnimator = this.GetComponent<Animator>();
         myAnimator.SetBool("idle", true);
 
-        if (IsARPlayer == true)
-        {
-            speed *= ARManager.Instance.SizeFactor;
-        }
         currentSpeed = speed;
 
     }
@@ -147,11 +142,6 @@ public class Player : MonoBehaviour, IPlayer
         Vector3 movementVelocity = movingDirection * currentSpeed * 0.1f;
         
         Vector3 finalVelocity = movementVelocity + pushVelocity + GravityVelocity;
-        if (MotherOfManagers.Instance.IsARGame == true)
-        {
-            finalVelocity /= ARManager.Instance.SizeFactor;
-            
-        }
         transform.localPosition += finalVelocity * Time.deltaTime;
     }
 
@@ -292,12 +282,6 @@ public class Player : MonoBehaviour, IPlayer
             wandEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
             GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, transform.rotation);
             bodyEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
-            if (MotherOfManagers.Instance.IsARGame == true)
-            {
-                wandEffect.transform.localScale *= ARManager.Instance.SizeFactor;
-                bodyEffect.transform.localScale *= ARManager.Instance.SizeFactor;
-            }
-
             bodyEffect.transform.parent = this.transform;
             wandEffect.transform.parent = this.transform;
             ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
@@ -407,11 +391,6 @@ public class Player : MonoBehaviour, IPlayer
     public void PushPlayer(Vector3 velocity, float duration)
     {
         pushVelocity = velocity;
-        if (MotherOfManagers.Instance.IsARGame == true)
-        {
-            pushVelocity *= ARManager.Instance.SizeFactor;
-        }
-
         Debug.Log("§$%§$% Player pushed : " + velocity);
 
         if (duration <= 0.0f)
@@ -446,10 +425,6 @@ public class Player : MonoBehaviour, IPlayer
         if (other.tag.Equals("Ground"))
         {
             GravityVelocity = new Vector3(0, -9.81f, 0);
-            if (MotherOfManagers.Instance.IsARGame == true)
-            {
-                GravityVelocity *= ARManager.Instance.SizeFactor;
-            }
             isDead = true;
             StopAllCoroutines();
             IsReadyToShoot = false;
@@ -476,11 +451,6 @@ public class Player : MonoBehaviour, IPlayer
 
     private Transform GetGrandFatherTransfrom()
     {
-        if (MotherOfManagers.Instance.IsARGame == true)
-        {
-            return ARManager.Instance.AugmentedStageTransform;
-        }
-
         Transform myGrandParentTransform = transform;
         while (myGrandParentTransform.parent != null)
         {

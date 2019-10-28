@@ -16,10 +16,6 @@ public class ObjectRotator : MonoBehaviour
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
 
         float heightHover = Mathf.Sin(Time.time * hoverSpeed) * hoverIntensity;
-        if (ARManager.Instance != null)
-        {
-            heightHover *= ARManager.Instance.SizeFactor;
-        }
         Vector3 hoveredPosition = transform.position;
         hoveredPosition.y += heightHover;
         transform.position = Vector3.Lerp(transform.position, hoveredPosition, hoverInterpolationFactor * Time.deltaTime);

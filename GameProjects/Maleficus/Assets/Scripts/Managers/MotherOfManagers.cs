@@ -20,11 +20,6 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
 
-    [Separator("AR")]
-    [SerializeField] public bool IsARGame = false;
-    [ConditionalField(nameof(IsARGame))] [SerializeField] public EPlacementMethod ARPlacementMethod;
-    [ConditionalField(nameof(IsARGame))] [SerializeField] public EEnemyMovementMethod EnemiesMovementMethod;
-
     [Separator("Debug")]
     [SerializeField] public bool IsDebugLogEvents = true;
     [SerializeField] public bool IsReduceLightIntensityOnSceneStart = false;
