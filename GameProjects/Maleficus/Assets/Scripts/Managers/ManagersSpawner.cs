@@ -34,6 +34,7 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsServer = IsServer;
             managersInstance.ConnectionMode = ConnectionMode;
             managersInstance.InputMode = InputMode;
+            managersInstance.IsConnectControllerInAnyState = IsConnectControllerInAnyState;
             managersInstance.IsSpawnPlayerOnConnect = IsSpawnPlayerOnConnect;
             managersInstance.IsSpawnAllPlayers = IsSpawnAllPlayers;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;

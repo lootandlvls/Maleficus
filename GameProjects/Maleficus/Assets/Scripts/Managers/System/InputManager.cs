@@ -11,33 +11,22 @@ public class InputManager : AbstractSingletonManager<InputManager>
 {
     public EInputMode                                   InputMode                               { get { return MotherOfManagers.Instance.InputMode; } }
 
-    ///// <summary> Joysticks inputs for every player (movement, rotation). </summary>
-    //public Dictionary<EControllerID, JoystickInput>     JoysticksInput                          { get { return JoystickInput; } }
-
     /// <summary> Mapping from controllerID to playerID </summary> 
     public Dictionary<EControllerID, EPlayerID>         ConnectedControllers                    { get { return connectedControllers; } }
 
 
-
-    /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
-    private Dictionary<EControllerID, bool>             canPerformHorizontalDirectionalButton   = new Dictionary<EControllerID, bool>();          
-    /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
-    private Dictionary<EControllerID, bool>             canPerformVerticalDirectionalButton     = new Dictionary<EControllerID, bool>();
-    //private Dictionary<EControllerID, JoystickInput>    JoystickInput                           = new Dictionary<EControllerID, JoystickInput>();
     private Dictionary<EControllerID, EPlayerID>        connectedControllers                    = new Dictionary<EControllerID, EPlayerID>();
 
     protected override void Awake()
     {
         base.Awake();
 
-        ReInitializeDirectionalMaps();
-
         AbstractInputSource[] inputSources = GetComponents<AbstractInputSource>();
         foreach (AbstractInputSource inputSource in inputSources)
         {
-            inputSource.ButtonPressed += On_InputSource_ButtonPressed;
-            inputSource.ButtonReleased += On_InputSource_ButtonReleased;
-            inputSource.JoystickMoved += On_InputSource_JoystickMoved;
+            inputSource.ButtonPressed   += On_InputSource_ButtonPressed;
+            inputSource.ButtonReleased  += On_InputSource_ButtonReleased;
+            inputSource.JoystickMoved   += On_InputSource_JoystickMoved;
         }
     }
 
@@ -46,42 +35,36 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
 
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener           (On_NETWORK_ReceivedGameSessionInfo);
+        EventManager.Instance.GAME_GameOver.AddListener                             (On_GAME_GameOver);
 
-        //// Listen to broadcasted inputs 
-        //EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
+        StartCoroutine(LateStartCoroutine());
+    }
 
+    private IEnumerator LateStartCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
 
         // Connect Touch player as first player
-        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH) 
-            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true) 
+        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
+            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true)
             && (ConnectedControllers.ContainsKey(EControllerID.TOUCH) == false))
         {
             ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
         }
-
     }
-
-    
 
     public override void OnSceneStartReinitialize()
     {
-        ReInitializeDirectionalMaps();
+        
     }
 
     private void Update()
     {
-        //FlushControllersInput();
-
-        //CheckButtonsAndJoysticksInput();
 
     }
 
-    private void LateUpdate()
-    {
-        //BroadcastLocalControllersInput();
-    }
 
-
+    #region Input Source Callbacks
     private void On_InputSource_ButtonPressed(EControllerID controllerID, EInputButton inputButton)
     {
         if (ConnectedControllers.ContainsKey(controllerID))
@@ -99,6 +82,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void On_InputSource_ButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
+                Debug.Log(controllerID + " released " + inputButton);
         if (ConnectedControllers.ContainsKey(controllerID))
         {
             EPlayerID playerID = ConnectedControllers[controllerID];
@@ -122,41 +106,16 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
             if (joystickType != EJoystickType.NONE)
             {
-
                 NetEvent_JoystickMoved joystickMoved = new NetEvent_JoystickMoved(clientID, joystickType, x, y);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY);
             }
         }
     }
+    #endregion
 
 
 
-
-    #region Network Input
-    //private void On_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
-    //{
-    //    EJoystickType joystickType = eventHandle.JoystickType;
-    //    float joystick_X = eventHandle.Joystick_X;
-    //    float joystick_Y = eventHandle.Joystick_Y;
-    //    EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
-    //    EControllerID controllerID = PlayerManager.Instance.GetControllerFrom(playerID);
-
-    //    if ((controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS))
-    //    || (controllerID == EControllerID.TOUCH))
-    //    {
-    //        if (joystickType == EJoystickType.MOVEMENT)
-    //        {
-    //            JoysticksInput[controllerID].JoystickValues[EInputAxis.MOVE_X] = joystick_X;
-    //            JoysticksInput[controllerID].JoystickValues[EInputAxis.MOVE_Y] = joystick_Y;
-    //        }
-    //        else if (joystickType == EJoystickType.ROTATION)
-    //        {
-    //            JoysticksInput[controllerID].JoystickValues[EInputAxis.ROTATE_X] = joystick_X;
-    //            JoysticksInput[controllerID].JoystickValues[EInputAxis.ROTATE_Y] = joystick_Y;
-    //        }
-    //    }
-    //}
-
+    #region Server Input
     private void On_NETWORK_ReceivedGameSessionInfo(Event_GenericHandle<List<EPlayerID>, EPlayerID> eventHandle)
     {
         List<EPlayerID> connectedPlayers = eventHandle.Arg1;
@@ -195,9 +154,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         ConnectedControllers.Add(controllerID, playerID);
 
-        // Initialize dictionaries
-        canPerformHorizontalDirectionalButton.Add(controllerID, true);
-        canPerformVerticalDirectionalButton.Add(controllerID, true);
+        Debug.Log("Connecting new controller " + controllerID);
 
         // Invoke event
         Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
@@ -212,33 +169,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
             return;
         }
 
-        canPerformHorizontalDirectionalButton.Remove(controllerID);
-        canPerformVerticalDirectionalButton.Remove(controllerID);
-    }
+        EPlayerID playerID = connectedControllers[controllerID];
 
-    //private void FlushControllersInput()
-    //{
-    //    foreach (EControllerID controllerID in ConnectedControllers.Keys)
-    //    {
-    //        if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS) == true)
-    //        {
-    //            continue;
-    //        }
-    //        JoysticksInput[controllerID].Flush();
-    //    }
-    //}
+        ConnectedControllers.Remove(controllerID);
 
-    private void ReInitializeDirectionalMaps()
-    {
-        foreach (EControllerID controllerID in ConnectedControllers.Keys)
-        {
-            canPerformHorizontalDirectionalButton[controllerID] = true;
-        }
-
-        foreach (EControllerID controllerID in ConnectedControllers.Keys)
-        {
-            canPerformVerticalDirectionalButton[controllerID] = true;
-        }
+        // Invoke event
+        Event_GenericHandle<EControllerID, EPlayerID> controllerDisconnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
+        EventManager.Instance.INPUT_ControllerDisconnected.Invoke(controllerDisconnected);
     }
 
 
@@ -246,4 +183,24 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         return ConnectedControllers.ContainsKey(controllerID);
     }
+
+    private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
+    {
+        // Disconnect all network controllers and AI
+        List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
+        foreach (EControllerID controllerID in ConnectedControllers.Keys)
+        {
+            if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS)
+                || (controllerID == EControllerID.AI))
+            {
+                controllerIDsToRemove.Add(controllerID);
+            }
+        }
+        foreach(EControllerID controllerID in controllerIDsToRemove)
+        {
+            ConnectedControllers.Remove(controllerID);
+        }
+    }
+
+    
 }

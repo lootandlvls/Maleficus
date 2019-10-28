@@ -212,5 +212,13 @@ public static class MaleficusConsts
         EControllerID.NETWORK_4
     };
 
+    public static EControllerID[] GAMEPADS_CONTROLLERS = new EControllerID[]
+    {
+        EControllerID.GAMEPAD_A,
+        EControllerID.GAMEPAD_B,
+        EControllerID.GAMEPAD_C,
+        EControllerID.GAMEPAD_D
+    };
+
 
 }

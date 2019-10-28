@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
+                                                                                                                                        
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
@@ -14,10 +14,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
     public Dictionary<EPlayerID, PlayerSpawnPosition>   PlayersSpawnPositions       { get { return playersSpawnPositions; } }
 
-    /* Dictionaries that are defined only for connected players  */
-    /// <summary> Initially initialized with false, then true whenever the respective player connects. </summary>
-    public Dictionary<EPlayerID, bool>                  ConnectedPlayers            { get { return connectedPlayers; } }
 
+    /* Dictionaries that are defined only for connected players  */
     /// <summary> Added whenever a player has spawned. Removed when he dies. </summary>
     public Dictionary<EPlayerID, Player>                ActivePlayers               { get { return activePlayers; } }
 
@@ -34,13 +32,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
     private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnPositions       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
-    private Dictionary<EPlayerID, bool>                 connectedPlayers            = new Dictionary<EPlayerID, bool>();
     private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
     private Dictionary<ETeamID, List<EPlayerID>>        teams                       = new Dictionary<ETeamID, List<EPlayerID>>();
     private Dictionary<EPlayerID, ETeamID>              playersTeam                 = new Dictionary<EPlayerID, ETeamID>();
     private Dictionary<EPlayerID, JoystickInput>        playersMovement             = new Dictionary<EPlayerID, JoystickInput>();
 
 
+                                                                                                                                    // TODO: Add a list of active Coroutines for every player to stop when he dies
     protected override void Awake()
     {
         base.Awake();
@@ -52,11 +50,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void Start()
     {
-
-
         // Input events
         EventManager.Instance.INPUT_ControllerConnected.AddListener             (On_INPUT_ControllerConnected);            
-        EventManager.Instance.INPUT_ControllerDisconnected.AddListener          (On_INPUT_ControllerDisconnected);            
+        EventManager.Instance.INPUT_ControllerDisconnected.AddListener          (On_INPUT_ControllerDisconnected); 
+        
         EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
         EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
         //EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
@@ -72,13 +69,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
         EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
 
-        EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
-
         StartCoroutine(LateStartCoroutine());
     }
-
-    
-
     
 
     private IEnumerator LateStartCoroutine()
@@ -103,26 +95,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     }
 
-
-    //private void On_NETWORK_ReceivedGameSessionInfo(Event_GenericHandle<List<EPlayerID>, EPlayerID> eventHandle)
-    //{
-    //    List<EPlayerID> connectedPlayers = eventHandle.Arg1;
-    //    EPlayerID ownPlayer = eventHandle.Arg2;
-
-    //    // Connect and spawn player
-    //    foreach (EPlayerID playerID in connectedPlayers)
-    //    {
-    //        if (playerID == ownPlayer)
-    //        {
-    //            ConnectPlayer(playerID, EControllerID.TOUCH);
-    //        }
-    //        else
-    //        {
-    //            ConnectPlayer(playerID, MaleficusUtilities.GetControllerNeteworkID(playerID));
-    //        }
-    //    }
-    //}
-
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplicate eventHandle)
     {
         EPlayerID playerID      = eventHandle.UpdatedPlayerID;
@@ -139,10 +111,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         SpawnAllConnectedPlayers();
     }
 
-    private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
-    {
-        DisconnectAllPlayers();
-    }
+
 
     public override void OnSceneStartReinitialize()
     {
@@ -157,7 +126,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Players Management
     public void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
-        if ((ConnectedPlayers[toSpawnPlayerID] == true) 
+        if ((IsPlayerConnected(toSpawnPlayerID) == true) 
             || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
                 && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES))))
         {
@@ -215,46 +184,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // TODO: Implement removing player from team
     }
 
-    ///// <summary>
-    ///// Connect new player to a free spot
-    ///// </summary>
-    ///// <returns> The ID of the connected player </returns>
-    //public EPlayerID ConnectNextPlayerToController(EControllerID controllerID)
-    //{
-    //    EPlayerID playerIDToConnect = EPlayerID.NONE;
-
-    //    // Look for a free slot to connect player
-    //    foreach (EPlayerID playerID in connectedPlayers.Keys)
-    //    {
-    //        if (ConnectedPlayers[playerID] == false)
-    //        {
-    //            ConnectedPlayers[playerID] = true;
-    //            AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
-    //            playerIDToConnect = playerID;
-    //            playerControllerMapping[playerID] = controllerID;
-    //            break;         
-    //        }
-    //    }
-
-    //    if (playerIDToConnect != EPlayerID.NONE)
-    //    {
-    //        //EventManager.Instance.Invoke_PLAYERS_PlayerConnected(playerIDToConnect);
-
-    //        if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
-    //            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
-    //        {
-    //            SpawnPlayer(playerIDToConnect);
-    //        }
-
-    //        return playerIDToConnect;
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Can't connect new player. All 4 players are already connected");
-    //        return 0;
-    //    }
-    //}
-
     /// <summary>
     /// Looks for the next possibe free slot of a PlayerID
     /// </summary>
@@ -262,62 +191,16 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     public EPlayerID GetNextFreePlayerID()
     {
         EPlayerID result = EPlayerID.NONE;
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        for (int i = 1; i < 5; i++)
         {
-            if (ConnectedPlayers[playerID] == false)
+            EPlayerID currentPlayerID = MaleficusUtilities.IntToPlayerID(i);
+            if (IsPlayerConnected(currentPlayerID) == false)
             {
-                result = playerID;
+                result = currentPlayerID;
                 break;
             }
         }
         return result;
-    }
-
-    private void ConnectPlayer(EPlayerID playerID)
-    {
-        if (ConnectedPlayers[playerID] == false)
-        {
-            ConnectedPlayers[playerID] = true;
-            AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
-
-            //// Controller mapping
-            //playerControllerMapping[playerID] = controllerID;
-
-            // Spawn player On Connect?
-            if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true) 
-                && (ActivePlayers.ContainsKey(playerID) == false)
-                && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
-            {
-                SpawnPlayer(EPlayerID.PLAYER_1);
-            }
-            
-        }
-    }
-
-    public void DisconnectPlayerWithController(EControllerID controllerID)
-    {
-        EPlayerID playerID = GetPlayerIDFrom(controllerID);
-
-        if (IsPlayerConnected(playerID) == true)
-        {
-            //EventManager.Instance.Invoke_PLAYERS_PlayerDisconnected(playerID);
-            ConnectedPlayers[playerID] = false;
-            InputManager.Instance.DisconnectController(controllerID);
-        }
-        else
-        {
-            Debug.LogError("Trying to disconnect a player that is not connected");
-        }
-    }
-
-    private void DisconnectAllPlayers()
-    {
-        EPlayerID[] temp = ConnectedPlayers.Keys.ToArray();
-        foreach (EPlayerID playerID in temp)
-        {
-            EControllerID controllerID = GetControllerFrom(playerID);
-            DisconnectPlayerWithController(controllerID);
-        }
     }
 
 
@@ -338,7 +221,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
 
         ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
-
 
         // Instantiate spell now ?
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
@@ -374,9 +256,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
 
-
-        //Debug.Log(spellSlot + " by " + playerID + " > IsReadyToShoot : " + ActivePlayers[playerID].IsReadyToShoot + " > ReadyToUseSpell : " + ActivePlayers[playerID].ReadyToUseSpell[spellSlot]);
-
         if (spell.MovementType != ESpellMovementType.LINEAR_LASER)
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
@@ -399,10 +278,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         float joystick_X = eventHandle.Joystick_X;
         float joystick_Y = eventHandle.Joystick_Y;
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
-        EControllerID controllerID = GetControllerFrom(playerID);
 
-        if ((controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS))
-        || (controllerID == EControllerID.TOUCH))
+        if (PlayersMovement.ContainsKey(playerID))
         {
             if (joystickType == EJoystickType.MOVEMENT)
             {
@@ -416,9 +293,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             }
         }
     }
-
-
-
 
     #endregion
 
@@ -444,12 +318,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Initialization
     private void InitializeDictionaries()
     {
-        ConnectedPlayers.Clear();
-        ConnectedPlayers[EPlayerID.PLAYER_1] = false;
-        ConnectedPlayers[EPlayerID.PLAYER_2] = false;
-        ConnectedPlayers[EPlayerID.PLAYER_3] = false;
-        ConnectedPlayers[EPlayerID.PLAYER_4] = false;
-
         Teams.Clear();
         Teams[ETeamID.TEAM_1] = new List<EPlayerID>();
         Teams[ETeamID.TEAM_2] = new List<EPlayerID>();
@@ -460,7 +328,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         playersTeam[EPlayerID.PLAYER_1] = ETeamID.NONE;
         playersTeam[EPlayerID.PLAYER_2] = ETeamID.NONE;
         playersTeam[EPlayerID.PLAYER_3] = ETeamID.NONE;
-        playersTeam[EPlayerID.PLAYER_4] = ETeamID.NONE;
+        PlayersTeam[EPlayerID.PLAYER_4] = ETeamID.NONE;
 }
 
 
@@ -513,29 +381,22 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnAllConnectedPlayers()
     {
-        foreach (EPlayerID playerID in ConnectedPlayers.Keys)
+        foreach (EPlayerID playerID in GetConnectedPlayers())
         {
             SpawnPlayer(playerID);
         }
-    }
-
-    /* public player information getter functions */
-    public bool IsPlayerConnected(EPlayerID playerID)
-    {
-        if (ConnectedPlayers.Keys.Contains(playerID))
-        {
-            return ConnectedPlayers[playerID];
-        }
-        return false;
     }
 
     public JoystickInput GetPlayerInput(EPlayerID playerID)
     {
         if (PlayersMovement.ContainsKey(playerID) == false)
         {
-            return null;
+            if (MotherOfManagers.Instance.IsSpawnAllPlayers == false)
+            {
+                Debug.LogError("No player movement found for : " + playerID);
+            }
+            return new JoystickInput();
         }
-
         return PlayersMovement[playerID];
     }
 
@@ -551,13 +412,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellSlot spellSlot)                 
     {
-        yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellSlot]);
-        ActivePlayers[playerID].IsReadyToShoot = true;
+        if (ActivePlayers.ContainsKey(playerID))
+        {
+            yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellSlot]);
+            ActivePlayers[playerID].IsReadyToShoot = true;
 
-        yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellSlot]);
-        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
+            yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellSlot]);
+            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
+        }
 
-        
     }
 
     public void OnPlayerOutOfBound(EPlayerID playerID)
@@ -580,89 +443,51 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    //public EPlayerID GetPlayerIDFrom(EControllerID controllerID)
-    //{
-    //    EPlayerID result = EPlayerID.NONE;
-    //    foreach (EPlayerID playerID in playerControllerMapping.Keys)
-    //    {
-    //        if (controllerID == playerControllerMapping[playerID])
-    //        {
-    //            result = playerID;
-    //        }
-    //    }
-    //    return result;
-    //}
-
-    //public EControllerID GetControllerFrom(EPlayerID playerID)
-    //{
-    //    if (playerControllerMapping.ContainsKey(playerID))
-    //    {
-    //        return playerControllerMapping[playerID];
-    //    }
-    //    return EControllerID.NONE;
-    //}
-
-
-    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHande)
+    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
-        
+        EPlayerID playerID = eventHandle.Arg2;
+        AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
+
+        if (PlayersMovement.ContainsKey(playerID) == false)
+        {
+            // Initialize player movement for the new player
+            PlayersMovement.Add(playerID, new JoystickInput());
+        }
+        else
+        {
+            Debug.LogError("Connecting a player that is already connected");
+        }
+
+        // Spawn player On Connect?
+        if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true)
+            && (ActivePlayers.ContainsKey(playerID) == false)
+            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
+        {
+            SpawnPlayer(EPlayerID.PLAYER_1);
+        }
     }
 
-    private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHande)
+    private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
-        throw new NotImplementedException();
+        EPlayerID playerID = eventHandle.Arg2;
+        if (PlayersMovement.ContainsKey(playerID) == true)
+        {
+            PlayersMovement.Remove(playerID);
+        }
+        else
+        {
+            Debug.LogError("Trying to disconnect a player that is not connected");
+        }
     }
 
-    private void UpdateControllersInput()
+   
+    public EPlayerID[] GetConnectedPlayers()
     {
-        //var controllersInput = InputManager.Instance.ControllersInput;
-        //foreach (EControllerID controllerID in controllersInput.Keys)
-        //{
-        //    ControllerInput controllerInput = controllersInput[controllerID];
-        //    EPlayerID playerID = GetPlayerIDFrom(controllerID);
+        return InputManager.Instance.ConnectedControllers.Values.ToArray<EPlayerID>();
+    }
 
-        //    // Movement
-        //    if (controllerInput.HasMoved())
-        //    {
-        //        float x = controllerInput.JoystickValues[EInputAxis.MOVE_X];
-        //        float y = controllerInput.JoystickValues[EInputAxis.MOVE_Y];
-        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.MOVEMENT, x, y, playerID);
-
-        //        On_INPUT_JoystickMoved(eventHandle);
-        //    }
-
-        //    // Rotation
-        //    if (controllerInput.HasRotated())
-        //    {
-        //        float x = controllerInput.JoystickValues[EInputAxis.ROTATE_X];
-        //        float y = controllerInput.JoystickValues[EInputAxis.ROTATE_Y];
-        //        JoystickMovedEventHandle eventHandle = new JoystickMovedEventHandle(EJoystickType.ROTATION, x, y, playerID);
-
-        //        On_INPUT_JoystickMoved(eventHandle);
-        //    }
-
-        //    // Button pressesd
-        //    var isButtonPressed = controllerInput.IsButtonPressed;
-        //    foreach (EInputButton inputButton in isButtonPressed.Keys)
-        //    {
-        //        if (isButtonPressed[inputButton] == true)
-        //        {
-        //            ButtonPressedEventHandle eventHandle = new ButtonPressedEventHandle(playerID, inputButton);
-        //            On_INPUT_ButtonPressed(eventHandle);
-        //        }
-        //    }
-
-        //    // Button Released
-        //    var isButtonReleased = controllerInput.IsButtonReleased;
-        //    foreach (EInputButton inputButton in isButtonReleased.Keys)
-        //    {
-        //        if (isButtonReleased[inputButton] == true)
-        //        {
-        //            Debug.Log("inputButton : " + inputButton + " | controller : " + controllerID);
-        //            ButtonReleasedEventHandle eventHandle = new ButtonReleasedEventHandle(playerID, inputButton);
-        //            //On_INPUT_ButtonReleased(eventHandle);
-        //        }
-        //    }
-        //}
+    public bool IsPlayerConnected(EPlayerID playerID)
+    {
+        return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
     }
 }

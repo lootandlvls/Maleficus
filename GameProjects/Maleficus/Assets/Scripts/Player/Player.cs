@@ -97,42 +97,44 @@ public class Player : MonoBehaviour, IPlayer
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
             JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
-
-            float Move_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
-            float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
-            float Rotate_X = playerInput.JoystickValues[EInputAxis.ROTATE_X];
-            float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
-            Move(Move_X, Move_Y);
-            Rotate(Rotate_X, Rotate_Y);
-
-            if (playerInput.HasMoved() == true)
-            // Moving?
+            if (playerInput != null)
             {
-                myAnimator.SetBool("idle", false);
-            }
-            // Not moving?
-            else
-            {
-                myAnimator.SetBool("idle", true);
-            }
+                float Move_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
+                float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
+                float Rotate_X = playerInput.JoystickValues[EInputAxis.ROTATE_X];
+                float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
+                Move(Move_X, Move_Y);
+                Rotate(Rotate_X, Rotate_Y);
 
-            if (playerInput.HasRotated() == true)
-            // Rotating?
-            {
-
-                SetDirectionalSpritesVisible(true);
-                lastTimeSinceRotated = Time.time;
-            }
-            else
-            // Not Rotating?
-            {
-                SetDirectionalSpritesVisible(false);
-
-                if ((playerInput.HasMoved() == true)
-                    && (Time.time - lastTimeSinceRotated > 0.5f))
-                // Moving for 1 second since last rortation?
+                if (playerInput.HasMoved() == true)
+                // Moving?
                 {
-                    LookAtMovingDirection(playerInput);
+                    myAnimator.SetBool("idle", false);
+                }
+                // Not moving?
+                else
+                {
+                    myAnimator.SetBool("idle", true);
+                }
+
+                if (playerInput.HasRotated() == true)
+                // Rotating?
+                {
+
+                    SetDirectionalSpritesVisible(true);
+                    lastTimeSinceRotated = Time.time;
+                }
+                else
+                // Not Rotating?
+                {
+                    SetDirectionalSpritesVisible(false);
+
+                    if ((playerInput.HasMoved() == true)
+                        && (Time.time - lastTimeSinceRotated > 0.5f))
+                    // Moving for 1 second since last rortation?
+                    {
+                        LookAtMovingDirection(playerInput);
+                    }
                 }
             }
         }
@@ -158,7 +160,7 @@ public class Player : MonoBehaviour, IPlayer
     private void Rotate(float axis_X, float axis_Z)
     {
         DebugManager.Instance.Log(4, " PLAYER ROTATE ");
-        if (axis_X != 0.0f || axis_Z != 0.0f)
+        if (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > 0.0f)
         {
             RotateRelativeToGrandParentRotation(axis_X, -axis_Z);
         }
@@ -183,19 +185,21 @@ public class Player : MonoBehaviour, IPlayer
 
     public void StartChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        if (spell.MovementType == ESpellMovementType.LINEAR_HIT)
+        if (IsPlayerCharging == false)
         {
-            IsPlayerCharging = true;
-            
-            Debug.Log("Player started Charging");
-            StartNewCoroutine(SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
-            //StartCoroutine(SpellChargingCoroutine(spellSlot));
-        }
-        else if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
-        {
-            StartCoroutine(SlowDownPlayerCoroutine(speed / 2.0f, spell.CastingDuration));
-        }
+            if (spell.MovementType == ESpellMovementType.LINEAR_HIT)
+            {
+                IsPlayerCharging = true;
 
+                Debug.Log("Player started Charging");
+                StartNewCoroutine(SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
+                //StartCoroutine(SpellChargingCoroutine(spellSlot));
+            }
+            else if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+            {
+                StartCoroutine(SlowDownPlayerCoroutine(speed / 2.0f, spell.CastingDuration));
+            }
+        }
     }
 
     public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
@@ -303,7 +307,6 @@ public class Player : MonoBehaviour, IPlayer
             ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
             ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
 
-            Debug.Log("34563463463 spellCharging function working...");
             while (IsPlayerCharging)
             {
                 particleSystemBodyEffect.maxParticles = counter;

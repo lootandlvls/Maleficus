@@ -342,7 +342,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         }
 
         EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(ownClientID);
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new Event_AbstractHandle<List<EPlayerID>, EPlayerID>
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new Event_GenericHandle<List<EPlayerID>, EPlayerID>
             (connectedPlayers, playerID), EEventInvocationType.LOCAL_ONLY);
     }
     #endregion

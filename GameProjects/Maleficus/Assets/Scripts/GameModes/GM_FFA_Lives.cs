@@ -108,13 +108,9 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 
     protected override void InitializePlayerStats()
     {
-        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
         {
-            if (connectedPlayers[playerID] == true)
-            {
-                playerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
-            }
+            playerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
         }
     }
 }

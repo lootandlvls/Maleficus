@@ -101,13 +101,9 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 
     protected override void InitializePlayerStats()
     {
-        Dictionary<EPlayerID, bool> connectedPlayers = PlayerManager.Instance.ConnectedPlayers;       
-        foreach (EPlayerID playerID in connectedPlayers.Keys)
+        foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
         {
-            if (connectedPlayers[playerID] == true)
-            {
-                playerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
-            }
+            playerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
         }
     }
 }

@@ -1,11 +1,52 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GamepadInputSource : AbstractInputSource
 {
+    /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
+    private Dictionary<EControllerID, bool> canPerformHorizontalDirectionalButton = new Dictionary<EControllerID, bool>();
+    /// <summary> Mapping to know if a specific player can perform a directional button when using the joystick  </summary>
+    private Dictionary<EControllerID, bool> canPerformVerticalDirectionalButton = new Dictionary<EControllerID, bool>();
 
-    private void CheckButtonsAndJoysticksInput()
+
+    private void Start()
+    {
+        EventManager.Instance.INPUT_ControllerConnected.AddListener(On_INPUT_ControllerConnected);
+        EventManager.Instance.INPUT_ControllerDisconnected.AddListener(On_INPUT_ControllerDisconnected);
+    }
+
+    /// <summary>
+    /// Add controller in dictionary if connected
+    /// </summary>
+    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> evenHandle)
+    {
+        EControllerID controllerID = evenHandle.Arg1;
+
+        if (controllerID.ContainedIn(MaleficusConsts.GAMEPADS_CONTROLLERS))
+        {
+            canPerformHorizontalDirectionalButton.Add(controllerID, true);
+            canPerformVerticalDirectionalButton.Add(controllerID, true);
+        }
+    }
+
+    /// <summary>
+    /// Remove controller from dictionary if disconnected
+    /// </summary>
+    private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> evenHandle)
+    {
+        EControllerID controllerID = evenHandle.Arg1;
+
+        if (controllerID.ContainedIn(MaleficusConsts.GAMEPADS_CONTROLLERS))
+        {
+            canPerformHorizontalDirectionalButton.Remove(controllerID);
+            canPerformVerticalDirectionalButton.Remove(controllerID);
+        }
+    }
+
+ 
+    private void Update()
     {
         // Confirm
         Check_Confirm(EControllerID.GAMEPAD_A);
@@ -15,10 +56,10 @@ public class GamepadInputSource : AbstractInputSource
 
         // TODO: Add missing Cancel buttons in Input Setting
         // Cancel
-        //Check_Cancel(EpellIDllerID.CONTROLLER_A);
-        //Check_Cancel(EControllerID.CONTROLLER_B);
-        //Check_Cancel(EControllerID.CONTROLLER_C);
-        //Check_Cancel(EControllerID.CONTROLLER_D);
+        Check_Cancel(EControllerID.GAMEPAD_A);
+        Check_Cancel(EControllerID.GAMEPAD_B);
+        Check_Cancel(EControllerID.GAMEPAD_C);
+        Check_Cancel(EControllerID.GAMEPAD_D);
 
         /* Charging spell check */
         // Spell 1
@@ -54,226 +95,147 @@ public class GamepadInputSource : AbstractInputSource
         Check_CastedSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_C);
         Check_CastedSpell(ESpellSlot.SPELL_3, EControllerID.GAMEPAD_D);
 
-        // Horizontal 
-        // Left 
-        Check_Axis("Horizontal", 'L', EControllerID.GAMEPAD_A);
-        Check_Axis("Horizontal", 'L', EControllerID.GAMEPAD_B);
-        Check_Axis("Horizontal", 'L', EControllerID.GAMEPAD_C);
-        Check_Axis("Horizontal", 'L', EControllerID.GAMEPAD_D);
+        // Left joystick 
+        Check_Axis(EJoystickType.MOVEMENT, EControllerID.GAMEPAD_A);
+        Check_Axis(EJoystickType.MOVEMENT, EControllerID.GAMEPAD_B);
+        Check_Axis(EJoystickType.MOVEMENT, EControllerID.GAMEPAD_C);
+        Check_Axis(EJoystickType.MOVEMENT, EControllerID.GAMEPAD_D);
 
-        // Right
-        Check_Axis("Horizontal", 'R', EControllerID.GAMEPAD_A);
-        Check_Axis("Horizontal", 'R', EControllerID.GAMEPAD_B);
-        Check_Axis("Horizontal", 'R', EControllerID.GAMEPAD_C);
-        Check_Axis("Horizontal", 'R', EControllerID.GAMEPAD_D);
+        // Right joystick 
+        Check_Axis(EJoystickType.ROTATION, EControllerID.GAMEPAD_A);
+        Check_Axis(EJoystickType.ROTATION, EControllerID.GAMEPAD_B);
+        Check_Axis(EJoystickType.ROTATION, EControllerID.GAMEPAD_C);
+        Check_Axis(EJoystickType.ROTATION, EControllerID.GAMEPAD_D);
 
-        // Vertical 
-        // Left 
-        Check_Axis("Vertical", 'L', EControllerID.GAMEPAD_A);
-        Check_Axis("Vertical", 'L', EControllerID.GAMEPAD_B);
-        Check_Axis("Vertical", 'L', EControllerID.GAMEPAD_C);
-        Check_Axis("Vertical", 'L', EControllerID.GAMEPAD_D);
-
-        // Right
-        Check_Axis("Vertical", 'R', EControllerID.GAMEPAD_A);
-        Check_Axis("Vertical", 'R', EControllerID.GAMEPAD_B);
-        Check_Axis("Vertical", 'R', EControllerID.GAMEPAD_C);
-        Check_Axis("Vertical", 'R', EControllerID.GAMEPAD_D);
     }
 
     private void Check_Confirm(EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-        if (Input.GetButtonDown("Confirm_" + controllerIDName))
+        if (controllerIDName != 'X')
         {
-            if ((InputManager.Instance.IsControllerConnected(controllerID) == true) || (InputManager.Instance.InputMode == EInputMode.TEST))
+            if (Input.GetButtonDown("Confirm_" + controllerIDName))
             {
-                InvokeButtonPressed(controllerID, EInputButton.CONFIRM);
-            }
-            else if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_GAMEPADS)
-                 // Connect players
-            {
-                EPlayerID playerID = PlayerManager.Instance.GetNextFreePlayerID();
-                if ((playerID != EPlayerID.TEST)
-                    && (playerID != EPlayerID.NONE))
+                if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
+                    || (InputManager.Instance.InputMode == EInputMode.TEST))
                 {
-                    InputManager.Instance.ConnectControllerToPlayer(controllerID, playerID);
+                    InvokeButtonPressed(controllerID, EInputButton.CONFIRM);
+                }
+                // Connect controller
+                else if ((AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_GAMEPADS)
+                    || (MotherOfManagers.Instance.IsConnectControllerInAnyState == true))
+                {
+                    EPlayerID playerID = PlayerManager.Instance.GetNextFreePlayerID();
+                    if ((playerID != EPlayerID.TEST)
+                        && (playerID != EPlayerID.NONE))
+                    {
+                        InputManager.Instance.ConnectControllerToPlayer(controllerID, playerID);
+                    }
                 }
             }
         }
     }
 
-    private void Check_Cancel(EControllerID controllerID)
+    private void Check_Cancel(EControllerID controllerID)         // TODO: Test with controller if it works
     {
+        // Is button pressed?
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-
-        // TODO: Test with controller if it works
-        if (Input.GetButtonDown("Cancel_" + controllerIDName))
+        if (controllerIDName != 'X')
         {
-            if ((InputManager.Instance.IsControllerConnected(controllerID) == true) || (InputManager.Instance.InputMode == EInputMode.TEST))
+            if (Input.GetButtonDown("Cancel_" + controllerIDName))
             {
-                //EPlayerID playerID = GetPlayerIDTo(controllerID);
-
-                if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_GAMEPADS)
-                // Disconnect Player
+                if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
+                    || (InputManager.Instance.InputMode == EInputMode.TEST))
                 {
-                    PlayerManager.Instance.DisconnectPlayerWithController(controllerID);
-                    //playerControllerMapping.Remove(controllerID);
-                    InputManager.Instance.DisconnectController(controllerID);
-                }
-                else // Not in connecting players state
-                {
-                    //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.CANCEL, playerID);
-                    //controllersInput[controllerID].IsButtonPressed[EInputButton.CANCEL] = true;
+                    // Disconnect Player
+                    if ((AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_GAMEPADS)
+                        | (MotherOfManagers.Instance.IsConnectControllerInAnyState == true))
+                    {
+                        InputManager.Instance.DisconnectController(controllerID);
+                    }
+                    else // Not in connecting players state
+                    {
+                        InvokeButtonPressed(controllerID, EInputButton.CANCEL);
+                    }
                 }
             }
         }
     }
 
-
-    private void Check_ChargingSpell(ESpellSlot spellID, EControllerID controllerID)
+    private void Check_ChargingSpell(ESpellSlot spellSlot, EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-        EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellID);
-        if (inputButton == EInputButton.NONE)
-        {
-            return;
-        }
+        int spellID = MaleficusUtilities.SpellSlotToInt(spellSlot);
 
-        if ((InputManager.Instance.IsControllerConnected(controllerID) == true) || (InputManager.Instance.InputMode == EInputMode.TEST))
+        if ((controllerIDName != 'X')  && (spellID != 0))
         {
-            // Did player press button?
+            // Is button pressed?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerIDName))
             {
-                //EPlayerID playerID = GetPlayerIDTo(controllerID);
-                //EventManager.Instance.Invoke_INPUT_ButtonPressed(inputButton, playerID);
-                //controllersInput[controllerID].IsButtonPressed[inputButton] = true;
+                EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellSlot);
+                if (inputButton != EInputButton.NONE)
+                {
+                    if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
+                        || (InputManager.Instance.InputMode == EInputMode.TEST))
+                    {
+                        InvokeButtonPressed(controllerID, inputButton);
+                    }
+                }
             }
         }
     }
 
-    private void Check_CastedSpell(ESpellSlot spellID, EControllerID controllerID)
+    private void Check_CastedSpell(ESpellSlot spellSlot, EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-        EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellID);
-        if (inputButton == EInputButton.NONE)
-        {
-            return;
-        }
+        int spellID = MaleficusUtilities.SpellSlotToInt(spellSlot);
 
-        if ((InputManager.Instance.IsControllerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
+        if ((controllerIDName != 'X') && (spellID != 0))
         {
-            // Did player press button?
+            // Is button pressed?
             if (Input.GetButtonUp("CastSpell_" + spellID + '_' + controllerIDName))
             {
-                //EPlayerID playerID = GetPlayerIDTo(controllerID);
-                //EventManager.Instance.Invoke_INPUT_ButtonReleased(inputButton, playerID);
-                //controllersInput[controllerID].IsButtonReleased[inputButton] = true;
+                EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellSlot);
+                if (inputButton != EInputButton.NONE)
+                {
+                    if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
+                        || (InputManager.Instance.InputMode == EInputMode.TEST))
+                    {
+                        InvokeButtonReleased(controllerID, inputButton);
+                    }
+                }
             }
         }
     }
 
-
-    private void Check_Axis(string axisName, char axisSide, EControllerID controllerID)
+    private void Check_Axis(EJoystickType joystickType, EControllerID controllerID)
     {
         char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-
-        if ((InputManager.Instance.IsControllerConnected(controllerID) == true) || (InputMode == EInputMode.TEST))
+        char axisSide = MaleficusUtilities.JoystickTypeToChar(joystickType);
+        if (axisSide != 'X')
         {
-            // Did player move joystick
-            float axisValue = Input.GetAxis(axisName + '_' + axisSide + '_' + controllerIDName);
-            if (axisValue != 0.0f)
+            if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
+                || (InputManager.Instance.InputMode == EInputMode.TEST))
             {
-                //EPlayerID playerID = GetPlayerIDTo(controllerID);
+                float x = Input.GetAxis("Horizontal" + '_' + axisSide + '_' + controllerIDName);
+                float y = Input.GetAxis("Vertical" + '_' + axisSide + '_' + controllerIDName);
+                DebugManager.Instance.Log(2, controllerID +  "> x : " + x + " | y : " + y);
 
-                // Is it a MOVE or ROTATE joystick?
-                EInputAxis inputAxis = EInputAxis.MOVE_Y;
-                if (axisSide == 'L')
-                {
-                    if (axisName == "Horizontal")
-                    {
-                        inputAxis = EInputAxis.MOVE_X;
-                    }
-                    else if (axisName == "Vertical")
-                    {
-                        inputAxis = EInputAxis.MOVE_Y;
-                    }
-
-                }
-                else if (axisSide == 'R')
-                {
-                    if (axisName == "Horizontal")
-                    {
-                        inputAxis = EInputAxis.ROTATE_X;
-                    }
-                    else if (axisName == "Vertical")
-                    {
-                        inputAxis = EInputAxis.ROTATE_Y;
-                    }
-                }
-
-                // Axis event
-                //EventManager.Instance.INPUT_JoystickMoved.Invoke(new JoystickMovedEventHandle(inputAxis, axisValue, playerID));
-                ControllersInput[controllerID].JoystickValues[inputAxis] = axisValue;
-
-                // Directional button event                                                                                              
-                if (axisSide == 'L')
-                {
-                    if (axisName == "Horizontal")
-                    {
-                        if ((Mathf.Abs(axisValue) > MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[controllerID] == true))
-                        {
-                            canPerformHorizontalDirectionalButton[controllerID] = false;
-
-                            if (axisValue > 0.0f)  // Which direction?  
-                                                   // positive value
-                            {
-                                //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.RIGHT, playerID);
-                                //controllersInput[controllerID].IsButtonPressed[EInputButton.RIGHT] = true;
-
-                            }
-                            else
-                            // negative value
-                            {
-                                //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.LEFT, playerID);
-                                //controllersInput[controllerID].IsButtonPressed[EInputButton.LEFT] = true;
-                            }
-                        }
-                        else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformHorizontalDirectionalButton[controllerID] == false))
-                        {
-                            canPerformHorizontalDirectionalButton[controllerID] = true;
-                        }
-                    }
-                    else if (axisName == "Vertical")
-                    {
-                        if ((Mathf.Abs(axisValue) > MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[controllerID] == true))
-                        {
-                            canPerformVerticalDirectionalButton[controllerID] = false;
-
-                            if (axisValue > 0.0f)    // Which direction?
-                                                     // positive value
-                            {
-                                //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.DOWN, playerID);
-                                //controllersInput[controllerID].IsButtonPressed[EInputButton.DOWN] = true;
-                            }
-                            else
-                            // negative value
-                            {
-                                //EventManager.Instance.Invoke_INPUT_ButtonPressed(EInputButton.UP, playerID);
-                                //controllersInput[controllerID].IsButtonPressed[EInputButton.UP] = true;
-                            }
-                        }
-                        else if ((Mathf.Abs(axisValue) < MaleficusConsts.DIRECTIONAL_BUTTON_THRESHOLD) && (canPerformVerticalDirectionalButton[controllerID] == false))
-                        {
-                            canPerformVerticalDirectionalButton[controllerID] = true;
-                        }
-                    }
-                }
+                InvokeJoystickMoved(controllerID, joystickType, x, y);
             }
-
-            // Debug
-            DebugManager.Instance.Log(2, "joystick " + axisName + " " + axisSide + " by " + controllerID + " : " + axisValue);
         }
     }
 
+    private void ReInitializeDirectionalMaps()
+    {
+        foreach (EControllerID controllerID in InputManager.Instance.ConnectedControllers.Keys)
+        {
+            canPerformHorizontalDirectionalButton[controllerID] = true;
+        }
+
+        foreach (EControllerID controllerID in InputManager.Instance.ConnectedControllers.Keys)
+        {
+            canPerformVerticalDirectionalButton[controllerID] = true;
+        }
+    }
 }
