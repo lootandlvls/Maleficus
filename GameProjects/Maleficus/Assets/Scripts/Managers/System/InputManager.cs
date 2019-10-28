@@ -86,7 +86,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         if (ConnectedControllers.ContainsKey(controllerID))
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(controllerID);
+            EPlayerID playerID = ConnectedControllers[controllerID];
             EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
 
             if (inputButton != EInputButton.NONE)
@@ -101,7 +101,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         if (ConnectedControllers.ContainsKey(controllerID))
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(controllerID);
+            EPlayerID playerID = ConnectedControllers[controllerID];
             EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
 
             if (inputButton != EInputButton.NONE)
@@ -117,11 +117,12 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         if (ConnectedControllers.ContainsKey(controllerID))
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(controllerID);
+            EPlayerID playerID = ConnectedControllers[controllerID];
             EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
 
             if (joystickType != EJoystickType.NONE)
             {
+
                 NetEvent_JoystickMoved joystickMoved = new NetEvent_JoystickMoved(clientID, joystickType, x, y);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY);
             }

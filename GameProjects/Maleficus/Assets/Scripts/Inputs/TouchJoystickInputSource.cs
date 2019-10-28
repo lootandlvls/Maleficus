@@ -5,6 +5,8 @@ using UnityEngine;
 public class TouchJoystickInputSource : AbstractInputSource
 {
 
+    private Vector2 oldInput = new Vector2(0.0f, 0.0f);
+
     private void Awake()
     {
         MaleficusJoystick[] maleficusJoystics = FindObjectsOfType<MaleficusJoystick>();
@@ -30,14 +32,8 @@ public class TouchJoystickInputSource : AbstractInputSource
         Vector2 newInput = joystickInput;
 
         if ((InputManager.Instance.InputMode == EInputMode.TOUCH)
-            && (ControllersInput.ContainsKey(EControllerID.TOUCH))
             && (Mathf.Abs(newInput.x) + Mathf.Abs(newInput.y) > MaleficusConsts.THRESHOLD_JOYSTICK_ACTIVATION))
         {
-            EPlayerID playerID = PlayerManager.Instance.GetPlayerIDFrom(EControllerID.TOUCH);
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
-
-            //EClientID clientID = NetworkManager.Instance.OwnClientID;
-
             // Move joystick
             if (touchJoystickType == ETouchJoystickType.MOVE)
             {
