@@ -24,7 +24,6 @@ public class ServerManager : NetworkManager
     public readonly bool isPlayer = false;
 
     private byte error;
-    private bool connected = false;
     private Mongo dataBank;
     private Dictionary<EClientID, int> connectedPlayers = new Dictionary<EClientID, int>();
     private IEnumerator UpdateGameStateEnumerator;
@@ -48,44 +47,48 @@ public class ServerManager : NetworkManager
         base.Start();
 
         EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
+
+
+        isConnected = false;
+        StartCoroutine(SetUpConnectionsCoroutine());
     }
 
-    protected override void Update()
+    protected void FixedUpdate()
     {
-        if (!connected)
+        if (!isConnected)
         {
-            StartCoroutine("SetUpConnections");
+            StartCoroutine(SetUpConnectionsCoroutine());
         }
         else
         {
-            StartCoroutine("UpdateMessagePump");
+            StartCoroutine(UpdateMessagePumpCoroutine());
         }
     }
 
 
     #endregion
 
-    System.Collections.IEnumerator SetUpConnections()
+    private IEnumerator SetUpConnectionsCoroutine()
     {
-        yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
-        if (!connected)
+        while (isConnected == false)
         {
+
             dataBank = new Mongo();
             if (dataBank.Init() && server_hostId != -1)
             {
                 NetworkTransport.Init();
 
-                ConnectionConfig cc = new ConnectionConfig();
+                ConnectionConfig connectionConfig = new ConnectionConfig();
 
-                server_reliableChannel = cc.AddChannel(QosType.Unreliable);
+                server_reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
 
 
-                HostTopology topo = new HostTopology(cc, MaleficusConsts.SERVER_MAX_USER);
+                HostTopology hostTopology = new HostTopology(connectionConfig, MaleficusConsts.SERVER_MAX_USER);
 
 
                 // Server only code
 
-                server_hostId = NetworkTransport.AddHost(topo, MaleficusConsts.PORT, null);
+                server_hostId = NetworkTransport.AddHost(hostTopology, MaleficusConsts.PORT, null);
                 Debug.Log("added host with Port 26002");
                 /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
                 Debug.Log("connected to Instance Manager Port 9999");
@@ -94,13 +97,21 @@ public class ServerManager : NetworkManager
             }
             if (dataBank != null && (server_hostId != -1))
             {
-                connected = true;
+                isConnected = true;
+
+                // Start fetching network messages
+                StartCoroutine(UpdateMessagePumpCoroutine());
+            }
+            else
+            {
+                yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
+
             }
         }
     }
 
 
-    System.Collections.IEnumerator UpdateMessagePump()
+    private IEnumerator UpdateMessagePumpCoroutine()
     {
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
@@ -112,7 +123,6 @@ public class ServerManager : NetworkManager
         bool isContinue = true;
         while (isContinue)
         {
-            yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
             NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
             switch (type)
             {
@@ -147,7 +157,12 @@ public class ServerManager : NetworkManager
                     Debug.Log("Unexpected network event type");
                     break;
             }
+
+            yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
         }
+
+        // if disconnected start connection coroutine
+        StartCoroutine(SetUpConnectionsCoroutine());
     }
 
     #region OnData
@@ -622,7 +637,7 @@ public class ServerManager : NetworkManager
 
     protected override void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
-        // Do not call base method. Need to be overrid.
+        // Do not call base method. Need to be overriden.
 
         if (UpdateGameStateEnumerator != null)
         {

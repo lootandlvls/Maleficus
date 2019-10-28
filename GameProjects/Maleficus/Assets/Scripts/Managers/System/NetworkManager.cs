@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -18,7 +19,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private byte error;
 
     private string token;
-    private bool connected = false;
+    protected bool isConnected = false;
     private int ownLobbyID;
     protected EClientID ownClientID;
 
@@ -34,6 +35,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     protected virtual void Start()
     {
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+
+        isConnected = false;
+        StartCoroutine(ConnectToServerCoroutine());
+        
     }
 
     public override void OnSceneStartReinitialize()
@@ -41,17 +46,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         Init();
     }
 
-    protected virtual void Update()
-    {
-        if (!connected)
-        {
-            StartCoroutine("ConnectToServer");
-        }
-        else
-        {
-            StartCoroutine("UpdateMessagePump");
-        }
-    }
+    
+
     #endregion
 
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
@@ -76,34 +72,48 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     }
 
-    System.Collections.IEnumerator ConnectToServer()
+    private IEnumerator ConnectToServerCoroutine()
     {
-        yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
-        NetworkTransport.Init();
+        while (isConnected == false)
+        {
 
-        ConnectionConfig cc = new ConnectionConfig();
-        reliableChannel = cc.AddChannel(QosType.Unreliable);
 
-        HostTopology topo = new HostTopology(cc, MaleficusConsts.CLIENT_MAX_USER);
+            NetworkTransport.Init();
 
-        // Client only code
-        hostId = NetworkTransport.AddHost(topo, 0);
+            ConnectionConfig connectionConfig = new ConnectionConfig();
+            reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
+
+            HostTopology hostTopology = new HostTopology(connectionConfig, MaleficusConsts.CLIENT_MAX_USER);
+
+            // Client only code
+            hostId = NetworkTransport.AddHost(hostTopology, 0);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 // Web Client
 connectionId = NetworkTransport.Connect(hostId, SERVER_IP, WEB_PORT, 0, out error);
 Debug.Log("Connecting from Web");
 #else
-        // Standalone Client
-        Debug.Log(MotherOfManagers.Instance.ServerIP);
-        connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, MaleficusConsts.PORT, 0, out error);
-        Debug.Log("Connecting from Standalone");
+            // Standalone Client
+            Debug.Log(MotherOfManagers.Instance.ServerIP);
+            connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, MaleficusConsts.PORT, 0, out error);
+            Debug.Log("Connecting from Standalone");
 #endif
-        Debug.Log(string.Format("Attempting to connect on {0}...", MotherOfManagers.Instance.ServerIP));
-        if (connectionId != -1)
-        {
-            connected = true;
+            Debug.Log(string.Format("Attempting to connect on {0}...", MotherOfManagers.Instance.ServerIP));
+            if (connectionId != -1)
+            {
+                isConnected = true;
+
+                // Start fetching network messages
+                StartCoroutine(UpdateMessagePumpCoroutine());
+            }
+            else
+            {
+                yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
+
+            }
         }
+
+        
     }
 
     public void Shutdown()
@@ -111,7 +121,7 @@ Debug.Log("Connecting from Web");
         NetworkTransport.Shutdown();
     }
 
-    System.Collections.IEnumerator UpdateMessagePump()
+    private IEnumerator UpdateMessagePumpCoroutine()
     {
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
@@ -120,40 +130,48 @@ Debug.Log("Connecting from Web");
         byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
         int dataSize;
 
-        bool isContinue = true;
-        while (isContinue)
+        // Start fetching messages routine
+        while (isConnected == true)
         {
-            yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
-            NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
-            switch (type)
+            bool isFetchingCompleted = false;
+            while (isFetchingCompleted == false)
             {
-                case NetworkEventType.ConnectEvent:
-                    Debug.Log("Connected to server");
-                    UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
-                    Net_Connected c = new Net_Connected();
-                    break;
+                NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
+                switch (type)
+                {
+                    case NetworkEventType.ConnectEvent:
+                        Debug.Log("Connected to server");
+                        UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
+                        Net_Connected c = new Net_Connected();
+                        break;
 
-                case NetworkEventType.DisconnectEvent:
-                    Debug.Log("Disconnected from server");
-                    UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
-                    Net_Disonnected di = new Net_Disonnected();
-                    connected = false;
-                    break;
+                    case NetworkEventType.DisconnectEvent:
+                        Debug.Log("Disconnected from server");
+                        UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
+                        Net_Disonnected disconnected = new Net_Disonnected();
+                        isConnected = false;  // changed to false. was true??
+                        break;
 
-                case NetworkEventType.DataEvent:
-                    UpdateReceivedMessage(ENetworkMessageType.DATA);
-                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
-                    MemoryStream ms = new MemoryStream(recBuffer);
-                    AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
+                    case NetworkEventType.DataEvent:
+                        UpdateReceivedMessage(ENetworkMessageType.DATA);
+                        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
+                        MemoryStream memoryStream = new MemoryStream(recBuffer);
+                        AbstractNetMessage message = (AbstractNetMessage)formatter.Deserialize(memoryStream);
 
-                    OnData(connectionId, channelId, recHostId, msg);
-                    break;
+                        OnData(connectionId, channelId, recHostId, message);
+                        break;
 
-                case NetworkEventType.Nothing:
-                    isContinue = false;
-                    break;
+                    case NetworkEventType.Nothing:
+                        isFetchingCompleted = true;
+                        break;
+                }
+
+                yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
             }
         }
+
+        // if disconnected start connection coroutine
+        StartCoroutine(ConnectToServerCoroutine());
     }
 
     #region OnData
