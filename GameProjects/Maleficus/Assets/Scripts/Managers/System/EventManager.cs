@@ -269,15 +269,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #endregion;
 
-    #region AR
-
-    public MaleficusEvent<Event_StateUpdated<EARState>> AR_ARStateUpdated = new MaleficusEvent<Event_StateUpdated<EARState>>("AR_ARStateUpdated");
-
-
-    public MaleficusEvent<NetEvent_ARStagePlaced> AR_ARStagePlaced = new MaleficusEvent<NetEvent_ARStagePlaced>("AR_ARStagePlayed");
-
-    #endregion
-
     private void DebugLog(string messageLog)
     {
         if (MotherOfManagers.Instance.IsDebugLogEvents == true)

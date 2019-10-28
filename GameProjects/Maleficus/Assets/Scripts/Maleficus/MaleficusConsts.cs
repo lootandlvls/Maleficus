@@ -14,10 +14,6 @@ public static class MaleficusConsts
     public const string SCENE_ENTRY = "ENTRY";
     public const string SCENE_MENU = "MENU";
     public const string SCENE_GAME = "GAME";
-    public const string SCENE_GAME_AR = "GAME_AR";
-    public const string SCENE_DUNGEON_1 = "LVL_1_AR";
-    public const string SCENE_DUNGEON_2 = "LVL_2_AR";
-    public const string SCENE_DUNGEON_3 = "LVL_3_AR";
     public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
     /* Managers path */
@@ -90,11 +86,6 @@ public static class MaleficusConsts
         { EScene.ENTRY,             EScene.MENU },
         { EScene.MENU,              EScene.GAME },
         { EScene.GAME,              EScene.MENU },
-        { EScene.GAME_AR,           EScene.MENU },
-
-        // AR Mode
-        { EScene.MENU_DUNGEON,      EScene.GAME_DUNGEON },
-        { EScene.GAME_DUNGEON,      EScene.MENU_DUNGEON },
     };
 
     /* Start states for the different scenes*/
@@ -104,35 +95,13 @@ public static class MaleficusConsts
         { EScene.ENTRY,             EAppState.IN_ENTRY },
         { EScene.MENU,              EAppState.IN_MENU_IN_MAIN },
         { EScene.GAME,              EAppState.IN_GAME_IN_NOT_STARTED },
-        { EScene.GAME_AR,           EAppState.IN_GAME_IN_NOT_STARTED },
-
-        // AR Mode
-        { EScene.GAME_DUNGEON,      EAppState.IN_GAME_IN_NOT_STARTED },
-        { EScene.MENU_DUNGEON,      EAppState.IN_MENU_IN_MAIN },
     };
     public static Dictionary<EScene, EMenuState> START_MENU_STATES = new Dictionary<EScene, EMenuState>()
     {
         { EScene.NONE,              EMenuState.NONE},
         { EScene.ENTRY,             EMenuState.IN_ENTRY},
         { EScene.MENU,              EMenuState.IN_MENU},
-        { EScene.GAME,              EMenuState.IN_GAME_NOT_STARTED},
-        { EScene.GAME_AR,           EMenuState.IN_GAME_NOT_STARTED},
-
-        // AR Mode
-        { EScene.GAME_DUNGEON,      EMenuState.IN_GAME_NOT_STARTED},
-        { EScene.MENU_DUNGEON,      EMenuState.IN_MENU},
-    };
-    public static Dictionary<EScene, EARState> START_AR_STATES = new Dictionary<EScene, EARState>()
-    {
-        { EScene.NONE,              EARState.NO_POSE},
-        { EScene.ENTRY,             EARState.NO_POSE},
-        { EScene.MENU,              EARState.NO_POSE},
-        { EScene.GAME,              EARState.NO_POSE},
-        { EScene.GAME_AR,           EARState.NO_POSE},
-
-        // AR Mode
-        { EScene.GAME_DUNGEON,      EARState.NO_POSE},
-        { EScene.MENU_DUNGEON,      EARState.NO_POSE},
+        { EScene.GAME,              EMenuState.IN_GAME_NOT_STARTED}
     };
 
 
@@ -140,7 +109,6 @@ public static class MaleficusConsts
     {
         EAppState.IN_ENTRY_IN_LOADING,
         EAppState.IN_MENU_IN_STARTING_GAME,
-        EAppState.IN_MENU_IN_STARTING_AR_GAME,
         EAppState.IN_GAME_IN_END_SCENE
     };
 
@@ -200,7 +168,6 @@ public static class MaleficusConsts
     public static readonly EScene[] GAME_SCENES = new EScene[]
 {
         EScene.GAME,
-        EScene.GAME_AR,
         EScene.GAME_DUNGEON
 };
 

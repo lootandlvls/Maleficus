@@ -26,8 +26,6 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
 
         EventManager.Instance.SPELLS_SpellSpawned += On_SPELLS_SpellSpawned;
         EventManager.Instance.SPELLS_SpellHitEnemy += On_SPELLS_SpellHitEnemy;
-
-        EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlaced);
     }
 
     private void On_AR_ARStagePlaced(NetEvent_ARStagePlaced eventHandle)

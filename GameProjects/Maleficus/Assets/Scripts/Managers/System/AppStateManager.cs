@@ -133,40 +133,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 SceneManager.LoadScene(MaleficusConsts.SCENE_GAME);
                 currentScene = EScene.GAME;
                 break;
-
-            case EScene.GAME_AR:
-                SceneManager.LoadScene(MaleficusConsts.SCENE_GAME_AR);
-                currentScene = EScene.GAME_AR;
-                break;
-
-            case EScene.GAME_DUNGEON:
-                string ScenePath = "";
-                switch (dungeonIDtoLoad)
-                {
-                    case EDungeonID.ONE:
-                        ScenePath = MaleficusConsts.SCENE_DUNGEON_1;
-                        break;
-
-                    case EDungeonID.TWO:
-                        ScenePath = MaleficusConsts.SCENE_DUNGEON_2;
-                        break;
-
-                    case EDungeonID.THREE:
-                        ScenePath = MaleficusConsts.SCENE_DUNGEON_3;
-                        break;
-
-                    case EDungeonID.NONE:
-                        Debug.LogError("Not a valid Dungeon scene selected to load");
-                        break;
-                }
-
-                if (ScenePath != "")
-                {
-                    SceneManager.LoadScene(ScenePath);
-                    currentScene = EScene.GAME_DUNGEON;
-                }
-                break;
-
             case EScene.MENU_DUNGEON:
                 SceneManager.LoadScene(MaleficusConsts.SCENE_DUNGEON_SELECTION);
                 currentScene = EScene.MENU_DUNGEON;
@@ -273,13 +239,9 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         // Validity test
         if ((newScene.name != MaleficusConsts.SCENE_GAME)
-            && (newScene.name != MaleficusConsts.SCENE_GAME_AR)
             && (newScene.name != MaleficusConsts.SCENE_MENU)
             && (newScene.name != MaleficusConsts.SCENE_ENTRY)
             && (newScene.name != MaleficusConsts.SCENE_DUNGEON_SELECTION)
-            && (newScene.name != MaleficusConsts.SCENE_DUNGEON_1)
-            && (newScene.name != MaleficusConsts.SCENE_DUNGEON_2)
-            && (newScene.name != MaleficusConsts.SCENE_DUNGEON_3)
             )
         {
             Debug.LogError("Loaded level doesn't match to build levels");

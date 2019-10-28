@@ -18,8 +18,6 @@ public class GameManager : AbstractSingletonManager<GameManager>
     private void Start()
     {
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver);
-        EventManager.Instance.AR_ARStateUpdated.AddListener(On_AR_ARStateUpdated);
-        EventManager.Instance.AR_ARStagePlaced.AddListener(On_AR_ARStagePlayerd);
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
     }
@@ -124,33 +122,6 @@ public class GameManager : AbstractSingletonManager<GameManager>
                 break;
         }
     }
-
-    private void On_AR_ARStateUpdated(Event_StateUpdated<EARState> eventHandle)
-    {
-        switch (eventHandle.NewState)
-        {
-            case EARState.NO_POSE:
-                if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
-                {
-                    PauseOrUnpauseGame();
-                }
-                break;
-        }
-    }
-
-    //private void On_AR_StagePlaced()
-    //{
-    //    switch (AppStateManager.Instance.CurrentState)
-    //    {
-    //        case EAppState.IN_GAME_IN_NOT_STARTED:
-    //            StartGame(EGameMode.DUNGEON);
-    //            break;
-
-    //        case EAppState.IN_GAME_IN_PAUSED:
-    //            PauseOrUnpauseGame();
-    //            break;
-    //    }
-    //}
     #endregion
 
     private void FindAndBindButtonActions()

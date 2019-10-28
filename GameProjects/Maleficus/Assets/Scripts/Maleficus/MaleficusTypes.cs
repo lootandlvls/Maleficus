@@ -441,23 +441,3 @@ public enum EDungeonID
     THREE
 }
 #endregion
-
-#region AR
-public enum EARState
-{
-    NONE,
-    NO_POSE,
-    LIMITED,
-    DETECTED,
-    TRACKED,
-    EXTENDED_TRACKED
-}
-
-public enum EPlacementMethod
-{
-    NONE,
-    ON_PLANE,
-    MID_AIR,
-    IMAGE_TRACKER
-}
-#endregion

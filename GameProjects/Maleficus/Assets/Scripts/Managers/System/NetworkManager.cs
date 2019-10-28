@@ -223,11 +223,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
                 EventManager.Instance.GAME_GameOver.Invoke(gameOver, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case ENetMessageID.AR_STAGE_PLACED:
-                NetEvent_ARStagePlaced arStageMessage = (NetEvent_ARStagePlaced)netMessage;
-                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage, EEventInvocationType.LOCAL_ONLY);
-                break;
-
             case ENetMessageID.GAME_STATE_REPLICATION:
                 Debug.Log("Game state replicated");
                 NetEvent_GameStateReplicate gameStateReplicateMessage = (NetEvent_GameStateReplicate)netMessage;

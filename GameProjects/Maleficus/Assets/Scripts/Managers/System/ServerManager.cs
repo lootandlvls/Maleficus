@@ -187,12 +187,6 @@ public class ServerManager : NetworkManager
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)netMessage);
                 break;
 
-            case ENetMessageID.AR_STAGE_PLACED:
-                NetEvent_ARStagePlaced arStageMessage = (NetEvent_ARStagePlaced)netMessage;
-                EventManager.Instance.AR_ARStagePlaced.Invoke(arStageMessage, EEventInvocationType.LOCAL_ONLY);
-                //BroadcastMessageToAllClients(arStageMessage, true);
-                break;
-
                 // Disconnect event
             case ENetMessageID.DISCONNECTED:
                 DisconnectEvent(recHostId, cnnId);
