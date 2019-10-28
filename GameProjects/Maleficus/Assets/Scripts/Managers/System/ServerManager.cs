@@ -68,31 +68,34 @@ public class ServerManager : NetworkManager
     System.Collections.IEnumerator SetUpConnections()
     {
         yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
-        dataBank = new Mongo();
-        if (dataBank.Init())
+        if (!connected)
         {
-            NetworkTransport.Init();
+            dataBank = new Mongo();
+            if (dataBank.Init() && server_hostId != -1)
+            {
+                NetworkTransport.Init();
 
-            ConnectionConfig cc = new ConnectionConfig();
+                ConnectionConfig cc = new ConnectionConfig();
 
-            server_reliableChannel = cc.AddChannel(QosType.Unreliable);
-
-
-            HostTopology topo = new HostTopology(cc, MaleficusConsts.SERVER_MAX_USER);
+                server_reliableChannel = cc.AddChannel(QosType.Unreliable);
 
 
-            // Server only code
+                HostTopology topo = new HostTopology(cc, MaleficusConsts.SERVER_MAX_USER);
 
-            server_hostId = NetworkTransport.AddHost(topo, MaleficusConsts.PORT, null);
-            Debug.Log("added host with Port 26002");
-            /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
-            Debug.Log("connected to Instance Manager Port 9999");
 
-            Debug.Log(string.Format("Opening connection on port {0} and webport {1}", MaleficusConsts.PORT, MaleficusConsts.WEB_PORT));*/
-        }
-        if(dataBank != null && (server_hostId != -1))
-        {
-            connected = true;
+                // Server only code
+
+                server_hostId = NetworkTransport.AddHost(topo, MaleficusConsts.PORT, null);
+                Debug.Log("added host with Port 26002");
+                /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
+                Debug.Log("connected to Instance Manager Port 9999");
+
+                Debug.Log(string.Format("Opening connection on port {0} and webport {1}", MaleficusConsts.PORT, MaleficusConsts.WEB_PORT));*/
+            }
+            if (dataBank != null && (server_hostId != -1))
+            {
+                connected = true;
+            }
         }
     }
 
