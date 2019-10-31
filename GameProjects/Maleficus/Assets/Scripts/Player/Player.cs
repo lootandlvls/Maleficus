@@ -5,20 +5,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IPlayer                                                
 {
-    public EPlayerID PlayerID { get; set; }
-    public ETeamID TeamID { get; set; }
-    public Vector3 Position { get { return transform.position; } }
-    public Quaternion Rotation { get { return transform.rotation; } }
-    public bool IsDead { get { return isDead; } }                                            // TODO: Define when player is dead
-    public Dictionary<ESpellSlot, bool> ReadyToUseSpell { get { return readyToUseSpell; } }
-    public Dictionary<ESpellSlot, float> SpellCooldown { get { return spellCooldown; } }
-    public Dictionary<ESpellSlot, float> SpellDuration { get { return spellDuration; } }
-    public bool IsReadyToShoot { get; set; }
-    public bool IsPlayerCharging { get; set; }
+    public EPlayerID PlayerID                                               { get; set; }
+    public ETeamID TeamID                                                   { get; set; }
+    public Vector3 Position                                                 { get { return transform.position; } }
+    public Quaternion Rotation                                              { get { return transform.rotation; } }
+    public bool IsDead                                                      { get { return isDead; } }                                            // TODO: Define when player is dead
+    public Dictionary<ESpellSlot, bool> ReadyToUseSpell                     { get { return readyToUseSpell; } }
+    public Dictionary<ESpellSlot, float> SpellCooldown                      { get { return spellCooldown; } }
+    public Dictionary<ESpellSlot, float> SpellDuration                      { get { return spellDuration; } }
+    public bool IsReadyToShoot                                              { get; set; }
+    public bool IsPlayerCharging                                            { get; set; }
 
-    public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
-    public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
-    public int SpellChargingLVL { get { return spellChargingLVL; } }
+    public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
+    public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
+    public int SpellChargingLVL                                             { get { return spellChargingLVL; } }
 
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;

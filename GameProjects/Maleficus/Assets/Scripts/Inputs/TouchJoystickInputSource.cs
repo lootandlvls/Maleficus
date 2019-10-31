@@ -11,8 +11,6 @@ public class TouchJoystickInputSource : AbstractInputSource
         MaleficusJoystick[] maleficusJoystics = FindObjectsOfType<MaleficusJoystick>();
         foreach(MaleficusJoystick maleficusJoystick in maleficusJoystics)
         {
-            Debug.Log("adding a touch joystick : " + maleficusJoystick.JoystickType);
-
             maleficusJoystick.TouchJoystickPressed  += On_MaleficusJoystick_TouchJoystickPressed;
             maleficusJoystick.TouchJoystickMoved    += On_MaleficusJoystick_TouchJoystickMoved;
             maleficusJoystick.TouchJoystickReleased += On_MaleficusJoystick_TouchJoystickReleased;

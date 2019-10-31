@@ -70,25 +70,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
         EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
 
-        StartCoroutine(LateStartCoroutine());
     }
     
 
-    private IEnumerator LateStartCoroutine()
-    {
-        yield return new WaitForEndOfFrame();
-
-
-
-        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
-            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
-        {
-            SpawnPlayer(EPlayerID.PLAYER_1);
-            SpawnPlayer(EPlayerID.PLAYER_2);
-            SpawnPlayer(EPlayerID.PLAYER_3);
-            SpawnPlayer(EPlayerID.PLAYER_4);
-        }
-    }
 
     private void Update()
     {

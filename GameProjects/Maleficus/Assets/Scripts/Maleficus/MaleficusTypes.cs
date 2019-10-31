@@ -190,7 +190,10 @@ public enum EControllerID
 {
     NONE = 'X',
     TOUCH,
-    AI,
+    AI_1,
+    AI_2,
+    AI_3,
+    AI_4,
     GAMEPAD_A,
     GAMEPAD_B,
     GAMEPAD_C,
@@ -411,7 +414,7 @@ public enum EConnectionMode
 {
     LOCAL_SERVER,
     CLOUD_SERVER,
-    EVRYTHING_LOCAL,
+    EVERYTHING_LOCAL,
     BNJMO_SERVER
 }
 #endregion

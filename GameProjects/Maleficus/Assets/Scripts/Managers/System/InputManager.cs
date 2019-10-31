@@ -46,10 +46,19 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         // Connect Touch player as first player
         if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
-            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true)
-            && (ConnectedControllers.ContainsKey(EControllerID.TOUCH) == false))
+            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true))
         {
             ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
+        }
+
+        // Connect all players
+        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true)
+            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
+        {
+            ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
+            ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
+            ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
+            ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
         }
     }
 
@@ -140,9 +149,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
     public void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
     {
         // Check parameters
-        if (ConnectedControllers.ContainsKey(controllerID) == true)
+        if ((ConnectedControllers.ContainsKey(controllerID) == true)
+            || (ConnectedControllers.ContainsValue(playerID) == true))
         {
-            Debug.LogError("Trying to connect a controller that is already connected.");
+            if (MotherOfManagers.Instance.IsSpawnAllPlayers == false)
+            {
+                Debug.LogError("Trying to connect a controller that is already connected.");
+            }
             return;
         }
         if ((playerID == EPlayerID.NONE)
@@ -191,7 +204,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         foreach (EControllerID controllerID in ConnectedControllers.Keys)
         {
             if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS)
-                || (controllerID == EControllerID.AI))
+                || (controllerID == EControllerID.AI_1))
             {
                 controllerIDsToRemove.Add(controllerID);
             }

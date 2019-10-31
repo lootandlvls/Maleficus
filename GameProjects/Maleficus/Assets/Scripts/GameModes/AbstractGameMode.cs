@@ -25,6 +25,13 @@ public abstract class AbstractGameMode<T> : MonoBehaviour where T : AbstractPlay
 
     protected virtual void Start()
     {
+        StartCoroutine(LateStart());
+    }
+
+    private IEnumerator LateStart()
+    {
+        yield return new WaitForEndOfFrame();
+
         InitializePlayerStats();
     }
 
