@@ -1,24 +1,29 @@
 ﻿using MongoDB.Bson;
 using System;
-
 public class Model_Account
 {
+    // identification
     public ObjectId _id { set; get; }
+    public String user_name { set; get; }
+    public String user_password { set; get; }
+    public string email { set; get; }
+    public int main_connection { set; get; }
+    public int instance_connection { set; get; }
+    public string token { set; get; }
+    public ObjectId lobby_id { set; get; } // lobby
+    public ObjectId game_id { set; get; } // game
 
-    public int ActiveConnection { set; get; }
-    public string Username { set; get; }
-    public string Discriminator { set; get; }
-    public string Email { set; get; }
-    public string ShaPassword { set; get; }
-
-    // flag for user is connected to ...game
-    public byte Status { set; get; }
-    public string Token { set; get; }
-    public DateTime LastLogin { set; get; }
-    public ObjectId inLobby { set; get; }
+    // other values
+    public byte status { set; get; }
+    public int coins { set; get; }
+    public byte level { set; get; }
+    public int xp { set; get; }
+    public byte spent_spell_points { set; get; }
+    public BsonDateTime account_created { set; get; }
+    public BsonDateTime last_login { set; get; }
 
     public Account GetAccount()
     {
-        return new Account() { Username = this.Username, ActiveConnection = this.ActiveConnection, Discriminator = this.Discriminator, Status = this.Status };
+        return new Account() { user_name = this.user_name, level = this.level, status = this.status };
     }
 }
