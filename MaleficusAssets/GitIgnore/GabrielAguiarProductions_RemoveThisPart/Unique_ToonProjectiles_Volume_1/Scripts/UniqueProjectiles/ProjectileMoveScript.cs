@@ -112,11 +112,6 @@ public class ProjectileMoveScript : MonoBehaviour {
             if (hitPrefab != null)
             {
                 var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
-
-            if (MotherOfManagers.Instance.IsARGame)
-            {
-                hitVFX.transform.localScale *= ARManager.Instance.SizeFactor;
-            }
                    
                 var ps = hitVFX.GetComponent<ParticleSystem>();
                 if (ps == null)
