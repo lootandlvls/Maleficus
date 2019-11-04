@@ -5,7 +5,7 @@ public class Net_OnRequestGameInfo : AbstractNetMessage
 {
     public Net_OnRequestGameInfo()
     {
-        ID = ENetMessageID.ON_REQUEST_GAME_SESSION_INFO;
+        MessageType = ENetMessageType.ON_REQUEST_GAME_SESSION_INFO;
     }
 
     public byte ownPlayerId { set; get; }

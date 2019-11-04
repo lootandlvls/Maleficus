@@ -3,7 +3,7 @@ public class Net_OnLoginRequest : AbstractNetMessage
 {
     public Net_OnLoginRequest()
     {
-        ID = ENetMessageID.ON_LOGIN_REQUEST;
+        MessageType = ENetMessageType.ON_LOGIN_REQUEST;
     }
     public byte Success { set; get; }
     public string Information { set; get; }

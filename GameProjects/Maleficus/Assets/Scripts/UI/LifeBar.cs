@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using static Maleficus.MaleficusConsts;
 
 public class LifeBar : MonoBehaviour {
 
@@ -38,7 +37,7 @@ public class LifeBar : MonoBehaviour {
         {
 
             PlayerStats_Dungeon dungeonStats = (PlayerStats_Dungeon)playerStats;
-            newPercentage = (dungeonStats.RemainingLives * 1.0f) / MaleficusConsts.PLAYER_LIVES_IN_DUNGEON_MODE;
+            newPercentage = (dungeonStats.RemainingLives * 1.0f) / PLAYER_LIVES_IN_DUNGEON_MODE;
         }
     } 
 

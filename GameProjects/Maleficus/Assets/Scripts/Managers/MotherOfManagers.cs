@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
+using static Maleficus.MaleficusConsts;
 
 public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {
@@ -70,14 +71,14 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
             switch (ConnectionMode)
             {
                 case EConnectionMode.LOCAL_SERVER:
-                    Debug.Log(MaleficusConsts.LOCAL_SERVER_IP);
-                    return MaleficusConsts.LOCAL_SERVER_IP;
+                    Debug.Log(LOCAL_SERVER_IP);
+                    return LOCAL_SERVER_IP;
 
                 case EConnectionMode.CLOUD_SERVER:
-                    return MaleficusConsts.CLOUD_SERVER_IP;
+                    return CLOUD_SERVER_IP;
 
                 case EConnectionMode.BNJMO_SERVER:
-                    return MaleficusConsts.BNJMO_SERVER_IP;
+                    return BNJMO_SERVER_IP;
 
                 default:
                     return "0.0.0.0";

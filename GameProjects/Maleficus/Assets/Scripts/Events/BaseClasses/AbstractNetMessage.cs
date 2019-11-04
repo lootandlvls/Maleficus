@@ -2,7 +2,10 @@
 public abstract class AbstractNetMessage
 {
     /// <summary> Differentiate between the different messages </summary>
-    public ENetMessageID ID         { get; set; }
+    public ENetMessageType MessageType         { get; set; }
+
+    /// <summary> Differentiate between the different messages </summary>
+    public float TimeStamp         { get; set; }
 
     /// <summary> Client ID of the message sender </summary>
     public EClientID SenderID       { get; set; }
@@ -12,6 +15,6 @@ public abstract class AbstractNetMessage
 
     public AbstractNetMessage()
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
     }
 }

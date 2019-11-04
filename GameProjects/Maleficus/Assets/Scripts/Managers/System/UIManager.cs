@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusUtilities;
+using static Maleficus.MaleficusConsts;
 
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
@@ -12,7 +14,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         base.Awake();
 
         // 1) Assign appropriate currentState from MaleficusTypes
-        startStates = MaleficusConsts.START_MENU_STATES;
+        startStates = START_MENU_STATES;
         // 2) Define "debugStateID" in Awake() of child class
         debugStateID = 50;
     }
@@ -158,7 +160,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
         if (selectedButton == null)
         {

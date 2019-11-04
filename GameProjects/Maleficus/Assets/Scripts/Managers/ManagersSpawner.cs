@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
+using static Maleficus.MaleficusConsts;
 
 /// <summary>
 /// Utility class that makes it possible to start and test any scene (instead of entry scene) by spawning needed managers if they are not found in the scene.
@@ -22,11 +23,11 @@ public class ManagersSpawner : MotherOfManagers
             GameObject prefabToSpawn;
             if (IsServer == true)
             {
-                prefabToSpawn = Resources.Load<GameObject>(MaleficusConsts.PATH_MANAGERS_SERVER);
+                prefabToSpawn = Resources.Load<GameObject>(PATH_MANAGERS_SERVER);
             }
             else // Client
             {
-                prefabToSpawn = Resources.Load<GameObject>(MaleficusConsts.PATH_MANAGERS_CLIENT);
+                prefabToSpawn = Resources.Load<GameObject>(PATH_MANAGERS_CLIENT);
             }
 
             // Set up Mother Of Managers Profile

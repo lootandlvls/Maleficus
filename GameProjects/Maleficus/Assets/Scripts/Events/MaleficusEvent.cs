@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
+using static Maleficus.MaleficusUtilities;
 
 public class MaleficusEvent<H> where H : AbstractEventHandle
 {
@@ -37,6 +36,9 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
     {
         if (maleficusEvent != null)
         {
+            // Add current time stamp to the event handle
+            eventHandle.TimeStamp = GetSystemTime();
+
             // Invoke event locally
             if ((eventInvocationType != EEventInvocationType.TO_SERVER_ONLY)
                 || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.EVERYTHING_LOCAL))
@@ -56,7 +58,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
             if (eventInvocationType != EEventInvocationType.LOCAL_ONLY)
             {
                 // Broadcast event message to server if not None and if not server
-                if ((eventHandle.ID != ENetMessageID.NONE) && (NetworkManager.Instance.HasAuthority == false))
+                if ((eventHandle.MessageType != ENetMessageType.NONE) && (NetworkManager.Instance.HasAuthority == false))
                 {
                     NetworkManager.Instance.BroadcastNetMessage(eventHandle);
                 }

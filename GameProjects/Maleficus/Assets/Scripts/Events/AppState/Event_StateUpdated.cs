@@ -9,7 +9,7 @@ public class Event_StateUpdated<E> : AbstractEventHandle
 
     public Event_StateUpdated(E newState, E lastState)
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
 
         NewState = newState;
         lastState = LastState;

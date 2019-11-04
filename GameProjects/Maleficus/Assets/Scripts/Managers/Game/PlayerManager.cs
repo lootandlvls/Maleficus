@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Maleficus.MaleficusUtilities;
+using static Maleficus.MaleficusConsts;
 
-                                                                                                                                        
+
+
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
@@ -24,7 +27,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     /// <summary> Assigned team of every player </summary>
     public Dictionary<EPlayerID, ETeamID>               PlayersTeam                 { get { return playersTeam; } }
-    public EPlayerID OwnPlayerID { get { return MaleficusUtilities.GetPlayerIDFrom(NetworkManager.Instance.OwnClientID); } }
+    public EPlayerID OwnPlayerID                                                    { get { return GetPlayerIDFrom(NetworkManager.Instance.OwnerClientID); } }
 
     /// <summary> Joysticks inputs for every player (movement, rotation). </summary>
     public Dictionary<EPlayerID, JoystickInput>         PlayersMovement             { get { return playersMovement; } }
@@ -67,7 +70,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         //Network
         //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
-        EventManager.Instance.NETWORK_GameStateReplicate.AddListener            (On_NETWORK_GameStateReplicate);
+        EventManager.Instance.NETWORK_GameStateReplication.AddListener            (On_NETWORK_GameStateReplicate);
         EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
 
     }
@@ -80,7 +83,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     }
 
-    private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplicate eventHandle)
+    private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
     {
         EPlayerID playerID      = eventHandle.UpdatedPlayerID;
         float[] playerPosition  = eventHandle.playerPosition;
@@ -113,7 +116,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if ((IsPlayerConnected(toSpawnPlayerID) == true) 
             || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
-                && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES))))
+                && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES))))
         {
             
             if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
@@ -171,7 +174,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EPlayerID result = EPlayerID.NONE;
         for (int i = 1; i < 5; i++)
         {
-            EPlayerID currentPlayerID = MaleficusUtilities.IntToPlayerID(i);
+            EPlayerID currentPlayerID = IntToPlayerID(i);
             if (IsPlayerConnected(currentPlayerID) == false)
 
             {
@@ -191,9 +194,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-        ESpellSlot spellSlot = MaleficusUtilities.GetSpellSlotFrom(inputButton);
+        ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
         if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
         {
             return;
@@ -225,9 +228,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-        ESpellSlot spellSlot = MaleficusUtilities.GetSpellSlotFrom(inputButton);
+        ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
         if ((spellSlot == ESpellSlot.NONE) || (activePlayers.ContainsKey(playerID) == false))
         {
             return;
@@ -256,7 +259,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EJoystickType joystickType = eventHandle.JoystickType;
         float joystick_X = eventHandle.Joystick_X;
         float joystick_Y = eventHandle.Joystick_Y;
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
         if (PlayersMovement.ContainsKey(playerID))
         {
@@ -279,7 +282,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {
         EScene newScene = eventHandle.Arg1;
-        if (newScene.ContainedIn(MaleficusConsts.GAME_SCENES))
+        if (newScene.ContainedIn(GAME_SCENES))
         {
             FindPlayerSpawnGhost();
         }
@@ -314,10 +317,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void LoadPlayerResources()
     {
         PlayerPrefabs.Clear();
-        PlayerPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(MaleficusConsts.PATH_PLAYER_RED));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(MaleficusConsts.PATH_PLAYER_BLUE));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(MaleficusConsts.PATH_PLAYER_YELLOW));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(MaleficusConsts.PATH_PLAYER_GREEN));
+        PlayerPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
+        PlayerPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
+        PlayerPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
+        PlayerPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
     }
 
     private void FindPlayerSpawnGhost()
@@ -338,10 +341,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             for (int i = 1; i < 5; i++)
             {
                 angle = 90 * i;
-                EPlayerID playerID = MaleficusUtilities.IntToPlayerID(i);
+                EPlayerID playerID = IntToPlayerID(i);
                 if (PlayersSpawnPositions.ContainsKey(playerID) == false)
                 {
-                    PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(MaleficusConsts.PATH_PLAYER_SPAWN_POSITION));
+                    PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION));
                     spawnGhost.ToSpawnPlayerID = playerID;
                     spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
                     spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
@@ -408,7 +411,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private IEnumerator DestroyPlayerCoroutine(EPlayerID playerID)
     {
-        yield return new WaitForSeconds(MaleficusConsts.PLAYER_FALLING_TIME);
+        yield return new WaitForSeconds(PLAYER_FALLING_TIME);
         if (ActivePlayers.ContainsKey(playerID))
         {
             Player playerToDestroy = ActivePlayers[playerID];
@@ -421,7 +424,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
         EPlayerID playerID = eventHandle.Arg2;
-        AssignPlayerToTeam(playerID, MaleficusUtilities.GetIdenticPlayerTeam(playerID));
+        AssignPlayerToTeam(playerID, GetIdenticPlayerTeam(playerID));
 
         if (PlayersMovement.ContainsKey(playerID) == false)
         {
@@ -436,7 +439,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // Spawn player On Connect?
         if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true)
             && (ActivePlayers.ContainsKey(playerID) == false)
-            && (AppStateManager.Instance.CurrentScene.ContainedIn(MaleficusConsts.GAME_SCENES)))
+            && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
         {
             SpawnPlayer(EPlayerID.PLAYER_1);
         }

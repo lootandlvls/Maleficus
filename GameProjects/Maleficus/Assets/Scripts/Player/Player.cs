@@ -80,7 +80,7 @@ public class Player : MonoBehaviour, IPlayer
         InitializeDictionaries();
 
         //myRigidBody = this.GetComponent<Rigidbody>();      
-        myAnimator = this.GetComponent<Animator>();
+        myAnimator = GetComponent<Animator>();
         myAnimator.SetBool("idle", true);
 
         currentSpeed = speed;
@@ -98,7 +98,8 @@ public class Player : MonoBehaviour, IPlayer
                 float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
                 float Rotate_X = playerInput.JoystickValues[EInputAxis.ROTATE_X];
                 float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
-                Move(Move_X, Move_Y);
+
+                //Move(Move_X, Move_Y);
                 Rotate(Rotate_X, Rotate_Y);
 
                 if (playerInput.HasMoved() == true)

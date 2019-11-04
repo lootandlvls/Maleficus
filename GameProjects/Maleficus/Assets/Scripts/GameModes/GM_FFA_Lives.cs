@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusConsts;
 
 public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 {
@@ -17,7 +18,7 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         // Define in child class correct game mode!
         gameMode = EGameMode.FFA_LIVES;
 
-        totalLives = MaleficusConsts.PLAYER_LIVES_IN_FFA_MODE;
+        totalLives = PLAYER_LIVES_IN_FFA_MODE;
     }
 
     protected override void Start()

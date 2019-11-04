@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusUtilities;
 
 [System.Serializable]
 public class NetEvent_ButtonReleased : AbstractEventHandle
@@ -9,7 +10,7 @@ public class NetEvent_ButtonReleased : AbstractEventHandle
 
     public NetEvent_ButtonReleased(EClientID senderID, EInputButton inputButton)
     {
-        ID = ENetMessageID.BUTTON_RELEASEED;
+        MessageType = ENetMessageType.BUTTON_RELEASEED;
         SenderID = senderID;
 
         InputButton = inputButton;
@@ -17,7 +18,7 @@ public class NetEvent_ButtonReleased : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(SenderID);
         return playerID + " released " + InputButton;
     }
 }

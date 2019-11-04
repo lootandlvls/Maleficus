@@ -3,6 +3,6 @@ public class Net_Disonnected : AbstractNetMessage
 {
     public Net_Disonnected()
     {
-        ID = ENetMessageID.DISCONNECTED;
+        MessageType = ENetMessageType.DISCONNECTED;
     }
 }

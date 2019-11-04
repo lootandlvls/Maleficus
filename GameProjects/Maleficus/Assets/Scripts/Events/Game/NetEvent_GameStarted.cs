@@ -7,7 +7,7 @@ public class NetEvent_GameStarted : AbstractEventHandle
 {
     public  NetEvent_GameStarted(EClientID senderID)
     {
-        ID = ENetMessageID.GAME_STARTED;
+        MessageType = ENetMessageType.GAME_STARTED;
         SenderID = senderID;
     }
 

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusUtilities;
 
 
 public class SpellManager : AbstractSingletonManager<SpellManager>
@@ -262,22 +264,22 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
     private void LoadSpellResources()
     {
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_AOE_EXPLOSION_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIREBALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIREBALL_LVL_2));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_FIRE__LASER_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_ICEBALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(MaleficusConsts.PATH_SPELL_TELEPORT_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_AOE_EXPLOSION_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIREBALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIREBALL_LVL_2));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIRE__LASER_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_ICEBALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_TELEPORT_LVL_1));
 
     }
 
     private void LoadEffectsResources()
     {
-        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusConsts.PATH_EFFECT_CHARGING_BODYENERGY));
-        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusConsts.PATH_EFFECT_CHARGING_WANDENERGY));
-        ChargingSpells_Effects.Add(Resources.Load<GameObject>(MaleficusConsts.PATH_EFFECT_FROZEN));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(PATH_EFFECT_CHARGING_BODYENERGY));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(PATH_EFFECT_CHARGING_WANDENERGY));
+        ChargingSpells_Effects.Add(Resources.Load<GameObject>(PATH_EFFECT_FROZEN));
     }
 
 
@@ -336,7 +338,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         for (int j = 0; j < 3; j++)
         {
-            ESpellSlot spellID = MaleficusUtilities.IntToSpellID(j + 1);
+            ESpellSlot spellID = IntToSpellID(j + 1);
 
             Player_Spells[EPlayerID.PLAYER_1][spellID] = Player_1_SpellsList[j];
             Player_Spells[EPlayerID.PLAYER_2][spellID] = Player_2_SpellsList[j];

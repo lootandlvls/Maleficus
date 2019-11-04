@@ -16,7 +16,7 @@ public class NetEvent_ARStagePlaced : AbstractEventHandle
 
     public NetEvent_ARStagePlaced(EClientID senderID, float x_Imagerotation, float y_Imagerotation, float z_Imagerotation, float x_ImageToStage, float y_ImageToStage, float z_ImageToStage)
     {
-        ID = ENetMessageID.AR_STAGE_PLACED;
+        MessageType = ENetMessageType.AR_STAGE_PLACED;
         SenderID = senderID;
 
         X_TrackerRotation = x_Imagerotation;

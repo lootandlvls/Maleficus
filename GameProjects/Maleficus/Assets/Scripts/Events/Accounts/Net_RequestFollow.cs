@@ -3,7 +3,7 @@ public class Net_RequestFollow : AbstractNetMessage
 {
     public Net_RequestFollow()
     {
-        ID = ENetMessageID.REQUEST_FOLLOW;
+        MessageType = ENetMessageType.REQUEST_FOLLOW;
     }
 
 }

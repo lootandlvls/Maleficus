@@ -3,7 +3,7 @@ public class Net_InitLobby : AbstractNetMessage
 {
     public Net_InitLobby()
     {
-        ID = ENetMessageID.INIT_LOBBY;
+        MessageType = ENetMessageType.INIT_LOBBY;
     }
 
 }

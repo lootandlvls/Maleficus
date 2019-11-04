@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusUtilities;
 
 [System.Serializable]
 public class NetEvent_JoystickMoved : AbstractEventHandle
@@ -12,7 +13,7 @@ public class NetEvent_JoystickMoved : AbstractEventHandle
 
     public NetEvent_JoystickMoved(EClientID senderID, EJoystickType joystickType, float joystick_X, float joystick_Y)
     {
-        ID = ENetMessageID.JOYSTICK_MOVED;
+        MessageType = ENetMessageType.JOYSTICK_MOVED;
         SenderID = senderID;
 
         JoystickType = joystickType;
@@ -23,7 +24,7 @@ public class NetEvent_JoystickMoved : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(SenderID);
         return playerID + " moved " + JoystickType + " | X : " + Joystick_X + ", Y : " + Joystick_Y;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Maleficus.MaleficusUtilities;
 
 public class FriendsContext : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class FriendsContext : MonoBehaviour
     {
         string usernameDiscriminator = addFollowInput.text;
 
-        if (!MaleficusUtilities.IsUsernameAndDiscriminator(usernameDiscriminator) && !MaleficusUtilities.IsEmail(usernameDiscriminator))
+        if (!IsUsernameAndDiscriminator(usernameDiscriminator) && !IsEmail(usernameDiscriminator))
         {
             Debug.Log("Invalid format!");
             return;

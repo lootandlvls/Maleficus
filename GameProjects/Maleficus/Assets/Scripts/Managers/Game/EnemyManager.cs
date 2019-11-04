@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static Maleficus.MaleficusUtilities;
 
 public class EnemyManager : AbstractSingletonManager<EnemyManager>
 {
@@ -129,7 +130,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             int randomPositionIndex;
             do
             {
-                randomPositionIndex = MaleficusUtilities.GetRndIndex(enemySpawnPositions.Length);
+                randomPositionIndex = GetRndIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
             
@@ -165,7 +166,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             int randomPositionIndex;
             do
             {
-                randomPositionIndex = MaleficusUtilities.GetRndIndex(enemySpawnPositions.Length);
+                randomPositionIndex = GetRndIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 
