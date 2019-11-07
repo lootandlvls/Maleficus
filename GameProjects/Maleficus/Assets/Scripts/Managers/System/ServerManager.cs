@@ -50,8 +50,6 @@ public class ServerManager : NetworkManager
 
     protected override void Start()
     {
-        base.Start();
-
         isConnected = false;
         StartCoroutine(SetUpConnectionsCoroutine());
     }
@@ -67,8 +65,12 @@ public class ServerManager : NetworkManager
 
     private IEnumerator SetUpConnectionsCoroutine()
     {
+        PrintToConsole("Trying to set up connection");
+
         while (isConnected == false)
         {
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+
             dataBank = new Mongo();
             if (dataBank.Init() && server_hostId != -1)
             {
@@ -91,24 +93,25 @@ public class ServerManager : NetworkManager
 
                 Debug.Log(string.Format("Opening connection on port {0} and webport {1}", PORT, WEB_PORT));*/
             }
+
+            // Check if is connected
             if (dataBank != null && (server_hostId != -1))
             {
                 isConnected = true;
-
-                // Start fetching network messages
-                StartCoroutine(UpdateMessagePumpCoroutine());
-            }
-            else
-            {
-                yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
-
             }
         }
+
+        yield return new WaitForEndOfFrame();
+
+        // Start fetching network messages
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
+        PrintToConsole("Starting to receive messages from client");
+
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
@@ -121,7 +124,7 @@ public class ServerManager : NetworkManager
         while (isConnected == true)
         {
             bool isFetchingCompleted = false;
-            while (isFetchingCompleted)
+            while (isFetchingCompleted == false)
             {
                 NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
                 switch (type)
@@ -157,10 +160,11 @@ public class ServerManager : NetworkManager
                         isFetchingCompleted = true;
                         break;
                 }
-
-                yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY_RENAME);
             }
+
+            yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY_RENAME);
         }
+
         // if disconnected start connection coroutine
         StartCoroutine(SetUpConnectionsCoroutine());
     }
@@ -202,6 +206,10 @@ public class ServerManager : NetworkManager
                 {
                     InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)netMessage);
                     isLobbyInitialized = true;
+                }
+                else
+                {
+                    PrintToConsole("Lobby already initialized");
                 }
                 break;
 
@@ -395,6 +403,8 @@ public class ServerManager : NetworkManager
     #region Lobby
     private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
     {
+        PrintToConsole("Initializing lobby...");
+
         Net_OnInitLobby oil = new Net_OnInitLobby();
         Model_Account self = dataBank.FindAccountByToken(il.Token);
         int lobbyID = dataBank.InitLobby(self._id);
@@ -411,12 +421,14 @@ public class ServerManager : NetworkManager
 
             if (thislobby.Team1 != null)
             {
+                Debug.Log("Adding fucking player 1");
                 players.Add(EPlayerID.PLAYER_1);
                 Model_Account player1 = dataBank.FindAccountByObjectId(thislobby.Team1[0]);
                 connectedPlayers.Add(EClientID.CLIENT_1, player1.ActiveConnection);
             }
             if (thislobby.Team2 != null)
             {
+                Debug.Log("Adding fucking player 2");
                 players.Add(EPlayerID.PLAYER_2);
                 Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
                 connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);         // INVERTED!!!
@@ -430,6 +442,7 @@ public class ServerManager : NetworkManager
             }
             if (thislobby.Team4 != null)
             {
+                Debug.Log("Adding fucking player 4");
                 players.Add(EPlayerID.PLAYER_4);
                 Model_Account player4 = dataBank.FindAccountByObjectId(thislobby.Team4[0]);
                 connectedPlayers.Add(EClientID.CLIENT_4, player4.ActiveConnection);
