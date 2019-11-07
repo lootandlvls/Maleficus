@@ -81,7 +81,8 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
                 case EConnectionMode.BNJMO_SERVER:
                     return BNJMO_SERVER_IP;
-
+                case EConnectionMode.GOOGLE_CLOUD_SERVER:
+                    return GOOGLE_CLOUD_SERVER_IP;
                 default:
                     return "0.0.0.0";
             }

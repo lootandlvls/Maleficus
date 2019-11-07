@@ -183,7 +183,11 @@ Debug.Log("Connecting from Web");
         }
 
         // if disconnected start connection coroutine
-        StartCoroutine(ConnectToServerCoroutine());
+        if (!isConnected)
+        {
+            StartCoroutine(ConnectToServerCoroutine());
+        }
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
     #region OnData
