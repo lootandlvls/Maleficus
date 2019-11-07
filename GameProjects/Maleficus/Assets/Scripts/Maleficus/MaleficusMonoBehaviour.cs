@@ -9,14 +9,25 @@ using static Maleficus.MaleficusConsts;
 
 
 
-public class MaleficusMonoBehaviour : MonoBehaviour
+public abstract class MaleficusMonoBehaviour : MonoBehaviour
 {
     [Separator("Maleficus MonoBehaviour")]
-    [SerializeField] bool printDebugToConsole = true;
+    [SerializeField] bool showMaleficusMonoBehaviourConfiguration = true;
+    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool printDebugToConsole = true;
+    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool printWarningsAsErrors = true;
 
     protected virtual void Awake()
     {
+        InitializeComponents();
         InitializeObjecsInScene();
+
+    }
+
+    /// <summary>
+    /// Use this to find components attached to the same gameobject and in order to assign references or bind them to callbacks (actually called in Awake)
+    /// </summary>
+    protected virtual void InitializeComponents()
+    {
 
     }
 
@@ -109,5 +120,52 @@ public class MaleficusMonoBehaviour : MonoBehaviour
         enumerator = coroutine;
         // Start new coroutine
         StartCoroutine(enumerator);
+    }
+
+
+    /// <summary>
+    /// Looks for component attached to the same gameobject of the given type and prompt an error message if not found.
+    /// </summary>
+    /// <typeparam name="T"> Type of component looking for (must be a Component) </typeparam>
+    /// <param name="promtWarningMessageIfNoneFound"> if true, promt a warning message in the log console to inform that not any component was found </param>
+    /// <returns> Component found otherwise null </returns>
+    public T FindComponent<T>(bool promtWarningMessageIfNoneFound = true) where T : Component
+    {
+        T result = GetComponent<T>();
+        if ((promtWarningMessageIfNoneFound == true) && (result == null))
+        {
+            if (printWarningsAsErrors == true)
+            {
+                Debug.LogError("[WARNING] Component of type '" + result.GetType() + "' not found on '" + name + "'");
+            }
+            else
+            {
+                Debug.Log("[WARNING] Component of type '" + result.GetType() + "' not found on '" + name + "'");
+            }
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Looks for all components attached to the same gameobject of the given type and prompt an error message if none found.
+    /// </summary>
+    /// <typeparam name="T"> Type of component looking for (must be a Component) </typeparam>
+    /// <param name="promtWarningMessageIfNoneFound"> if true, promt a warning message in the log console to inform that not any component was found </param>
+    /// <returns> Component found otherwise null </returns>
+    public T[] FindComponents<T>(bool promtWarningMessageIfNoneFound = true) where T : Component
+    {
+        T[] result = GetComponents<T>();
+        if ((promtWarningMessageIfNoneFound == true) && (result.Length == 0))
+        {
+            if (printWarningsAsErrors == true)
+            {
+                Debug.LogError("[WARNING] Not any component of type '" + result.GetType() + "' not found on '" + name + "'");
+            }
+            else
+            {
+                Debug.Log("[WARNING] Not any component of type '" + result.GetType() + "' not found on '" + name + "'");
+            }
+        }
+        return result;
     }
 }

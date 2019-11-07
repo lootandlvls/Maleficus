@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 
 using static Maleficus.MaleficusUtilities;
-
+using static Maleficus.MaleficusConsts;
 
 
 public class NetworkMovement : MaleficusMonoBehaviour
@@ -19,7 +19,7 @@ public class NetworkMovement : MaleficusMonoBehaviour
     private Vector2 currentMovementInput = Vector2.zero;
     private int currentExecution = 0;
 
-
+    private ServerMovementRepresentation serverMovementRepresentation;
 
     protected override void Awake()
     {
@@ -34,14 +34,28 @@ public class NetworkMovement : MaleficusMonoBehaviour
         }
     }
 
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_INPUT_JoystickMoved);
+        EventManager.Instance.NETWORK_GameStateReplication.AddListener(On_NETWORK_GameStateReplicate);
+    }
+
     protected override void Start()
     {
         base.Start();
 
-        EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
-        EventManager.Instance.NETWORK_GameStateReplication.AddListener          (On_NETWORK_GameStateReplicate);
-
         initialPosition = transform.position;
+
+        SpawnServerVisualRepresentation();
+    }
+
+    private void SpawnServerVisualRepresentation()
+    {
+        GameObject spawnedObject = Instantiate(Resources.Load<GameObject>(PATH_PLAYER_SERVER_REPRESENTATION), transform.position, transform.rotation);
+        serverMovementRepresentation = spawnedObject.GetComponent<ServerMovementRepresentation>();
+        serverMovementRepresentation.transform.localScale = transform.localScale;
     }
 
     protected override void LateStart()
@@ -118,7 +132,7 @@ public class NetworkMovement : MaleficusMonoBehaviour
     {
         if (eventHandle.UpdatedPlayerID == GetPlayerIDFrom(myClientID))
         {
-            transform.position = GetVectorFrom(eventHandle.playerPosition);
+            serverMovementRepresentation.Position = GetVectorFrom(eventHandle.playerPosition);
 
             List<NetEvent_JoystickMoved> newList = new List<NetEvent_JoystickMoved>();
             foreach (NetEvent_JoystickMoved notAcknowledgedMovementMessage in notAcknowledgedMovementMessages)
@@ -126,7 +140,7 @@ public class NetworkMovement : MaleficusMonoBehaviour
                 // Stored net message is more recenet than received game state
                 if (notAcknowledgedMovementMessage.TimeStamp > eventHandle.TimeStamp)
                 {
-                    Move(notAcknowledgedMovementMessage.Joystick_X, notAcknowledgedMovementMessage.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
+                    MoveServerRepresentation(notAcknowledgedMovementMessage.Joystick_X, notAcknowledgedMovementMessage.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
 
                     newList.Add(notAcknowledgedMovementMessage);
                 }
@@ -149,6 +163,19 @@ public class NetworkMovement : MaleficusMonoBehaviour
 
         Vector3 finalVelocity = movementVelocity /*+ pushVelocity + GravityVelocity*/;
         transform.localPosition += finalVelocity * Time.fixedDeltaTime * fixedTimePercentage;
+    }
+
+
+    private void MoveServerRepresentation(float axis_X, float axis_Z, float remainingTime)
+    {
+        float fixedTimePercentage = remainingTime / (Time.fixedDeltaTime * 1000.0f);
+
+        Vector3 movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
+
+        Vector3 movementVelocity = movingDirection * 75 * 0.1f;
+
+        Vector3 finalVelocity = movementVelocity /*+ pushVelocity + GravityVelocity*/;
+        serverMovementRepresentation.Position += finalVelocity * Time.fixedDeltaTime * fixedTimePercentage;
     }
 
     private void LookAtMovingDirection(float axis_X, float axis_Z)
@@ -182,12 +209,12 @@ public class NetworkMovement : MaleficusMonoBehaviour
     private IEnumerator ReplicateMovementCoroutine()
     {
         // Reset position
-        transform.position = initialPosition;
+        serverMovementRepresentation.Position = initialPosition;
 
         // Clear trail 
         if (myTrailRenderer != null)
         {
-            myTrailRenderer.Clear();
+            serverMovementRepresentation.ClearTrailRenderer();
         }
 
         if (notAcknowledgedMovementMessages.Count > 2)
@@ -215,23 +242,20 @@ public class NetworkMovement : MaleficusMonoBehaviour
 
                 while (timeDifference >= Time.fixedDeltaTime * 1000)
                 {
-                    Move(currentEvent.Joystick_X, currentEvent.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
+                    MoveServerRepresentation(currentEvent.Joystick_X, currentEvent.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
 
                     timeDifference -= Time.fixedDeltaTime * 1000;
-                    LookAtMovingDirection(currentEvent.Joystick_X, currentEvent.Joystick_Y);
-
-
                     yield return new WaitForFixedUpdate();
                 }
 
-                Move(currentEvent.Joystick_X, currentEvent.Joystick_Y, timeDifference);
+                MoveServerRepresentation(currentEvent.Joystick_X, currentEvent.Joystick_Y, timeDifference);
 
                 currentExecution++;
             }
 
             NetEvent_JoystickMoved lastEvent = notAcknowledgedMovementMessages[notAcknowledgedMovementMessages.Count - 1];
 
-            Move(lastEvent.Joystick_X, lastEvent.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
+            MoveServerRepresentation(lastEvent.Joystick_X, lastEvent.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
 
             currentExecution++;
 

@@ -45,6 +45,7 @@ namespace Maleficus
         public const string PATH_PLAYER_GREEN = "Wizard_Green";
         public const string PATH_PLAYER_YELLOW = "Wizard_Yellow";
         public const string PATH_PLAYER_SPAWN_POSITION = "PlayerSpawnPosition";
+        public const string PATH_PLAYER_SERVER_REPRESENTATION = "PlayerServerRepresentation";
 
         /* Networking */
         public const int CLIENT_MAX_USER = 100;
