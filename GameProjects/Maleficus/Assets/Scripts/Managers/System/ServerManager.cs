@@ -104,14 +104,13 @@ public class ServerManager : NetworkManager
         yield return new WaitForEndOfFrame();
 
         // Start fetching network messages
+        DebugLog("Starting to receive messages from client");
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
-        DebugLog("Starting to receive messages from client");
-
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
@@ -119,54 +118,47 @@ public class ServerManager : NetworkManager
         byte[] recBuffer = new byte[BYTE_SIZE];
         int dataSize;
 
-
         // Start fetching messages 
-        while (isConnected == true)
+        bool isFetchingCompleted = false;
+        while (isFetchingCompleted == false)
         {
-            bool isFetchingCompleted = false;
-            while (isFetchingCompleted == false)
+            NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
+            switch (type)
             {
-                NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
-                switch (type)
-                {
-                    case NetworkEventType.ConnectEvent:
-                        if (recHostId != 2)
-                        {
-                            Debug.Log(string.Format("User {0} has connected through host {1}!", connectionId, recHostId));
-                        }
-                        else
-                        {
-                            Debug.Log(string.Format("The Instance Manager has connected through host {0}!", recHostId));
-                        }
-                        break;
+                case NetworkEventType.ConnectEvent:
+                    if (recHostId != 2)
+                    {
+                        Debug.Log(string.Format("User {0} has connected through host {1}!", connectionId, recHostId));
+                    }
+                    else
+                    {
+                        Debug.Log(string.Format("The Instance Manager has connected through host {0}!", recHostId));
+                    }
+                    break;
 
-                    case NetworkEventType.DisconnectEvent:
-                        DisconnectEvent(recHostId, connectionId);
-                        isConnected = false;
-                        break;
+                case NetworkEventType.DisconnectEvent:
+                    DisconnectEvent(recHostId, connectionId);
+                    break;
 
-                    case NetworkEventType.DataEvent:
-                        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
-                        MemoryStream ms = new MemoryStream(recBuffer);
-                        AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
-                        OnData(connectionId, channelId, recHostId, msg);
-                        break;
+                case NetworkEventType.DataEvent:
+                    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new BinaryFormatter();
+                    MemoryStream ms = new MemoryStream(recBuffer);
+                    AbstractNetMessage msg = (AbstractNetMessage)formatter.Deserialize(ms);
+                    OnData(connectionId, channelId, recHostId, msg);
+                    break;
 
-                    case NetworkEventType.BroadcastEvent:
-                        Debug.Log("Unexpected network event type");
-                        break;
+                case NetworkEventType.BroadcastEvent:
+                    Debug.Log("Unexpected network event type");
+                    break;
 
-                    case NetworkEventType.Nothing:
-                        isFetchingCompleted = true;
-                        break;
-                }
+                case NetworkEventType.Nothing:
+                    isFetchingCompleted = true;
+                    break;
             }
-
-            yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY_RENAME);
         }
 
-        // if disconnected start connection coroutine
-        StartCoroutine(SetUpConnectionsCoroutine());
+        yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY_RENAME);
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
     #region OnData
