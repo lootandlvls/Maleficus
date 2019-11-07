@@ -420,7 +420,8 @@ public enum EConnectionMode
     LOCAL_SERVER,
     CLOUD_SERVER,
     EVERYTHING_LOCAL,
-    BNJMO_SERVER
+    BNJMO_SERVER,
+    GOOGLE_CLOUD_SERVER
 }
 #endregion
 
