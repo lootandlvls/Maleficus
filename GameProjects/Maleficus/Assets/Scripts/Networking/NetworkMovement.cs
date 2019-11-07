@@ -1,23 +1,32 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusUtilities;
 using System.Collections;
 
-public class NetworkMovement : MonoBehaviour
+using static Maleficus.MaleficusUtilities;
+
+
+
+public class NetworkMovement : MaleficusMonoBehaviour
 {
+    private TrailRenderer myTrailRenderer;
 
     private List<NetEvent_JoystickMoved> notAcknowledgedMovementMessages = new List<NetEvent_JoystickMoved>();
-
-    private Vector2 currentMovementInput;
-
     private EClientID myClientID = EClientID.NONE;
+    private Vector3 initialPosition;
+    private IEnumerator ReplicateMovementEnumerator;
 
+
+    private Vector2 currentMovementInput = Vector2.zero;
     private int currentExecution = 0;
 
-    private Vector3 initialPosition;
 
-    private void Awake()
+
+    protected override void Awake()
     {
+        base.Awake();
+
+        myTrailRenderer = GetComponent<TrailRenderer>();
+
         Player myPlayer = GetComponent<Player>();
         if (myPlayer != null)
         {
@@ -25,29 +34,40 @@ public class NetworkMovement : MonoBehaviour
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
         EventManager.Instance.NETWORK_GameStateReplication.AddListener          (On_NETWORK_GameStateReplicate);
 
         initialPosition = transform.position;
+    }
+
+    protected override void LateStart()
+    {
+        base.LateStart();
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         DebugManager.Instance.Log(92, "Not Ack # : " + notAcknowledgedMovementMessages.Count);
         DebugManager.Instance.Log(93, "Current execution # : " + currentExecution);
 
         if (Input.GetKeyDown("r"))
         {
-            StartCoroutine(ReplicateMovementCoroutine());
+            StartNewCoroutine(ref ReplicateMovementEnumerator, ReplicateMovementCoroutine());
         }
 
     }
 
-    private void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.Update();
+
         if (NetworkManager.Instance.HasAuthority == true)
         {
             ServerUpdate();
@@ -69,6 +89,7 @@ public class NetworkMovement : MonoBehaviour
     private void OwnerClientUpdate()
     {
         Move(currentMovementInput.x, currentMovementInput.y, Time.fixedDeltaTime * 1000.0f);
+        LookAtMovingDirection(currentMovementInput.x, currentMovementInput.y);
     }
 
     private void OtherClientUpdate()
@@ -79,9 +100,17 @@ public class NetworkMovement : MonoBehaviour
 
     private void On_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
     {
-        currentMovementInput = new Vector2(eventHandle.Joystick_X, eventHandle.Joystick_Y);
+        if (eventHandle.JoystickType == EJoystickType.MOVEMENT)
+        {
+            currentMovementInput = new Vector2(eventHandle.Joystick_X, eventHandle.Joystick_Y);
 
-        notAcknowledgedMovementMessages.Add(eventHandle);
+            notAcknowledgedMovementMessages.Add(eventHandle);
+        }
+
+        if (eventHandle.JoystickType == EJoystickType.ROTATION)
+        {
+            RotateRelativeToGrandParentRotation(eventHandle.Joystick_X, -eventHandle.Joystick_Y);
+        }
 
     }
 
@@ -122,10 +151,44 @@ public class NetworkMovement : MonoBehaviour
         transform.localPosition += finalVelocity * Time.fixedDeltaTime * fixedTimePercentage;
     }
 
+    private void LookAtMovingDirection(float axis_X, float axis_Z)
+    {
+        RotateRelativeToGrandParentRotation(axis_X, axis_Z);
+    }
+
+    private void RotateRelativeToGrandParentRotation(float axis_X, float axis_Z)
+    {
+        if (Mathf.Abs(axis_X) + Mathf.Abs(axis_Z) > 0.0f)
+        {
+            Transform myGrandTransform = GetGrandFatherTransfrom();
+            Vector3 newForwardDirection = myGrandTransform.TransformDirection(new Vector3(axis_X, 0.0f, axis_Z));
+            Quaternion newRotation = Quaternion.LookRotation(newForwardDirection, transform.up);
+            transform.rotation = newRotation;
+        }
+    }
+
+    private Transform GetGrandFatherTransfrom()
+    {
+        Transform myGrandParentTransform = transform;
+        while (myGrandParentTransform.parent != null)
+        {
+            myGrandParentTransform = myGrandParentTransform.parent;
+        }
+
+        return myGrandParentTransform;
+    }
+
 
     private IEnumerator ReplicateMovementCoroutine()
     {
+        // Reset position
         transform.position = initialPosition;
+
+        // Clear trail 
+        if (myTrailRenderer != null)
+        {
+            myTrailRenderer.Clear();
+        }
 
         if (notAcknowledgedMovementMessages.Count > 2)
         {
@@ -139,7 +202,7 @@ public class NetworkMovement : MonoBehaviour
                 NetEvent_JoystickMoved nextEvent = notAcknowledgedMovementMessages[i + 1];
                 float timeDifference = nextEvent.TimeStamp - currentEvent.TimeStamp;
 
-                Debug.Log(i + " - " + (i+1) + "  time difference : " + timeDifference);
+                //Debug.Log(i + " - " + (i+1) + "  time difference : " + timeDifference);
             }
 
             for (int i = 0; i < notAcknowledgedMovementMessages.Count - 1; i++)
@@ -155,6 +218,8 @@ public class NetworkMovement : MonoBehaviour
                     Move(currentEvent.Joystick_X, currentEvent.Joystick_Y, Time.fixedDeltaTime * 1000.0f);
 
                     timeDifference -= Time.fixedDeltaTime * 1000;
+                    LookAtMovingDirection(currentEvent.Joystick_X, currentEvent.Joystick_Y);
+
 
                     yield return new WaitForFixedUpdate();
                 }
@@ -171,9 +236,13 @@ public class NetworkMovement : MonoBehaviour
             currentExecution++;
 
 
-            yield return new WaitForSeconds(Time.fixedDeltaTime);
+
+            yield return new WaitForFixedUpdate();
         }
 
     }
+
+
+    
 
 }
