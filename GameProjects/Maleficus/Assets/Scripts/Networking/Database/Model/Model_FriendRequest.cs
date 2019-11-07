@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
-public class Model_Friend
+public class Model_FriendRequest
 {
     // identification
     public ObjectId _id { set; get; }
