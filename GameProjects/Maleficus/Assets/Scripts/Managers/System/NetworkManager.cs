@@ -86,8 +86,10 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     private IEnumerator ConnectToServerCoroutine()
     {
+        PrintToConsole("Trying to connect");
         while (isConnected == false)
         {
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
 
 
             NetworkTransport.Init();
@@ -114,16 +116,14 @@ Debug.Log("Connecting from Web");
             if (connectionId != -1)
             {
                 isConnected = true;
-
-                // Start fetching network messages
-                StartCoroutine(UpdateMessagePumpCoroutine());
-            }
-            else
-            {
-                yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
-
+                PrintToConsole("Connected!");
             }
         }
+
+        yield return new WaitForEndOfFrame();
+
+        // Start fetching network messages
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
     public void Shutdown()
@@ -133,6 +133,8 @@ Debug.Log("Connecting from Web");
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
+        PrintToConsole("Starting to receive messages from server");
+
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
