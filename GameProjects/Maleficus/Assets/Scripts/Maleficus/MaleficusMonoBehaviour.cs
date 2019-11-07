@@ -12,9 +12,10 @@ using static Maleficus.MaleficusConsts;
 public abstract class MaleficusMonoBehaviour : MonoBehaviour
 {
     [Separator("Maleficus MonoBehaviour")]
-    [SerializeField] bool showMaleficusMonoBehaviourConfiguration = true;
-    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool printDebugToConsole = true;
-    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool printWarningsAsErrors = true;
+    [SerializeField] bool showMaleficusMonoBehaviourConfiguration = false;
+    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool debugLogConsoleEnabled = true;
+    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool logWarningsAsErrors = true;
+    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] List<string> logCategoriesToIgnore;
 
     protected virtual void Awake()
     {
@@ -91,15 +92,25 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
 
     }
 
-    protected void PrintToConsole(string logText)
+    /// <summary>
+    /// Prints a log text into the console if logging is enabled and the category of the text to log is not already added into the ignore list.
+    /// </summary>
+    /// <param name="logText"> Log text to print </param>
+    /// <param name="category"> Category of the log text </param>
+    protected void DebugLog(string logText, string category = "Default")
     {
-        if (printDebugToConsole == true)
+        if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
         {
             Debug.Log(logText);
         }
     }
 
-    protected void PrintToCanvas(string logText, int debugID = 0)
+    /// <summary>
+    /// Prints a log text into a Debug Text component on the canvas in the scene, with a matching debug ID
+    /// </summary>
+    /// <param name="logText"> Log text to print </param>
+    /// <param name="debugID"> Debug ID of the Debug Text component </param>
+    protected void DebugLogOnCanvas(string logText, int debugID = 0)
     {
         DebugManager.Instance.Log(debugID, logText);
     }
@@ -134,7 +145,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
         T result = GetComponent<T>();
         if ((promtWarningMessageIfNoneFound == true) && (result == null))
         {
-            if (printWarningsAsErrors == true)
+            if (logWarningsAsErrors == true)
             {
                 Debug.LogError("[WARNING] Component of type '" + result.GetType() + "' not found on '" + name + "'");
             }
@@ -157,7 +168,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
         T[] result = GetComponents<T>();
         if ((promtWarningMessageIfNoneFound == true) && (result.Length == 0))
         {
-            if (printWarningsAsErrors == true)
+            if (logWarningsAsErrors == true)
             {
                 Debug.LogError("[WARNING] Not any component of type '" + result.GetType() + "' not found on '" + name + "'");
             }

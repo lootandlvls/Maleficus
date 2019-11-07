@@ -65,7 +65,7 @@ public class ServerManager : NetworkManager
 
     private IEnumerator SetUpConnectionsCoroutine()
     {
-        PrintToConsole("Trying to set up connection");
+        DebugLog("Trying to set up connection");
 
         while (isConnected == false)
         {
@@ -110,7 +110,7 @@ public class ServerManager : NetworkManager
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
-        PrintToConsole("Starting to receive messages from client");
+        DebugLog("Starting to receive messages from client");
 
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
@@ -209,7 +209,7 @@ public class ServerManager : NetworkManager
                 }
                 else
                 {
-                    PrintToConsole("Lobby already initialized");
+                    DebugLog("Lobby already initialized");
                 }
                 break;
 
@@ -403,7 +403,7 @@ public class ServerManager : NetworkManager
     #region Lobby
     private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
     {
-        PrintToConsole("Initializing lobby...");
+        DebugLog("Initializing lobby...");
 
         Net_OnInitLobby oil = new Net_OnInitLobby();
         Model_Account self = dataBank.FindAccountByToken(il.Token);

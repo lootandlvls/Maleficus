@@ -6023,6 +6023,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   chargingBodyEnergy: {fileID: 1820421771836070987, guid: 8fe5d31d8d3b7f4408c5ce8686c271de,
     type: 3}
   chargingWandEnergy: {fileID: 5551467226034161610, guid: 2b649d7e1c9688b4788d9cf712bcefcc,
@@ -6072,6 +6076,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60031efa7cf48fc4aaf0ff6d248f85a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore:
+  - Replication Movement
 --- !u!96 &2630372558410990984
 TrailRenderer:
   serializedVersion: 2

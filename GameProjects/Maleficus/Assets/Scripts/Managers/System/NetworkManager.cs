@@ -86,12 +86,9 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     private IEnumerator ConnectToServerCoroutine()
     {
-        PrintToConsole("Trying to connect");
+        DebugLog("Trying to connect");
         while (isConnected == false)
         {
-            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
-
-
             NetworkTransport.Init();
 
             ConnectionConfig connectionConfig = new ConnectionConfig();
@@ -116,8 +113,11 @@ Debug.Log("Connecting from Web");
             if (connectionId != -1)
             {
                 isConnected = true;
-                PrintToConsole("Connected!");
+                DebugLog("Connected!");
             }
+
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+
         }
 
         yield return new WaitForEndOfFrame();
@@ -133,7 +133,7 @@ Debug.Log("Connecting from Web");
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
-        PrintToConsole("Starting to receive messages from server");
+        DebugLog("Starting to receive messages from server");
 
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
@@ -373,7 +373,7 @@ Debug.Log("Connecting from Web");
     #endregion
 
     #region Send
-    public void SendServer(AbstractNetMessage msg)
+    private void SendServer(AbstractNetMessage msg)
     {
         // this is where we hold our data
         byte[] buffer = new byte[BYTE_SIZE];

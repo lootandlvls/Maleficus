@@ -222,14 +222,15 @@ public class NetworkMovement : MaleficusMonoBehaviour
 
             currentExecution = 0;
 
-            Debug.Log("Fixed delta time : " + Time.fixedDeltaTime * 1000);
+            DebugLog("Fixed delta time : " + Time.fixedDeltaTime * 1000, "Replication Movement");
+
             for (int i = 0; i < notAcknowledgedMovementMessages.Count - 1; i++)
             {
                 NetEvent_JoystickMoved currentEvent = notAcknowledgedMovementMessages[i];
                 NetEvent_JoystickMoved nextEvent = notAcknowledgedMovementMessages[i + 1];
                 float timeDifference = nextEvent.TimeStamp - currentEvent.TimeStamp;
 
-                //Debug.Log(i + " - " + (i+1) + "  time difference : " + timeDifference);
+                DebugLog(i + " - " + (i + 1) + "  time difference : " + timeDifference, "Replication Movement");
             }
 
             for (int i = 0; i < notAcknowledgedMovementMessages.Count - 1; i++)
