@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour, IPlayer                                                
+public class Player : MaleficusMonoBehaviour, IPlayer                                                
 {
     public EPlayerID PlayerID                                               { get; set; }
     public ETeamID TeamID                                                   { get; set; }
@@ -67,16 +67,20 @@ public class Player : MonoBehaviour, IPlayer
     private Dictionary<ESpellSlot, float> spellDuration = new Dictionary<ESpellSlot, float>();
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
 
         IsReadyToShoot = true;
         IsPlayerCharging = false;
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         InitializeDictionaries();
 
         //myRigidBody = this.GetComponent<Rigidbody>();      
@@ -87,8 +91,10 @@ public class Player : MonoBehaviour, IPlayer
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
             JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
@@ -100,7 +106,7 @@ public class Player : MonoBehaviour, IPlayer
                 float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
 
                 //Move(Move_X, Move_Y);
-                Rotate(Rotate_X, Rotate_Y);
+                //Rotate(Rotate_X, Rotate_Y);
 
                 if (playerInput.HasMoved() == true)
                 // Moving?
@@ -129,7 +135,7 @@ public class Player : MonoBehaviour, IPlayer
                         && (Time.time - lastTimeSinceRotated > 0.5f))
                     // Moving for 1 second since last rortation?
                     {
-                        LookAtMovingDirection(playerInput);
+                        //LookAtMovingDirection(playerInput);
                     }
                 }
             }
@@ -183,7 +189,7 @@ public class Player : MonoBehaviour, IPlayer
                 IsPlayerCharging = true;
 
                 Debug.Log("Player started Charging");
-                StartNewCoroutine(SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
+                StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
             }
             else if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
@@ -294,8 +300,9 @@ public class Player : MonoBehaviour, IPlayer
 
             while (IsPlayerCharging)
             {
-                particleSystemBodyEffect.maxParticles = counter;
-                particleSystemWandEffect.maxParticles = counter;
+                var mainPS = particleSystemBodyEffect.main;
+                mainPS.maxParticles = counter;
+                mainPS.maxParticles = counter;
 
 
                 yield return new WaitForSeconds(0.0f);
@@ -401,7 +408,7 @@ public class Player : MonoBehaviour, IPlayer
         {
             duration = 0.1f;
         }
-        StartNewCoroutine(UpdatePushVelocityEnumerator, UpdatePushVelocityCoroutine(duration));
+        StartNewCoroutine(ref UpdatePushVelocityEnumerator, UpdatePushVelocityCoroutine(duration));
     }
 
     
@@ -439,18 +446,6 @@ public class Player : MonoBehaviour, IPlayer
     public void DestroyPlayer()
     {
         Destroy(gameObject);
-    }
-
-    
-
-    private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)
-    {
-        if (enumerator != null)
-        {
-            StopCoroutine(enumerator);
-        }
-        enumerator = coroutine;
-        StartCoroutine(enumerator);
     }
 
     private Transform GetGrandFatherTransfrom()

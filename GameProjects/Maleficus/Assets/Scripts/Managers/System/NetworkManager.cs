@@ -39,15 +39,18 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     #region Monobehaviour
 
-    protected override void Awake()
-    {
-        base.Awake();
 
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
     }
 
-    protected virtual void Start()
+
+    protected override void Start()
     {
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+        base.Start();
 
         isConnected = false;
         StartCoroutine(ConnectToServerCoroutine());
@@ -57,9 +60,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         Init();
     }
-
-    
-
     #endregion
 
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)

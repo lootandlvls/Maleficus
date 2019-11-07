@@ -220,10 +220,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     break;
             }
         }
-        switch(receivedMsg)
-        {
-
-        }
     }
 
     public void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)

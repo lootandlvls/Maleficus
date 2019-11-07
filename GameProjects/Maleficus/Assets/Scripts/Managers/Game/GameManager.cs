@@ -15,8 +15,10 @@ public class GameManager : AbstractSingletonManager<GameManager>
         base.Awake();
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver);
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;

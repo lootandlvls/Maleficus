@@ -37,8 +37,10 @@ public abstract class AbstractSingletonManager<T> : AbstractManager where T : Ab
     /// <summary>
     /// Base awake method that resets the singleton's unique instance.
     /// </summary>
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (instance == this)
         {
             instance = null;

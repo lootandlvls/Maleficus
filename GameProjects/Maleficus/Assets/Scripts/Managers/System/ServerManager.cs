@@ -46,19 +46,22 @@ public class ServerManager : NetworkManager
         ownClientID = EClientID.SERVER;
         currentTimeStampID = 0;
     }
+    
 
     protected override void Start()
     {
         base.Start();
 
-        EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
-
-
         isConnected = false;
         StartCoroutine(SetUpConnectionsCoroutine());
     }
 
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
 
+        EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
+    }
 
     #endregion
 
@@ -643,7 +646,7 @@ public class ServerManager : NetworkManager
         switch(eventHandle.NewState)
         {
             case EAppState.IN_GAME_IN_RUNNING:
-                StartNewCoroutine(UpdateGameStateEnumerator, UpdateGameStateCoroutine());
+                StartNewCoroutine(ref UpdateGameStateEnumerator, UpdateGameStateCoroutine());
                 break;
         }
     }
@@ -654,16 +657,5 @@ public class ServerManager : NetworkManager
         {
             SendClient(0, connectedPlayers[connectedClientID], gameOverEventHandle);
         }
-    }
-
-
-    private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)
-    {
-        if (enumerator != null)
-        {
-            StopCoroutine(enumerator);
-        }
-        enumerator = coroutine;
-        StartCoroutine(enumerator);
     }
 }

@@ -13,8 +13,10 @@ public class CoinManager : AbstractSingletonManager<CoinManager>
     private Dictionary<int, Coin> AllCoins = new Dictionary<int, Coin>();
 
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.ENEMIES_WaveCompleted += On_ENEMIES_WaveCompleted;

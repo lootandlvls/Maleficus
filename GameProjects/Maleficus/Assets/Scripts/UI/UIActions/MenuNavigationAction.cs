@@ -7,8 +7,8 @@ public class MenuNavigationAction : AbstractUIAction {
 
     public event Action<EMenuState> MenuNavigationActionPressed;
 
-    [SerializeField] private EMenuState fromState;
-    [SerializeField] private EMenuState toState;
+    [SerializeField] private EMenuState fromState = EMenuState.NONE;
+    [SerializeField] private EMenuState toState = EMenuState.NONE;
 
     protected override void OnDestroy()
     {

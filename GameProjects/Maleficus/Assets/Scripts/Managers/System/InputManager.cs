@@ -18,32 +18,32 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private Dictionary<EControllerID, EPlayerID>        connectedControllers                    = new Dictionary<EControllerID, EPlayerID>();
 
-    protected override void Awake()
+
+    protected override void InitializeObjecsInScene()
     {
-        base.Awake();
+        base.InitializeObjecsInScene();
 
         AbstractInputSource[] inputSources = GetComponents<AbstractInputSource>();
         foreach (AbstractInputSource inputSource in inputSources)
         {
-            inputSource.ButtonPressed   += On_InputSource_ButtonPressed;
-            inputSource.ButtonReleased  += On_InputSource_ButtonReleased;
-            inputSource.JoystickMoved   += On_InputSource_JoystickMoved;
+            inputSource.ButtonPressed += On_InputSource_ButtonPressed;
+            inputSource.ButtonReleased += On_InputSource_ButtonReleased;
+            inputSource.JoystickMoved += On_InputSource_JoystickMoved;
         }
     }
 
 
-    private void Start()
+    protected override void InitializeEventsCallbacks()
     {
+        base.InitializeEventsCallbacks();
 
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener           (On_NETWORK_ReceivedGameSessionInfo);
-        EventManager.Instance.GAME_GameOver.AddListener                             (On_GAME_GameOver);
-
-        StartCoroutine(LateStartCoroutine());
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
+        EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
     }
 
-    private IEnumerator LateStartCoroutine()
+    protected override void LateStart()
     {
-        yield return new WaitForEndOfFrame();
+        base.LateStart();
 
         // Connect Touch player as first player
         if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
@@ -64,11 +64,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
     }
 
     public override void OnSceneStartReinitialize()
-    {
-
-    }
-
-    private void Update()
     {
 
     }

@@ -52,36 +52,31 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
 
 
-    private void Start()
+    protected override void InitializeEventsCallbacks()
     {
+        base.InitializeEventsCallbacks();
+
         // Input events
-        EventManager.Instance.INPUT_ControllerConnected.AddListener             (On_INPUT_ControllerConnected);            
-        EventManager.Instance.INPUT_ControllerDisconnected.AddListener          (On_INPUT_ControllerDisconnected); 
-        
-        EventManager.Instance.INPUT_ButtonPressed.AddListener                   (On_INPUT_ButtonPressed);
-        EventManager.Instance.INPUT_ButtonReleased.AddListener                  (On_INPUT_ButtonReleased);
+        EventManager.Instance.INPUT_ControllerConnected.AddListener(On_INPUT_ControllerConnected);
+        EventManager.Instance.INPUT_ControllerDisconnected.AddListener(On_INPUT_ControllerDisconnected);
+
+        EventManager.Instance.INPUT_ButtonPressed.AddListener(On_INPUT_ButtonPressed);
+        EventManager.Instance.INPUT_ButtonReleased.AddListener(On_INPUT_ButtonReleased);
         //EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
         // Listen to broadcasted inputs 
-        EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_SERVER_INPUT_JoystickMoved);
+        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_SERVER_INPUT_JoystickMoved);
 
         // Scene changed event
-        EventManager.Instance.APP_SceneChanged.AddListener                      (On_APP_SceneChanged);
-        EventManager.Instance.APP_AppStateUpdated.AddListener                   (On_APP_AppStateUpdated);
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
 
         //Network
         //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
-        EventManager.Instance.NETWORK_GameStateReplication.AddListener            (On_NETWORK_GameStateReplicate);
-        EventManager.Instance.NETWORK_GameStarted.AddListener                   (On_NETWORK_GameStarted);
-
+        EventManager.Instance.NETWORK_GameStateReplication.AddListener(On_NETWORK_GameStateReplicate);
+        EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
     }
-    
 
 
-    private void Update()
-    {
-        //UpdateControllersInput();
-
-    }
 
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
     {

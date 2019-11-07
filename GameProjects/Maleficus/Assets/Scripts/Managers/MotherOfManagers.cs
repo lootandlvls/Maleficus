@@ -34,11 +34,13 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
         InitializeManagers();
     }
 
-    private void Start()
+    protected override void InitializeEventsCallbacks()
     {
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
-    }
+        base.InitializeEventsCallbacks();
 
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+
+    }
 
     public override void OnSceneStartReinitialize()
     {

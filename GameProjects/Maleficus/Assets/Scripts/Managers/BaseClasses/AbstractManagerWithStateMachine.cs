@@ -52,8 +52,10 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
          */
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
+
         /* INSTRUCTIONS
          *  3) Bind event in start method of child class!
          *  Example:
@@ -62,13 +64,13 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
 
         // Register to scene change
         EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
-        // Wait for another frame before setting state
-        StartCoroutine(LateStartCoroutine());
+
     }
 
-    protected virtual IEnumerator LateStartCoroutine()
+    // Wait for another frame before setting state
+    protected override void LateStart()
     {
-        yield return new WaitForEndOfFrame();
+        base.LateStart();
 
         // Update state according to current Scene
         EScene currentScene = AppStateManager.Instance.CurrentScene;
@@ -78,8 +80,11 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
         }
     }
 
-    protected virtual void Update()
+
+    protected override void Update()
     {
+        base.Update();
+
         // Debug current state
         DebugManager.Instance.Log(debugStateID, CurrentState.GetType() + " : " + currentState);
     }

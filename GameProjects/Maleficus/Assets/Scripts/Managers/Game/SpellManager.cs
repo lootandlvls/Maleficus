@@ -49,13 +49,17 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         InitializeSpells();
     }
 
-    private void Start()
+    protected override void Start()
     {
-        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
-        EventManager.Instance.SPELLS_Teleport += On__SPELLS_Teleport;
-
-
         activePlayers = PlayerManager.Instance.ActivePlayers;
+    }
+
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
+        EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
     }
 
     public override void OnSceneStartReinitialize()

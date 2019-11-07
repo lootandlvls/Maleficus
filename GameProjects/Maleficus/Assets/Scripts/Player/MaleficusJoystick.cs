@@ -25,7 +25,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     public float MoveThreshold                  { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
 
 
-    [SerializeField] private ETouchJoystickType joystickType;
+    [SerializeField] private ETouchJoystickType joystickType = ETouchJoystickType.NONE;
 
     [Header("Joystick Settings")]
     [SerializeField] private float moveThreshold = 1;
