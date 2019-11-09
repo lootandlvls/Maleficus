@@ -158,6 +158,9 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 case ENetworkMessageType.CONNECTED:
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
                     break;
+                case ENetworkMessageType.OFFLINE:
+                    UpdateState(EAppState.IN_ENTRY_IN_LOADING);
+                    break;
                 case ENetworkMessageType.LOGGED_IN:
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);
                     break;

@@ -50,7 +50,7 @@ public class ServerManager : NetworkManager
 
     protected override void Start()
     {
-        isConnected = false;
+        pingedSuccessfully = false;
         StartCoroutine(SetUpConnectionsCoroutine());
     }
 
@@ -67,7 +67,7 @@ public class ServerManager : NetworkManager
     {
         DebugLog("Trying to set up connection");
 
-        while (isConnected == false)
+        while (pingedSuccessfully == false)
         {
             yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
 
@@ -97,7 +97,7 @@ public class ServerManager : NetworkManager
             // Check if is connected
             if (dataBank != null && (server_hostId != -1))
             {
-                isConnected = true;
+                pingedSuccessfully = true;
             }
         }
 
@@ -157,7 +157,7 @@ public class ServerManager : NetworkManager
             }
         }
 
-        yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY_RENAME);
+        yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
 

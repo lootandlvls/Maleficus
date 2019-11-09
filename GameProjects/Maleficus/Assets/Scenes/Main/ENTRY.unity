@@ -4447,9 +4447,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef8e6c4bf0929e4591fb8093ec21509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   IsServer: 0
-  ConnectionMode: 0
+  ConnectionMode: 5
   InputMode: 2
+  IsConnectControllerInAnyState: 0
   IsSpawnPlayerOnConnect: 0
   IsSpawnAllPlayers: 0
   IsSpawnTouchAsPlayer1: 0

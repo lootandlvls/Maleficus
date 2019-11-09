@@ -73,16 +73,15 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
             switch (ConnectionMode)
             {
                 case EConnectionMode.LOCAL_SERVER:
-                    Debug.Log(LOCAL_SERVER_IP);
                     return LOCAL_SERVER_IP;
-
                 case EConnectionMode.CLOUD_SERVER:
                     return CLOUD_SERVER_IP;
-
                 case EConnectionMode.BNJMO_SERVER:
                     return BNJMO_SERVER_IP;
                 case EConnectionMode.GOOGLE_CLOUD_SERVER:
                     return GOOGLE_CLOUD_SERVER_IP;
+                case EConnectionMode.PLAY_OFFLINE:
+                    return PLAY_OFFLINE_IP;
                 default:
                     return "0.0.0.0";
             }

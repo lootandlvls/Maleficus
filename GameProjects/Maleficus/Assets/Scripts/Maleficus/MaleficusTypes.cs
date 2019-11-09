@@ -377,6 +377,7 @@ public enum ENetMessageType
 public enum ENetworkMessageType
 {
     NONE,
+    OFFLINE,
     CONNECTED,
     DISCONNECTED,
     DATA,
@@ -421,7 +422,8 @@ public enum EConnectionMode
     CLOUD_SERVER,
     EVERYTHING_LOCAL,
     BNJMO_SERVER,
-    GOOGLE_CLOUD_SERVER
+    GOOGLE_CLOUD_SERVER,
+    PLAY_OFFLINE
 }
 #endregion
 

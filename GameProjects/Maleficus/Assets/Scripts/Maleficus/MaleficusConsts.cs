@@ -59,13 +59,12 @@ namespace Maleficus
         public const string GOOGLE_CLOUD_SERVER_IP = "35.246.234.228";
         public const string BNJMO_SERVER_IP = "192.168.137.1";
         public const string INSTANCE_MANAGER_SERVER_IP = "54.167.218.82";
-        public const float GAME_STATE_UPDATE_FREQUENCY = 1.0f;
-        public const float NETWORK_UPDATE_FREQUENCY_RENAME = 0.001f;
-        public const float NETWORK_CONNECT_FREQUENCY = 0.1f;
+        public const string PLAY_OFFLINE_IP = "0.0.0";
+        // Frequency numbers should be represantable by binary numbers so no conversion errors happen https://www.h-schmidt.net/FloatConverter/IEEE754.html
+        public const float GAME_STATE_UPDATE_FREQUENCY = 0.75f;
+        public const float NETWORK_UPDATE_FREQUENCY = 0.0078125f;
+        public const float NETWORK_CONNECT_FREQUENCY = 0.75f;
 
-
-
-        public const float NETWORK_UPDATE_FREQUENCY = 0.1f;
 
 
         /// <summary> Threshold to know what joystick value can be considered as a directional button </summary>  

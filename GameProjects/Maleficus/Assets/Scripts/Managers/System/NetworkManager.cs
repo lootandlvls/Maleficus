@@ -13,6 +13,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     public bool HasAuthority                        { get { return ownClientID == EClientID.SERVER; } }
     public EClientID OwnerClientID                    { get { return ownClientID; } }
     public Account Self;
+    public bool PlayingOffline = false;
 
     private byte reliableChannel;
     private int connectionId;
@@ -21,7 +22,9 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private byte error;
 
     private string token;
+    protected bool pingedSuccessfully = false;
     protected bool isConnected = false;
+    private byte tries = 0;
     private int ownLobbyID;
     protected EClientID ownClientID;
 
@@ -52,7 +55,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         base.Start();
 
-        isConnected = false;
+        pingedSuccessfully = false;
         StartCoroutine(ConnectToServerCoroutine());
     }
 
@@ -86,38 +89,53 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     private IEnumerator ConnectToServerCoroutine()
     {
-        DebugLog("Trying to connect");
-        while (isConnected == false)
+        if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
         {
-            NetworkTransport.Init();
+            Debug.Log("couldn't connect to the internet");
+            PlayingOffline = true;
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+            UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
+            yield break;
+        }
+        else
+        {
+            Debug.Log("Connected to the internet");
+        }
+        DebugLog("Trying to ping Server");
 
-            ConnectionConfig connectionConfig = new ConnectionConfig();
-            reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
+        NetworkTransport.Init();
 
-            HostTopology hostTopology = new HostTopology(connectionConfig, CLIENT_MAX_USER);
+        ConnectionConfig connectionConfig = new ConnectionConfig();
+        reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
 
-            // Client only code
-            hostId = NetworkTransport.AddHost(hostTopology, 0);
+        HostTopology hostTopology = new HostTopology(connectionConfig, CLIENT_MAX_USER);
+
+        // Client only code
+        hostId = NetworkTransport.AddHost(hostTopology, 0);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 // Web Client
 connectionId = NetworkTransport.Connect(hostId, SERVER_IP, WEB_PORT, 0, out error);
 Debug.Log("Connecting from Web");
 #else
-            // Standalone Client
-            Debug.Log(MotherOfManagers.Instance.ServerIP);
-            connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, PORT, 0, out error);
-            Debug.Log("Connecting from Standalone");
+        // Standalone Client
+        Debug.Log(MotherOfManagers.Instance.ServerIP);
+        connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, PORT, 0, out error);
+        Debug.Log("Ping from Standalone");
 #endif
-            Debug.Log(string.Format("Attempting to connect on {0}...", MotherOfManagers.Instance.ServerIP));
-            if (connectionId != -1)
-            {
-                isConnected = true;
-                DebugLog("Connected!");
-            }
-
+        Debug.Log(string.Format("Attempting to ping {0}...", MotherOfManagers.Instance.ServerIP));
+        if (connectionId != 0)
+        {
+            pingedSuccessfully = true;
+            DebugLog("Pinged Server successfully!");
+        }
+        else
+        {
+            Debug.Log("Server seems to be not existing");
+            PlayingOffline = true;
             yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
-
+            UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
+            yield break;
         }
 
         yield return new WaitForEndOfFrame();
@@ -133,8 +151,7 @@ Debug.Log("Connecting from Web");
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
-        DebugLog("Starting to receive messages from server");
-
+        Debug.Log("Trying to connect to the Server...");
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
@@ -143,7 +160,7 @@ Debug.Log("Connecting from Web");
         int dataSize;
 
         // Start fetching messages routine
-        while (isConnected == true)
+        while (pingedSuccessfully == true)
         {
             bool isFetchingCompleted = false;
             while (isFetchingCompleted == false)
@@ -153,15 +170,31 @@ Debug.Log("Connecting from Web");
                 {
                     case NetworkEventType.ConnectEvent:
                         Debug.Log("Connected to server");
+                        yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
                         UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
                         Net_Connected c = new Net_Connected();
+                        isConnected = true;
                         break;
-
                     case NetworkEventType.DisconnectEvent:
                         Debug.Log("Disconnected from server");
                         UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
                         Net_Disonnected disconnected = new Net_Disonnected();
-                        isConnected = false;  // changed to false. was true??
+                        isConnected = false;
+                        // check if internet down or server
+                        if (Application.internetReachability == NetworkReachability.NotReachable)
+                        {
+                            Debug.Log("lost connection to the internet...");
+                            pingedSuccessfully = false;
+                            UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
+                            yield break;
+                        }
+                        else
+                        {
+                            Debug.Log("Server down...");
+                            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+                            Shutdown();
+                            StartCoroutine(ConnectToServerCoroutine());
+                        }
                         break;
 
                     case NetworkEventType.DataEvent:
@@ -177,14 +210,20 @@ Debug.Log("Connecting from Web");
                         isFetchingCompleted = true;
                         break;
                 }
-
-                yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY_RENAME);
+                yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
+            }
+            if (isConnected == false)
+            {
+                yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+                break;
             }
         }
 
         // if disconnected start connection coroutine
-        if (!isConnected)
+        if (pingedSuccessfully == false)
         {
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+            Shutdown();
             StartCoroutine(ConnectToServerCoroutine());
         }
         StartCoroutine(UpdateMessagePumpCoroutine());
@@ -379,6 +418,10 @@ Debug.Log("Connecting from Web");
     #region Send
     private void SendServer(AbstractNetMessage msg)
     {
+        if(isConnected == false)
+        {
+            return;
+        }
         // this is where we hold our data
         byte[] buffer = new byte[BYTE_SIZE];
 
