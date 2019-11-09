@@ -10,9 +10,9 @@ public class Model_Instance
 
     // other values
     public bool occupied { set; get; }
-    public List<participant> participants { set; get; }
+    public List<instance_participant> instance_participants { set; get; }
 
-    public struct participant
+    public struct instance_participant
     {
         public ObjectId participant_id; // account
         public byte connection_id;
