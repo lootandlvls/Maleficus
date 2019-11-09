@@ -15,7 +15,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
     public MaleficusEvent<TestEventHandle> TEST_TestEvent 
         = new MaleficusEvent<TestEventHandle>("TEST_TestEvent");
 
-
     #region APP
 
     public MaleficusEvent<Event_StateUpdated<EAppState>> APP_AppStateUpdated 
@@ -221,8 +220,8 @@ public class EventManager : AbstractSingletonManager<EventManager>
         = new MaleficusEvent<Event_GenericHandle<List<EPlayerID>, EPlayerID>>("NETWORK_ReceivedGameSessionInfo");
 
     /// <summary> Event to restore the game state in case of lost connection </summary>
-    public MaleficusEvent<NetEvent_GameStateReplicate> NETWORK_GameStateReplicate 
-        = new MaleficusEvent<NetEvent_GameStateReplicate>("NETWORK_GameStateReplicate") ;
+    public MaleficusEvent<NetEvent_GameStateReplication> NETWORK_GameStateReplication 
+        = new MaleficusEvent<NetEvent_GameStateReplication>("NETWORK_GameStateReplication") ;
 
     public MaleficusEvent<NetEvent_GameStarted> NETWORK_GameStarted 
         = new MaleficusEvent<NetEvent_GameStarted>("NETWORK_GameStarted");

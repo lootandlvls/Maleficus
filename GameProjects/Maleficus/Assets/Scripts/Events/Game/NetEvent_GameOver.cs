@@ -9,7 +9,7 @@ public class NetEvent_GameOver : AbstractEventHandle
 
     public NetEvent_GameOver(EClientID senderID, ETeamID teamID)
     {
-        ID = ENetMessageID.GAME_OVER;
+        MessageType = ENetMessageType.GAME_OVER;
         SenderID = SenderID;
 
         TeamID = teamID;

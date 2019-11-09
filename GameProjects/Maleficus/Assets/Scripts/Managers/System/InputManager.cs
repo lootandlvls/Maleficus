@@ -2,7 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusUtilities;
 
 /// <summary>
 /// Responsible for managing input controller sources attached to the same gameobject
@@ -17,52 +18,74 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private Dictionary<EControllerID, EPlayerID>        connectedControllers                    = new Dictionary<EControllerID, EPlayerID>();
 
-    protected override void Awake()
+
+    protected override void InitializeObjecsInScene()
     {
-        base.Awake();
+        base.InitializeObjecsInScene();
 
         AbstractInputSource[] inputSources = GetComponents<AbstractInputSource>();
         foreach (AbstractInputSource inputSource in inputSources)
         {
-            inputSource.ButtonPressed   += On_InputSource_ButtonPressed;
-            inputSource.ButtonReleased  += On_InputSource_ButtonReleased;
-            inputSource.JoystickMoved   += On_InputSource_JoystickMoved;
+            inputSource.ButtonPressed += On_InputSource_ButtonPressed;
+            inputSource.ButtonReleased += On_InputSource_ButtonReleased;
+            inputSource.JoystickMoved += On_InputSource_JoystickMoved;
         }
     }
 
 
-    private void Start()
+    protected override void InitializeEventsCallbacks()
     {
+        base.InitializeEventsCallbacks();
 
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener           (On_NETWORK_ReceivedGameSessionInfo);
-        EventManager.Instance.GAME_GameOver.AddListener                             (On_GAME_GameOver);
-
-        StartCoroutine(LateStartCoroutine());
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
+        EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
     }
 
-    private IEnumerator LateStartCoroutine()
+    protected override void LateStart()
     {
-        yield return new WaitForEndOfFrame();
+        base.LateStart();
 
         // Connect Touch player as first player
         if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
-            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true)
-            && (ConnectedControllers.ContainsKey(EControllerID.TOUCH) == false))
+            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true))
         {
             ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
+        }
+
+        // Connect all players
+        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true)
+            && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
+        {
+            ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
+            ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
+            ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
+            ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
         }
     }
 
     public override void OnSceneStartReinitialize()
     {
-        
+
     }
 
-    private void Update()
+    private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
-
+        // Disconnect all network controllers and AI
+        List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
+        foreach (EControllerID controllerID in ConnectedControllers.Keys)
+        {
+            if (controllerID.ContainedIn(NETWORK_CONTROLLERS)
+                || (controllerID == EControllerID.AI_1))
+            {
+                controllerIDsToRemove.Add(controllerID);
+            }
+        }
+        foreach (EControllerID controllerID in controllerIDsToRemove)
+        {
+            ConnectedControllers.Remove(controllerID);
+        }
     }
-
+ 
 
     #region Input Source Callbacks
     private void On_InputSource_ButtonPressed(EControllerID controllerID, EInputButton inputButton)
@@ -70,7 +93,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if (ConnectedControllers.ContainsKey(controllerID))
         {
             EPlayerID playerID = ConnectedControllers[controllerID];
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+            EClientID clientID = GetClientIDFrom(playerID);
 
             if (inputButton != EInputButton.NONE)
             {
@@ -86,7 +109,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if (ConnectedControllers.ContainsKey(controllerID))
         {
             EPlayerID playerID = ConnectedControllers[controllerID];
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+            EClientID clientID = GetClientIDFrom(playerID);
 
             if (inputButton != EInputButton.NONE)
             {
@@ -102,7 +125,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if (ConnectedControllers.ContainsKey(controllerID))
         {
             EPlayerID playerID = ConnectedControllers[controllerID];
-            EClientID clientID = MaleficusUtilities.GetClientIDFrom(playerID);
+            EClientID clientID = GetClientIDFrom(playerID);
 
             if (joystickType != EJoystickType.NONE)
             {
@@ -112,8 +135,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
     #endregion
-
-
 
     #region Server Input
     private void On_NETWORK_ReceivedGameSessionInfo(Event_GenericHandle<List<EPlayerID>, EPlayerID> eventHandle)
@@ -130,19 +151,23 @@ public class InputManager : AbstractSingletonManager<InputManager>
             }
             else
             {
-                ConnectControllerToPlayer(MaleficusUtilities.GetControllerNeteworkID(playerID), playerID);
+                ConnectControllerToPlayer(GetControllerNeteworkID(playerID), playerID);
             }
         }
     }
     #endregion
 
-
+    #region Controller Connection
     public void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
     {
         // Check parameters
-        if (ConnectedControllers.ContainsKey(controllerID) == true)
+        if ((ConnectedControllers.ContainsKey(controllerID) == true)
+            || (ConnectedControllers.ContainsValue(playerID) == true))
         {
-            Debug.LogError("Trying to connect a controller that is already connected.");
+            if (MotherOfManagers.Instance.IsSpawnAllPlayers == false)
+            {
+                Debug.LogError("Trying to connect a controller that is already connected.");
+            }
             return;
         }
         if ((playerID == EPlayerID.NONE)
@@ -183,24 +208,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         return ConnectedControllers.ContainsKey(controllerID);
     }
+    #endregion
 
-    private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
-    {
-        // Disconnect all network controllers and AI
-        List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
-        foreach (EControllerID controllerID in ConnectedControllers.Keys)
-        {
-            if (controllerID.ContainedIn(MaleficusConsts.NETWORK_CONTROLLERS)
-                || (controllerID == EControllerID.AI))
-            {
-                controllerIDsToRemove.Add(controllerID);
-            }
-        }
-        foreach(EControllerID controllerID in controllerIDsToRemove)
-        {
-            ConnectedControllers.Remove(controllerID);
-        }
-    }
-
-    
 }

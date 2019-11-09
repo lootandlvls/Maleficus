@@ -19,8 +19,10 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
     [SerializeField] private AudioSource stagePlaced;
 
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         //AppStateManager.Instance.AppStateUpdated += OnAppStateUpdated;
         EventManager.Instance.APP_AppStateUpdated.AddListener(OnAppStateUpdated);
 

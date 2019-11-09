@@ -13,7 +13,8 @@ using UnityEngine.UI;
 /// 52 - Scene
 /// 80 - Enemies
 /// 89 - AR Anchor status
-/// 103 - Single lives game mode stats
+/// 92 - Network Player Movement
+/// 103 - GM_FFA_Lives - Single lives game mode stats
 /// </summary>
 public class DebugManager : AbstractSingletonManager<DebugManager>
 {

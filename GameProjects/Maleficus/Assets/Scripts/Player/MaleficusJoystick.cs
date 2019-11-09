@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using static Maleficus.MaleficusConsts;
 
 public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
@@ -24,7 +25,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     public float MoveThreshold                  { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
 
 
-    [SerializeField] private ETouchJoystickType joystickType;
+    [SerializeField] private ETouchJoystickType joystickType = ETouchJoystickType.NONE;
 
     [Header("Joystick Settings")]
     [SerializeField] private float moveThreshold = 1;
@@ -114,7 +115,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         OnDrag(eventData);
 
         // Update Joystick appearance 
-        if (input.magnitude > MaleficusConsts.SPELL_BUTTON_THRESHOLD)
+        if (input.magnitude > SPELL_BUTTON_THRESHOLD)
         {
             UpdateState(EJoystickState.SELECTED_CAN_TRIGGER_BUTTON);
         }
@@ -141,7 +142,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         handle.anchoredPosition = input * radius * handleRange;
        
         // Update Joystick appearance 
-        if (input.magnitude > MaleficusConsts.SPELL_BUTTON_THRESHOLD)
+        if (input.magnitude > SPELL_BUTTON_THRESHOLD)
         {
             UpdateState(EJoystickState.SELECTED_CAN_TRIGGER_BUTTON);
         }

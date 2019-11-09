@@ -15,8 +15,10 @@ public class GameManager : AbstractSingletonManager<GameManager>
         base.Awake();
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver);
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
         // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
@@ -24,6 +26,8 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
     {
+        Debug.Log("[GAME_LOOP_FIX] Game started event");
+
         StartGame(EGameMode.FFA_LIVES);
     }
 
@@ -44,32 +48,30 @@ public class GameManager : AbstractSingletonManager<GameManager>
     #region Game Actions
     private void StartGame(EGameMode gameModeToStart)
     {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_NOT_STARTED)
+        currentGameMode = gameModeToStart;
+
+        switch (gameModeToStart)
         {
-            currentGameMode = gameModeToStart;
+            case EGameMode.FFA_LIVES:
+                Debug.Log("[GAME_LOOP_FIX] Starting GM_FFA_Lives");
+                gameObject.AddComponent<GM_FFA_Lives>();          
+                break; 
 
-            switch (gameModeToStart)
-            {
-                case EGameMode.FFA_LIVES:
-                    gameObject.AddComponent<GM_FFA_Lives>();          
-                    break; 
+            case EGameMode.FFA_TIME:
 
-                case EGameMode.FFA_TIME:
+                break;
 
-                    break;
+            case EGameMode.INSANE:
 
-                case EGameMode.INSANE:
+                break;
 
-                    break;
+            case EGameMode.DUNGEON:
+                gameObject.AddComponent<GM_Single_Dungeon>();          
 
-                case EGameMode.DUNGEON:
-                    gameObject.AddComponent<GM_Single_Dungeon>();          
-
-                    break;
-            }
-
-            EventManager.Instance.Invoke_GAME_GameStarted(currentGameMode);
+                break;
         }
+
+        EventManager.Instance.Invoke_GAME_GameStarted(currentGameMode);
     }
 
 

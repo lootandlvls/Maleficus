@@ -25,8 +25,10 @@ public class CurveReader : AbstractSingletonManager<CurveReader>
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (Input.GetKeyDown("u"))
         {
             UpdateCurves();

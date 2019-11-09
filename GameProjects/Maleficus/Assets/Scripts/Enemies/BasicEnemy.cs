@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static Maleficus.MaleficusUtilities;
 
 // Klasse fuer Huendchen Gegner
 public class BasicEnemy : MonoBehaviour, IEnemy
@@ -61,7 +62,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
         myAnimator = GetComponent<Animator>();
         myNavAgent = GetComponent<NavMeshAgent>();
         
-        myAudioSource = MaleficusUtilities.AddAudioListener(gameObject, false, 0.15f, false);
+        myAudioSource = AddAudioListener(gameObject, false, 0.15f, false);
 
         FindAllWayPoints();
     }
@@ -260,7 +261,7 @@ public class BasicEnemy : MonoBehaviour, IEnemy
     private IEnumerator InvokeAttackedEventCoroutine()
     {
         yield return new WaitForSeconds(attackDelay);
-        MaleficusUtilities.PlayRandomSound(myAudioSource, attackSounds);
+        PlayRandomSound(myAudioSource, attackSounds);
 
         EventManager.Instance.Invoke_ENEMIES_EnemyHitPlayer(this);
     }

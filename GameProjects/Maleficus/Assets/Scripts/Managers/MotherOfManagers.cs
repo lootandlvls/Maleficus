@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
+using static Maleficus.MaleficusConsts;
 
 public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {
@@ -9,7 +10,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     [Separator("Networking")]
     [SerializeField] public bool IsServer = false;
-    [ConditionalField(nameof(IsServer), inverse:true)] [SerializeField] public EConnectionMode ConnectionMode = EConnectionMode.EVRYTHING_LOCAL;
+    [ConditionalField(nameof(IsServer), inverse:true)] [SerializeField] public EConnectionMode ConnectionMode = EConnectionMode.EVERYTHING_LOCAL;
 
     [Separator("Input")]
     [SerializeField] public EInputMode InputMode = EInputMode.CONTROLLER;
@@ -33,11 +34,13 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
         InitializeManagers();
     }
 
-    private void Start()
+    protected override void InitializeEventsCallbacks()
     {
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
-    }
+        base.InitializeEventsCallbacks();
 
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+
+    }
 
     public override void OnSceneStartReinitialize()
     {
@@ -70,15 +73,15 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
             switch (ConnectionMode)
             {
                 case EConnectionMode.LOCAL_SERVER:
-                    Debug.Log(MaleficusConsts.LOCAL_SERVER_IP);
-                    return MaleficusConsts.LOCAL_SERVER_IP;
-
+                    return LOCAL_SERVER_IP;
                 case EConnectionMode.CLOUD_SERVER:
-                    return MaleficusConsts.CLOUD_SERVER_IP;
-
+                    return CLOUD_SERVER_IP;
                 case EConnectionMode.BNJMO_SERVER:
-                    return MaleficusConsts.BNJMO_SERVER_IP;
-
+                    return BNJMO_SERVER_IP;
+                case EConnectionMode.GOOGLE_CLOUD_SERVER:
+                    return GOOGLE_CLOUD_SERVER_IP;
+                case EConnectionMode.PLAY_OFFLINE:
+                    return PLAY_OFFLINE_IP;
                 default:
                     return "0.0.0.0";
             }

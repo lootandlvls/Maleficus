@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusUtilities;
 
 public class GamepadInputSource : AbstractInputSource
 {
@@ -24,7 +26,7 @@ public class GamepadInputSource : AbstractInputSource
     {
         EControllerID controllerID = evenHandle.Arg1;
 
-        if (controllerID.ContainedIn(MaleficusConsts.GAMEPADS_CONTROLLERS))
+        if (controllerID.ContainedIn(GAMEPADS_CONTROLLERS))
         {
             canPerformHorizontalDirectionalButton.Add(controllerID, true);
             canPerformVerticalDirectionalButton.Add(controllerID, true);
@@ -38,7 +40,7 @@ public class GamepadInputSource : AbstractInputSource
     {
         EControllerID controllerID = evenHandle.Arg1;
 
-        if (controllerID.ContainedIn(MaleficusConsts.GAMEPADS_CONTROLLERS))
+        if (controllerID.ContainedIn(GAMEPADS_CONTROLLERS))
         {
             canPerformHorizontalDirectionalButton.Remove(controllerID);
             canPerformVerticalDirectionalButton.Remove(controllerID);
@@ -111,7 +113,7 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_Confirm(EControllerID controllerID)
     {
-        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+        char controllerIDName = ControllerIDToChar(controllerID);
         if (controllerIDName != 'X')
         {
             if (Input.GetButtonDown("Confirm_" + controllerIDName))
@@ -139,7 +141,7 @@ public class GamepadInputSource : AbstractInputSource
     private void Check_Cancel(EControllerID controllerID)         // TODO: Test with controller if it works
     {
         // Is button pressed?
-        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
+        char controllerIDName = ControllerIDToChar(controllerID);
         if (controllerIDName != 'X')
         {
             if (Input.GetButtonDown("Cancel_" + controllerIDName))
@@ -164,15 +166,15 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_ChargingSpell(ESpellSlot spellSlot, EControllerID controllerID)
     {
-        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-        int spellID = MaleficusUtilities.SpellSlotToInt(spellSlot);
+        char controllerIDName = ControllerIDToChar(controllerID);
+        int spellID = SpellSlotToInt(spellSlot);
 
         if ((controllerIDName != 'X')  && (spellID != 0))
         {
             // Is button pressed?
             if (Input.GetButtonDown("CastSpell_" + spellID + '_' + controllerIDName))
             {
-                EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellSlot);
+                EInputButton inputButton = GetInputButtonFrom(spellSlot);
                 if (inputButton != EInputButton.NONE)
                 {
                     if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
@@ -187,15 +189,15 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_CastedSpell(ESpellSlot spellSlot, EControllerID controllerID)
     {
-        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-        int spellID = MaleficusUtilities.SpellSlotToInt(spellSlot);
+        char controllerIDName = ControllerIDToChar(controllerID);
+        int spellID = SpellSlotToInt(spellSlot);
 
         if ((controllerIDName != 'X') && (spellID != 0))
         {
             // Is button pressed?
             if (Input.GetButtonUp("CastSpell_" + spellID + '_' + controllerIDName))
             {
-                EInputButton inputButton = MaleficusUtilities.GetInputButtonFrom(spellSlot);
+                EInputButton inputButton = GetInputButtonFrom(spellSlot);
                 if (inputButton != EInputButton.NONE)
                 {
                     if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
@@ -210,8 +212,8 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_Axis(EJoystickType joystickType, EControllerID controllerID)
     {
-        char controllerIDName = MaleficusUtilities.ControllerIDToChar(controllerID);
-        char axisSide = MaleficusUtilities.JoystickTypeToChar(joystickType);
+        char controllerIDName = ControllerIDToChar(controllerID);
+        char axisSide = JoystickTypeToChar(joystickType);
         if (axisSide != 'X')
         {
             if ((InputManager.Instance.IsControllerConnected(controllerID) == true)

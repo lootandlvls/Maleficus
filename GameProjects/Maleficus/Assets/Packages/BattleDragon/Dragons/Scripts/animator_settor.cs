@@ -5,16 +5,16 @@ using System.Collections;
 public class animator_settor : MonoBehaviour
 {
 
-    public string name = "";
+    public string AnimatorName = "";
     public float time = 0.0f;
 
     // Use this for initialization
     void Start()
     {
         Animator animator = GetComponent<Animator>();
-        if (null != animator && "" != name)
+        if (null != animator && "" != AnimatorName)
         {
-            animator.Play(name, -1, time);
+            animator.Play(AnimatorName, -1, time);
             animator.speed = 0;
 
           //  animation[name].wrapMode = WrapMode.Loop;

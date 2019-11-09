@@ -7,7 +7,7 @@ public class StartDungeonAction : AbstractUIAction
 {
     public event Action<EDungeonID> StartDungeonPressed;
 
-    [SerializeField] private EDungeonID dungeonID;
+    [SerializeField] private EDungeonID dungeonID = EDungeonID.NONE;
 
     public override void Execute()
     {

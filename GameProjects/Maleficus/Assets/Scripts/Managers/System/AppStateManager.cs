@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using static Maleficus.MaleficusConsts;
 
 
 public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppStateManager, EAppState>
@@ -21,7 +22,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         base.Awake();
 
         // 1) Assign appropriate currentState from MaleficusTypes
-        startStates = MaleficusConsts.START_APP_STATES;
+        startStates = START_APP_STATES;
         // 2) Define "debugStateID" in Awake() of child class
         debugStateID = 51;
     }
@@ -73,9 +74,9 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         // Update state
         base.UpdateState(newAppState);
 
-        if (newAppState.ContainedIn(MaleficusConsts.APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
+        if (newAppState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE))
         {
-            EScene newScene = MaleficusConsts.FROM_SCENE_TO[CurrentScene];
+            EScene newScene = FROM_SCENE_TO[CurrentScene];
 
             UpdateScene(newScene);
         }
@@ -108,7 +109,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private IEnumerator LateUpdateSceneCoroutine(EScene newScene)
     {
         int frameCounter = 0;
-        while (frameCounter < MaleficusConsts.NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE)
+        while (frameCounter < NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE)
         {
             frameCounter++;
             yield return new WaitForEndOfFrame();
@@ -122,20 +123,20 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         switch (sceneToLoad)
         {
             case EScene.ENTRY:
-                SceneManager.LoadScene(MaleficusConsts.SCENE_ENTRY);
+                SceneManager.LoadScene(SCENE_ENTRY);
                 currentScene = EScene.ENTRY;
                 break;
             case EScene.MENU:
-                SceneManager.LoadScene(MaleficusConsts.SCENE_MENU);
+                SceneManager.LoadScene(SCENE_MENU);
                 currentScene = EScene.MENU;
                 break;
 
             case EScene.GAME:
-                SceneManager.LoadScene(MaleficusConsts.SCENE_GAME);
+                SceneManager.LoadScene(SCENE_GAME);
                 currentScene = EScene.GAME;
                 break;
             case EScene.MENU_DUNGEON:
-                SceneManager.LoadScene(MaleficusConsts.SCENE_DUNGEON_SELECTION);
+                SceneManager.LoadScene(SCENE_DUNGEON_SELECTION);
                 currentScene = EScene.MENU_DUNGEON;
                 break;
 
@@ -156,6 +157,9 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             {
                 case ENetworkMessageType.CONNECTED:
                     UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
+                    break;
+                case ENetworkMessageType.OFFLINE:
+                    UpdateState(EAppState.IN_ENTRY_IN_LOADING);
                     break;
                 case ENetworkMessageType.LOGGED_IN:
                     UpdateState(EAppState.IN_ENTRY_IN_LOADING);
@@ -224,7 +228,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             action.ActionButtonPressed += () =>
             {
-                EClientID clientID = NetworkManager.Instance.OwnClientID;
+                EClientID clientID = NetworkManager.Instance.OwnerClientID;
                 NetEvent_GameStarted gameStarted = new NetEvent_GameStarted(clientID);
                 EventManager.Instance.NETWORK_GameStarted.Invoke(gameStarted, EEventInvocationType.TO_SERVER_ONLY);
             };
@@ -239,10 +243,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.APP_SceneChanged.Invoke(new Event_GenericHandle<EScene>(CurrentScene));
 
         // Validity test
-        if ((newScene.name != MaleficusConsts.SCENE_GAME)
-            && (newScene.name != MaleficusConsts.SCENE_MENU)
-            && (newScene.name != MaleficusConsts.SCENE_ENTRY)
-            && (newScene.name != MaleficusConsts.SCENE_DUNGEON_SELECTION)
+        if ((newScene.name != SCENE_GAME)
+            && (newScene.name != SCENE_MENU)
+            && (newScene.name != SCENE_ENTRY)
+            && (newScene.name != SCENE_DUNGEON_SELECTION)
             )
         {
             Debug.LogError("Loaded level doesn't match to build levels");
@@ -256,7 +260,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private IEnumerator EndGameCoroutine()
     {
         UpdateState(EAppState.IN_GAME_IN_ENDED);
-        yield return new WaitForSeconds(MaleficusConsts.ENG_GAME_SCENE_TRANSITION_DURATION);
+        yield return new WaitForSeconds(ENG_GAME_SCENE_TRANSITION_DURATION);
         UpdateState(EAppState.IN_GAME_IN_END_SCENE);
     }
 

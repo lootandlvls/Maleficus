@@ -22,12 +22,11 @@ public class Linear_Hit : AbstractSpell
 
     
     // Update is called once per frame
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        
+        base.FixedUpdate();
+
         Move();
-       
-        
     }
 
 

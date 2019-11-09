@@ -35,8 +35,10 @@ public class Parabolic_Explosive : AbstractSpell
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (animationStarted)
         {
             StartMovement();

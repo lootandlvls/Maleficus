@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Maleficus.MaleficusConsts;
 
 public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 {
@@ -24,7 +25,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
     protected override void Start()
     {
         totalItemsToCollect = CoinManager.Instance.NumberOfCoins;
-        totalLives = MaleficusConsts.PLAYER_LIVES_IN_DUNGEON_MODE;
+        totalLives = PLAYER_LIVES_IN_DUNGEON_MODE;
 
         base.Start();
 
@@ -39,7 +40,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         if (waveIndex == totalItemsToCollect)
         {
             ETeamID teamID = ETeamID.NONE;
-            EClientID clientID = NetworkManager.Instance.OwnClientID;
+            EClientID clientID = NetworkManager.Instance.OwnerClientID;
             NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(clientID, teamID);
             EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.LOCAL_ONLY);
 
@@ -78,7 +79,7 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
             if (playerStat.IsGameOver == true)
             {
                 ETeamID teamID = ETeamID.NONE;
-                EClientID clientID = NetworkManager.Instance.OwnClientID;
+                EClientID clientID = NetworkManager.Instance.OwnerClientID;
                 NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(clientID, teamID);
                 EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.LOCAL_ONLY);
             }

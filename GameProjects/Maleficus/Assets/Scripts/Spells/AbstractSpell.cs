@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbstractSpell : MonoBehaviour, ISpell
+public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 {
     //  private Vector3 movingDirection;
-
 
 
 
@@ -69,8 +68,10 @@ public abstract class AbstractSpell : MonoBehaviour, ISpell
 
 
     // Start is called before the first frame update
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
+
         direction = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
 

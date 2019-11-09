@@ -8,7 +8,7 @@ public class TestEventHandle : AbstractEventHandle
 
     public TestEventHandle(string text)
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
 
         TestMessage = text;
     }

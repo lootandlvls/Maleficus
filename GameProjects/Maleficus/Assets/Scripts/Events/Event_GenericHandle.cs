@@ -11,7 +11,7 @@ public class Event_GenericHandle<A> : AbstractEventHandle
 
     public Event_GenericHandle(A arg1)
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
 
         Arg1 = arg1;
     }
@@ -32,7 +32,7 @@ public class Event_GenericHandle<A, B> : AbstractEventHandle
 
     public Event_GenericHandle(A arg1, B arg2)
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
 
         Arg1 = arg1;
         Arg2 = arg2;
@@ -55,7 +55,7 @@ public class Event_GenericHandle<A, B, C> : AbstractEventHandle
 
     public Event_GenericHandle(A arg1, B arg2, C arg3)
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
 
         Arg1 = arg1;
         Arg2 = arg2;
@@ -80,7 +80,7 @@ public class Event_GenericHandle<A, B, C, D> : AbstractEventHandle
 
     public Event_GenericHandle(A arg1, B arg2, C arg3, D arg4)
     {
-        ID = ENetMessageID.NONE;
+        MessageType = ENetMessageType.NONE;
 
         Arg1 = arg1;
         Arg2 = arg2;

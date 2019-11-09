@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
+using static Maleficus.MaleficusConsts;
+
 
 /// <summary>
 /// UI element that reacts to UI state change.
@@ -20,7 +20,7 @@ public abstract class AbstractUIReaction : MonoBehaviour {
         switch (activeOnState)
         {
             case EMenuState.IN_ENTRY_IN_LOGIN:
-                temp = new List<EMenuState>(MaleficusConsts.MENU_STATES_IN_LOGIN);
+                temp = new List<EMenuState>(MENU_STATES_IN_LOGIN);
                 break;
       
         }

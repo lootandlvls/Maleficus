@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static Maleficus.MaleficusUtilities;
 
 public class EnemyManager : AbstractSingletonManager<EnemyManager>
 {
@@ -51,8 +52,10 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
         base.Awake();
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         EventManager.Instance.APP_AppStateUpdated.AddListener(OnAppStateUpdated);
         EventManager.Instance.PLAYERS_PlayerCollectedCoin += On_PLAYERS_PlayerCollectedCoin;
         EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
@@ -64,8 +67,10 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
         waveCounter = 0;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         DebugManager.Instance.Log(80,
             "basicEnemyMaxNumber : " + basicEnemyMaxNumber
             + "\nspawnedBasicEnemyCounter : " + spawnedBasicEnemyCounter
@@ -129,7 +134,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             int randomPositionIndex;
             do
             {
-                randomPositionIndex = MaleficusUtilities.GetRndIndex(enemySpawnPositions.Length);
+                randomPositionIndex = GetRndIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
             
@@ -165,7 +170,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             int randomPositionIndex;
             do
             {
-                randomPositionIndex = MaleficusUtilities.GetRndIndex(enemySpawnPositions.Length);
+                randomPositionIndex = GetRndIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 

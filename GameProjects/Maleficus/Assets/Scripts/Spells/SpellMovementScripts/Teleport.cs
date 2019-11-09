@@ -16,10 +16,4 @@ public class Teleport : AbstractSpell
         playerID = castedSpell.CastingPlayerID;
         EventManager.Instance.Invoke_SPELLS_Teleport(castedSpell, playerID);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

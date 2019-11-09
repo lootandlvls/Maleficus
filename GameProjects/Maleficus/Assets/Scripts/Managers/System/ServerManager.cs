@@ -6,6 +6,8 @@ using UnityEngine.Networking;
 using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Collections;
+using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusUtilities;
 
 public class ServerManager : NetworkManager
 {
@@ -29,6 +31,8 @@ public class ServerManager : NetworkManager
     private IEnumerator UpdateGameStateEnumerator;
     private bool isLobbyInitialized = false;
 
+    private Dictionary<EClientID, Dictionary<int, AbstractNetMessage>> receivedNetMessages;
+
     #region Monobehaviour
     public override void OnSceneStartReinitialize()
     {
@@ -40,38 +44,32 @@ public class ServerManager : NetworkManager
         base.Awake();
 
         ownClientID = EClientID.SERVER;
+        currentTimeStampID = 0;
     }
+    
 
     protected override void Start()
     {
-        base.Start();
-
-        EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
-
-
-        isConnected = false;
+        pingedSuccessfully = false;
         StartCoroutine(SetUpConnectionsCoroutine());
     }
 
-    protected void FixedUpdate()
+    protected override void InitializeEventsCallbacks()
     {
-        if (!isConnected)
-        {
-            StartCoroutine(SetUpConnectionsCoroutine());
-        }
-        else
-        {
-            StartCoroutine(UpdateMessagePumpCoroutine());
-        }
-    }
+        base.InitializeEventsCallbacks();
 
+        EventManager.Instance.GAME_GameOver.AddListener(On_GameOver);
+    }
 
     #endregion
 
     private IEnumerator SetUpConnectionsCoroutine()
     {
-        while (isConnected == false)
+        DebugLog("Trying to set up connection");
+
+        while (pingedSuccessfully == false)
         {
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
 
             dataBank = new Mongo();
             if (dataBank.Init() && server_hostId != -1)
@@ -83,31 +81,31 @@ public class ServerManager : NetworkManager
                 server_reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
 
 
-                HostTopology hostTopology = new HostTopology(connectionConfig, MaleficusConsts.SERVER_MAX_USER);
+                HostTopology hostTopology = new HostTopology(connectionConfig, SERVER_MAX_USER);
 
 
                 // Server only code
 
-                server_hostId = NetworkTransport.AddHost(hostTopology, MaleficusConsts.PORT, null);
+                server_hostId = NetworkTransport.AddHost(hostTopology, PORT, null);
                 Debug.Log("added host with Port 26002");
-                /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, MaleficusConsts.INSTANCE_MANAGER_SERVER_IP, MaleficusConsts.SERVER_INSTANCE_MANAGER_PORT, 0, out error);
+                /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, INSTANCE_MANAGER_SERVER_IP, SERVER_INSTANCE_MANAGER_PORT, 0, out error);
                 Debug.Log("connected to Instance Manager Port 9999");
 
-                Debug.Log(string.Format("Opening connection on port {0} and webport {1}", MaleficusConsts.PORT, MaleficusConsts.WEB_PORT));*/
+                Debug.Log(string.Format("Opening connection on port {0} and webport {1}", PORT, WEB_PORT));*/
             }
+
+            // Check if is connected
             if (dataBank != null && (server_hostId != -1))
             {
-                isConnected = true;
-
-                // Start fetching network messages
-                StartCoroutine(UpdateMessagePumpCoroutine());
-            }
-            else
-            {
-                yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
-
+                pingedSuccessfully = true;
             }
         }
+
+        yield return new WaitForEndOfFrame();
+
+        // Start fetching network messages
+        DebugLog("Starting to receive messages from client");
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
 
@@ -117,19 +115,16 @@ public class ServerManager : NetworkManager
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
 
-        byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
+        byte[] recBuffer = new byte[BYTE_SIZE];
         int dataSize;
 
-        bool isContinue = true;
-        while (isContinue)
+        // Start fetching messages 
+        bool isFetchingCompleted = false;
+        while (isFetchingCompleted == false)
         {
-            NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
+            NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
             switch (type)
             {
-                case NetworkEventType.Nothing:
-                    isContinue = false;
-                    break;
-
                 case NetworkEventType.ConnectEvent:
                     if (recHostId != 2)
                     {
@@ -152,70 +147,75 @@ public class ServerManager : NetworkManager
                     OnData(connectionId, channelId, recHostId, msg);
                     break;
 
-                default:
                 case NetworkEventType.BroadcastEvent:
                     Debug.Log("Unexpected network event type");
                     break;
-            }
 
-            yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
+                case NetworkEventType.Nothing:
+                    isFetchingCompleted = true;
+                    break;
+            }
         }
 
-        // if disconnected start connection coroutine
-        StartCoroutine(SetUpConnectionsCoroutine());
+        yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
     #region OnData
 
     private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage netMessage)
     {
-        Debug.Log("receiverd a message of type " + netMessage.ID);
+        Debug.Log("receiverd a message of type " + netMessage.MessageType);
 
-        switch (netMessage.ID)
+        switch (netMessage.MessageType)
         {
-            case ENetMessageID.NONE:
+            case ENetMessageType.NONE:
                 Debug.Log("Unexpected ENetMessageID");
                 break;
 
-            case ENetMessageID.CREATE_ACCOUNT:
+            case ENetMessageType.CREATE_ACCOUNT:
                 CreateAccount(cnnId, channelId, recHostId, (Net_CreateAccount)netMessage);
                 break;
 
-            case ENetMessageID.LOGIN_REQUEST:
+            case ENetMessageType.LOGIN_REQUEST:
                 LoginRequest(cnnId, channelId, recHostId, (Net_LoginRequest)netMessage);
                 break;
 
-            case ENetMessageID.ADD_FOLLOW:
+            case ENetMessageType.ADD_FOLLOW:
                 AddFollow(cnnId, channelId, recHostId, (Net_AddFollow)netMessage);
                 break;
 
-            case ENetMessageID.REMOVE_FOLLOW:
+            case ENetMessageType.REMOVE_FOLLOW:
                 RemoveFollow(cnnId, channelId, recHostId, (Net_RemoveFollow)netMessage);
                 break;
 
-            case ENetMessageID.REQUEST_FOLLOW:
+            case ENetMessageType.REQUEST_FOLLOW:
                 RequestFollow(cnnId, channelId, recHostId, (Net_RequestFollow)netMessage);
                 break;
 
-            case ENetMessageID.INIT_LOBBY:
+            case ENetMessageType.INIT_LOBBY:
                 if (isLobbyInitialized == false)
                 {
                     InitLobby(cnnId, channelId, recHostId, (Net_InitLobby)netMessage);
                     isLobbyInitialized = true;
                 }
+                else
+                {
+                    DebugLog("Lobby already initialized");
+                }
                 break;
 
-            case ENetMessageID.REQUEST_GAME_SESSION_INFO:
+            case ENetMessageType.REQUEST_GAME_SESSION_INFO:
                 Debug.Log("&/(&/(  recieve request game info");
                 Net_OnRequestGameInfo(cnnId, channelId, recHostId, (Net_RequestGameInfo)netMessage);
                 break;
 
                 // Disconnect event
-            case ENetMessageID.DISCONNECTED:
+            case ENetMessageType.DISCONNECTED:
                 DisconnectEvent(recHostId, cnnId);
                 break;
 
-            case ENetMessageID.GAME_STARTED:
+            case ENetMessageType.GAME_STARTED:
                 Debug.Log("Game starting received");
 
                 NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
@@ -224,15 +224,15 @@ public class ServerManager : NetworkManager
                 break;
 
             // Input
-            case ENetMessageID.JOYSTICK_MOVED:
+            case ENetMessageType.JOYSTICK_MOVED:
                 Debug.Log("Game input received");
 
                 NetEvent_JoystickMoved movementMessage = (NetEvent_JoystickMoved)netMessage;
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(movementMessage, EEventInvocationType.LOCAL_ONLY);
-                BroadcastMessageToAllClients(movementMessage, false);
+                //BroadcastMessageToAllClients(movementMessage, false);
                 break;
 
-            case ENetMessageID.BUTTON_PRESSED:
+            case ENetMessageType.BUTTON_PRESSED:
                 Debug.Log("Received Spell Input from another Player");
 
                 NetEvent_ButtonPressed buttonPressed = (NetEvent_ButtonPressed)netMessage;
@@ -241,7 +241,7 @@ public class ServerManager : NetworkManager
                 break;
 
 
-            case ENetMessageID.BUTTON_RELEASEED:
+            case ENetMessageType.BUTTON_RELEASEED:
                 Debug.Log("Received Spell Input from another Player");
 
                 NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
@@ -319,7 +319,7 @@ public class ServerManager : NetworkManager
     }
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
-        string randomToken = MaleficusUtilities.GenerateRandom(128);
+        string randomToken = GenerateRandom(128);
         Model_Account account = dataBank.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
         Net_OnLoginRequest olr = new Net_OnLoginRequest();
         if (account != null)
@@ -358,7 +358,7 @@ public class ServerManager : NetworkManager
         if (dataBank.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
         {
             oaf.Success = 1;
-            if (MaleficusUtilities.IsEmail(msg.UsernameDiscriminatorOrEmail))
+            if (IsEmail(msg.UsernameDiscriminatorOrEmail))
             {
                 // this is email
                 oaf.Follow = dataBank.FindAccountByEmail(msg.UsernameDiscriminatorOrEmail).GetAccount();
@@ -395,6 +395,8 @@ public class ServerManager : NetworkManager
     #region Lobby
     private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
     {
+        DebugLog("Initializing lobby...");
+
         Net_OnInitLobby oil = new Net_OnInitLobby();
         Model_Account self = dataBank.FindAccountByToken(il.Token);
         int lobbyID = dataBank.InitLobby(self._id);
@@ -411,12 +413,14 @@ public class ServerManager : NetworkManager
 
             if (thislobby.Team1 != null)
             {
+                Debug.Log("Adding fucking player 1");
                 players.Add(EPlayerID.PLAYER_1);
                 Model_Account player1 = dataBank.FindAccountByObjectId(thislobby.Team1[0]);
                 connectedPlayers.Add(EClientID.CLIENT_1, player1.ActiveConnection);
             }
             if (thislobby.Team2 != null)
             {
+                Debug.Log("Adding fucking player 2");
                 players.Add(EPlayerID.PLAYER_2);
                 Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
                 connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);         // INVERTED!!!
@@ -430,6 +434,7 @@ public class ServerManager : NetworkManager
             }
             if (thislobby.Team4 != null)
             {
+                Debug.Log("Adding fucking player 4");
                 players.Add(EPlayerID.PLAYER_4);
                 Model_Account player4 = dataBank.FindAccountByObjectId(thislobby.Team4[0]);
                 connectedPlayers.Add(EClientID.CLIENT_4, player4.ActiveConnection);
@@ -580,7 +585,7 @@ public class ServerManager : NetworkManager
     public void SendClient(int recHost, int cnnId, AbstractNetMessage message)
     {
         // this is where we hold our data
-        byte[] buffer = new byte[MaleficusConsts.BYTE_SIZE];
+        byte[] buffer = new byte[BYTE_SIZE];
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
@@ -588,15 +593,15 @@ public class ServerManager : NetworkManager
         formatter.Serialize(memoryStream, message);
         if (recHost == 0)
         {
-            NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
+            NetworkTransport.Send(server_hostId, cnnId, server_reliableChannel, buffer, BYTE_SIZE, out error);
         }
         else if (recHost == 1)
         {
-            NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
+            NetworkTransport.Send(server_webHostId, cnnId, server_reliableChannel, buffer, BYTE_SIZE, out error);
         }
         else
         {
-            NetworkTransport.Send(server_instanceManagerHostId, InstanceManagerConnectionId, server_reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
+            NetworkTransport.Send(server_instanceManagerHostId, InstanceManagerConnectionId, server_reliableChannel, buffer, BYTE_SIZE, out error);
             Debug.Log("sent to im");
         }
     }
@@ -608,7 +613,7 @@ public class ServerManager : NetworkManager
 
         while (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            yield return new WaitForSeconds(MaleficusConsts.GAME_STATE_UPDATE_FREQUENCY);
+            yield return new WaitForSeconds(GAME_STATE_UPDATE_FREQUENCY);
 
             foreach (EPlayerID connectedPlayerIDj in PlayerManager.Instance.GetConnectedPlayers())
             {
@@ -620,15 +625,14 @@ public class ServerManager : NetworkManager
                         playerPosition[0] = PlayerManager.Instance.ActivePlayers[activePlayerIDi].transform.localPosition.x;
                         playerPosition[1] = PlayerManager.Instance.ActivePlayers[activePlayerIDi].transform.localPosition.y;
                         playerPosition[2] = PlayerManager.Instance.ActivePlayers[activePlayerIDi].transform.localPosition.z;
-                        NetEvent_GameStateReplicate msg_gameState = new NetEvent_GameStateReplicate(EClientID.SERVER, activePlayerIDi, playerPosition);
+                        NetEvent_GameStateReplication msg_gameState = new NetEvent_GameStateReplication(EClientID.SERVER, activePlayerIDi, playerPosition);
 
-                        EClientID updatedClientID = MaleficusUtilities.GetClientIDFrom(connectedPlayerIDj);
+                        EClientID updatedClientID = GetClientIDFrom(connectedPlayerIDj);
                         Debug.Log("Sending game replication to client : " + updatedClientID);
                         if (connectedPlayers.ContainsKey(updatedClientID))
                         {
                             SendClient(0, connectedPlayers[updatedClientID], msg_gameState);
                         }
-                        yield return new WaitForSeconds(0.2f);
                     }
                 }
             }
@@ -647,7 +651,7 @@ public class ServerManager : NetworkManager
         switch(eventHandle.NewState)
         {
             case EAppState.IN_GAME_IN_RUNNING:
-                StartNewCoroutine(UpdateGameStateEnumerator, UpdateGameStateCoroutine());
+                StartNewCoroutine(ref UpdateGameStateEnumerator, UpdateGameStateCoroutine());
                 break;
         }
     }
@@ -658,16 +662,5 @@ public class ServerManager : NetworkManager
         {
             SendClient(0, connectedPlayers[connectedClientID], gameOverEventHandle);
         }
-    }
-
-
-    private void StartNewCoroutine(IEnumerator enumerator, IEnumerator coroutine)
-    {
-        if (enumerator != null)
-        {
-            StopCoroutine(enumerator);
-        }
-        enumerator = coroutine;
-        StartCoroutine(enumerator);
     }
 }

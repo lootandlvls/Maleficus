@@ -22,8 +22,10 @@ public class CurveTestSpeed : AbstractSpell
     private float percentageProgress;
     private bool animationStarted = true;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         AbstractSpell abstracSpell = this.GetComponent<AbstractSpell>();
         endPosition = abstracSpell.parabolicSpell_EndPosition;
         endRotation = endTransform.rotation;
@@ -34,8 +36,10 @@ public class CurveTestSpeed : AbstractSpell
 
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (animationStarted)
         {
             StartMovement();

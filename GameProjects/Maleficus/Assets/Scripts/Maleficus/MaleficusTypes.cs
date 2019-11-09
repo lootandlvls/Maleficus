@@ -56,7 +56,7 @@ public enum EGameMode
     FFA_POINTS,
     INSANE,
     DUNGEON
-        // TODO: Define rest of game modes
+    // TODO: Define rest of game modes
 }
 
 
@@ -74,7 +74,7 @@ public enum ESpellSlot
     SPELL_3
 }
 
-public enum ESpellType                       
+public enum ESpellType
 {
     BUFF_ONSELF,
     PUSH,
@@ -83,7 +83,7 @@ public enum ESpellType
 
 
 
-public enum ESpellEffects                   
+public enum ESpellEffects
 {
     PROTECT,
     INCREASE_DAMAGE,
@@ -100,7 +100,7 @@ public enum ESpellEffects
 
 
 
-public enum ESpellMovementType         
+public enum ESpellMovementType
 {
     LINEAR_HIT,
     LINEAR_EXPLOSIVE,
@@ -114,10 +114,10 @@ public enum ESpellMovementType
 
 public enum ESpellID
 {
-  FIREBALL,
-  FIRE_LASER,
-  FIRE_EXPLOSION,
-  ICEBALL
+    FIREBALL,
+    FIRE_LASER,
+    FIRE_EXPLOSION,
+    ICEBALL
 }
 #endregion
 
@@ -152,18 +152,23 @@ public struct SHitInfo
         this.hasPower = hasPower;
         this.buffEffects = buffEffects;
         this.debuffEffects = debuffEffects;
-        
+
     }
 
     public ISpell CastedSpell { get { return castedSpell; } }
     public EPlayerID CastingPlayerID { get { return castingPlayerID; } }
     public EPlayerID HitPlayerID { get { return hitPlayerID; } }
     public Vector3 HitPosition { get { return hitPosition; } }
-    public Vector3 HitVelocity { get {
+    public Vector3 HitVelocity
+    {
+        get
+        {
             Debug.Log("§$%§$%§ dir : " + castedSpell.Direction + " | pow : " + castedSpell.HitPower);
-            return castedSpell.Direction * castedSpell.HitPower ; } }
+            return castedSpell.Direction * castedSpell.HitPower;
+        }
+    }
     public bool HasPushPower { get { return hasPower; } }
-    public List<ESpellEffects> DebuffEffects { get {return debuffEffects; }}
+    public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
     public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
 
 
@@ -175,7 +180,7 @@ public struct SHitInfo
     private List<ESpellEffects> debuffEffects;
     private List<ESpellEffects> buffEffects;
 }
-#endregion 
+#endregion
 
 #region Input
 public enum EInputMode
@@ -190,7 +195,10 @@ public enum EControllerID
 {
     NONE = 'X',
     TOUCH,
-    AI,
+    AI_1,
+    AI_2,
+    AI_3,
+    AI_4,
     GAMEPAD_A,
     GAMEPAD_B,
     GAMEPAD_C,
@@ -298,7 +306,7 @@ public enum EMenuState
     IN_MENU,
     IN_CONNECTING_PLAYERS,
     IN_STARTUP,                                                                         //TODO [Leon]: Define. Ambiguous meaning
-    /* Login context */
+                                                                                        /* Login context */
     IN_ENTRY_IN_LOGIN,
     IN_ENTRY_IN_LOGIN_IN_LOGIN,
     IN_ENTRY_IN_LOGIN_IN_REGISTER,
@@ -324,51 +332,52 @@ public enum EButtonDirection
 
 #region NETWORK
 
-public enum ENetMessageID
+public enum ENetMessageType
 {
-    NONE                                                = 0,
+    NONE = 0,
 
-    CREATE_ACCOUNT                                      = 1,
-    LOGIN_REQUEST                                       = 2,
+    CREATE_ACCOUNT = 1,
+    LOGIN_REQUEST = 2,
 
-    ON_CREATE_ACCOUNT                                   = 3,
-    ON_LOGIN_REQUEST                                    = 4,
+    ON_CREATE_ACCOUNT = 3,
+    ON_LOGIN_REQUEST = 4,
 
-    ADD_FOLLOW                                          = 5,
-    REMOVE_FOLLOW                                       = 6,
-    REQUEST_FOLLOW                                      = 7,
+    ADD_FOLLOW = 5,
+    REMOVE_FOLLOW = 6,
+    REQUEST_FOLLOW = 7,
 
-    ON_ADD_FOLLOW                                       = 8,
-    ON_REQUEST_FOLLOW                                   = 9,
-    UPDATE_FOLLOW                                       = 10,
+    ON_ADD_FOLLOW = 8,
+    ON_REQUEST_FOLLOW = 9,
+    UPDATE_FOLLOW = 10,
 
-    INIT_LOBBY                                          = 11,
+    INIT_LOBBY = 11,
 
-    ON_INITI_LOBBY                                      = 12,
+    ON_INITI_LOBBY = 12,
 
-    CONNECTED                                           = 13,
-    DISCONNECTED                                        = 14,
+    CONNECTED = 13,
+    DISCONNECTED = 14,
 
-    REQUEST_GAME_SESSION_INFO                           = 17,
-    ON_REQUEST_GAME_SESSION_INFO                        = 18,
+    REQUEST_GAME_SESSION_INFO = 17,
+    ON_REQUEST_GAME_SESSION_INFO = 18,
 
-    GAME_STATE_REPLICATION                              = 19,
+    GAME_STATE_REPLICATION = 19,
 
-    GAME_STARTED                                        = 20,
+    GAME_STARTED = 20,
 
-    AR_STAGE_PLACED                                     = 21,
+    AR_STAGE_PLACED = 21,
 
-    GAME_OVER                                           = 22,
+    GAME_OVER = 22,
 
-    BUTTON_PRESSED                                      = 30,
-    BUTTON_RELEASEED                                    = 31,
-    JOYSTICK_MOVED                                      = 32
+    BUTTON_PRESSED = 30,
+    BUTTON_RELEASEED = 31,
+    JOYSTICK_MOVED = 32
 
 }
 
 public enum ENetworkMessageType
 {
     NONE,
+    OFFLINE,
     CONNECTED,
     DISCONNECTED,
     DATA,
@@ -411,8 +420,10 @@ public enum EConnectionMode
 {
     LOCAL_SERVER,
     CLOUD_SERVER,
-    EVRYTHING_LOCAL,
-    BNJMO_SERVER
+    EVERYTHING_LOCAL,
+    BNJMO_SERVER,
+    GOOGLE_CLOUD_SERVER,
+    PLAY_OFFLINE
 }
 #endregion
 
@@ -441,3 +452,4 @@ public enum EDungeonID
     THREE
 }
 #endregion
+

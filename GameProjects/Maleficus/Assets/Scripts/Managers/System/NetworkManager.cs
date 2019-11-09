@@ -5,12 +5,15 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
+using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusUtilities;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
     public bool HasAuthority                        { get { return ownClientID == EClientID.SERVER; } }
-    public EClientID OwnClientID                    { get { return ownClientID; } }
+    public EClientID OwnerClientID                    { get { return ownClientID; } }
     public Account Self;
+    public bool PlayingOffline = false;
 
     private byte reliableChannel;
     private int connectionId;
@@ -19,41 +22,53 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private byte error;
 
     private string token;
+    protected bool pingedSuccessfully = false;
     protected bool isConnected = false;
+    private byte tries = 0;
     private int ownLobbyID;
     protected EClientID ownClientID;
 
 
+    protected int currentTimeStampID;
+
+    /// <summary>
+    /// Messages that will be sent on the next client to server update 
+    /// </summary>
+    private List<AbstractNetMessage> pendingMessages = new List<AbstractNetMessage>();
+    /// <summary>
+    /// Message already sent to the server but not acnkowledged back yet
+    /// </summary>
+    private List<AbstractNetMessage> nonAcnkowledgedMessages = new List<AbstractNetMessage>();
+
     #region Monobehaviour
 
-    protected override void Awake()
-    {
-        base.Awake();
 
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
     }
 
-    protected virtual void Start()
-    {
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
 
-        isConnected = false;
+    protected override void Start()
+    {
+        base.Start();
+
+        pingedSuccessfully = false;
         StartCoroutine(ConnectToServerCoroutine());
-        
     }
 
     public override void OnSceneStartReinitialize()
     {
         Init();
     }
-
-    
-
     #endregion
 
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
         // Prevent that other clients who recieve an event Triggered by a different client, to broadcast the same event again
-        if (netMessage.SenderID != OwnClientID)
+        if (netMessage.SenderID != OwnerClientID)
         {
             return;
         }
@@ -74,46 +89,59 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 
     private IEnumerator ConnectToServerCoroutine()
     {
-        while (isConnected == false)
+        if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
         {
+            Debug.Log("couldn't connect to the internet");
+            PlayingOffline = true;
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+            UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
+            yield break;
+        }
+        else
+        {
+            Debug.Log("Connected to the internet");
+        }
+        DebugLog("Trying to ping Server");
 
+        NetworkTransport.Init();
 
-            NetworkTransport.Init();
+        ConnectionConfig connectionConfig = new ConnectionConfig();
+        reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
 
-            ConnectionConfig connectionConfig = new ConnectionConfig();
-            reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
+        HostTopology hostTopology = new HostTopology(connectionConfig, CLIENT_MAX_USER);
 
-            HostTopology hostTopology = new HostTopology(connectionConfig, MaleficusConsts.CLIENT_MAX_USER);
-
-            // Client only code
-            hostId = NetworkTransport.AddHost(hostTopology, 0);
+        // Client only code
+        hostId = NetworkTransport.AddHost(hostTopology, 0);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 // Web Client
 connectionId = NetworkTransport.Connect(hostId, SERVER_IP, WEB_PORT, 0, out error);
 Debug.Log("Connecting from Web");
 #else
-            // Standalone Client
-            Debug.Log(MotherOfManagers.Instance.ServerIP);
-            connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, MaleficusConsts.PORT, 0, out error);
-            Debug.Log("Connecting from Standalone");
+        // Standalone Client
+        Debug.Log(MotherOfManagers.Instance.ServerIP);
+        connectionId = NetworkTransport.Connect(hostId, MotherOfManagers.Instance.ServerIP, PORT, 0, out error);
+        Debug.Log("Ping from Standalone");
 #endif
-            Debug.Log(string.Format("Attempting to connect on {0}...", MotherOfManagers.Instance.ServerIP));
-            if (connectionId != -1)
-            {
-                isConnected = true;
-
-                // Start fetching network messages
-                StartCoroutine(UpdateMessagePumpCoroutine());
-            }
-            else
-            {
-                yield return new WaitForSeconds(MaleficusConsts.NETWORK_CONNECT_FREQUENCY);
-
-            }
+        Debug.Log(string.Format("Attempting to ping {0}...", MotherOfManagers.Instance.ServerIP));
+        if (connectionId != 0)
+        {
+            pingedSuccessfully = true;
+            DebugLog("Pinged Server successfully!");
+        }
+        else
+        {
+            Debug.Log("Server seems to be not existing");
+            PlayingOffline = true;
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+            UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
+            yield break;
         }
 
-        
+        yield return new WaitForEndOfFrame();
+
+        // Start fetching network messages
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
     public void Shutdown()
@@ -123,33 +151,50 @@ Debug.Log("Connecting from Web");
 
     private IEnumerator UpdateMessagePumpCoroutine()
     {
+        Debug.Log("Trying to connect to the Server...");
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
 
-        byte[] recBuffer = new byte[MaleficusConsts.BYTE_SIZE];
+        byte[] recBuffer = new byte[BYTE_SIZE];
         int dataSize;
 
         // Start fetching messages routine
-        while (isConnected == true)
+        while (pingedSuccessfully == true)
         {
             bool isFetchingCompleted = false;
             while (isFetchingCompleted == false)
             {
-                NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, MaleficusConsts.BYTE_SIZE, out dataSize, out error);
+                NetworkEventType type = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, BYTE_SIZE, out dataSize, out error);
                 switch (type)
                 {
                     case NetworkEventType.ConnectEvent:
                         Debug.Log("Connected to server");
+                        yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
                         UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
                         Net_Connected c = new Net_Connected();
+                        isConnected = true;
                         break;
-
                     case NetworkEventType.DisconnectEvent:
                         Debug.Log("Disconnected from server");
                         UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
                         Net_Disonnected disconnected = new Net_Disonnected();
-                        isConnected = false;  // changed to false. was true??
+                        isConnected = false;
+                        // check if internet down or server
+                        if (Application.internetReachability == NetworkReachability.NotReachable)
+                        {
+                            Debug.Log("lost connection to the internet...");
+                            pingedSuccessfully = false;
+                            UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
+                            yield break;
+                        }
+                        else
+                        {
+                            Debug.Log("Server down...");
+                            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+                            Shutdown();
+                            StartCoroutine(ConnectToServerCoroutine());
+                        }
                         break;
 
                     case NetworkEventType.DataEvent:
@@ -165,66 +210,76 @@ Debug.Log("Connecting from Web");
                         isFetchingCompleted = true;
                         break;
                 }
-
-                yield return new WaitForSeconds(MaleficusConsts.NETWORK_UPDATE_FREQUENCY);
+                yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
+            }
+            if (isConnected == false)
+            {
+                yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+                break;
             }
         }
 
         // if disconnected start connection coroutine
-        StartCoroutine(ConnectToServerCoroutine());
+        if (pingedSuccessfully == false)
+        {
+            yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
+            Shutdown();
+            StartCoroutine(ConnectToServerCoroutine());
+        }
+        StartCoroutine(UpdateMessagePumpCoroutine());
     }
 
     #region OnData
     private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage netMessage)
     {
-        Debug.Log("receiverd a message of type " + netMessage.ID);
+        Debug.Log("receiverd a message of type " + netMessage.MessageType);
 
-        switch (netMessage.ID)
+        switch (netMessage.MessageType)
         {
             /** Connection and Social Logic **/
-            case ENetMessageID.NONE:
+            case ENetMessageType.NONE:
                 Debug.Log("Unexpected NetOP");
                 break;
 
-            case ENetMessageID.ON_CREATE_ACCOUNT:
+            case ENetMessageType.ON_CREATE_ACCOUNT:
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)netMessage);
                 UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
                 break;
 
-            case ENetMessageID.ON_LOGIN_REQUEST:
+            case ENetMessageType.ON_LOGIN_REQUEST:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)netMessage);
                 UpdateReceivedMessage(ENetworkMessageType.LOGGED_IN);
                 break;
 
-            case ENetMessageID.ON_ADD_FOLLOW:
+            case ENetMessageType.ON_ADD_FOLLOW:
                 Debug.Log("Add Friend");
                 OnAddFollow((Net_OnAddFollow)netMessage);
                 UpdateReceivedMessage(ENetworkMessageType.DATA_ONADDFOLLOW);
                 break;
 
-            case ENetMessageID.ON_REQUEST_FOLLOW:
+            case ENetMessageType.ON_REQUEST_FOLLOW:
                 Debug.Log("Get Some Friends");
                 OnRequestFollow((Net_OnRequestFollow)netMessage);
                 UpdateReceivedMessage(ENetworkMessageType.DATA_ONREQUESTFOLLOW);
                 break;
             //Todo [Leon]: change to Onupdatefollow
 
-            case ENetMessageID.UPDATE_FOLLOW:
+            case ENetMessageType.UPDATE_FOLLOW:
                 Debug.Log("Update Friends");
                 UpdateFollow((Net_UpdateFollow)netMessage);
                 UpdateReceivedMessage(ENetworkMessageType.DATA_ONUPDATEFOLLOW);
                 break;
 
-            case ENetMessageID.ON_INITI_LOBBY:
+            case ENetMessageType.ON_INITI_LOBBY:
                 Debug.Log("Lobby initialized");
                 UpdateReceivedMessage(ENetworkMessageType.DATA_ONINITLOBBY);
                 Net_OnInitLobby oil = (Net_OnInitLobby)netMessage;
                 ownLobbyID = oil.lobbyID;
                 break;
 
-            case ENetMessageID.ON_REQUEST_GAME_SESSION_INFO:
+            case ENetMessageType.ON_REQUEST_GAME_SESSION_INFO:
                 Debug.Log("Game session info received");
                 UpdateReceivedMessage(ENetworkMessageType.DATA_ONREQUESTGAMEINFO);
                 OnRequestGameInfo((Net_OnRequestGameInfo)netMessage);
@@ -232,38 +287,38 @@ Debug.Log("Connecting from Web");
 
 
             /** Game Logic **/
-            case ENetMessageID.GAME_STARTED:
+            case ENetMessageType.GAME_STARTED:
                 Debug.Log("Game Started");
                 NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
                 EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case ENetMessageID.GAME_OVER:
+            case ENetMessageType.GAME_OVER:
                 Debug.Log("Game Over");
                 NetEvent_GameOver gameOver = (NetEvent_GameOver)netMessage;
                 EventManager.Instance.GAME_GameOver.Invoke(gameOver, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case ENetMessageID.GAME_STATE_REPLICATION:
+            case ENetMessageType.GAME_STATE_REPLICATION:
                 Debug.Log("Game state replicated");
-                NetEvent_GameStateReplicate gameStateReplicateMessage = (NetEvent_GameStateReplicate)netMessage;
-                EventManager.Instance.NETWORK_GameStateReplicate.Invoke(gameStateReplicateMessage, EEventInvocationType.LOCAL_ONLY);
+                NetEvent_GameStateReplication gameStateReplicateMessage = (NetEvent_GameStateReplication)netMessage;
+                EventManager.Instance.NETWORK_GameStateReplication.Invoke(gameStateReplicateMessage, EEventInvocationType.LOCAL_ONLY);
                 break;
 
             // Input
-            case ENetMessageID.JOYSTICK_MOVED:
+            case ENetMessageType.JOYSTICK_MOVED:
                 Debug.Log("Game input received");
                 NetEvent_JoystickMoved joystickMoved = (NetEvent_JoystickMoved)netMessage;
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case ENetMessageID.BUTTON_PRESSED:
+            case ENetMessageType.BUTTON_PRESSED:
                 Debug.Log("Received Spell Input pressed from another Player");
                 NetEvent_ButtonPressed buttonPressed = (NetEvent_ButtonPressed)netMessage;
                 EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.LOCAL_ONLY);
                 break;
 
-            case ENetMessageID.BUTTON_RELEASEED:
+            case ENetMessageType.BUTTON_RELEASEED:
                 Debug.Log("Received Spell Input released from another Player");
                 NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
@@ -329,7 +384,7 @@ Debug.Log("Connecting from Web");
     private void OnRequestGameInfo(Net_OnRequestGameInfo orgi)
     {
         Debug.Log("&/(&/(&(/&/(&( M Player ID : " + orgi.ownPlayerId);
-        ownClientID = MaleficusUtilities.IntToClientID(orgi.ownPlayerId);
+        ownClientID = IntToClientID(orgi.ownPlayerId);
         if (ownClientID == EClientID.NONE)
         {
             Debug.LogError("Couldn't convert Client ID");
@@ -354,24 +409,28 @@ Debug.Log("Connecting from Web");
             connectedPlayers.Add(EPlayerID.PLAYER_4);
         }
 
-        EPlayerID playerID = MaleficusUtilities.GetPlayerIDFrom(ownClientID);
+        EPlayerID playerID = GetPlayerIDFrom(ownClientID);
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(new Event_GenericHandle<List<EPlayerID>, EPlayerID>
             (connectedPlayers, playerID), EEventInvocationType.LOCAL_ONLY);
     }
     #endregion
 
     #region Send
-    public void SendServer(AbstractNetMessage msg)
+    private void SendServer(AbstractNetMessage msg)
     {
+        if(isConnected == false)
+        {
+            return;
+        }
         // this is where we hold our data
-        byte[] buffer = new byte[MaleficusConsts.BYTE_SIZE];
+        byte[] buffer = new byte[BYTE_SIZE];
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
-        MemoryStream ms = new MemoryStream(buffer);
-        formatter.Serialize(ms, msg);
+        MemoryStream memoryStream = new MemoryStream(buffer);
+        formatter.Serialize(memoryStream, msg);
 
-        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, MaleficusConsts.BYTE_SIZE, out error);
+        NetworkTransport.Send(hostId, connectionId, reliableChannel, buffer, BYTE_SIZE, out error);
     }
 
     protected override void OnDestroy()
@@ -387,7 +446,7 @@ Debug.Log("Connecting from Web");
     {
 
         // invalid username
-        if (!MaleficusUtilities.IsUsername(username))
+        if (!IsUsername(username))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Username is invalid");
             LoginContext.Instance.EnableInputs();
@@ -395,7 +454,7 @@ Debug.Log("Connecting from Web");
         }
 
         // invalid email
-        if (!MaleficusUtilities.IsEmail(email))
+        if (!IsEmail(email))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Email is invalid");
             LoginContext.Instance.EnableInputs();
@@ -403,7 +462,7 @@ Debug.Log("Connecting from Web");
         }
 
         // invalid password
-        if (!MaleficusUtilities.IsPassword(password))
+        if (!IsPassword(password))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
             LoginContext.Instance.EnableInputs();
@@ -412,7 +471,7 @@ Debug.Log("Connecting from Web");
 
         Net_CreateAccount ca = new Net_CreateAccount();
         ca.Username = username;
-        ca.Password = MaleficusUtilities.Sha256FromString(password);
+        ca.Password = Sha256FromString(password);
         ca.Email = email;
 
         LoginContext.Instance.ChangeAuthenticationMessage("Sending request...");
@@ -423,7 +482,7 @@ Debug.Log("Connecting from Web");
     {
         // todo: username and token working and messages should work
         // invalid email or username
-        if (!MaleficusUtilities.IsUsernameAndDiscriminator(usernameOrEmail) && !MaleficusUtilities.IsEmail(usernameOrEmail))
+        if (!IsUsernameAndDiscriminator(usernameOrEmail) && !IsEmail(usernameOrEmail))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
             LoginContext.Instance.EnableInputs();
@@ -431,7 +490,7 @@ Debug.Log("Connecting from Web");
         }
 
         // invalid password
-        if (!MaleficusUtilities.IsPassword(password))
+        if (!IsPassword(password))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
             LoginContext.Instance.EnableInputs();
@@ -441,7 +500,7 @@ Debug.Log("Connecting from Web");
         Net_LoginRequest lr = new Net_LoginRequest();
 
         lr.UsernameOrEmail = usernameOrEmail;
-        lr.Password = MaleficusUtilities.Sha256FromString(password);
+        lr.Password = Sha256FromString(password);
 
         LoginContext.Instance.ChangeAuthenticationMessage("Sending Login request...");
         SendServer(lr);
