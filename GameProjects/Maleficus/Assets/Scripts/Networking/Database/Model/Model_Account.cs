@@ -4,8 +4,8 @@ public class Model_Account
 {
     // identification
     public ObjectId _id { set; get; }
-    public String user_name { set; get; }
-    public String user_password { set; get; }
+    public string user_name { set; get; }
+    public string password { set; get; }
     public string email { set; get; }
     public int main_connection { set; get; }
     public int instance_connection { set; get; }

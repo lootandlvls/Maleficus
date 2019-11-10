@@ -13,9 +13,22 @@ public class Mongo
     private MongoClient client;
     private IMongoDatabase db;
 
-    private IMongoCollection<Model_Account> accounts;
-    private IMongoCollection<Model_Follow> follows;
+
+    private IMongoCollection<Model_Account> collection_accounts;
+    private IMongoCollection<Model_Friend> collection_friends;
+    private IMongoCollection<Model_FriendRequest> collection_friend_requests;
+    private IMongoCollection<Model_Spell> collection_spells;
+    private IMongoCollection<Model_Skin> collection_skins;
+    private IMongoCollection<Model_OtherBuyable> collection_other_buyables;
+    private IMongoCollection<Model_Lobby> collection_lobbies;
+    private IMongoCollection<Model_Game> collection_games;
+    private IMongoCollection<Model_Instance> collection_instances;
+    private IMongoCollection<Model_SinglePlayer> collection_single_players;
+    private IMongoCollection<Model_DailyMission> collection_daily_missions;
+
     private IMongoCollection<Model_Lobby> lobbys;
+    //private IMongoCollection<Model_Account> accounts;
+    private IMongoCollection<Model_Follow> follows;
 
     // initialize the connection to the database
     public bool Init() { 
@@ -23,6 +36,19 @@ public class Mongo
         client = new MongoClient(MONGO_URI);
         db = client.GetDatabase(DATABASE_NAME);
         // initialize collections here
+        collection_accounts = db.GetCollection<Model_Account>("accounts");
+        collection_friends = db.GetCollection<Model_Friend>("friends");
+        collection_friend_requests = db.GetCollection<Model_FriendRequest>("friend_requests");
+        collection_spells = db.GetCollection<Model_Spell>("spells");
+        collection_skins = db.GetCollection<Model_Skin>("skins");
+        collection_other_buyables = db.GetCollection<Model_OtherBuyable>("other_buyables");
+        collection_lobbies = db.GetCollection<Model_Lobby>("lobbies");
+        collection_games = db.GetCollection<Model_Game>("games");
+        collection_instances = db.GetCollection<Model_Instance>("instances");
+        collection_single_players = db.GetCollection<Model_SinglePlayer>("single_players");
+        collection_daily_missions = db.GetCollection<Model_DailyMission>("daily_missions");
+
+
         accounts = db.GetCollection<Model_Account>("account");
         follows = db.GetCollection<Model_Follow>("follow");
         lobbys = db.GetCollection<Model_Lobby>("lobby");
@@ -41,6 +67,70 @@ public class Mongo
         client = null;
         db = null;
     }
+
+    #region Fetch
+    public Model_Account FindAccount(ObjectId _id=default(ObjectId), string user_name="", string email="", string token="", ObjectId lobby_id=default(ObjectId), ObjectId game_id=default(ObjectId))
+    {
+        if (_id != default(ObjectId)){
+            return collection_accounts.Find(u => u._id == _id).FirstOrDefault<Model_Account>();
+        }else if (user_name != "")
+        {
+            return collection_accounts.Find(u => u.user_name == user_name).FirstOrDefault<Model_Account>();
+        }else if(email != "")
+        {
+            return collection_accounts.Find(u => u.email == email).FirstOrDefault<Model_Account>();
+        }else if(token != "")
+        {
+            return collection_accounts.Find(u => u.token == token).FirstOrDefault<Model_Account>();
+        }else if(lobby_id != default(ObjectId))
+        {
+            return collection_accounts.Find(u => u.lobby_id == lobby_id).FirstOrDefault<Model_Account>();
+        }else if(game_id != default(ObjectId))
+        {
+            return collection_accounts.Find(u => u.game_id == game_id).FirstOrDefault<Model_Account>();
+        }
+        Debug.Log("FindAccount: No parameter given!");
+        return null;
+    }
+
+    public List<Model_Friend> FindFriends(ObjectId friend=default(ObjectId))
+    {
+        if(friend != default(ObjectId))
+        {
+            return collection_friends.Find(u => u.friend_one == friend || u.friend_two == friend).ToList<Model_Friend>();
+        }
+        Debug.Log("FindFriends: No parameter given!");
+        return null;
+    }
+
+    public List<Model_FriendRequest> FindFriendRequests(ObjectId asker=default(ObjectId), ObjectId possible_friend=default(ObjectId))
+    {
+        if(asker != default(ObjectId))
+        {
+            return collection_friend_requests.Find(u => u.asker == asker).ToList<Model_FriendRequest>();
+        }else if(possible_friend != default(ObjectId))
+        {
+            return collection_friend_requests.Find(u => u.possible_friend == possible_friend).ToList<Model_FriendRequest>();
+        }
+        Debug.Log("FindFriendRequests: No parameter given!");
+        return null;
+    }
+
+    public List<Model_Spell> FindSpells(ObjectId account_id=default(ObjectId))
+    {
+        if(account_id != default(ObjectId))
+        {
+            return collection_spells.Find(u => u.account_id == account_id).ToList<Model_Spell>();
+        }
+
+        Debug.Log("FindSpells: No parameter given!");
+        return null;
+    }
+    #endregion
+
+
+
+
 
     #region Insert
     public bool InsertAccount(string username, string password, string email)
