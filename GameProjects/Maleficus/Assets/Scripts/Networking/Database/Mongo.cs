@@ -126,9 +126,146 @@ public class Mongo
         Debug.Log("FindSpells: No parameter given!");
         return null;
     }
+
+    public List<Model_Skin> FindSkins(ObjectId account_id=default(ObjectId))
+    {
+        if(account_id != default(ObjectId))
+        {
+            return collection_skins.Find(u => u.account_id == account_id).ToList<Model_Skin>();
+        }
+
+        Debug.Log("FindSkins: No parameter given!");
+        return null;
+    }
+
+    public List<Model_OtherBuyable> FindOtherBuyables(ObjectId account_id = default(ObjectId))
+    {
+        if(account_id != default(ObjectId))
+        {
+            return collection_other_buyables.Find(u => u.account_id == account_id).ToList<Model_OtherBuyable>();
+        }
+        Debug.Log("FindOtherBuyables: No parameter given!");
+        return null;
+    }
+
+    public Model_Lobby FindLobby(ObjectId _id = default(ObjectId), ObjectId initialiser=default(ObjectId), ObjectId participant=default(ObjectId))
+    {
+        if (_id != default(ObjectId))
+        {
+            return collection_lobbies.Find(u => u._id == _id).FirstOrDefault<Model_Lobby>();
+        }else if(initialiser != default(ObjectId))
+        {
+            return collection_lobbies.Find(u => u.initialiser == initialiser).FirstOrDefault<Model_Lobby>();
+        }else if(participant != default(ObjectId)){
+            List<Model_Lobby> lobbies = collection_lobbies.Find(u => true).ToList<Model_Lobby>();
+            foreach(var lobby in lobbies)
+            {
+                foreach(var lobby_participant in lobby.participants)
+                {
+                    if(lobby_participant.participant_id == participant)
+                    {
+                        return lobby;
+                    }
+                }
+            }
+        }
+        Debug.Log("FindLobbies: No parameter given!");
+        return null;
+    }
+
+    public Model_Game FindGame(ObjectId _id = default(ObjectId), ObjectId instance_id = default(ObjectId), ObjectId player = default(ObjectId))
+    {
+        if (_id != default(ObjectId))
+        {
+            return collection_games.Find(u => u._id == _id).FirstOrDefault<Model_Game>();
+        }
+        else if (instance_id != default(ObjectId))
+        {
+            return collection_games.Find(u => u.instance_id == instance_id).FirstOrDefault<Model_Game>();
+        }
+        else if (player != default(ObjectId))
+        {
+            List<Model_Game> games = collection_games.Find(u => true).ToList<Model_Game>();
+            foreach (var game in games)
+            {
+                foreach (var game_player in game.players)
+                {
+                    if (game_player.player_id == player)
+                    {
+                        return game;
+                    }
+                }
+            }
+        }
+        Debug.Log("FindGames: No parameter given!");
+        return null;
+    }
+
+    public Model_Instance FindInstance(ObjectId _id = default(ObjectId), ObjectId game_id = default(ObjectId), ObjectId participant = default(ObjectId))
+    {
+        if (_id != default(ObjectId))
+        {
+            return collection_instances.Find(u => u._id == _id).FirstOrDefault<Model_Instance>();
+        }
+        else if (game_id != default(ObjectId))
+        {
+            return collection_instances.Find(u => u.game_id == game_id).FirstOrDefault<Model_Instance>();
+        }
+        else if (participant != default(ObjectId))
+        {
+            List<Model_Instance> instances = collection_instances.Find(u => true).ToList<Model_Instance>();
+            foreach (var instance in instances)
+            {
+                foreach (var instance_participant in instance.instance_participants)
+                {
+                    if (instance_participant.participant_id == participant)
+                    {
+                        return instance;
+                    }
+                }
+            }
+        }
+        Debug.Log("FindInstance: No parameter given!");
+        return null;
+    }
+
+    public List<Model_SinglePlayer> FindSinglePlayers(ObjectId account_id = default(ObjectId))
+    {
+        if (account_id != default(ObjectId))
+        {
+            return collection_single_players.Find(u => u.account_id == account_id).ToList<Model_SinglePlayer>();
+        }
+
+        Debug.Log("FindSinglePlayers: No parameter given!");
+        return null;
+    }
+
+    public List<Model_DailyMission> FindDailyMissions(ObjectId account_id = default(ObjectId))
+    {
+        if (account_id != default(ObjectId))
+        {
+            return collection_daily_missions.Find(u => u.account_id == account_id).ToList<Model_DailyMission>();
+        }
+
+        Debug.Log("FindDailyMissions: No parameter given!");
+        return null;
+    }
     #endregion
 
+    #region Insert
+    public void InsertAccount(string user_name, string password)
+    {
+        Model_Account account = new Model_Account();
+        // check if user_name is valid
+        if (!IsUsername(user_name))
+        {
+            account.user_name = user_name;
+        }
 
+        // check if password is valid
+        if()
+    }
+    #endregion
 
 
 
@@ -344,118 +481,6 @@ public class Mongo
     }
     #endregion
 
-    #region Fetch
-
-    #region Account
-    public Model_Account FindAccountByEmail(string email)
-    {
-        return accounts.Find(u => u.Email == email).FirstOrDefault<Model_Account>();
-    }
-    public Model_Account FindAccountByUsernameAndDiscriminator(string username, string discriminator)
-    {
-        return accounts.Find(u => u.Username == username && u.Discriminator == discriminator).FirstOrDefault<Model_Account>();
-    }
-    public Model_Account FindAccountByToken(string token)
-    {
-        return accounts.Find(u => u.Token == token).FirstOrDefault<Model_Account>();
-    }
-    public Model_Account FindAccountByObjectId(ObjectId id)
-    {
-        return accounts.Find(u => u._id == id).FirstOrDefault<Model_Account>();
-    }
-    public Model_Account FindAccountByConnectionId(int connectionId)
-    {
-        return accounts.Find(u => u.ActiveConnection == connectionId).FirstOrDefault<Model_Account>();
-    }
-
-    #endregion
-
-    #region Follow
-    // find all who you follow
-    public List<Account> FindAllFollowFrom(string token)
-    {
-        Model_Reference self = new Model_Reference("account", FindAccountByToken(token)._id);
-
-        List<Account> followsResponse = new List<Account>();
-        foreach(var f in follows.Find(f => f.Sender == self).ToList())
-        {
-            //maybe cast as objectId at f.target.id
-            followsResponse.Add(FindAccountByObjectId(f.Target.id).GetAccount());
-        }
-        return followsResponse;
-    }
-
-    // find all who follow you
-    public List<Account> FindAllFollowBy(string email)
-    {
-        Model_Reference self = new Model_Reference("account", FindAccountByEmail(email)._id);
-
-        List<Account> followsResponse = new List<Account>();
-        foreach (var f in follows.Find(f => f.Target == self).ToList())
-        {
-            //maybe cast as objectId at f.target.id
-            followsResponse.Add(FindAccountByObjectId(f.Sender.id).GetAccount());
-        }
-        return followsResponse;
-    }
-
-    public List<Model_Account> FindAllFollowFromGetModelAccount(string token)
-    {
-        //Todo replace redundant code
-        Model_Reference self = new Model_Reference("account", FindAccountByToken(token)._id);
-
-        List<Account> followsResponse = new List<Account>();
-        foreach (var f in follows.Find(f => f.Sender == self).ToList())
-        {
-            //maybe cast as objectId at f.target.id
-            followsResponse.Add(FindAccountByObjectId(f.Target.id).GetAccount());
-        }
-
-        List<Model_Account> ownFollows = new List<Model_Account>();
-        foreach (var f in followsResponse)
-        {
-            ownFollows.Add(FindAccountByUsernameAndDiscriminator(f.Username, f.Discriminator));
-        }
-        return ownFollows;
-    }
-
-    // find all who follow you
-    public List<Model_Account> FindAllFollowByGetModelAccount(string email)
-    {
-        //Todo replace redundant code
-        Model_Reference self = new Model_Reference("account", FindAccountByEmail(email)._id);
-
-        List<Account> followsResponse = new List<Account>();
-        foreach (var f in follows.Find(f => f.Target == self).ToList())
-        {
-            //maybe cast as objectId at f.target.id
-            followsResponse.Add(FindAccountByObjectId(f.Sender.id).GetAccount());
-        }
-
-        List<Model_Account> ownFollows = new List<Model_Account>();
-        foreach (var f in followsResponse)
-        {
-            ownFollows.Add(FindAccountByUsernameAndDiscriminator(f.Username, f.Discriminator));
-        }
-        return ownFollows;
-    }
-
-    public Model_Follow FindFollowByUsernameAndDiscriminator(string token, string usernameAndDiscriminator)
-    {
-        string[] data = usernameAndDiscriminator.Split('#');
-
-        if(data[1] != null)
-        {
-            var sender = new Model_Reference("account", FindAccountByToken(token)._id);
-            var follow = new Model_Reference("account", FindAccountByUsernameAndDiscriminator(data[0], data[1])._id);
-
-            return follows.Find(f => f.Sender == sender && f.Target == follow).FirstOrDefault<Model_Follow>();
-        }
-        return null;
-    }
-
-    #endregion
-
     #region Lobby
     public Model_Lobby FindLobbyByObjectId(ObjectId objectId)
     {
@@ -465,8 +490,6 @@ public class Mongo
     {
         return lobbys.Find(u => u.LobbyID == lobbyID).FirstOrDefault<Model_Lobby>();
     }
-    #endregion
-
     #endregion
 
     #region Update
