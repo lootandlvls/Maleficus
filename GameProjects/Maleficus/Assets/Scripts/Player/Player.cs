@@ -21,6 +21,8 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public int SpellChargingLVL                                             { get { return spellChargingLVL; } }
 
     [Header("Charging Spell Effects")]
+    [Tooltip("This value is read from the actual Player ID inside the script. Chaning it in the inspector will have no effect")]
+    [SerializeField] private EPlayerID myPlayerIDDebug = EPlayerID.NONE;
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
 
@@ -81,6 +83,9 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     {
         base.Start();
 
+        myPlayerIDDebug = PlayerID;
+
+
         InitializeDictionaries();
 
         //myRigidBody = this.GetComponent<Rigidbody>();      
@@ -97,16 +102,18 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
+            Debug.Log("Getting player movement for : " + PlayerID);
             JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
             if (playerInput != null)
             {
+
                 float Move_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
                 float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
                 float Rotate_X = playerInput.JoystickValues[EInputAxis.ROTATE_X];
                 float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
 
-                //Move(Move_X, Move_Y);
-                //Rotate(Rotate_X, Rotate_Y);
+                Move(Move_X, Move_Y);
+                Rotate(Rotate_X, Rotate_Y);
 
                 if (playerInput.HasMoved() == true)
                 // Moving?
@@ -135,7 +142,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                         && (Time.time - lastTimeSinceRotated > 0.5f))
                     // Moving for 1 second since last rortation?
                     {
-                        //LookAtMovingDirection(playerInput);
+                        LookAtMovingDirection(playerInput);
                     }
                 }
             }
