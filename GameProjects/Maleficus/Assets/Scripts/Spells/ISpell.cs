@@ -32,4 +32,6 @@ public interface ISpell
 
     float PushDuration { get; }
 
+    bool Chargeable { get; }
+
 }

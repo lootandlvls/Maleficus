@@ -120,7 +120,8 @@ public enum ESpellID
     FIREBALL,
     FIRE_LASER,
     FIRE_EXPLOSION,
-    ICEBALL
+    ICEBALL,
+    TELEPORT
 }
 #endregion
 
@@ -146,7 +147,7 @@ public enum ETeamID
 
 public struct SHitInfo
 {
-    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
+    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, bool chargeable, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;
@@ -155,6 +156,7 @@ public struct SHitInfo
         this.hasPower = hasPower;
         this.buffEffects = buffEffects;
         this.debuffEffects = debuffEffects;
+        this.chargeable = chargeable;
 
     }
 
@@ -173,8 +175,9 @@ public struct SHitInfo
     public bool HasPushPower { get { return hasPower; } }
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
     public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
+    public bool Chargeable { get { return chargeable; } }
 
-
+    private bool chargeable;
     private ISpell castedSpell;
     private EPlayerID castingPlayerID;
     private EPlayerID hitPlayerID;

@@ -22,7 +22,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public int SpellLevel { get { return spellLevel; } }
 
-    public bool HasPower { get { return hasPower; } }
+    public bool HasPower { get { return hasPushPower; } }
 
     public ESpellMovementType MovementType { get { return movementType; } }
 
@@ -40,14 +40,16 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public ESpellID SpellID { get { return spell; } }
 
+    public bool Chargeable { get { return chargeable; } }
 
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
     [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
-    [SerializeField] private bool hasPower;
+    [SerializeField] private bool hasPushPower;
     [SerializeField] private ESpellID spell;
+    [SerializeField] private bool chargeable;
 
     [SerializeField] private ESpellMovementType movementType;
     [SerializeField] private List<ESpellEffects> debuffEffects;
@@ -77,7 +79,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
         if (OnSelfEffect)
         {
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPower, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPushPower, chargeable, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
     }
@@ -89,7 +91,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         {
 
             // Debug.Log(dirVector);
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, chargeable, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
 
             ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
@@ -105,7 +107,8 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     {
         if (hitPlayer.IsDead == false)
         {
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPower, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, chargeable, debuffEffects, buffEffects);
+           
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
 
             ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();

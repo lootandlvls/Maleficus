@@ -9336,7 +9336,7 @@ GameObject:
   - component: {fileID: 7967797922335698527}
   - component: {fileID: 2873473120091955154}
   m_Layer: 0
-  m_Name: TeleportationSkill
+  m_Name: S_Teleportation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9383,17 +9383,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eda7c0e832cab14e9bc7169d6680c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   hitPower: 0
   speed: 0
   spellName: 
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 0
-  cooldown: 3
-  spellDuration: 0
+  hasPushPower: 0
+  spell: 4
   movementType: 4
   debuffEffects: 
   buffEffects: 
+  cooldown: 3
+  spellDuration: 0
+  pushDuration: 0
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}

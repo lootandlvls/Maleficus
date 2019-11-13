@@ -39,7 +39,9 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
         EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
+        EventManager.Instance.GAME_GameStarted                                  += On_GAME_GameStarted;
     }
+
 
     protected override void LateStart()
     {
@@ -52,15 +54,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
         }
 
-        // Connect all players
-        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true)
-            && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
-        {
-            ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
-            ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
-            ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
-            ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
-        }
+
     }
 
     public override void OnSceneStartReinitialize()
@@ -85,7 +79,20 @@ public class InputManager : AbstractSingletonManager<InputManager>
             ConnectedControllers.Remove(controllerID);
         }
     }
- 
+
+
+    private void On_GAME_GameStarted(EGameMode obj)
+    {
+        // Connect all players
+        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true)
+            && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
+        {
+            ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
+            ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
+            ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
+            ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
+        }
+    }
 
     #region Input Source Callbacks
     private void On_InputSource_ButtonPressed(EControllerID controllerID, EInputButton inputButton)

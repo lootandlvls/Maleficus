@@ -4851,13 +4851,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   hitPower: 19
   speed: 800
   spellName: FireBall_lvl_
   spellLevel: 1
   OnSelfEffect: 0
-  hasPower: 1
+  hasPushPower: 1
   spell: 0
+  chargeable: 1
   movementType: 0
   debuffEffects: 
   buffEffects: 

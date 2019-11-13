@@ -91,12 +91,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   hitPower: 20
   speed: 800
   spellName: S_IceBall
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 0
+  hasPower: 1
   spell: 3
   movementType: 0
   debuffEffects: 06000000

@@ -436,7 +436,7 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
-    joyNum: 2
+    joyNum: 1
   - serializedVersion: 3
     m_Name: CastSpell_1_B
     descriptiveName: 
@@ -474,7 +474,7 @@ InputManager:
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: joystick 2 button 3
+    positiveButton: joystick 2 button 6
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000

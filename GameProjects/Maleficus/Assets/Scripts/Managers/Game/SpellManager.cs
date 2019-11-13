@@ -51,6 +51,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     protected override void Start()
     {
+        base.Start();
+
         activePlayers = PlayerManager.Instance.ActivePlayers;
     }
 
@@ -58,6 +60,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         base.InitializeEventsCallbacks();
 
+        DebugLog("Subscribe to spell events");
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
     }
@@ -96,18 +99,22 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         if (hitInfo.HasPushPower)
         {
+            DebugLog("player hit he will be pushed");
             if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
             {
+
                 PushPlayer(hitInfo);
             }
         }
 
+ 
         foreach (ESpellEffects debuffeffect in hitInfo.DebuffEffects)
         {
+            Debug.Log("Spell has debuffeffect");
             ApplyDebuff(debuffeffect, hitInfo.HitPlayerID);
         }
 
-        foreach (ESpellEffects buffeffect in hitInfo.DebuffEffects)
+        foreach (ESpellEffects buffeffect in hitInfo.BuffEffects)
         {
             ApplyBuff(buffeffect, hitInfo.HitPlayerID);
         }
@@ -124,7 +131,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         switch (debuff)
         {
             case ESpellEffects.FROZEN:
+                Debug.Log("Player Frozen");
                 StartCoroutine(PlayerFrozen(playerID));
+
                 break;
             case ESpellEffects.STUN:
 
@@ -235,6 +244,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
+            DebugLog("teleportation spell has been casted");
             activePlayers[playerID].DoTeleportAnimation();
 
             Quaternion rotation = activePlayers[playerID].transform.rotation;

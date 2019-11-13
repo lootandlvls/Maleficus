@@ -13796,12 +13796,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2aca8fc163479549b5bf1528ae0eb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   hitPower: 21
   speed: 0
   spellName: S_FireLaser
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 1
+  hasPushPower: 1
   spell: 1
   movementType: 6
   debuffEffects: 

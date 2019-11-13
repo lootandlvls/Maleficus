@@ -162,8 +162,10 @@ public class EventManager : AbstractSingletonManager<EventManager>
     public event Action<ISpell, EPlayerID> SPELLS_Teleport;
     public void Invoke_SPELLS_Teleport(ISpell castedSpell , EPlayerID castingPlayerID)
     {
+        DebugLog("Invoke spell event");
         if (SPELLS_Teleport != null)
         {
+            
             SPELLS_Teleport.Invoke(castedSpell, castingPlayerID);
         }
     }
