@@ -347,14 +347,14 @@ Debug.Log("Connecting from Web");
             // successfull login
 
             // this is where we save data about ourself
-            Self = new Account();
-            Self.ActiveConnection = olr.ConnectionId;
-            Self.Username = olr.Username;
-            Self.Discriminator = olr.Discriminator;
+            //Self = new Account();
+            //Self.ActiveConnection = olr.ConnectionId;
+            //Self.Username = olr.Username;
+            //Self.Discriminator = olr.Discriminator;
 
-            token = olr.Token;
-            Debug.Log("token: " + token);
-            LoginContext.Instance.EnableInputs();
+            //token = olr.Token;
+            //Debug.Log("token: " + token);
+            //LoginContext.Instance.EnableInputs();
 
             // change to next state
 

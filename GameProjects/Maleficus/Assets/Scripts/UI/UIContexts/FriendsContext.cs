@@ -20,7 +20,7 @@ public class FriendsContext : MonoBehaviour
     private void Start()
     {
         Instance = this;
-        selfInformation.text = NetworkManager.Instance.Self.Username + "#" + NetworkManager.Instance.Self.Discriminator;
+        selfInformation.text = NetworkManager.Instance.Self.user_name;
         NetworkManager.Instance.SendRequestFollow();
     }
 
@@ -28,17 +28,17 @@ public class FriendsContext : MonoBehaviour
     {
         GameObject followItem = Instantiate(followPrefab, followContainer);
 
-        followItem.GetComponentInChildren<TextMeshProUGUI>().text = follow.Username + "#" + follow.Discriminator;
-        followItem.transform.GetChild(1).GetComponent<Image>().color = (follow.Status != 0) ? Color.green : Color.gray;
+        followItem.GetComponentInChildren<TextMeshProUGUI>().text = follow.user_name;
+        followItem.transform.GetChild(1).GetComponent<Image>().color = (follow.status != 0) ? Color.green : Color.gray;
         followItem.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate { Destroy(followItem); });
         //Todo wait for server response bevor deleting object
-        followItem.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate { OnClickRemoveFollow(follow.Username, follow.Discriminator); });
+        followItem.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate { OnClickRemoveFollow(follow.user_name); });
 
-        uiFollows.Add(follow.Username + "#" + follow.Discriminator, followItem);
+        uiFollows.Add(follow.user_name, followItem);
     }
     public void UpdateFollow(Account follow)
     {
-        uiFollows[follow.Username + "#" + follow.Discriminator].transform.GetChild(1).GetComponent<Image>().color = (follow.Status != 0) ? Color.green : Color.gray;
+        uiFollows[follow.user_name].transform.GetChild(1).GetComponent<Image>().color = (follow.status != 0) ? Color.green : Color.gray;
     }
 
     #region Button
@@ -56,10 +56,10 @@ public class FriendsContext : MonoBehaviour
 
     }
 
-    public void OnClickRemoveFollow(string username, string discriminator)
+    public void OnClickRemoveFollow(string username)
     {
-        NetworkManager.Instance.SendRemoveFollow(username + "#" + discriminator);
-        uiFollows.Remove(username + "#" + discriminator);
+        NetworkManager.Instance.SendRemoveFollow(username);
+        uiFollows.Remove(username);
     }
     #endregion
 }

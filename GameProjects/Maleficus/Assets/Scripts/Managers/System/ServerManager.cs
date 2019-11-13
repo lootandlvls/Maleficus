@@ -77,15 +77,10 @@ public class ServerManager : NetworkManager
                 NetworkTransport.Init();
 
                 ConnectionConfig connectionConfig = new ConnectionConfig();
-
-                server_reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
-
-
+                server_reliableChannel = connectionConfig.AddChannel(QosType.Reliable);
                 HostTopology hostTopology = new HostTopology(connectionConfig, SERVER_MAX_USER);
 
-
                 // Server only code
-
                 server_hostId = NetworkTransport.AddHost(hostTopology, PORT, null);
                 Debug.Log("added host with Port 26002");
                 /*InstanceManagerConnectionId = NetworkTransport.Connect(server_hostId, INSTANCE_MANAGER_SERVER_IP, SERVER_INSTANCE_MANAGER_PORT, 0, out error);
@@ -215,41 +210,39 @@ public class ServerManager : NetworkManager
                 DisconnectEvent(recHostId, cnnId);
                 break;
 
-            case ENetMessageType.GAME_STARTED:
-                Debug.Log("Game starting received");
+            //case ENetMessageType.GAME_STARTED:
+            //    Debug.Log("Game starting received");
 
-                NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
-                EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
-                BroadcastMessageToAllClients(gameStartedMessage, false);
-                break;
+            //    NetEvent_GameStarted gameStartedMessage = (NetEvent_GameStarted)netMessage;
+            //    EventManager.Instance.NETWORK_GameStarted.Invoke(gameStartedMessage, EEventInvocationType.LOCAL_ONLY);
+            //    BroadcastMessageToAllClients(gameStartedMessage, false);
+            //    break;
 
-            // Input
-            case ENetMessageType.JOYSTICK_MOVED:
-                Debug.Log("Game input received");
+            //// Input
+            //case ENetMessageType.JOYSTICK_MOVED:
+            //    Debug.Log("Game input received");
 
-                NetEvent_JoystickMoved movementMessage = (NetEvent_JoystickMoved)netMessage;
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(movementMessage, EEventInvocationType.LOCAL_ONLY);
-                //BroadcastMessageToAllClients(movementMessage, false);
-                break;
+            //    NetEvent_JoystickMoved movementMessage = (NetEvent_JoystickMoved)netMessage;
+            //    EventManager.Instance.INPUT_JoystickMoved.Invoke(movementMessage, EEventInvocationType.LOCAL_ONLY);
+            //    //BroadcastMessageToAllClients(movementMessage, false);
+            //    break;
 
-            case ENetMessageType.BUTTON_PRESSED:
-                Debug.Log("Received Spell Input from another Player");
+            //case ENetMessageType.BUTTON_PRESSED:
+            //    Debug.Log("Received Spell Input from another Player");
 
-                NetEvent_ButtonPressed buttonPressed = (NetEvent_ButtonPressed)netMessage;
-                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.LOCAL_ONLY);
-                BroadcastMessageToAllClients(buttonPressed, false);
-                break;
-
-
-            case ENetMessageType.BUTTON_RELEASEED:
-                Debug.Log("Received Spell Input from another Player");
-
-                NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
-                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
-                BroadcastMessageToAllClients(buttonReleased,  false);
-                break;
+            //    NetEvent_ButtonPressed buttonPressed = (NetEvent_ButtonPressed)netMessage;
+            //    EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.LOCAL_ONLY);
+            //    BroadcastMessageToAllClients(buttonPressed, false);
+            //    break;
 
 
+            //case ENetMessageType.BUTTON_RELEASEED:
+            //    Debug.Log("Received Spell Input from another Player");
+
+            //    NetEvent_ButtonReleased buttonReleased = (NetEvent_ButtonReleased)netMessage;
+            //    EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.LOCAL_ONLY);
+            //    BroadcastMessageToAllClients(buttonReleased,  false);
+            //    break;
         }
     }
 
@@ -272,30 +265,30 @@ public class ServerManager : NetworkManager
     {
         Debug.Log(string.Format("User {0} has disconnected!", connectionId));
 
-        // get a reference to the connected account
-        Model_Account account = dataBank.FindAccountByConnectionId(connectionId);
+        //// get a reference to the connected account
+        //Model_Account account = dataBank.FindAccountByConnectionId(connectionId);
 
-        // if user is logged in
-        if (account == null)
-        {
-            return;
-        }
+        //// if user is logged in
+        //if (account == null)
+        //{
+        //    return;
+        //}
 
-        dataBank.UpdateAccountAfterDisconnection(account.Email);
+        //dataBank.UpdateAccountAfterDisconnection(account.Email);
 
-        // prepare and send our update message
-        Net_UpdateFollow fu = new Net_UpdateFollow();
-        //Todo strip this down to only nessesary info
-        Model_Account updateAccount = dataBank.FindAccountByEmail(account.Email);
-        fu.Follow = updateAccount.GetAccount();
+        //// prepare and send our update message
+        //Net_UpdateFollow fu = new Net_UpdateFollow();
+        ////Todo strip this down to only nessesary info
+        //Model_Account updateAccount = dataBank.FindAccountByEmail(account.Email);
+        //fu.Follow = updateAccount.GetAccount();
 
-        foreach (var f in dataBank.FindAllFollowBy(account.Email))
-        {
-            if (f.ActiveConnection != 0)
-            {
-                SendClient(recHostId, f.ActiveConnection, fu);
-            }
-        }
+        //foreach (var f in dataBank.FindAllFollowBy(account.Email))
+        //{
+        //    if (f.ActiveConnection != 0)
+        //    {
+        //        SendClient(recHostId, f.ActiveConnection, fu);
+        //    }
+        //}
     }
 
 
@@ -304,91 +297,91 @@ public class ServerManager : NetworkManager
     {
         Net_OnCreateAccount oca = new Net_OnCreateAccount();
 
-        if (dataBank.InsertAccount(ca.Username, ca.Password, ca.Email))
-        {
-            oca.Success = 1;
-            oca.Information = "Account was created";
-        }
-        else
-        {
-            oca.Success = 0;
-            oca.Information = "Account was not created";
-        }
+        //if (dataBank.InsertAccount(ca.Username, ca.Password, ca.Email))
+        //{
+        //    oca.Success = 1;
+        //    oca.Information = "Account was created";
+        //}
+        //else
+        //{
+        //    oca.Success = 0;
+        //    oca.Information = "Account was not created";
+        //}
 
-        SendClient(recHostId, cnnId, oca);
+        //SendClient(recHostId, cnnId, oca);
     }
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
-        string randomToken = GenerateRandom(128);
-        Model_Account account = dataBank.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
-        Net_OnLoginRequest olr = new Net_OnLoginRequest();
-        if (account != null)
-        {
-            olr.Success = 1;
-            olr.Information = "Logged in as " + account.Username;
-            olr.Username = account.Username;
-            olr.Discriminator = account.Discriminator;
-            olr.Token = randomToken;
-            olr.ConnectionId = cnnId;
+        //string randomToken = GenerateRandom(128);
+        //Model_Account account = dataBank.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
+        //Net_OnLoginRequest olr = new Net_OnLoginRequest();
+        //if (account != null)
+        //{
+        //    olr.Success = 1;
+        //    olr.Information = "Logged in as " + account.Username;
+        //    olr.Username = account.Username;
+        //    olr.Discriminator = account.Discriminator;
+        //    olr.Token = randomToken;
+        //    olr.ConnectionId = cnnId;
 
-            // prepare and send our update message
-            Net_UpdateFollow fu = new Net_UpdateFollow();
-            fu.Follow = account.GetAccount();
+        //    // prepare and send our update message
+        //    Net_UpdateFollow fu = new Net_UpdateFollow();
+        //    fu.Follow = account.GetAccount();
 
-            foreach (var f in dataBank.FindAllFollowBy(account.Email))
-            {
-                if (f.ActiveConnection != 0)
-                {
-                    //Todo rename cnnId to connectionId in whole solution
-                    SendClient(recHostId, f.ActiveConnection, fu);
-                }
-            }
-        }
-        else
-        {
-            olr.Success = 0;
-        }
+        //    foreach (var f in dataBank.FindAllFollowBy(account.Email))
+        //    {
+        //        if (f.ActiveConnection != 0)
+        //        {
+        //            //Todo rename cnnId to connectionId in whole solution
+        //            SendClient(recHostId, f.ActiveConnection, fu);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    olr.Success = 0;
+        //}
 
-        SendClient(recHostId, cnnId, olr);
+        //SendClient(recHostId, cnnId, olr);
     }
     private void AddFollow(int cnnId, int channelId, int recHostId, Net_AddFollow msg)
     {
         Net_OnAddFollow oaf = new Net_OnAddFollow();
 
-        if (dataBank.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
-        {
-            oaf.Success = 1;
-            if (IsEmail(msg.UsernameDiscriminatorOrEmail))
-            {
-                // this is email
-                oaf.Follow = dataBank.FindAccountByEmail(msg.UsernameDiscriminatorOrEmail).GetAccount();
-            }
-            else
-            {
-                // this is username
-                string[] data = msg.UsernameDiscriminatorOrEmail.Split('#');
-                if (data[1] == null)
-                {
-                    return;
-                }
+        //if (dataBank.InsertFollow(msg.Token, msg.UsernameDiscriminatorOrEmail))
+        //{
+        //    oaf.Success = 1;
+        //    if (IsEmail(msg.UsernameDiscriminatorOrEmail))
+        //    {
+        //        // this is email
+        //        oaf.Follow = dataBank.FindAccountByEmail(msg.UsernameDiscriminatorOrEmail).GetAccount();
+        //    }
+        //    else
+        //    {
+        //        // this is username
+        //        string[] data = msg.UsernameDiscriminatorOrEmail.Split('#');
+        //        if (data[1] == null)
+        //        {
+        //            return;
+        //        }
 
-                oaf.Follow = dataBank.FindAccountByUsernameAndDiscriminator(data[0], data[1]).GetAccount();
-            }
-        }
+        //        oaf.Follow = dataBank.FindAccountByUsernameAndDiscriminator(data[0], data[1]).GetAccount();
+        //    }
+        //}
 
-        SendClient(recHostId, cnnId, oaf);
+        //SendClient(recHostId, cnnId, oaf);
     }
     private void RemoveFollow(int cnnId, int channelId, int recHostId, Net_RemoveFollow msg)
     {
-        dataBank.RemoveFollow(msg.Token, msg.UsernameDiscriminator);
+        //dataBank.RemoveFollow(msg.Token, msg.UsernameDiscriminator);
     }
     private void RequestFollow(int cnnId, int channelId, int recHostId, Net_RequestFollow msg)
     {
-        Net_OnRequestFollow orf = new Net_OnRequestFollow();
+        //Net_OnRequestFollow orf = new Net_OnRequestFollow();
 
-        orf.Follows = dataBank.FindAllFollowFrom(msg.Token);
+        //orf.Follows = dataBank.FindAllFollowFrom(msg.Token);
 
-        SendClient(recHostId, cnnId, orf);
+        //SendClient(recHostId, cnnId, orf);
     }
     #endregion
 
@@ -397,183 +390,183 @@ public class ServerManager : NetworkManager
     {
         DebugLog("Initializing lobby...");
 
-        Net_OnInitLobby oil = new Net_OnInitLobby();
-        Model_Account self = dataBank.FindAccountByToken(il.Token);
-        int lobbyID = dataBank.InitLobby(self._id);
-        if (lobbyID != -1)
-        {
-            oil.Success = 1;
-            oil.Information = "Lobby has been initialized";
+        //Net_OnInitLobby oil = new Net_OnInitLobby();
+        //Model_Account self = dataBank.FindAccountByToken(il.Token);
+        //int lobbyID = dataBank.InitLobby(self._id);
+        //if (lobbyID != -1)
+        //{
+        //    oil.Success = 1;
+        //    oil.Information = "Lobby has been initialized";
 
-            // send msg to InstanceManager to run new Instance
-            //SendClient(2, cnnId, il);
-            EPlayerID playerID = EPlayerID.NONE;
-            Model_Lobby thislobby = dataBank.FindLobbyByLobbyID(lobbyID);
-            List<EPlayerID> players = new List<EPlayerID>();
+        //    // send msg to InstanceManager to run new Instance
+        //    //SendClient(2, cnnId, il);
+        //    EPlayerID playerID = EPlayerID.NONE;
+        //    Model_Lobby thislobby = dataBank.FindLobbyByLobbyID(lobbyID);
+        //    List<EPlayerID> players = new List<EPlayerID>();
 
-            if (thislobby.Team1 != null)
-            {
-                Debug.Log("Adding fucking player 1");
-                players.Add(EPlayerID.PLAYER_1);
-                Model_Account player1 = dataBank.FindAccountByObjectId(thislobby.Team1[0]);
-                connectedPlayers.Add(EClientID.CLIENT_1, player1.ActiveConnection);
-            }
-            if (thislobby.Team2 != null)
-            {
-                Debug.Log("Adding fucking player 2");
-                players.Add(EPlayerID.PLAYER_2);
-                Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
-                connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);         // INVERTED!!!
-            }
-            if (thislobby.Team3 != null)
-            {
-                Debug.Log("Adding fucking player 3");
-                players.Add(EPlayerID.PLAYER_3);
-                Model_Account player3 = dataBank.FindAccountByObjectId(thislobby.Team3[0]);
-                connectedPlayers.Add(EClientID.CLIENT_3, player3.ActiveConnection);         // INVERTED!!!
-            }
-            if (thislobby.Team4 != null)
-            {
-                Debug.Log("Adding fucking player 4");
-                players.Add(EPlayerID.PLAYER_4);
-                Model_Account player4 = dataBank.FindAccountByObjectId(thislobby.Team4[0]);
-                connectedPlayers.Add(EClientID.CLIENT_4, player4.ActiveConnection);
-            }
-            foreach(EClientID clientID in connectedPlayers.Keys)
-            {
-                Debug.Log(clientID + " is connected : " + connectedPlayers[clientID]);
-            }
+        //    if (thislobby.Team1 != null)
+        //    {
+        //        Debug.Log("Adding fucking player 1");
+        //        players.Add(EPlayerID.PLAYER_1);
+        //        Model_Account player1 = dataBank.FindAccountByObjectId(thislobby.Team1[0]);
+        //        connectedPlayers.Add(EClientID.CLIENT_1, player1.ActiveConnection);
+        //    }
+        //    if (thislobby.Team2 != null)
+        //    {
+        //        Debug.Log("Adding fucking player 2");
+        //        players.Add(EPlayerID.PLAYER_2);
+        //        Model_Account player2 = dataBank.FindAccountByObjectId(thislobby.Team2[0]);
+        //        connectedPlayers.Add(EClientID.CLIENT_2, player2.ActiveConnection);         // INVERTED!!!
+        //    }
+        //    if (thislobby.Team3 != null)
+        //    {
+        //        Debug.Log("Adding fucking player 3");
+        //        players.Add(EPlayerID.PLAYER_3);
+        //        Model_Account player3 = dataBank.FindAccountByObjectId(thislobby.Team3[0]);
+        //        connectedPlayers.Add(EClientID.CLIENT_3, player3.ActiveConnection);         // INVERTED!!!
+        //    }
+        //    if (thislobby.Team4 != null)
+        //    {
+        //        Debug.Log("Adding fucking player 4");
+        //        players.Add(EPlayerID.PLAYER_4);
+        //        Model_Account player4 = dataBank.FindAccountByObjectId(thislobby.Team4[0]);
+        //        connectedPlayers.Add(EClientID.CLIENT_4, player4.ActiveConnection);
+        //    }
+        //    foreach(EClientID clientID in connectedPlayers.Keys)
+        //    {
+        //        Debug.Log(clientID + " is connected : " + connectedPlayers[clientID]);
+        //    }
 
-            var eventHandle = new Event_GenericHandle<List<EPlayerID>, EPlayerID>(players, playerID);
-            EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(eventHandle, EEventInvocationType.LOCAL_ONLY);
-        }
-        else
-        {
-            oil.Success = 0;
-            oil.Information = "Lobby couldn't be initialized";
-            SendClient(recHostId, cnnId, oil);
-            return;
-        }
+        //    var eventHandle = new Event_GenericHandle<List<EPlayerID>, EPlayerID>(players, playerID);
+        //    EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Invoke(eventHandle, EEventInvocationType.LOCAL_ONLY);
+        //}
+        //else
+        //{
+        //    oil.Success = 0;
+        //    oil.Information = "Lobby couldn't be initialized";
+        //    SendClient(recHostId, cnnId, oil);
+        //    return;
+        //}
 
-        Model_Lobby lobby = dataBank.FindLobbyByLobbyID(lobbyID);
+        //Model_Lobby lobby = dataBank.FindLobbyByLobbyID(lobbyID);
 
-        oil.lobbyID = lobby.LobbyID;
-        // add lobbyID to the player
-        dataBank.UpdateAccountInLobby(self._id, lobby._id);
+        //oil.lobbyID = lobby.LobbyID;
+        //// add lobbyID to the player
+        //dataBank.UpdateAccountInLobby(self._id, lobby._id);
 
-        // send all lobby members the message that the game can start now
-        // Todo change so different game modes can be initialized
+        //// send all lobby members the message that the game can start now
+        //// Todo change so different game modes can be initialized
 
-        //SendClient(recHostId, cnnId, oil);
+        ////SendClient(recHostId, cnnId, oil);
 
-        Debug.Log("trying to send second client");
+        //Debug.Log("trying to send second client");
 
 
-        if ((lobby.Team1 != null) && (lobby.Team1.Count != 0))
-        {
-            Model_Account player1 = dataBank.FindAccountByObjectId(lobby.Team1[0]);
-            if (player1 != null)
-            {
-                Debug.Log("trying to send second client " + player1.ActiveConnection);
-                dataBank.UpdateAccountInLobby(player1._id, lobby._id);
-                SendClient(recHostId, player1.ActiveConnection, oil);
-            }
-        }
+        //if ((lobby.Team1 != null) && (lobby.Team1.Count != 0))
+        //{
+        //    Model_Account player1 = dataBank.FindAccountByObjectId(lobby.Team1[0]);
+        //    if (player1 != null)
+        //    {
+        //        Debug.Log("trying to send second client " + player1.ActiveConnection);
+        //        dataBank.UpdateAccountInLobby(player1._id, lobby._id);
+        //        SendClient(recHostId, player1.ActiveConnection, oil);
+        //    }
+        //}
 
-        if ((lobby.Team2 != null) && (lobby.Team2.Count != 0))
-        {
-            Model_Account player2 = dataBank.FindAccountByObjectId(lobby.Team2[0]);
-            if (player2 != null)
-            {
-                Debug.Log("trying to send second client " + player2.ActiveConnection);
-                dataBank.UpdateAccountInLobby(player2._id, lobby._id);
-                SendClient(recHostId, player2.ActiveConnection, oil);
-            }
-        }
+        //if ((lobby.Team2 != null) && (lobby.Team2.Count != 0))
+        //{
+        //    Model_Account player2 = dataBank.FindAccountByObjectId(lobby.Team2[0]);
+        //    if (player2 != null)
+        //    {
+        //        Debug.Log("trying to send second client " + player2.ActiveConnection);
+        //        dataBank.UpdateAccountInLobby(player2._id, lobby._id);
+        //        SendClient(recHostId, player2.ActiveConnection, oil);
+        //    }
+        //}
 
-        if ((lobby.Team3 != null) && (lobby.Team3.Count != 0))
-        {
-            Model_Account player3 = dataBank.FindAccountByObjectId(lobby.Team3[0]);
-            if (player3 != null)
-            {
-                dataBank.UpdateAccountInLobby(player3._id, lobby._id);
-                SendClient(recHostId, player3.ActiveConnection, oil);
-            }
-        }
+        //if ((lobby.Team3 != null) && (lobby.Team3.Count != 0))
+        //{
+        //    Model_Account player3 = dataBank.FindAccountByObjectId(lobby.Team3[0]);
+        //    if (player3 != null)
+        //    {
+        //        dataBank.UpdateAccountInLobby(player3._id, lobby._id);
+        //        SendClient(recHostId, player3.ActiveConnection, oil);
+        //    }
+        //}
 
-        if ((lobby.Team4 != null) && (lobby.Team4.Count != 0))
-        {
-            Model_Account player4 = dataBank.FindAccountByObjectId(lobby.Team4[0]);
-            if (player4 != null)
-            {
-                dataBank.UpdateAccountInLobby(player4._id, lobby._id);
-                SendClient(recHostId, player4.ActiveConnection, oil);
-            }
-        }
+        //if ((lobby.Team4 != null) && (lobby.Team4.Count != 0))
+        //{
+        //    Model_Account player4 = dataBank.FindAccountByObjectId(lobby.Team4[0]);
+        //    if (player4 != null)
+        //    {
+        //        dataBank.UpdateAccountInLobby(player4._id, lobby._id);
+        //        SendClient(recHostId, player4.ActiveConnection, oil);
+        //    }
+        //}
     }
     #endregion
 
     #region Game
     private void Net_OnRequestGameInfo(int connectionID, int channelId, int recHostId, Net_RequestGameInfo rgi)
     {
-        Net_OnRequestGameInfo onRequestGameSessionInfo = new Net_OnRequestGameInfo();
-        Model_Account self = dataBank.FindAccountByToken(rgi.Token);
-        Model_Lobby lobby = dataBank.FindLobbyByLobbyID(rgi.lobbyID);
+        //Net_OnRequestGameInfo onRequestGameSessionInfo = new Net_OnRequestGameInfo();
+        //Model_Account self = dataBank.FindAccountByToken(rgi.Token);
+        //Model_Lobby lobby = dataBank.FindLobbyByLobbyID(rgi.lobbyID);
 
-        onRequestGameSessionInfo.Token = rgi.Token;
+        //onRequestGameSessionInfo.Token = rgi.Token;
 
-        if (dataBank.FindAccountByObjectId(lobby.Team1[0]).Token == rgi.Token)
-        {
-            onRequestGameSessionInfo.ownPlayerId = 1;
-        }
-        if ((lobby.Team2 != null) && (dataBank.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token))
-        {
-            onRequestGameSessionInfo.ownPlayerId = 2;
-        }
-        if ((lobby.Team3 != null) && (dataBank.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token))
-        {
-            onRequestGameSessionInfo.ownPlayerId = 3;
-        }
-        if ((lobby.Team4 != null) && (dataBank.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token))
-        {
-            onRequestGameSessionInfo.ownPlayerId = 4;
-        }
+        //if (dataBank.FindAccountByObjectId(lobby.Team1[0]).Token == rgi.Token)
+        //{
+        //    onRequestGameSessionInfo.ownPlayerId = 1;
+        //}
+        //if ((lobby.Team2 != null) && (dataBank.FindAccountByObjectId(lobby.Team2[0]).Token == rgi.Token))
+        //{
+        //    onRequestGameSessionInfo.ownPlayerId = 2;
+        //}
+        //if ((lobby.Team3 != null) && (dataBank.FindAccountByObjectId(lobby.Team3[0]).Token == rgi.Token))
+        //{
+        //    onRequestGameSessionInfo.ownPlayerId = 3;
+        //}
+        //if ((lobby.Team4 != null) && (dataBank.FindAccountByObjectId(lobby.Team4[0]).Token == rgi.Token))
+        //{
+        //    onRequestGameSessionInfo.ownPlayerId = 4;
+        //}
 
-        onRequestGameSessionInfo.initialiser = dataBank.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
+        //onRequestGameSessionInfo.initialiser = dataBank.FindAccountByObjectId(lobby.Team1[0]).GetAccount();
 
-        if (lobby.Team1 != null)
-        {
-            for (int i = 0; i < lobby.Team1.Count; ++i)
-            {
-                onRequestGameSessionInfo.Player1 = dataBank.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
-            }
-        }
+        //if (lobby.Team1 != null)
+        //{
+        //    for (int i = 0; i < lobby.Team1.Count; ++i)
+        //    {
+        //        onRequestGameSessionInfo.Player1 = dataBank.FindAccountByObjectId(lobby.Team1[i]).GetAccount();
+        //    }
+        //}
 
-        if (lobby.Team2 != null)
-        {
-            for (int i = 0; i < lobby.Team2.Count; ++i)
-            {
-                onRequestGameSessionInfo.Player2 = dataBank.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
-            }
-        }
+        //if (lobby.Team2 != null)
+        //{
+        //    for (int i = 0; i < lobby.Team2.Count; ++i)
+        //    {
+        //        onRequestGameSessionInfo.Player2 = dataBank.FindAccountByObjectId(lobby.Team2[i]).GetAccount();
+        //    }
+        //}
 
-        if (lobby.Team3 != null)
-        {
-            for (int i = 0; i < lobby.Team3.Count; ++i)
-            {
-                onRequestGameSessionInfo.Player3 = dataBank.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
-            }
-        }
+        //if (lobby.Team3 != null)
+        //{
+        //    for (int i = 0; i < lobby.Team3.Count; ++i)
+        //    {
+        //        onRequestGameSessionInfo.Player3 = dataBank.FindAccountByObjectId(lobby.Team3[i]).GetAccount();
+        //    }
+        //}
 
-        if (lobby.Team4 != null)
-        {
-            for (int i = 0; i < lobby.Team4.Count; ++i)
-            {
-                onRequestGameSessionInfo.Player4 = dataBank.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
-            }
-        }
+        //if (lobby.Team4 != null)
+        //{
+        //    for (int i = 0; i < lobby.Team4.Count; ++i)
+        //    {
+        //        onRequestGameSessionInfo.Player4 = dataBank.FindAccountByObjectId(lobby.Team4[i]).GetAccount();
+        //    }
+        //}
 
-        SendClient(recHostId, connectionID, onRequestGameSessionInfo);
+        //SendClient(recHostId, connectionID, onRequestGameSessionInfo);
     }
     #endregion
 

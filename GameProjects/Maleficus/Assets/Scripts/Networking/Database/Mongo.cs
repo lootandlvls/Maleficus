@@ -49,11 +49,11 @@ public class Mongo
         collection_daily_missions = db.GetCollection<Model_DailyMission>("daily_missions");
 
 
-        accounts = db.GetCollection<Model_Account>("account");
-        follows = db.GetCollection<Model_Follow>("follow");
-        lobbys = db.GetCollection<Model_Lobby>("lobby");
-        
-        if(db != null)
+        //accounts = db.GetCollection<Model_Account>("account");
+        //follows = db.GetCollection<Model_Follow>("follow");
+        //lobbys = db.GetCollection<Model_Lobby>("lobby");
+
+        if (db != null)
         {
             Debug.Log("Database has been initialized");
             return true;
@@ -253,7 +253,7 @@ public class Mongo
     #endregion
 
     #region Insert
-    public void InsertAccount(string user_name, string password)
+    /*public void InsertAccount(string user_name, string password)
     {
         Model_Account account = new Model_Account();
         // check if user_name is valid
@@ -263,12 +263,12 @@ public class Mongo
         }
 
         // check if password is valid
-        if()
-    }
+        
+    }*/
     #endregion
 
 
-
+/*
     #region Insert
     public bool InsertAccount(string username, string password, string email)
     {
@@ -519,4 +519,5 @@ public class Mongo
         follows.DeleteOne(f => f._id == id);
     }
     #endregion
+    */
 }

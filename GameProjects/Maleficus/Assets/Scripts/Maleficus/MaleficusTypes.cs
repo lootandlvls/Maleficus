@@ -43,7 +43,10 @@ public enum EScene
     GAME,
     GAME_AR,
     GAME_DUNGEON,
-    MENU_DUNGEON
+    MENU_DUNGEON,
+    SERVER,
+    INSTANCE_MANAGER,
+    INSTANCE
 }
 #endregion
 
