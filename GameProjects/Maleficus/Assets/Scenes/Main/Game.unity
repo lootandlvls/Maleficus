@@ -1686,11 +1686,11 @@ MonoBehaviour:
   logCategoriesToIgnore: []
   IsServer: 0
   ConnectionMode: 2
-  InputMode: 1
+  InputMode: 2
   IsConnectControllerInAnyState: 1
   IsSpawnPlayerOnConnect: 1
-  IsSpawnAllPlayers: 0
-  IsSpawnTouchAsPlayer1: 0
+  IsSpawnAllPlayers: 1
+  IsSpawnTouchAsPlayer1: 1
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsDebugLogEvents: 0
   IsReduceLightIntensityOnSceneStart: 0

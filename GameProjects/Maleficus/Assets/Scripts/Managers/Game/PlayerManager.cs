@@ -238,6 +238,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
+               
                 ActivePlayers[playerID].IsReadyToShoot = false;
                 ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                 ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);

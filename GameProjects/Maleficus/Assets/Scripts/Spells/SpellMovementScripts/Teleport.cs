@@ -14,8 +14,8 @@ public class Teleport : AbstractSpell
         
         castedSpell = this.GetComponent<AbstractSpell>();
         playerID = castedSpell.CastingPlayerID;
-        Debug.Log("player "+ Maleficus.MaleficusUtilities.PlayerIDToInt(playerID));
+      
         EventManager.Instance.Invoke_SPELLS_Teleport(castedSpell, playerID);
-        Debug.Log("Teleportation spell casted");
+       
     }
 }

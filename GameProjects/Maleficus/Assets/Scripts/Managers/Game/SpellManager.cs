@@ -84,13 +84,14 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(castingPlayerID);
 
-        float InputH = playerInput.JoystickValues[EInputAxis.MOVE_X];
-        float InputV = playerInput.JoystickValues[EInputAxis.MOVE_Y];
-        Debug.Log(InputH + " and " + InputV);
-        Vector3 TeleportDirection = new Vector3();
-        TeleportDirection.x = InputH * Time.deltaTime * 10;
-        TeleportDirection.z = InputV * Time.deltaTime * 10;
-        activePlayers[castingPlayerID].transform.position += TeleportDirection * 50;
+        float InputH = playerInput.JoystickValues[EInputAxis.ROTATE_X];
+        float InputV = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
+
+        Vector3 TeleportDirection = activePlayers[castingPlayerID].transform.forward;
+
+
+
+        activePlayers[castingPlayerID].transform.position += TeleportDirection * 5;
 
 
 
@@ -244,7 +245,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
-            DebugLog("teleportation spell has been casted");
+       
             activePlayers[playerID].DoTeleportAnimation();
 
             Quaternion rotation = activePlayers[playerID].transform.rotation;
@@ -335,11 +336,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
 
         yield return new WaitForSeconds(0.3f);
-
+/*
         AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
-        spell.CastingPlayerID = playerID;
-        spell.CastingPlayerID = playerID;
-        spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        spell.CastingPlayerID = playerID;       
+       // spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;*/
     }
 
     private void InitializeSpells()
