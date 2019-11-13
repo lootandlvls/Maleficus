@@ -13,8 +13,10 @@ public class GamepadInputSource : AbstractInputSource
     private Dictionary<EControllerID, bool> canPerformVerticalDirectionalButton = new Dictionary<EControllerID, bool>();
 
 
-    private void Start()
+    protected override void InitializeEventsCallbacks()
     {
+        base.InitializeEventsCallbacks();
+
         EventManager.Instance.INPUT_ControllerConnected.AddListener(On_INPUT_ControllerConnected);
         EventManager.Instance.INPUT_ControllerDisconnected.AddListener(On_INPUT_ControllerDisconnected);
     }
@@ -48,8 +50,10 @@ public class GamepadInputSource : AbstractInputSource
     }
 
  
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         // Confirm
         Check_Confirm(EControllerID.GAMEPAD_A);
         Check_Confirm(EControllerID.GAMEPAD_B);
@@ -113,14 +117,17 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_Confirm(EControllerID controllerID)
     {
+
         char controllerIDName = ControllerIDToChar(controllerID);
         if (controllerIDName != 'X')
         {
             if (Input.GetButtonDown("Confirm_" + controllerIDName))
             {
+
                 if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
                     || (InputManager.Instance.InputMode == EInputMode.TEST))
                 {
+                    DebugLog("Confirm pressed by : " + controllerID, "Input");
                     InvokeButtonPressed(controllerID, EInputButton.CONFIRM);
                 }
                 // Connect controller
@@ -131,6 +138,7 @@ public class GamepadInputSource : AbstractInputSource
                     if ((playerID != EPlayerID.TEST)
                         && (playerID != EPlayerID.NONE))
                     {
+                        DebugLog("Connecting : " + controllerID, "Deafult");
                         InputManager.Instance.ConnectControllerToPlayer(controllerID, playerID);
                     }
                 }

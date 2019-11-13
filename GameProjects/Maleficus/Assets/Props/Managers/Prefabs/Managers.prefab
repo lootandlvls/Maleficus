@@ -297,6 +297,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbd13aa99716933458f3cc890396499d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &898608065508071772
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,49 +555,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &3281076885597085672
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1265026851044408116}
-  - component: {fileID: 1268404026414265604}
-  m_Layer: 0
-  m_Name: ARManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1265026851044408116
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3281076885597085672}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4707470802447310722}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1268404026414265604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3281076885597085672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3e982f14d6c49a498fb25afa1773562, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3833435040366009655
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,7 +589,6 @@ Transform:
   - {fileID: 1622036482847483339}
   - {fileID: 1230836642821334467}
   - {fileID: 7140744973992432358}
-  - {fileID: 1265026851044408116}
   m_Father: {fileID: 4335998295704777601}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -675,6 +635,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ad9086efa0b04409a463505312cb8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &4237950309803824908
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,16 +811,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6cd55cde3b0ed4682f0d471db7c139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   IsServer: 0
   ConnectionMode: 2
   InputMode: 1
+  IsConnectControllerInAnyState: 0
   IsSpawnPlayerOnConnect: 1
   IsSpawnAllPlayers: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsARGame: 0
-  ARPlacementMethod: 0
-  EnemiesMovementMethod: 0
   IsDebugLogEvents: 1
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
@@ -902,6 +868,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd9b5f6edcec5742a1da35394e589e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &4335998295998743998
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,6 +918,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 431d8d5cd9abea64eb849725c63eb898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!114 &8235437520970104786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -960,6 +934,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7710a370895981041afc4a9ced488f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!114 &2354991698562529715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,6 +950,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dfd444da589115449340d8c9e3984f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!114 &5843528688104263127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -984,6 +966,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f02d728cfe836084a8ef8a188c542eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &4335998296063043094
 GameObject:
   m_ObjectHideFlags: 0
@@ -1027,6 +1013,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8906518179ce3c94f89a4994164bb75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &4335998296438487357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,6 +1060,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fd42a054186c04d9cf980f40fc3cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &4335998297404941566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,6 +1107,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2e4102fc697074583a0c3ca5d1bdd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &5169349337228766896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,6 +1154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4eae2af4e287d4485eceb1a8a5e71b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
+  PlayingOffline: 0
 --- !u!1 &5503119419134137403
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,6 +1247,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1715f15a61fa443afb680dbda224ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   ambiamce_AudioSource: {fileID: 7902778028624163180}
   startFighting__AudioSource: {fileID: 1348411854551532653}
   fighting_AudioSource: {fileID: 8667944723138714777}
@@ -1551,6 +1558,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512cf275eaaa21b4393825f97f72fd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   spellsUpgrade:
   - {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac, type: 3}
   frozenEffect: {fileID: 8333159550493524451, guid: 041befb866d1ae646b3760d7ec3b284f,
@@ -1869,6 +1880,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a726f62aa46dde645926d62660a88477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &8098184902868246776
 GameObject:
   m_ObjectHideFlags: 0
@@ -1912,6 +1927,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5af407d41952745a283afbca211213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
 --- !u!1 &8933254075485993536
 GameObject:
   m_ObjectHideFlags: 0
@@ -1955,6 +1974,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd2d1f1c37160e4681c8bacc2785b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   basicEnemyPrefab: {fileID: 114409282968527766, guid: 359597ca943bcba48b221bef1fffc8fd,
     type: 3}
   basicEnemyMaxNumber: 5

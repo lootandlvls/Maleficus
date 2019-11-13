@@ -41,7 +41,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
 
             // Invoke event locally
             if ((eventInvocationType != EEventInvocationType.TO_SERVER_ONLY)
-                || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.EVERYTHING_LOCAL))
+                || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.PLAY_OFFLINE))
             {
                 // Invoke event to all local listeners
                 maleficusEvent.Invoke(eventHandle);
