@@ -24,7 +24,7 @@ public class FriendsContext : MonoBehaviour
         NetworkManager.Instance.SendRequestFollow();
     }
 
-    public void AddFollowToUi(Account follow)
+    public void AddFollowToUi(Local_Account follow)
     {
         GameObject followItem = Instantiate(followPrefab, followContainer);
 
@@ -36,7 +36,7 @@ public class FriendsContext : MonoBehaviour
 
         uiFollows.Add(follow.user_name, followItem);
     }
-    public void UpdateFollow(Account follow)
+    public void UpdateFollow(Local_Account follow)
     {
         uiFollows[follow.user_name].transform.GetChild(1).GetComponent<Image>().color = (follow.status != 0) ? Color.green : Color.gray;
     }

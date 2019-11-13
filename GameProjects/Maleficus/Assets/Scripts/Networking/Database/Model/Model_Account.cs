@@ -22,8 +22,8 @@ public class Model_Account
     public BsonDateTime account_created { set; get; }
     public BsonDateTime last_login { set; get; }
 
-    public Account GetAccount()
+    public Local_Account GetAccount()
     {
-        return new Account() { user_name = this.user_name, level = this.level, status = this.status };
+        return new Local_Account() { user_name = this.user_name, level = this.level, status = this.status };
     }
 }
