@@ -8,5 +8,5 @@ public class Net_OnRequestFollow : AbstractNetMessage
         MessageType = ENetMessageType.ON_REQUEST_FOLLOW;
     }
 
-    public List<Account> Follows { set; get; }
+    public List<Local_Account> Follows { set; get; }
 }
