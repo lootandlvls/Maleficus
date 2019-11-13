@@ -118,11 +118,7 @@ public class NetworkMovement : MaleficusMonoBehaviour
         {
             currentMovementInput = new Vector2(eventHandle.Joystick_X, eventHandle.Joystick_Y);
 
-
-            if (MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
-            {
-                notAcknowledgedMovementMessages.Add(eventHandle);
-            }
+            notAcknowledgedMovementMessages.Add(eventHandle);
         }
 
         if (eventHandle.JoystickType == EJoystickType.ROTATION)

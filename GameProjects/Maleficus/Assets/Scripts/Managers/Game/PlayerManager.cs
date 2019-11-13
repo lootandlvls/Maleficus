@@ -257,6 +257,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         float joystick_Y = eventHandle.Joystick_Y;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
+
         if (PlayersMovement.ContainsKey(playerID))
         {
             if (joystickType == EJoystickType.MOVEMENT)
@@ -419,17 +420,19 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
+        EControllerID controllerID = eventHandle.Arg1;
         EPlayerID playerID = eventHandle.Arg2;
         AssignPlayerToTeam(playerID, GetIdenticPlayerTeam(playerID));
 
         if (PlayersMovement.ContainsKey(playerID) == false)
         {
             // Initialize player movement for the new player
+            Debug.Log("Adding new player : " + playerID + " from : " + controllerID);
             PlayersMovement.Add(playerID, new JoystickInput());
         }
         else
         {
-            Debug.LogError("Connecting a player that is already connected");
+            Debug.LogError("Trying to connect a player that is already connected");
         }
 
         // Spawn player On Connect?
@@ -437,7 +440,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             && (ActivePlayers.ContainsKey(playerID) == false)
             && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
         {
-            SpawnPlayer(EPlayerID.PLAYER_1);
+            SpawnPlayer(playerID);
         }
     }
 

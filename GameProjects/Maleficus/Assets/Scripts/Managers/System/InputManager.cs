@@ -186,7 +186,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         ConnectedControllers.Add(controllerID, playerID);
 
-        Debug.Log("Connecting new controller " + controllerID);
+        Debug.Log("Connecting new controller " + controllerID + " to player : " + playerID);
 
         // Invoke event
         Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
