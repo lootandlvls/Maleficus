@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public abstract class AbstractInputSource : MonoBehaviour
+public abstract class AbstractInputSource : MaleficusMonoBehaviour
 {
     public event Action<EControllerID, EInputButton>                        ButtonPressed;
     public event Action<EControllerID, EInputButton>                        ButtonReleased;

@@ -9,8 +9,10 @@ public class TouchJoystickInputSource : AbstractInputSource
     private Vector2 oldMovementInput = new Vector2(0.0f, 0.0f);
     private Vector2 oldRotationInput = new Vector2(0.0f, 0.0f);
 
-    private void Awake()
+    protected override void InitializeObjecsInScene()
     {
+        base.InitializeObjecsInScene();
+
         MaleficusJoystick[] maleficusJoystics = FindObjectsOfType<MaleficusJoystick>();
         foreach(MaleficusJoystick maleficusJoystick in maleficusJoystics)
         {
