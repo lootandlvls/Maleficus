@@ -123,11 +123,11 @@ public class GamepadInputSource : AbstractInputSource
         {
             if (Input.GetButtonDown("Confirm_" + controllerIDName))
             {
-                DebugLog("Confirm pressed by : " + controllerID, "Input");
 
                 if ((InputManager.Instance.IsControllerConnected(controllerID) == true)
                     || (InputManager.Instance.InputMode == EInputMode.TEST))
                 {
+                    DebugLog("Confirm pressed by : " + controllerID, "Input");
                     InvokeButtonPressed(controllerID, EInputButton.CONFIRM);
                 }
                 // Connect controller
@@ -138,6 +138,7 @@ public class GamepadInputSource : AbstractInputSource
                     if ((playerID != EPlayerID.TEST)
                         && (playerID != EPlayerID.NONE))
                     {
+                        DebugLog("Connecting : " + controllerID, "Deafult");
                         InputManager.Instance.ConnectControllerToPlayer(controllerID, playerID);
                     }
                 }

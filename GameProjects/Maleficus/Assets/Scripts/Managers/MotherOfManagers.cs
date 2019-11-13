@@ -10,7 +10,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     [Separator("Networking")]
     [SerializeField] public bool IsServer = false;
-    [ConditionalField(nameof(IsServer), inverse:true)] [SerializeField] public EConnectionMode ConnectionMode = EConnectionMode.EVERYTHING_LOCAL;
+    [ConditionalField(nameof(IsServer), inverse:true)] [SerializeField] public EConnectionMode ConnectionMode = EConnectionMode.PLAY_OFFLINE;
 
     [Separator("Input")]
     [SerializeField] public EInputMode InputMode = EInputMode.CONTROLLER;

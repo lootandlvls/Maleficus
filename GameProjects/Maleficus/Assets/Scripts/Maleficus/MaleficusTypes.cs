@@ -423,10 +423,9 @@ public enum EConnectionMode
 {
     LOCAL_SERVER,
     CLOUD_SERVER,
-    EVERYTHING_LOCAL,
+    PLAY_OFFLINE,
     BNJMO_SERVER,
-    GOOGLE_CLOUD_SERVER,
-    PLAY_OFFLINE
+    GOOGLE_CLOUD_SERVER
 }
 #endregion
 
