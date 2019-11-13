@@ -12,7 +12,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
     public bool HasAuthority                        { get { return ownClientID == EClientID.SERVER; } }
     public EClientID OwnerClientID                    { get { return ownClientID; } }
-    public Account Self;
+    public Local_Account Self;
     public bool PlayingOffline = false;
 
     private byte reliableChannel;
@@ -106,7 +106,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         NetworkTransport.Init();
 
         ConnectionConfig connectionConfig = new ConnectionConfig();
-        reliableChannel = connectionConfig.AddChannel(QosType.Unreliable);
+        reliableChannel = connectionConfig.AddChannel(QosType.Reliable);
 
         HostTopology hostTopology = new HostTopology(connectionConfig, CLIENT_MAX_USER);
 
@@ -347,7 +347,7 @@ Debug.Log("Connecting from Web");
             // successfull login
 
             // this is where we save data about ourself
-            //Self = new Account();
+            //Self = new Local_Account();
             //Self.ActiveConnection = olr.ConnectionId;
             //Self.Username = olr.Username;
             //Self.Discriminator = olr.Discriminator;
