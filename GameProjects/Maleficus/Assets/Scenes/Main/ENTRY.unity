@@ -4452,7 +4452,7 @@ MonoBehaviour:
   logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   IsServer: 0
-  ConnectionMode: 5
+  ConnectionMode: 2
   InputMode: 2
   IsConnectControllerInAnyState: 0
   IsSpawnPlayerOnConnect: 0
