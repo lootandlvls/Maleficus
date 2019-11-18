@@ -23,6 +23,7 @@ public class Mongo
     private IMongoCollection<Model_Lobby> collection_lobbies;
     private IMongoCollection<Model_Game> collection_games;
     private IMongoCollection<Model_Instance> collection_instances;
+    private IMongoCollection<Model_InstanceManager> collection_instance_managers;
     private IMongoCollection<Model_SinglePlayer> collection_single_players;
     private IMongoCollection<Model_DailyMission> collection_daily_missions;
 
@@ -45,6 +46,7 @@ public class Mongo
         collection_lobbies = db.GetCollection<Model_Lobby>("lobbies");
         collection_games = db.GetCollection<Model_Game>("games");
         collection_instances = db.GetCollection<Model_Instance>("instances");
+        collection_instance_managers = db.GetCollection<Model_InstanceManager>("instance_managers");
         collection_single_players = db.GetCollection<Model_SinglePlayer>("single_players");
         collection_daily_missions = db.GetCollection<Model_DailyMission>("daily_missions");
 
@@ -201,7 +203,7 @@ public class Mongo
         return null;
     }
 
-    public Model_Instance FindInstance(ObjectId _id = default(ObjectId), ObjectId game_id = default(ObjectId), ObjectId participant = default(ObjectId))
+    public Model_Instance FindInstance(ObjectId _id = default(ObjectId), ObjectId game_id = default(ObjectId), ObjectId manager = default(ObjectId), ObjectId participant = default(ObjectId))
     {
         if (_id != default(ObjectId))
         {
@@ -210,6 +212,10 @@ public class Mongo
         else if (game_id != default(ObjectId))
         {
             return collection_instances.Find(u => u.game_id == game_id).FirstOrDefault<Model_Instance>();
+        }
+        else if(manager != default(ObjectId))
+        {
+            return collection_instances.Find(u => u.manager == manager).FirstOrDefault<Model_Instance>();
         }
         else if (participant != default(ObjectId))
         {
@@ -226,6 +232,24 @@ public class Mongo
             }
         }
         Debug.Log("FindInstance: No parameter given!");
+        return null;
+    }
+
+    public Model_InstanceManager FindInstanceManager(ObjectId _id = default(ObjectId), string ip = "", string region = "")
+    {
+        if (_id != default(ObjectId))
+        {
+            return collection_instance_managers.Find(u => u._id == _id).FirstOrDefault<Model_InstanceManager>();
+        }
+        else if (ip != "")
+        {
+            return collection_instance_managers.Find(u => u.ip == ip).FirstOrDefault<Model_InstanceManager>();
+        }
+        else if (region != "")
+        {
+            return collection_instance_managers.Find(u => u.region == region).FirstOrDefault<Model_InstanceManager>();
+        }
+        Debug.Log("FindInstanceManager: No parameter given!");
         return null;
     }
 

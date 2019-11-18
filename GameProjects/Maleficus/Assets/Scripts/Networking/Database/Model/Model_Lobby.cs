@@ -9,6 +9,7 @@ public class Model_Lobby
     // other values
     public List<participant> participants { set; get; }
     public byte game_mode { set; get; }
+    public int queue { set; get; }
 
     public struct participant
     {

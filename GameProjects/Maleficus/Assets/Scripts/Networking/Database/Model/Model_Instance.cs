@@ -5,7 +5,7 @@ public class Model_Instance
     // identification
     public ObjectId _id { set; get; }
     public ObjectId game_id { set; get; }
-    public string server_ip { set; get; }
+    public ObjectId manager { set; get; }
     public int port { set; get; }
 
     // other values
