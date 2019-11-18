@@ -25,8 +25,9 @@ public class UserManager : AbstractSingletonManager<UserManager>
     protected override void Awake()
     {
         base.Awake();
-        //CreateLocalData();
-        //LoadSavedData();
+        CreateLocalData();
+        LoadSavedData();
+        print(achievements.ToJson());
     }
 
     protected override void Start()
@@ -46,6 +47,8 @@ public class UserManager : AbstractSingletonManager<UserManager>
     {
         CreateLocalUserAccount(false);
         CreateLocalSpells(false);
+        CreateLocalSinglePlayers(false);
+        CreateLocalAchievements(false);
     }
 
     public static void CreateLocalUserAccount(bool forcedCreate)
@@ -80,6 +83,8 @@ public class UserManager : AbstractSingletonManager<UserManager>
     {
         if(!File.Exists(Application.persistentDataPath + "/savedSpells.gd") || forcedCreate)
         {
+            spells = new List<Local_Spell>();
+            BinaryFormatter bf = new BinaryFormatter();
             FileStream file = null;
             try
             {
@@ -93,6 +98,57 @@ public class UserManager : AbstractSingletonManager<UserManager>
             }
             if(file != null)
             {
+                bf.Serialize(file, spells);
+                file.Close();
+            }
+        }
+    }
+
+    public static void CreateLocalSinglePlayers(bool forcedCreate)
+    {
+        if (!File.Exists(Application.persistentDataPath + "/savedSinglePlayers.gd") || forcedCreate)
+        {
+            singleplayers = new List<Local_SinglePlayer>();
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = null;
+            try
+            {
+                file = File.Create(Application.persistentDataPath + "/savedSinglePlayers.gd");
+            }
+            catch (IOException e)
+            {
+                print(e.Message);
+                File.Delete(Application.persistentDataPath + "/savedSinglePlayers.gd");
+                file = File.Create(Application.persistentDataPath + "/savedSinglePlayers.gd");
+            }
+            if (file != null)
+            {
+                bf.Serialize(file, singleplayers);
+                file.Close();
+            }
+        }
+    }
+
+    public static void CreateLocalAchievements(bool forcedCreate)
+    {
+        if (!File.Exists(Application.persistentDataPath + "/savedAchievements.gd") || forcedCreate)
+        {
+            Local_Achievement achievement = new Local_Achievement();
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = null;
+            try
+            {
+                file = File.Create(Application.persistentDataPath + "/savedAchievements.gd");
+            }
+            catch (IOException e)
+            {
+                print(e.Message);
+                File.Delete(Application.persistentDataPath + "/savedAchievements.gd");
+                file = File.Create(Application.persistentDataPath + "/savedAchievements.gd");
+            }
+            if (file != null)
+            {
+                bf.Serialize(file, achievement);
                 file.Close();
             }
         }
@@ -110,6 +166,14 @@ public class UserManager : AbstractSingletonManager<UserManager>
         if(spells == null)
         {
             LoadSavedSpells();
+        }
+        if(singleplayers == null)
+        {
+            LoadSavedSinglePlayers();
+        }
+        if(achievements == null)
+        {
+            LoadSavedAchievements();
         }
     }
 
@@ -157,6 +221,49 @@ public class UserManager : AbstractSingletonManager<UserManager>
         }
     }
 
+    public static void LoadSavedSinglePlayers()
+    {
+        if (File.Exists(Application.persistentDataPath + "/savedSinglePlayers.gd"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/savedSinglePlayers.gd", FileMode.Open);
+            try
+            {
+                singleplayers = (List<Local_SinglePlayer>)bf.Deserialize(file);
+            }
+            catch (SerializationException ex)
+            {
+                print(ex.Message);
+                file.Close();
+                CreateLocalSinglePlayers(true);
+                return;
+            }
+
+            file.Close();
+        }
+    }
+
+    public static void LoadSavedAchievements()
+    {
+        if (File.Exists(Application.persistentDataPath + "/savedAchievements.gd"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/savedAchievements.gd", FileMode.Open);
+            try
+            {
+                achievements = (Local_Achievement)bf.Deserialize(file);
+            }
+            catch (SerializationException ex)
+            {
+                print(ex.Message);
+                file.Close();
+                CreateLocalAchievements(true);
+                return;
+            }
+
+            file.Close();
+        }
+    }
     #endregion
 
     #region Update
@@ -221,7 +328,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         catch(IOException e)
         {
             print(e.Message);
-            bf.Serialize(file, user);
             file.Close();
             return;
         }
@@ -230,7 +336,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
         file.Close();
     }
 
-    public static void UpdateSavedSpells(bool new_spell, byte spell_id=255, bool selected = false, byte spell_level=255, int spell_xp=-1)
+    public static void UpdateSavedSpells(bool new_spell, bool selected, byte spell_id, byte spell_level=255, int spell_xp=-1)
     {
         // check if spells are already loaded;
         if (spells == null)
@@ -239,15 +345,19 @@ public class UserManager : AbstractSingletonManager<UserManager>
         }
 
         // update values if not null / default
-
         if (new_spell)
         {
+            foreach(Local_Spell local_spell in spells)
+            {
+                if(local_spell.spell_id == spell_id)
+                {
+                    Debug.Log("Tried to add a already existing Spell!");
+                    return;
+                }
+            }
             Local_Spell spell = new Local_Spell();
             spell.selected = selected;
-            if (spell_id != 255)
-            {
-                spell.spell_id = spell_id;
-            }
+            spell.spell_id = spell_id;
             if(spell_level != 255)
             {
                 spell.spell_level = spell_level;
@@ -260,7 +370,23 @@ public class UserManager : AbstractSingletonManager<UserManager>
         }
         else
         {
-            spells
+            // search spell via spell_id
+            foreach(Local_Spell spell in spells)
+            {
+                if (spell.spell_id == spell_id)
+                {
+                    spell.selected = selected;
+                    if(spell_level != 255)
+                    {
+                        spell.spell_level = spell_level;
+                    }
+                    if(spell_xp != -1)
+                    {
+                        spell.spell_xp = spell_xp;
+                    }
+                }
+            }
+
         }
 
         // actually update the file
@@ -273,7 +399,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         catch (IOException e)
         {
             print(e.Message);
-            bf.Serialize(file, spells);
             file.Close();
             return;
         }
@@ -281,5 +406,98 @@ public class UserManager : AbstractSingletonManager<UserManager>
         bf.Serialize(file, spells);
         file.Close();
     }
+
+    public static void UpdateSavedSinglePlayers(bool new_single_player, byte level_id, bool unlocked, bool finished)
+    {
+        // check if spells are already loaded;
+        if (singleplayers == null)
+        {
+            LoadSavedSinglePlayers();
+        }
+
+        // update values if not null / default
+        if (new_single_player)
+        {
+            foreach (Local_SinglePlayer local_single_player in singleplayers)
+            {
+                if (local_single_player.level_id == level_id)
+                {
+                    Debug.Log("Tried to add a already existing Level!");
+                    return;
+                }
+            }
+            Local_SinglePlayer singleplayer = new Local_SinglePlayer();
+            singleplayer.level_id = level_id;
+            singleplayer.unlocked = unlocked;
+            singleplayer.finished = finished;
+            singleplayers.Add(singleplayer);
+        }
+        else
+        {
+            // search spell via spell_id
+            foreach (Local_SinglePlayer single_player in singleplayers)
+            {
+                if (single_player.level_id == level_id)
+                {
+                    single_player.unlocked = unlocked;
+                    single_player.finished = finished;
+                }
+            }
+
+        }
+
+        // actually update the file
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = null;
+        try
+        {
+            file = File.Create(Application.persistentDataPath + "/savedSinglePlayers.gd");
+        }
+        catch (IOException e)
+        {
+            print(e.Message);
+            file.Close();
+            return;
+        }
+
+        bf.Serialize(file, singleplayers);
+        file.Close();
+    }
+
+    public static void UpdateSavedAchievements(int wins=-1, int losses=-1)
+    {
+        // check if user is already loaded;
+        if (achievements == null)
+        {
+            LoadSavedAchievements();
+        }
+
+        // update values if not null / default
+        if(wins != -1)
+        {
+            achievements.wins = wins;
+        }
+        if(losses != -1)
+        {
+            achievements.losses = losses;
+        }
+        // actually update the file
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = null;
+        try
+        {
+            file = File.Create(Application.persistentDataPath + "/savedAchievements.gd");
+        }
+        catch (IOException e)
+        {
+            print(e.Message);
+            file.Close();
+            return;
+        }
+
+        bf.Serialize(file, achievements);
+        file.Close();
+    }
+
     #endregion
 }

@@ -91,7 +91,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
         {
-            Debug.Log("couldn't connect to the internet");
+            Debug.Log("couldn't connect to the internet, or playing offline");
             PlayingOffline = true;
             yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
             UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
