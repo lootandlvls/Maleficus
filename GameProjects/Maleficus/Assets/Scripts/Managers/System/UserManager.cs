@@ -6,7 +6,7 @@ using MongoDB.Bson;
 using System.IO;
 using static Maleficus.MaleficusUtilities;
 using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusVariables;
 using System.Runtime.Serialization;
 
 public class UserManager : AbstractSingletonManager<UserManager>
@@ -77,7 +77,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
     {
         if(!File.Exists(Application.persistentDataPath + "/savedSpells.gd") || forcedCreate)
         {
-            spells = new List<Local_Spell>();
+            saved_spells = new List<Local_Spell>();
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = null;
             try
@@ -92,7 +92,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
             }
             if(file != null)
             {
-                bf.Serialize(file, spells);
+                bf.Serialize(file, saved_spells);
                 file.Close();
             }
         }
@@ -157,7 +157,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
         {
             LoadSavedAccount();
         }
-        if(spells == null)
+        if(saved_spells == null)
         {
             LoadSavedSpells();
         }
@@ -201,7 +201,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
             FileStream file = File.Open(Application.persistentDataPath + "/savedSpells.gd", FileMode.Open);
             try
             {
-                spells = (List<Local_Spell>)bf.Deserialize(file);
+                saved_spells = (List<Local_Spell>)bf.Deserialize(file);
             }
             catch (SerializationException ex)
             {
@@ -333,7 +333,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
     public static void UpdateSavedSpells(bool new_spell, bool selected, byte spell_id, byte spell_level=255, int spell_xp=-1)
     {
         // check if spells are already loaded;
-        if (spells == null)
+        if (saved_spells == null)
         {
             LoadSavedSpells();
         }
@@ -341,7 +341,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
         // update values if not null / default
         if (new_spell)
         {
-            foreach(Local_Spell local_spell in spells)
+            foreach(Local_Spell local_spell in saved_spells)
             {
                 if(local_spell.spell_id == spell_id)
                 {
@@ -360,12 +360,12 @@ public class UserManager : AbstractSingletonManager<UserManager>
             {
                 spell.spell_xp = spell_xp;
             }
-            spells.Add(spell);
+            saved_spells.Add(spell);
         }
         else
         {
             // search spell via spell_id
-            foreach(Local_Spell spell in spells)
+            foreach(Local_Spell spell in saved_spells)
             {
                 if (spell.spell_id == spell_id)
                 {
@@ -397,7 +397,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
             return;
         }
 
-        bf.Serialize(file, spells);
+        bf.Serialize(file, saved_spells);
         file.Close();
     }
 
