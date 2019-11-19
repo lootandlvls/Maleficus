@@ -6,16 +6,11 @@ using MongoDB.Bson;
 using System.IO;
 using static Maleficus.MaleficusUtilities;
 using static Maleficus.MaleficusConsts;
+using static Maleficus.MaleficusConsts;
 using System.Runtime.Serialization;
 
 public class UserManager : AbstractSingletonManager<UserManager>
 {
-    // accessable variables after deserialization
-    public static Local_Account user;
-    public static List<Local_Spell> spells;
-    public static List<Local_SinglePlayer> singleplayers;
-    public static Local_Achievement achievements;
-
     #region Monobehaviour
     public override void OnSceneStartReinitialize()
     {
@@ -27,7 +22,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         base.Awake();
         CreateLocalData();
         LoadSavedData();
-        print(achievements.ToJson());
     }
 
     protected override void Start()
