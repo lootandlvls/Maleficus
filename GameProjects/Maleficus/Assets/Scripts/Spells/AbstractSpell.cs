@@ -40,7 +40,11 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public ESpellID SpellID { get { return spell; } }
 
-    public bool Chargeable { get { return chargeable; } }
+    public bool IsChargeable { get { return chargeable; } }
+
+    public Sprite SpellIcon { get { return spellIcon; } }
+
+    public int SkillPoint { get { return skillPoint; } }
 
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
@@ -50,8 +54,12 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     [SerializeField] private bool hasPushPower;
     [SerializeField] private ESpellID spell;
     [SerializeField] private bool chargeable;
+    [SerializeField] private Sprite spellIcon;
+    [SerializeField] private int skillPoint;
+    
 
-    [SerializeField] private ESpellMovementType movementType;
+
+  [SerializeField] private ESpellMovementType movementType;
     [SerializeField] private List<ESpellEffects> debuffEffects;
     [SerializeField] private List<ESpellEffects> buffEffects;
 

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Player : MaleficusMonoBehaviour, IPlayer                                                
 {
+
+    
     public EPlayerID PlayerID                                               { get; set; }
     public ETeamID TeamID                                                   { get; set; }
     public Vector3 Position                                                 { get { return transform.position; } }
@@ -102,7 +104,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            Debug.Log("Getting player movement for : " + PlayerID);
+
             JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
             if (playerInput != null)
             {

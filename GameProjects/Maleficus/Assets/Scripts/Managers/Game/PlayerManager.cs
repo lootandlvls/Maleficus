@@ -213,7 +213,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
             }
         }
-        else if (spell.Chargeable)
+        else if (spell.IsChargeable)
         {
             ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
         }

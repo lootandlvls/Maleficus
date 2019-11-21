@@ -336,10 +336,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
 
         yield return new WaitForSeconds(0.3f);
-/*
+
         AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
         spell.CastingPlayerID = playerID;       
-       // spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;*/
+        spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
     }
 
     private void InitializeSpells()

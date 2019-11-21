@@ -32,6 +32,9 @@ public interface ISpell
 
     float PushDuration { get; }
 
-    bool Chargeable { get; }
+    bool IsChargeable { get; }
 
+    Sprite SpellIcon { get; }
+
+    int SkillPoint { get; }
 }
