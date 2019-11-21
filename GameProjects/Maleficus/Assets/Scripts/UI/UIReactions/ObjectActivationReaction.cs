@@ -7,7 +7,7 @@ public class ObjectActivationReaction : AbstractUIReaction {
 
     protected override void PlayAppropriateReaction(EMenuState newState)
     {
-        if (newState.ContainedIn(activeOnStates))
+        if (newState.ContainedIn(activeOnSubStates))
         {
             gameObject.SetActive(true);
         }

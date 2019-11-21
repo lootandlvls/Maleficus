@@ -127,7 +127,14 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 currentScene = EScene.ENTRY;
                 break;
             case EScene.MENU:
-                SceneManager.LoadScene(SCENE_MENU);
+                if (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.PLAY_OFFLINE)
+                {
+                    SceneManager.LoadScene(SCENE_MENU_COUCH);
+                }
+                else
+                {
+                    SceneManager.LoadScene(SCENE_MENU_MOBILE);
+                }
                 currentScene = EScene.MENU;
                 break;
 
@@ -242,15 +249,15 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         Debug.Log("Loading level done : " + newScene.name);
         EventManager.Instance.APP_SceneChanged.Invoke(new Event_GenericHandle<EScene>(CurrentScene));
 
-        // Validity test
-        if ((newScene.name != SCENE_GAME)
-            && (newScene.name != SCENE_MENU)
-            && (newScene.name != SCENE_ENTRY)
-            && (newScene.name != SCENE_DUNGEON_SELECTION)
-            )
-        {
-            Debug.LogError("Loaded level doesn't match to build levels");
-        }
+        //// Validity test
+        //if ((newScene.name != SCENE_GAME)
+        //    && (newScene.name != SCENE_MENU)
+        //    && (newScene.name != SCENE_ENTRY)
+        //    && (newScene.name != SCENE_DUNGEON_SELECTION)
+        //    )
+        //{
+        //    Debug.LogError("Loaded level doesn't match to build levels");
+        //}
     }
 
     private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)

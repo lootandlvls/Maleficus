@@ -14,7 +14,8 @@ namespace Maleficus
 
         /* Scene names (in build settings) */
         public const string SCENE_ENTRY = "ENTRY";
-        public const string SCENE_MENU = "MENU";
+        public const string SCENE_MENU_COUCH = "MENU_COUCH";
+        public const string SCENE_MENU_MOBILE = "MENU_MOBILE";
         public const string SCENE_GAME = "GAME";
         public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
@@ -108,8 +109,8 @@ namespace Maleficus
     {
         { EScene.NONE,              EMenuState.NONE},
         { EScene.ENTRY,             EMenuState.IN_ENTRY},
-        { EScene.MENU,              EMenuState.IN_MENU},
-        { EScene.GAME,              EMenuState.IN_GAME_NOT_STARTED}
+        { EScene.MENU,              EMenuState.IN_MENU_MAIN},
+        { EScene.GAME,              EMenuState.IN_GAME_IN_NOT_STARTED}
     };
 
 
@@ -160,10 +161,6 @@ namespace Maleficus
 
         /* UI States classifications lists */
         // Update these lists when more states are added to MenuState!
-        public static EMenuState[] MENU_STATES_STARTUP = new EMenuState[]
-        {
-        EMenuState.IN_STARTUP
-        };
         public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
         {
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN,

@@ -19,13 +19,13 @@ public class SpriteRotatorReaction : AbstractUIReaction
 
     protected override void PlayAppropriateReaction(EMenuState newState)
     {
-        if (newState == activeOnState)
+        if (newState.ContainedIn(activeOnStates))
         {
             canRotate = true;
-            transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
         }
         else
         {
+            transform.rotation = Quaternion.Euler(0.0f, 0.0f, 0.0f);
             canRotate = false;
         }
     }

@@ -200,7 +200,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     }
                     break;
                 case ENetworkMessageType.LOGGED_IN:
-                    UpdateState(EMenuState.IN_MENU);
+                    UpdateState(EMenuState.IN_MENU_MAIN);
                     break;
                 case ENetworkMessageType.REGISTERED:
                     UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
@@ -228,16 +228,16 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     }
     private void On_GAME_GameUnPaused(EGameMode obj)
     {
-        UpdateState(EMenuState.IN_GAME_RUNNING);
+        UpdateState(EMenuState.IN_GAME_IN_RUNNING);
     }
     private void On_GAME_GamePaused(EGameMode obj)
     {
-        UpdateState(EMenuState.IN_GAME_PAUSED);
+        UpdateState(EMenuState.IN_GAME_IN_PAUSED);
     }
 
     private void On_GAME_GameStarted(EGameMode obj)
     {
-        UpdateState(EMenuState.IN_GAME_RUNNING);
+        UpdateState(EMenuState.IN_GAME_IN_RUNNING);
     }
     #endregion
 

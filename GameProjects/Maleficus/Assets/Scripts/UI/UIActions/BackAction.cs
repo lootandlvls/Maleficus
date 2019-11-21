@@ -7,6 +7,6 @@ public class BackAction : AbstractUIAction
 {
     public bool IsStaysInSameAppState { get { return isStaysInSameAppState; } }
 
-    [SerializeField] private bool isStaysInSameAppState = false; 
+    [SerializeField] private bool isStaysInSameAppState = true; 
 
 }

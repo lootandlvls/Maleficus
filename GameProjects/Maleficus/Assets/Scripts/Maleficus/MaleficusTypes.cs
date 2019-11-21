@@ -308,21 +308,26 @@ public class JoystickInput
 public enum EMenuState
 {
     NONE,
+
+    /* Entry */
     IN_ENTRY,
-    IN_MENU,
-    IN_CONNECTING_PLAYERS,
-    IN_STARTUP,                                                                         //TODO [Leon]: Define. Ambiguous meaning
-                                                                                        /* Login context */
     IN_ENTRY_IN_LOGIN,
     IN_ENTRY_IN_LOGIN_IN_LOGIN,
     IN_ENTRY_IN_LOGIN_IN_REGISTER,
     IN_ENTRY_IN_LOGIN_IN_FOLLOW,
     IN_ENTRY_IN_LOGIN_IN_LEGAL,
-    /* Game context */
-    IN_GAME_NOT_STARTED,
-    IN_GAME_ABOUT_TO_START,
-    IN_GAME_RUNNING,
-    IN_GAME_PAUSED,
+
+    /* Menu */
+    IN_MENU_MAIN,
+    IN_MENU_IN_GAME_MODE_SELECTION,
+    IN_MENU_IN_SPELL_SELECTION,
+    IN_MENU_IN_ARENA_SELECTION,
+
+    /* Game */
+    IN_GAME_IN_NOT_STARTED,
+    IN_GAME_IN_COUNTDOWN,
+    IN_GAME_IN_RUNNING,
+    IN_GAME_IN_PAUSED,
     IN_GAME_OVER
 }
 
