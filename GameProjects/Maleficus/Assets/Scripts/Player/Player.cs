@@ -102,7 +102,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
         if (true) //AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            Debug.Log("Getting player movement for : " + PlayerID);
             JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
             if (playerInput != null)
             {
@@ -195,7 +194,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             {
                 IsPlayerCharging = true;
 
-                Debug.Log("Player started Charging");
+                DebugLog("Player started Charging", "SPELL_CHARGE");
                 StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
             }
@@ -208,7 +207,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        Debug.Log("player stopped charging " + spellSlot);
+        DebugLog("player stopped charging " + spellSlot, "SPELL_CHARGE");
         IsPlayerCharging = false;
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
@@ -273,18 +272,18 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         IsReadyToShoot = true;
         readyToUseSpell[spellSlot] = true;
 
-        Debug.Log("ready to use the spell again");
+        DebugLog("ready to use the spell again", "SPELL_CHARGE");
     }
 
 
 
     private IEnumerator SpellChargingCoroutine(ESpellSlot spellSlot)
     {
-        Debug.Log("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot);
+        DebugLog("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
         while ((IsPlayerCharging == true)
             && ((readyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
         {
-            Debug.Log("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot);
+            DebugLog("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
             yield return new WaitForEndOfFrame();
         }
 
@@ -305,6 +304,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
             ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
 
+            spellChargingLVL = 0;
             while (IsPlayerCharging)
             {
                 var mainPS = particleSystemBodyEffect.main;
@@ -316,17 +316,25 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 counter += 4;       // TODO: Add how an attribute in spell to influence how fast second level is charged
                 if (counter > 100)
                 {
-                    spellChargingLVL = 2;
-                    //Debug.Log("Spell upgraded to lvl 2");
+                    if (spellChargingLVL != 2)
+                    {
+                        spellChargingLVL = 2;
+                        DebugLog("Spell upgraded to lvl 2", "SPELL_CHARGE");
+                    }
                 }
                 else
                 {
+                    if (spellChargingLVL != 1)
+                    {
+
                     spellChargingLVL = 1;
-                    //Debug.Log("Spell upgraded to lvl 1");
+                    DebugLog("Spell upgraded to lvl 1", "SPELL_CHARGE");
+                    }
+
                 }
                 yield return new WaitForEndOfFrame();
             }
-            Debug.Log("spellCharging function Done!!");
+            DebugLog("spellCharging function Done!!", "SPELL_CHARGE");
 
             myAnimator.SetBool("charging", false);
             StopSlowDownPlayer();
@@ -334,7 +342,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             particleSystemBodyEffect.Stop();
             particleSystemWandEffect.Stop();
 
-            Debug.Log("counter = " + counter);
+            DebugLog("counter = " + counter, "SPELL_CHARGE");
         }
     }
     #endregion
@@ -344,7 +352,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     {
         if (myDirectionalSprites.Length == 0)
         {
-            Debug.Log("directional sprites empty");
+            Debug.LogError("PLayer's directional sprites are empty!");
             myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
         }
 
@@ -409,7 +417,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public void PushPlayer(Vector3 velocity, float duration)
     {
         pushVelocity = velocity;
-        Debug.Log("§$%§$% Player pushed : " + velocity);
 
         if (duration <= 0.0f)
         {

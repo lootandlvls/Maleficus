@@ -17,8 +17,8 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [ConditionalField(nameof(InputMode), false, EInputMode.CONTROLLER)] [SerializeField] public bool IsConnectControllerInAnyState = false;
 
     [Separator("Player")]
-    [SerializeField] public bool IsSpawnPlayerOnConnect = false;
-    [SerializeField] public bool IsSpawnAllPlayers = false;
+    [SerializeField] public bool IsSpawnPlayerOnControllerConnect = false;
+    [SerializeField] public bool IsSpawnRemainingPlayersOnGameStart = false;
     [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
 

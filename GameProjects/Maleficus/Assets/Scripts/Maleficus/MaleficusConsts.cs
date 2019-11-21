@@ -75,8 +75,8 @@ namespace Maleficus
 
         // Input
         public const float THRESHOLD_JOYSTICK_ACTIVATION = 0.2f;
-        public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.3f;
-        public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.2f;
+        public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.1f;
+        public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.1f;
 
         public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
 
@@ -193,6 +193,14 @@ namespace Maleficus
         EControllerID.GAMEPAD_B,
         EControllerID.GAMEPAD_C,
         EControllerID.GAMEPAD_D
+        };
+
+        public static EControllerID[] AI_CONTROLLERS = new EControllerID[]
+        {
+        EControllerID.AI_1,
+        EControllerID.AI_2,
+        EControllerID.AI_3,
+        EControllerID.AI_4
         };
 
 

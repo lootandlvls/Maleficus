@@ -651,6 +651,52 @@ namespace Maleficus
             return result;
         }
 
+        /// <summary> Converts a controllerID (AI or Network) to a PlayerID </summary>
+        public static EPlayerID GetPlayerIDFrom(EControllerID controllerID)
+        {
+            EPlayerID result = EPlayerID.NONE;
+            switch (controllerID)
+            {
+                /* AI */
+                case EControllerID.AI_1:
+                    result = EPlayerID.PLAYER_1;
+                    break;
+
+                case EControllerID.AI_2:
+                    result = EPlayerID.PLAYER_2;
+                    break;
+
+                case EControllerID.AI_3:
+                    result = EPlayerID.PLAYER_3;
+                    break;
+
+                case EControllerID.AI_4:
+                    result = EPlayerID.PLAYER_4;
+                    break;
+
+                /* Network */
+                case EControllerID.NETWORK_1:
+                    result = EPlayerID.PLAYER_1;
+                    break;
+
+                case EControllerID.NETWORK_2:
+                    result = EPlayerID.PLAYER_2;
+                    break;
+
+                case EControllerID.NETWORK_3:
+                    result = EPlayerID.PLAYER_3;
+                    break;
+
+                case EControllerID.NETWORK_4:
+                    result = EPlayerID.PLAYER_4;
+                    break;
+            }
+            return result;
+        }
+
+
+
+
         /// <summary> Converts an array with 3 elements to a Vector3 </summary>
         public static Vector3 GetVectorFrom(float[] vector)
         {
