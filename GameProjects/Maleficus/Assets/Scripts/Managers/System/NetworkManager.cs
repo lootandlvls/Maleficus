@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static Maleficus.MaleficusConsts;
 using static Maleficus.MaleficusUtilities;
+using static Maleficus.MaleficusVariables;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
@@ -38,7 +39,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     /// <summary>
     /// Message already sent to the server but not acnkowledged back yet
     /// </summary>
-    private List<AbstractNetMessage> nonAcnkowledgedMessages = new List<AbstractNetMessage>();
+    private List<AbstractNetMessage> nonAcknowledgedMessages = new List<AbstractNetMessage>();
 
     #region Monobehaviour
 
@@ -48,6 +49,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         base.InitializeEventsCallbacks();
 
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+        EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
     }
 
 
@@ -91,7 +93,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
         {
-            Debug.Log("couldn't connect to the internet");
+            Debug.Log("couldn't connect to the internet, or playing offline");
             PlayingOffline = true;
             yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
             UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
@@ -534,6 +536,14 @@ Debug.Log("Connecting from Web");
         Debug.Log("trying to send requestollow");
     }
 
+    protected virtual void CheckForSavedLoginData()
+    {
+        if(user.email != "" && user.password != "")
+        {
+            SendLoginRequest(user.email, user.password);
+        }
+    }
+
     #endregion
 
     #region Lobby related
@@ -568,6 +578,16 @@ Debug.Log("Connecting from Web");
         {
             case EAppState.IN_GAME_IN_NOT_STARTED:
                 SendRequestGameInfo();
+                break;
+        }
+    }
+
+    protected virtual void On_UI_MenuStateUpdated(Event_StateUpdated<EMenuState> eventHandle)
+    {
+        switch (eventHandle.NewState)
+        {
+            case EMenuState.IN_ENTRY_IN_LOGIN:
+
                 break;
         }
     }
