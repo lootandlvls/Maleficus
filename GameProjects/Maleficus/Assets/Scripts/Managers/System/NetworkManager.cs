@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using static Maleficus.MaleficusConsts;
 using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusVariables;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
@@ -538,10 +537,10 @@ Debug.Log("Connecting from Web");
 
     protected virtual void CheckForSavedLoginData()
     {
-        if(user.email != "" && user.password != "")
+        /*if(user.email != "" && user.password != "")
         {
             SendLoginRequest(user.email, user.password);
-        }
+        }*/
     }
 
     #endregion

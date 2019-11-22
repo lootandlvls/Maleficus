@@ -922,7 +922,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
-  activeOnState: 1
+  isLoadSubStates: 1
+  activeOnStates: 01000000
 --- !u!114 &306061634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1823,7 +1824,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
-  activeOnState: 6
+  isLoadSubStates: 1
+  activeOnStates: 03000000
 --- !u!1 &680908185
 GameObject:
   m_ObjectHideFlags: 0
@@ -2180,7 +2182,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
-  activeOnState: 7
+  isLoadSubStates: 1
+  activeOnStates: 04000000
 --- !u!1 &796254796
 GameObject:
   m_ObjectHideFlags: 0
@@ -4452,11 +4455,11 @@ MonoBehaviour:
   logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   IsServer: 0
-  ConnectionMode: 2
+  ConnectionMode: 0
   InputMode: 2
   IsConnectControllerInAnyState: 0
-  IsSpawnPlayerOnConnect: 0
-  IsSpawnAllPlayers: 0
+  IsSpawnPlayerOnControllerConnect: 0
+  IsSpawnRemainingPlayersOnGameStart: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsDebugLogEvents: 1
@@ -6256,7 +6259,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
-  activeOnState: 5
+  isLoadSubStates: 1
+  activeOnStates: 02000000
 --- !u!114 &2016787067
 MonoBehaviour:
   m_ObjectHideFlags: 0
