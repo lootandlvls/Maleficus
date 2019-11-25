@@ -200,11 +200,12 @@ namespace Maleficus
         #endregion
 
         #region Networking
-        private const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
-        private const string USERNAME_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{1,13}$";
+        public const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
+        public const string USERNAME_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{1,18}$";
+        public const string USERNAME_PLAYER_PATTERN = "^(player[0-9]{1,14})$";
         //private const string PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,20}$";
-        private const string PASSWORD_PATTERN = "^[a-zA-Z0-9!#$%&*?^+_~.,=-]{5,20}$";
-        private const string RANDOM_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        public const string PASSWORD_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{5,20}$";
+        public const string RANDOM_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         public static bool IsEmail(string email)
         {
@@ -222,7 +223,10 @@ namespace Maleficus
         {
             if (username != null)
             {
-                return Regex.IsMatch(username, USERNAME_PATTERN);
+                if(!Regex.IsMatch(username, USERNAME_PLAYER_PATTERN))
+                {
+                    return Regex.IsMatch(username, USERNAME_PATTERN);
+                }
             }
             return false;
         }

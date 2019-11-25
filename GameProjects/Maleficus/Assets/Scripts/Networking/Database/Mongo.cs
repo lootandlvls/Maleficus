@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static Maleficus.MaleficusUtilities;
+using System.Text.RegularExpressions;
 
 public class Mongo
 {
@@ -279,15 +280,14 @@ public class Mongo
     #region Insert
     public bool InsertAccount()
     {
-        /*
         Model_Account new_account = new Model_Account();
         new_account.password = "" + UnityEngine.Random.Range(0, 99999).ToString("00000");
         new_account.user_name = "player";
-        List<Model_Account> users_with_standard_name = new List<Model_Account>();
-        users_with_standard_name = collection_accounts.Find ToList<Model_Account>();
+        Model_Account users_with_standard_name = (Model_Account)collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).SortByDescending(u => u.user_name).Limit(1);
+        String[] parts_of_player_number = users_with_standard_name.user_name.Split('r');
+        new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
 
-
-        accounts.InsertOne(newAccount);*/
+        collection_accounts.InsertOne(new_account);
         return true;
     }
     #endregion
