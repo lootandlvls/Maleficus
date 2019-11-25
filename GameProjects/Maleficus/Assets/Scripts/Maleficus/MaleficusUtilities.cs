@@ -200,21 +200,12 @@ namespace Maleficus
         #endregion
 
         #region Networking
-        private const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
-        private const string USERNAME_AND_DISCRIMINATOR_PATTERN = @"^[a-zA-Z0-9]{4,20}#[0-9]{4}$";
-        private const string USERNAME_PATTERN = @"^[a-zA-Z0-9]{4,20}$";
-        /*
-        ^                         Start anchor
-        (?=.*[A-Z])               Ensure string has one uppercase letter.
-        (?=.*[!@#$&*])            Ensure string has one special case letter.
-        (?=.*[0-9])               Ensure string has one digit.
-        (?=.*[a-z].*[a-z].*[a-z]) Ensure string has three lowercase letters.
-        .{8,20}                   Ensure string is of length 8-20.
-        $                         End anchor.
-        */
+        public const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
+        public const string USERNAME_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{1,18}$";
+        public const string USERNAME_PLAYER_PATTERN = "^(player[0-9]{1,14})$";
         //private const string PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,20}$";
-        private const string PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,20}$";
-        private const string RANDOM_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        public const string PASSWORD_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{5,20}$";
+        public const string RANDOM_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         public static bool IsEmail(string email)
         {
@@ -226,19 +217,18 @@ namespace Maleficus
             {
                 return false;
             }
-
         }
 
         public static bool IsUsername(string username)
         {
             if (username != null)
             {
-                return Regex.IsMatch(username, USERNAME_PATTERN);
+                if(!Regex.IsMatch(username, USERNAME_PLAYER_PATTERN))
+                {
+                    return Regex.IsMatch(username, USERNAME_PATTERN);
+                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static bool IsPassword(string password)
@@ -247,22 +237,7 @@ namespace Maleficus
             {
                 return Regex.IsMatch(password, PASSWORD_PATTERN);
             }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static bool IsUsernameAndDiscriminator(string username)
-        {
-            if (username != null)
-            {
-                return Regex.IsMatch(username, USERNAME_AND_DISCRIMINATOR_PATTERN);
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         public static string GenerateRandom(int length)

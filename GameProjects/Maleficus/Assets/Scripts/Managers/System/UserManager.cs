@@ -25,7 +25,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
     protected override void Awake()
     {
         base.Awake();
-        CreateLocalData();
         LoadSavedData();
     }
 

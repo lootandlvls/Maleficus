@@ -46,7 +46,7 @@ public class FriendsContext : MonoBehaviour
     {
         string usernameDiscriminator = addFollowInput.text;
 
-        if (!IsUsernameAndDiscriminator(usernameDiscriminator) && !IsEmail(usernameDiscriminator))
+        if (!IsUsername(usernameDiscriminator) && !IsEmail(usernameDiscriminator))
         {
             Debug.Log("Invalid format!");
             return;
