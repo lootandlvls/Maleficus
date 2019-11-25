@@ -483,7 +483,7 @@ Debug.Log("Connecting from Web");
     {
         // todo: username and token working and messages should work
         // invalid email or username
-        if (!IsUsernameAndDiscriminator(usernameOrEmail) && !IsEmail(usernameOrEmail))
+        if (!IsUsername(usernameOrEmail) && !IsEmail(usernameOrEmail))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
             LoginContext.Instance.EnableInputs();
