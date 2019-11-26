@@ -267,18 +267,28 @@ public class Mongo
     #endregion
 
     #region Insert
-    public bool InsertAccount(bool random)
+    public Model_Account InsertAccount(bool random)
     {
+        Model_Account new_account = new Model_Account();
         if (random)
         {
             // create random account
-            Model_Account new_account = new Model_Account();
-            new_account.password = Sha256FromString("" + UnityEngine.Random.Range(0, 99999).ToString("00000"));
-            new_account.user_name = "player";
-            Model_Account users_with_standard_name = (Model_Account)collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).SortByDescending(u => u.user_name).Limit(1);
-            String[] parts_of_player_number = users_with_standard_name.user_name.Split('r');
-            new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
-            new_account.user_name = Sha256FromString(new_account.user_name);
+            new_account.password = UnityEngine.Random.Range(0, 99999).ToString("00000");
+            List<Model_Account> users_with_standard_name = collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).ToList();
+            
+            if(users_with_standard_name.Count > 0)
+            {
+                String[] parts_of_player_number = users_with_standard_name[users_with_standard_name.Count - 1].user_name.Split('_');
+                new_account.user_name = "player_";
+                new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
+            }
+            else
+            {
+                new_account.user_name = "player_1";
+            }
+
+
+            new_account.account_created = DateTime.UtcNow;
             collection_accounts.InsertOne(new_account);
         }
         else
@@ -286,7 +296,7 @@ public class Mongo
             // create account with given user_name, email and password
         }
 
-        return true;
+        return new_account;
     }
     #endregion
 

@@ -202,7 +202,7 @@ namespace Maleficus
         #region Networking
         public const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
         public const string USERNAME_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{1,18}$";
-        public const string USERNAME_PLAYER_PATTERN = "^(player[0-9]{1,14})$";
+        public const string USERNAME_PLAYER_PATTERN = "^(player_[0-9]{1,14})$";
         //private const string PASSWORD_PATTERN = "^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,20}$";
         public const string PASSWORD_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{5,20}$";
         public const string RANDOM_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
