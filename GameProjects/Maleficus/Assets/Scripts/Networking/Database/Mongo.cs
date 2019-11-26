@@ -95,7 +95,6 @@ public class Mongo
         Debug.Log("FindAccount: No parameter given!");
         return null;
     }
-
     public List<Model_Friend> FindFriends(ObjectId friend=default(ObjectId))
     {
         if(friend != default(ObjectId))
@@ -105,7 +104,6 @@ public class Mongo
         Debug.Log("FindFriends: No parameter given!");
         return null;
     }
-
     public List<Model_FriendRequest> FindFriendRequests(ObjectId asker=default(ObjectId), ObjectId possible_friend=default(ObjectId))
     {
         if(asker != default(ObjectId))
@@ -118,7 +116,6 @@ public class Mongo
         Debug.Log("FindFriendRequests: No parameter given!");
         return null;
     }
-
     public List<Model_Spell> FindSpells(ObjectId account_id=default(ObjectId))
     {
         if(account_id != default(ObjectId))
@@ -129,7 +126,6 @@ public class Mongo
         Debug.Log("FindSpells: No parameter given!");
         return null;
     }
-
     public List<Model_Skin> FindSkins(ObjectId account_id=default(ObjectId))
     {
         if(account_id != default(ObjectId))
@@ -140,7 +136,6 @@ public class Mongo
         Debug.Log("FindSkins: No parameter given!");
         return null;
     }
-
     public List<Model_OtherBuyable> FindOtherBuyables(ObjectId account_id = default(ObjectId))
     {
         if(account_id != default(ObjectId))
@@ -150,7 +145,6 @@ public class Mongo
         Debug.Log("FindOtherBuyables: No parameter given!");
         return null;
     }
-
     public Model_Lobby FindLobby(ObjectId _id = default(ObjectId), ObjectId initialiser=default(ObjectId), ObjectId participant=default(ObjectId))
     {
         if (_id != default(ObjectId))
@@ -175,7 +169,6 @@ public class Mongo
         Debug.Log("FindLobbies: No parameter given!");
         return null;
     }
-
     public Model_Game FindGame(ObjectId _id = default(ObjectId), ObjectId instance_id = default(ObjectId), ObjectId player = default(ObjectId))
     {
         if (_id != default(ObjectId))
@@ -203,7 +196,6 @@ public class Mongo
         Debug.Log("FindGames: No parameter given!");
         return null;
     }
-
     public Model_Instance FindInstance(ObjectId _id = default(ObjectId), ObjectId game_id = default(ObjectId), ObjectId manager = default(ObjectId), ObjectId participant = default(ObjectId))
     {
         if (_id != default(ObjectId))
@@ -235,7 +227,6 @@ public class Mongo
         Debug.Log("FindInstance: No parameter given!");
         return null;
     }
-
     public Model_InstanceManager FindInstanceManager(ObjectId _id = default(ObjectId), string ip = "", string region = "")
     {
         if (_id != default(ObjectId))
@@ -253,7 +244,6 @@ public class Mongo
         Debug.Log("FindInstanceManager: No parameter given!");
         return null;
     }
-
     public List<Model_SinglePlayer> FindSinglePlayers(ObjectId account_id = default(ObjectId))
     {
         if (account_id != default(ObjectId))
@@ -264,7 +254,6 @@ public class Mongo
         Debug.Log("FindSinglePlayers: No parameter given!");
         return null;
     }
-
     public List<Model_DailyMission> FindDailyMissions(ObjectId account_id = default(ObjectId))
     {
         if (account_id != default(ObjectId))
@@ -278,16 +267,25 @@ public class Mongo
     #endregion
 
     #region Insert
-    public bool InsertAccount()
+    public bool InsertAccount(bool random)
     {
-        Model_Account new_account = new Model_Account();
-        new_account.password = "" + UnityEngine.Random.Range(0, 99999).ToString("00000");
-        new_account.user_name = "player";
-        Model_Account users_with_standard_name = (Model_Account)collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).SortByDescending(u => u.user_name).Limit(1);
-        String[] parts_of_player_number = users_with_standard_name.user_name.Split('r');
-        new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
+        if (random)
+        {
+            // create random account
+            Model_Account new_account = new Model_Account();
+            new_account.password = Sha256FromString("" + UnityEngine.Random.Range(0, 99999).ToString("00000"));
+            new_account.user_name = "player";
+            Model_Account users_with_standard_name = (Model_Account)collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).SortByDescending(u => u.user_name).Limit(1);
+            String[] parts_of_player_number = users_with_standard_name.user_name.Split('r');
+            new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
+            new_account.user_name = Sha256FromString(new_account.user_name);
+            collection_accounts.InsertOne(new_account);
+        }
+        else
+        {
+            // create account with given user_name, email and password
+        }
 
-        collection_accounts.InsertOne(new_account);
         return true;
     }
     #endregion
@@ -315,7 +313,7 @@ public class Mongo
         // update by the given values
         if (password != "")
         {
-            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("password", password));
+            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("password", Sha256FromString(password)));
         }
 
         if (user_name != "")

@@ -1,14 +1,17 @@
-﻿[System.Serializable]
+﻿using MongoDB.Bson;
+[System.Serializable]
 public class Net_OnCreateAccount : AbstractNetMessage
 {
     public Net_OnCreateAccount()
     {
         MessageType = ENetMessageType.ON_CREATE_ACCOUNT;
     }
-    public byte Success { set; get; }
-    public string Information { set; get; }
+    public byte success { set; get; }
     
-    public int ConnectionId { set; get; }
-    public string Username { set; get; }
-    public string Discriminator { set; get; }
+    public bool random { set; get; }
+    public int main_connection { set; get; }
+    public string user_name { set; get; }
+    public string password { set; get; }
+    public string email { set; get; }
+    public BsonDateTime account_created { set; get; }
 }

@@ -97,15 +97,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             };
         }
 
-        GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
-        foreach (GoBackToLoginAction Action in GBLActions)
-        {
-            Action.ActionButtonPressed += () =>
-            {
-                UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
-            };
-        }
-
         LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
         foreach (LoginRequestAction Action in LRActions)
         {
