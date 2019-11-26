@@ -132,6 +132,12 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                 NetworkManager.Instance.SendInitLobby();
             };
         }
+
+        RegisterOkAction[] ROActions = FindObjectsOfType<RegisterOkAction>();
+        foreach(RegisterOkAction Action in ROActions)
+        {
+            NetworkManager.Instance.OnRegisterOk();
+        }
     }
         
     #region Events Callbacks

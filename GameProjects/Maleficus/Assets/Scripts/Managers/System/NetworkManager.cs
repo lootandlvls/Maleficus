@@ -236,7 +236,6 @@ Debug.Log("Connecting from Web");
             case ENetMessageType.ON_CREATE_ACCOUNT:
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)netMessage);
-                UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
                 break;
 
             case ENetMessageType.ON_LOGIN_REQUEST:
@@ -325,7 +324,7 @@ Debug.Log("Connecting from Web");
         UserManager.CreateLocalUserAccount(true);
         UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255,-1,255,-1,255,oca.account_created,default(BsonDateTime));
         UserManager.LoadSavedAccount();
-        if (!oca.random)
+        if (oca.random)
         {
             AutoAccountContext.Instance.EnableInputs();
             AutoAccountContext.Instance.user_name.text = UserManager.user.user_name;
@@ -474,10 +473,9 @@ Debug.Log("Connecting from Web");
             ca.user_name = user_name;
             ca.password = Sha256FromString(password);
             ca.email = email;
+            RegisterContext.Instance.ChangeAuthenticationMessage("Sending create account request...");
         }
 
-
-        RegisterContext.Instance.ChangeAuthenticationMessage("Sending create account request...");
         SendServer(ca);
     }
 
@@ -590,6 +588,11 @@ Debug.Log("Connecting from Web");
                 SendCreateAccount(true);
                 break;
         }
+    }
+
+    public void OnRegisterOk()
+    {
+        UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
     }
 
 #endregion
