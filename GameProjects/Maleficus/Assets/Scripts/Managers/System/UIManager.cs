@@ -97,15 +97,6 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             };
         }
 
-        GoBackToLoginAction[] GBLActions = FindObjectsOfType<GoBackToLoginAction>();
-        foreach (GoBackToLoginAction Action in GBLActions)
-        {
-            Action.ActionButtonPressed += () =>
-            {
-                UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
-            };
-        }
-
         LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
         foreach (LoginRequestAction Action in LRActions)
         {
@@ -140,6 +131,12 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             {
                 NetworkManager.Instance.SendInitLobby();
             };
+        }
+
+        RegisterOkAction[] ROActions = FindObjectsOfType<RegisterOkAction>();
+        foreach(RegisterOkAction Action in ROActions)
+        {
+            NetworkManager.Instance.OnRegisterOk();
         }
     }
         

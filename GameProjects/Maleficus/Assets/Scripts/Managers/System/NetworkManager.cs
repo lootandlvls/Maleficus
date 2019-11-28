@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
+using MongoDB.Bson;
 using static Maleficus.MaleficusConsts;
 using static Maleficus.MaleficusUtilities;
 
@@ -41,8 +42,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private List<AbstractNetMessage> nonAcknowledgedMessages = new List<AbstractNetMessage>();
 
     #region Monobehaviour
-
-
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
@@ -50,8 +49,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
     }
-
-
     protected override void Start()
     {
         base.Start();
@@ -59,7 +56,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         pingedSuccessfully = false;
         StartCoroutine(ConnectToServerCoroutine());
     }
-
     public override void OnSceneStartReinitialize()
     {
         Init();
@@ -77,17 +73,14 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         // Broadcast event if main sender
         SendServer(netMessage);
     }
-
     protected void UpdateReceivedMessage(ENetworkMessageType receivedMessage)
     {
         EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
-
     public virtual void Init()
     {
 
     }
-
     private IEnumerator ConnectToServerCoroutine()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
@@ -144,12 +137,10 @@ Debug.Log("Connecting from Web");
         // Start fetching network messages
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
-
     public void Shutdown()
     {
         NetworkTransport.Shutdown();
     }
-
     private IEnumerator UpdateMessagePumpCoroutine()
     {
         Debug.Log("Trying to connect to the Server...");
@@ -245,7 +236,6 @@ Debug.Log("Connecting from Web");
             case ENetMessageType.ON_CREATE_ACCOUNT:
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)netMessage);
-                UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
                 break;
 
             case ENetMessageType.ON_LOGIN_REQUEST:
@@ -331,9 +321,20 @@ Debug.Log("Connecting from Web");
 
     private void OnCreateAccount(Net_OnCreateAccount oca)
     {
-        LoginContext.Instance.EnableInputs();
-        LoginContext.Instance.ChangeAuthenticationMessage(oca.Information);
-
+        UserManager.CreateLocalUserAccount(true);
+        UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255,-1,255,-1,255,oca.account_created,default(BsonDateTime));
+        UserManager.LoadSavedAccount();
+        if (oca.random)
+        {
+            AutoAccountContext.Instance.EnableInputs();
+            AutoAccountContext.Instance.user_name.text = UserManager.user.user_name;
+            AutoAccountContext.Instance.password.text = UserManager.user.password;
+        }
+        else
+        {
+            RegisterContext.Instance.EnableInputs();
+            RegisterContext.Instance.ChangeAuthenticationMessage("Registered!");
+        }
     }
     private void OnLoginRequest(Net_OnLoginRequest olr)
     {
@@ -416,7 +417,7 @@ Debug.Log("Connecting from Web");
     }
     #endregion
 
-    #region Send
+#region Send
     private void SendServer(AbstractNetMessage msg)
     {
         if(isConnected == false)
@@ -440,42 +441,41 @@ Debug.Log("Connecting from Web");
 
         SendServer(new Net_Disonnected());
     }
-    #endregion
 
     #region Account related
-    public void SendCreateAccount(string username, string password, string email)
+    public void SendCreateAccount(bool random, string user_name="", string password="", string email="")
     {
-
-        // invalid username
-        if (!IsUsername(username))
-        {
-            LoginContext.Instance.ChangeAuthenticationMessage("Username is invalid");
-            LoginContext.Instance.EnableInputs();
-            return;
-        }
-
-        // invalid email
-        if (!IsEmail(email))
-        {
-            LoginContext.Instance.ChangeAuthenticationMessage("Email is invalid");
-            LoginContext.Instance.EnableInputs();
-            return;
-        }
-
-        // invalid password
-        if (!IsPassword(password))
-        {
-            LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
-            LoginContext.Instance.EnableInputs();
-            return;
-        }
-
         Net_CreateAccount ca = new Net_CreateAccount();
-        ca.Username = username;
-        ca.Password = Sha256FromString(password);
-        ca.Email = email;
+        ca.random = random;
 
-        LoginContext.Instance.ChangeAuthenticationMessage("Sending request...");
+        if (!random)
+        {
+            // if account values given
+            if (!IsUsername(user_name))
+            {
+                RegisterContext.Instance.ChangeAuthenticationMessage("Username is invalid");
+                RegisterContext.Instance.EnableInputs();
+                return;
+            }
+            if (!IsEmail(email))
+            {
+                RegisterContext.Instance.ChangeAuthenticationMessage("Email is invalid");
+                RegisterContext.Instance.EnableInputs();
+                return;
+            }
+            if (!IsPassword(password))
+            {
+                RegisterContext.Instance.ChangeAuthenticationMessage("Password is invalid");
+                RegisterContext.Instance.EnableInputs();
+                return;
+            }
+
+            ca.user_name = user_name;
+            ca.password = Sha256FromString(password);
+            ca.email = email;
+            RegisterContext.Instance.ChangeAuthenticationMessage("Sending create account request...");
+        }
+
         SendServer(ca);
     }
 
@@ -483,7 +483,7 @@ Debug.Log("Connecting from Web");
     {
         // todo: username and token working and messages should work
         // invalid email or username
-        if (!IsUsernameAndDiscriminator(usernameOrEmail) && !IsEmail(usernameOrEmail))
+        if (!IsUsername(usernameOrEmail) && !IsEmail(usernameOrEmail))
         {
             LoginContext.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
             LoginContext.Instance.EnableInputs();
@@ -567,10 +567,9 @@ Debug.Log("Connecting from Web");
     }
 
     #endregion
+#endregion
 
-
-
-    #region Listeners
+#region Listeners
     protected virtual void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
@@ -585,11 +584,16 @@ Debug.Log("Connecting from Web");
     {
         switch (eventHandle.NewState)
         {
-            case EMenuState.IN_ENTRY_IN_LOGIN:
-
+            case EMenuState.IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER:
+                SendCreateAccount(true);
                 break;
         }
     }
 
-    #endregion
+    public void OnRegisterOk()
+    {
+        UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
+    }
+
+#endregion
 }

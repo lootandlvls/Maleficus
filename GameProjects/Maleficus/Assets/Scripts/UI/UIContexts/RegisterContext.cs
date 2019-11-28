@@ -26,7 +26,7 @@ public class RegisterContext : MonoBehaviour
         string password = registerPassword.text;
         string email = registerEmail.text;
 
-        NetworkManager.Instance.SendCreateAccount(username, password, email);
+        NetworkManager.Instance.SendCreateAccount(false, username, password, email);
     }
 
     //Todo context should inherit from abstract context

@@ -102,8 +102,6 @@ public class ServerManager : NetworkManager
         DebugLog("Starting to receive messages from client");
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
-
-
     private IEnumerator UpdateMessagePumpCoroutine()
     {
         int recHostId;      // is this from web? standalone?
@@ -157,7 +155,6 @@ public class ServerManager : NetworkManager
     }
 
     #region OnData
-
     private void OnData(int cnnId, int channelId, int recHostId, AbstractNetMessage netMessage)
     {
         Debug.Log("receiverd a message of type " + netMessage.MessageType);
@@ -296,19 +293,22 @@ public class ServerManager : NetworkManager
     private void CreateAccount(int cnnId, int channelId, int recHostId, Net_CreateAccount ca)
     {
         Net_OnCreateAccount oca = new Net_OnCreateAccount();
+        Model_Account new_user = dataBank.InsertAccount(ca.random);
+        oca.random = ca.random;
+        oca.main_connection = cnnId;
+        if (new_user != null)
+        {
+            oca.success = 1;
+            oca.user_name = new_user.user_name;
+            oca.password = new_user.password;
+            oca.account_created = new_user.account_created;
+        }
+        else
+        {
+            oca.success = 0;
+        }
 
-        //if (dataBank.InsertAccount(ca.Username, ca.Password, ca.Email))
-        //{
-        //    oca.Success = 1;
-        //    oca.Information = "Account was created";
-        //}
-        //else
-        //{
-        //    oca.Success = 0;
-        //    oca.Information = "Account was not created";
-        //}
-
-        //SendClient(recHostId, cnnId, oca);
+        SendClient(recHostId, cnnId, oca);
     }
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {

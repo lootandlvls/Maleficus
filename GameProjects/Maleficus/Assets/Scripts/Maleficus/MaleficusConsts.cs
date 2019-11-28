@@ -164,7 +164,8 @@ namespace Maleficus
         public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
         {
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN,
-        EMenuState.IN_ENTRY_IN_LOGIN_IN_REGISTER,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_CHOOSE_PLAY_OR_REGISTER,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL
         };
