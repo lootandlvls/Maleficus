@@ -472,8 +472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromState: 8
-  toState: 9
+  fromState: 10
+  toState: 11
 --- !u!114 &125230227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,7 +924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
   isLoadSubStates: 1
-  activeOnStates: 09000000
+  activeOnStates: 0b000000
 --- !u!1 &252770784
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,8 +987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromState: 8
-  toState: 9
+  fromState: 10
+  toState: 11
 --- !u!114 &252770788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1451,7 +1451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &349846199
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1489,7 +1489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
   isLoadSubStates: 1
-  activeOnStates: 07000000
+  activeOnStates: 09000000
 --- !u!1 &361447241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,8 +1539,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromState: 7
-  toState: 8
+  fromState: 9
+  toState: 10
 --- !u!114 &361447244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1884,7 +1884,7 @@ PrefabInstance:
     - target: {fileID: 3134534792627890947, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
@@ -2028,7 +2028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
   isLoadSubStates: 1
-  activeOnStates: 0700000008000000
+  activeOnStates: 090000000a000000
 --- !u!1 &528669478
 GameObject:
   m_ObjectHideFlags: 0
@@ -2563,8 +2563,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromState: 8
-  toState: 9
+  fromState: 10
+  toState: 11
 --- !u!114 &624141325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2755,7 +2755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &703595466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2793,7 +2793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
   isLoadSubStates: 1
-  activeOnStates: 08000000
+  activeOnStates: 0a000000
 --- !u!1001 &708614909
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3699,8 +3699,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromState: 8
-  toState: 7
+  fromState: 11
+  toState: 10
 --- !u!114 &1143176445
 MonoBehaviour:
   m_ObjectHideFlags: 0
