@@ -403,6 +403,23 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         }
     }
 
+    public void SetPlayerParalyzed(bool isParalyzed , int effectStrenght)
+    {
+        if (isParalyzed == true)
+        {
+            currentSpeed = speed / effectStrenght;
+        }
+        else
+        {
+            currentSpeed = speed;
+        }
+    }
+
+    public void SetPlayerSpeedBoost(int speedBoost)
+    {
+        currentSpeed = speed * speedBoost;
+    }
+
     public void resetSpellChargingLVL()
     {
         spellChargingLVL = 1;

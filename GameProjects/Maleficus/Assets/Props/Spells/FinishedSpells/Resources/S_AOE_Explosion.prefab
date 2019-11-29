@@ -9372,13 +9372,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c0df8cd2f7b7b41be180d72e30b932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   hitPower: 20
   speed: 0
   spellName: S_AOE
   spellLevel: 1
   OnSelfEffect: 0
-  hasPower: 1
+  hasPushPower: 0
   spell: 2
+  chargeable: 0
+  spellIcon: {fileID: 0}
+  skillPoint: 0
   movementType: 5
   debuffEffects: 
   buffEffects: 

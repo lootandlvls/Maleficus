@@ -18889,13 +18889,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2757952822883132718}
-  - component: {fileID: 2868948270811275154}
   - component: {fileID: 2787713138264977068}
   - component: {fileID: 2776490216190916522}
   - component: {fileID: 4160352071230772421}
-  - component: {fileID: 2873030796196779476}
   m_Layer: 0
-  m_Name: FireBall_Parabolic
+  m_Name: S_EnergyBalll_Parabolic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18919,33 +18917,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2868948270811275154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2760583601501435574}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12ba759cd568c0e47a7018ab70867a0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bounce: 0
-  bounceForce: 10
-  speed: 5
-  accuracy: 95
-  fireRate: 4
-  muzzlePrefab: {fileID: 1252424093267096, guid: fede7bedd0d852844a42392d0db8e8a7,
-    type: 3}
-  hitPrefab: {fileID: 1312591640859010, guid: b4473bf379aa11541848b07fcf1b6a1f, type: 3}
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
-  trails:
-  - {fileID: 2760157492897391864}
-  - {fileID: 2760179145021652930}
-  - {fileID: 2759821787568496742}
-  - {fileID: 2759909698158572790}
 --- !u!65 &2787713138264977068
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18987,19 +18958,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32bea1718cc99284cbe0b802886c35bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
   hitPower: 40
   speed: 10
   spellName: 
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 1
-  cooldown: 2
+  hasPushPower: 0
+  spell: 0
+  isChargeable: 0
+  spellIcon: {fileID: 0}
+  skillPoint: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 
+  cooldown: 2
+  spellDuration: 0
+  pushDuration: 0
+  shotSFX: {fileID: 0}
+  hitSFX: {fileID: 0}
+  hitPrefab: {fileID: 1312591640859010, guid: b4473bf379aa11541848b07fcf1b6a1f, type: 3}
+  trails:
+  - {fileID: 2760157492897391864}
+  - {fileID: 2760179145021652930}
+  - {fileID: 2759821787568496742}
+  - {fileID: 2759909698158572790}
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   startTransform: {fileID: 0}
   endTransform: {fileID: 0}
   endPosition: {x: 0, y: 0, z: 0}
@@ -19008,31 +18995,3 @@ MonoBehaviour:
   startRotation: {x: 0, y: 0, z: 0, w: 0}
   movementSpeed: 10
   heightFactor: 10
---- !u!114 &2873030796196779476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2760583601501435574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9e272d634f40434b85fbf756732714d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  size: 1
-  speed: 1
-  duration: 1
-  loop: 1
-  prewarm: 0
-  lights: 0
-  trails: 0
-  changeColor: 1
-  newMaxColor: {r: 1, g: 0.15095036, b: 0.07352942, a: 1}
-  newMinColor: {r: 0.71323526, g: 0.10285698, b: 0.047199395, a: 1}
-  ParticleSystems:
-  - {fileID: 2760157492897391864}
-  - {fileID: 2760179145021652930}
-  - {fileID: 2759821787568496742}
-  - {fileID: 2759909698158572790}
-  ActiveParticleSystems: 01010101

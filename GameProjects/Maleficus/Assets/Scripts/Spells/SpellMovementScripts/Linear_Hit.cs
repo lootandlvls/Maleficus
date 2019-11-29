@@ -50,6 +50,7 @@ public class Linear_Hit : AbstractSpell
 
         if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
         {
+            Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.PlayerIDToInt(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.PlayerIDToInt(otherPlayer.PlayerID));
             ProcessHits(otherPlayer);
         }
         else if (otherEnemy != null)
@@ -58,20 +59,10 @@ public class Linear_Hit : AbstractSpell
         }
         else if (other.tag.Equals("Object"))
         {
-            ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
-            if (destroyEffect != null)
-            {
-                destroyEffect.DestroySpell();
-            }
-        }
-        /*else
-        {
-            ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
-            if (destroyEffect != null)
-            {
-                destroyEffect.DestroySpell();
-            }
             
-        }*/
+                DestroySpell();
+         
+        }
+       
     }
 }

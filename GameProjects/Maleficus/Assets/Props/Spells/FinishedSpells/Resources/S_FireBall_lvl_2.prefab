@@ -14169,7 +14169,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9017447394813811280}
-  - component: {fileID: 8988386976688867526}
   - component: {fileID: 9073582946971209394}
   - component: {fileID: 6485598310355335466}
   - component: {fileID: 4978913634343584972}
@@ -14200,31 +14199,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8988386976688867526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9020335875047621422}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12ba759cd568c0e47a7018ab70867a0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bounce: 0
-  bounceForce: 10
-  speed: 35
-  accuracy: 95
-  fireRate: 4
-  muzzlePrefab: {fileID: 1486444696406430, guid: ba1295ef26a8b874eae8969b7aadfd8a,
-    type: 3}
-  hitPrefab: {fileID: 1221116321114522, guid: 13e7b1908d4d5094e9ba37c20eb5a0a0, type: 3}
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
-  trails:
-  - {fileID: 9020541765673529008}
-  - {fileID: 9020277928398844066}
 --- !u!54 &9073582946971209394
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14277,13 +14251,21 @@ MonoBehaviour:
   OnSelfEffect: 0
   hasPushPower: 1
   spell: 0
-  chargeable: 0
+  isChargeable: 0
+  spellIcon: {fileID: 0}
+  skillPoint: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 
   cooldown: 1
   spellDuration: 0
   pushDuration: 1
+  shotSFX: {fileID: 0}
+  hitSFX: {fileID: 0}
+  hitPrefab: {fileID: 1221116321114522, guid: 13e7b1908d4d5094e9ba37c20eb5a0a0, type: 3}
+  trails:
+  - {fileID: 9020541765673529008}
+  - {fileID: 9020277928398844066}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0

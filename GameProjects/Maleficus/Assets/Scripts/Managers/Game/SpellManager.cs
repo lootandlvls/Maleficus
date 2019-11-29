@@ -18,10 +18,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<AbstractSpell> All_Spells { get { return all_Spells; } }
 
     public Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
-
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
-    [SerializeField] private GameObject frozenEffect;
     [SerializeField] private float friction;
+    //Spell Effects
+
+    [SerializeField] private GameObject frozenEffect;
+    [SerializeField] private GameObject paralyzeEffect;
+ 
 
     private List<GameObject> chargingSpells_Effects = new List<GameObject>();
     private List<AbstractSpell> all_Spells = new List<AbstractSpell>();
@@ -101,7 +104,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         if (hitInfo.HasPushPower)
         {
             DebugLog("player hit he will be pushed");
-            if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
+            if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID )
             {
 
                 PushPlayer(hitInfo);
@@ -117,10 +120,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         foreach (ESpellEffects buffeffect in hitInfo.BuffEffects)
         {
-            ApplyBuff(buffeffect, hitInfo.HitPlayerID);
+            ApplyBuff(buffeffect, hitInfo.HitPlayerID , hitInfo.CastingPlayerID);
         }
     }
 
+   
     private void PushPlayer(SHitInfo hitInfo)
     {
         activePlayers[hitInfo.HitPlayerID].PushPlayer(hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
@@ -142,7 +146,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 break;
 
             case ESpellEffects.SLOWDOWN:
-                Debug.Log("Player SLOWED DOWN");
+                Debug.Log("Player Paralyzed");
+                StartCoroutine(PlayerParalyzed(playerID , 3));
 
                 break;
 
@@ -156,13 +161,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
 
     }
-    private void ApplyBuff(ESpellEffects buff, EPlayerID playerID)
+    private void ApplyBuff(ESpellEffects buff, EPlayerID playerID, EPlayerID CastingPlayerID)
     {
         Debug.Log("Apply Buff on player " + playerID);
         switch (buff)
         {
             case ESpellEffects.INCREACE_SPEED:
-
+                StartCoroutine(PlayerSpeedBoost(CastingPlayerID , 2));
                 break;
 
             case ESpellEffects.INCREASE_CASTING_SPEED:
@@ -266,6 +271,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spell.CastingPlayerID = playerID;
           //  StartCoroutine(PlayerCantMove());
         }
+       
         else
         {
             Vector3 position = activePlayers[playerID].transform.position;
@@ -298,6 +304,18 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
 
+    //BUFFS
+    private IEnumerator PlayerSpeedBoost(EPlayerID playerID , int SpeedBoost)
+    {
+        activePlayers[playerID].SetPlayerSpeedBoost(SpeedBoost);
+
+        yield return new WaitForSeconds(2.5f);
+
+        activePlayers[playerID].SetPlayerSpeedBoost(1);
+    }
+
+    //DEBUFFS
+
     private IEnumerator PlayerFrozen(EPlayerID playerID)
     {
         activePlayers[playerID].SetPlayerFrozen(true);
@@ -320,7 +338,17 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         activePlayers[playerID].SetPlayerStunned(false);
     }
 
-    
+    private IEnumerator PlayerParalyzed(EPlayerID playerID , int effectStrenght)
+    {
+        activePlayers[playerID].SetPlayerParalyzed(true , effectStrenght);
+        Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y +1 , activePlayers[playerID].transform.position.z);
+        GameObject ParalyzeEffect = Instantiate(paralyzeEffect, position, activePlayers[playerID].transform.rotation);
+        ParalyzeEffect.transform.parent = activePlayers[playerID].transform;
+        yield return new WaitForSeconds(2f);
+        activePlayers[playerID].SetPlayerParalyzed(false , effectStrenght);
+    }
+
+
 
     IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID, int animationID)
     {

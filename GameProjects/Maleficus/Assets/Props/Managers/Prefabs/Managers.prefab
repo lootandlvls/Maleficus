@@ -1564,13 +1564,15 @@ MonoBehaviour:
   logCategoriesToIgnore: []
   spellsUpgrade:
   - {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac, type: 3}
+  friction: 0
   frozenEffect: {fileID: 8333159550493524451, guid: 041befb866d1ae646b3760d7ec3b284f,
     type: 3}
-  friction: 0
+  paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
+    type: 3}
   Player_1_SpellsList:
-  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
-  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
-  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
+  - {fileID: 2113275338062280336, guid: d2188dc4b92b40e408cac7944a5543c9, type: 3}
+  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
   Player_2_SpellsList:
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
   - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}

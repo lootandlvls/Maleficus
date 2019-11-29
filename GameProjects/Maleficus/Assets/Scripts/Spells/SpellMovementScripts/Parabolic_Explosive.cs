@@ -26,8 +26,8 @@ public class Parabolic_Explosive : AbstractSpell
     {
         base.Start();
 
-        endPosition = parabolicSpell_EndPosition;
-        endRotation = endTransform.rotation;
+        endPosition = new Vector3(transform.position.x , transform.position.y , transform.position.z + 8);
+        endRotation = endTransform.rotation; 
         startTransform = this.transform;
         startRotation = startTransform.rotation;
         startPosition = startTransform.position;
@@ -54,9 +54,9 @@ public class Parabolic_Explosive : AbstractSpell
             {
                 isStarted = false;
                 onExplosionEnter(transform.position, 5);
-               ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+               
 
-                destroyEffect.DestroySpell();
+                DestroySpell();
                 return;
             }
 

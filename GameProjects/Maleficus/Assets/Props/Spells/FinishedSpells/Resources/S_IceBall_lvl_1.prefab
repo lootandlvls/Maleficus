@@ -100,14 +100,25 @@ MonoBehaviour:
   spellName: S_IceBall
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 1
+  hasPushPower: 0
   spell: 3
+  isChargeable: 0
+  spellIcon: {fileID: 0}
+  skillPoint: 0
   movementType: 0
   debuffEffects: 06000000
   buffEffects: 
   cooldown: 3
   spellDuration: 0
   pushDuration: 0
+  shotSFX: {fileID: 0}
+  hitSFX: {fileID: 0}
+  hitPrefab: {fileID: 1312591640859010, guid: 57073eed22326fd489c9cfeb9a76b7b9, type: 3}
+  trails:
+  - {fileID: 6517137874974288690}
+  - {fileID: 6517177660247568392}
+  - {fileID: 6517642733333082028}
+  - {fileID: 6517449718434085692}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0

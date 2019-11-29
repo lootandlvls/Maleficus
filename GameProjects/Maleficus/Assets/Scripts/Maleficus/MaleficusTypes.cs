@@ -121,7 +121,9 @@ public enum ESpellID
     FIRE_LASER,
     FIRE_EXPLOSION,
     ICEBALL,
-    TELEPORT
+    TELEPORT,
+    ELECTRICBALL,
+    VAMPERICBALL
 }
 #endregion
 
