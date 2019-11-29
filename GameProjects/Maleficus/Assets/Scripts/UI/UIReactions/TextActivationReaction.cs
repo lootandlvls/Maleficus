@@ -14,7 +14,7 @@ public class TextActivationReaction : AbstractUIReaction {
 
     protected override void PlayAppropriateReaction(EMenuState newState)
     {
-        if (newState == activeOnState)
+        if (newState.ContainedIn(activeOnStates))
         {
             text.enabled = true;
         }

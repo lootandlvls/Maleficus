@@ -110,7 +110,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     public void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
         if ((IsPlayerConnected(toSpawnPlayerID) == true) 
-            || ((MotherOfManagers.Instance.IsSpawnAllPlayers == true) 
+            || ((MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == true) 
                 && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES))))
         {
             
@@ -367,7 +367,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (PlayersMovement.ContainsKey(playerID) == false)
         {
-            if (MotherOfManagers.Instance.IsSpawnAllPlayers == false)
+            if (MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == false)
             {
                 Debug.LogError("No player movement found for : " + playerID);
             }
@@ -437,7 +437,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
 
         // Spawn player On Connect?
-        if ((MotherOfManagers.Instance.IsSpawnPlayerOnConnect == true)
+        if ((MotherOfManagers.Instance.IsSpawnPlayerOnControllerConnect == true)
             && (ActivePlayers.ContainsKey(playerID) == false)
             && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
         {

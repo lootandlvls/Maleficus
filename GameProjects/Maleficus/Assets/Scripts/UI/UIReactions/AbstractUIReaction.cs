@@ -9,26 +9,37 @@ using static Maleficus.MaleficusConsts;
 public abstract class AbstractUIReaction : MonoBehaviour {
 
     [SerializeField] protected bool isInitializeOnStart = true;
-    [SerializeField] protected EMenuState activeOnState = EMenuState.NONE;
+    [SerializeField] protected bool isLoadSubStates = true;
+    [SerializeField] protected EMenuState[] activeOnStates;
 
-    protected EMenuState[] activeOnStates;
+    protected EMenuState[] activeOnSubStates;
 
     private void Awake()
     {
-        // Add all sub states if selected state is a high hierarchy 
-        List<EMenuState> temp = new List<EMenuState>();
-        switch (activeOnState)
+        if (isLoadSubStates == true)
         {
-            case EMenuState.IN_ENTRY_IN_LOGIN:
-                temp = new List<EMenuState>(MENU_STATES_IN_LOGIN);
-                break;
-      
+            // Add all sub states if selected state is a high hierarchy 
+            List<EMenuState> temp = new List<EMenuState>();
+            foreach (EMenuState activeOnState in activeOnStates)
+            {
+                switch (activeOnState)
+                {
+                    case EMenuState.IN_ENTRY_IN_LOGIN:
+                        temp = new List<EMenuState>(MENU_STATES_IN_LOGIN);
+                        break;
+
+                }
+                if (temp.Contains(activeOnState) == false)
+                {
+                    temp.Add(activeOnState);
+                }
+            }
+            activeOnSubStates = temp.ToArray();
         }
-        if (temp.Contains(activeOnState) == false)
+        else
         {
-            temp.Add(activeOnState);
+            activeOnSubStates = activeOnStates;
         }
-        activeOnStates = temp.ToArray();
     }
 
     private void Start()

@@ -309,23 +309,30 @@ public class JoystickInput
 /// </summary>
 public enum EMenuState
 {
-    NONE,
-    IN_ENTRY,
-    IN_MENU,
-    IN_CONNECTING_PLAYERS,
-    IN_STARTUP,                                                                         //TODO [Leon]: Define. Ambiguous meaning
-                                                                                        /* Login context */
-    IN_ENTRY_IN_LOGIN,
-    IN_ENTRY_IN_LOGIN_IN_LOGIN,
-    IN_ENTRY_IN_LOGIN_IN_REGISTER,
-    IN_ENTRY_IN_LOGIN_IN_FOLLOW,
-    IN_ENTRY_IN_LOGIN_IN_LEGAL,
-    /* Game context */
-    IN_GAME_NOT_STARTED,
-    IN_GAME_ABOUT_TO_START,
-    IN_GAME_RUNNING,
-    IN_GAME_PAUSED,
-    IN_GAME_OVER
+    NONE = 0,
+
+    /* Entry */
+    IN_ENTRY = 1,
+    IN_ENTRY_IN_LOGIN = 2,
+    IN_ENTRY_IN_LOGIN_IN_LOGIN = 3,
+    IN_ENTRY_IN_LOGIN_IN_CHOOSE_PLAY_OR_REGISTER = 4,
+    IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER = 5,
+    IN_ENTRY_IN_LOGIN_IN_REGISTER = 6,
+    IN_ENTRY_IN_LOGIN_IN_FOLLOW = 7,
+    IN_ENTRY_IN_LOGIN_IN_LEGAL = 8,
+
+    /* Menu */
+    IN_MENU_MAIN = 9,
+    IN_MENU_IN_GAME_MODE_SELECTION = 10,
+    IN_MENU_IN_SPELL_SELECTION = 11,
+    IN_MENU_IN_ARENA_SELECTION = 12,
+
+    /* Game */
+    IN_GAME_IN_NOT_STARTED = 13,
+    IN_GAME_IN_COUNTDOWN = 14,
+    IN_GAME_IN_RUNNING = 15,
+    IN_GAME_IN_PAUSED = 16,
+    IN_GAME_OVER = 17
 }
 
 public enum EButtonDirection

@@ -5,7 +5,8 @@ public class Net_CreateAccount : AbstractNetMessage
     {
         MessageType = ENetMessageType.CREATE_ACCOUNT;
     }
-    public string Username { set; get; }
-    public string Password { set; get; }
-    public string Email { set; get; }
+    public bool random { set; get; }
+    public string user_name { set; get; }
+    public string password { set; get; }
+    public string email { set; get; }
 }

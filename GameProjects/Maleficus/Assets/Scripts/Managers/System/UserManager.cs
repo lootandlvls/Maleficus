@@ -6,11 +6,16 @@ using MongoDB.Bson;
 using System.IO;
 using static Maleficus.MaleficusUtilities;
 using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusVariables;
 using System.Runtime.Serialization;
 
 public class UserManager : AbstractSingletonManager<UserManager>
 {
+    // accessable variables after deserialization
+    public static Local_Account user;
+    public static List<Local_Spell> saved_spells;
+    public static List<Local_SinglePlayer> singleplayers;
+    public static Local_Achievement achievements;
+
     #region Monobehaviour
     public override void OnSceneStartReinitialize()
     {
@@ -20,7 +25,7 @@ public class UserManager : AbstractSingletonManager<UserManager>
     protected override void Awake()
     {
         base.Awake();
-        CreateLocalData();
+        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
         LoadSavedData();
     }
 
@@ -44,7 +49,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         CreateLocalSinglePlayers(false);
         CreateLocalAchievements(false);
     }
-
     public static void CreateLocalUserAccount(bool forcedCreate)
     {
         if (!File.Exists(Application.persistentDataPath + "/savedAccountData.gd") || forcedCreate)
@@ -72,7 +76,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
             }
         }
     }
-
     public static void CreateLocalSpells(bool forcedCreate)
     {
         if(!File.Exists(Application.persistentDataPath + "/savedSpells.gd") || forcedCreate)
@@ -97,7 +100,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
             }
         }
     }
-
     public static void CreateLocalSinglePlayers(bool forcedCreate)
     {
         if (!File.Exists(Application.persistentDataPath + "/savedSinglePlayers.gd") || forcedCreate)
@@ -122,7 +124,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
             }
         }
     }
-
     public static void CreateLocalAchievements(bool forcedCreate)
     {
         if (!File.Exists(Application.persistentDataPath + "/savedAchievements.gd") || forcedCreate)
@@ -261,7 +262,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
     #endregion
 
     #region Update
-
     public static void UpdateSavedAccountData(string user_name="", string password="", string email="", byte status=255, int coins=-1, byte level=255, int xp=-1, byte spent_spell_points=255, BsonDateTime account_created=default(BsonDateTime), BsonDateTime last_login=default(BsonDateTime))
     {
         // check if user is already loaded;
@@ -329,7 +329,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         bf.Serialize(file, user);
         file.Close();
     }
-
     public static void UpdateSavedSpells(bool new_spell, bool selected, byte spell_id, byte spell_level=255, int spell_xp=-1)
     {
         // check if spells are already loaded;
@@ -400,7 +399,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         bf.Serialize(file, saved_spells);
         file.Close();
     }
-
     public static void UpdateSavedSinglePlayers(bool new_single_player, byte level_id, bool unlocked, bool finished)
     {
         // check if spells are already loaded;
@@ -457,7 +455,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
         bf.Serialize(file, singleplayers);
         file.Close();
     }
-
     public static void UpdateSavedAchievements(int wins=-1, int losses=-1)
     {
         // check if user is already loaded;
@@ -492,6 +489,17 @@ public class UserManager : AbstractSingletonManager<UserManager>
         bf.Serialize(file, achievements);
         file.Close();
     }
+    #endregion
 
+    #region Listeners
+    public void On_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)
+    {
+        switch (receivedMsg)
+        {
+            case ENetworkMessageType.REGISTERED:
+                
+                break;
+        }
+    }
     #endregion
 }

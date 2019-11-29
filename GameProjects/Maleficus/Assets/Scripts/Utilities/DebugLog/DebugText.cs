@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Check DebugManager for DebugIDs
+/// </summary>
 public class DebugText : MonoBehaviour
 {
     private Text myUIText;

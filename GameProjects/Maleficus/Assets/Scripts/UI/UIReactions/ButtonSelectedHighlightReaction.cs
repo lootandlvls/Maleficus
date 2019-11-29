@@ -14,7 +14,7 @@ public class ButtonSelectedHighlightReaction : AbstractUIReaction
 
     protected override void PlayAppropriateReaction(EMenuState newState)
     {
-        if (newState == activeOnState)
+        if (newState.ContainedIn(activeOnStates))
         {
             myMenuButton.Highlight();
             UIManager.Instance.OnSelectedButton(myMenuButton);

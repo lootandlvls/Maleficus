@@ -14,7 +14,8 @@ namespace Maleficus
 
         /* Scene names (in build settings) */
         public const string SCENE_ENTRY = "ENTRY";
-        public const string SCENE_MENU = "MENU";
+        public const string SCENE_MENU_COUCH = "MENU_COUCH";
+        public const string SCENE_MENU_MOBILE = "MENU_MOBILE";
         public const string SCENE_GAME = "GAME";
         public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
@@ -75,8 +76,8 @@ namespace Maleficus
 
         // Input
         public const float THRESHOLD_JOYSTICK_ACTIVATION = 0.2f;
-        public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.3f;
-        public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.2f;
+        public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.1f;
+        public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.1f;
 
         public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
 
@@ -108,8 +109,8 @@ namespace Maleficus
     {
         { EScene.NONE,              EMenuState.NONE},
         { EScene.ENTRY,             EMenuState.IN_ENTRY},
-        { EScene.MENU,              EMenuState.IN_MENU},
-        { EScene.GAME,              EMenuState.IN_GAME_NOT_STARTED}
+        { EScene.MENU,              EMenuState.IN_MENU_MAIN},
+        { EScene.GAME,              EMenuState.IN_GAME_IN_NOT_STARTED}
     };
 
 
@@ -160,14 +161,11 @@ namespace Maleficus
 
         /* UI States classifications lists */
         // Update these lists when more states are added to MenuState!
-        public static EMenuState[] MENU_STATES_STARTUP = new EMenuState[]
-        {
-        EMenuState.IN_STARTUP
-        };
         public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
         {
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN,
-        EMenuState.IN_ENTRY_IN_LOGIN_IN_REGISTER,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_CHOOSE_PLAY_OR_REGISTER,
+        EMenuState.IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL
         };
@@ -193,6 +191,14 @@ namespace Maleficus
         EControllerID.GAMEPAD_B,
         EControllerID.GAMEPAD_C,
         EControllerID.GAMEPAD_D
+        };
+
+        public static EControllerID[] AI_CONTROLLERS = new EControllerID[]
+        {
+        EControllerID.AI_1,
+        EControllerID.AI_2,
+        EControllerID.AI_3,
+        EControllerID.AI_4
         };
 
 

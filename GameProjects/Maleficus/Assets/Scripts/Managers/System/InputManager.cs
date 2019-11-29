@@ -84,7 +84,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     private void On_GAME_GameStarted(EGameMode obj)
     {
         // Connect all players
-        if ((MotherOfManagers.Instance.IsSpawnAllPlayers == true)
+        if ((MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == true)
             && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
         {
             ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
@@ -112,7 +112,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void On_InputSource_ButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
-                Debug.Log(controllerID + " released " + inputButton);
         if (ConnectedControllers.ContainsKey(controllerID))
         {
             EPlayerID playerID = ConnectedControllers[controllerID];
@@ -171,7 +170,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if ((ConnectedControllers.ContainsKey(controllerID) == true)
             || (ConnectedControllers.ContainsValue(playerID) == true))
         {
-            if (MotherOfManagers.Instance.IsSpawnAllPlayers == false)
+            if (MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == false)
             {
                 Debug.LogError("Trying to connect a controller that is already connected.");
             }
@@ -216,5 +215,36 @@ public class InputManager : AbstractSingletonManager<InputManager>
         return ConnectedControllers.ContainsKey(controllerID);
     }
     #endregion
+
+
+    /// <summary>
+    /// Gets the connected PlayerID to the given ControllerID
+    /// </summary>
+    /// <returns> NONE if given controllerID is not connected</returns>
+    public EPlayerID GetConnectedPlayerID(EControllerID controllerID)
+    {
+        if (ConnectedControllers.ContainsKey(controllerID))
+        {
+            return ConnectedControllers[controllerID];
+        }
+        return EPlayerID.NONE;
+    }
+
+
+    /// <summary>
+    /// Gets the connected ControllerID from the given PlayerID
+    /// </summary>
+    /// <returns> NONE if given playerID is not connected</returns>
+    public EControllerID GetConnectedControllerID(EPlayerID playerID)
+    {
+        foreach(EControllerID controllerID in ConnectedControllers.Keys)
+        {
+            if (ConnectedControllers[controllerID] == playerID)
+            {
+                return controllerID;
+            }
+        }
+        return EControllerID.NONE;
+    }
 
 }
