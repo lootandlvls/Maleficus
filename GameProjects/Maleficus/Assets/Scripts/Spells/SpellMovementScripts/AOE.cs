@@ -6,13 +6,13 @@ public class AOE : AbstractSpell
 {
 
    private Vector3 startPosition;
-
+   public float radius;
 
     protected override void Start()
     {
         base.Start();
 
-        OnExplosionEnter( transform.position, 10f * 1f); // 1f was sizeFactor in ar
+        OnExplosionEnter( transform.position, radius); // 1f was sizeFactor in ar
     }
 
 
@@ -50,7 +50,7 @@ public class AOE : AbstractSpell
             }
         }
         ExplosionProcessHits(hitPlayers.ToArray());
-        ExplosionProcessHits(hitEnemies.ToArray());
+        //ExplosionProcessHits(hitEnemies.ToArray());
 
     }
 }

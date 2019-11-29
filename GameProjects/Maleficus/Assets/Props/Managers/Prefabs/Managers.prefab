@@ -818,9 +818,9 @@ MonoBehaviour:
   IsServer: 0
   ConnectionMode: 2
   InputMode: 1
-  IsConnectControllerInAnyState: 0
-  IsSpawnPlayerOnConnect: 1
-  IsSpawnAllPlayers: 0
+  IsConnectControllerInAnyState: 1
+  IsSpawnPlayerOnControllerConnect: 1
+  IsSpawnRemainingPlayersOnGameStart: 1
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsDebugLogEvents: 1
@@ -1570,9 +1570,9 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   Player_1_SpellsList:
-  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
-  - {fileID: 2113275338062280336, guid: d2188dc4b92b40e408cac7944a5543c9, type: 3}
-  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
+  - {fileID: 1357507747990590128, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
+  - {fileID: 3192603726563579907, guid: a5f1558f45cacb641b0ed304f7db35cd, type: 3}
+  - {fileID: 3192603726563579907, guid: a5f1558f45cacb641b0ed304f7db35cd, type: 3}
   Player_2_SpellsList:
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
   - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}

@@ -42,9 +42,13 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public bool IsChargeable { get { return isChargeable; } }
 
+    public bool IsTripleCast { get { return isTripleCast; } }
+
     public Sprite SpellIcon { get { return spellIcon; } }
 
     public int SkillPoint { get { return skillPoint; } }
+
+
 
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
@@ -56,7 +60,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     [SerializeField] private bool isChargeable;
     [SerializeField] private Sprite spellIcon;
     [SerializeField] private int skillPoint;
-    
+    [SerializeField] private bool isTripleCast;
 
 
     [SerializeField] private ESpellMovementType movementType;
@@ -90,7 +94,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
         if (OnSelfEffect)
         {
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPushPower, isChargeable, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPushPower, isChargeable , isTripleCast, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
     }
@@ -102,9 +106,13 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         {
 
             // Debug.Log(dirVector);
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, isTripleCast, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-            DestroySpell();
+            if (movementType != ESpellMovementType.AOE)
+            {
+                DestroySpell();
+            }
+            
            
         }
     }
@@ -114,12 +122,14 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         if (hitPlayer.IsDead == false)
         {
             Debug.Log("333333333333333333333333 player hit");
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, isTripleCast, debuffEffects, buffEffects);
            
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-      
-            DestroySpell();
-   
+
+            if (movementType != ESpellMovementType.LINEAR_LASER )
+            {
+                DestroySpell();
+            }
         }
     }
 

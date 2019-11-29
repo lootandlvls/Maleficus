@@ -937,7 +937,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
-  activeOnState: 10
+  isLoadSubStates: 1
+  activeOnStates: 
 --- !u!114 &733501431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1057,7 +1058,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
-  activeOnState: 10
+  isLoadSubStates: 1
+  activeOnStates: 
 --- !u!1 &884023421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1688,8 +1690,8 @@ MonoBehaviour:
   ConnectionMode: 2
   InputMode: 1
   IsConnectControllerInAnyState: 1
-  IsSpawnPlayerOnConnect: 1
-  IsSpawnAllPlayers: 1
+  IsSpawnPlayerOnControllerConnect: 1
+  IsSpawnRemainingPlayersOnGameStart: 1
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsDebugLogEvents: 0

@@ -111,7 +111,8 @@ public enum ESpellMovementType
     LINEAR_INSTANT, //Single or multi
     TELEPORT,
     AOE,
-    LINEAR_LASER
+    LINEAR_LASER,
+    RAPID_FIRE
 
 }
 
@@ -149,7 +150,7 @@ public enum ETeamID
 
 public struct SHitInfo
 {
-    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, bool chargeable, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
+    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, bool chargeable  , bool isTripleCast, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
     {
         this.castedSpell = castedSpell;
         this.castingPlayerID = castingPlayerID;
@@ -159,6 +160,7 @@ public struct SHitInfo
         this.buffEffects = buffEffects;
         this.debuffEffects = debuffEffects;
         this.chargeable = chargeable;
+        this.isTripleCast = isTripleCast;
 
     }
 
@@ -178,7 +180,9 @@ public struct SHitInfo
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
     public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
     public bool Chargeable { get { return chargeable; } }
+    public bool IsTripleCast { get { return isTripleCast; } }
 
+    private bool isTripleCast;
     private bool chargeable;
     private ISpell castedSpell;
     private EPlayerID castingPlayerID;

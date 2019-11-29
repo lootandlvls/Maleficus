@@ -17,10 +17,10 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public Dictionary<ESpellSlot, float> SpellDuration                      { get { return spellDuration; } }
     public bool IsReadyToShoot                                              { get; set; }
     public bool IsPlayerCharging                                            { get; set; }
-
     public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
     public int SpellChargingLVL                                             { get { return spellChargingLVL; } }
+    public bool hasCastedSpell = false;
 
     [Header("Charging Spell Effects")]
     [Tooltip("This value is read from the actual Player ID inside the script. Chaning it in the inspector will have no effect")]
@@ -201,10 +201,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
             }
-            else if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
-            {
-                StartCoroutine(SlowDownPlayerCoroutine(speed / 2.0f, spell.CastingDuration));
-            }
+            
         }
     }
 
@@ -215,7 +212,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
         {
-            StartCoroutine(SlowDownPlayerCoroutine(speed / 10.0f, spell.CastingDuration));
+            StartCoroutine(SlowDownPlayerCoroutine(0, spell.CastingDuration));
         }
         else
         {
@@ -249,7 +246,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     {
         myAnimator.SetBool("channeling", true);
         currentSpeed = slowDownSpeed;
-
+        Debug.Log("PLAYER SLOWED : SPEED = " + currentSpeed);
         yield return new WaitForSeconds(duration);
 
         currentSpeed = speed;
@@ -446,7 +443,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     }
 
     
-
+  
 
     private IEnumerator UpdatePushVelocityCoroutine(float duration)
     {

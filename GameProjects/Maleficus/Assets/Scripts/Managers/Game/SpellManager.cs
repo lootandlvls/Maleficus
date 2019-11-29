@@ -226,7 +226,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         {
             activePlayers[playerID].DoShockwaveAnimation();
-            Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.01f, activePlayers[playerID].transform.position.z);
+            Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.5f, activePlayers[playerID].transform.position.z);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
 
@@ -364,10 +364,38 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
 
         yield return new WaitForSeconds(0.3f);
+        if (spellToCast.IsTripleCast)
+        {
+            TripleCastSpell(spellToCast, playerID);
+        }
+      else
+        {
+             AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
+             spell.CastingPlayerID = playerID;       
+             spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        }
 
-        AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
-        spell.CastingPlayerID = playerID;       
-        spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+    }
+
+    private void TripleCastSpell(AbstractSpell spellToCast, EPlayerID playerID)
+    {
+        Vector3 rot1 = activePlayers[playerID].transform.rotation.eulerAngles;
+        Vector3 rot2euler = rot1 + new Vector3(0, 30, 0);
+        Vector3 rot3euler = rot1 - new Vector3(0, 30, 0);
+        Quaternion rotation_2 = Quaternion.Euler(rot2euler);
+        Quaternion rotation_3 = Quaternion.Euler(rot3euler);
+
+        AbstractSpell cast_1 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
+        cast_1.CastingPlayerID = playerID;
+        cast_1.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+
+        AbstractSpell cast_2 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, rotation_2);
+        cast_2.CastingPlayerID = playerID;
+        cast_2.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+
+        AbstractSpell cast_3 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, rotation_3);
+        cast_3.CastingPlayerID = playerID;
+        cast_3.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
     }
 
     private void InitializeSpells()

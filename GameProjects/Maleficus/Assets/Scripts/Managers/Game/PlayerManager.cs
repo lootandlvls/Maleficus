@@ -204,6 +204,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
+              
                 ActivePlayers[playerID].IsReadyToShoot = false;
                 ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                 ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
@@ -213,8 +214,21 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
             }
         }
+       else  if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
+        {
+            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            {
+               
+                StartCoroutine( FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+               StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+            }
+        }
+
         else if (spell.IsChargeable)
         {
+             
             ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
         }
         
@@ -234,7 +248,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
 
-        if (spell.MovementType != ESpellMovementType.LINEAR_LASER)
+        if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE)
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
@@ -248,6 +262,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
             }
         }
+        
     }
 
 
@@ -386,6 +401,19 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return Teams[inTeamID].ToArray();
     }
 
+
+    private IEnumerator FirstTimeSpellCastedCoroutine(EPlayerID playerID, ESpellSlot spellSlot , float duration)
+    {
+        
+        if (!activePlayers[playerID].hasCastedSpell)
+        {         
+            activePlayers[playerID].hasCastedSpell = true;
+            yield return new WaitForSeconds(duration);
+            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+            ActivePlayers[playerID].IsReadyToShoot = false;
+        }
+        else { yield return new WaitForSeconds(0f); }
+    }
     private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellSlot spellSlot)                 
     {
         if (ActivePlayers.ContainsKey(playerID))
@@ -395,6 +423,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
             yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellSlot]);
             ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
+            ActivePlayers[playerID].hasCastedSpell = false;
         }
 
     }

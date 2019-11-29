@@ -13752,7 +13752,7 @@ Transform:
   m_GameObject: {fileID: 3869868896117027089}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -1.81, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 3865039730977768151}
   - {fileID: 3872389534490520989}
@@ -13800,19 +13800,27 @@ MonoBehaviour:
   debugLogConsoleEnabled: 1
   logWarningsAsErrors: 1
   logCategoriesToIgnore: []
-  hitPower: 21
+  hitPower: 5
   speed: 0
   spellName: S_FireLaser
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
   spell: 1
+  isChargeable: 0
+  spellIcon: {fileID: 0}
+  skillPoint: 0
+  isTripleCast: 0
   movementType: 6
   debuffEffects: 
   buffEffects: 
   cooldown: 5
   spellDuration: 2.5
   pushDuration: 0.2
+  shotSFX: {fileID: 0}
+  hitSFX: {fileID: 0}
+  hitPrefab: {fileID: 0}
+  trails: []
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &8270885389934248921
 BoxCollider:
@@ -13825,8 +13833,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.49146876, y: 0.43652153, z: 10.474691}
-  m_Center: {x: 0.09088351, y: 0, z: 4.922403}
+  m_Size: {x: 0.49146876, y: 0.43652153, z: 12.002073}
+  m_Center: {x: 0.09088351, y: 0, z: 5.686094}
 --- !u!1 &3870020238712434183
 GameObject:
   m_ObjectHideFlags: 0

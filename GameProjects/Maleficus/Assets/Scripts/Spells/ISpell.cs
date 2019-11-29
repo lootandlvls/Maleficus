@@ -34,6 +34,8 @@ public interface ISpell
 
     bool IsChargeable { get; }
 
+    bool IsTripleCast { get; }
+
     Sprite SpellIcon { get; }
 
     int SkillPoint { get; }
