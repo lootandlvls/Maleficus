@@ -168,7 +168,9 @@ public class ServerManager : NetworkManager
             case ENetMessageType.CREATE_ACCOUNT:
                 CreateAccount(cnnId, channelId, recHostId, (Net_CreateAccount)netMessage);
                 break;
-
+            case ENetMessageType.UPDATE_ACCOUNT:
+                UpdateAccount(cnnId, channelId, recHostId, (Net_UpdateAccount)netMessage);
+                break;
             case ENetMessageType.LOGIN_REQUEST:
                 LoginRequest(cnnId, channelId, recHostId, (Net_LoginRequest)netMessage);
                 break;
@@ -299,6 +301,7 @@ public class ServerManager : NetworkManager
         if (new_user != null)
         {
             oca.success = 1;
+            oca.token = new_user.token;
             oca.user_name = new_user.user_name;
             oca.password = new_user.password;
             oca.account_created = new_user.account_created;
@@ -309,6 +312,69 @@ public class ServerManager : NetworkManager
         }
 
         SendClient(recHostId, cnnId, oca);
+    }
+
+    private void UpdateAccount(int cnnId, int channelId, int recHostId, Net_UpdateAccount ua)
+    {
+        Net_OnUpdateAccount oua = new Net_OnUpdateAccount();
+        Model_Account account = dataBank.FindAccount(default(ObjectId), "", "", ua.token);
+        oua.success = 1;
+        // check if user_name, password, email are valid
+        if (!IsUsername(ua.user_name))
+        {
+            Debug.Log("User name not valid");
+            oua.success = 4;
+        }
+        else
+        {
+            account.user_name = ua.user_name;
+            oua.user_name = ua.user_name;
+        }
+        if (ua.update_random)
+        {
+            if (!IsPassword(ua.password))
+            {
+                Debug.Log("Password not valid");
+                oua.success = 3;
+            }
+            else
+            {
+                account.password = ua.password;
+                oua.password = ua.password;
+            }
+        }
+
+        if (!ua.update_random)
+        {
+            // if don't update your account right after you created it
+            if (!IsPassword(ua.old_password) || ua.old_password != Sha256FromString(account.password))
+            {
+                Debug.Log("Old Password not valid");
+                oua.success = 2;
+            }
+            else
+            {
+                account.password = ua.password;
+                oua.password = ua.password;
+            }
+        }
+        
+        if (ua.email != "" && !IsEmail(ua.email))
+        {
+            Debug.Log("Email not valid");
+            oua.success = 5;
+        }
+        else
+        {
+            account.email = ua.email;
+            oua.email = ua.email;
+        }
+
+        if(oua.success == 1)
+        {
+            dataBank.UpdateAccount(account._id, account.user_name, account.password, account.email);
+        }
+        SendClient(recHostId, cnnId, oua);
     }
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
