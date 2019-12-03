@@ -8,6 +8,7 @@ public class Net_OnCreateAccount : AbstractNetMessage
     }
     public byte success { set; get; }
     
+    public string token { set; get; }
     public bool random { set; get; }
     public int main_connection { set; get; }
     public string user_name { set; get; }

@@ -111,7 +111,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
-                RegisterContext.Instance.OnClickCreateAccount();
+                AutoAccountContext.Instance.OnClickCreateAccount();
             };
         }
 
@@ -133,10 +133,13 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             };
         }
 
-        RegisterOkAction[] ROActions = FindObjectsOfType<RegisterOkAction>();
-        foreach(RegisterOkAction Action in ROActions)
+        UpdateAccountRequestAction[] UARActions = FindObjectsOfType<UpdateAccountRequestAction>();
+        foreach(UpdateAccountRequestAction Action in UARActions)
         {
-            NetworkManager.Instance.OnRegisterOk();
+            Action.ActionButtonPressed += () =>
+            {
+                AutoAccountContext.Instance.OnClickSaveCredentials();
+            };
         }
     }
         
@@ -200,7 +203,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     UpdateState(EMenuState.IN_MENU_MAIN);
                     break;
                 case ENetworkMessageType.REGISTERED:
-                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    UpdateState(EMenuState.IN_MENU_MAIN);
                     break;
             }
         }

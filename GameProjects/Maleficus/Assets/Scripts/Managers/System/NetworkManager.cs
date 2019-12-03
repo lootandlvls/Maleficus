@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using MongoDB.Bson;
 using static Maleficus.MaleficusConsts;
 using static Maleficus.MaleficusUtilities;
+using static UserManager;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
@@ -237,7 +238,10 @@ Debug.Log("Connecting from Web");
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)netMessage);
                 break;
-
+            case ENetMessageType.ON_UPDATE_ACCOUNT:
+                Debug.Log("On Update Account");
+                OnUpdateAccount((Net_OnUpdateAccount)netMessage);
+                break;
             case ENetMessageType.ON_LOGIN_REQUEST:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)netMessage);
@@ -324,17 +328,36 @@ Debug.Log("Connecting from Web");
         UserManager.CreateLocalUserAccount(true);
         UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255,-1,255,-1,255,oca.account_created,default(BsonDateTime));
         UserManager.LoadSavedAccount();
-        if (oca.random)
+        AutoAccountContext.Instance.EnableInputs();
+        AutoAccountContext.Instance.user_name_input_field.text = UserManager.user.user_name;
+        AutoAccountContext.Instance.password_input_field.text = UserManager.user.password;
+    }
+    private void OnUpdateAccount(Net_OnUpdateAccount oca)
+    {
+        if (oca.success == 2)
         {
-            AutoAccountContext.Instance.EnableInputs();
-            AutoAccountContext.Instance.user_name.text = UserManager.user.user_name;
-            AutoAccountContext.Instance.password.text = UserManager.user.password;
+            Debug.Log("Update Account was not successfull: Current password was entered wrong");
+            return;
         }
-        else
+        if(oca.success == 3)
         {
-            RegisterContext.Instance.EnableInputs();
-            RegisterContext.Instance.ChangeAuthenticationMessage("Registered!");
+            Debug.Log("Update Account was not successfull: The new password is not a valid");
+            return;
         }
+        if (oca.success == 4)
+        {
+            Debug.Log("Update Account was not successfull: The entered user name is not valid");
+            return;
+        }
+        if (oca.success == 5)
+        {
+            Debug.Log("Update Account was not successfull: The entered email address is not valid");
+            return;
+        }
+        Debug.Log("Update Account was successfull");
+        UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email);
+        UserManager.LoadSavedAccount();
+        UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
     }
     private void OnLoginRequest(Net_OnLoginRequest olr)
     {
@@ -448,37 +471,20 @@ Debug.Log("Connecting from Web");
         Net_CreateAccount ca = new Net_CreateAccount();
         ca.random = random;
 
-        if (!random)
-        {
-            // if account values given
-            if (!IsUsername(user_name))
-            {
-                RegisterContext.Instance.ChangeAuthenticationMessage("Username is invalid");
-                RegisterContext.Instance.EnableInputs();
-                return;
-            }
-            if (!IsEmail(email))
-            {
-                RegisterContext.Instance.ChangeAuthenticationMessage("Email is invalid");
-                RegisterContext.Instance.EnableInputs();
-                return;
-            }
-            if (!IsPassword(password))
-            {
-                RegisterContext.Instance.ChangeAuthenticationMessage("Password is invalid");
-                RegisterContext.Instance.EnableInputs();
-                return;
-            }
-
-            ca.user_name = user_name;
-            ca.password = Sha256FromString(password);
-            ca.email = email;
-            RegisterContext.Instance.ChangeAuthenticationMessage("Sending create account request...");
-        }
-
         SendServer(ca);
     }
+    public void SendUpdateAccount(bool update_random, string user_name="", string old_password="", string password="", string email="")
+    {
+        Net_UpdateAccount ua = new Net_UpdateAccount();
+        ua.update_random = update_random;
+        ua.token = token;
+        ua.user_name = user_name;
+        ua.old_password = old_password;
+        ua.password = password;
+        ua.email = email;
 
+        SendServer(ua);
+    }
     public void SendLoginRequest(string usernameOrEmail, string password)
     {
         // todo: username and token working and messages should work
@@ -506,7 +512,6 @@ Debug.Log("Connecting from Web");
         LoginContext.Instance.ChangeAuthenticationMessage("Sending Login request...");
         SendServer(lr);
     }
-
     public void SendAddFollow(string usernameOrEmail)
     {
         Net_AddFollow af = new Net_AddFollow();
@@ -515,7 +520,6 @@ Debug.Log("Connecting from Web");
 
         SendServer(af);
     }
-
     public void SendRemoveFollow(string username)
     {
         Net_RemoveFollow rf = new Net_RemoveFollow();
@@ -524,7 +528,6 @@ Debug.Log("Connecting from Web");
 
         SendServer(rf);
     }
-
     public void SendRequestFollow()
     {
         Net_RequestFollow rf = new Net_RequestFollow();
@@ -534,7 +537,6 @@ Debug.Log("Connecting from Web");
         SendServer(rf);
         Debug.Log("trying to send requestollow");
     }
-
     protected virtual void CheckForSavedLoginData()
     {
         /*if(user.email != "" && user.password != "")
@@ -579,20 +581,22 @@ Debug.Log("Connecting from Web");
                 break;
         }
     }
-
     protected virtual void On_UI_MenuStateUpdated(Event_StateUpdated<EMenuState> eventHandle)
     {
         switch (eventHandle.NewState)
         {
             case EMenuState.IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER:
-                SendCreateAccount(true);
+                //if(user == null)
+                //{
+                    SendCreateAccount(true);
+                //}
+                /*else
+                {
+                    Debug.Log("An Account already exists on your device.");
+                    //TODO change to new buttons: login, create new account by name
+                }*/
                 break;
         }
-    }
-
-    public void OnRegisterOk()
-    {
-        UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
     }
 
 #endregion
