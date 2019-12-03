@@ -325,12 +325,17 @@ Debug.Log("Connecting from Web");
 
     private void OnCreateAccount(Net_OnCreateAccount oca)
     {
-        UserManager.CreateLocalUserAccount(true);
-        UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255,-1,255,-1,255,oca.account_created,default(BsonDateTime));
-        UserManager.LoadSavedAccount();
-        AutoAccountContext.Instance.EnableInputs();
-        AutoAccountContext.Instance.user_name_input_field.text = UserManager.user.user_name;
-        AutoAccountContext.Instance.password_input_field.text = UserManager.user.password;
+        if(oca.success == 1)
+        {
+            UserManager.CreateLocalUserAccount(true);
+            UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255, -1, 255, -1, 255, oca.account_created, default(BsonDateTime));
+            UserManager.LoadSavedAccount();
+            AutoAccountContext.Instance.EnableInputs();
+            AutoAccountContext.Instance.user_name_input_field.text = UserManager.user.user_name;
+            AutoAccountContext.Instance.password_input_field.text = UserManager.user.password;
+            token = oca.token;
+        }
+
     }
     private void OnUpdateAccount(Net_OnUpdateAccount oca)
     {

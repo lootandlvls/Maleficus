@@ -1,4 +1,5 @@
-﻿public class Net_OnUpdateAccount : AbstractNetMessage
+﻿[System.Serializable]
+public class Net_OnUpdateAccount : AbstractNetMessage
 {
     public Net_OnUpdateAccount()
     {
