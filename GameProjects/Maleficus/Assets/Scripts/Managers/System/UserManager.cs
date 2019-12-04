@@ -275,11 +275,11 @@ public class UserManager : AbstractSingletonManager<UserManager>
         {
             user.user_name = user_name;
         }
-        if (IsPassword(password))
+        if (password != "")
         {
             user.password = password;
         }
-        if (IsEmail(email))
+        if (email != "")
         {
             user.email = email;
         }

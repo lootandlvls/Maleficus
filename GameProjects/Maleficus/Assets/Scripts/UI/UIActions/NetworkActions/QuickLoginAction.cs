@@ -11,6 +11,6 @@ public class QuickLoginAction : AbstractUIAction
     {
         base.Execute();
 
-        NetworkManager.Instance.SendLoginRequest(userName, password);
+        NetworkManager.Instance.SendLoginRequest(false, userName, password);
     }
 }

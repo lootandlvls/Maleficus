@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using static Maleficus.MaleficusUtilities;
 using static Maleficus.MaleficusConsts;
 
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
-    private MaleficusButton selectedButton;                                                                         // TODO: Update selected button on menu change
+    private MaleficusButton selectedButton;// TODO: Update selected button on menu change
 
     protected override void Awake()
     {

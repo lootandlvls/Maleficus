@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static Maleficus.MaleficusUtilities;
 
 public class AutoAccountContext : MonoBehaviour
 {
@@ -32,9 +33,8 @@ public class AutoAccountContext : MonoBehaviour
         DisableInputs();
 
         string user_name = user_name_input_field.text;
-        string password = password_input_field.text;
+        string password = Sha256FromString(password_input_field.text);
         string email = email_input_field.text;
-
         NetworkManager.Instance.SendUpdateAccount(true, user_name, "", password, email);
     }
     public void EnableInputs()
