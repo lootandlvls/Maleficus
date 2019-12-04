@@ -267,13 +267,13 @@ public class Mongo
     #endregion
 
     #region Insert
-    public Model_Account InsertAccount(bool random)
+    public Model_Account InsertAccount(bool random, string password)
     {
         Model_Account new_account = new Model_Account();
 
         // create random account
         new_account.token = GenerateRandom(128);
-        new_account.password = UnityEngine.Random.Range(0, 99999).ToString("00000");
+        new_account.password = Sha256FromString(password);
         List<Model_Account> users_with_standard_name = collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).ToList();
             
         if(users_with_standard_name.Count > 0)
@@ -300,7 +300,7 @@ public class Mongo
         // update by the given values
         if (password != "")
         {
-            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("password", Sha256FromString(password)));
+            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("password", password));
         }
 
         if (user_name != "")

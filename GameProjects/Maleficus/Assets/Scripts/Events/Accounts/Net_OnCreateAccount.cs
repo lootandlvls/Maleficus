@@ -7,7 +7,7 @@ public class Net_OnCreateAccount : AbstractNetMessage
         MessageType = ENetMessageType.ON_CREATE_ACCOUNT;
     }
     public byte success { set; get; }
-    
+    public string plain_password { set; get; }
     public string token { set; get; }
     public bool random { set; get; }
     public int main_connection { set; get; }

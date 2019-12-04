@@ -259,7 +259,6 @@ public class ServerManager : NetworkManager
         }
     }
 
-
     private void DisconnectEvent(int recHostId, int connectionId)
     {
         Debug.Log(string.Format("User {0} has disconnected!", connectionId));
@@ -290,12 +289,12 @@ public class ServerManager : NetworkManager
         //}
     }
 
-
     #region Account
     private void CreateAccount(int cnnId, int channelId, int recHostId, Net_CreateAccount ca)
     {
         Net_OnCreateAccount oca = new Net_OnCreateAccount();
-        Model_Account new_user = dataBank.InsertAccount(ca.random);
+        oca.plain_password = UnityEngine.Random.Range(0, 99999).ToString("00000");
+        Model_Account new_user = dataBank.InsertAccount(ca.random, oca.plain_password);
         oca.random = ca.random;
         oca.main_connection = cnnId;
         if (new_user != null)
@@ -308,19 +307,19 @@ public class ServerManager : NetworkManager
         }
         else
         {
+            oca.plain_password = "";
             oca.success = 0;
         }
 
         SendClient(recHostId, cnnId, oca);
     }
-
     private void UpdateAccount(int cnnId, int channelId, int recHostId, Net_UpdateAccount ua)
     {
         Net_OnUpdateAccount oua = new Net_OnUpdateAccount();
         Model_Account account = dataBank.FindAccount(default(ObjectId), "", "", ua.token);
         oua.success = 1;
         // check if user_name, password, email are valid
-        if (!IsUsername(ua.user_name))
+        if ((!IsUsername(ua.user_name) && ua.user_name != account.user_name) || IsEmail(ua.user_name))
         {
             Debug.Log("User name not valid");
             oua.success = 4;
@@ -329,25 +328,14 @@ public class ServerManager : NetworkManager
         {
             account.user_name = ua.user_name;
             oua.user_name = ua.user_name;
-        }
-        if (ua.update_random)
-        {
-            if (!IsPassword(ua.password))
-            {
-                Debug.Log("Password not valid");
-                oua.success = 3;
-            }
-            else
-            {
-                account.password = ua.password;
-                oua.password = ua.password;
-            }
+            account.password = ua.password;
+            oua.password = ua.password;
         }
 
         if (!ua.update_random)
         {
             // if don't update your account right after you created it
-            if (!IsPassword(ua.old_password) || ua.old_password != Sha256FromString(account.password))
+            if (!IsPassword(ua.old_password) || ua.old_password != account.password)
             {
                 Debug.Log("Old Password not valid");
                 oua.success = 2;
@@ -378,37 +366,52 @@ public class ServerManager : NetworkManager
     }
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
-        //string randomToken = GenerateRandom(128);
-        //Model_Account account = dataBank.LoginAccount(lr.UsernameOrEmail, lr.Password, cnnId, randomToken);
-        //Net_OnLoginRequest olr = new Net_OnLoginRequest();
-        //if (account != null)
-        //{
-        //    olr.Success = 1;
-        //    olr.Information = "Logged in as " + account.Username;
-        //    olr.Username = account.Username;
-        //    olr.Discriminator = account.Discriminator;
-        //    olr.Token = randomToken;
-        //    olr.ConnectionId = cnnId;
+        Model_Account account = dataBank.FindAccount(default(ObjectId), lr.user_name, lr.email);
+        Net_OnLoginRequest olr = new Net_OnLoginRequest();
+        if (account != null)
+        {
+            if(lr.password != account.password)
+            {
+                Debug.Log("user tryed to log in with wrong password");
+                olr.success = 3;
+                SendClient(recHostId, cnnId, olr);
+                return;
+            }
+            olr.success = 1;
+            olr.token = GenerateRandom(128);
+            olr.user_name = account.user_name;
+            olr.password = account.password;
+            olr.email = account.email;
+            olr.status = 1;
+            olr.coins = account.coins;
+            olr.level = account.level;
+            olr.xp = account.xp;
+            olr.spent_spell_points = account.spent_spell_points;
+            olr.account_created = account.account_created;
+            olr.last_login = DateTime.UtcNow;
+            dataBank.UpdateAccount(account._id, "", "", "", cnnId, -1, olr.token, default(ObjectId), default(ObjectId), olr.status, -1, 255, -1, 255, olr.last_login);
 
-        //    // prepare and send our update message
-        //    Net_UpdateFollow fu = new Net_UpdateFollow();
-        //    fu.Follow = account.GetAccount();
+            // follower are deprecated, new is Friend system: to be implemented
+            /*Net_UpdateFollow fu = new Net_UpdateFollow();
+            fu.Follow = account.GetAccount();
 
-        //    foreach (var f in dataBank.FindAllFollowBy(account.Email))
-        //    {
-        //        if (f.ActiveConnection != 0)
-        //        {
-        //            //Todo rename cnnId to connectionId in whole solution
-        //            SendClient(recHostId, f.ActiveConnection, fu);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    olr.Success = 0;
-        //}
+            foreach (var f in dataBank.FindAllFollowBy(account.Email))
+            {
+                if (f.ActiveConnection != 0)
+                {
+                    //Todo rename cnnId to connectionId in whole solution
+                    SendClient(recHostId, f.ActiveConnection, fu);
+                }
+            }*/
+        }
+        else
+        {
+            //Todo [Leon] login fails counter
+            Debug.Log("user tryed to log in with wrong user_name or email");
+            olr.success = 2;
+        }
 
-        //SendClient(recHostId, cnnId, olr);
+        SendClient(recHostId, cnnId, olr);
     }
     private void AddFollow(int cnnId, int channelId, int recHostId, Net_AddFollow msg)
     {
@@ -645,10 +648,15 @@ public class ServerManager : NetworkManager
     {
         // this is where we hold our data
         byte[] buffer = new byte[BYTE_SIZE];
+        
 
         // this is where we put our data into a byte[]
         BinaryFormatter formatter = new BinaryFormatter();
         MemoryStream memoryStream = new MemoryStream(buffer);
+        using(var ms = new MemoryStream())
+        {
+
+        }
         formatter.Serialize(memoryStream, message);
         if (recHost == 0)
         {

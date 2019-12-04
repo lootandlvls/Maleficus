@@ -1,14 +1,21 @@
-﻿[System.Serializable]
+﻿using MongoDB.Bson;
+[System.Serializable]
 public class Net_OnLoginRequest : AbstractNetMessage
 {
     public Net_OnLoginRequest()
     {
         MessageType = ENetMessageType.ON_LOGIN_REQUEST;
     }
-    public byte Success { set; get; }
-    public string Information { set; get; }
-
-    public int ConnectionId { set; get; }
-    public string Username { set; get; }
-    public string Discriminator { set; get; }
+    public byte success { set; get; }
+    public string token { set; get; }
+    public string user_name { set; get; }
+    public string password { set; get; }
+    public string email { set; get; }
+    public byte status { set; get; }
+    public int coins { set; get; }
+    public byte level { set; get; }
+    public int xp { set; get; }
+    public byte spent_spell_points { set; get; }
+    public BsonDateTime account_created { set; get; }
+    public BsonDateTime last_login { set; get; }
 }
