@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using static Maleficus.MaleficusUtilities;
 
 public class AutoAccountContext : MonoBehaviour
 {
     public static AutoAccountContext Instance { set; get; }
 
-    [SerializeField] public TMP_Text user_name;
-    [SerializeField] public TMP_Text password;
+    [SerializeField] public TMP_InputField user_name_input_field;
+    [SerializeField] public TMP_InputField password_input_field;
+    [SerializeField] public TMP_InputField email_input_field;
 
     //[SerializeField] protected TextMeshProUGUI authenticationMessageText;
 
@@ -17,9 +19,23 @@ public class AutoAccountContext : MonoBehaviour
         Instance = this;
     }
 
+    public void OnClickCreateAccount()
+    {
+        DisableInputs();
+        NetworkManager.Instance.SendCreateAccount(true);
+    }
     public void ChangeAuthenticationMessage(string msg)
     {
         //authenticationMessageText.text = msg;
+    }
+    public void OnClickSaveCredentials()
+    {
+        DisableInputs();
+
+        string user_name = user_name_input_field.text;
+        string password = Sha256FromString(password_input_field.text);
+        string email = email_input_field.text;
+        NetworkManager.Instance.SendUpdateAccount(true, user_name, "", password, email);
     }
     public void EnableInputs()
     {

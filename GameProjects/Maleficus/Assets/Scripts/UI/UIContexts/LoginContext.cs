@@ -24,7 +24,7 @@ public class LoginContext : MonoBehaviour
         string usernameOrEmail = loginUsernameOrEmail.text;
         string password = loginPassword.text;
 
-        NetworkManager.Instance.SendLoginRequest(usernameOrEmail, password);
+        NetworkManager.Instance.SendLoginRequest(false, usernameOrEmail, password);
     }
 
     public void ChangeAuthenticationMessage(string msg)

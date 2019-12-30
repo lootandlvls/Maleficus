@@ -267,34 +267,28 @@ public class Mongo
     #endregion
 
     #region Insert
-    public Model_Account InsertAccount(bool random)
+    public Model_Account InsertAccount(bool random, string password)
     {
         Model_Account new_account = new Model_Account();
-        if (random)
-        {
-            // create random account
-            new_account.password = UnityEngine.Random.Range(0, 99999).ToString("00000");
-            List<Model_Account> users_with_standard_name = collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).ToList();
+
+        // create random account
+        new_account.token = GenerateRandom(128);
+        new_account.password = Sha256FromString(password);
+        List<Model_Account> users_with_standard_name = collection_accounts.Find(u => Regex.IsMatch(u.user_name, USERNAME_PLAYER_PATTERN)).ToList();
             
-            if(users_with_standard_name.Count > 0)
-            {
-                String[] parts_of_player_number = users_with_standard_name[users_with_standard_name.Count - 1].user_name.Split('_');
-                new_account.user_name = "player_";
-                new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
-            }
-            else
-            {
-                new_account.user_name = "player_1";
-            }
-
-
-            new_account.account_created = DateTime.UtcNow;
-            collection_accounts.InsertOne(new_account);
+        if(users_with_standard_name.Count > 0)
+        {
+            String[] parts_of_player_number = users_with_standard_name[users_with_standard_name.Count - 1].user_name.Split('_');
+            new_account.user_name = "player_";
+            new_account.user_name += int.Parse(parts_of_player_number[1]) + 1;
         }
         else
         {
-            // create account with given user_name, email and password
+            new_account.user_name = "player_1";
         }
+
+        new_account.account_created = DateTime.UtcNow;
+        collection_accounts.InsertOne(new_account);
 
         return new_account;
     }
@@ -303,32 +297,34 @@ public class Mongo
     #region Update
     public bool UpdateAccount(ObjectId _id, string user_name = "", string password = "", string email = "", int main_connection = -1, int instance_connection = -1, string token = "", ObjectId lobby_id = default(ObjectId), ObjectId game_id = default(ObjectId), byte status = 255, int coins = -1, byte level = 255, int xp = -1, byte spent_spell_points = 255, BsonDateTime last_login = default(BsonDateTime))
     {
-        // check if user_name, password, email are valid
-        if (user_name != "" && !IsUsername(user_name))
-        {
-            Debug.Log("User name not valid");
-            return false;
-        }
-        if (password != "" && !IsPassword(password))
-        {
-            Debug.Log("User name not valid");
-            return false;
-        }
-        if (email != "" && !IsEmail(email))
-        {
-            Debug.Log("User name not valid");
-            return false;
-        }
-
         // update by the given values
         if (password != "")
         {
-            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("password", Sha256FromString(password)));
+            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("password", password));
         }
 
         if (user_name != "")
         {
-            collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("user_name", user_name));
+            if(FindAccount(default(ObjectId), user_name) == null)
+            {
+                collection_accounts.UpdateOne(u => u._id == _id, Builders<Model_Account>.Update.Set("user_name", user_name));
+            }
+            else
+            {
+                return false;
+            }
+        }
+        if (email != "")
+        {
+            if (FindAccount(default(ObjectId), "", email) == null)
+            {
+                // email noch nicht vorhanden
+                collection_accounts.UpdateOne(u => u._id == _id || u.user_name == user_name, Builders<Model_Account>.Update.Set("email", email));
+            }
+            else
+            {
+                return false;
+            }
         }
         if (password != "")
         {
@@ -553,7 +549,8 @@ public class Mongo
             if (IsEmail(usernameOrEmail))
             {
                 // if i logged in using an email
-                myAccount = accounts.Find(u => u.Email == usernameOrEmail && u.ShaPassword == password).FirstOrDefault<Model_Account>();
+                myAccount = accounts.Find(u => u.Email == usernameOrEmail && u.
+                Password == password).FirstOrDefault<Model_Account>();
 
                 //Todo find way to store filters
                 if (myAccount != null)

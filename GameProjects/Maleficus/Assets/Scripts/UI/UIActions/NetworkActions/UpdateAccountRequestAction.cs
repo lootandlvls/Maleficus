@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RegisterOkAction : AbstractUIAction
+public class UpdateAccountRequestAction : AbstractUIAction
 {
     // Simply invoke ActionButtonPressed event
 }

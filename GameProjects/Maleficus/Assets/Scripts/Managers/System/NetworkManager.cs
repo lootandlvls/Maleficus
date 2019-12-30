@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using MongoDB.Bson;
 using static Maleficus.MaleficusConsts;
 using static Maleficus.MaleficusUtilities;
+using static UserManager;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>
 {
@@ -21,6 +22,8 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private int hostId;
     // for lookup of error codes unitydocs networking networkError
     private byte error;
+    protected int debugStateID;
+    protected string currentDebugText="";
 
     private string token;
     protected bool pingedSuccessfully = false;
@@ -49,10 +52,15 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
         EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
     }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        debugStateID = 60;
+    }
     protected override void Start()
     {
         base.Start();
-
         pingedSuccessfully = false;
         StartCoroutine(ConnectToServerCoroutine());
     }
@@ -60,8 +68,12 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         Init();
     }
+    protected override void Update()
+    {
+        base.Update();
+        DebugManager.Instance.Log(debugStateID, currentDebugText);
+    }
     #endregion
-
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
         // Prevent that other clients who recieve an event Triggered by a different client, to broadcast the same event again
@@ -85,7 +97,7 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     {
         if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
         {
-            Debug.Log("couldn't connect to the internet, or playing offline");
+            currentDebugText = "Couldn't connect to the internet.";
             PlayingOffline = true;
             yield return new WaitForSeconds(NETWORK_CONNECT_FREQUENCY);
             UpdateReceivedMessage(ENetworkMessageType.OFFLINE);
@@ -93,10 +105,9 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         }
         else
         {
-            Debug.Log("Connected to the internet");
+            currentDebugText =  "Connected to the internet.";
         }
-        DebugLog("Trying to ping Server");
-
+        currentDebugText = "Trying to ping Server...";
         NetworkTransport.Init();
 
         ConnectionConfig connectionConfig = new ConnectionConfig();
@@ -121,7 +132,7 @@ Debug.Log("Connecting from Web");
         if (connectionId != 0)
         {
             pingedSuccessfully = true;
-            DebugLog("Pinged Server successfully!");
+            currentDebugText = "Pinged Server successfully!...";
         }
         else
         {
@@ -143,7 +154,7 @@ Debug.Log("Connecting from Web");
     }
     private IEnumerator UpdateMessagePumpCoroutine()
     {
-        Debug.Log("Trying to connect to the Server...");
+        currentDebugText = "Trying to connect to the Server...";
         int recHostId;      // is this from web? standalone?
         int connectionId;   // which user is sending me this?
         int channelId;      // which lane is he sending that message from
@@ -162,10 +173,12 @@ Debug.Log("Connecting from Web");
                 {
                     case NetworkEventType.ConnectEvent:
                         Debug.Log("Connected to server");
+                        currentDebugText = "";
                         yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
                         UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
                         Net_Connected c = new Net_Connected();
                         isConnected = true;
+                        CheckForSavedLoginData();
                         break;
                     case NetworkEventType.DisconnectEvent:
                         Debug.Log("Disconnected from server");
@@ -237,11 +250,13 @@ Debug.Log("Connecting from Web");
                 Debug.Log("Account Created.");
                 OnCreateAccount((Net_OnCreateAccount)netMessage);
                 break;
-
+            case ENetMessageType.ON_UPDATE_ACCOUNT:
+                Debug.Log("On Update Account");
+                OnUpdateAccount((Net_OnUpdateAccount)netMessage);
+                break;
             case ENetMessageType.ON_LOGIN_REQUEST:
                 Debug.Log("Login");
                 OnLoginRequest((Net_OnLoginRequest)netMessage);
-                UpdateReceivedMessage(ENetworkMessageType.LOGGED_IN);
                 break;
 
             case ENetMessageType.ON_ADD_FOLLOW:
@@ -319,70 +334,6 @@ Debug.Log("Connecting from Web");
 
     }
 
-    private void OnCreateAccount(Net_OnCreateAccount oca)
-    {
-        UserManager.CreateLocalUserAccount(true);
-        UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255,-1,255,-1,255,oca.account_created,default(BsonDateTime));
-        UserManager.LoadSavedAccount();
-        if (oca.random)
-        {
-            AutoAccountContext.Instance.EnableInputs();
-            AutoAccountContext.Instance.user_name.text = UserManager.user.user_name;
-            AutoAccountContext.Instance.password.text = UserManager.user.password;
-        }
-        else
-        {
-            RegisterContext.Instance.EnableInputs();
-            RegisterContext.Instance.ChangeAuthenticationMessage("Registered!");
-        }
-    }
-    private void OnLoginRequest(Net_OnLoginRequest olr)
-    {
-        LoginContext.Instance.ChangeAuthenticationMessage(olr.Information);
-        if (olr.Success != 1)
-        {
-            // unsuccessfull login
-            LoginContext.Instance.EnableInputs();
-        }
-        else
-        {
-            // successfull login
-
-            // this is where we save data about ourself
-            //Self = new Local_Account();
-            //Self.ActiveConnection = olr.ConnectionId;
-            //Self.Username = olr.Username;
-            //Self.Discriminator = olr.Discriminator;
-
-            //token = olr.Token;
-            //Debug.Log("token: " + token);
-            //LoginContext.Instance.EnableInputs();
-
-            // change to next state
-
-        }
-    }
-    private void OnAddFollow(Net_OnAddFollow oaf)
-    {
-        if (oaf.Success == 1)
-        {
-            FriendsContext.Instance.AddFollowToUi(oaf.Follow);
-        }
-    }
-    private void OnRequestFollow(Net_OnRequestFollow orf)
-    {
-        foreach (var follow in orf.Follows)
-        {
-            FriendsContext.Instance.AddFollowToUi(follow);
-        }
-    }
-    private void UpdateFollow(Net_UpdateFollow fu)
-    {
-        if (FriendsContext.Instance != null)
-        {
-            FriendsContext.Instance.UpdateFollow(fu.Follow);
-        }
-    }
     private void OnRequestGameInfo(Net_OnRequestGameInfo orgi)
     {
         Debug.Log("&/(&/(&(/&/(&( M Player ID : " + orgi.ownPlayerId);
@@ -448,65 +399,48 @@ Debug.Log("Connecting from Web");
         Net_CreateAccount ca = new Net_CreateAccount();
         ca.random = random;
 
-        if (!random)
-        {
-            // if account values given
-            if (!IsUsername(user_name))
-            {
-                RegisterContext.Instance.ChangeAuthenticationMessage("Username is invalid");
-                RegisterContext.Instance.EnableInputs();
-                return;
-            }
-            if (!IsEmail(email))
-            {
-                RegisterContext.Instance.ChangeAuthenticationMessage("Email is invalid");
-                RegisterContext.Instance.EnableInputs();
-                return;
-            }
-            if (!IsPassword(password))
-            {
-                RegisterContext.Instance.ChangeAuthenticationMessage("Password is invalid");
-                RegisterContext.Instance.EnableInputs();
-                return;
-            }
-
-            ca.user_name = user_name;
-            ca.password = Sha256FromString(password);
-            ca.email = email;
-            RegisterContext.Instance.ChangeAuthenticationMessage("Sending create account request...");
-        }
-
         SendServer(ca);
     }
-
-    public void SendLoginRequest(string usernameOrEmail, string password)
+    public void SendUpdateAccount(bool update_random, string user_name="", string old_password="", string password="", string email="")
     {
-        // todo: username and token working and messages should work
-        // invalid email or username
-        if (!IsUsername(usernameOrEmail) && !IsEmail(usernameOrEmail))
-        {
-            LoginContext.Instance.ChangeAuthenticationMessage("Email or Username#Discriminator is invalid");
-            LoginContext.Instance.EnableInputs();
-            return;
-        }
+        Net_UpdateAccount ua = new Net_UpdateAccount();
+        ua.update_random = update_random;
+        ua.token = token;
+        ua.user_name = user_name;
+        ua.old_password = old_password;
+        ua.password = password;
+        ua.email = email;
 
-        // invalid password
-        if (!IsPassword(password))
+        SendServer(ua);
+    }
+    public void SendLoginRequest(bool is_automatic_login, string user_name_or_email, string password)
+    {
+        if (!is_automatic_login)
         {
-            LoginContext.Instance.ChangeAuthenticationMessage("Password is invalid");
-            LoginContext.Instance.EnableInputs();
-            return;
+            if (!IsPassword(password))
+            {
+                // invalid password
+                currentDebugText = "Password is invalid";
+                LoginContext.Instance.EnableInputs();
+                return;
+            }
         }
 
         Net_LoginRequest lr = new Net_LoginRequest();
+        if (IsEmail(user_name_or_email))
+        {
+            lr.email = user_name_or_email;
+        }
+        else
+        {
+            lr.user_name = user_name_or_email;
+        }
 
-        lr.UsernameOrEmail = usernameOrEmail;
-        lr.Password = Sha256FromString(password);
+        lr.password = password;
 
-        LoginContext.Instance.ChangeAuthenticationMessage("Sending Login request...");
+        currentDebugText = "Logging in...";
         SendServer(lr);
     }
-
     public void SendAddFollow(string usernameOrEmail)
     {
         Net_AddFollow af = new Net_AddFollow();
@@ -515,7 +449,6 @@ Debug.Log("Connecting from Web");
 
         SendServer(af);
     }
-
     public void SendRemoveFollow(string username)
     {
         Net_RemoveFollow rf = new Net_RemoveFollow();
@@ -524,7 +457,6 @@ Debug.Log("Connecting from Web");
 
         SendServer(rf);
     }
-
     public void SendRequestFollow()
     {
         Net_RequestFollow rf = new Net_RequestFollow();
@@ -534,13 +466,22 @@ Debug.Log("Connecting from Web");
         SendServer(rf);
         Debug.Log("trying to send requestollow");
     }
-
+    private void UpdateFollow(Net_UpdateFollow fu)
+    {
+        if (FriendsContext.Instance != null)
+        {
+            FriendsContext.Instance.UpdateFollow(fu.Follow);
+        }
+    }
     protected virtual void CheckForSavedLoginData()
     {
-        /*if(user.email != "" && user.password != "")
+        if(user != null)
         {
-            SendLoginRequest(user.email, user.password);
-        }*/
+            if (user.user_name != "" && user.password != "")
+            {
+                SendLoginRequest(true, user.user_name, user.password);
+            }
+        }
     }
 
     #endregion
@@ -567,9 +508,101 @@ Debug.Log("Connecting from Web");
     }
 
     #endregion
-#endregion
+    #endregion
 
-#region Listeners
+    #region Listeners
+
+    #region AccountListeners
+    private void OnCreateAccount(Net_OnCreateAccount oca)
+    {
+        Debug.Log("createdaccount");
+        if (oca.success == 1)
+        {
+            UserManager.CreateLocalUserAccount(true);
+            UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email, 255, -1, 255, -1, 255, 
+                oca.account_created, default(BsonDateTime));
+            AutoAccountContext.Instance.EnableInputs();
+            AutoAccountContext.Instance.user_name_input_field.text = UserManager.user.user_name;
+            AutoAccountContext.Instance.password_input_field.text = oca.plain_password;
+            token = oca.token;
+        }
+    }
+    private void OnUpdateAccount(Net_OnUpdateAccount oca)
+    {
+        if (oca.success == 2)
+        {
+            currentDebugText = "Current password was entered wrong";
+            AutoAccountContext.Instance.EnableInputs();
+            return;
+        }
+        if (oca.success == 3)
+        {
+            currentDebugText = "The new password is not a valid";
+            AutoAccountContext.Instance.EnableInputs();
+            return;
+        }
+        if (oca.success == 4)
+        {
+            currentDebugText = "The entered user name is not valid";
+            AutoAccountContext.Instance.EnableInputs();
+            return;
+        }
+        if (oca.success == 5)
+        {
+            currentDebugText = "The entered email address is not valid";
+            AutoAccountContext.Instance.EnableInputs();
+            return;
+        }
+        Debug.Log("Updating Account was successfull");
+        UserManager.UpdateSavedAccountData(oca.user_name, oca.password, oca.email);
+        AutoAccountContext.Instance.EnableInputs();
+        UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
+    }
+    private void OnLoginRequest(Net_OnLoginRequest olr)
+    {
+        if(olr.success == 3)
+        {
+            currentDebugText = "Wrong password-.-";
+            LoginContext.Instance.EnableInputs();
+            return;
+        }
+        if (olr.success == 2)
+        {
+            // unsuccessfull login
+            currentDebugText = "Wrong user_name or email";
+            LoginContext.Instance.EnableInputs();
+            return;
+        }
+        else
+        {
+            // successfull login
+            UserManager.UpdateSavedAccountData(olr.user_name, olr.password, olr.email, olr.status, 
+                olr.coins, olr.level, olr.xp, olr.spent_spell_points, olr.account_created, olr.last_login);
+            token = olr.Token;
+            Debug.Log("token: " + token);
+            LoginContext.Instance.EnableInputs();
+
+            // change to next state
+            UpdateReceivedMessage(ENetworkMessageType.LOGGED_IN);
+        }
+    }
+    private void OnAddFollow(Net_OnAddFollow oaf)
+    {
+        if (oaf.Success == 1)
+        {
+            FriendsContext.Instance.AddFollowToUi(oaf.Follow);
+        }
+    }
+    private void OnRequestFollow(Net_OnRequestFollow orf)
+    {
+        foreach (var follow in orf.Follows)
+        {
+            FriendsContext.Instance.AddFollowToUi(follow);
+        }
+    }
+    #endregion
+
+    #region ManagerEventListeners
     protected virtual void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
@@ -579,21 +612,24 @@ Debug.Log("Connecting from Web");
                 break;
         }
     }
-
     protected virtual void On_UI_MenuStateUpdated(Event_StateUpdated<EMenuState> eventHandle)
     {
         switch (eventHandle.NewState)
         {
             case EMenuState.IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER:
-                SendCreateAccount(true);
+                //if(user == null)
+                //{
+                    SendCreateAccount(true);
+                //}
+                /*else
+                {
+                    Debug.Log("An Account already exists on your device.");
+                    //TODO change to new buttons: login, create new account by name
+                }*/
                 break;
         }
     }
+    #endregion
 
-    public void OnRegisterOk()
-    {
-        UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
-    }
-
-#endregion
+    #endregion
 }

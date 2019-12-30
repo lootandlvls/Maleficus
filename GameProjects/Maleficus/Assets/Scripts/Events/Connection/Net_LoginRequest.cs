@@ -5,6 +5,7 @@ public class Net_LoginRequest : AbstractNetMessage
     {
         MessageType = ENetMessageType.LOGIN_REQUEST;
     }
-    public string UsernameOrEmail { set; get; }
-    public string Password { set; get; }
+    public string user_name { set; get; }
+    public string password { set; get; }
+    public string email { set; get; }
 }

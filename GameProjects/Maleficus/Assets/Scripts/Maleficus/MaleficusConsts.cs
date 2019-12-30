@@ -55,7 +55,7 @@ namespace Maleficus
         public const int SERVER_INSTANCE_MANAGER_PORT = 9999;
         public const int PORT = 26002;
         public const int WEB_PORT = 26004;
-        public const int BYTE_SIZE = 1024;
+        public const int BYTE_SIZE = 1402;
         public const string LOCAL_SERVER_IP = "127.0.0.1";
         public const string CLOUD_SERVER_IP = "83.171.237.227";
         public const string GOOGLE_CLOUD_SERVER_IP = "35.246.234.228";
@@ -165,7 +165,6 @@ namespace Maleficus
         public static EMenuState[] MENU_STATES_IN_LOGIN = new EMenuState[]
         {
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN,
-        EMenuState.IN_ENTRY_IN_LOGIN_IN_CHOOSE_PLAY_OR_REGISTER,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_AUTO_REGISTER,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_FOLLOW,
         EMenuState.IN_ENTRY_IN_LOGIN_IN_LEGAL

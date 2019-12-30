@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using static Maleficus.MaleficusUtilities;
 using static Maleficus.MaleficusConsts;
 
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
-    [SerializeField] MaleficusButton selectedButton ;                                                                         // TODO: Update selected button on menu change
+    private MaleficusButton selectedButton;// TODO: Update selected button on menu change
 
     protected override void Awake()
     {
@@ -111,7 +112,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         {
             Action.ActionButtonPressed += () =>
             {
-                RegisterContext.Instance.OnClickCreateAccount();
+                AutoAccountContext.Instance.OnClickCreateAccount();
             };
         }
 
@@ -133,15 +134,16 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             };
         }
 
-        RegisterOkAction[] ROActions = FindObjectsOfType<RegisterOkAction>();
-        foreach(RegisterOkAction Action in ROActions)
+        UpdateAccountRequestAction[] UARActions = FindObjectsOfType<UpdateAccountRequestAction>();
+        foreach(UpdateAccountRequestAction Action in UARActions)
         {
-            NetworkManager.Instance.OnRegisterOk();
+            Action.ActionButtonPressed += () =>
+            {
+                AutoAccountContext.Instance.OnClickSaveCredentials();
+            };
         }
     }
         
-  
-
     #region Events Callbacks
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
@@ -202,7 +204,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     UpdateState(EMenuState.IN_MENU_MAIN);
                     break;
                 case ENetworkMessageType.REGISTERED:
-                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    UpdateState(EMenuState.IN_MENU_MAIN);
                     break;
             }
         }
