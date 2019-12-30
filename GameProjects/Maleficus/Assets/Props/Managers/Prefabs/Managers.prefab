@@ -639,6 +639,7 @@ MonoBehaviour:
   debugLogConsoleEnabled: 1
   logWarningsAsErrors: 1
   logCategoriesToIgnore: []
+  selectedButton: {fileID: 0}
 --- !u!1 &4237950309803824908
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +824,7 @@ MonoBehaviour:
   IsSpawnRemainingPlayersOnGameStart: 1
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsDebugLogEvents: 1
+  IsDebugLogEvents: 0
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
 GameObject:
@@ -1570,13 +1571,13 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   Player_1_SpellsList:
-  - {fileID: 1357507747990590128, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
-  - {fileID: 3192603726563579907, guid: a5f1558f45cacb641b0ed304f7db35cd, type: 3}
-  - {fileID: 3192603726563579907, guid: a5f1558f45cacb641b0ed304f7db35cd, type: 3}
-  Player_2_SpellsList:
-  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07, type: 3}
   - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
-  - {fileID: 1160651867442885725, guid: dfd154fda39e76441a581dc5206c9639, type: 3}
+  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
+  Player_2_SpellsList:
+  - {fileID: 4881839978439356376, guid: bca058ddfee72814bb33efe897551b02, type: 3}
+  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
+  - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
   Player_3_SpellsList:
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
   - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}

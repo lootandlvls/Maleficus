@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Linear_Laser : AbstractSpell
 {
+
     private void OnTriggerStay(Collider other)
     {
         Vector3 movingDirection = Vector3.forward;
@@ -14,6 +15,7 @@ public class Linear_Laser : AbstractSpell
         if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
         {
             ProcessHits(otherPlayer);
+
         }
         else if (otherEnemy != null)
         {

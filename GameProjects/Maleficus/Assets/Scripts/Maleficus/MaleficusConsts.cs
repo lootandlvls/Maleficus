@@ -32,6 +32,7 @@ namespace Maleficus
         public const string PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1 = "S_EnergyBalll_Parabolic";
         public const string PATH_SPELL_FIRE__LASER_LVL_1 = "S_FireLaser";
         public const string PATH_SPELL_TELEPORT_LVL_1 = "S_Teleportation";
+        public const string PATH_SPELL_PLASMA_FISSION_BALLS = "S_Plasma_Fission_Balls"; 
 
         /* Effects path */
         public const string PATH_EFFECT_FROZEN = "E_Snowman";

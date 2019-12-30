@@ -105,6 +105,7 @@ MonoBehaviour:
   isChargeable: 0
   spellIcon: {fileID: 0}
   skillPoint: 0
+  isTripleCast: 0
   movementType: 0
   debuffEffects: 06000000
   buffEffects: 
@@ -192,7 +193,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6517137874974288690}
   serializedVersion: 6
-  lengthInSec: 1
+  lengthInSec: 2
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 3
@@ -1017,7 +1018,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 40
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4828,8 +4829,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 471fd056a7163294b9459fc0c7c272c3, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4987,7 +4988,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.15
+      scalar: 0.12
       minScalar: 0.1
       maxCurve:
         serializedVersion: 2
@@ -5156,7 +5157,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3.5
+      scalar: 4
       minScalar: 1.5
       maxCurve:
         serializedVersion: 2
@@ -5737,7 +5738,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 40
+      scalar: 30
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -9548,8 +9549,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 471fd056a7163294b9459fc0c7c272c3, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14268,8 +14269,8 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 471fd056a7163294b9459fc0c7c272c3, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15637,7 +15638,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.07352942, g: 0.6549693, b: 1, a: 1}
+        key0: {r: 0.5087665, g: 0.7990795, b: 0.9716981, a: 1}
         key1: {r: 0, g: 0, b: 0, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
@@ -18989,7 +18990,7 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
-  - {fileID: 0}
+  - {fileID: 2100000, guid: ffd93b0c159b9234daa329ec89d537bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

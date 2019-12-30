@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5166936958848267940}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.3323519, y: 0.035451822, z: -0.94239134, w: 0.013562637}
   m_LocalPosition: {x: 0, y: 0, z: -0.057}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5161984704513669514}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -183.314, y: -141.066, z: 2.8209991}
 --- !u!198 &5003722161517601882
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -4727,7 +4727,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5167001418836066224}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: 5.65, y: 2, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4737,7 +4737,7 @@ Transform:
   - {fileID: 5161735389842899910}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!199 &5005578895052102024
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4839,6 +4839,7 @@ MonoBehaviour:
   isChargeable: 1
   spellIcon: {fileID: 0}
   skillPoint: 0
+  isTripleCast: 0
   movementType: 0
   debuffEffects: 
   buffEffects: 
@@ -4849,6 +4850,8 @@ MonoBehaviour:
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1262490536792160, guid: b364b2e1b67030b41b0d034b293f04cf, type: 3}
   trails:
+  - {fileID: 5167562852309430166}
+  - {fileID: 5167634775298860820}
   - {fileID: 5167806128211538230}
   - {fileID: 5166936958848267940}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
@@ -9580,13 +9583,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5167562852309430166}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0.04547063, y: -0, z: -0, w: 0.9989657}
   m_LocalPosition: {x: 0, y: 0, z: -0.864}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5161984704513669514}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -5.2120004, y: 0, z: 0}
 --- !u!199 &5003846093235997992
 ParticleSystemRenderer:
   serializedVersion: 6

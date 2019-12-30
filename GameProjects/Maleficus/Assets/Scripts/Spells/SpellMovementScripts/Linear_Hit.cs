@@ -6,7 +6,7 @@ public class Linear_Hit : AbstractSpell
 {
     private Vector3 movingDirection;  
     public Vector3 directionVector;
-    
+    private Vector3 forward = Vector3.forward;
     
     [SerializeField] bool shoot;
 
@@ -33,7 +33,7 @@ public class Linear_Hit : AbstractSpell
     public void Move()
     {
       
-        movingDirection =  Vector3.forward * Speed * Time.deltaTime;
+        movingDirection = forward * Speed * Time.deltaTime;
 
         directionVector = transform.TransformDirection(movingDirection);
         myRigidBody.velocity = new Vector3(directionVector.x, directionVector.y, directionVector.z);
@@ -47,22 +47,34 @@ public class Linear_Hit : AbstractSpell
         direction = transform.TransformDirection(pushingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
+        Shield shield = other.gameObject.GetComponent<Shield>();
 
-        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
+        if (shield == null)
         {
-            Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.PlayerIDToInt(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.PlayerIDToInt(otherPlayer.PlayerID));
-            ProcessHits(otherPlayer);
-        }
-        else if (otherEnemy != null)
-        {
-            ProcessHits(otherEnemy);
-        }
-        else if (other.tag.Equals("Object"))
-        {
-            
+            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
+            {
+                Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.PlayerIDToInt(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.PlayerIDToInt(otherPlayer.PlayerID));
+                ProcessHits(otherPlayer);
+            }
+            else if (otherEnemy != null)
+            {
+                ProcessHits(otherEnemy);
+            }
+            else if (other.tag.Equals("Object"))
+            {
+
                 DestroySpell();
-         
+
+            }
         }
-       
+        else
+        {
+            if (CastingPlayerID != shield.CastingPlayerID)
+            {
+                transform.Rotate(180, 0, 0);
+                CastingPlayerID = shield.CastingPlayerID;
+            }
+        }
+    
     }
 }

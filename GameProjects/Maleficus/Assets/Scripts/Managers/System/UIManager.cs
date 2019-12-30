@@ -7,7 +7,7 @@ using static Maleficus.MaleficusConsts;
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
-    private MaleficusButton selectedButton;                                                                         // TODO: Update selected button on menu change
+    [SerializeField] MaleficusButton selectedButton ;                                                                         // TODO: Update selected button on menu change
 
     protected override void Awake()
     {
@@ -140,6 +140,8 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
     }
         
+  
+
     #region Events Callbacks
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {

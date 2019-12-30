@@ -21,7 +21,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver);
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
-        // EventManager.Instance.AR_StagePlaced += On_AR_StagePlaced;
+        
     }
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
@@ -31,10 +31,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         StartGame(EGameMode.FFA_LIVES);
     }
 
-    private void On_AR_ARStagePlayerd(NetEvent_ARStagePlaced obj)
-    {
-        // TODO Implement
-    }
+   
 
     public override void OnSceneStartReinitialize()
     {

@@ -133,7 +133,19 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog(castedSpell + " casted by " + castingPlayerID);
     }
 
-    
+
+    public event Action<ESpellID, EPlayerID> SPELLS_UniqueEffectActivated;
+    public void Invoke_SPELLS_UniqueEffectActivated(ESpellID castedSpell, EPlayerID castingPlayerID)
+    {
+
+        if (SPELLS_UniqueEffectActivated != null)
+        {
+            SPELLS_UniqueEffectActivated.Invoke(castedSpell, castingPlayerID);
+        }
+        DebugLog(castedSpell + " casted by " + castingPlayerID);
+    }
+
+
     public event Action<SHitInfo> SPELLS_SpellHitPlayer;
     public void Invoke_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {

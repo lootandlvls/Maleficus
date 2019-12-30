@@ -112,7 +112,10 @@ public enum ESpellMovementType
     TELEPORT,
     AOE,
     LINEAR_LASER,
-    RAPID_FIRE
+    RAPID_FIRE,
+    Traps,
+    UNIQUE,
+    STATIC
 
 }
 
@@ -123,8 +126,14 @@ public enum ESpellID
     FIRE_EXPLOSION,
     ICEBALL,
     TELEPORT,
+    ENERGY_TRIANGLES,
+    AOE_EXPLOSION,
+    FIRE_SHOCKBLAST,
     ELECTRICBALL,
-    VAMPERICBALL
+    VAMPERICBALL,
+    PLASMA_FISSION,
+    PLASMA_FISSION_BALLS,
+    SHIELD
 }
 #endregion
 
@@ -172,7 +181,7 @@ public struct SHitInfo
     {
         get
         {
-            Debug.Log("§$%§$%§ dir : " + castedSpell.Direction + " | pow : " + castedSpell.HitPower);
+           // Debug.Log("§$%§$%§ dir : " + castedSpell.Direction + " | pow : " + castedSpell.HitPower);
             return castedSpell.Direction * castedSpell.HitPower;
         }
     }

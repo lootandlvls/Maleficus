@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
 
     public int HitPower { get {
-            Debug.Log("$%&$/$%& Hit power : " + hitPower);
+           // Debug.Log("$%&$/$%& Hit power : " + hitPower);
             return hitPower; } }
 
     public float Speed { get { return speed; } }
@@ -91,6 +92,8 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
         direction = new Vector3(0, 0, 0);
         myRigidBody = GetComponent<Rigidbody>();
+        // Activates a Spell unique Abilities
+        EventManager.Instance.SPELLS_UniqueEffectActivated += On_SPELLS_UniqueEffectActivated;
 
         if (OnSelfEffect)
         {
@@ -99,6 +102,47 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         }
     }
 
+    private void On_SPELLS_UniqueEffectActivated(ESpellID SpellID, EPlayerID PlayerID)
+    {
+        if (this != null)
+        {
+            if (MovementType == ESpellMovementType.UNIQUE)
+            {
+                if (CastingPlayerID == PlayerID)
+                {
+                    if (SpellID == ESpellID.PLASMA_FISSION)
+                    {
+                        AbstractSpell Part_1 = null;
+                        AbstractSpell Part_2 = null;
+                        foreach (var spell in SpellManager.Instance.All_Spells)
+                        {
+                            if (spell.SpellID == ESpellID.PLASMA_FISSION_BALLS)
+                            {
+                                Part_1 = (AbstractSpell)spell;
+                                Part_2 = (AbstractSpell)spell;
+                            }
+                        }
+                        
+                        Vector3 rotation_1 = this.transform.rotation.eulerAngles + new Vector3(0, 90, 0);
+                        Vector3 rotation_2 = this.transform.rotation.eulerAngles - new Vector3(0, 90, 0);
+
+                        Quaternion Qrotation_1 = Quaternion.Euler(rotation_1);
+                        Quaternion Qrotation_2 = Quaternion.Euler(rotation_2);
+                        if (Part_1 != null && Part_2 != null)
+                        {
+                            AbstractSpell spell_Part_1 = Instantiate(Part_1, transform.position, Qrotation_1);
+                            spell_Part_1.CastingPlayerID = CastingPlayerID;
+                            AbstractSpell spell_Part_2 = Instantiate(Part_2, transform.position, Qrotation_2);
+                            spell_Part_2.CastingPlayerID = CastingPlayerID;
+                        }
+                        DestroySpell();
+
+                    }
+
+                }
+            }
+        }
+    }
 
     protected void ProcessHits(IPlayer[] hitPlayers)
     {
@@ -108,7 +152,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
             // Debug.Log(dirVector);
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, isTripleCast, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-            if (movementType != ESpellMovementType.AOE)
+            if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST)
             {
                 DestroySpell();
             }
@@ -121,15 +165,15 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     {
         if (hitPlayer.IsDead == false)
         {
-            Debug.Log("333333333333333333333333 player hit");
+          //  Debug.Log("333333333333333333333333 player hit");
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, isTripleCast, debuffEffects, buffEffects);
            
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-
-            if (movementType != ESpellMovementType.LINEAR_LASER )
-            {
+            
+           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST )
+           {
                 DestroySpell();
-            }
+           }
         }
     }
 

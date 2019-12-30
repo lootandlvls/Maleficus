@@ -4749,20 +4749,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a140ba59daf63b946a13fe4fdd1b3221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRigidBody: {fileID: 0}
-  dirVector: {x: 0, y: 0, z: 0}
-  parabolicSpell_EndPosition: {fileID: 0}
-  hitPower: 5
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logWarningsAsErrors: 1
+  logCategoriesToIgnore: []
+  hitPower: 30
   speed: 0
   spellName: S_Fire_Shockwave
   spellLevel: 0
   OnSelfEffect: 0
-  hasPower: 1
-  cooldown: 4
-  spellDuration: 0.2
+  hasPushPower: 1
+  spell: 7
+  isChargeable: 0
+  spellIcon: {fileID: 0}
+  skillPoint: 0
+  isTripleCast: 0
   movementType: 3
   debuffEffects: 
   buffEffects: 
+  cooldown: 1
+  spellDuration: 0.2
+  pushDuration: 0
+  shotSFX: {fileID: 0}
+  hitSFX: {fileID: 0}
+  hitPrefab: {fileID: 0}
+  trails: []
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6989875467044313393
 GameObject:
   m_ObjectHideFlags: 0

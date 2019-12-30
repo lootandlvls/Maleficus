@@ -256,8 +256,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             StartCoroutine(animationDelay(spellToCast, playerID, 2));
             Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
-            AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
-            spell.CastingPlayerID = playerID;
+          //  AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
+        //    spell.CastingPlayerID = playerID;
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
@@ -271,7 +271,23 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spell.CastingPlayerID = playerID;
           //  StartCoroutine(PlayerCantMove());
         }
-       
+       else if (spellToCast.GetComponent<Traps>() != null)
+        {
+            Vector3 position = activePlayers[playerID].SpellInitPosition + new Vector3(0,0,2);
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+            AbstractSpell spell = Instantiate(spellToCast, position, rotation);               
+            spell.CastingPlayerID = playerID;
+
+            
+        }
+        else if (spellToCast.GetComponent<Shield>() != null)
+        {
+            Vector3 position = activePlayers[playerID].transform.position + new Vector3(0, 2, 0);
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+            AbstractSpell spell = Instantiate(spellToCast, position, rotation);
+            spell.CastingPlayerID = playerID;
+            spell.transform.parent = activePlayers[playerID].transform;
+        }
         else
         {
             Vector3 position = activePlayers[playerID].transform.position;
@@ -293,7 +309,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_ICEBALL_LVL_1));
         All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
         All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_TELEPORT_LVL_1));
-
+        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PLASMA_FISSION_BALLS));
     }
 
     private void LoadEffectsResources()
@@ -376,7 +392,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
 
     }
-
+    //CAST A TRIPLE VERSION OF THE SPELL 
     private void TripleCastSpell(AbstractSpell spellToCast, EPlayerID playerID)
     {
         Vector3 rot1 = activePlayers[playerID].transform.rotation.eulerAngles;

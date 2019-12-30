@@ -23614,8 +23614,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2240130883715882924}
   - component: {fileID: 3192603726563579907}
+  - component: {fileID: 178593770562574596}
   m_Layer: 0
-  m_Name: AOE_Explosion
+  m_Name: S_AOE_Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23630,7 +23631,7 @@ Transform:
   m_GameObject: {fileID: 7584670280421684884}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 7450642477142793328}
   m_Father: {fileID: 0}
@@ -23652,13 +23653,13 @@ MonoBehaviour:
   debugLogConsoleEnabled: 1
   logWarningsAsErrors: 1
   logCategoriesToIgnore: []
-  hitPower: 10
+  hitPower: 20
   speed: 0
   spellName: S_AOE
   spellLevel: 1
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 2
+  spell: 6
   isChargeable: 0
   spellIcon: {fileID: 0}
   skillPoint: 0
@@ -23666,12 +23667,28 @@ MonoBehaviour:
   movementType: 5
   debuffEffects: 
   buffEffects: 
-  cooldown: 1
+  cooldown: 3
   spellDuration: 0
   pushDuration: 1
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}
-  trails: []
+  trails:
+  - {fileID: 1787104733920792496}
+  - {fileID: 592063311389522299}
+  - {fileID: 5649359071165970059}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
-  radius: 2
+  radius: 3.3
+--- !u!114 &178593770562574596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7584670280421684884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 1
