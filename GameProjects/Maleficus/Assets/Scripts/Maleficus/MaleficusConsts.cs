@@ -129,7 +129,7 @@ namespace Maleficus
         {
         // In Menu
         EAppState.IN_MENU_IN_MAIN,
-        EAppState.IN_MENU_IN_CONNECTING_GAMEPADS,
+        EAppState.IN_MENU_IN_CONNECTING_CONTROLLERS,
         EAppState.IN_MENU_IN_LOGING_IN,
 
         // In Game
@@ -145,7 +145,7 @@ namespace Maleficus
         public static EAppState[] APP_STATES_IN_MENU = new EAppState[]
         {
         EAppState.IN_MENU_IN_MAIN,
-        EAppState.IN_MENU_IN_CONNECTING_GAMEPADS,
+        EAppState.IN_MENU_IN_CONNECTING_CONTROLLERS,
         EAppState.IN_MENU_IN_STARTING_GAME
 ,
         };

@@ -6,7 +6,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
 {
     public string Name { get; }
 
-    private event Action<H> maleficusEvent;
+    public event Action<H> Event;
 
     public MaleficusEvent(string name)
     {
@@ -15,26 +15,26 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
 
     public void AddListener(Action<H> callbackAction)
     {
-        maleficusEvent += callbackAction;
+        Event += callbackAction;
     }
 
     public void RemoveListener(Action<H> callbackAction)
     {
-        maleficusEvent -= callbackAction;
+        Event -= callbackAction;
     }
 
     public void ClearAllListeners()
     {
-        Delegate[] delegates = maleficusEvent.GetInvocationList();
+        Delegate[] delegates = Event.GetInvocationList();
         foreach (Delegate myDelegate in delegates)
         {
-            maleficusEvent -= (myDelegate as Action<H>);
+            Event -= (myDelegate as Action<H>);
         }
     }
 
-    public void Invoke(H eventHandle, EEventInvocationType eventInvocationType = EEventInvocationType.TO_ALL)
+    public void Invoke(H eventHandle, EEventInvocationType eventInvocationType = EEventInvocationType.TO_ALL, bool debugEvent = true)
     {
-        if (maleficusEvent != null)
+        if (Event != null)
         {
             // Add current time stamp to the event handle
             eventHandle.TimeStamp = GetSystemTime();
@@ -44,11 +44,13 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
                 || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.PLAY_OFFLINE))
             {
                 // Invoke event to all local listeners
-                maleficusEvent.Invoke(eventHandle);
+                Event.Invoke(eventHandle);
 
                 // Debug event
                 string debugMessage = eventHandle.GetDebugMessage();
-                if ((MotherOfManagers.Instance.IsDebugLogEvents == true) && (debugMessage != ""))
+                if ((MotherOfManagers.Instance.IsDebugLogEvents == true) 
+                    && (debugMessage != "") 
+                    && (debugEvent == true))
                 {
                     Debug.Log("[EVENT] " + Name + " : " + debugMessage);
                 }

@@ -17,13 +17,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
 
     private Dictionary<EControllerID, EPlayerID>        connectedControllers                    = new Dictionary<EControllerID, EPlayerID>();
-
+    AbstractInputSource[] inputSources;
 
     protected override void InitializeObjecsInScene()
     {
         base.InitializeObjecsInScene();
 
-        AbstractInputSource[] inputSources = GetComponents<AbstractInputSource>();
+        inputSources = GetComponents<AbstractInputSource>();
         foreach (AbstractInputSource inputSource in inputSources)
         {
             inputSource.ButtonPressed += On_InputSource_ButtonPressed;
@@ -104,6 +104,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
             if (inputButton != EInputButton.NONE)
             {
+                Debug.Log(inputButton + " pressed");
                 NetEvent_ButtonPressed buttonPressed = new NetEvent_ButtonPressed(clientID, inputButton);
                 EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.TO_SERVER_ONLY);
             }
@@ -119,6 +120,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
             if (inputButton != EInputButton.NONE)
             {
+                Debug.Log(inputButton + " released");
                 NetEvent_ButtonReleased buttonReleased = new NetEvent_ButtonReleased(clientID, inputButton);
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.TO_SERVER_ONLY);
             }
@@ -136,7 +138,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             if (joystickType != EJoystickType.NONE)
             {
                 NetEvent_JoystickMoved joystickMoved = new NetEvent_JoystickMoved(clientID, joystickType, x, y);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY, false);
             }
         }
     }
@@ -164,7 +166,52 @@ public class InputManager : AbstractSingletonManager<InputManager>
     #endregion
 
     #region Controller Connection
-    public void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
+    /// <summary>
+    /// Tries to connect the given controllerID (if not already connected) to the next free PlayerID available
+    /// </summary>
+    /// <param name="controllerID"> contrllerID </param>
+    /// <returns></returns>
+    public bool TryToConnectController(EControllerID controllerID)
+    {
+        // Check ControllerID
+        if (controllerID == EControllerID.NONE)
+        {
+            Debug.LogError("Warning! Trying to connect a controller that is NONE.");
+            return false;
+        }
+
+        // Get and check PlayerID
+        EPlayerID playerID = PlayerManager.Instance.GetNextFreePlayerID();
+        if (playerID == EPlayerID.NONE)
+        {
+            Debug.Log("Warning! Couldn't get a valid PlayerID for : " + controllerID);
+            return false;
+        }
+
+        // Check parameters
+        if ((ConnectedControllers.ContainsKey(controllerID) == true)
+            || (ConnectedControllers.ContainsValue(playerID) == true))
+        {
+            if (MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == false)
+            {
+                Debug.LogError("Warning! Trying to connect a controller that is already connected.");
+            }
+            return false;
+        }
+
+        // Successful
+        ConnectedControllers.Add(controllerID, playerID);
+
+        Debug.Log("Connecting new controller " + controllerID + " to player : " + playerID);
+
+        // Invoke event
+        Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
+        EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
+
+        return true;
+    }
+
+    private void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
     {
         // Check parameters
         if ((ConnectedControllers.ContainsKey(controllerID) == true)
@@ -191,6 +238,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
         EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
     }
+
 
     public void DisconnectController(EControllerID controllerID)
     {
@@ -245,6 +293,32 @@ public class InputManager : AbstractSingletonManager<InputManager>
             }
         }
         return EControllerID.NONE;
+    }
+
+    /// <summary>
+    /// Returns (the first) Input Source of type "A" attached on the Input Manager.
+    /// </summary>
+    /// <typeparam name="A"> Specification from AbstractInputSource </typeparam>
+    /// <returns> The first Inpupt Source found </returns>
+    public A GetInputSource<A>() where A : AbstractInputSource
+    {
+        A result = null;
+
+        foreach (AbstractInputSource inputSource in inputSources)
+        {
+            if (inputSource.GetType() == typeof(A))
+            {
+                result = (A)inputSource;
+                break;
+            }
+        }
+
+        if (result == null)
+        {
+            Debug.Log("Warning! No Input Source of the given type found attached on InputManager!");
+        }
+
+        return result;
     }
 
 }

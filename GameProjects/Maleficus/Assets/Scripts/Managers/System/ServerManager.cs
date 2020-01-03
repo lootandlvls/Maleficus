@@ -65,7 +65,7 @@ public class ServerManager : NetworkManager
 
     private IEnumerator SetUpConnectionsCoroutine()
     {
-        DebugLog("Trying to set up connection");
+        LogConsole("Trying to set up connection");
 
         while (pingedSuccessfully == false)
         {
@@ -99,7 +99,7 @@ public class ServerManager : NetworkManager
         yield return new WaitForEndOfFrame();
 
         // Start fetching network messages
-        DebugLog("Starting to receive messages from client");
+        LogConsole("Starting to receive messages from client");
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
     private IEnumerator UpdateMessagePumpCoroutine()
@@ -195,7 +195,7 @@ public class ServerManager : NetworkManager
                 }
                 else
                 {
-                    DebugLog("Lobby already initialized");
+                    LogConsole("Lobby already initialized");
                 }
                 break;
 
@@ -457,7 +457,7 @@ public class ServerManager : NetworkManager
     #region Lobby
     private void InitLobby(int cnnId, int channelId, int recHostId, Net_InitLobby il)
     {
-        DebugLog("Initializing lobby...");
+        LogConsole("Initializing lobby...");
 
         //Net_OnInitLobby oil = new Net_OnInitLobby();
         //Model_Account self = dataBank.FindAccountByToken(il.Token);

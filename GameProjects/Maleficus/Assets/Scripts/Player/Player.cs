@@ -48,7 +48,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     /// <summary> Spell Manager will initialize the variables for this Dictionary </summary> 
     Dictionary<ESpellSlot, GameObject> ChargingEffects = new Dictionary<ESpellSlot, GameObject>();
 
-    
     private Vector3 movingDirection;
     //private Rigidbody myRigidBody;
     private DirectionalSprite[] myDirectionalSprites;
@@ -59,7 +58,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     private Vector3 GravityVelocity;
 
     private bool isDead = false;
-
 
     // TODO [Nassim]: refactor multiple variables into a dictionary
     private Dictionary<ESpellSlot, bool> readyToUseSpell = new Dictionary<ESpellSlot, bool>();
@@ -155,7 +153,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     #region INPUT
     private void Move(float axis_X, float axis_Z)
     {
-        movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * Mathf.Max(Mathf.Abs(axis_X), Mathf.Abs(axis_Z));
+        movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * (Mathf.Pow(axis_X, 2.0f) + Mathf.Pow(axis_Z, 2.0f));
 
         Vector3 movementVelocity = movingDirection * currentSpeed * 0.1f;
         
@@ -197,7 +195,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             {
                 IsPlayerCharging = true;
 
-                DebugLog("Player started Charging", "SPELL_CHARGE");
+                LogConsole("Player started Charging", "SPELL_CHARGE");
                 StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
             }
@@ -207,7 +205,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        DebugLog("player stopped charging " + spellSlot, "SPELL_CHARGE");
+        LogConsole("player stopped charging " + spellSlot, "SPELL_CHARGE");
         IsPlayerCharging = false;
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
@@ -272,18 +270,18 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         IsReadyToShoot = true;
         readyToUseSpell[spellSlot] = true;
 
-        DebugLog("ready to use the spell again", "SPELL_CHARGE");
+        LogConsole("ready to use the spell again", "SPELL_CHARGE");
     }
 
 
 
     private IEnumerator SpellChargingCoroutine(ESpellSlot spellSlot)
     {
-        DebugLog("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
+        LogConsole("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
         while ((IsPlayerCharging == true)
             && ((readyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
         {
-            DebugLog("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
+            LogConsole("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
             yield return new WaitForEndOfFrame();
         }
 
@@ -319,7 +317,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                     if (spellChargingLVL != 2)
                     {
                         spellChargingLVL = 2;
-                        DebugLog("Spell upgraded to lvl 2", "SPELL_CHARGE");
+                        LogConsole("Spell upgraded to lvl 2", "SPELL_CHARGE");
                     }
                 }
                 else
@@ -328,13 +326,13 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                     {
 
                     spellChargingLVL = 1;
-                    DebugLog("Spell upgraded to lvl 1", "SPELL_CHARGE");
+                    LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
                     }
 
                 }
                 yield return new WaitForEndOfFrame();
             }
-            DebugLog("spellCharging function Done!!", "SPELL_CHARGE");
+            LogConsole("spellCharging function Done!!", "SPELL_CHARGE");
 
             myAnimator.SetBool("charging", false);
             StopSlowDownPlayer();
@@ -342,7 +340,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             particleSystemBodyEffect.Stop();
             particleSystemWandEffect.Stop();
 
-            DebugLog("counter = " + counter, "SPELL_CHARGE");
+            LogConsole("counter = " + counter, "SPELL_CHARGE");
         }
     }
     #endregion

@@ -12,37 +12,37 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
     /// <summary> Reference to all player prefabs to be spawned. </summary>
-    public Dictionary<EPlayerID, Player>                PlayerPrefabs               { get { return playerPrefabs; } }
+    public Dictionary<EPlayerID, Player> PlayerPrefabs { get { return playerPrefabs; } }
 
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
-    public Dictionary<EPlayerID, PlayerSpawnPosition>   PlayersSpawnPositions       { get { return playersSpawnPositions; } }
+    public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions { get { return playersSpawnPositions; } }
 
 
     /* Dictionaries that are defined only for connected players  */
     /// <summary> Added whenever a player has spawned. Removed when he dies. </summary>
-    public Dictionary<EPlayerID, Player>                ActivePlayers               { get { return activePlayers; } }
+    public Dictionary<EPlayerID, Player> ActivePlayers { get { return activePlayers; } }
 
     /// <summary> All assigned players for every team. </summary>
-    public Dictionary<ETeamID, List<EPlayerID>>         Teams                       { get { return teams; } }
+    public Dictionary<ETeamID, List<EPlayerID>> Teams { get { return teams; } }
 
     /// <summary> Assigned team of every player </summary>
-    public Dictionary<EPlayerID, ETeamID>               PlayersTeam                 { get { return playersTeam; } }
-    public EPlayerID OwnPlayerID                                                    { get { return GetPlayerIDFrom(NetworkManager.Instance.OwnerClientID); } }
+    public Dictionary<EPlayerID, ETeamID> PlayersTeam { get { return playersTeam; } }
+    public EPlayerID OwnPlayerID { get { return GetPlayerIDFrom(NetworkManager.Instance.OwnerClientID); } }
 
     /// <summary> Joysticks inputs for every player (movement, rotation). </summary>
-    public Dictionary<EPlayerID, JoystickInput>         PlayersMovement             { get { return playersMovement; } }
+    public Dictionary<EPlayerID, JoystickInput> PlayersMovement { get { return playersMovement; } }
 
 
 
-    private Dictionary<EPlayerID, Player>               playerPrefabs               = new Dictionary<EPlayerID, Player>();
-    private Dictionary<EPlayerID, PlayerSpawnPosition>  playersSpawnPositions       = new Dictionary<EPlayerID, PlayerSpawnPosition>();
-    private Dictionary<EPlayerID, Player>               activePlayers               = new Dictionary<EPlayerID, Player>();
-    private Dictionary<ETeamID, List<EPlayerID>>        teams                       = new Dictionary<ETeamID, List<EPlayerID>>();
-    private Dictionary<EPlayerID, ETeamID>              playersTeam                 = new Dictionary<EPlayerID, ETeamID>();
-    private Dictionary<EPlayerID, JoystickInput>        playersMovement             = new Dictionary<EPlayerID, JoystickInput>();
+    private Dictionary<EPlayerID, Player> playerPrefabs = new Dictionary<EPlayerID, Player>();
+    private Dictionary<EPlayerID, PlayerSpawnPosition> playersSpawnPositions = new Dictionary<EPlayerID, PlayerSpawnPosition>();
+    private Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
+    private Dictionary<ETeamID, List<EPlayerID>> teams = new Dictionary<ETeamID, List<EPlayerID>>();
+    private Dictionary<EPlayerID, ETeamID> playersTeam = new Dictionary<EPlayerID, ETeamID>();
+    private Dictionary<EPlayerID, JoystickInput> playersMovement = new Dictionary<EPlayerID, JoystickInput>();
 
 
-                                                                                                                                    // TODO: Add a list of active Coroutines for every player to stop when he dies
+    // TODO: Add a list of active Coroutines for every player to stop when he dies
     protected override void Awake()
     {
         base.Awake();
@@ -80,8 +80,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
     {
-        EPlayerID playerID      = eventHandle.UpdatedPlayerID;
-        float[] playerPosition  = eventHandle.playerPosition;
+        EPlayerID playerID = eventHandle.UpdatedPlayerID;
+        float[] playerPosition = eventHandle.playerPosition;
 
         if (activePlayers.ContainsKey(playerID))
         {
@@ -109,11 +109,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Players Management
     public void SpawnPlayer(EPlayerID toSpawnPlayerID)
     {
-        if ((IsPlayerConnected(toSpawnPlayerID) == true) 
-            || ((MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == true) 
+        if ((IsPlayerConnected(toSpawnPlayerID) == true)
+            || ((MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == true)
                 && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES))))
         {
-            
+
             if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
             {
                 Player playerPrefab = PlayerPrefabs[toSpawnPlayerID];
@@ -171,7 +171,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             EPlayerID currentPlayerID = IntToPlayerID(i);
             if (IsPlayerConnected(currentPlayerID) == false)
-
             {
                 result = currentPlayerID;
                 break;
@@ -188,9 +187,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
-      
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+        Debug.Log("player manager : " + inputButton);
 
         ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
         if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))
@@ -205,7 +204,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
-              
+
                 ActivePlayers[playerID].IsReadyToShoot = false;
                 ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                 ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
@@ -215,31 +214,31 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
             }
         }
-       else  if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
+        else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
-               
-                StartCoroutine( FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+
+                StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
                 SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
-               StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
             }
         }
         else if (spell.MovementType == ESpellMovementType.UNIQUE)
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
-                if  (!activePlayers[playerID].hasCastedSpell)
+                if (!activePlayers[playerID].hasCastedSpell)
                 {
                     StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
                     SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
                     StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
                 }
-               
-                  
 
-              
+
+
+
             }
             else
             {
@@ -249,10 +248,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         else if (spell.IsChargeable)
         {
-             
+
             ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
+            Debug.Log("Start charging");
+
         }
-        
+
 
     }
 
@@ -273,7 +274,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
             {
-                
+
                 ActivePlayers[playerID].IsReadyToShoot = false;
                 ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                 ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
@@ -283,7 +284,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
             }
         }
-        
+
     }
 
 
@@ -345,7 +346,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         playersTeam[EPlayerID.PLAYER_2] = ETeamID.NONE;
         playersTeam[EPlayerID.PLAYER_3] = ETeamID.NONE;
         PlayersTeam[EPlayerID.PLAYER_4] = ETeamID.NONE;
-}
+    }
 
 
     private void LoadPlayerResources()
@@ -388,7 +389,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             }
         }
     }
-#endregion
+    #endregion
 
 
     private void SpawnAllConnectedPlayers()
@@ -423,11 +424,11 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
 
 
-    private IEnumerator FirstTimeSpellCastedCoroutine(EPlayerID playerID, ESpellSlot spellSlot , float duration)
+    private IEnumerator FirstTimeSpellCastedCoroutine(EPlayerID playerID, ESpellSlot spellSlot, float duration)
     {
-        
+
         if (!activePlayers[playerID].hasCastedSpell)
-        {         
+        {
             activePlayers[playerID].hasCastedSpell = true;
             yield return new WaitForSeconds(duration);
             ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
@@ -435,7 +436,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
         else { yield return new WaitForSeconds(0f); }
     }
-    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellSlot spellSlot)                 
+    private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellSlot spellSlot)
     {
         if (ActivePlayers.ContainsKey(playerID))
         {
@@ -508,7 +509,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-   
+
     public EPlayerID[] GetConnectedPlayers()
     {
         return InputManager.Instance.ConnectedControllers.Values.ToArray<EPlayerID>();

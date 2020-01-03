@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Linq.Expressions;
 
 namespace Maleficus
 {
@@ -66,7 +67,6 @@ namespace Maleficus
             axis_X = controllerAxis.x;
             axis_Z = controllerAxis.y;
         }
-
         #endregion
 
         #region Sound

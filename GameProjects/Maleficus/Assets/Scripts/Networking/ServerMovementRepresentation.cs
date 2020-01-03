@@ -13,7 +13,7 @@ public class ServerMovementRepresentation : MaleficusMonoBehaviour
     {
         base.InitializeComponents();
 
-        myTrailRenderer = FindComponent<TrailRenderer>();
+        myTrailRenderer = GetComponentWithCheck<TrailRenderer>();
     }
 
     public void ClearTrailRenderer()

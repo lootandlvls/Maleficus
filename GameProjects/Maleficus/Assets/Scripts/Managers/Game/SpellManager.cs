@@ -63,7 +63,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         base.InitializeEventsCallbacks();
 
-        DebugLog("Subscribe to spell events");
+        LogConsole("Subscribe to spell events");
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
     }
@@ -103,7 +103,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         if (hitInfo.HasPushPower)
         {
-            DebugLog("player hit he will be pushed");
+            LogConsole("player hit he will be pushed");
             if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID )
             {
 

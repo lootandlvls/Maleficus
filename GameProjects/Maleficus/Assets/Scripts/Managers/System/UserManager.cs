@@ -25,8 +25,14 @@ public class UserManager : AbstractSingletonManager<UserManager>
     protected override void Awake()
     {
         base.Awake();
-        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
         LoadSavedData();
+    }
+
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
     }
 
     protected override void Start()
