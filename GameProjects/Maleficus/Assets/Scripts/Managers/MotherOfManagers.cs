@@ -15,6 +15,8 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [Separator("Input")]
     [SerializeField] public EInputMode InputMode = EInputMode.CONTROLLER;
     [ConditionalField(nameof(InputMode), false, EInputMode.CONTROLLER)] [SerializeField] public bool IsConnectControllerInAnyState = false;
+    [SerializeField] public bool CanDebugButtonEvents = false;
+    [SerializeField] public bool CanDebugJoystickEvents = false;
 
     [Separator("Player")]
     [SerializeField] public bool IsSpawnPlayerOnControllerConnect = false;

@@ -188,8 +188,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     private void FindAndBindButtonActions()
     {
         // Connect Players Action
-        StartConnectingPlayersAction[] connectPlayersActions = FindObjectsOfType<StartConnectingPlayersAction>();
-        foreach (StartConnectingPlayersAction action in connectPlayersActions)
+        StartConnectingPlayersUIAction[] connectPlayersActions = FindObjectsOfType<StartConnectingPlayersUIAction>();
+        foreach (StartConnectingPlayersUIAction action in connectPlayersActions)
         {
             action.ActionButtonPressed += () =>
             {
@@ -211,8 +211,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         }
 
         // Launch game (change scene)
-        PlayAction[] playActions = FindObjectsOfType<PlayAction>();
-        foreach (PlayAction action in playActions)
+        PlayUIAction[] playActions = FindObjectsOfType<PlayUIAction>();
+        foreach (PlayUIAction action in playActions)
         {
             action.ActionButtonPressed += () =>
             {
@@ -231,7 +231,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
             };
         }
 
-        foreach(StartGameAction action in FindObjectsOfType<StartGameAction>())
+        foreach(StartGameUIAction action in FindObjectsOfType<StartGameUIAction>())
         {
             action.ActionButtonPressed += () =>
             {

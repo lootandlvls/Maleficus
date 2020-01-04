@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayAction : AbstractUIAction
+/// <summary>
+/// Connect players with controllers
+/// </summary>
+public class StartConnectingPlayersUIAction : AbstractUIAction
 {
     // Simply invoke ActionButtonPressed event
 }

@@ -8,7 +8,7 @@ using static Maleficus.MaleficusConsts;
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
-    private MaleficusButton selectedButton;// TODO: Update selected button on menu change
+    private MaleficusButton highlightedButton;
 
     protected override void Awake()
     {
@@ -46,12 +46,12 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
 
     /// <summary>
-    /// When a pressed is highlighted (selected by controller)
+    /// Called from a MaleficusButton whenever it gets highlighted (selected)
     /// </summary>
-    /// <param name="selectedButton"></param>
-    public void OnSelectedButton(MaleficusButton selectedButton)
+    /// <param name="selectedButton"> calling MaleficusButton </param>
+    public void OnButtonHighlighted(MaleficusButton selectedButton)
     {
-        this.selectedButton = selectedButton;
+        this.highlightedButton = selectedButton;
     }
 
     protected override void UpdateState(EMenuState newMenuState)
@@ -59,6 +59,107 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         // Update state
         base.UpdateState(newMenuState);
     }
+
+
+        
+    #region Events Callbacks
+    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
+    {
+        EInputButton inputButton = eventHandle.InputButton;
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+
+        if (highlightedButton == null)
+        {
+            return;
+        }
+
+        MaleficusButton nextButton = null;
+        switch (inputButton)
+        {
+            case EInputButton.CONFIRM:
+                highlightedButton.Press();
+                break;
+
+            case EInputButton.LEFT:
+                nextButton = highlightedButton.GetNextButton(EButtonDirection.LEFT);
+                break;
+
+            case EInputButton.RIGHT:
+                nextButton = highlightedButton.GetNextButton(EButtonDirection.RIGHT);
+                break;
+
+            case EInputButton.UP:
+                nextButton = highlightedButton.GetNextButton(EButtonDirection.UP);
+                break;
+
+            case EInputButton.DOWN:
+                nextButton = highlightedButton.GetNextButton(EButtonDirection.DOWN);
+                break;
+        }
+
+        // Update highlighted button
+        if (nextButton != null)
+        {
+            highlightedButton = nextButton;
+            nextButton.Highlight();
+        }
+        
+    }
+
+    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)
+    {
+        // if, to prevent scene change through loss of connection during game
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY || AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
+        {
+            switch (receivedMsg)
+            {
+                case ENetworkMessageType.CONNECTED:
+                    if (currentState == EMenuState.IN_ENTRY)
+                    {
+                        UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    }
+                    break;
+                case ENetworkMessageType.LOGGED_IN:
+                    UpdateState(EMenuState.IN_MENU_MAIN);
+                    break;
+                case ENetworkMessageType.REGISTERED:
+                    UpdateState(EMenuState.IN_MENU_MAIN);
+                    break;
+            }
+        }
+    }
+
+    public void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
+    {
+        if(currentState == EMenuState.IN_ENTRY)
+        {
+            switch (eventHandle.NewState)
+            {
+                case EAppState.IN_ENTRY_IN_LOGIN:
+                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
+                    break;
+            }
+        }
+    }
+
+    private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
+    {
+        UpdateState(EMenuState.IN_GAME_OVER);
+    }
+    private void On_GAME_GameUnPaused(EGameMode obj)
+    {
+        UpdateState(EMenuState.IN_GAME_IN_RUNNING);
+    }
+    private void On_GAME_GamePaused(EGameMode obj)
+    {
+        UpdateState(EMenuState.IN_GAME_IN_PAUSED);
+    }
+
+    private void On_GAME_GameStarted(EGameMode obj)
+    {
+        UpdateState(EMenuState.IN_GAME_IN_RUNNING);
+    }
+    #endregion
 
     private void FindAndBindButtonActions()
     {
@@ -135,7 +236,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
 
         UpdateAccountRequestAction[] UARActions = FindObjectsOfType<UpdateAccountRequestAction>();
-        foreach(UpdateAccountRequestAction Action in UARActions)
+        foreach (UpdateAccountRequestAction Action in UARActions)
         {
             Action.ActionButtonPressed += () =>
             {
@@ -143,105 +244,5 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             };
         }
     }
-        
-    #region Events Callbacks
-    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
-    {
-        EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-
-        if (selectedButton == null)
-        {
-            return;
-        }
-
-        MaleficusButton nextButton = null;
-        switch (inputButton)
-        {
-            case EInputButton.CONFIRM:
-                selectedButton.Press();
-                break;
-
-            case EInputButton.LEFT:
-                nextButton = selectedButton.GoToNextButton(EButtonDirection.LEFT);
-                break;
-
-            case EInputButton.RIGHT:
-                nextButton = selectedButton.GoToNextButton(EButtonDirection.RIGHT);
-                break;
-
-            case EInputButton.UP:
-                nextButton = selectedButton.GoToNextButton(EButtonDirection.UP);
-                break;
-
-            case EInputButton.DOWN:
-                nextButton = selectedButton.GoToNextButton(EButtonDirection.DOWN);
-                break;
-        }
-
-        // Update selected button
-        if (nextButton != null)
-        {
-            selectedButton = nextButton;
-        }
-        
-    }
-
-    private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)
-    {
-        // if, to prevent scene change through loss of connection during game
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY || AppStateManager.Instance.CurrentState == EAppState.IN_ENTRY_IN_LOGIN)  // Added this to prevent change of Menu outside correct context // TODO: Make sure to switch to "IN_MENU_LOGING_IN" before when the following code is needed 
-        {
-            switch (receivedMsg)
-            {
-                case ENetworkMessageType.CONNECTED:
-                    if (currentState == EMenuState.IN_ENTRY)
-                    {
-                        UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
-                    }
-                    break;
-                case ENetworkMessageType.LOGGED_IN:
-                    UpdateState(EMenuState.IN_MENU_MAIN);
-                    break;
-                case ENetworkMessageType.REGISTERED:
-                    UpdateState(EMenuState.IN_MENU_MAIN);
-                    break;
-            }
-        }
-    }
-
-    public void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
-    {
-        if(currentState == EMenuState.IN_ENTRY)
-        {
-            switch (eventHandle.NewState)
-            {
-                case EAppState.IN_ENTRY_IN_LOGIN:
-                    UpdateState(EMenuState.IN_ENTRY_IN_LOGIN);
-                    break;
-            }
-        }
-    }
-
-    private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
-    {
-        UpdateState(EMenuState.IN_GAME_OVER);
-    }
-    private void On_GAME_GameUnPaused(EGameMode obj)
-    {
-        UpdateState(EMenuState.IN_GAME_IN_RUNNING);
-    }
-    private void On_GAME_GamePaused(EGameMode obj)
-    {
-        UpdateState(EMenuState.IN_GAME_IN_PAUSED);
-    }
-
-    private void On_GAME_GameStarted(EGameMode obj)
-    {
-        UpdateState(EMenuState.IN_GAME_IN_RUNNING);
-    }
-    #endregion
-
-        
 }
 

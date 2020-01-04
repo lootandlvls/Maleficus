@@ -48,7 +48,7 @@ public class DeviceInputSource : AbstractInputSource
     /// <returns> Assigned ControllerID </returns>
     public EControllerID OnNewDeviceJoined(PlayerInputListener playerInputListener)
     {
-        IS_VALID(playerInputListener);
+        IS_NOT_NULL(playerInputListener);
 
         // Assign a ControllerID
         EControllerID controllerID = GetNextFreeControllerID(playerInputListener);

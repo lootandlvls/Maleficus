@@ -14,6 +14,7 @@ using System;
 public abstract class AbstractUIAction : MonoBehaviour
 {
     public event Action ActionButtonPressed;
+    public event Action ActionButtonHighlighted;
 
     /// <summary>
     /// Trigger Execute() whenever the button is pressed.
@@ -47,6 +48,15 @@ public abstract class AbstractUIAction : MonoBehaviour
         InvokeActionPressedEvent();
     }
 
+    /// <summary>
+    /// Action that should be triggered when Button is highlighted (selected). 
+    /// Extend it in child class when needed.
+    /// </summary>
+    public virtual void OnHighlighted()
+    {
+        InvokeActionHighlightedEvent();
+    }
+
     protected void InvokeActionPressedEvent()
     {
         if (ActionButtonPressed != null)
@@ -54,5 +64,15 @@ public abstract class AbstractUIAction : MonoBehaviour
             ActionButtonPressed.Invoke();
         }
     }
+
+    protected void InvokeActionHighlightedEvent()
+    {
+        if (ActionButtonHighlighted != null)
+        {
+            ActionButtonHighlighted.Invoke();
+        }
+    }
+
+
 
 }

@@ -32,14 +32,20 @@ public class ManagersSpawner : MotherOfManagers
 
             // Set up Mother Of Managers Profile
             managersInstance = prefabToSpawn.GetComponent<MotherOfManagers>();
+            // Networking
             managersInstance.IsServer = IsServer;
             managersInstance.ConnectionMode = ConnectionMode;
+            // Input
             managersInstance.InputMode = InputMode;
             managersInstance.IsConnectControllerInAnyState = IsConnectControllerInAnyState;
+            managersInstance.CanDebugButtonEvents = CanDebugButtonEvents;
+            managersInstance.CanDebugJoystickEvents = CanDebugJoystickEvents;
+            // Player
             managersInstance.IsSpawnPlayerOnControllerConnect = IsSpawnPlayerOnControllerConnect;
             managersInstance.IsSpawnRemainingPlayersOnGameStart = IsSpawnRemainingPlayersOnGameStart;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
+            // Debug
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;
 

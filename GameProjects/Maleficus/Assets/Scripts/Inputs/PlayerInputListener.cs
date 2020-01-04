@@ -44,7 +44,7 @@ public class PlayerInputListener : MaleficusMonoBehaviour
 
         // Initialze Player Input and callbacks
         myPlayerInput = GetComponentWithCheck<PlayerInput>();
-        if (IS_VALID(myPlayerInput))
+        if (IS_NOT_NULL(myPlayerInput))
         {
             InitializePlayerDeviceName();
             InitializePlayerInputCallbacks();
@@ -55,7 +55,7 @@ public class PlayerInputListener : MaleficusMonoBehaviour
     {
         base.Start();
 
-        if (IS_VALID(myPlayerInput))
+        if (IS_NOT_NULL(myPlayerInput))
         {
             // Initialize Input Actions references
             inputAction_Move = myPlayerInput.currentActionMap.FindAction(controls.Player.Move.id);
@@ -63,7 +63,7 @@ public class PlayerInputListener : MaleficusMonoBehaviour
 
             // Inform Device Input Source that a new Player Input has joined and become a ControllerID
             DeviceInputSource deviceInputSource = InputManager.Instance.GetInputSource<DeviceInputSource>();
-            if (IS_VALID(deviceInputSource))
+            if (IS_NOT_NULL(deviceInputSource))
             {
                 myControllerID = deviceInputSource.OnNewDeviceJoined(this);
                 IS_NOT_NONE(myControllerID);

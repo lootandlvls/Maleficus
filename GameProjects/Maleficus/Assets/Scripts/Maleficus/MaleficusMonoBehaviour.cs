@@ -93,6 +93,11 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     {
 
     }
+
+    protected virtual void OnValidate()
+    {
+
+    }
     #endregion
 
     #region Debug Log
@@ -105,7 +110,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     {
         if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
         {
-            Debug.Log(logText);
+            Debug.Log("<color=gray>[" + name + "]</color> " + logText);
         }
     }
 
@@ -118,7 +123,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     {
         if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
         {
-            Debug.Log("< color = yellow >Warning! </color>" + logText);
+            Debug.Log("<color=yellow>Warning! </color>" + "<color=gray>[" + name + "]</color> " + logText);
         }
     }
 
@@ -131,7 +136,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     {
         if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
         {
-            Debug.Log("< color = red >Error! </color>" + logText);
+            Debug.Log("<color=red>Error! </color>" + "<color=gray>[" + name + "]</color> " + logText);
         }
     }
 
@@ -142,35 +147,197 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     /// <param name="logText"> Log text to print </param>
     protected void LogCanvas(int debugID, string logText)
     {
-        DebugManager.Instance.Log(debugID, logText);
+        DebugManager.Instance.Log(debugID, "[" + name + "]" + logText);
     }
+    #endregion
+
+
+    #region Checkers
 
     /// <summary>
-    /// Checks if the validity of the given object's reference
+    /// Checks if the the given object's reference is null.
+    /// Prints a warning in the console if not null.
     /// </summary>
     /// <typeparam name="O"> Type of the object to check</typeparam>
     /// <param name="objectToCheck"> object to check </param>
     /// <returns> True if the given object has a valid reference, otherwise false</returns>
-    protected bool IS_VALID<O> (O objectToCheck)
+    protected bool IS_NULL<O>(O objectToCheck)
     {
-        if (objectToCheck == null)
+        if (objectToCheck != null)
         {
-            Debug.LogError("An object of type <color=red>" + typeof(O) + "</color> is null! ");
+            LogConsoleWarning("An object of type <color=cyan>" + typeof(O) + "</color> isn't null! ");
             return false;
         }
         return true;
     }
 
+    /// <summary>
+    /// Checks if the the given object's reference is not null.
+    /// Prints a warning in the console if null.
+    /// </summary>
+    /// <typeparam name="O"> Type of the object to check</typeparam>
+    /// <param name="objectToCheck"> object to check </param>
+    /// <returns> True if the given object has a valid reference, otherwise false</returns>
+    protected bool IS_NOT_NULL<O> (O objectToCheck)
+    {
+        if (objectToCheck == null)
+        {
+            LogConsoleWarning("An object of type <color=cyan>" + typeof(O) + "</color> is null! ");
+            return false;
+        }
+        return true;
+    }
 
+    /// <summary>
+    /// Checks if the given enum has the value NONE. 
+    /// Check is performed by a simple string conversion!
+    /// Prints a warning in the console if not NONE.
+    /// </summary>
+    /// <typeparam name="E"> Type of the enum to check </typeparam>
+    /// <param name="enumToCheck"> enum to check </param>
+    /// <returns></returns>
+    protected bool IS_NONE<E> (E enumToCheck) where E : Enum
+    {
+        if (enumToCheck.ToString() != "NONE")
+        {
+            LogConsoleWarning("An enum of type <color=cyan>" + typeof(E) + "</color> isn't NONE! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the given enum has NOT the value NONE. 
+    /// Check is performed by a simple string conversion!
+    /// Prints a warning in the console if NONE.
+    /// </summary>
+    /// <typeparam name="E"> Type of the enum to check </typeparam>
+    /// <param name="enumToCheck"> enum to check </param>
+    /// <returns></returns>
     protected bool IS_NOT_NONE<E> (E enumToCheck) where E : Enum
     {
         if (enumToCheck.ToString() == "NONE")
         {
-            Debug.LogError("An enum of type <color=red>" + typeof(E) + "</color> is NONE! ");
+                LogConsoleWarning("An enum of type <color=cyan>" + typeof(E) + "</color> is NONE! ");
             return false;
         }
         return true;
     }
+
+    /// <summary>
+    /// Checks if the given dictionary contains the given key.
+    /// Prints a warning in the console if key is not found.
+    /// </summary>
+    /// <typeparam name="K"> type of the key </typeparam>
+    /// <typeparam name="V"> type of the value </typeparam>
+    /// <param name="dictionary"> dictionary to check into </param>
+    /// <param name="key"> key to check inside the dictionary </param>
+    /// <returns></returns>
+    protected bool IS_KEY_CONTAINED<K, V> (Dictionary<K, V> dictionary, K key)
+    {
+        if (dictionary.ContainsKey(key) == false)
+        {
+            LogConsoleWarning("A dictionary with keys type <color=cyan>" + typeof(K) + "</color> doens't contain the key '" + key + "' ! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the given dictionary doesn't contains the given key.
+    /// Prints a warning in the console if key is found.
+    /// </summary>
+    /// <typeparam name="K"> type of the key </typeparam>
+    /// <typeparam name="V"> type of the value </typeparam>
+    /// <param name="dictionary"> dictionary to check into </param>
+    /// <param name="key"> key to check inside the dictionary </param>
+    /// <returns></returns>
+    protected bool IS_KEY_NOT_CONTAINED<K, V> (Dictionary<K, V> dictionary, K key)
+    {
+        if (dictionary.ContainsKey(key) == true)
+        {
+            LogConsoleWarning("A dictionary with keys type <color=cyan>" + typeof(K) + "</color> does already contain the key '" + key + "' ! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the given dictionary contains the given value.
+    /// Prints a warning in the console if value is not found.
+    /// </summary>
+    /// <typeparam name="K"> type of the key </typeparam>
+    /// <typeparam name="V"> type of the value </typeparam>
+    /// <param name="dictionary"> dictionary to check into </param>
+    /// <param name="value"> value to check inside the dictionary </param>
+    /// <returns></returns>
+    protected bool IS_VALUE_CONTAINED<K, V> (Dictionary<K, V> dictionary, V value)
+    {
+        if (dictionary.ContainsValue(value) == false)
+        {
+            LogConsoleWarning("A dictionary with values type <color=cyan>" + typeof(V) + "</color> doens't contain the value '" + value + "' ! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the given dictionary doesn't contain the given value.
+    /// Prints a warning in the console if value is found.
+    /// </summary>
+    /// <typeparam name="K"> type of the key </typeparam>
+    /// <typeparam name="V"> type of the value </typeparam>
+    /// <param name="dictionary"> dictionary to check into </param>
+    /// <param name="value"> value to check inside the dictionary </param>
+    /// <returns></returns>
+    protected bool IS_VALUE_NOT_CONTAINED<K, V> (Dictionary<K, V> dictionary, V value)
+    {
+        if (dictionary.ContainsValue(value) == true)
+        {
+            LogConsoleWarning("A dictionary with values type <color=cyan>" + typeof(V) + "</color> does contain already the value '" + value + "' ! ");
+            return false;
+        }
+        return true;
+    }
+
+
+
+    /// <summary>
+    /// Checks if the given list contains the given value.
+    /// Prints a warning in the console if value is not found.
+    /// </summary>
+    /// <typeparam name="V"> type of the value </typeparam>
+    /// <param name="list"> list to check into </param>
+    /// <param name="value"> value to check inside the list </param>
+    /// <returns></returns>
+    protected bool IS_VALUE_CONTAINED<V> (List<V> list, V value)
+    {
+        if (list.Contains(value) == false)
+        {
+            LogConsoleWarning("A list with valuess type <color=cyan>" + typeof(V) + "</color> doens't contain the value '" + value + "' ! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the given list doesn't contain the given value.
+    /// Prints a warning in the console if value is found.
+    /// </summary>
+    /// <typeparam name="V"> type of the value </typeparam>
+    /// <param name="list"> list to check into </param>
+    /// <param name="value"> value to check inside the list </param>
+    /// <returns></returns>
+    protected bool IS_VALUE_NOT_CONTAINED<V> (List<V> list, V value)
+    {
+        if (list.Contains(value) == true)
+        {
+            LogConsoleWarning("A list with valuess type <color=cyan>" + typeof(V) + "</color> does contain already the value '" + value + "' ! ");
+            return false;
+        }
+        return true;
+    }
+
 
 
 

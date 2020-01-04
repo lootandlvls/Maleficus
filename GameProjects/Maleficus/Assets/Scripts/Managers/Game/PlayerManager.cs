@@ -189,7 +189,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-        Debug.Log("player manager : " + inputButton);
 
         ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
         if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (activePlayers.ContainsKey(playerID) == false))

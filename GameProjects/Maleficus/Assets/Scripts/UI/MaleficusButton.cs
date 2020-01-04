@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 
-
+[RequireComponent(typeof(Button))]
 public class MaleficusButton : MonoBehaviour
 {
 
@@ -14,59 +12,53 @@ public class MaleficusButton : MonoBehaviour
     [SerializeField] private MaleficusButton buttomButton;
 
     private Button myButton;
-    private AbstractUIAction myMenuAction;
+    private AbstractUIAction[] myUIActions;
 
     private void Awake()
     {
         myButton = GetComponent<Button>();
-        myMenuAction = GetComponent<AbstractUIAction>();
+        myUIActions = GetComponents<AbstractUIAction>();
     }
 
     public void Highlight()
     {
         myButton.Select();
+
+        UIManager.Instance.OnButtonHighlighted(this);
+
+        foreach (AbstractUIAction abstractUIAction in myUIActions)
+        {
+            abstractUIAction.OnHighlighted();
+        }
     }
 
     public void Press()
     {
-        myMenuAction.Execute();
+        foreach (AbstractUIAction abstractUIAction in myUIActions)
+        {
+            abstractUIAction.Execute();
+        }
     }
 
-    public MaleficusButton GoToNextButton(EButtonDirection buttonDirection)
+    public MaleficusButton GetNextButton(EButtonDirection buttonDirection)
     {
         MaleficusButton buttonToReturn = null;
-        switch(buttonDirection)
+        switch (buttonDirection)
         {
             case EButtonDirection.LEFT:
-                if (leftButton != null)
-                {
-                    leftButton.Highlight();
-                    buttonToReturn = leftButton;
-                }
+                buttonToReturn = leftButton;
                 break;
 
             case EButtonDirection.RIGHT:
-                if (rightButton != null)
-                {
-                    rightButton.Highlight();
-                    buttonToReturn = rightButton;
-                }
+                buttonToReturn = rightButton;
                 break;
 
             case EButtonDirection.UP:
-                if (upperButton != null)
-                {
-                    upperButton.Highlight();
-                    buttonToReturn = upperButton;
-                }
+                buttonToReturn = upperButton;
                 break;
 
             case EButtonDirection.DOWN:
-                if (buttomButton != null)
-                {
-                    buttomButton.Highlight();
-                    buttonToReturn = buttomButton;
-                }
+                buttonToReturn = buttomButton;
                 break;
         }
         return buttonToReturn;

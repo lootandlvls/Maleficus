@@ -104,9 +104,8 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
             if (inputButton != EInputButton.NONE)
             {
-                Debug.Log(inputButton + " pressed");
                 NetEvent_ButtonPressed buttonPressed = new NetEvent_ButtonPressed(clientID, inputButton);
-                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.TO_SERVER_ONLY);
+                EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugButtonEvents);
             }
         }
     }
@@ -122,7 +121,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             {
                 Debug.Log(inputButton + " released");
                 NetEvent_ButtonReleased buttonReleased = new NetEvent_ButtonReleased(clientID, inputButton);
-                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.TO_SERVER_ONLY);
+                EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugButtonEvents);
             }
         }
     }
@@ -138,7 +137,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             if (joystickType != EJoystickType.NONE)
             {
                 NetEvent_JoystickMoved joystickMoved = new NetEvent_JoystickMoved(clientID, joystickType, x, y);
-                EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY, false);
+                EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugJoystickEvents);
             }
         }
     }
@@ -201,8 +200,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         // Successful
         ConnectedControllers.Add(controllerID, playerID);
-
-        Debug.Log("Connecting new controller " + controllerID + " to player : " + playerID);
 
         // Invoke event
         Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);

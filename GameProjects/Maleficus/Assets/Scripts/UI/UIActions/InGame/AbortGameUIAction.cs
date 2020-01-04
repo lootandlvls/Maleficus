@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class AbortGameAction : AbstractUIAction
+public class AbortGameUIAction : AbstractUIAction
 {
     // Simply invoke ActionButtonPressed event
 }

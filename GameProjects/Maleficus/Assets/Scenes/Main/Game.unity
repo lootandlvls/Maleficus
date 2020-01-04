@@ -908,7 +908,6 @@ GameObject:
   - component: {fileID: 733501431}
   - component: {fileID: 733501430}
   - component: {fileID: 733501429}
-  - component: {fileID: 733501435}
   m_Layer: 5
   m_Name: B_StartGame
   m_TagString: Untagged
@@ -945,7 +944,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 733501427}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5383a19f3f89588439832f5104634396, type: 3}
+  m_Script: {fileID: 11500000, guid: db3f8c20e0e795c409e60f2ddc98c3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &733501430
@@ -962,7 +961,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInitializeOnStart: 1
   isLoadSubStates: 1
-  activeOnStates: 
+  activeOnStates: 0d000000
 --- !u!114 &733501431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,21 +1068,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 733501427}
   m_CullTransparentMesh: 0
---- !u!114 &733501435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 733501427}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb6635fac656d64cac70938b54ac084, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInitializeOnStart: 1
-  isLoadSubStates: 1
-  activeOnStates: 
 --- !u!1 &793477898
 GameObject:
   m_ObjectHideFlags: 0
@@ -1714,6 +1698,8 @@ MonoBehaviour:
   ConnectionMode: 2
   InputMode: 1
   IsConnectControllerInAnyState: 1
+  CanDebugButtonEvents: 0
+  CanDebugJoystickEvents: 0
   IsSpawnPlayerOnControllerConnect: 1
   IsSpawnRemainingPlayersOnGameStart: 1
   IsSpawnTouchAsPlayer1: 0
@@ -1937,7 +1923,7 @@ PrefabInstance:
     - target: {fileID: 2253750139580572988, guid: 21892945d55fdc8418515f4eb977bab8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.99
+      value: 4.52
       objectReference: {fileID: 0}
     - target: {fileID: 2253750139580572988, guid: 21892945d55fdc8418515f4eb977bab8,
         type: 3}
@@ -1947,7 +1933,7 @@ PrefabInstance:
     - target: {fileID: 2253750139580572988, guid: 21892945d55fdc8418515f4eb977bab8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.66
+      value: -4.82
       objectReference: {fileID: 0}
     - target: {fileID: 2253750139580572988, guid: 21892945d55fdc8418515f4eb977bab8,
         type: 3}
@@ -2151,7 +2137,7 @@ PrefabInstance:
     - target: {fileID: 2253750139580572988, guid: 21892945d55fdc8418515f4eb977bab8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.57
+      value: -4.9
       objectReference: {fileID: 0}
     - target: {fileID: 2253750139580572988, guid: 21892945d55fdc8418515f4eb977bab8,
         type: 3}

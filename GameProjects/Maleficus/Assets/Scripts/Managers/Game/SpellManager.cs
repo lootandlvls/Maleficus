@@ -63,7 +63,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         base.InitializeEventsCallbacks();
 
-        LogConsole("Subscribe to spell events");
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
     }
