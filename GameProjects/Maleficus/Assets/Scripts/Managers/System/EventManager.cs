@@ -139,6 +139,28 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player " + playerID + " left");
     }
 
+    public event Action PLAYERS_AllPlayersReady;
+    public void Invoke_PLAYERS_AllPlayersReady()
+    {
+        if (PLAYERS_AllPlayersReady != null)
+        {
+            PLAYERS_AllPlayersReady.Invoke();
+        }
+        DebugLog("All players are ready");
+    }
+
+    public event Action<EPlayerID> PLAYERS_PlayerCanceledReady;
+    public void Invoke_PLAYERS_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
+    {
+        if (PLAYERS_PlayerCanceledReady != null)
+        {
+            PLAYERS_PlayerCanceledReady.Invoke(playerID);
+        }
+        DebugLog("Player " + playerID + " canceled ready");
+    }
+
+
+
     #endregion
 
     #region SPELLS
@@ -218,7 +240,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //}
     public MaleficusEvent<Event_StateUpdated<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<Event_StateUpdated<EMenuState>>("UI_MenuStateUpdated");
 
-    public event Action<EPlayerID,AbstractSpell , ESpellSlot> UI_SpellChosen;
+    public event Action<EPlayerID, AbstractSpell , ESpellSlot> UI_SpellChosen;
     public void Invoke_UI_SpellChosen(EPlayerID playerID, AbstractSpell abstractSpell , ESpellSlot spellSlot )
     {
 

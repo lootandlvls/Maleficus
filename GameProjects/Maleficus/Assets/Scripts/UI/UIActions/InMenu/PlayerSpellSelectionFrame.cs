@@ -15,7 +15,6 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
 
     private int spellCounter = 0;
 
-    // Start is called before the first frame update
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
