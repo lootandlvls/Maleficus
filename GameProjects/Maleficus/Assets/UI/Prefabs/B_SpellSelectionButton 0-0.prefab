@@ -85,7 +85,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   playerID: 3
 --- !u!1 &3864292929565570298
@@ -173,7 +172,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   playerID: 1
 --- !u!1 &5547775021222199177
@@ -261,7 +259,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   playerID: 4
 --- !u!1 &5722256176738287712
@@ -349,7 +346,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   playerID: 2
 --- !u!1 &8791247594938183410
@@ -368,7 +364,7 @@ GameObject:
   - component: {fileID: 2101685524027812932}
   - component: {fileID: 8791247594938183417}
   m_Layer: 0
-  m_Name: B_SpellSelectionButton 0 - 0
+  m_Name: B_SpellSelectionButton 0-0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -507,7 +503,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   disableDebugTextOnStart: 1
   spell: {fileID: 0}

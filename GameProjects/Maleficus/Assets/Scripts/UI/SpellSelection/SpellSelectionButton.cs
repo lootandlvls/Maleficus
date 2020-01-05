@@ -1,26 +1,25 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(SpellSelectionUIAction))]
 public class SpellSelectionButton : MaleficusMonoBehaviour
 {
-    public int RowIndex         { get { return rowIndex; } }
-    public int ColumnIndex      { get { return columnIndex; } }
+    public MaleficusButton MaleficusButton      { get { return GetComponent<MaleficusButton>(); } }
+    public int RowIndex                         { get { return rowIndex; } }
+    public int ColumnIndex                      { get { return columnIndex; } }
 
     [Header("Spell Selection Button")]
-
-    [Tooltip("Leave NONE if doesn't need to be highlighted")]
-    [SerializeField] private EPlayerID highlightOnStartForPlayer = EPlayerID.NONE;
 
     [SerializeField] private bool disableDebugTextOnStart = true;
     [SerializeField] private AbstractSpell spell;
     [SerializeField] private int rowIndex;
     [SerializeField] private int columnIndex;
 
-
     private Button myButton;
     private Text myDebugIndexText;
+    private Dictionary<EPlayerID, SpellSelectionPlayerHighlight> playerHighlights = new Dictionary<EPlayerID, SpellSelectionPlayerHighlight>();
+
 
     protected override void Start()
     {
@@ -29,6 +28,29 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
         if ((myDebugIndexText != null) && (disableDebugTextOnStart == true))
         {
             myDebugIndexText.enabled = false;
+        }
+    }
+
+
+    public void HighlightPlayerSelection(EPlayerID playerID)
+    {
+        if (playerID != EPlayerID.NONE)
+        {
+            if (IS_KEY_CONTAINED(playerHighlights, playerID))
+            {
+                playerHighlights[playerID].ShowHighlight();
+            }
+        }
+    }
+
+    public void UnHighlightPlayerSelection(EPlayerID playerID)
+    {
+        if (playerID != EPlayerID.NONE)
+        {
+            if (IS_KEY_CONTAINED(playerHighlights, playerID))
+            {
+                playerHighlights[playerID].HideHighlight();
+            }
         }
     }
 
@@ -43,7 +65,7 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
             myDebugIndexText.text = RowIndex + "-" + ColumnIndex;
 
             // Update the name of the gameobject accordingly
-            name = "B_SpellSelectionButton " + RowIndex + " - " + ColumnIndex;
+            name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex;
         }
 
         // Reinitialize button image 
@@ -55,11 +77,9 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
                 myButton.image.sprite = spell.SpellIcon;
 
                 // Update the name of the gameobject accordingly
-                name = "B_SpellSelectionButton " + RowIndex + " - " + ColumnIndex + " : " + spell.SpellName;
+                name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex + " : " + spell.SpellName;
             }
         }
-
-
     }
 
     protected override void InitializeComponents()
@@ -82,6 +102,20 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
         {
             myDebugIndexText.text = RowIndex + "-" + ColumnIndex;
         }
+
+        // Initialize player highlights
+        foreach (var playerHighlight in GetComponentsInChildren<SpellSelectionPlayerHighlight>())
+        {
+            if ((IS_VALUE_NOT_CONTAINED(playerHighlights, playerHighlight))
+                && (IS_KEY_NOT_CONTAINED(playerHighlights, playerHighlight.PlayerID)))
+            {
+                playerHighlights.Add(playerHighlight.PlayerID, playerHighlight);
+            }
+        }
+        IS_KEY_CONTAINED(playerHighlights, EPlayerID.PLAYER_1);
+        IS_KEY_CONTAINED(playerHighlights, EPlayerID.PLAYER_2);
+        IS_KEY_CONTAINED(playerHighlights, EPlayerID.PLAYER_3);
+        IS_KEY_CONTAINED(playerHighlights, EPlayerID.PLAYER_4);
     }
 
 

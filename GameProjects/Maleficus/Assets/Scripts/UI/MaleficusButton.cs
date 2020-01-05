@@ -5,6 +5,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class MaleficusButton : MonoBehaviour
 {
+    public MaleficusButton LeftButton   { get { return leftButton; }    set { leftButton = value; } }
+    public MaleficusButton RightButton  { get { return rightButton; }   set { rightButton = value; } }
+    public MaleficusButton UpperButton  { get { return upperButton; }   set { upperButton = value; } }
+    public MaleficusButton BottomButton { get { return buttomButton; }  set { buttomButton = value; } }
 
     [SerializeField] private MaleficusButton leftButton;
     [SerializeField] private MaleficusButton rightButton;
@@ -62,5 +66,13 @@ public class MaleficusButton : MonoBehaviour
                 break;
         }
         return buttonToReturn;
+    }
+
+    public void UnPopulateNavigationButtons()
+    {
+        LeftButton = null;
+        RightButton = null;
+        UpperButton = null;
+        BottomButton = null;
     }
 }

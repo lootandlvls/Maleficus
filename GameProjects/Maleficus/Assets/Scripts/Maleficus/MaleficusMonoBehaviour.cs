@@ -5,16 +5,11 @@ using System;
 
 using MyBox;
 
-using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusConsts;
-using System.Linq.Expressions;
-
 public abstract class MaleficusMonoBehaviour : MonoBehaviour
 {
     [Separator("Maleficus MonoBehaviour")]
     [SerializeField] bool showMaleficusMonoBehaviourConfiguration = false;
     [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool debugLogConsoleEnabled = true;
-    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool logWarningsAsErrors = true;
     [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] List<string> logCategoriesToIgnore;
 
 
@@ -375,14 +370,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
         T result = GetComponent<T>();
         if ((promtWarningMessageIfNoneFound == true) && (result == null))
         {
-            if (logWarningsAsErrors == true)
-            {
-                Debug.LogError("[WARNING] Component of type '" + result.GetType() + "' not found on '" + name + "'");
-            }
-            else
-            {
-                Debug.Log("[WARNING] Component of type '" + result.GetType() + "' not found on '" + name + "'");
-            }
+            LogConsoleWarning("Component of type <color=cyan>" + typeof(T) + "</color> not found on '" + name + "'");
         }
         return result;
     }
@@ -398,14 +386,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
         T[] result = GetComponents<T>();
         if ((promtWarningMessageIfNoneFound == true) && (result.Length == 0))
         {
-            if (logWarningsAsErrors == true)
-            {
-                Debug.LogError("[WARNING] Not any component of type '" + result.GetType() + "' not found on '" + name + "'");
-            }
-            else
-            {
-                Debug.Log("[WARNING] Not any component of type '" + result.GetType() + "' not found on '" + name + "'");
-            }
+            LogConsoleWarning("Not any component of type <color=cyan>" + typeof(T) + "</color> not found on '" + name + "'");
         }
         return result;
     }
