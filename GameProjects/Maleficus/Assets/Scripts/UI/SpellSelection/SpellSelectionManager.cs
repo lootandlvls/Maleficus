@@ -13,7 +13,6 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
 
 
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
-
     private Dictionary<int, Dictionary<int, SpellSelectionButton>> allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
 
     protected override void Update()

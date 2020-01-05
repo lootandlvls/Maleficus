@@ -6,8 +6,6 @@ using UnityEngine;
 using static Maleficus.MaleficusUtilities;
 using static Maleficus.MaleficusConsts;
 
-
-
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
@@ -16,7 +14,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
     public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions { get { return playersSpawnPositions; } }
-
 
     /* Dictionaries that are defined only for connected players  */
     /// <summary> Added whenever a player has spawned. Removed when he dies. </summary>
@@ -32,7 +29,26 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     /// <summary> Joysticks inputs for every player (movement, rotation). </summary>
     public Dictionary<EPlayerID, JoystickInput> PlayersMovement { get { return playersMovement; } }
 
+    /// <summary> Players that are connected and have joined the game session </summary>
+    public Dictionary<EPlayerID, bool> JoinedPlayers { get { return joinedPlayers; } }
 
+    /// <summary>
+    /// Get all players that are connected with a controller.
+    /// Warning! A connected player is not necessarily a player that has joined the game session
+    /// </summary>
+    public EPlayerID[] GetConnectedPlayers()
+    {
+        return InputManager.Instance.ConnectedControllers.Values.ToArray<EPlayerID>();
+    }
+
+    /// <summary>
+    /// Get the player that is connected with the given controller.
+    /// Warning! A connected player is not necessarily a player that has joined the game session
+    /// </summary>
+    public bool IsPlayerConnected(EPlayerID playerID)
+    {
+        return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
+    }
 
     private Dictionary<EPlayerID, Player> playerPrefabs = new Dictionary<EPlayerID, Player>();
     private Dictionary<EPlayerID, PlayerSpawnPosition> playersSpawnPositions = new Dictionary<EPlayerID, PlayerSpawnPosition>();
@@ -40,7 +56,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private Dictionary<ETeamID, List<EPlayerID>> teams = new Dictionary<ETeamID, List<EPlayerID>>();
     private Dictionary<EPlayerID, ETeamID> playersTeam = new Dictionary<EPlayerID, ETeamID>();
     private Dictionary<EPlayerID, JoystickInput> playersMovement = new Dictionary<EPlayerID, JoystickInput>();
-
+    private Dictionary<EPlayerID, bool> joinedPlayers = new Dictionary<EPlayerID, bool>();
 
     // TODO: Add a list of active Coroutines for every player to stop when he dies
     protected override void Awake()
@@ -74,9 +90,18 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
         EventManager.Instance.NETWORK_GameStateReplication.AddListener(On_NETWORK_GameStateReplicate);
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
+
+        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
     }
 
 
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    {
+        if (IS_KEY_CONTAINED(JoinedPlayers, playerID))
+        {
+            JoinedPlayers[playerID] = true;
+        }
+    }
 
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
     {
@@ -91,7 +116,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
-        SpawnAllConnectedPlayers();
+        SpawnAllJoinedPlayers();
     }
 
 
@@ -326,7 +351,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
-            SpawnAllConnectedPlayers();
+            SpawnAllJoinedPlayers();
         }
     }
     #endregion
@@ -391,11 +416,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #endregion
 
 
-    private void SpawnAllConnectedPlayers()
+    private void SpawnAllJoinedPlayers()
     {
-        foreach (EPlayerID playerID in GetConnectedPlayers())
+        foreach (EPlayerID playerID in joinedPlayers.Keys)
         {
-            SpawnPlayer(playerID);
+            if (joinedPlayers[playerID] == true)
+            {
+                SpawnPlayer(playerID);
+            }
         }
     }
 
@@ -475,15 +503,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EPlayerID playerID = eventHandle.Arg2;
         AssignPlayerToTeam(playerID, GetIdenticPlayerTeam(playerID));
 
-        if (PlayersMovement.ContainsKey(playerID) == false)
+        // Initialize dictionaries for the new player
+        if (IS_KEY_NOT_CONTAINED(PlayersMovement, playerID))
         {
-            // Initialize player movement for the new player
-            Debug.Log("Adding new player : " + playerID + " from : " + controllerID);
             PlayersMovement.Add(playerID, new JoystickInput());
         }
-        else
+        if (IS_KEY_NOT_CONTAINED(JoinedPlayers, playerID))
         {
-            Debug.LogError("Trying to connect a player that is already connected");
+            JoinedPlayers.Add(playerID, false);
         }
 
         // Spawn player On Connect?
@@ -509,13 +536,5 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
 
 
-    public EPlayerID[] GetConnectedPlayers()
-    {
-        return InputManager.Instance.ConnectedControllers.Values.ToArray<EPlayerID>();
-    }
-
-    public bool IsPlayerConnected(EPlayerID playerID)
-    {
-        return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
-    }
+ 
 }
