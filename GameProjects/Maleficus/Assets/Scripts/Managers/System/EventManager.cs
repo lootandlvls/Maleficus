@@ -128,6 +128,16 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         DebugLog("Player " + playerID + " joined");
     }
+        
+    public event Action<EPlayerID> PLAYERS_PlayerLeft;
+    public void Invoke_PLAYERS_PlayerLeft(EPlayerID playerID)
+    {
+        if (PLAYERS_PlayerLeft != null)
+        {
+            PLAYERS_PlayerLeft.Invoke(playerID);
+        }
+        DebugLog("Player " + playerID + " left");
+    }
 
     #endregion
 
