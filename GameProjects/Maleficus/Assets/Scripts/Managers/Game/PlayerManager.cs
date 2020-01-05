@@ -92,6 +92,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
 
         EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
+        EventManager.Instance.PLAYERS_PlayerLeft += On_PLAYERS_PlayerLeft;
     }
 
 
@@ -102,6 +103,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             JoinedPlayers[playerID] = true;
         }
     }
+        
+    private void On_PLAYERS_PlayerLeft(EPlayerID playerID)
+    {
+        if (IS_KEY_CONTAINED(JoinedPlayers, playerID))
+        {
+            JoinedPlayers[playerID] = false;
+        }
+    }
+
 
     private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
     {
