@@ -197,13 +197,13 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //}
     public MaleficusEvent<Event_StateUpdated<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<Event_StateUpdated<EMenuState>>("UI_MenuStateUpdated");
 
-    public event Action<EPlayerID,AbstractSpell> UI_SpellChosen;
-    public void Invoke_UI_SpellChosen(EPlayerID playerID, AbstractSpell abstractSpell)
+    public event Action<EPlayerID,AbstractSpell , ESpellSlot> UI_SpellChosen;
+    public void Invoke_UI_SpellChosen(EPlayerID playerID, AbstractSpell abstractSpell , ESpellSlot spellSlot )
     {
 
         if (UI_SpellChosen != null)
         {
-            UI_SpellChosen.Invoke(playerID,abstractSpell);
+            UI_SpellChosen.Invoke(playerID,abstractSpell, spellSlot);
         }
         DebugLog("Spell " + abstractSpell.SpellName + " Has been Chosen");
     }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SelectedSpell : MonoBehaviour
 {
-   [SerializeField] ESpellSlot spellSlot;
+    [SerializeField] ESpellSlot spellSlot;
     [SerializeField] EPlayerID player;
 
     private Image spellIcon;
@@ -15,28 +15,38 @@ public class SelectedSpell : MonoBehaviour
     void Start()
     {
         spellIcon = this.GetComponent<Image>();
-        EventManager.Instance.UI_SpellChosen += On_UI_SpellChosen;
+        SpellSelectionManager.Instance.SpellButtonPressed += OnSpellButtonPressed;
     }
 
 
-    private void On_UI_SpellChosen(EPlayerID playerID, AbstractSpell chosenSpell)
+    private void OnSpellButtonPressed(EPlayerID playerID, AbstractSpell chosenSpell)
     {
-        
-            counter++;
+        Debug.Log("EVENT CALLED");
+           
             if (counter == 0 && spellSlot == ESpellSlot.SPELL_1 && player == playerID)
             {
                 spellIcon.sprite = chosenSpell.SpellIcon;
-            }
+            counter++;
+            EventManager.Instance.Invoke_UI_SpellChosen(playerID, chosenSpell, spellSlot);        
+            Debug.Log("Spell 1 has been CHosen");
+        }
             if (counter == 1 && spellSlot == ESpellSlot.SPELL_2 && player == playerID)
             {
                 spellIcon.sprite = chosenSpell.SpellIcon;
-            }
+            counter++;
+            EventManager.Instance.Invoke_UI_SpellChosen(playerID, chosenSpell, spellSlot);
+            Debug.Log("Spell 1 has been CHosen");
+        }
             if (counter == 2 && spellSlot == ESpellSlot.SPELL_3 && player == playerID)
             {
                 spellIcon.sprite = chosenSpell.SpellIcon;
-            }
-           
+            counter++;
+            EventManager.Instance.Invoke_UI_SpellChosen(playerID, chosenSpell, spellSlot);
+            Debug.Log("Spell 1 has been CHosen");
+        }
         
+
+
     }
   
 }

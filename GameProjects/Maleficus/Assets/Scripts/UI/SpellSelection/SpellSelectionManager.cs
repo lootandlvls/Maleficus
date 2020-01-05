@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using System;
 
 using static Maleficus.MaleficusUtilities;
 
 
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>
 {
+    public event Action<EPlayerID, AbstractSpell> SpellButtonHighlighted;
+    public event Action<EPlayerID, AbstractSpell> SpellButtonPressed;
+
+
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
 
     private Dictionary<int, Dictionary<int, SpellSelectionButton>> allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
@@ -35,21 +40,22 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         InitializeSpellButtonsDictionaries();
         InitializeStartPlayerHighlights();
 
-        SpellSelectionButton[] spellSelectionAction = FindObjectsOfType<SpellSelectionButton>();
-        foreach (SpellSelectionButton Action in spellSelectionAction)
-        {
-            Action.SpellButtonPressed+= (EPlayerID playerID) =>
-            {
-                EventManager.Instance.Invoke_UI_SpellChosen(playerID , Action.Spell );
-                Debug.Log("A BUTTON HAS BEEN PRESSED !!!!!!!!!!!!!!");
-            };
-            Action.SpellButtonHighlighted += (EPlayerID playerID) =>
-            {
-                EventManager.Instance.Invoke_UI_SpellHighlighted(playerID , Action.Spell);
-                Debug.Log("Spell has been Highlighted");
-            };
+        //SpellSelectionButton[] spellSelectionAction = FindObjectsOfType<SpellSelectionButton>();
+        //foreach (SpellSelectionButton Action in spellSelectionAction)
+        //{
+        //    Action.SpellButtonPressed+= (EPlayerID playerID) =>
+        //    {
 
-        }
+        //        EventManager.Instance.Invoke_UI_SpellChosen(playerID , Action.Spell );
+        //        Debug.Log("A BUTTON HAS BEEN PRESSED !!!!!!!!!!!!!!");
+        //    };
+        //    Action.SpellButtonHighlighted += (EPlayerID playerID) =>
+        //    {
+        //        EventManager.Instance.Invoke_UI_SpellHighlighted(playerID , Action.Spell);
+        //        Debug.Log("Spell has been Highlighted");
+        //    };
+
+        //}
 
     }
 
@@ -68,6 +74,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                 {
                     case EInputButton.CONFIRM:
                         currentSpellButton.PressSpellButton(playerID);
+                        InvokeEventIfBound(SpellButtonPressed, playerID, currentSpellButton.Spell);
                         break;
 
                     case EInputButton.UP:
@@ -79,6 +86,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             currentSpellButton = upperMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
+                            InvokeEventIfBound(SpellButtonHighlighted, playerID, currentSpellButton.Spell);
                         }
                         break;
 
@@ -90,6 +98,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             currentSpellButton = bottomMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
+                            InvokeEventIfBound(SpellButtonHighlighted, playerID, currentSpellButton.Spell);
                         }
                         break;
 
@@ -101,6 +110,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             currentSpellButton = leftMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
+                            InvokeEventIfBound(SpellButtonHighlighted, playerID, currentSpellButton.Spell);
                         }
                         break;
 
@@ -112,6 +122,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             currentSpellButton = rightMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
+                            InvokeEventIfBound(SpellButtonHighlighted, playerID, currentSpellButton.Spell);
                         }
                         break;
 

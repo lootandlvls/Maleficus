@@ -5,9 +5,6 @@ using System;
 
 public class SpellSelectionButton : MaleficusMonoBehaviour
 {
-    public event Action<EPlayerID> SpellButtonHighlighted;
-    public event Action<EPlayerID> SpellButtonPressed;
-
     public AbstractSpell Spell                  { get { return spell; } }
     public MaleficusButton MaleficusButton      { get { return GetComponent<MaleficusButton>(); } }
     public int RowIndex                         { get { return rowIndex; } }
@@ -105,8 +102,6 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
             if (IS_KEY_CONTAINED(playerHighlights, playerID))
             {
                 playerHighlights[playerID].ShowHighlight();
-
-                InvokeEventIfBound(SpellButtonHighlighted, playerID);
             }
         }
     }
@@ -126,7 +121,7 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
     {
         if (playerID != EPlayerID.NONE)
         {
-            InvokeEventIfBound(SpellButtonPressed, playerID);
+
         }
     }
 }

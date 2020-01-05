@@ -448,6 +448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
+  player: 4
 --- !u!114 &23347391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,6 +462,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
+  player: 4
 --- !u!114 &23347392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,6 +476,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
+  player: 4
 --- !u!114 &23347393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,6 +495,50 @@ MonoBehaviour:
   Connected: {fileID: 23347388}
   NotConnected: {fileID: 23347384}
   PlayerID: 4
+--- !u!1 &61040292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5401137398088082504, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1355317788}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &61040293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61040292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1f770436133714b9acedd4d6a3b479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
+  player: 3
+--- !u!1 &117408006 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5401137398088082504, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 221259343}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &117408007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117408006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1f770436133714b9acedd4d6a3b479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
+  player: 2
 --- !u!1 &118632178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1227,6 +1274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
+  player: 2
 --- !u!114 &221259352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,6 +1288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
+  player: 2
 --- !u!114 &221259353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1253,6 +1302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
+  player: 2
 --- !u!114 &221259354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2383,7 +2433,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 708614909}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &616015788
+--- !u!114 &616015791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2398,6 +2448,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
+  player: 1
 --- !u!1 &624141322
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,6 +2967,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
+  player: 1
 --- !u!114 &708614918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2929,6 +2981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
+  player: 1
 --- !u!114 &708614919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2942,6 +2995,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
+  player: 1
 --- !u!114 &708614920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4196,6 +4250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
+  player: 3
 --- !u!114 &1355317797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4209,6 +4264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
+  player: 3
 --- !u!114 &1355317798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4222,6 +4278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
+  player: 3
 --- !u!114 &1355317799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4866,6 +4923,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1839569387}
   m_CullTransparentMesh: 0
+--- !u!1 &1869789392 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5401137398088082504, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 23347382}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1869789393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869789392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1f770436133714b9acedd4d6a3b479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
+  player: 4
 --- !u!1 &2042784792
 GameObject:
   m_ObjectHideFlags: 0

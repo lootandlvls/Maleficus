@@ -7,18 +7,21 @@ using UnityEngine.UI;
 public class HighlightedSpell : MaleficusMonoBehaviour
 {
     Image spellIcon;
-
+    [SerializeField] EPlayerID player;
     // Start is called before the first frame update
     protected override void InitializeEventsCallbacks()
     {
         
         base.InitializeEventsCallbacks();
         spellIcon = GetComponent<Image>();
-        EventManager.Instance.UI_SpellHighlighted += On_UI_SpellHighlighted;
+        SpellSelectionManager.Instance.SpellButtonHighlighted += OnSpellHighlighted;
     }
 
-    private void On_UI_SpellHighlighted(EPlayerID playerID , AbstractSpell highlightedSpell)
+    private void OnSpellHighlighted(EPlayerID playerID , AbstractSpell highlightedSpell)
     {
-        spellIcon.sprite = highlightedSpell.SpellIcon;
+        if (player == playerID)
+        {
+            spellIcon.sprite = highlightedSpell.SpellIcon;
+        }
     }
 }

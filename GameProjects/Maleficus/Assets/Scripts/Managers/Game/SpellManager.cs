@@ -82,24 +82,24 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-    private void On_UI_SpellChosen( EPlayerID playerID , AbstractSpell chosenSpell)
+    private void On_UI_SpellChosen( EPlayerID playerID , AbstractSpell chosenSpell , ESpellSlot spellSlot)
     {
            if (playerID == EPlayerID.PLAYER_1)
-           {
-            Player_1_SpellsList.Add(chosenSpell);
+           {           
+            Player_1_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
            }
            else if  (playerID == EPlayerID.PLAYER_2)
            {
-            Player_2_SpellsList.Add(chosenSpell);
-        }
+            Player_2_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
+           }
            else if (playerID == EPlayerID.PLAYER_3)
            {
-            Player_3_SpellsList.Add(chosenSpell);
+            Player_3_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
            }
            else if (playerID == EPlayerID.PLAYER_4)
            {
-            Player_4_SpellsList.Add(chosenSpell);
-           }
+            Player_4_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
+            }
 
     }
     private void On__SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
