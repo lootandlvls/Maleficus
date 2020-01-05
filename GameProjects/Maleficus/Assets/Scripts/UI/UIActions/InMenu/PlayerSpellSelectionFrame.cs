@@ -10,6 +10,11 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
    [SerializeField] GameObject Connected;
    [SerializeField] GameObject NotConnected;
    [SerializeField] EPlayerID PlayerID;
+
+    private bool isPlayerConnected = false;
+
+    private int spellCounter = 0;
+
     // Start is called before the first frame update
     protected override void InitializeEventsCallbacks()
     {
@@ -22,15 +27,50 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = Maleficus.MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
-        
-        if (inputButton == EInputButton.CONFIRM && playerID == PlayerID)
+
+        if (playerID == PlayerID)
         {
-            Connected.SetActive(true);
-            NotConnected.SetActive(false);
+            switch (inputButton)
+            {
+                case EInputButton.CONFIRM:
+                    ConnectPlayer();
+                    break;
+
+                case EInputButton.CANCEL:
+                    if (spellCounter == 0)
+                    {
+                        DisconnectPlayer();
+                    }
+                    else
+                    {
+                        // TODO : remove spell slot
+                    }
+                    break;
+            }
         }
     }
 
-    
+    private void ConnectPlayer()
+    {
+        Connected.SetActive(true);
+        NotConnected.SetActive(false);
+
+        isPlayerConnected = true;
+
+        spellCounter = 0;
+
+        EventManager.Instance.Invoke_PLAYERS_PlayerJoined(PlayerID);
+    }
+
+    private void DisconnectPlayer()
+    {
+        Connected.SetActive(false);
+        NotConnected.SetActive(true);
+
+        isPlayerConnected = false;
+
+        EventManager.Instance.Invoke_PLAYERS_PlayerLeft(PlayerID);
+    }
 
     // Update is called once per frame
 
