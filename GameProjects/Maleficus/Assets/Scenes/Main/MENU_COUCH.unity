@@ -486,6 +486,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdf02a3db3899c489bca1ba9104a5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
   Connected: {fileID: 23347388}
   NotConnected: {fileID: 23347384}
   PlayerID: 4
@@ -1012,6 +1015,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 305986815}
     m_Modifications:
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.9669811
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.9669811
+      objectReference: {fileID: 0}
     - target: {fileID: 2505281986020663859, guid: 1308e35999056b44fa2bd2196f9ce5a7,
         type: 3}
       propertyPath: m_Text
@@ -1127,6 +1150,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: C_PlayerSpellSelection (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2717939387981441232, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281746932787045762, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5275876891473842222, guid: 1308e35999056b44fa2bd2196f9ce5a7,
         type: 3}
       propertyPath: m_IsActive
@@ -1232,6 +1265,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdf02a3db3899c489bca1ba9104a5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
   Connected: {fileID: 221259349}
   NotConnected: {fileID: 221259345}
   PlayerID: 2
@@ -2341,6 +2377,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598246084}
   m_CullTransparentMesh: 0
+--- !u!1 &616015787 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5401137398088082504, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 708614909}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &616015788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616015787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1f770436133714b9acedd4d6a3b479, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
 --- !u!1 &624141322
 GameObject:
   m_ObjectHideFlags: 0
@@ -2652,6 +2709,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 305986815}
     m_Modifications:
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1129402162360002057, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2505281986148012433, guid: 1308e35999056b44fa2bd2196f9ce5a7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2762,6 +2839,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: C_PlayerSpellSelection (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2717939387981441232, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4281746932787045762, guid: 1308e35999056b44fa2bd2196f9ce5a7,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5275876891473842222, guid: 1308e35999056b44fa2bd2196f9ce5a7,
         type: 3}
       propertyPath: m_IsActive
@@ -2867,6 +2954,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdf02a3db3899c489bca1ba9104a5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
   Connected: {fileID: 708614915}
   NotConnected: {fileID: 708614911}
   PlayerID: 1
@@ -4144,6 +4234,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bdf02a3db3899c489bca1ba9104a5ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
   Connected: {fileID: 1355317794}
   NotConnected: {fileID: 1355317790}
   PlayerID: 3
