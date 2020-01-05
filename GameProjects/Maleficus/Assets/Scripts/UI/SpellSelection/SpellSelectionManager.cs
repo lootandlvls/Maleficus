@@ -22,6 +22,17 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         InitializeSpellButtonsDictionaries();
         InitializeStartPlayerHighlights();
 
+        //SpellSelectionUIAction[] spellSelectionAction = FindObjectsOfType<SpellSelectionButton>();
+        //foreach (SpellSelectionButton Action in spellSelectionAction)
+        //{
+        //    Action. += () =>
+        //    {
+        //        EventManager.Instance.Invoke_UI_SpellChosen(Action.Spell);
+        //        Debug.Log("A BUTTON HAS BEEN PRESSED !!!!!!!!!!!!!!");
+        //    };
+
+        //}
+
     }
 
     public void PopulateSpellButtonsNavigation()
@@ -148,6 +159,8 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
             }
         }
     }
+
+
 
     private void InitializeSpellButtonsDictionaries()
     {

@@ -197,6 +197,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
     //}
     public MaleficusEvent<Event_StateUpdated<EMenuState>> UI_MenuStateUpdated = new MaleficusEvent<Event_StateUpdated<EMenuState>>("UI_MenuStateUpdated");
 
+    public event Action<AbstractSpell> UI_SpellChosen;
+    public void Invoke_UI_SpellChosen(AbstractSpell abstractSpell)
+    {
+
+        if (UI_SpellChosen != null)
+        {
+            UI_SpellChosen.Invoke(abstractSpell);
+        }
+        DebugLog("Spell " + abstractSpell.SpellName + " Has been Chosen");
+    }
+
     #endregion
 
     #region INPUT

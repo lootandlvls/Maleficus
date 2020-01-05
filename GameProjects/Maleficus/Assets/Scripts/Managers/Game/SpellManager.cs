@@ -38,7 +38,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<AbstractSpell> Player_3_SpellsList = new List<AbstractSpell>();
     public List<AbstractSpell> Player_4_SpellsList = new List<AbstractSpell>();
 
-
+    private int Counter = 0;
+    private bool temp = false;
     private Dictionary<ETouchJoystickType, MaleficusJoystick> spellJoysticks = new Dictionary<ETouchJoystickType, MaleficusJoystick>();
 
 
@@ -65,6 +66,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
+        EventManager.Instance.UI_SpellChosen += On_UI_SpellChosen;
     }
 
     public override void OnSceneStartReinitialize()
@@ -80,6 +82,35 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
+    private void On_UI_SpellChosen(AbstractSpell chosenSpell)
+    {
+       
+            if (Counter <= 2)
+            {
+                Player_1_SpellsList[Counter] = chosenSpell;
+                Debug.Log("Player 1 chose a spell  ");
+            }
+            if (Counter <= 5 && Counter > 2)
+            {
+                Player_2_SpellsList[Counter] = chosenSpell;
+                Debug.Log("Player 2 chose a spell  ");
+            }
+            if (Counter <= 8 && Counter > 5)
+            {
+                Player_3_SpellsList[Counter] = chosenSpell;
+                Debug.Log("Player 3 chose a spell  ");
+            }
+            if (Counter <= 11 && Counter > 8)
+            {
+                Player_4_SpellsList[Counter] = chosenSpell;
+                Debug.Log("Player 4 chose a spell  ");
+            }
+
+
+            Counter++;
+            Debug.Log("Counter = " + Counter);
+        
+    }
     private void On__SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
     {
         Debug.Log("Teleportation spell executed");
