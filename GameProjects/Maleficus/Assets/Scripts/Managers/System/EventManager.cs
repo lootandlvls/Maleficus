@@ -116,8 +116,19 @@ public class EventManager : AbstractSingletonManager<EventManager>
         {
             PLAYERS_PlayerCollectedCoin.Invoke();
         }
-        Debug.Log("Player collected a coin");
+        DebugLog("Player collected a coin");
     }
+        
+    public event Action<EPlayerID> PLAYERS_PlayerJoined;
+    public void Invoke_PLAYERS_PlayerJoined(EPlayerID playerID)
+    {
+        if (PLAYERS_PlayerJoined != null)
+        {
+            PLAYERS_PlayerJoined.Invoke(playerID);
+        }
+        DebugLog("Player " + playerID + " joined");
+    }
+
     #endregion
 
     #region SPELLS

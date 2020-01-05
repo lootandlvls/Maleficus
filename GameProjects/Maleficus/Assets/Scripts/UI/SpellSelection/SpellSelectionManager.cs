@@ -8,7 +8,6 @@ using static Maleficus.MaleficusUtilities;
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>
 {
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
-
     private Dictionary<int, Dictionary<int, SpellSelectionButton>> allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
 
     protected override void Update()
