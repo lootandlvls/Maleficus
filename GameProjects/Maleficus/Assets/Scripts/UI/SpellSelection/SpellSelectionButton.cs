@@ -121,4 +121,12 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
             }
         }
     }
+
+    public void PressSpellButton(EPlayerID playerID)
+    {
+        if (playerID != EPlayerID.NONE)
+        {
+            InvokeEventIfBound(SpellButtonPressed, playerID);
+        }
+    }
 }

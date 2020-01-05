@@ -58,14 +58,19 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
             if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
             {
                 SpellSelectionButton currentSpellButton = highlightedSpellButtons[playerID];
-                currentSpellButton.UnHighlightPlayerSelection(playerID);
 
                 switch (inputButton)
                 {
+                    case EInputButton.CONFIRM:
+                        currentSpellButton.PressSpellButton(playerID);
+                        break;
+
                     case EInputButton.UP:
+
                         MaleficusButton upperMaleficusButton = currentSpellButton.MaleficusButton.UpperButton;
                         if (IS_NOT_NULL(upperMaleficusButton))
                         {
+                            currentSpellButton.UnHighlightPlayerSelection(playerID);
                             currentSpellButton = upperMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
@@ -76,6 +81,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                         MaleficusButton bottomMaleficusButton = currentSpellButton.MaleficusButton.BottomButton;
                         if (IS_NOT_NULL(bottomMaleficusButton))
                         {
+                            currentSpellButton.UnHighlightPlayerSelection(playerID);
                             currentSpellButton = bottomMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
@@ -86,6 +92,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                         MaleficusButton leftMaleficusButton = currentSpellButton.MaleficusButton.LeftButton;
                         if (IS_NOT_NULL(leftMaleficusButton))
                         {
+                            currentSpellButton.UnHighlightPlayerSelection(playerID);
                             currentSpellButton = leftMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
@@ -96,11 +103,13 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                         MaleficusButton rightMaleficusButton = currentSpellButton.MaleficusButton.RightButton;
                         if (IS_NOT_NULL(rightMaleficusButton))
                         {
+                            currentSpellButton.UnHighlightPlayerSelection(playerID);
                             currentSpellButton = rightMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
                             currentSpellButton.HighlightPlayerSelection(playerID);
                             highlightedSpellButtons[playerID] = currentSpellButton;
                         }
                         break;
+
                 }
             }
         }
