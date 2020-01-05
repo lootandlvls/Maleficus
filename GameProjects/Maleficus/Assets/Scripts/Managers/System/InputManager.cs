@@ -119,7 +119,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
             if (inputButton != EInputButton.NONE)
             {
-                Debug.Log(inputButton + " released");
                 NetEvent_ButtonReleased buttonReleased = new NetEvent_ButtonReleased(clientID, inputButton);
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugButtonEvents);
             }
