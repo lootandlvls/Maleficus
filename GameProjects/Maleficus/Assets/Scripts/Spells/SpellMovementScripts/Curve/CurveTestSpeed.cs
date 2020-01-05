@@ -54,8 +54,8 @@ public class CurveTestSpeed : AbstractSpell
             if (percentageProgress >= 1.0f)
             {
                 isStarted = false;
-                ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
-                destroyEffect.DestroySpell();
+                //ProjectileMoveScript destroyEffect = this.GetComponent<ProjectileMoveScript>();
+//destroyEffect.DestroySpell();
                 return;
             }
             
