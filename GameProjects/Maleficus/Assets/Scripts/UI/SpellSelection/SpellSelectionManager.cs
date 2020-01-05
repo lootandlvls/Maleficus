@@ -34,16 +34,21 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         InitializeSpellButtonsDictionaries();
         InitializeStartPlayerHighlights();
 
-        //SpellSelectionUIAction[] spellSelectionAction = FindObjectsOfType<SpellSelectionButton>();
-        //foreach (SpellSelectionButton Action in spellSelectionAction)
-        //{
-        //    Action. += () =>
-        //    {
-        //        EventManager.Instance.Invoke_UI_SpellChosen(Action.Spell);
-        //        Debug.Log("A BUTTON HAS BEEN PRESSED !!!!!!!!!!!!!!");
-        //    };
+        SpellSelectionButton[] spellSelectionAction = FindObjectsOfType<SpellSelectionButton>();
+        foreach (SpellSelectionButton Action in spellSelectionAction)
+        {
+            Action.SpellButtonPressed+= (EPlayerID playerID) =>
+            {
+                EventManager.Instance.Invoke_UI_SpellChosen(playerID , Action.Spell );
+                Debug.Log("A BUTTON HAS BEEN PRESSED !!!!!!!!!!!!!!");
+            };
+            Action.SpellButtonHighlighted += (EPlayerID playerID) =>
+            {
+                EventManager.Instance.Invoke_UI_SpellHighlighted(playerID , Action.Spell);
+                Debug.Log("Spell has been Highlighted");
+            };
 
-        //}
+        }
 
     }
 

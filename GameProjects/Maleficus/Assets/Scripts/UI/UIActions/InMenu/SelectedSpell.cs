@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class SelectedSpell : MonoBehaviour
 {
    [SerializeField] ESpellSlot spellSlot;
+    [SerializeField] EPlayerID player;
 
     private Image spellIcon;
     private int counter = 0;
@@ -18,26 +19,23 @@ public class SelectedSpell : MonoBehaviour
     }
 
 
-    private void On_UI_SpellChosen(AbstractSpell chosenSpell)
+    private void On_UI_SpellChosen(EPlayerID playerID, AbstractSpell chosenSpell)
     {
         
             counter++;
-            if (counter == 1 && spellSlot == ESpellSlot.SPELL_1)
+            if (counter == 0 && spellSlot == ESpellSlot.SPELL_1 && player == playerID)
             {
                 spellIcon.sprite = chosenSpell.SpellIcon;
             }
-            if (counter == 2 && spellSlot == ESpellSlot.SPELL_2)
+            if (counter == 1 && spellSlot == ESpellSlot.SPELL_2 && player == playerID)
             {
                 spellIcon.sprite = chosenSpell.SpellIcon;
             }
-            if (counter == 3 && spellSlot == ESpellSlot.SPELL_3)
+            if (counter == 2 && spellSlot == ESpellSlot.SPELL_3 && player == playerID)
             {
                 spellIcon.sprite = chosenSpell.SpellIcon;
             }
-            if ( spellSlot == ESpellSlot.NONE)
-            {
-                spellIcon.sprite = chosenSpell.SpellIcon;
-            }
+           
         
     }
   
