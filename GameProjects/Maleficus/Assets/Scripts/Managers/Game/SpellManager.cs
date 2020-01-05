@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Maleficus.MaleficusConsts;
@@ -67,6 +68,26 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
         EventManager.Instance.UI_SpellChosen += On_UI_SpellChosen;
+        EventManager.Instance.UI_SpellRemoved += On_UI_SpellRemoved;
+    }
+
+    private void On_UI_SpellRemoved(EPlayerID playerID, ESpellSlot spellSlot)
+    {
+        switch (playerID)
+        {
+            case EPlayerID.PLAYER_1:
+                Player_1_SpellsList[SpellSlotToInt(spellSlot) - 1] = null;
+                break;
+            case EPlayerID.PLAYER_2:
+                Player_2_SpellsList[SpellSlotToInt(spellSlot) -1] = null;
+                break;
+            case EPlayerID.PLAYER_3:
+                Player_3_SpellsList[SpellSlotToInt(spellSlot) -1] = null;
+                break;
+            case EPlayerID.PLAYER_4:
+                Player_4_SpellsList[SpellSlotToInt(spellSlot) -1] = null;
+                break;
+        }
     }
 
     public override void OnSceneStartReinitialize()

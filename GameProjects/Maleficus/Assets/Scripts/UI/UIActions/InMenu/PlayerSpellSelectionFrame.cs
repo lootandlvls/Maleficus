@@ -12,15 +12,76 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
    [SerializeField] EPlayerID PlayerID;
 
     private bool isPlayerConnected = false;
-
     private int spellCounter = 0;
+    private Dictionary<ESpellSlot, SelectedSpell> selectedSpellsIcons = new Dictionary<ESpellSlot, SelectedSpell>();
 
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
+
+        SpellSelectionManager.Instance.SpellButtonPressed += OnSpellButtonPressed;
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
     }
-   
+
+    protected override void InitializeComponents()
+    {
+        base.InitializeComponents();
+
+        // Initialize selected spells
+        Connected.SetActive(true);
+        foreach (SelectedSpell SelectedSpell in GetComponentsInChildren<SelectedSpell>())
+        {
+            selectedSpellsIcons.Add(SelectedSpell.SpellSlot, SelectedSpell);
+            LogConsole("adding : " + SelectedSpell.SpellSlot);
+
+        }
+        LogConsole("SelectedSpell initialzed " + selectedSpellsIcons.Count);
+        Connected.SetActive(false);
+
+
+    }
+
+    private void OnSpellButtonPressed(EPlayerID playerID, AbstractSpell spell)
+    {
+
+        if (PlayerID == playerID)
+        {
+            if (spellCounter < 3)
+            {
+                spellCounter++;
+            }
+            switch (spellCounter)
+            {
+                case 1:
+                    if (selectedSpellsIcons[ESpellSlot.SPELL_1] != null)
+                    {
+                        LogConsole("Spell 1 has been Chosen");
+                        selectedSpellsIcons[ESpellSlot.SPELL_1].ChangeImage(spell);
+                        EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, ESpellSlot.SPELL_1);
+                    }
+                    break;
+                case 2:
+                    if (selectedSpellsIcons[ESpellSlot.SPELL_2] != null)
+                    {
+                        LogConsole("Spell 2 has been Chosen");
+                        selectedSpellsIcons[ESpellSlot.SPELL_2].ChangeImage(spell);
+                        EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, ESpellSlot.SPELL_2);
+                    }
+                    break;
+                case 3:
+                    if (selectedSpellsIcons[ESpellSlot.SPELL_3] != null)
+                    {
+                        LogConsole("Spell 3 has been Chosen");
+                        selectedSpellsIcons[ESpellSlot.SPELL_3].ChangeImage(spell);
+                        EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, ESpellSlot.SPELL_3);
+                    }
+                    break;
+
+            }
+            
+        }
+    }
+
 
     private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
     {
@@ -46,7 +107,7 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
                     }
                     else
                     {
-                        // TODO : remove spell slot
+                        RemoveSpell(playerID);
                     }
                     break;
             }
@@ -73,6 +134,46 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
         isPlayerConnected = false;
 
         EventManager.Instance.Invoke_PLAYERS_PlayerLeft(PlayerID);
+    }
+
+    private void RemoveSpell(EPlayerID playerID)
+    {
+        if (playerID == PlayerID)
+        {
+            switch (spellCounter)
+            {
+                case 1:
+                    if (selectedSpellsIcons[ESpellSlot.SPELL_1] != null)
+                    {
+                        LogConsole("Spell 1 has been Chosen");
+                        selectedSpellsIcons[ESpellSlot.SPELL_1].RemoveImage();
+                        EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_1);
+                    }
+                    break;
+                case 2:
+                    if (selectedSpellsIcons[ESpellSlot.SPELL_2] != null)
+                    {
+                        LogConsole("Spell 2 has been Chosen");
+                        selectedSpellsIcons[ESpellSlot.SPELL_2].RemoveImage();
+                        EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_2);
+                    }
+                    break;
+                case 3:
+                    if (selectedSpellsIcons[ESpellSlot.SPELL_3] != null)
+                    {
+                        LogConsole("Spell 3 has been Chosen");
+                        selectedSpellsIcons[ESpellSlot.SPELL_3].RemoveImage();
+                        EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_3);
+                    }
+                    break;
+
+
+            }
+            if (spellCounter >= 0)
+            {
+                spellCounter--;
+            }
+        }
     }
 
     // Update is called once per frame
