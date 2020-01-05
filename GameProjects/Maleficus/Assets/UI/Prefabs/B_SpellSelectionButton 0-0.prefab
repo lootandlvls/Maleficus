@@ -362,7 +362,6 @@ GameObject:
   - component: {fileID: 8791247594938183422}
   - component: {fileID: 8791247594938183421}
   - component: {fileID: 2101685524027812932}
-  - component: {fileID: 8791247594938183417}
   m_Layer: 0
   m_Name: B_SpellSelectionButton 0-0
   m_TagString: Untagged
@@ -485,6 +484,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 0}
@@ -508,18 +510,6 @@ MonoBehaviour:
   spell: {fileID: 0}
   rowIndex: 0
   columnIndex: 0
---- !u!114 &8791247594938183417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8791247594938183410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75e0dd2c9ab2e034a911b7dcae77817c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8791247595626946145
 GameObject:
   m_ObjectHideFlags: 0

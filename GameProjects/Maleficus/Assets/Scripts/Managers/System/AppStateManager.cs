@@ -193,7 +193,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             action.ActionButtonPressed += () =>
             {
-                UpdateState(EAppState.IN_MENU_IN_CONNECTING_CONTROLLERS);
+                UpdateState(EAppState.IN_MENU_IN_SPELL_SELECTION);
             };
         }
 

@@ -2,18 +2,31 @@
 using UnityEditor;
 using UnityEngine;
 
+using static Maleficus.MaleficusUtilities;
+
+
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>
 {
-    // TODO : defining every player on a corner 
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
 
     private Dictionary<int, Dictionary<int, SpellSelectionButton>> allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
+
+    protected override void Update()
+    {
+        base.Update();
+    }
 
     public override void OnSceneStartReinitialize()
     {
         
     }
 
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
+    }
 
     protected override void InitializeObjecsInScene()
     {
@@ -22,6 +35,64 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         InitializeSpellButtonsDictionaries();
         InitializeStartPlayerHighlights();
 
+    }
+
+    private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
+    {
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
+        {
+            EInputButton inputButton = eventHandle.InputButton;
+            EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+
+            if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
+            {
+                SpellSelectionButton currentSpellButton = highlightedSpellButtons[playerID];
+                currentSpellButton.UnHighlightPlayerSelection(playerID);
+
+                switch (inputButton)
+                {
+                    case EInputButton.UP:
+                        MaleficusButton upperMaleficusButton = currentSpellButton.MaleficusButton.UpperButton;
+                        if (IS_NOT_NULL(upperMaleficusButton))
+                        {
+                            currentSpellButton = upperMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
+                            currentSpellButton.HighlightPlayerSelection(playerID);
+                            highlightedSpellButtons[playerID] = currentSpellButton;
+                        }
+                        break;
+
+                    case EInputButton.DOWN:
+                        MaleficusButton bottomMaleficusButton = currentSpellButton.MaleficusButton.BottomButton;
+                        if (IS_NOT_NULL(bottomMaleficusButton))
+                        {
+                            currentSpellButton = bottomMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
+                            currentSpellButton.HighlightPlayerSelection(playerID);
+                            highlightedSpellButtons[playerID] = currentSpellButton;
+                        }
+                        break;
+
+                    case EInputButton.LEFT:
+                        MaleficusButton leftMaleficusButton = currentSpellButton.MaleficusButton.LeftButton;
+                        if (IS_NOT_NULL(leftMaleficusButton))
+                        {
+                            currentSpellButton = leftMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
+                            currentSpellButton.HighlightPlayerSelection(playerID);
+                            highlightedSpellButtons[playerID] = currentSpellButton;
+                        }
+                        break;
+
+                    case EInputButton.RIGHT:
+                        MaleficusButton rightMaleficusButton = currentSpellButton.MaleficusButton.RightButton;
+                        if (IS_NOT_NULL(rightMaleficusButton))
+                        {
+                            currentSpellButton = rightMaleficusButton.GetComponentWithCheck<SpellSelectionButton>();
+                            currentSpellButton.HighlightPlayerSelection(playerID);
+                            highlightedSpellButtons[playerID] = currentSpellButton;
+                        }
+                        break;
+                }
+            }
+        }
     }
 
     public void PopulateSpellButtonsNavigation()

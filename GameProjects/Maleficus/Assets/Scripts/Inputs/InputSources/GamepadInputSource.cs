@@ -130,7 +130,7 @@ public class GamepadInputSource : AbstractInputSource
                     InvokeButtonPressed(controllerID, EInputButton.CONFIRM);
                 }
                 // Connect controller
-                else if ((AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_CONTROLLERS)
+                else if ((AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
                     || (MotherOfManagers.Instance.IsConnectControllerInAnyState == true))
                 {
                     InputManager.Instance.TryToConnectController(controllerID);
@@ -151,7 +151,7 @@ public class GamepadInputSource : AbstractInputSource
                     || (InputManager.Instance.InputMode == EInputMode.TEST))
                 {
                     // Disconnect Player
-                    if ((AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_CONNECTING_CONTROLLERS)
+                    if ((AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
                         | (MotherOfManagers.Instance.IsConnectControllerInAnyState == true))
                     {
                         InputManager.Instance.DisconnectController(controllerID);

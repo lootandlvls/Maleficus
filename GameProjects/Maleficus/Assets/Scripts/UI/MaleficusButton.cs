@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 
 [RequireComponent(typeof(Button))]
-public class MaleficusButton : MonoBehaviour
+public class MaleficusButton : MaleficusMonoBehaviour
 {
     public MaleficusButton LeftButton   { get { return leftButton; }    set { leftButton = value; } }
     public MaleficusButton RightButton  { get { return rightButton; }   set { rightButton = value; } }
@@ -18,8 +18,10 @@ public class MaleficusButton : MonoBehaviour
     private Button myButton;
     private AbstractUIAction[] myUIActions;
 
-    private void Awake()
+    protected override void InitializeComponents()
     {
+        base.InitializeComponents();
+
         myButton = GetComponent<Button>();
         myUIActions = GetComponents<AbstractUIAction>();
     }
@@ -70,6 +72,7 @@ public class MaleficusButton : MonoBehaviour
 
     public void UnPopulateNavigationButtons()
     {
+        LogConsole("Unpopulating buttons");
         LeftButton = null;
         RightButton = null;
         UpperButton = null;

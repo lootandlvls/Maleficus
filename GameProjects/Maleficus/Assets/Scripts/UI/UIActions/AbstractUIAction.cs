@@ -11,7 +11,7 @@ using System;
 
 [RequireComponent(typeof (Button))]
 [RequireComponent(typeof (MaleficusButton))]
-public abstract class AbstractUIAction : MonoBehaviour
+public abstract class AbstractUIAction : MaleficusMonoBehaviour
 {
     public event Action ActionButtonPressed;
     public event Action ActionButtonHighlighted;
@@ -19,16 +19,20 @@ public abstract class AbstractUIAction : MonoBehaviour
     /// <summary>
     /// Trigger Execute() whenever the button is pressed.
     /// </summary>
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         GetComponent<Button>().onClick.AddListener(Execute);
     }
 
     /// <summary>
     /// Unsubscribe to ActionButtonPressed event when object is destroyed.
     /// </summary>
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (ActionButtonPressed != null)
         {
             Delegate[] delegates = ActionButtonPressed.GetInvocationList();

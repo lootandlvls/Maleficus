@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class SpellSelectionUIAction : AbstractUIAction
 {
+    public EPlayerID PLayerID { get; set; }
+
+    public AbstractSpell Spell          { get { return GetComponentWithCheck<SpellSelectionButton>().Spell; } }
+
     public override void OnHighlighted()
     {
         base.OnHighlighted();

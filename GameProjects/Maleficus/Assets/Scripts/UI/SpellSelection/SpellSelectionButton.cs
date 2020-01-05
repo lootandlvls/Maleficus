@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
-[RequireComponent(typeof(SpellSelectionUIAction))]
 public class SpellSelectionButton : MaleficusMonoBehaviour
 {
+    public event Action<EPlayerID> SpellButtonHighlighted;
+    public event Action<EPlayerID> SpellButtonPressed;
+
+    public AbstractSpell Spell                  { get { return spell; } }
     public MaleficusButton MaleficusButton      { get { return GetComponent<MaleficusButton>(); } }
     public int RowIndex                         { get { return rowIndex; } }
     public int ColumnIndex                      { get { return columnIndex; } }
 
     [Header("Spell Selection Button")]
-
     [SerializeField] private bool disableDebugTextOnStart = true;
     [SerializeField] private AbstractSpell spell;
     [SerializeField] private int rowIndex;
@@ -28,29 +31,6 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
         if ((myDebugIndexText != null) && (disableDebugTextOnStart == true))
         {
             myDebugIndexText.enabled = false;
-        }
-    }
-
-
-    public void HighlightPlayerSelection(EPlayerID playerID)
-    {
-        if (playerID != EPlayerID.NONE)
-        {
-            if (IS_KEY_CONTAINED(playerHighlights, playerID))
-            {
-                playerHighlights[playerID].ShowHighlight();
-            }
-        }
-    }
-
-    public void UnHighlightPlayerSelection(EPlayerID playerID)
-    {
-        if (playerID != EPlayerID.NONE)
-        {
-            if (IS_KEY_CONTAINED(playerHighlights, playerID))
-            {
-                playerHighlights[playerID].HideHighlight();
-            }
         }
     }
 
@@ -118,5 +98,27 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
         IS_KEY_CONTAINED(playerHighlights, EPlayerID.PLAYER_4);
     }
 
+    public void HighlightPlayerSelection(EPlayerID playerID)
+    {
+        if (playerID != EPlayerID.NONE)
+        {
+            if (IS_KEY_CONTAINED(playerHighlights, playerID))
+            {
+                playerHighlights[playerID].ShowHighlight();
 
+                InvokeEventIfBound(SpellButtonHighlighted, playerID);
+            }
+        }
+    }
+
+    public void UnHighlightPlayerSelection(EPlayerID playerID)
+    {
+        if (playerID != EPlayerID.NONE)
+        {
+            if (IS_KEY_CONTAINED(playerHighlights, playerID))
+            {
+                playerHighlights[playerID].HideHighlight();
+            }
+        }
+    }
 }
