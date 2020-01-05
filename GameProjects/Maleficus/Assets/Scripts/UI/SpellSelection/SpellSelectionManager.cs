@@ -20,7 +20,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         base.InitializeObjecsInScene();
 
         InitializeSpellButtonsDictionaries();
-
+        InitializeStartPlayerHighlights();
 
     }
 
@@ -151,6 +151,8 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
 
     private void InitializeSpellButtonsDictionaries()
     {
+        allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
+
         // Find all Spell Selection Buttons in the scene
         foreach (SpellSelectionButton spellSelectionButton in FindObjectsOfType<SpellSelectionButton>())
         {
@@ -167,6 +169,35 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
             {
                 allSpellSelectionButtons[rowIndex].Add(columnIndex, spellSelectionButton);
             }
+        }
+    }
+
+    private void InitializeStartPlayerHighlights()
+    {
+
+        highlightedSpellButtons = new Dictionary<EPlayerID, SpellSelectionButton>();
+
+        // Upper left corner
+        InitializeStartPlayerHighlight(EPlayerID.PLAYER_1, 0, 0);
+
+        // Upper right corner
+        InitializeStartPlayerHighlight(EPlayerID.PLAYER_2, 0, allSpellSelectionButtons[0].Count - 1);
+
+        // Lower left corner
+        InitializeStartPlayerHighlight(EPlayerID.PLAYER_3, allSpellSelectionButtons.Count - 1, 0);
+
+        // Lower right corner
+        InitializeStartPlayerHighlight(EPlayerID.PLAYER_4, allSpellSelectionButtons.Count - 1, allSpellSelectionButtons[allSpellSelectionButtons.Count - 1].Count - 1);
+    }
+
+    private void InitializeStartPlayerHighlight(EPlayerID playerID, int rowIndex, int columnIndex)
+    {
+        if ((IS_KEY_CONTAINED(allSpellSelectionButtons, rowIndex))
+            && (IS_KEY_CONTAINED(allSpellSelectionButtons[rowIndex], columnIndex)))
+        {
+            SpellSelectionButton player1Button = allSpellSelectionButtons[rowIndex][columnIndex];
+            highlightedSpellButtons.Add(playerID, player1Button);
+            player1Button.HighlightPlayerSelection(playerID);
         }
     }
 }

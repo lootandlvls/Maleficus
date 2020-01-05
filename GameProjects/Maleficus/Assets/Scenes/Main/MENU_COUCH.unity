@@ -2272,10 +2272,16 @@ PrefabInstance:
       propertyPath: rowIndex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: spell
+      value: 
+      objectReference: {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac,
+        type: 3}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: B_SpellSelectionButton 1-0
+      value: 'B_SpellSelectionButton 1-0 : FireBall_lvl_2'
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2382,6 +2388,12 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183423, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: caccc09442e90904d94b08c1ae00b653,
+        type: 3}
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
@@ -3144,10 +3156,16 @@ PrefabInstance:
       propertyPath: columnIndex
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: spell
+      value: 
+      objectReference: {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d,
+        type: 3}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: B_SpellSelectionButton 0-3
+      value: 'B_SpellSelectionButton 0-3 : S_FireLaser'
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3254,6 +3272,12 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183423, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 16a6a5271084d7742be0e0f1a9e217ef,
+        type: 3}
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
@@ -3822,10 +3846,16 @@ PrefabInstance:
       propertyPath: columnIndex
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: spell
+      value: 
+      objectReference: {fileID: 2529863791790152314, guid: 5f5d57d7d5418d94483960af93d846ab,
+        type: 3}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: B_SpellSelectionButton 1-3
+      value: 'B_SpellSelectionButton 1-3 : S_IceBall'
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3932,6 +3962,12 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183423, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5e93a13d0aab81048b25143ba568ef1b,
+        type: 3}
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
@@ -4817,10 +4853,16 @@ PrefabInstance:
       propertyPath: columnIndex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: spell
+      value: 
+      objectReference: {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac,
+        type: 3}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: B_SpellSelectionButton 0-1
+      value: 'B_SpellSelectionButton 0-1 : FireBall_lvl_2'
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -4927,6 +4969,12 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183423, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: caccc09442e90904d94b08c1ae00b653,
+        type: 3}
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
