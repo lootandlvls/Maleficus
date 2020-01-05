@@ -33,11 +33,15 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
             switch (inputButton)
             {
                 case EInputButton.CONFIRM:
-                    ConnectPlayer();
+                    if (isPlayerConnected == false)
+                    {
+                        ConnectPlayer();
+                    }
                     break;
 
                 case EInputButton.CANCEL:
-                    if (spellCounter == 0)
+                    if ((spellCounter == 0)
+                        && (isPlayerConnected == true))
                     {
                         DisconnectPlayer();
                     }
