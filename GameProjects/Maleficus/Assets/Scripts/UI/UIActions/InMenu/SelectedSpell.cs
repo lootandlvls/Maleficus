@@ -28,6 +28,10 @@ public class SelectedSpell : MaleficusMonoBehaviour
     {
         spellIcon.sprite = spell.SpellIcon;
     }
+    public void RemoveImage()
+    {
+        spellIcon.sprite = null;
+    }
 
     //private void OnSpellButtonPressed(EPlayerID playerID, AbstractSpell chosenSpell)
     //{

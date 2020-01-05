@@ -238,6 +238,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         DebugLog("Spell " + abstractSpell.SpellName + " Has been Highlighted");
     }
+
+    public event Action<EPlayerID, ESpellSlot> UI_SpellRemoved;
+    public void Invoke_UI_SpellRemoved(EPlayerID playerID,ESpellSlot spellSlot)
+    {
+
+        if (UI_SpellRemoved != null)
+        {
+            UI_SpellRemoved.Invoke(playerID, spellSlot);
+        }
+        DebugLog("Spell Has been REMOVED");
+    }
     #endregion
 
     #region INPUT
