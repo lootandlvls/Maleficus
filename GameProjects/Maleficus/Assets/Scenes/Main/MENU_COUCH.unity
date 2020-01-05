@@ -448,7 +448,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
-  player: 4
 --- !u!114 &23347391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +461,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
-  player: 4
 --- !u!114 &23347392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,7 +474,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
-  player: 4
 --- !u!114 &23347393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,7 +498,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1355317788}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &61040293
+--- !u!114 &61040296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -523,7 +520,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 221259343}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &117408007
+--- !u!114 &117408010
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1274,7 +1271,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
-  player: 2
 --- !u!114 &221259352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1288,7 +1284,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
-  player: 2
 --- !u!114 &221259353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1302,7 +1297,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
-  player: 2
 --- !u!114 &221259354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2967,7 +2961,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
-  player: 1
 --- !u!114 &708614918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2981,7 +2974,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
-  player: 1
 --- !u!114 &708614919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2995,7 +2987,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
-  player: 1
 --- !u!114 &708614920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4250,7 +4241,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 3
-  player: 3
 --- !u!114 &1355317797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4264,7 +4254,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 2
-  player: 3
 --- !u!114 &1355317798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4278,7 +4267,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellSlot: 1
-  player: 3
 --- !u!114 &1355317799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4929,7 +4917,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 23347382}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1869789393
+--- !u!114 &1869789396
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
