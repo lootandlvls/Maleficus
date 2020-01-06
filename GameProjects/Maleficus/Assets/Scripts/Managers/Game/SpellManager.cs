@@ -361,6 +361,58 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         ChargingSpells_Effects.Add(Resources.Load<GameObject>(PATH_EFFECT_FROZEN));
     }
 
+    public bool CheckPlayerSpells(EPlayerID playerID , AbstractSpell chosenSpell)
+    {
+        switch (playerID)
+        {
+            case EPlayerID.PLAYER_1:
+                return !Player_1_SpellsList.Contains(chosenSpell);
+              
+
+            case EPlayerID.PLAYER_2:
+                foreach (AbstractSpell spell in Player_2_SpellsList)
+                {
+                    if (spell == chosenSpell)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case EPlayerID.PLAYER_3:
+                foreach (AbstractSpell spell in Player_3_SpellsList)
+                {
+                    if (spell == chosenSpell)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                break;
+            case EPlayerID.PLAYER_4:
+                foreach (AbstractSpell spell in Player_4_SpellsList)
+                {
+                    if (spell == chosenSpell)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                break;
+        }
+        
+        
+        return true;
+    }
 
     //BUFFS
     private IEnumerator PlayerSpeedBoost(EPlayerID playerID , int SpeedBoost)

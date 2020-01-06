@@ -299,7 +299,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &898608065508071772
 GameObject:
@@ -637,7 +636,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &4237950309803824908
 GameObject:
@@ -813,12 +811,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   IsServer: 0
   ConnectionMode: 2
   InputMode: 1
   IsConnectControllerInAnyState: 1
+  CanDebugButtonEvents: 0
+  CanDebugJoystickEvents: 0
   IsSpawnPlayerOnControllerConnect: 1
   IsSpawnRemainingPlayersOnGameStart: 1
   IsSpawnTouchAsPlayer1: 0
@@ -870,7 +869,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &4335998295998743998
 GameObject:
@@ -921,7 +919,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!114 &8235437520970104786
 MonoBehaviour:
@@ -937,7 +934,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!114 &5843528688104263127
 MonoBehaviour:
@@ -953,7 +949,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!114 &3260712311203817852
 MonoBehaviour:
@@ -969,7 +964,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &4335998296063043094
 GameObject:
@@ -1016,7 +1010,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &4335998296438487357
 GameObject:
@@ -1063,7 +1056,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &4335998297404941566
 GameObject:
@@ -1110,7 +1102,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &5169349337228766896
 GameObject:
@@ -1157,7 +1148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   PlayingOffline: 0
 --- !u!1 &5503119419134137403
@@ -1250,7 +1240,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   ambiamce_AudioSource: {fileID: 7902778028624163180}
   startFighting__AudioSource: {fileID: 1348411854551532653}
@@ -1561,7 +1550,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   spellsUpgrade:
   - {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac, type: 3}
@@ -1571,13 +1559,13 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   Player_1_SpellsList:
-  - {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07, type: 3}
-  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
-  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Player_2_SpellsList:
-  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
-  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
-  - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Player_3_SpellsList:
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
   - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
@@ -1885,7 +1873,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &8098184902868246776
 GameObject:
@@ -1932,7 +1919,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
 --- !u!1 &8705121572368194172
 GameObject:
@@ -2063,7 +2049,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   basicEnemyPrefab: {fileID: 114409282968527766, guid: 359597ca943bcba48b221bef1fffc8fd,
     type: 3}
