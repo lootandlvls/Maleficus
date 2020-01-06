@@ -12,7 +12,7 @@ public class Event_StateUpdated<E> : AbstractEventHandle
         MessageType = ENetMessageType.NONE;
 
         NewState = newState;
-        lastState = LastState;
+        LastState = lastState;
     }
 
     public override string GetDebugMessage()

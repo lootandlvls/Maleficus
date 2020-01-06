@@ -13,6 +13,8 @@ using System;
 [RequireComponent(typeof (MaleficusButton))]
 public abstract class AbstractUIAction : MaleficusMonoBehaviour
 {
+    [SerializeField] private bool delayedEventExecution = false;
+
     public event Action ActionButtonPressed;
     public event Action ActionButtonHighlighted;
 
@@ -48,6 +50,18 @@ public abstract class AbstractUIAction : MaleficusMonoBehaviour
     /// Extend it in child class when needed.
     /// </summary>
     public virtual void Execute()
+    {
+        if (delayedEventExecution == false)
+        {
+            InvokeActionPressedEvent();
+        }
+        else
+        {
+            Invoke(nameof(DelayedExecuteCoroutine), 0.1f);
+        }
+    }
+
+    private void DelayedExecuteCoroutine()
     {
         InvokeActionPressedEvent();
     }

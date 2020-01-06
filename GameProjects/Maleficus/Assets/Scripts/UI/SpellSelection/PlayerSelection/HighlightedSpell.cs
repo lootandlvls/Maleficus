@@ -15,6 +15,16 @@ public class HighlightedSpell : MaleficusMonoBehaviour
         base.InitializeEventsCallbacks();
         spellIcon = GetComponent<Image>();
         SpellSelectionManager.Instance.SpellButtonHighlighted += OnSpellHighlighted;
+
+        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
+    }
+
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    {
+        if (playerID == player)
+        {
+            spellIcon.sprite = SpellSelectionManager.Instance.GetHighlightedSpellButton(player).Spell.SpellIcon;
+        }
     }
 
     private void OnSpellHighlighted(EPlayerID playerID , AbstractSpell highlightedSpell)

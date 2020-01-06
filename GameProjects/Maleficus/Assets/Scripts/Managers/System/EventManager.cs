@@ -149,6 +149,16 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("All players are ready");
     }
 
+    public event Action<EPlayerID> PLAYERS_PlayerReady;
+    public void Invoke_PLAYERS_PlayerReady(EPlayerID playerID)
+    {
+        if (PLAYERS_PlayerReady != null)
+        {
+            PLAYERS_PlayerReady.Invoke(playerID);
+        }
+        DebugLog("Player " + playerID + " ready");
+    }
+
     public event Action<EPlayerID> PLAYERS_PlayerCanceledReady;
     public void Invoke_PLAYERS_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
     {

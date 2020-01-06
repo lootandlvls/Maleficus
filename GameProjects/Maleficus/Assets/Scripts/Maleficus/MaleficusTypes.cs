@@ -161,45 +161,43 @@ public struct SHitInfo
 {
     public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, bool chargeable  , bool isTripleCast, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
     {
-        this.castedSpell = castedSpell;
-        this.castingPlayerID = castingPlayerID;
-        this.hitPlayerID = hitplayerID;
+        CastedSpell = castedSpell;
+        CastingPlayerID = castingPlayerID;
+        HitPlayerID = hitplayerID;
         this.hitPosition = hitPosition;
-        this.hasPower = hasPower;
-        this.buffEffects = buffEffects;
-        this.debuffEffects = debuffEffects;
-        this.chargeable = chargeable;
-        this.isTripleCast = isTripleCast;
+        HasPushPower = hasPower;
+        BuffEffects = buffEffects;
+        DebuffEffects = debuffEffects;
+        Chargeable = chargeable;
+        IsTripleCast = isTripleCast;
 
     }
 
-    public ISpell CastedSpell { get { return castedSpell; } }
-    public EPlayerID CastingPlayerID { get { return castingPlayerID; } }
-    public EPlayerID HitPlayerID { get { return hitPlayerID; } }
+    public ISpell CastedSpell { get; }
+    public EPlayerID CastingPlayerID { get; }
+    public EPlayerID HitPlayerID { get; }
     public Vector3 HitPosition { get { return hitPosition; } }
     public Vector3 HitVelocity
     {
         get
         {
            // Debug.Log("§$%§$%§ dir : " + castedSpell.Direction + " | pow : " + castedSpell.HitPower);
-            return castedSpell.Direction * castedSpell.HitPower;
+            return CastedSpell.Direction * CastedSpell.HitPower;
         }
     }
-    public bool HasPushPower { get { return hasPower; } }
-    public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
-    public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
-    public bool Chargeable { get { return chargeable; } }
-    public bool IsTripleCast { get { return isTripleCast; } }
+    public bool HasPushPower { get; }
+    public List<ESpellEffects> DebuffEffects { get; }
+    public List<ESpellEffects> BuffEffects { get; }
+    public bool Chargeable { get; }
+    public bool IsTripleCast { get; }
 
-    private bool isTripleCast;
-    private bool chargeable;
-    private ISpell castedSpell;
-    private EPlayerID castingPlayerID;
-    private EPlayerID hitPlayerID;
     private Vector3 hitPosition;
-    private bool hasPower;
-    private List<ESpellEffects> debuffEffects;
-    private List<ESpellEffects> buffEffects;
+}
+
+public class PlayerJoinStatus
+{
+    public bool HasJoined { get; set; } = false;
+    public bool IsReady { get; set; } = false;
 }
 #endregion
 

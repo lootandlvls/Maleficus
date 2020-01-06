@@ -8,16 +8,28 @@ using static Maleficus.MaleficusUtilities;
 
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>
 {
+
+
     public event Action<EPlayerID, AbstractSpell> SpellButtonHighlighted;
-    public event Action<EPlayerID, AbstractSpell> SpellButtonPressed;
 
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
     private Dictionary<int, Dictionary<int, SpellSelectionButton>> allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
+
+    public SpellSelectionButton GetHighlightedSpellButton(EPlayerID playerID)
+    {
+        if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
+        {
+            return highlightedSpellButtons[playerID];
+        }
+        return null;
+    }
 
     protected override void Update()
     {
         base.Update();
     }
+
+
 
     public override void OnSceneStartReinitialize()
     {
@@ -67,8 +79,8 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
             EInputButton inputButton = eventHandle.InputButton;
             EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-            if ((IS_KEY_CONTAINED(PlayerManager.Instance.JoinedPlayers, playerID))
-                && (PlayerManager.Instance.JoinedPlayers[playerID] == true))
+            if ((IS_KEY_CONTAINED(PlayerManager.Instance.PlayersJoinStatus, playerID))
+                && (PlayerManager.Instance.PlayersJoinStatus[playerID].HasJoined == true))
             {
                 if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
                 {
@@ -76,11 +88,6 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
 
                     switch (inputButton)
                     {
-                        case EInputButton.CONFIRM:
-                            currentSpellButton.PressSpellButton(playerID);
-                            InvokeEventIfBound(SpellButtonPressed, playerID, currentSpellButton.Spell);
-                            break;
-
                         case EInputButton.UP:
 
                             MaleficusButton upperMaleficusButton = currentSpellButton.MaleficusButton.UpperButton;
