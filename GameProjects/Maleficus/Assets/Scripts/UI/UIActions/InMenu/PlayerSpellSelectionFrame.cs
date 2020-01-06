@@ -12,12 +12,10 @@ public class PlayerSpellSelectionFrame : MaleficusMonoBehaviour
    [SerializeField] EPlayerID PlayerID;
 
     private bool isPlayerConnected = false;
-    
-    private int spellCounter = 0;
 
+    private int spellCounter = 0;
     private Dictionary<ESpellSlot, SelectedSpell> selectedSpellsIcons = new Dictionary<ESpellSlot, SelectedSpell>();
 
-    // Start is called before the first frame update
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
