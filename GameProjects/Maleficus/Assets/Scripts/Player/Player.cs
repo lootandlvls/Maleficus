@@ -118,12 +118,20 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 if (playerInput.HasMoved() == true)
                 // Moving?
                 {
-                    myAnimator.SetBool("idle", false);
+                    if (myAnimator != null)
+                    {
+                        myAnimator.SetBool("idle", false);
+                    }
                 }
                 // Not moving?
                 else
                 {
-                    myAnimator.SetBool("idle", true);
+                    if (myAnimator != null)
+                    {
+                        myAnimator.SetBool("idle", true);
+                    }
+                   
+                   
                 }
 
                 if (playerInput.HasRotated() == true)
