@@ -27,12 +27,20 @@ public class SpellSelectionCountdown : MaleficusMonoBehaviour
         base.InitializeEventsCallbacks();
 
         EventManager.Instance.PLAYERS_AllPlayersReady += On_PLAYERS_AllPlayersReady;
+        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
         EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
     }
 
     private void On_PLAYERS_AllPlayersReady()
     {
         StartNewCoroutine(ref StartCountdownEnumerator, StartCountdownCoroutine());
+    }
+
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    {
+        StopCoroutine(StartCountdownEnumerator);
+
+        myText.text = "";
     }
 
     private void On_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
@@ -50,5 +58,6 @@ public class SpellSelectionCountdown : MaleficusMonoBehaviour
             yield return new WaitForSeconds(1.0f);
         }
         myText.text = "Game starting...";
+        EventManager.Instance.Invoke_GAME_CountdownFinished();
     }
 }

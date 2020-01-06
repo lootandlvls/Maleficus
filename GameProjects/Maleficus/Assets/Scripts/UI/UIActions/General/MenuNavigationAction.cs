@@ -26,11 +26,15 @@ public class MenuNavigationAction : AbstractUIAction {
 
     public override void Execute()
     {
-        base.Execute();
-
-        if (MenuNavigationActionPressed != null)
+        if (fromState == UIManager.Instance.CurrentState)
         {
-            MenuNavigationActionPressed.Invoke(toState);
+            base.Execute();
+
+            if (MenuNavigationActionPressed != null)
+            {
+                LogConsole("pressed");
+                MenuNavigationActionPressed.Invoke(toState);
+            }
         }
     }
 }

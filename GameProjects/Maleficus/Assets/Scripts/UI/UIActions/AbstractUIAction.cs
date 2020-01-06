@@ -80,6 +80,7 @@ public abstract class AbstractUIAction : MaleficusMonoBehaviour
         if (ActionButtonPressed != null)
         {
             ActionButtonPressed.Invoke();
+            LogConsole("Pressed");
         }
     }
 

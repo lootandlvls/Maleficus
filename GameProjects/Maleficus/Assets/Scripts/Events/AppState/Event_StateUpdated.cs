@@ -17,7 +17,7 @@ public class Event_StateUpdated<E> : AbstractEventHandle
 
     public override string GetDebugMessage()
     {
-        return "App state changed from " + LastState + " to " + NewState;
+        return "State changed from " + LastState + " to " + NewState;
     }
 }
 

@@ -41,6 +41,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         SceneManager.sceneLoaded += On_SceneLoaded;
 
+        EventManager.Instance.GAME_CountdownFinished += On_GAME_CountdownFinished;
         EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
         EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
         EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
@@ -49,6 +50,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
         EventManager.Instance.NETWORK_GameStarted.AddListener                (On_NETWORK_GameStarted);
     }
+
+    
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
     {
@@ -258,6 +261,11 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         //{
         //    Debug.LogError("Loaded level doesn't match to build levels");
         //}
+    }
+
+    private void On_GAME_CountdownFinished()
+    {
+        UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
     }
 
     private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)

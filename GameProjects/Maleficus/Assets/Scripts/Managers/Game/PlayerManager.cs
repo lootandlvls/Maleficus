@@ -97,7 +97,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         string playerStatusLog = "";
         foreach (var pair in PlayersJoinStatus)
         {
-            playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady;
+            playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
         }
         LogCanvas(69, playerStatusLog);
     }
@@ -533,6 +533,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (IS_KEY_CONTAINED(PlayersJoinStatus, playerID))
         {
             PlayersJoinStatus[playerID].HasJoined = false;
+
+            CheckIfAllPlayersAreReady();
         }
     }
 
@@ -542,20 +544,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             PlayersJoinStatus[playerID].IsReady = true;
 
-            // Check if all players are now ready
-            bool areAllReady = true;
-            foreach (PlayerJoinStatus playerJoinStatus in PlayersJoinStatus.Values)
-            {
-                if (playerJoinStatus.IsReady == false)
-                {
-                    areAllReady = false;
-                    break;
-                }
-            }
-            if (areAllReady == true)
-            {
-                EventManager.Instance.Invoke_PLAYERS_AllPlayersReady();
-            }
+            CheckIfAllPlayersAreReady();
         }
     }
 
@@ -581,5 +570,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
         SpawnAllJoinedPlayers();
+    }
+
+
+    private void CheckIfAllPlayersAreReady()
+    {
+        bool areAllReady = true;
+        foreach (PlayerJoinStatus playerJoinStatus in PlayersJoinStatus.Values)
+        {
+            if ((playerJoinStatus.HasJoined == true)
+                && (playerJoinStatus.IsReady == false))
+            {
+                areAllReady = false;
+                break;
+            }
+        }
+        if (areAllReady == true)
+        {
+            EventManager.Instance.Invoke_PLAYERS_AllPlayersReady();
+        }
     }
 }
