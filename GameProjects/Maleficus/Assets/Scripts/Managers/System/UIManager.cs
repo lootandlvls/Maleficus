@@ -68,7 +68,8 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-        if (highlightedButton == null)
+        if ((IS_NOT_NULL(highlightedButton) == false)
+             || (AppStateManager.Instance.CurrentState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE) == true))
         {
             return;
         }

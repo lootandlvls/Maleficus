@@ -27,6 +27,15 @@ public class EventManager : AbstractSingletonManager<EventManager>
         = new MaleficusEvent<Event_GenericHandle<EScene>>("APP_SceneChanged");
 
 
+    public event Action GAME_CountdownFinished;
+    public void Invoke_GAME_CountdownFinished()
+    {
+        if (GAME_CountdownFinished != null)
+        {
+            GAME_CountdownFinished.Invoke();
+        }
+        DebugLog("Countdown finished");
+    }
     #endregion
 
     #region GAME

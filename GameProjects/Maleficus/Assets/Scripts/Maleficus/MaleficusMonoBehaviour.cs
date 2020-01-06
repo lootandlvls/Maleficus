@@ -142,7 +142,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     /// <param name="logText"> Log text to print </param>
     protected void LogCanvas(int debugID, string logText)
     {
-        DebugManager.Instance.Log(debugID, "[" + name + "]" + logText);
+        DebugManager.Instance.Log(debugID, logText);
     }
     #endregion
 
