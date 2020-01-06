@@ -368,11 +368,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             case EPlayerID.PLAYER_1:
                 return !Player_1_SpellsList.Contains(chosenSpell);
             case EPlayerID.PLAYER_2:
-                return !Player_2_SpellsList.Contains(chosenSpell);
-                
+                return !Player_2_SpellsList.Contains(chosenSpell);              
             case EPlayerID.PLAYER_3:
-                return !Player_3_SpellsList.Contains(chosenSpell);
-               
+                return !Player_3_SpellsList.Contains(chosenSpell);              
             case EPlayerID.PLAYER_4:
                 return !Player_4_SpellsList.Contains(chosenSpell);
                 
