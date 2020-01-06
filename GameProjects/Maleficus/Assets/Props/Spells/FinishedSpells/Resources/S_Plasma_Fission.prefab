@@ -19183,7 +19183,7 @@ MonoBehaviour:
   hasPushPower: 1
   spell: 10
   isChargeable: 0
-  spellIcon: {fileID: 21300000, guid: e5f8e29c0eb39d74e9509b0469b5204c, type: 3}
+  spellIcon: {fileID: 21300000, guid: 9c223d2d2f48b7f469e4570ae200a77a, type: 3}
   skillPoint: 0
   isTripleCast: 0
   movementType: 9
