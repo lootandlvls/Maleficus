@@ -50,6 +50,16 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
     }
 
+    public bool HasPlayerJoined(EPlayerID playerID)
+    {
+        if ((PlayersJoinStatus.ContainsKey(playerID))
+            && (PlayersJoinStatus[playerID].HasJoined == true))
+        {
+            return true;
+        }
+        return false;
+    }
+
     // TODO: Add a list of active Coroutines for every player to stop when he dies
     protected override void Awake()
     {
@@ -116,25 +126,25 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
     #region Players Management
-    public void SpawnPlayer(EPlayerID toSpawnPlayerID)
+    public void SpawnPlayer(EPlayerID playerID)
     {
-        if ((IsPlayerConnected(toSpawnPlayerID) == true)
-            || ((MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == true)
+        if ((IsPlayerConnected(playerID) == true)
+            || ((MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
                 && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES))))
         {
 
-            if (ActivePlayers.ContainsKey(toSpawnPlayerID) == false)
+            if (ActivePlayers.ContainsKey(playerID) == false)
             {
-                Player playerPrefab = PlayerPrefabs[toSpawnPlayerID];
-                PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[toSpawnPlayerID];
+                Player playerPrefab = PlayerPrefabs[playerID];
+                PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[playerID];
                 Vector3 playerPosition = playerSpawnPosition.Position;
                 Quaternion playerRotation = playerSpawnPosition.Rotation;
 
                 Player spawnedPlayer = Instantiate(playerPrefab, playerPosition, playerRotation);
-                spawnedPlayer.PlayerID = toSpawnPlayerID;
-                spawnedPlayer.TeamID = PlayersTeam[toSpawnPlayerID];
+                spawnedPlayer.PlayerID = playerID;
+                spawnedPlayer.TeamID = PlayersTeam[playerID];
 
-                ActivePlayers.Add(toSpawnPlayerID, spawnedPlayer);
+                ActivePlayers.Add(playerID, spawnedPlayer);
 
                 // Place player under parent of SpawnPosition
                 if (playerSpawnPosition.transform.parent != null)
@@ -142,7 +152,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
                 }
 
-                EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(toSpawnPlayerID);
+                LogConsole("Spawn player : " + playerID);
+
+                EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(playerID);
             }
             else
             {
@@ -404,7 +416,23 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         foreach (EPlayerID playerID in PlayersJoinStatus.Keys)
         {
-            if (PlayersJoinStatus[playerID].HasJoined == true)
+            if ((PlayersJoinStatus[playerID].HasJoined == true)
+                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+            {
+                SpawnPlayer(playerID);
+            }
+        }
+    }
+
+    private void SpawnRemaningAIPlayers()
+    {
+        foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
+        {
+            EControllerID controllerID = pair.Key;
+            EPlayerID playerID = pair.Value;
+
+            if ((controllerID.ContainedIn(AI_CONTROLLERS))
+                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
             {
                 SpawnPlayer(playerID);
             }
@@ -415,7 +443,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (PlayersMovement.ContainsKey(playerID) == false)
         {
-            if (MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == false)
+            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
             {
                 Debug.LogError("No player movement found for : " + playerID);
             }
@@ -569,7 +597,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
-        SpawnAllJoinedPlayers();
+        // Connect and spawn reamining players as AI
+        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
+        {
+            InputManager.Instance.ConnectAllRemainingAIPlayers();
+            SpawnRemaningAIPlayers();
+        }
     }
 
 

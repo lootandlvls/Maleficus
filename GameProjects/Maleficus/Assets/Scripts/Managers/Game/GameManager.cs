@@ -19,12 +19,42 @@ public class GameManager : AbstractSingletonManager<GameManager>
     {
         base.Start();
 
-        EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver);
-        EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
         
     }
 
-    private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed;
+        EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
+
+        EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver); // TODO : Not clean! use public OnGameOver method instead
+    }
+
+
+    //public void OnGameOver<T>(AbstractGameMode<T> gameMode, ETeamID teamID) where T: AbstractPlayerStats
+    //{
+
+
+    //    NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(EClientID.SERVER, teamID);
+    //    EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.TO_ALL);
+    //}
+
+    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
+    {
+        EInputButton inputButton = eventHandle.InputButton;
+        EPlayerID playerID = Maleficus.MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        if ((AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_NOT_STARTED)
+            && (eventHandle.InputButton == EInputButton.CONFIRM)
+            && (PlayerManager.Instance.HasPlayerJoined(playerID) == true))
+        {
+            EventManager.Instance.NETWORK_GameStarted.Invoke(new NetEvent_GameStarted(eventHandle.SenderID));
+        }
+
+    }
+
+    private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
         Debug.Log("[GAME_LOOP_FIX] Game started event");
 

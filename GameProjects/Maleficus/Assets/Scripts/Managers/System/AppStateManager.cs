@@ -38,6 +38,11 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         // 3) Bind event in start method of child class!
         StateUpdateEvent += EventManager.Instance.APP_AppStateUpdated.Invoke;
+    }
+
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
 
         SceneManager.sceneLoaded += On_SceneLoaded;
 
@@ -48,10 +53,8 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
-        EventManager.Instance.NETWORK_GameStarted.AddListener                (On_NETWORK_GameStarted);
+        EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
     }
-
-    
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
     {
