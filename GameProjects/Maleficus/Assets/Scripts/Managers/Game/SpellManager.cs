@@ -8,15 +8,10 @@ using static Maleficus.MaleficusUtilities;
 
 public class SpellManager : AbstractSingletonManager<SpellManager>
 {
-    Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
-
-
-
-
 
     public List<AbstractSpell> SpellsUpgrade { get { return spellsUpgrade; } }
-    public List<GameObject> ChargingSpells_Effects { get { return chargingSpells_Effects; } }
-    public List<AbstractSpell> All_Spells { get { return all_Spells; } }
+    public List<GameObject> ChargingSpells_Effects { get; } = new List<GameObject>();
+    public List<AbstractSpell> All_Spells { get; } = new List<AbstractSpell>();
 
     public Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
@@ -25,10 +20,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject paralyzeEffect;
- 
 
-    private List<GameObject> chargingSpells_Effects = new List<GameObject>();
-    private List<AbstractSpell> all_Spells = new List<AbstractSpell>();
+    private Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
 
     //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
 
@@ -51,8 +44,14 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         LoadSpellResources();
         LoadEffectsResources();
-        InitializeSpells();
+
+        if (MotherOfManagers.Instance.IsClearDebugSpellLists == true)
+        {
+            CleaDebugSpellLists();
+        }
     }
+
+
 
     protected override void Start()
     {
@@ -70,6 +69,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.UI_SpellChosen += On_UI_SpellChosen;
         EventManager.Instance.UI_SpellRemoved += On_UI_SpellRemoved;
     }
+
+
 
     private void On_UI_SpellRemoved(EPlayerID playerID, ESpellSlot spellSlot)
     {
@@ -92,6 +93,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     public override void OnSceneStartReinitialize()
     {
+        InitializeSpells();
+
         // Find touch joysticks
         spellJoysticks.Clear();
         foreach (MaleficusJoystick joystick in FindObjectsOfType<MaleficusJoystick>())
@@ -491,5 +494,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Player_Spells[EPlayerID.PLAYER_3][spellID] = Player_3_SpellsList[j];
             Player_Spells[EPlayerID.PLAYER_4][spellID] = Player_4_SpellsList[j];
         }
+    }
+
+    private void CleaDebugSpellLists()
+    {
+        Player_1_SpellsList = new List<AbstractSpell> { null, null, null };
+        Player_2_SpellsList = new List<AbstractSpell> { null, null, null };
+        Player_3_SpellsList = new List<AbstractSpell> { null, null, null };
+        Player_4_SpellsList = new List<AbstractSpell> { null, null, null };
     }
 }

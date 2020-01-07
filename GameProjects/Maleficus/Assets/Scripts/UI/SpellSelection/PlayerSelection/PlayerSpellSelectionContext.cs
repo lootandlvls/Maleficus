@@ -141,7 +141,6 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
     {
         if (SpellManager.Instance.CheckPlayerSpells(playerID, spell))
         {
-            LogConsole("Spell 1 has been Chosen");
             selectedSpellsIcons[spellSlot].ChangeImage(spell);
             EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, spellSlot);
             if (selectedSpellsCounter < 3)

@@ -68,43 +68,42 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-        if ((IS_NOT_NULL(highlightedButton) == false)
-             || (AppStateManager.Instance.CurrentState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE) == true))
+        if ((highlightedButton != null)
+             && (AppStateManager.Instance.CurrentState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE) == false)
+             && (AppStateManager.Instance.CurrentState!= EAppState.IN_MENU_IN_SPELL_SELECTION)) // TODO : remove when multiplayer UI is defined
         {
-            return;
+
+            MaleficusButton nextButton = null;
+            switch (inputButton)
+            {
+                case EInputButton.CONFIRM:
+                    highlightedButton.Press();
+                    break;
+
+                case EInputButton.LEFT:
+                    nextButton = highlightedButton.GetNextButton(EButtonDirection.LEFT);
+                    break;
+
+                case EInputButton.RIGHT:
+                    nextButton = highlightedButton.GetNextButton(EButtonDirection.RIGHT);
+                    break;
+
+                case EInputButton.UP:
+                    nextButton = highlightedButton.GetNextButton(EButtonDirection.UP);
+                    break;
+
+                case EInputButton.DOWN:
+                    nextButton = highlightedButton.GetNextButton(EButtonDirection.DOWN);
+                    break;
+            }
+
+            // Update highlighted button
+            if (nextButton != null)
+            {
+                highlightedButton = nextButton;
+                nextButton.Highlight();
+            }
         }
-
-        MaleficusButton nextButton = null;
-        switch (inputButton)
-        {
-            case EInputButton.CONFIRM:
-                highlightedButton.Press();
-                break;
-
-            case EInputButton.LEFT:
-                nextButton = highlightedButton.GetNextButton(EButtonDirection.LEFT);
-                break;
-
-            case EInputButton.RIGHT:
-                nextButton = highlightedButton.GetNextButton(EButtonDirection.RIGHT);
-                break;
-
-            case EInputButton.UP:
-                nextButton = highlightedButton.GetNextButton(EButtonDirection.UP);
-                break;
-
-            case EInputButton.DOWN:
-                nextButton = highlightedButton.GetNextButton(EButtonDirection.DOWN);
-                break;
-        }
-
-        // Update highlighted button
-        if (nextButton != null)
-        {
-            highlightedButton = nextButton;
-            nextButton.Highlight();
-        }
-        
     }
 
     private void On_NETWORK_ReceivedMessageUpdated(ENetworkMessageType receivedMsg)

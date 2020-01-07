@@ -20,9 +20,12 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 
     [Separator("Player")]
     [SerializeField] public bool IsSpawnPlayerOnControllerConnect = false;
-    [SerializeField] public bool IsSpawnRemainingPlayersOnGameStart = false;
+    [SerializeField] public bool IsSpawnRemainingAIPlayersOnGameStart = false;
     [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
+
+    [Separator("Spell")]
+    [SerializeField] public bool IsClearDebugSpellLists = true;
 
     [Separator("Debug")]
     [SerializeField] public bool IsDebugLogEvents = true;

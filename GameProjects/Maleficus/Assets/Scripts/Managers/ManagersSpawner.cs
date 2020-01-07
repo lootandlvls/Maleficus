@@ -42,9 +42,11 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.CanDebugJoystickEvents = CanDebugJoystickEvents;
             // Player
             managersInstance.IsSpawnPlayerOnControllerConnect = IsSpawnPlayerOnControllerConnect;
-            managersInstance.IsSpawnRemainingPlayersOnGameStart = IsSpawnRemainingPlayersOnGameStart;
+            managersInstance.IsSpawnRemainingAIPlayersOnGameStart = IsSpawnRemainingAIPlayersOnGameStart;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
+            // Spell
+            managersInstance.IsClearDebugSpellLists = IsClearDebugSpellLists;
             // Debug
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;

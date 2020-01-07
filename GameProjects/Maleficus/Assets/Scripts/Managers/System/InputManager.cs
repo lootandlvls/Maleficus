@@ -39,7 +39,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
         EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
-        EventManager.Instance.GAME_GameStarted                                  += On_GAME_GameStarted;
     }
 
 
@@ -77,20 +76,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         foreach (EControllerID controllerID in controllerIDsToRemove)
         {
             ConnectedControllers.Remove(controllerID);
-        }
-    }
-
-
-    private void On_GAME_GameStarted(EGameMode obj)
-    {
-        // Connect all players
-        if ((MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == true)
-            && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
-        {
-            ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
-            ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
-            ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
-            ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
         }
     }
 
@@ -190,7 +175,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if ((ConnectedControllers.ContainsKey(controllerID) == true)
             || (ConnectedControllers.ContainsValue(playerID) == true))
         {
-            if (MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == false)
+            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
             {
                 Debug.LogError("Warning! Trying to connect a controller that is already connected.");
             }
@@ -213,7 +198,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         if ((ConnectedControllers.ContainsKey(controllerID) == true)
             || (ConnectedControllers.ContainsValue(playerID) == true))
         {
-            if (MotherOfManagers.Instance.IsSpawnRemainingPlayersOnGameStart == false)
+            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
             {
                 Debug.LogError("Trying to connect a controller that is already connected.");
             }
@@ -253,6 +238,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.INPUT_ControllerDisconnected.Invoke(controllerDisconnected);
     }
 
+    public void ConnectAllRemainingAIPlayers()
+    {
+        ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
+        ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
+        ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
+        ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
+    }
 
     public bool IsControllerConnected(EControllerID controllerID)
     {
