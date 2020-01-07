@@ -184,13 +184,13 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #region SPELLS
     
-    public event Action<ISpell, EPlayerID> SPELLS_SpellSpawned;
-    public void Invoke_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayerID)
+    public event Action<ISpell, EPlayerID, ESpellSlot> SPELLS_SpellSpawned;
+    public void Invoke_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayerID , ESpellSlot spellSlot)
     {
 
         if (SPELLS_SpellSpawned != null)
         {
-            SPELLS_SpellSpawned.Invoke(castedSpell, castingPlayerID);
+            SPELLS_SpellSpawned.Invoke(castedSpell, castingPlayerID, spellSlot);
         }
         DebugLog(castedSpell + " casted by " + castingPlayerID);
     }

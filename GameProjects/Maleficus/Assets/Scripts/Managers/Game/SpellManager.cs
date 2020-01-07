@@ -255,7 +255,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         InstantiateSpell(spellToCast, playerID);
 
         //spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);         // TODO [Bnjmo]: Readapt this
-        EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID);
+        EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID , spellID);
     }
 
 

@@ -6,28 +6,44 @@ using UnityEngine.UI;
 public class UI_SpellCooldowns : MaleficusMonoBehaviour
 {
 
-    private Image SpellIcon;
+    private Image spellIcon;
     public ESpellSlot SpellSlot { get { return spellSlot; } }
-    [SerializeField] EPlayerID playerID;
     [SerializeField] ESpellSlot spellSlot;
 
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
-        EventManager.Instance.SPELLS_SpellSpawned += On_SpellSpawned;
+       
     }
 
     protected override void InitializeComponents()
     {
         base.InitializeComponents();
-        
-        
+        spellIcon = GetComponentWithCheck<Image>();
+
+    }
+
+
+   public void startCooldown(float cooldown)
+    {
+        spellIcon.fillAmount = 0;
+        StartCoroutine(Cooldown(cooldown));
+
+    }
+
+    private IEnumerator Cooldown(float cooldown)
+    {
+        float startTime = Time.time ;
+        while (Time.time - startTime < cooldown)
+        {
+            spellIcon.fillAmount = (Time.time - startTime) / cooldown;
+            yield return new WaitForEndOfFrame();
+           
+        }
+
     }
     // Start is called before the first frame update
 
 
-    private void On_SpellSpawned(ISpell spellCasted, EPlayerID playerID)
-    {
-       
-    }
+
 }

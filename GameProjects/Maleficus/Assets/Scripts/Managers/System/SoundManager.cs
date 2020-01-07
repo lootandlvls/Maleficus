@@ -45,7 +45,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
 
     }
 
-    private void On_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayer)
+    private void On_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayer , ESpellSlot spellSlot)
     {
         switch(castedSpell.SpellName)
         {
