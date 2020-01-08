@@ -46,11 +46,8 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 
     protected override void InitializePlayerStats()
     {
-        Debug.Log("[GAME_LOOP_FIX] - Connected players number : " + PlayerManager.Instance.GetConnectedPlayers().Length);
-
         foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
         {
-            Debug.Log("[GAME_LOOP_FIX] - Adding playeyr : " + playerID);
             playerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
         }
     }
@@ -68,10 +65,6 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
 
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
     {
-        // if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_RUNNING)          // TODO: check for right state
-        Debug.Log("PLAYER DIED : " + diedPlayerID);
-
-
         // Update Killed Player stats
         PlayerStats_Lives killedPlayerStats = PlayerStats[diedPlayerID];
         killedPlayerStats.DecrementPlayerLives();
@@ -105,7 +98,6 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
                 winnerPlayerID = playerID;
             }
         }
-        Debug.Log("[GAME_LOOP_FIX] - Game Over Player Counter : " + gameOverPlayerCounter + " | Player counts : " + playerStats.Count);
 
         //TODO[BNJMO] fix this when only one player is connected
         if (gameOverPlayerCounter == PlayerStats.Count - 1)
@@ -120,10 +112,6 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
                 NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(EClientID.SERVER, teamID);
                 EventManager.Instance.GAME_GameOver.Invoke(gameOverEventHandle, EEventInvocationType.TO_ALL);
             }
-            
         }
-
     }
-
-
 }

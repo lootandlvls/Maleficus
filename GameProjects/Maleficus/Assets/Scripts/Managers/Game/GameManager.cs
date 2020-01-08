@@ -7,20 +7,6 @@ public class GameManager : AbstractSingletonManager<GameManager>
 {                    
     private EGameMode currentGameMode;
 
-    private bool isCanStartGame = false;
-
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        
-    }
 
     protected override void InitializeEventsCallbacks()
     {
@@ -66,8 +52,6 @@ public class GameManager : AbstractSingletonManager<GameManager>
     public override void OnSceneStartReinitialize()
     {
         FindAndBindButtonActions();
-
-        isCanStartGame = false;
     }
 
 
@@ -125,7 +109,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
     #endregion
 
 
-#region Event Callbacks 
+    #region Event Callbacks 
     private void ON_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
         EndGame();

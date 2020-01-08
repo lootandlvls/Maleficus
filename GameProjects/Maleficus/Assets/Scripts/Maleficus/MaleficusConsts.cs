@@ -83,7 +83,7 @@ namespace Maleficus
         public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
 
         public const int PLAYER_LIVES_IN_DUNGEON_MODE = 10;
-        public const int PLAYER_LIVES_IN_FFA_MODE = 2;
+        public const int PLAYER_LIVES_IN_FFA_MODE = 3;
 
         public const int PLAYER_FALLING_TIME = 2;
 
