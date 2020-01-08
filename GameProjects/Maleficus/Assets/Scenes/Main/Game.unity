@@ -2611,7 +2611,7 @@ MonoBehaviour:
   IsSpawnRemainingAIPlayersOnGameStart: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsClearDebugSpellLists: 1
+  IsClearDebugSpellLists: 0
   IsDebugLogEvents: 0
   IsReduceLightIntensityOnSceneStart: 0
   currentScene: 3

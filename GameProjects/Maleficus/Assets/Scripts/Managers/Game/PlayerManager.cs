@@ -190,7 +190,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EPlayerID result = EPlayerID.NONE;
         for (int i = 1; i < 5; i++)
         {
-            EPlayerID currentPlayerID = IntToPlayerID(i);
+            EPlayerID currentPlayerID = GetPlayerIDFrom(i);
             if (IsPlayerConnected(currentPlayerID) == false)
             {
                 result = currentPlayerID;
@@ -396,7 +396,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             for (int i = 1; i < 5; i++)
             {
                 angle = 90 * i;
-                EPlayerID playerID = IntToPlayerID(i);
+                EPlayerID playerID = GetPlayerIDFrom(i);
                 if (PlayersSpawnPositions.ContainsKey(playerID) == false)
                 {
                     PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION));
@@ -608,14 +608,17 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void CheckIfAllPlayersAreReady()
     {
-        bool areAllReady = true;
+        bool areAllReady = false;
         foreach (PlayerJoinStatus playerJoinStatus in PlayersJoinStatus.Values)
         {
-            if ((playerJoinStatus.HasJoined == true)
-                && (playerJoinStatus.IsReady == false))
+            if (playerJoinStatus.HasJoined == true)
             {
-                areAllReady = false;
-                break;
+                areAllReady = true;
+                if (playerJoinStatus.IsReady == false)
+                {
+                    areAllReady = false;
+                    break;
+                }
             }
         }
         if (areAllReady == true)

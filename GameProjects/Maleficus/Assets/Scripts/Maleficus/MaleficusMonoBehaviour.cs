@@ -340,7 +340,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
 
     #region Coroutine
     /// <summary>
-    /// Starts a couritine and store it in the given enumerator. If the enumerator is already running a coroutine, then stop it and start a new one.
+    /// Starts a couroutine and store it in the given enumerator. If the enumerator is already running a coroutine, then stop it and start a new one.
     /// </summary>
     /// <param name="enumerator"> where the coroutine reference will be stored (define as a member in your class) </param>
     /// <param name="coroutine"> the coroutine name function to run + () with parameters if defined </param>
@@ -356,6 +356,22 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
         // Start new coroutine
         StartCoroutine(enumerator);
     }
+
+    /// <summary>
+    /// Stops a couroutine if already running.
+    /// </summary>
+    /// <param name="enumerator"> where the coroutine reference will be stored (define as a member in your class) </param>
+    /// <returns> True if the coroutine was running and got stopped, otherwise false </returns>
+    protected bool StopCoroutineIfRunning(IEnumerator enumerator)
+    {
+        if (enumerator != null)
+        {
+            StopCoroutine(enumerator);
+            return true;
+        }
+        return false;
+    }
+
     #endregion
 
     #region Get Component

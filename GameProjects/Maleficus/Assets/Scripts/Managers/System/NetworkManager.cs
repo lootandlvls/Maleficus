@@ -337,7 +337,7 @@ Debug.Log("Connecting from Web");
     private void OnRequestGameInfo(Net_OnRequestGameInfo orgi)
     {
         Debug.Log("&/(&/(&(/&/(&( M Player ID : " + orgi.ownPlayerId);
-        ownClientID = IntToClientID(orgi.ownPlayerId);
+        ownClientID = GetClienIDFrom(orgi.ownPlayerId);
         if (ownClientID == EClientID.NONE)
         {
             Debug.LogError("Couldn't convert Client ID");

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 {
-
-
     [SerializeField] EPlayerID PlayerID;
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<ESpellSlot, UI_PlayerLives> spellLivesIcons = new Dictionary<ESpellSlot, UI_PlayerLives>();
@@ -21,17 +19,9 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
     {
         if (PlayerID == playerID)
         {
-            switch(spellSlot)
+            if (IS_KEY_CONTAINED(spellCooldownsIcons, spellSlot))
             {
-                case ESpellSlot.SPELL_1:
-                    spellCooldownsIcons[ESpellSlot.SPELL_1].startCooldown(spell.Cooldown + spell.CastingDuration);
-                    break;
-                case ESpellSlot.SPELL_2:
-                    spellCooldownsIcons[ESpellSlot.SPELL_2].startCooldown(spell.Cooldown + spell.CastingDuration);
-                    break;
-                case ESpellSlot.SPELL_3:
-                    spellCooldownsIcons[ESpellSlot.SPELL_3].startCooldown(spell.Cooldown + spell.CastingDuration);
-                    break;
+                spellCooldownsIcons[spellSlot].StartCooldown(spell.Cooldown + spell.CastingDuration);
             }
         }
     }

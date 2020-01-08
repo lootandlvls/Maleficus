@@ -118,7 +118,7 @@ public class GamepadInputSource : AbstractInputSource
     private void Check_Confirm(EControllerID controllerID)
     {
 
-        char controllerIDName = ControllerIDToChar(controllerID);
+        char controllerIDName = GetCharFrom(controllerID);
         if (controllerIDName != 'X')
         {
             if (Input.GetButtonDown("Confirm_" + controllerIDName))
@@ -142,7 +142,7 @@ public class GamepadInputSource : AbstractInputSource
     private void Check_Cancel(EControllerID controllerID)         // TODO: Test with controller if it works
     {
         // Is button pressed?
-        char controllerIDName = ControllerIDToChar(controllerID);
+        char controllerIDName = GetCharFrom(controllerID);
         if (controllerIDName != 'X')
         {
             if (Input.GetButtonDown("Cancel_" + controllerIDName))
@@ -167,8 +167,8 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_ChargingSpell(ESpellSlot spellSlot, EControllerID controllerID)
     {
-        char controllerIDName = ControllerIDToChar(controllerID);
-        int spellID = SpellSlotToInt(spellSlot);
+        char controllerIDName = GetCharFrom(controllerID);
+        int spellID = GetIntFrom(spellSlot);
 
         if ((controllerIDName != 'X')  && (spellID != 0))
         {
@@ -190,8 +190,8 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_CastedSpell(ESpellSlot spellSlot, EControllerID controllerID)
     {
-        char controllerIDName = ControllerIDToChar(controllerID);
-        int spellID = SpellSlotToInt(spellSlot);
+        char controllerIDName = GetCharFrom(controllerID);
+        int spellID = GetIntFrom(spellSlot);
 
         if ((controllerIDName != 'X') && (spellID != 0))
         {
@@ -213,8 +213,8 @@ public class GamepadInputSource : AbstractInputSource
 
     private void Check_Axis(EJoystickType joystickType, EControllerID controllerID)
     {
-        char controllerIDName = ControllerIDToChar(controllerID);
-        char axisSide = JoystickTypeToChar(joystickType);
+        char controllerIDName = GetCharFrom(controllerID);
+        char axisSide = GetCharFrom(joystickType);
         if (axisSide != 'X')
         {
             if ((InputManager.Instance.IsControllerConnected(controllerID) == true)

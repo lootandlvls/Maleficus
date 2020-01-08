@@ -37,14 +37,15 @@ public class SpellSelectionCountdown : MaleficusMonoBehaviour
 
     private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
     {
-        StopCoroutine(StartCountdownCoroutine());
+        
+        StopCoroutineIfRunning(StartCountdownEnumerator);
 
         myText.text = "";
     }
 
     private void On_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
     {
-        StopCoroutine(StartCountdownCoroutine());
+        StopCoroutineIfRunning(StartCountdownEnumerator);
 
         myText.text = "";
     }

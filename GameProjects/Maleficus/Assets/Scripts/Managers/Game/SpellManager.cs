@@ -77,16 +77,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         switch (playerID)
         {
             case EPlayerID.PLAYER_1:
-                Player_1_SpellsList[SpellSlotToInt(spellSlot) - 1] = null;
+                Player_1_SpellsList[GetIntFrom(spellSlot) - 1] = null;
                 break;
             case EPlayerID.PLAYER_2:
-                Player_2_SpellsList[SpellSlotToInt(spellSlot) -1] = null;
+                Player_2_SpellsList[GetIntFrom(spellSlot) -1] = null;
                 break;
             case EPlayerID.PLAYER_3:
-                Player_3_SpellsList[SpellSlotToInt(spellSlot) -1] = null;
+                Player_3_SpellsList[GetIntFrom(spellSlot) -1] = null;
                 break;
             case EPlayerID.PLAYER_4:
-                Player_4_SpellsList[SpellSlotToInt(spellSlot) -1] = null;
+                Player_4_SpellsList[GetIntFrom(spellSlot) -1] = null;
                 break;
         }
     }
@@ -110,19 +110,19 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
            if (playerID == EPlayerID.PLAYER_1)
            {           
-            Player_1_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
+            Player_1_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
            }
            else if  (playerID == EPlayerID.PLAYER_2)
            {
-            Player_2_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
+            Player_2_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
            }
            else if (playerID == EPlayerID.PLAYER_3)
            {
-            Player_3_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
+            Player_3_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
            }
            else if (playerID == EPlayerID.PLAYER_4)
            {
-            Player_4_SpellsList[SpellSlotToInt(spellSlot)-1] = chosenSpell;
+            Player_4_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
             }
 
     }
@@ -487,7 +487,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         for (int j = 0; j < 3; j++)
         {
-            ESpellSlot spellID = IntToSpellID(j + 1);
+            ESpellSlot spellID = GetSpellSlotFrom(j + 1);
 
             Player_Spells[EPlayerID.PLAYER_1][spellID] = Player_1_SpellsList[j];
             Player_Spells[EPlayerID.PLAYER_2][spellID] = Player_2_SpellsList[j];

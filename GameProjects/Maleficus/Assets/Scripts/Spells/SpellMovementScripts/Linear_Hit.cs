@@ -53,7 +53,7 @@ public class Linear_Hit : AbstractSpell
         {
             if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
             {
-                Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.PlayerIDToInt(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.PlayerIDToInt(otherPlayer.PlayerID));
+                Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.GetIntFrom(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.GetIntFrom(otherPlayer.PlayerID));
                 ProcessHits(otherPlayer);
             }
             else if (otherEnemy != null)

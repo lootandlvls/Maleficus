@@ -24,14 +24,14 @@ public class UI_SpellCooldowns : MaleficusMonoBehaviour
     }
 
 
-   public void startCooldown(float cooldown)
+   public void StartCooldown(float cooldown)
     {
         spellIcon.fillAmount = 0;
-        StartCoroutine(Cooldown(cooldown));
+        StartCoroutine(CooldownCoroutine(cooldown));
 
     }
 
-    private IEnumerator Cooldown(float cooldown)
+    private IEnumerator CooldownCoroutine(float cooldown)
     {
         float startTime = Time.time ;
         while (Time.time - startTime < cooldown)
@@ -42,8 +42,5 @@ public class UI_SpellCooldowns : MaleficusMonoBehaviour
         }
 
     }
-    // Start is called before the first frame update
-
-
 
 }

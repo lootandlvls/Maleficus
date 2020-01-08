@@ -274,7 +274,7 @@ namespace Maleficus
 
         #region Maleficus Types Conversions
         /// <summary> Convert a PlayerID enum to an int </summary>
-        public static int PlayerIDToInt(EPlayerID playerID)
+        public static int GetIntFrom(EPlayerID playerID)
         {
             int result = 0;
             switch (playerID)
@@ -296,7 +296,7 @@ namespace Maleficus
         }
 
         /// <summary> Convert an int to a PlayerID enum </summary>
-        public static EPlayerID IntToPlayerID(int playerID)
+        public static EPlayerID GetPlayerIDFrom(int playerID)
         {
             EPlayerID result = EPlayerID.NONE;
             switch (playerID)
@@ -317,7 +317,7 @@ namespace Maleficus
             return result;
         }
         /// <summary> Convert an int to a ClientID enum </summary>
-        public static EClientID IntToClientID(int clientID)
+        public static EClientID GetClienIDFrom(int clientID)
         {
             EClientID result = EClientID.NONE;
             switch (clientID)
@@ -341,8 +341,8 @@ namespace Maleficus
             return result;
         }
 
-        /// <summary> Convert an int to a SpellID enum </summary>
-        public static ESpellSlot IntToSpellID(int spellID)
+        /// <summary> Convert an int to a SpellID enum (1 being the spell slot 1) </summary>
+        public static ESpellSlot GetSpellSlotFrom(int spellID)
         {
             ESpellSlot result = ESpellSlot.NONE;
             switch (spellID)
@@ -361,7 +361,7 @@ namespace Maleficus
         }
 
         /// <summary> Convert a ControllerID enum to an Char </summary>
-        public static char ControllerIDToChar(EControllerID ControllerID)
+        public static char GetCharFrom(EControllerID ControllerID)
         {
             char result = 'X';
             switch (ControllerID)
@@ -383,7 +383,7 @@ namespace Maleficus
         }
 
         /// <summary> Convert a Char to a ControllerID enum </summary>
-        public static EControllerID CharToControllerID(char ControllerID)
+        public static EControllerID GetControllerIDFrom(char ControllerID)
         {
             EControllerID result = EControllerID.NONE;
             switch (ControllerID)
@@ -405,7 +405,7 @@ namespace Maleficus
         }
 
         /// <summary> Convert a joystickType enum to a char</summary>
-        public static char JoystickTypeToChar(EJoystickType joystickType)
+        public static char GetCharFrom(EJoystickType joystickType)
         {
             char resut = 'X';
             switch (joystickType)
@@ -443,7 +443,7 @@ namespace Maleficus
         }
 
         /// <summary> Convert a SpellSlot enum to an int </summary>
-        public static int SpellSlotToInt(ESpellSlot spellSlot)
+        public static int GetIntFrom(ESpellSlot spellSlot)
         {
             int result = 0;
             switch (spellSlot)
@@ -464,7 +464,7 @@ namespace Maleficus
         }
 
         /// <summary> Convert a TouchJoystickType enum to a SpellID enum </summary>
-        public static ESpellSlot GetSpellIDFrom(ETouchJoystickType inputButton)
+        public static ESpellSlot GetSpellSlotFrom(ETouchJoystickType inputButton)
         {
             ESpellSlot result = ESpellSlot.NONE;
             switch (inputButton)

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+using static Maleficus.MaleficusUtilities;
 
 public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
 {
@@ -58,7 +57,7 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
     private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = Maleficus.MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
 
         if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
@@ -78,32 +77,19 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
 
                                 AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
 
-                                switch (selectedSpellsCounter)
+                                if (selectedSpellsCounter == 3)
                                 {
-                                    case 0:
-                                        if (selectedSpellsIcons[ESpellSlot.SPELL_1] != null)
-                                        {
-                                            CheckAndAddSpell(playerID, spell, ESpellSlot.SPELL_1);
-
-                                        }
-                                        break;
-                                    case 1:
-                                        if (selectedSpellsIcons[ESpellSlot.SPELL_2] != null)
-                                        {
-                                            CheckAndAddSpell(playerID, spell, ESpellSlot.SPELL_2);
-                                        }
-                                        break;
-                                    case 2:
-                                        if (selectedSpellsIcons[ESpellSlot.SPELL_3] != null)
-                                        {
-                                            CheckAndAddSpell(playerID, spell, ESpellSlot.SPELL_3);
-                                        }
-                                        break;
-
-                                    case 3:
-                                        SetToReady();
-                                        break;
-                                    
+                                    LogConsole("Set ready");
+                                    SetToReady();
+                                }
+                                else 
+                                {
+                                    // Get and check spell slot
+                                    ESpellSlot spellSlot = GetSpellSlotFrom(selectedSpellsCounter + 1);
+                                    if (IS_NOT_NULL(spellSlot))
+                                    {
+                                        CheckAndAddSpell(playerID, spell, spellSlot);
+                                    }
                                 }
                                 break;
                         }
@@ -133,9 +119,6 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
             }
         }
     }
-
-   
-
 
     private void CheckAndAddSpell(EPlayerID playerID, AbstractSpell spell , ESpellSlot spellSlot)
     {
