@@ -17,10 +17,6 @@ public class UserManager : AbstractSingletonManager<UserManager>
     public static Local_Achievement achievements;
 
     #region Monobehaviour
-    public override void OnSceneStartReinitialize()
-    {
-
-    }
 
     protected override void Awake()
     {

@@ -46,7 +46,7 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
             // Spell
-            managersInstance.IsClearDebugSpellLists = IsClearDebugSpellLists;
+            managersInstance.IsLoadDebugSpells = IsLoadDebugSpells;
             // Debug
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;

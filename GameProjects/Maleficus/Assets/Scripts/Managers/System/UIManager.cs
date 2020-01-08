@@ -39,8 +39,10 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
     }
 
 
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         FindAndBindButtonActions();
     }
 

@@ -61,8 +61,10 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         UpdateState(EAppState.IN_GAME_IN_RUNNING);
     }
 
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         FindAndBindButtonActions();
     }
 

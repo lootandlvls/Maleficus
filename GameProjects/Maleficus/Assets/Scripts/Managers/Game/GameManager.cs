@@ -47,10 +47,12 @@ public class GameManager : AbstractSingletonManager<GameManager>
         StartGame(EGameMode.FFA_LIVES);
     }
 
-   
 
-    public override void OnSceneStartReinitialize()
+
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         FindAndBindButtonActions();
     }
 

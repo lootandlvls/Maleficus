@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public abstract class AbstractManager : MaleficusMonoBehaviour
 {
@@ -15,12 +13,35 @@ public abstract class AbstractManager : MaleficusMonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
         }
+
+        OnReinitializeManager();
     }
 
-    /// <summary>
-    /// Initialize Manager (called by MotherOfManagers when scene is changed)
-    /// </summary>
-    public abstract void OnSceneStartReinitialize();
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
 
- 
+        // Reinitialize manager whenever the scene is changed
+        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        EventManager.Instance.APP_SceneChanged.RemoveListener(On_APP_SceneChanged);
+    }
+
+    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
+    {
+        OnReinitializeManager();
+    }
+
+    protected virtual void OnReinitializeManager()
+    {
+        LogConsole("Reinitializing manager");
+        // Define in specification
+    }
+
+
 }

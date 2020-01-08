@@ -13,7 +13,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<GameObject> ChargingSpells_Effects { get; } = new List<GameObject>();
     public List<AbstractSpell> All_Spells { get; } = new List<AbstractSpell>();
 
-    public Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
     [SerializeField] private float friction;
     //Spell Effects
@@ -21,16 +20,14 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject paralyzeEffect;
 
+    private Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> playersChosenSpells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
+    // PlayerManager's activePlayers reference
     private Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
 
-    //  public Dictionary<EPlayerID, List<AbstractSpell>> Player_Spells = new Dictionary<EPlayerID, List<AbstractSpell>>();
-
-
-
-    public List<AbstractSpell> Player_1_SpellsList = new List<AbstractSpell>();
-    public List<AbstractSpell> Player_2_SpellsList = new List<AbstractSpell>();
-    public List<AbstractSpell> Player_3_SpellsList = new List<AbstractSpell>();
-    public List<AbstractSpell> Player_4_SpellsList = new List<AbstractSpell>();
+    public List<AbstractSpell> DebugSpells_Player1 = new List<AbstractSpell>();
+    public List<AbstractSpell> DebugSpells_Player2 = new List<AbstractSpell>();
+    public List<AbstractSpell> DebugSpells_Player3 = new List<AbstractSpell>();
+    public List<AbstractSpell> DebugSpells_Player4 = new List<AbstractSpell>();
 
     private int Counter = 0;
     private bool temp = false;
@@ -44,11 +41,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         LoadSpellResources();
         LoadEffectsResources();
-
-        if (MotherOfManagers.Instance.IsClearDebugSpellLists == true)
-        {
-            CleaDebugSpellLists();
-        }
+        InitializeSpellsDictionnary();
     }
 
 
@@ -65,68 +58,40 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         base.InitializeEventsCallbacks();
 
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
-        EventManager.Instance.SPELLS_Teleport       += On__SPELLS_Teleport;
-        EventManager.Instance.UI_SpellChosen += On_UI_SpellChosen;
-        EventManager.Instance.UI_SpellRemoved += On_UI_SpellRemoved;
+        EventManager.Instance.SPELLS_Teleport       += On_SPELLS_Teleport;
+        EventManager.Instance.UI_SpellChosen        += On_UI_SpellChosen;
+        EventManager.Instance.UI_SpellRemoved       += On_UI_SpellRemoved;
+    }
+
+    protected override void OnReinitializeManager()
+    {
+        base.OnReinitializeManager();
+
+        FinTouochJoysticks();
+
     }
 
 
 
     private void On_UI_SpellRemoved(EPlayerID playerID, ESpellSlot spellSlot)
     {
-        switch (playerID)
+        if ((IS_KEY_CONTAINED(playersChosenSpells, playerID))
+            && (IS_KEY_CONTAINED(playersChosenSpells[playerID], spellSlot)))
         {
-            case EPlayerID.PLAYER_1:
-                Player_1_SpellsList[GetIntFrom(spellSlot) - 1] = null;
-                break;
-            case EPlayerID.PLAYER_2:
-                Player_2_SpellsList[GetIntFrom(spellSlot) -1] = null;
-                break;
-            case EPlayerID.PLAYER_3:
-                Player_3_SpellsList[GetIntFrom(spellSlot) -1] = null;
-                break;
-            case EPlayerID.PLAYER_4:
-                Player_4_SpellsList[GetIntFrom(spellSlot) -1] = null;
-                break;
-        }
-    }
-
-    public override void OnSceneStartReinitialize()
-    {
-        InitializeSpells();
-
-        // Find touch joysticks
-        spellJoysticks.Clear();
-        foreach (MaleficusJoystick joystick in FindObjectsOfType<MaleficusJoystick>())
-        {
-            if (spellJoysticks.ContainsKey(joystick.JoystickType) == false)
-            {
-                spellJoysticks.Add(joystick.JoystickType, joystick);
-            }
+            playersChosenSpells[playerID][spellSlot] = null;
         }
     }
 
     private void On_UI_SpellChosen( EPlayerID playerID , AbstractSpell chosenSpell , ESpellSlot spellSlot)
     {
-           if (playerID == EPlayerID.PLAYER_1)
-           {           
-            Player_1_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
-           }
-           else if  (playerID == EPlayerID.PLAYER_2)
-           {
-            Player_2_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
-           }
-           else if (playerID == EPlayerID.PLAYER_3)
-           {
-            Player_3_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
-           }
-           else if (playerID == EPlayerID.PLAYER_4)
-           {
-            Player_4_SpellsList[GetIntFrom(spellSlot)-1] = chosenSpell;
-            }
-
+        if ((IS_KEY_CONTAINED(playersChosenSpells, playerID))
+            && (IS_KEY_CONTAINED(playersChosenSpells[playerID], spellSlot)))
+        {
+            playersChosenSpells[playerID][spellSlot] = chosenSpell;
+        }
     }
-    private void On__SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
+
+    private void On_SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
     {
         Debug.Log("Teleportation spell executed");
 
@@ -137,13 +102,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         Vector3 TeleportDirection = activePlayers[castingPlayerID].transform.forward;
 
-
-
         activePlayers[castingPlayerID].transform.position += TeleportDirection * 5;
-
-
-
     }
+
     private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
         if (hitInfo.HasPushPower)
@@ -151,11 +112,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             LogConsole("player hit he will be pushed");
             if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID )
             {
-
                 PushPlayer(hitInfo);
             }
         }
-
  
         foreach (ESpellEffects debuffeffect in hitInfo.DebuffEffects)
         {
@@ -169,7 +128,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-   
     private void PushPlayer(SHitInfo hitInfo)
     {
         activePlayers[hitInfo.HitPlayerID].PushPlayer(hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
@@ -177,23 +135,20 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void ApplyDebuff(ESpellEffects debuff, EPlayerID playerID)
     {
-
         switch (debuff)
         {
             case ESpellEffects.FROZEN:
                 Debug.Log("Player Frozen");
                 StartCoroutine(PlayerFrozen(playerID));
-
                 break;
-            case ESpellEffects.STUN:
 
+            case ESpellEffects.STUN:
 
                 break;
 
             case ESpellEffects.SLOWDOWN:
                 Debug.Log("Player Paralyzed");
                 StartCoroutine(PlayerParalyzed(playerID , 3));
-
                 break;
 
             case ESpellEffects.CHARM:
@@ -201,11 +156,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 break;
 
         }
-
-
-
-
     }
+
     private void ApplyBuff(ESpellEffects buff, EPlayerID playerID, EPlayerID CastingPlayerID)
     {
         Debug.Log("Apply Buff on player " + playerID);
@@ -216,7 +168,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 break;
 
             case ESpellEffects.INCREASE_CASTING_SPEED:
-
                 Debug.Log("INCREASE_CASTING_SPEED");
                 break;
 
@@ -227,9 +178,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             case ESpellEffects.INCREASE_OFFENSIVE_SPELL_SIZE:
                 Debug.Log("INCREASE_OFFENSIVE_SPELL_SIZE");
                 break;
+
             case ESpellEffects.PROTECT:
                 Debug.Log("PROTECT");
                 break;
+
             case ESpellEffects.REMOVE_DEBUFF:
                 Debug.Log("REMOVE_DEBUF");
                 break;
@@ -240,8 +193,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public void CastSpell(EPlayerID playerID, ESpellSlot spellID , int spellChargingLVL)
     {
         AbstractSpell spellToCast ;
-        float spellCooldown = Player_Spells[playerID][spellID].Cooldown;      
-        spellToCast = Player_Spells[playerID][spellID];
+        float spellCooldown = playersChosenSpells[playerID][spellID].Cooldown;      
+        spellToCast = playersChosenSpells[playerID][spellID];
     
         if (spellChargingLVL == 2)
         {
@@ -255,18 +208,14 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             }
         }
 
-        InstantiateSpell(spellToCast, playerID);
+        SpawnSpell(spellToCast, playerID);
 
         //spellJoysticks[ETouchJoystickType.SPELL_1].ReloadJoystick(spellCooldown);         // TODO [Bnjmo]: Readapt this
         EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID , spellID);
     }
 
-
-    private void InstantiateSpell(AbstractSpell spellToCast, EPlayerID playerID)
+    private void SpawnSpell(AbstractSpell spellToCast, EPlayerID playerID)
     {
-
-                                                                            //TODO [Nassim]: instantiate the spell object here and give it the playerID
-
         if (spellToCast.GetComponent<AOE>() != null)
 
         {
@@ -316,7 +265,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spell.CastingPlayerID = playerID;
           //  StartCoroutine(PlayerCantMove());
         }
-       else if (spellToCast.GetComponent<Traps>() != null)
+        else if (spellToCast.GetComponent<Traps>() != null)
         {
             Vector3 position = activePlayers[playerID].SpellInitPosition + new Vector3(0,0,2);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
@@ -342,8 +291,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
 
         activePlayers[playerID].resetSpellChargingLVL();
-
     }
+
     private void LoadSpellResources()
     {
         All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_AOE_EXPLOSION_LVL_1));
@@ -366,20 +315,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     public bool CheckPlayerSpells(EPlayerID playerID , AbstractSpell chosenSpell)
     {
-        switch (playerID)
+        if (IS_KEY_CONTAINED(playersChosenSpells, playerID))
         {
-            case EPlayerID.PLAYER_1:
-                return !Player_1_SpellsList.Contains(chosenSpell);
-            case EPlayerID.PLAYER_2:
-                return !Player_2_SpellsList.Contains(chosenSpell);              
-            case EPlayerID.PLAYER_3:
-                return !Player_3_SpellsList.Contains(chosenSpell);              
-            case EPlayerID.PLAYER_4:
-                return !Player_4_SpellsList.Contains(chosenSpell);
-                
+            return !playersChosenSpells[playerID].ContainsValue(chosenSpell);
         }
-        
-        
         return true;
     }
 
@@ -443,18 +382,19 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
 
         yield return new WaitForSeconds(0.3f);
+
         if (spellToCast.IsTripleCast)
         {
             TripleCastSpell(spellToCast, playerID);
         }
-      else
+        else
         {
              AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
              spell.CastingPlayerID = playerID;       
              spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
         }
-
     }
+
     //CAST A TRIPLE VERSION OF THE SPELL 
     private void TripleCastSpell(AbstractSpell spellToCast, EPlayerID playerID)
     {
@@ -477,30 +417,63 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         cast_3.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
     }
 
-    private void InitializeSpells()
+    private void InitializeSpellsDictionnary()
     {
-        Player_Spells[EPlayerID.PLAYER_1] = new Dictionary<ESpellSlot, AbstractSpell>();
-        Player_Spells[EPlayerID.PLAYER_2] = new Dictionary<ESpellSlot, AbstractSpell>();
-        Player_Spells[EPlayerID.PLAYER_3] = new Dictionary<ESpellSlot, AbstractSpell>();
-        Player_Spells[EPlayerID.PLAYER_4] = new Dictionary<ESpellSlot, AbstractSpell>();
+        playersChosenSpells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
 
-
-        for (int j = 0; j < 3; j++)
+        foreach (EPlayerID playerID in Enum.GetValues(typeof(EPlayerID)))
         {
-            ESpellSlot spellID = GetSpellSlotFrom(j + 1);
+            if (playerID != EPlayerID.NONE)
+            {
+                playersChosenSpells.Add(playerID, new Dictionary<ESpellSlot, AbstractSpell>());
 
-            Player_Spells[EPlayerID.PLAYER_1][spellID] = Player_1_SpellsList[j];
-            Player_Spells[EPlayerID.PLAYER_2][spellID] = Player_2_SpellsList[j];
-            Player_Spells[EPlayerID.PLAYER_3][spellID] = Player_3_SpellsList[j];
-            Player_Spells[EPlayerID.PLAYER_4][spellID] = Player_4_SpellsList[j];
+                foreach (ESpellSlot spellSlot in Enum.GetValues(typeof(ESpellSlot)))
+                {
+                    if (spellSlot != ESpellSlot.NONE)
+                    {
+                        playersChosenSpells[playerID].Add(spellSlot, null);
+                    }
+                }
+            }
+        }
+
+
+        if (MotherOfManagers.Instance.IsLoadDebugSpells == true)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                ESpellSlot spellID = GetSpellSlotFrom(j + 1);
+
+                playersChosenSpells[EPlayerID.PLAYER_1][spellID] = DebugSpells_Player1[j];
+                playersChosenSpells[EPlayerID.PLAYER_2][spellID] = DebugSpells_Player2[j];
+                playersChosenSpells[EPlayerID.PLAYER_3][spellID] = DebugSpells_Player3[j];
+                playersChosenSpells[EPlayerID.PLAYER_4][spellID] = DebugSpells_Player4[j];
+            }
         }
     }
 
-    private void CleaDebugSpellLists()
+    private void FinTouochJoysticks()
     {
-        Player_1_SpellsList = new List<AbstractSpell> { null, null, null };
-        Player_2_SpellsList = new List<AbstractSpell> { null, null, null };
-        Player_3_SpellsList = new List<AbstractSpell> { null, null, null };
-        Player_4_SpellsList = new List<AbstractSpell> { null, null, null };
+        spellJoysticks.Clear();
+        foreach (MaleficusJoystick joystick in FindObjectsOfType<MaleficusJoystick>())
+        {
+            if (spellJoysticks.ContainsKey(joystick.JoystickType) == false)
+            {
+                spellJoysticks.Add(joystick.JoystickType, joystick);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the chosen spell for the given PlayerID and spellSlot. Returns null if none is chosen!
+    /// </summary>
+    public AbstractSpell GetChosenSpell(EPlayerID playerID, ESpellSlot spellSlot)
+    {
+        if ((IS_KEY_CONTAINED(playersChosenSpells, playerID))
+            && (IS_KEY_CONTAINED(playersChosenSpells[playerID], spellSlot)))
+        {
+            return playersChosenSpells[playerID][spellSlot];
+        }
+        return null;
     }
 }

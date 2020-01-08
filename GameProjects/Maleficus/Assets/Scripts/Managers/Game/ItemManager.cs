@@ -4,8 +4,5 @@ using UnityEngine;
 
 public class ItemManager : AbstractSingletonManager<ItemManager>
 {
-    public override void OnSceneStartReinitialize()
-    {
-        
-    }
+
 }

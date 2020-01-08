@@ -85,7 +85,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.INPUT_JoystickMoved.AddListener(On_SERVER_INPUT_JoystickMoved);
 
         // Scene changed event
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
 
         //Network
@@ -105,9 +104,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         base.Update();
 
         string playerStatusLog = "";
-        foreach (var pair in PlayersJoinStatus)
+        //foreach (var pair in PlayersJoinStatus)
+        //{
+        //    playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
+        //}   
+        foreach (var pair in ActivePlayers)
         {
-            playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
+            playerStatusLog += pair.Key + " - joined : " + pair.Value.name + "\n";
         }
         LogCanvas(69, playerStatusLog);
     }
@@ -115,10 +118,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
 
 
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         FindPlayerSpawnGhost();
 
+        LogConsole("Reset active players");
         ActivePlayers.Clear();
     }
 
@@ -144,6 +150,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 spawnedPlayer.PlayerID = playerID;
                 spawnedPlayer.TeamID = PlayersTeam[playerID];
 
+                LogConsole("Adding " + playerID);
                 ActivePlayers.Add(playerID, spawnedPlayer);
 
                 // Place player under parent of SpawnPosition
@@ -210,71 +217,68 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-
         ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
-        if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (ActivePlayers.ContainsKey(playerID) == false))
-        {
-            return;
-        }
 
-        ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
+        LogConsole(playerID + " - " + ActivePlayers.ContainsKey(playerID));
 
-        // Instantiate spell now ?
-        if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+        if ((spellSlot != ESpellSlot.NONE)
+            && (ActivePlayers.ContainsKey(playerID) == true))
         {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+            LogConsole(playerID + " - Spawn : " + spell.name);
+            if (IS_NOT_NULL(spell))
             {
-
-                ActivePlayers[playerID].IsReadyToShoot = false;
-                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
-
-                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-            }
-        }
-        else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
-        {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-            {
-
-                StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
-                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-            }
-        }
-        else if (spell.MovementType == ESpellMovementType.UNIQUE)
-        {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-            {
-                if (!ActivePlayers[playerID].hasCastedSpell)
+                // Instantiate spell now ?
+                if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
                 {
-                    StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
-                    SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
+
+                        ActivePlayers[playerID].IsReadyToShoot = false;
+                        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                        ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+
+                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    }
+                }
+                else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
+                {
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
+
+                        StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    }
+                }
+                else if (spell.MovementType == ESpellMovementType.UNIQUE)
+                {
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
+                        if (!ActivePlayers[playerID].hasCastedSpell)
+                        {
+                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                            SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                        }
+                    }
+                    else
+                    {
+                        EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                    }
                 }
 
+                else if (spell.IsChargeable)
+                {
+                    ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
+                    Debug.Log("Start charging");
 
-
-
-            }
-            else
-            {
-                EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                }
             }
         }
-
-        else if (spell.IsChargeable)
-        {
-
-            ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
-            Debug.Log("Start charging");
-
-        }
-
-
     }
 
     private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
@@ -288,23 +292,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             return;
         }
 
-        ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
-
-        if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
+        AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+        if (IS_NOT_NULL(spell))
         {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
             {
+                if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                {
 
-                ActivePlayers[playerID].IsReadyToShoot = false;
-                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+                    ActivePlayers[playerID].IsReadyToShoot = false;
+                    ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                    ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
 
-                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                    SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
-                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                }
             }
         }
-
     }
 
 
@@ -334,15 +339,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #endregion
 
     #region Events Callbacks
-    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
-    {
-        EScene newScene = eventHandle.Arg1;
-        if (newScene.ContainedIn(GAME_SCENES))
-        {
-            FindPlayerSpawnGhost();
-        }
-    }
-
     private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)

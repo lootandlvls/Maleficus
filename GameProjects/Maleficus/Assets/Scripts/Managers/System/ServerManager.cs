@@ -34,10 +34,6 @@ public class ServerManager : NetworkManager
     private Dictionary<EClientID, Dictionary<int, AbstractNetMessage>> receivedNetMessages;
 
     #region Monobehaviour
-    public override void OnSceneStartReinitialize()
-    {
-        Init();
-    }
 
     protected override void Awake()
     {

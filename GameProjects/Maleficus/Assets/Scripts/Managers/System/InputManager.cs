@@ -56,11 +56,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     }
 
-    public override void OnSceneStartReinitialize()
-    {
-
-    }
-
     private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
         // Disconnect all network controllers and AI
