@@ -29,7 +29,10 @@ public abstract class AbstractManager : MaleficusMonoBehaviour
     {
         base.OnDestroy();
 
-        EventManager.Instance.APP_SceneChanged.RemoveListener(On_APP_SceneChanged);
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.APP_SceneChanged.RemoveListener(On_APP_SceneChanged);
+        }
     }
 
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)

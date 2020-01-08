@@ -110,6 +110,13 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
 
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {
-        UpdateState(startStates[eventHandle.Arg1]);
+        StartCoroutine(DelayedUpdateStateCoroutine(eventHandle.Arg1));
+    }
+
+    private IEnumerator DelayedUpdateStateCoroutine(EScene newScene)
+    {
+        yield return new WaitForEndOfFrame();
+
+        UpdateState(startStates[newScene]);
     }
 }

@@ -341,6 +341,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Events Callbacks
     private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
+        LogConsole("joining players : " + eventHandle.NewState);
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
             SpawnAllJoinedPlayers();

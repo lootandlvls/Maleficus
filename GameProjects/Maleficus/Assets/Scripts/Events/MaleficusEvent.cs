@@ -43,17 +43,17 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
             if ((eventInvocationType != EEventInvocationType.TO_SERVER_ONLY)
                 || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.PLAY_OFFLINE))
             {
-                // Invoke event to all local listeners
-                Event.Invoke(eventHandle);
-
                 // Debug event
                 string debugMessage = eventHandle.GetDebugMessage();
-                if ((MotherOfManagers.Instance.IsDebugLogEvents == true) 
-                    && (debugMessage != "") 
+                if ((MotherOfManagers.Instance.IsDebugLogEvents == true)
+                    && (debugMessage != "")
                     && (debugEvent == true))
                 {
                     Debug.Log("[EVENT] " + Name + " : " + debugMessage);
                 }
+
+                // Invoke event to all local listeners
+                Event.Invoke(eventHandle);
             }
 
             // Broadcast event to the Server
