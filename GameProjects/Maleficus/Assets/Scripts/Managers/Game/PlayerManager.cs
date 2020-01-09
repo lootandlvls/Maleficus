@@ -9,8 +9,7 @@ using static Maleficus.MaleficusConsts;
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
-    /// <summary> Reference to all player prefabs to be spawned. </summary>
-    public Dictionary<EPlayerID, Player> PlayerPrefabs { get; } = new Dictionary<EPlayerID, Player>();
+
 
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
     public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions { get; } = new Dictionary<EPlayerID, PlayerSpawnPosition>();
@@ -31,6 +30,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     /// <summary> The join status of player that have connected with a controllers </summary>
     public Dictionary<EPlayerID, PlayerJoinStatus> PlayersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
+
+    private Dictionary<EPlayerID, Vector3> PlayersDeathPositions = new Dictionary<EPlayerID, Vector3>();
+    private Dictionary<EPlayerID, Quaternion> PlayersDeathRotations = new Dictionary<EPlayerID, Quaternion>();
+
+    private Dictionary<EPlayerID, Player> playersPrefabs { get; } = new Dictionary<EPlayerID, Player>();
+    private PlayerSpawnPosition playerSpawnPositionPrefab;
+    private PlayerRespawnGhost playerRespawnGhostPrefab;
 
     /// <summary>
     /// Get all players that are connected with a controller.
@@ -60,7 +66,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return false;
     }
 
-    // TODO: Add a list of active Coroutines for every player to stop when he dies
     protected override void Awake()
     {
         base.Awake();
@@ -85,7 +90,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.INPUT_JoystickMoved.AddListener(On_SERVER_INPUT_JoystickMoved);
 
         // Scene changed event
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
         EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
 
         //Network
@@ -105,20 +109,25 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         base.Update();
 
         string playerStatusLog = "";
-        foreach (var pair in PlayersJoinStatus)
+        //foreach (var pair in PlayersJoinStatus)
+        //{
+        //    playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
+        //}   
+        foreach (var pair in ActivePlayers)
         {
-            playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
+            playerStatusLog += pair.Key + " - joined : " + pair.Value.name + "\n";
         }
         LogCanvas(69, playerStatusLog);
     }
 
 
-
-
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         FindPlayerSpawnGhost();
 
+        LogConsole("Reset active players");
         ActivePlayers.Clear();
     }
 
@@ -135,7 +144,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
             if (ActivePlayers.ContainsKey(playerID) == false)
             {
-                Player playerPrefab = PlayerPrefabs[playerID];
+                Player playerPrefab = playersPrefabs[playerID];
                 PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[playerID];
                 Vector3 playerPosition = playerSpawnPosition.Position;
                 Quaternion playerRotation = playerSpawnPosition.Rotation;
@@ -152,13 +161,75 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
                 }
 
-                LogConsole("Spawn player : " + playerID);
-
                 EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(playerID);
             }
             else
             {
                 Debug.LogWarning("Trying to spawn a player that is still active");
+            }
+        }
+    }
+
+    public void RespawnPlayer(EPlayerID playerID)
+    {
+        if ((IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
+            && (IS_KEY_CONTAINED(PlayersDeathPositions, playerID))
+            && (IS_KEY_CONTAINED(PlayersDeathRotations, playerID))
+            && (IS_KEY_CONTAINED(PlayersSpawnPositions, playerID)))
+        {
+            Vector3 startPostion = PlayersDeathPositions[playerID];
+            Quaternion startRotation = PlayersDeathRotations[playerID];
+            Vector3 endPosition = PlayersSpawnPositions[playerID].Position;
+            Quaternion endRotation = PlayersSpawnPositions[playerID].Rotation;
+
+            PlayerRespawnGhost playerRespawnGhost = Instantiate(playerRespawnGhostPrefab, startPostion, startRotation);
+            playerRespawnGhost.PlayerID = playerID;
+            playerRespawnGhost.RespawnAnimationDone += On_RespawnAnimationDone;
+            playerRespawnGhost.StartRespawnAnimation(startPostion, startRotation, endPosition, endRotation);
+        }
+    }
+
+    private void DestroyPlayer(EPlayerID playerID)
+    {
+        if (IS_KEY_CONTAINED(ActivePlayers, playerID))
+        {
+            Player player = ActivePlayers[playerID];
+            if ((IS_KEY_CONTAINED(PlayersDeathPositions, playerID))
+                && (IS_KEY_CONTAINED(PlayersDeathRotations, playerID)))
+            {
+                PlayersDeathPositions[playerID] = player.Position;
+                PlayersDeathRotations[playerID] = player.Rotation;
+            }
+
+            ActivePlayers.Remove(playerID);
+            player.DestroyPlayer();
+            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
+        }
+    }
+
+    private void SpawnAllJoinedPlayers()
+    {
+        foreach (EPlayerID playerID in PlayersJoinStatus.Keys)
+        {
+            if ((PlayersJoinStatus[playerID].HasJoined == true)
+                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+            {
+                SpawnPlayer(playerID);
+            }
+        }
+    }
+
+    private void SpawnRemaningAIPlayers()
+    {
+        foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
+        {
+            EControllerID controllerID = pair.Key;
+            EPlayerID playerID = pair.Value;
+
+            if ((controllerID.ContainedIn(AI_CONTROLLERS))
+                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+            {
+                SpawnPlayer(playerID);
             }
         }
     }
@@ -210,71 +281,65 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-
         ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
-        if ((spellSlot == ESpellSlot.NONE) || (playerID == EPlayerID.TEST) || (ActivePlayers.ContainsKey(playerID) == false))
-        {
-            return;
-        }
 
-        ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
-
-        // Instantiate spell now ?
-        if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+        if ((spellSlot != ESpellSlot.NONE)
+            && (ActivePlayers.ContainsKey(playerID) == true))
         {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+            if (IS_NOT_NULL(spell))
             {
-
-                ActivePlayers[playerID].IsReadyToShoot = false;
-                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
-
-                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-            }
-        }
-        else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
-        {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-            {
-
-                StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
-                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-            }
-        }
-        else if (spell.MovementType == ESpellMovementType.UNIQUE)
-        {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-            {
-                if (!ActivePlayers[playerID].hasCastedSpell)
+                // Instantiate spell now ?
+                if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
                 {
-                    StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
-                    SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
+
+                        ActivePlayers[playerID].IsReadyToShoot = false;
+                        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                        ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+
+                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    }
+                }
+                else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
+                {
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
+
+                        StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    }
+                }
+                else if (spell.MovementType == ESpellMovementType.UNIQUE)
+                {
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
+                        if (!ActivePlayers[playerID].hasCastedSpell)
+                        {
+                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                            SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                        }
+                    }
+                    else
+                    {
+                        EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                    }
                 }
 
+                else if (spell.IsChargeable)
+                {
+                    ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
+                    Debug.Log("Start charging");
 
-
-
-            }
-            else
-            {
-                EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                }
             }
         }
-
-        else if (spell.IsChargeable)
-        {
-
-            ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
-            Debug.Log("Start charging");
-
-        }
-
-
     }
 
     private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
@@ -288,23 +353,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             return;
         }
 
-        ISpell spell = SpellManager.Instance.Player_Spells[playerID][spellSlot];
-
-        if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
+        AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+        if (IS_NOT_NULL(spell))
         {
-            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+            if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
             {
+                if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                {
 
-                ActivePlayers[playerID].IsReadyToShoot = false;
-                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+                    ActivePlayers[playerID].IsReadyToShoot = false;
+                    ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                    ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
 
-                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                    SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
-                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                }
             }
         }
-
     }
 
 
@@ -334,21 +400,27 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #endregion
 
     #region Events Callbacks
-    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
-    {
-        EScene newScene = eventHandle.Arg1;
-        if (newScene.ContainedIn(GAME_SCENES))
-        {
-            FindPlayerSpawnGhost();
-        }
-    }
-
     private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
+        LogConsole("joining players : " + eventHandle.NewState);
         if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
         {
             SpawnAllJoinedPlayers();
         }
+    }
+
+    public void OnPlayerOutOfBound(EPlayerID playerID)
+    {
+        DestroyPlayer(playerID);
+    }
+
+    private void On_RespawnAnimationDone(PlayerRespawnGhost playerRespawnGhost)
+    {
+        playerRespawnGhost.RespawnAnimationDone -= On_RespawnAnimationDone;
+
+        LogConsole(playerRespawnGhost.PlayerID + " completed respawn animation");
+        SpawnPlayer(playerRespawnGhost.PlayerID);
+        playerRespawnGhost.DestroyGhost();
     }
     #endregion
 
@@ -362,20 +434,37 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         Teams[ETeamID.TEAM_4] = new List<EPlayerID>();
 
         PlayersTeam.Clear();
-        PlayersTeam[EPlayerID.PLAYER_1] = ETeamID.NONE;
-        PlayersTeam[EPlayerID.PLAYER_2] = ETeamID.NONE;
-        PlayersTeam[EPlayerID.PLAYER_3] = ETeamID.NONE;
-        PlayersTeam[EPlayerID.PLAYER_4] = ETeamID.NONE;
+        PlayersDeathPositions.Clear();
+        PlayersDeathRotations.Clear();
+        foreach (EPlayerID playerID in Enum.GetValues(typeof(EPlayerID)))
+        {
+            if (playerID != EPlayerID.NONE)
+            {
+                PlayersTeam.Add(playerID, ETeamID.NONE);
+                PlayersDeathPositions.Add(playerID, Vector3.zero);
+                PlayersDeathRotations.Add(playerID, Quaternion.identity);
+            }
+        }
     }
 
 
     private void LoadPlayerResources()
     {
-        PlayerPrefabs.Clear();
-        PlayerPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
+        playersPrefabs.Clear();
+        playersPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
+        playersPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
+        playersPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
+        playersPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_1]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_2]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_3]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_4]);
+
+        playerSpawnPositionPrefab = Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION);
+        IS_NOT_NULL(playerSpawnPositionPrefab);
+
+        playerRespawnGhostPrefab = Resources.Load<PlayerRespawnGhost>(PATH_PLAYER_RESPAWN_GHOST);
+        IS_NOT_NULL(playerRespawnGhostPrefab);
     }
 
     private void FindPlayerSpawnGhost()
@@ -399,7 +488,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 EPlayerID playerID = GetPlayerIDFrom(i);
                 if (PlayersSpawnPositions.ContainsKey(playerID) == false)
                 {
-                    PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION));
+                    PlayerSpawnPosition spawnGhost = Instantiate(playerSpawnPositionPrefab);
                     spawnGhost.ToSpawnPlayerID = playerID;
                     spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
                     spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
@@ -412,32 +501,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #endregion
 
 
-    private void SpawnAllJoinedPlayers()
-    {
-        foreach (EPlayerID playerID in PlayersJoinStatus.Keys)
-        {
-            if ((PlayersJoinStatus[playerID].HasJoined == true)
-                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
-            {
-                SpawnPlayer(playerID);
-            }
-        }
-    }
-
-    private void SpawnRemaningAIPlayers()
-    {
-        foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
-        {
-            EControllerID controllerID = pair.Key;
-            EPlayerID playerID = pair.Value;
-
-            if ((controllerID.ContainedIn(AI_CONTROLLERS))
-                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
-            {
-                SpawnPlayer(playerID);
-            }
-        }
-    }
 
     public JoystickInput GetPlayerInput(EPlayerID playerID)
     {
@@ -489,25 +552,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     }
 
-    public void OnPlayerOutOfBound(EPlayerID playerID)
-    {
-        if (ActivePlayers.ContainsKey(playerID))
-        {
-            StartCoroutine(DestroyPlayerCoroutine(playerID));
-        }
-    }
 
-    private IEnumerator DestroyPlayerCoroutine(EPlayerID playerID)
-    {
-        yield return new WaitForSeconds(PLAYER_FALLING_TIME);
-        if (ActivePlayers.ContainsKey(playerID))
-        {
-            Player playerToDestroy = ActivePlayers[playerID];
-            ActivePlayers.Remove(playerID);
-            playerToDestroy.DestroyPlayer();
-            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
-        }
-    }
 
     private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {

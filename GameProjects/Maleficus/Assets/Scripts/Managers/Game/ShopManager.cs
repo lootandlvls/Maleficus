@@ -4,8 +4,5 @@ using UnityEngine;
 
 public class ShopManager : AbstractSingletonManager<ShopManager>
 {
-    public override void OnSceneStartReinitialize()
-    {
 
-    }
 }

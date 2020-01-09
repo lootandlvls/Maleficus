@@ -22,8 +22,10 @@ public class CoinManager : AbstractSingletonManager<CoinManager>
         EventManager.Instance.ENEMIES_WaveCompleted += On_ENEMIES_WaveCompleted;
     }
 
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         numberOfCoins = 0;
         AllCoins.Clear();
         Coin[] coinList = FindObjectsOfType<Coin>();

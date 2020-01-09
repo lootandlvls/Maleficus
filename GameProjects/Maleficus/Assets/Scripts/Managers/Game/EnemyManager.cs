@@ -61,8 +61,10 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
         EventManager.Instance.ENEMIES_EnemyDied += On_ENEMIES_EnemyDied;
     }
 
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         FindAndBindButtonActions();
         waveCounter = 0;
     }

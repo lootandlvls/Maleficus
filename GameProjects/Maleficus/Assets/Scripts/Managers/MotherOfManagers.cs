@@ -25,51 +25,11 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
 
     [Separator("Spell")]
-    [SerializeField] public bool IsClearDebugSpellLists = true;
+    [SerializeField] public bool IsLoadDebugSpells = false;
 
     [Separator("Debug")]
     [SerializeField] public bool IsDebugLogEvents = true;
     [SerializeField] public bool IsReduceLightIntensityOnSceneStart = false;
-
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        InitializeManagers();
-    }
-
-    protected override void InitializeEventsCallbacks()
-    {
-        base.InitializeEventsCallbacks();
-
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
-
-    }
-
-    public override void OnSceneStartReinitialize()
-    {
-
-    }
-
-    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
-    {
-        InitializeManagers();
-    }
-
-
-    private void InitializeManagers()
-    {
-        Debug.Log("Intializing managers");
-        AbstractManager[] abstractManagers = FindObjectsOfType<AbstractManager>();
-        foreach (AbstractManager abstractManager in abstractManagers)
-        {
-            if (abstractManager != this)
-            {
-                abstractManager.OnSceneStartReinitialize();
-            }
-        }
-    }
 
     public string ServerIP
     {
@@ -93,22 +53,3 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
         }
     }
 }
-
-
-//[CustomEditor(typeof(MotherOfManagers))]
-//public class MotherOfManagersEditor : Editor
-//{
-//    public override void OnInspectorGUI()
-//    {
-//        var myScript = target as MotherOfManagers;
-
-//        myScript.IsServer = GUILayout.Toggle(myScript.IsServer, "IsServer");
-
-//        if (myScript.IsServer)
-//        {
-//            myScript.i = EditorGUILayout.IntSlider("I field:", myScript.i, 1, 100);
-
-//        }
-
-//    }
-//}

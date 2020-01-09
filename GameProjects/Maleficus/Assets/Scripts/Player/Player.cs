@@ -9,10 +9,10 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public ETeamID TeamID                                                   { get; set; }
     public Vector3 Position                                                 { get { return transform.position; } }
     public Quaternion Rotation                                              { get { return transform.rotation; } }
-    public bool IsDead                                                      { get { return isDead; } }                                            // TODO: Define when player is dead
-    public Dictionary<ESpellSlot, bool> ReadyToUseSpell                     { get { return readyToUseSpell; } }
-    public Dictionary<ESpellSlot, float> SpellCooldown                      { get { return spellCooldown; } }
-    public Dictionary<ESpellSlot, float> SpellDuration                      { get { return spellDuration; } }
+    public bool IsDead                                                      { get; private set; } = false;                                          
+    public Dictionary<ESpellSlot, bool> ReadyToUseSpell                     { get; } = new Dictionary<ESpellSlot, bool>();
+    public Dictionary<ESpellSlot, float> SpellCooldown                      { get; } = new Dictionary<ESpellSlot, float>();
+    public Dictionary<ESpellSlot, float> SpellDuration                      { get; } = new Dictionary<ESpellSlot, float>();
     public bool IsReadyToShoot                                              { get; set; }
     public bool IsPlayerCharging                                            { get; set; }
     public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
@@ -21,8 +21,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public bool hasCastedSpell = false;
 
     [Header("Charging Spell Effects")]
-    [Tooltip("This value is read from the actual Player ID inside the script. Chaning it in the inspector will have no effect")]
-    [SerializeField] private EPlayerID myPlayerIDDebug = EPlayerID.NONE;
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
 
@@ -31,9 +29,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     [SerializeField] private Transform spellInitPosition;
     [SerializeField] private Transform spellEndPosition;
-
-    private String playerVerticalInput;
-    private String playerHorizontalInput;
 
     private int spellChargingLVL = 1;
 
@@ -49,49 +44,33 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     private Vector3 movingDirection;
     //private Rigidbody myRigidBody;
     private DirectionalSprite[] myDirectionalSprites;
-    private Dictionary<int, AbstractSpell> spellsSlot;
     private Animator myAnimator;
 
     private Vector3 pushVelocity;
     private Vector3 GravityVelocity;
 
-    private bool isDead = false;
 
-    // TODO [Nassim]: refactor multiple variables into a dictionary
-    private Dictionary<ESpellSlot, bool> readyToUseSpell = new Dictionary<ESpellSlot, bool>();
-
-    [Header("SpellsCooldown")]
-    private Dictionary<ESpellSlot, float> spellCooldown = new Dictionary<ESpellSlot, float>();
-
-    [Header("SpellsDuration")]
-    private Dictionary<ESpellSlot, float> spellDuration = new Dictionary<ESpellSlot, float>();
-
-
-    protected override void Awake()
+    protected override void InitializeComponents()
     {
-        base.Awake();
+        base.InitializeComponents();
 
         myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
+        myAnimator = GetComponent<Animator>();
 
-        IsReadyToShoot = true;
-        IsPlayerCharging = false;
     }
 
     protected override void Start()
     {
         base.Start();
 
-        myPlayerIDDebug = PlayerID;
-
+        IsReadyToShoot = true;
+        IsPlayerCharging = false;
 
         InitializeDictionaries();
 
-        //myRigidBody = this.GetComponent<Rigidbody>();      
-        myAnimator = GetComponent<Animator>();
         myAnimator.SetBool("idle", true);
 
         currentSpeed = speed;
-
     }
 
     protected override void Update()
@@ -232,19 +211,20 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     private void InitializeDictionaries()
     {
-        readyToUseSpell[ESpellSlot.SPELL_1] = true;
-        readyToUseSpell[ESpellSlot.SPELL_2] = true;
-        readyToUseSpell[ESpellSlot.SPELL_3] = true;
-
-        spellCooldown[ESpellSlot.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_1].Cooldown;
-        spellCooldown[ESpellSlot.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_2].Cooldown;
-        spellCooldown[ESpellSlot.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_3].Cooldown;
-
-        spellDuration[ESpellSlot.SPELL_1] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_1].CastingDuration;
-        spellDuration[ESpellSlot.SPELL_2] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_2].CastingDuration;
-        spellDuration[ESpellSlot.SPELL_3] = SpellManager.Instance.Player_Spells[PlayerID][ESpellSlot.SPELL_3].CastingDuration;
+        foreach (ESpellSlot spellSlot in Enum.GetValues(typeof(ESpellSlot)))
+        {
+            if (spellSlot != ESpellSlot.NONE)
+            {
+                ReadyToUseSpell[spellSlot] = true;
+                AbstractSpell chosenSpell = SpellManager.Instance.GetChosenSpell(PlayerID, spellSlot);
+                if (IS_NOT_NULL(chosenSpell))
+                {
+                    SpellCooldown[spellSlot] = chosenSpell.Cooldown;
+                    SpellDuration[spellSlot] = chosenSpell.CastingDuration;
+                }
+            }
+        }
     }
-
 
     private IEnumerator SlowDownPlayerCoroutine(float slowDownSpeed, float duration)
     {
@@ -274,7 +254,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         yield return new WaitForSeconds(time);
 
         IsReadyToShoot = true;
-        readyToUseSpell[spellSlot] = true;
+        ReadyToUseSpell[spellSlot] = true;
 
         LogConsole("ready to use the spell again", "SPELL_CHARGE");
     }
@@ -283,11 +263,11 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     private IEnumerator SpellChargingCoroutine(ESpellSlot spellSlot)
     {
-        LogConsole("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
+        LogConsole("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
         while ((IsPlayerCharging == true)
-            && ((readyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
+            && ((ReadyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
         {
-            LogConsole("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + readyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
+            LogConsole("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
             yield return new WaitForEndOfFrame();
         }
 
@@ -471,7 +451,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         if (other.tag.Equals("Ground"))
         {
             GravityVelocity = new Vector3(0, -9.81f, 0);
-            isDead = true;
+            IsDead = true;
             StopAllCoroutines();
             IsReadyToShoot = false;
             PlayerManager.Instance.OnPlayerOutOfBound(PlayerID);

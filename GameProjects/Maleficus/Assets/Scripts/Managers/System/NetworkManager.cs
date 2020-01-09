@@ -64,10 +64,13 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         pingedSuccessfully = false;
         StartCoroutine(ConnectToServerCoroutine());
     }
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         Init();
     }
+
     protected override void Update()
     {
         base.Update();

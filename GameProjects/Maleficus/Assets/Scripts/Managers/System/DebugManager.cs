@@ -8,8 +8,9 @@ using UnityEngine.UI;
 /// Multiple channel (IDs) debug messages on every frame
 /// IDs:
 /// 2  - Joystick 
-/// 9  - Player Input Listener
 /// 6  - AI
+/// 9  - Player Input Listener
+/// 12 - Players join status
 /// 50 - UI state
 /// 51 - App state 
 /// 52 - Scene
@@ -24,8 +25,10 @@ public class DebugManager : AbstractSingletonManager<DebugManager>
     private Dictionary<int, DebugText> debugTexts = new Dictionary<int, DebugText>();
     private Dictionary<int, bool> reportedDebugTexts = new Dictionary<int, bool>();
 
-    public override void OnSceneStartReinitialize()
+    protected override void OnReinitializeManager()
     {
+        base.OnReinitializeManager();
+
         debugTexts.Clear();
         reportedDebugTexts.Clear();
 

@@ -47,6 +47,7 @@ namespace Maleficus
         public const string PATH_PLAYER_GREEN = "Wizard_Green";
         public const string PATH_PLAYER_YELLOW = "Wizard_Yellow";
         public const string PATH_PLAYER_SPAWN_POSITION = "PlayerSpawnPosition";
+        public const string PATH_PLAYER_RESPAWN_GHOST = "PlayerRespawnGhost";
         public const string PATH_PLAYER_SERVER_REPRESENTATION = "PlayerServerRepresentation";
 
         /* Networking */
@@ -83,7 +84,7 @@ namespace Maleficus
         public const float ENG_GAME_SCENE_TRANSITION_DURATION = 4.0f;
 
         public const int PLAYER_LIVES_IN_DUNGEON_MODE = 10;
-        public const int PLAYER_LIVES_IN_FFA_MODE = 2;
+        public const int PLAYER_LIVES_IN_FFA_MODE = 3;
 
         public const int PLAYER_FALLING_TIME = 2;
 

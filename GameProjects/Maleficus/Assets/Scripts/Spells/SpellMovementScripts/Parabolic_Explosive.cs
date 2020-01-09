@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Parabolic_Explosive : AbstractSpell
 {
+
+    [SerializeField] private AnimationCurve speedCurve;
+    [SerializeField] private AnimationCurve heightCurve;
     [SerializeField] private Transform startTransform;
     [SerializeField] private Transform endTransform;
     [SerializeField] private Vector3 endPosition;
@@ -42,7 +45,6 @@ public class Parabolic_Explosive : AbstractSpell
         if (animationStarted)
         {
             StartMovement();
-
         }
 
         if (isStarted == true)
@@ -60,14 +62,18 @@ public class Parabolic_Explosive : AbstractSpell
                 return;
             }
 
-            float curveValue = CurveReader.Instance.EvaluateCurve(3, percentageProgress);
-            float heightValue = CurveReader.Instance.EvaluateCurve(1, percentageProgress);
+            if ((IS_NOT_NULL(speedCurve))
+                && (IS_NOT_NULL(heightCurve)))
 
+            {
+                float speedAlpha = speedCurve.Evaluate(percentageProgress);
+                float heightAlpha = speedCurve.Evaluate(speedAlpha);
 
-            transform.position = Vector3.Lerp(startPosition, endPosition, curveValue);
-            transform.rotation = Quaternion.Lerp(startRotation, endRotation, curveValue);
+                transform.position = Vector3.Lerp(startPosition, endPosition, speedAlpha);
+                transform.rotation = Quaternion.Lerp(startRotation, endRotation, speedAlpha);
 
-            transform.position = new Vector3(transform.position.x, heightValue * heightFactor, transform.position.z);
+                transform.position = new Vector3(transform.position.x, heightAlpha * heightFactor, transform.position.z);
+            }
         }
 
 

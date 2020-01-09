@@ -40,10 +40,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
         
     }
 
-    public override void OnSceneStartReinitialize()
-    {
 
-    }
 
     private void On_SPELLS_SpellSpawned(ISpell castedSpell, EPlayerID castingPlayer , ESpellSlot spellSlot)
     {

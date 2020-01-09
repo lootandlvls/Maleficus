@@ -29,13 +29,6 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         base.Update();
     }
 
-
-
-    public override void OnSceneStartReinitialize()
-    {
-        
-    }
-
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
