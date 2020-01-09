@@ -6,16 +6,37 @@ using UnityEngine;
 public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 {
     [SerializeField] EPlayerID PlayerID;
+    [SerializeField] int RemainingLives;
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
-    private Dictionary<ESpellSlot, UI_PlayerLives> spellLivesIcons = new Dictionary<ESpellSlot, UI_PlayerLives>();
+    private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
 
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
         EventManager.Instance.SPELLS_SpellSpawned += On_SpellSpawned;
+        EventManager.Instance.GAME_PlayerStatsUpdated += On_GAME_PlayerStatsUpdated;
     }
 
-    private void On_SpellSpawned(ISpell spell, EPlayerID playerID , ESpellSlot spellSlot)
+   
+    protected override void InitializeComponents()
+    {
+        base.InitializeComponents();
+
+        foreach (UI_SpellCooldowns SpellCooldown in GetComponentsInChildren<UI_SpellCooldowns>())
+        {
+            spellCooldownsIcons.Add(SpellCooldown.SpellSlot, SpellCooldown);
+        }
+
+        foreach (UI_PlayerLives PlayerLife in GetComponentsInChildren<UI_PlayerLives>())
+        {
+            PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
+        }
+        //Update the lives depending on the game mode
+        UpdateLives(1);
+    }
+
+
+    private void On_SpellSpawned(ISpell spell, EPlayerID playerID, ESpellSlot spellSlot)
     {
         if (PlayerID == playerID)
         {
@@ -26,15 +47,75 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         }
     }
 
-    protected override void InitializeComponents()
+    private void On_GAME_PlayerStatsUpdated(AbstractPlayerStats playerStats, EGameMode gameMode)
     {
-        base.InitializeComponents();
-
-        foreach (UI_SpellCooldowns SpellCooldown in GetComponentsInChildren<UI_SpellCooldowns>())
+        switch (gameMode)
         {
-            spellCooldownsIcons.Add(SpellCooldown.SpellSlot, SpellCooldown);
+            case EGameMode.FFA_LIVES:
+                PlayerStats_Lives playerStatsFFA = (PlayerStats_Lives)playerStats;
+
+                if (PlayerID == playerStatsFFA.PlayerID)
+                {
+                    RemainingLives = playerStatsFFA.RemainingLives;
+                    UpdateLives(playerStatsFFA.RemainingLives);
+                }
+               
+
+                break;
         }
     }
 
 
+    private void UpdateLives(int remainingLives)
+    {
+
+        Debug.Log("lives updated Remaining Live = " + remainingLives);
+        switch (remainingLives)
+        {
+            case 0:
+                PlayerLivesIcons[1].gameObject.SetActive(false);
+                PlayerLivesIcons[2].gameObject.SetActive(false);
+                PlayerLivesIcons[3].gameObject.SetActive(false);
+                PlayerLivesIcons[4].gameObject.SetActive(false);
+                PlayerLivesIcons[5].gameObject.SetActive(false);
+                break;
+            case 1:
+                PlayerLivesIcons[1].gameObject.SetActive(true);
+                PlayerLivesIcons[2].gameObject.SetActive(false);
+                PlayerLivesIcons[3].gameObject.SetActive(false);
+                PlayerLivesIcons[4].gameObject.SetActive(false);
+                PlayerLivesIcons[5].gameObject.SetActive(false);
+                break;
+            case 2:
+                PlayerLivesIcons[1].gameObject.SetActive(true);
+                PlayerLivesIcons[2].gameObject.SetActive(true);
+                PlayerLivesIcons[3].gameObject.SetActive(false);
+                PlayerLivesIcons[4].gameObject.SetActive(false);
+                PlayerLivesIcons[5].gameObject.SetActive(false);
+                break;
+            case 3:
+                PlayerLivesIcons[1].gameObject.SetActive(true);
+                PlayerLivesIcons[2].gameObject.SetActive(true);
+                PlayerLivesIcons[3].gameObject.SetActive(true);
+                PlayerLivesIcons[4].gameObject.SetActive(false);
+                PlayerLivesIcons[5].gameObject.SetActive(false);
+                break;
+            case 4:
+                PlayerLivesIcons[1].gameObject.SetActive(true);
+                PlayerLivesIcons[2].gameObject.SetActive(true);
+                PlayerLivesIcons[3].gameObject.SetActive(true);
+                PlayerLivesIcons[4].gameObject.SetActive(true);
+                PlayerLivesIcons[5].gameObject.SetActive(false);
+                break;
+            case 5:
+                PlayerLivesIcons[1].gameObject.SetActive(true);
+                PlayerLivesIcons[2].gameObject.SetActive(true);
+                PlayerLivesIcons[3].gameObject.SetActive(true);
+                PlayerLivesIcons[4].gameObject.SetActive(true);
+                PlayerLivesIcons[5].gameObject.SetActive(true);
+                break;
+
+        }
+        
+    }
 }
