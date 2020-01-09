@@ -273,7 +273,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
     }
 
-    private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
+    private void On_GAME_GameEnded(AbstractGameMode gameMode, bool wasAborted)
     {
         StartCoroutine(EndGameCoroutine());
     }
@@ -285,17 +285,17 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     }
 
 
-    private void On_GAME_GameUnPaused(EGameMode obj)
+    private void On_GAME_GameUnPaused(AbstractGameMode gameMode)
     {
         UpdateState(EAppState.IN_GAME_IN_RUNNING);
     }
 
-    private void On_GAME_GamePaused(EGameMode obj)
+    private void On_GAME_GamePaused(AbstractGameMode gameMode)
     {
         UpdateState(EAppState.IN_GAME_IN_PAUSED);
     }
 
-    private void On_GAME_GameStarted(EGameMode obj)
+    private void On_GAME_GameStarted(AbstractGameMode gameMode)
     {
         UpdateState(EAppState.IN_GAME_IN_RUNNING);
     }

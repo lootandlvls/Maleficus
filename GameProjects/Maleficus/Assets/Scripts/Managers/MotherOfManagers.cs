@@ -18,6 +18,11 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public bool CanDebugButtonEvents = false;
     [SerializeField] public bool CanDebugJoystickEvents = false;
 
+    [Separator("Game")]
+    [SerializeField] public bool IsUseDebugGameMode = false;
+    [ConditionalField(nameof(IsUseDebugGameMode))] [SerializeField] public EGameMode DebugGameMode = EGameMode.NONE;
+
+
     [Separator("Player")]
     [SerializeField] public bool IsSpawnPlayerOnControllerConnect = false;
     [SerializeField] public bool IsSpawnRemainingAIPlayersOnGameStart = false;

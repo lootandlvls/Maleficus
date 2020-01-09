@@ -35,44 +35,44 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #region GAME
 
-    public event Action<EGameMode> GAME_GameStarted;
-    public void Invoke_GAME_GameStarted(EGameMode gameModeStarted)
+    public event Action<AbstractGameMode> GAME_GameStarted;
+    public void Invoke_GAME_GameStarted(AbstractGameMode gameMode)
     {
         if (GAME_GameStarted != null)
         {
-            GAME_GameStarted.Invoke(gameModeStarted);
+            GAME_GameStarted.Invoke(gameMode);
         }
-        DebugLog("Game started : " + gameModeStarted);
+        DebugLog("Game started : " + gameMode.GameModeType);
     }
 
-    public event Action<EGameMode> GAME_GamePaused;
-    public void Invoke_GAME_GamePaused(EGameMode gameModePaused)
+    public event Action<AbstractGameMode> GAME_GamePaused;
+    public void Invoke_GAME_GamePaused(AbstractGameMode gameMode)
     {
         if (GAME_GamePaused != null)
         {
-            GAME_GamePaused.Invoke(gameModePaused);
+            GAME_GamePaused.Invoke(gameMode);
         }
-        DebugLog("Game paused : " + gameModePaused);
+        DebugLog("Game paused : " + gameMode.GameModeType);
     }
 
-    public event Action<EGameMode> GAME_GameUnPaused;
-    public void Invoke_GAME_GameUnPaused(EGameMode gameModeUnPaused)
+    public event Action<AbstractGameMode> GAME_GameUnPaused;
+    public void Invoke_GAME_GameUnPaused(AbstractGameMode gameMode)
     {
         if (GAME_GameUnPaused != null)
         {
-            GAME_GameUnPaused.Invoke(gameModeUnPaused);
+            GAME_GameUnPaused.Invoke(gameMode);
         }
-        DebugLog("Game unpaused : " + gameModeUnPaused);
+        DebugLog("Game unpaused : " + gameMode.GameModeType);
     }
 
-    public event Action<EGameMode, bool> GAME_GameEnded;
-    public void Invoke_GAME_GameEnded(EGameMode gameModeEnded, bool wasAborted = false)
+    public event Action<AbstractGameMode, bool> GAME_GameEnded;
+    public void Invoke_GAME_GameEnded(AbstractGameMode gameMode, bool wasAborted = false)
     {
         if (GAME_GameEnded != null)
         {
-            GAME_GameEnded.Invoke(gameModeEnded, wasAborted);
+            GAME_GameEnded.Invoke(gameMode, wasAborted);
         }
-        DebugLog("Game ended : " + gameModeEnded + ". Aborted : " + wasAborted.ToString());
+        DebugLog("Game ended : " + gameMode.GameModeType + ". Aborted : " + wasAborted.ToString());
     }
 
     public event Action<AbstractPlayerStats, EGameMode> GAME_PlayerStatsUpdated;

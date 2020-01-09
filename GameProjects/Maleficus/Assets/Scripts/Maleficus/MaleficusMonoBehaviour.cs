@@ -220,6 +220,44 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks if the 2 given enums are equal.
+    /// Prints a warning in the console if different.
+    /// </summary>
+    /// <typeparam name="E"> Type of the enum to check </typeparam>
+    /// <param name="enumToCheck1"> first enum to check </param>
+    /// <param name="enumToCheck2"> second enum to check with </param>
+    /// <returns></returns>
+    protected bool ARE_EQUAL<E>(E enumToCheck1, E enumToCheck2) where E : Enum
+    {
+        if (enumToCheck1.ToString().Equals(enumToCheck2.ToString()) == false)
+        {
+            LogConsoleWarning("Two enums of type <color=cyan>" + typeof(E) + "</color> are different! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the 2 given enums are not equal.
+    /// Prints a warning in the console if not different.
+    /// </summary>
+    /// <typeparam name="E"> Type of the enum to check </typeparam>
+    /// <param name="enumToCheck1"> first enum to check </param>
+    /// <param name="enumToCheck2"> second enum to check with </param>
+    /// <returns></returns>
+    protected bool ARE_NOT_EQUAL<E>(E enumToCheck1, E enumToCheck2) where E : Enum
+    {
+        if (enumToCheck1.ToString().Equals(enumToCheck2.ToString()) == true)
+        {
+            LogConsoleWarning("Two enums of type <color=cyan>" + typeof(E) + "</color> are NOT different! ");
+            return false;
+        }
+        return true;
+    }
+
+
+
+    /// <summary>
     /// Checks if the given dictionary contains the given key.
     /// Prints a warning in the console if key is not found.
     /// </summary>

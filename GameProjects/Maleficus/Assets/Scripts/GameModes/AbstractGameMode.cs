@@ -1,40 +1,69 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-/// <summary>
-/// Defines the rules for a specific game mode.
-/// Don't forget to define the correct game mode inside the awake of the extending children classes!
-/// </summary>
-/// <typeparam name="T"> Type of information that defines the player's stats (e.g. Reamining lives)</typeparam>
-public abstract class AbstractGameMode<T> : MonoBehaviour where T : AbstractPlayerStats, new()
+﻿public abstract class AbstractGameMode : MaleficusMonoBehaviour
 {
-    public EGameMode GameMode                       { get { return gameMode; } }
-    public Dictionary<EPlayerID, T> PlayerStats     { get { return playerStats; } }
+    public EGameMode GameModeType   { get; protected set; } = EGameMode.NONE;
+    public bool IsRunning           { get; private set; } = false;
 
-    protected EGameMode gameMode;
-    protected Dictionary<EPlayerID, T> playerStats = new Dictionary<EPlayerID, T>();
-
-
-    protected virtual void Awake()
+    protected override void Awake()
     {
-        // Define in child class correct game mode!
-        gameMode = EGameMode.NONE;
+        base.Awake();
+
+        // Define in child class corresponding game mode!
+        GameModeType = EGameMode.NONE;
     }
 
-    protected virtual void Start()
+    protected override void InitializeEventsCallbacks()
     {
-        StartCoroutine(LateStart());
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.GAME_GameStarted  += On_GAME_GameStarted;
+        EventManager.Instance.GAME_GameEnded    += On_GAME_GameEnded;
+        EventManager.Instance.GAME_GamePaused   += On_GAME_GamePaused;
+        EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
     }
 
-    private IEnumerator LateStart()
+    protected override void OnDestroy()
     {
-        yield return new WaitForEndOfFrame();
-
-        InitializePlayerStats();
+        base.OnDestroy();
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.GAME_GameStarted  -= On_GAME_GameStarted;
+            EventManager.Instance.GAME_GameEnded    -= On_GAME_GameEnded;
+            EventManager.Instance.GAME_GamePaused   -= On_GAME_GamePaused;
+            EventManager.Instance.GAME_GameUnPaused -= On_GAME_GameUnPaused;
+        }
     }
 
-    protected abstract void InitializePlayerStats();
+    protected virtual void On_GAME_GameStarted(AbstractGameMode gameMode)
+    {
+        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        {
+            IsRunning = true;
+        }
+    }
+
+    protected virtual void On_GAME_GameEnded(AbstractGameMode gameMode, bool wasAborted)
+    {
+        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        {
+            IsRunning = false;
+        }
+    }
+
+    protected virtual void On_GAME_GamePaused(AbstractGameMode gameMode)
+    {
+        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        {
+            IsRunning = false;
+        }
+    }
+
+
+    protected virtual void On_GAME_GameUnPaused(AbstractGameMode gameMode)
+    {
+        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        {
+            IsRunning = true;
+        }
+    }
 
 }

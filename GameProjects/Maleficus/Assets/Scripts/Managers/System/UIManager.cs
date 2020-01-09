@@ -144,20 +144,20 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         }
     }
 
-    private void On_GAME_GameEnded(EGameMode obj, bool wasAborted)
+    private void On_GAME_GameEnded(AbstractGameMode gameMode, bool wasAborted)
     {
         UpdateState(EMenuState.IN_GAME_OVER);
     }
-    private void On_GAME_GameUnPaused(EGameMode obj)
+    private void On_GAME_GameUnPaused(AbstractGameMode gameMode)
     {
         UpdateState(EMenuState.IN_GAME_IN_RUNNING);
     }
-    private void On_GAME_GamePaused(EGameMode obj)
+    private void On_GAME_GamePaused(AbstractGameMode gameMode)
     {
         UpdateState(EMenuState.IN_GAME_IN_PAUSED);
     }
 
-    private void On_GAME_GameStarted(EGameMode obj)
+    private void On_GAME_GameStarted(AbstractGameMode gameMode)
     {
         UpdateState(EMenuState.IN_GAME_IN_RUNNING);
     }

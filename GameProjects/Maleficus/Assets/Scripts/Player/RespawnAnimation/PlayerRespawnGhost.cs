@@ -16,6 +16,9 @@ public class PlayerRespawnGhost : MaleficusMonoBehaviour
     [SerializeField] private float heightFromSpawnPosition = 5.0f;
     [SerializeField] private float deviationFactor = 7.0f;
 
+    [SerializeField] private ParticleSystem deathEffect;
+    //[SerializeField] private ParticleSystem deathEffect;
+
     private Vector3 elevatedEndPosition;
 
     protected override void Start()

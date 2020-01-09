@@ -42,7 +42,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     /// Get all players that are connected with a controller.
     /// Warning! A connected player is not necessarily a player that has joined the game session
     /// </summary>
-    public EPlayerID[] GetConnectedPlayers()
+    public EPlayerID[] GetConnectedPlayers() // TODO Change to JoinedPlayers and get from PlayersJoinStatus instead 
     {
         return InputManager.Instance.ConnectedControllers.Values.ToArray<EPlayerID>();
     }
@@ -127,7 +127,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         FindPlayerSpawnGhost();
 
-        LogConsole("Reset active players");
         ActivePlayers.Clear();
     }
 

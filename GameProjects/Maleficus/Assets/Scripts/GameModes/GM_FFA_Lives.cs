@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Maleficus.MaleficusConsts;
 
-public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
+public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 {
-    // Should only be called directly after object construction (used in Start method)
-    public int TotalLives { get { return totalLives; } }
-
-    private int totalLives;
+    public int TotalLives { get; private set; }
 
 
     protected override void Awake()
@@ -16,9 +13,9 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         base.Awake();
 
         // Define in child class correct game mode!
-        gameMode = EGameMode.FFA_LIVES;
+        GameModeType = EGameMode.FFA_LIVES;
 
-        totalLives = PLAYER_LIVES_IN_FFA_MODE;
+        TotalLives = PLAYER_LIVES_IN_FFA_MODE;
     }
 
     protected override void Start()
@@ -29,53 +26,68 @@ public class GM_FFA_Lives : AbstractGameMode<PlayerStats_Lives>
         EventManager.Instance.SPELLS_SpellHitPlayer         += On_SPELLS_SpellHitPlayer;
     }
 
-    private void Update()
+    protected override void Update()
     {
-        foreach(PlayerStats_Lives playerStat in PlayerStats.Values)
+        base.Update();
+
+        // Debug Player stats
+        if (IsRunning)
         {
-            DebugManager.Instance.Log(103, "* " + playerStat.PlayerID + " *"
-                + "\nFrags : " + playerStat.NumberOfKilledPlayers
-                + "\nRemaining lives :" + playerStat.RemainingLives
-                + "\nNumber of hit players :" + playerStat.NumberOfHitPlayers
-                + "\nNumber of killed players :" + playerStat.NumberOfKilledPlayers
-                + "\nLast hit by : " + playerStat.LastHitBy
-                + "\n-------------------------\n"
-                );
+            foreach (PlayerStats_Lives playerStat in PlayerStats.Values)
+            {
+                DebugManager.Instance.Log(103, "* " + playerStat.PlayerID + " *"
+                    + "\nFrags : " + playerStat.NumberOfKilledPlayers
+                    + "\nRemaining lives :" + playerStat.RemainingLives
+                    + "\nNumber of hit players :" + playerStat.NumberOfHitPlayers
+                    + "\nNumber of killed players :" + playerStat.NumberOfKilledPlayers
+                    + "\nLast hit by : " + playerStat.LastHitBy
+                    + "\n-------------------------\n"
+                    );
+            }
         }
     }
 
     protected override void InitializePlayerStats()
     {
+        PlayerStats.Clear();
         foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
         {
-            playerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
+            PlayerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
         }
     }
 
     private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
+        if (IsRunning == false)
+        {
+            return;
+        }
         EPlayerID hitPlayerID = hitInfo.HitPlayerID;
         EPlayerID hitByPlayerID = hitInfo.CastingPlayerID;
         PlayerStats[hitPlayerID].SetLastHitBy(hitByPlayerID);
         PlayerStats[hitByPlayerID].IncrementNumberOfHitPlayers();
 
-        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitPlayerID], GameMode);
-        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitByPlayerID], GameMode);
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitPlayerID], GameModeType);
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitByPlayerID], GameModeType);
     }
 
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
     {
+        if (IsRunning == false)
+        {
+            return;
+        }
         // Update Killed Player stats
         PlayerStats_Lives killedPlayerStats = PlayerStats[diedPlayerID];
         killedPlayerStats.DecrementPlayerLives();
-        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayerStats, GameMode);
+        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayerStats, GameModeType);
 
         // Update Killer stats
         if (killedPlayerStats.LastHitBy != EPlayerID.NONE)
         {
             PlayerStats_Lives killingPlayer = PlayerStats[killedPlayerStats.LastHitBy];
             killingPlayer.IncrementNumberOfKilledPlayers();
-            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameMode);
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameModeType);
         }
 
         // Respawn Killed Player

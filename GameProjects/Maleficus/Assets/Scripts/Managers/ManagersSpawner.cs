@@ -40,6 +40,9 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsConnectControllerInAnyState = IsConnectControllerInAnyState;
             managersInstance.CanDebugButtonEvents = CanDebugButtonEvents;
             managersInstance.CanDebugJoystickEvents = CanDebugJoystickEvents;
+            // Game
+            managersInstance.IsUseDebugGameMode = IsUseDebugGameMode;
+            managersInstance.DebugGameMode = DebugGameMode;
             // Player
             managersInstance.IsSpawnPlayerOnControllerConnect = IsSpawnPlayerOnControllerConnect;
             managersInstance.IsSpawnRemainingAIPlayersOnGameStart = IsSpawnRemainingAIPlayersOnGameStart;

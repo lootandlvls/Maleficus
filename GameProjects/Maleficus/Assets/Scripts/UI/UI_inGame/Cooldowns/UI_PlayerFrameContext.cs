@@ -31,10 +31,20 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         {
             PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
         }
-        //Update the lives depending on the game mode
-        UpdateLives(1);
     }
 
+    protected override void Start()
+    {
+        base.Start();
+
+        switch (GameManager.Instance.ChosenGameModeType)
+        {
+            case EGameMode.FFA_LIVES:
+                GM_FFA_Lives gM_FFA_Lives = (GM_FFA_Lives)GameManager.Instance.CurrentGameMode;
+                UpdateLives(gM_FFA_Lives.TotalLives);
+                break;
+        }
+    }
 
     private void On_SpellSpawned(ISpell spell, EPlayerID playerID, ESpellSlot spellSlot)
     {

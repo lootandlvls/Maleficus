@@ -1,12 +1,24 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : AbstractSingletonManager<GameManager>
-{                    
-    private EGameMode currentGameMode;
+{
+    public AbstractGameMode CurrentGameMode { get; private set; }
+    public EGameMode ChosenGameModeType { get; private set; }
 
+    protected override void Start()
+    {
+        base.Start();
+
+        if (MotherOfManagers.Instance.IsUseDebugGameMode == true)
+        {
+            ChosenGameModeType = MotherOfManagers.Instance.DebugGameMode;
+            if (SpawnChosenGameMode() == false)
+            {
+                LogConsoleError("Was not able to spawn GameMode for : " + ChosenGameModeType);
+            }
+        }
+    }
 
     protected override void InitializeEventsCallbacks()
     {
@@ -18,7 +30,70 @@ public class GameManager : AbstractSingletonManager<GameManager>
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver); // TODO : Not clean! use public OnGameOver method instead
     }
 
+    protected override void OnReinitializeManager()
+    {
+        base.OnReinitializeManager();
 
+        FindAndBindButtonActions();
+    }
+
+    #region Game Actions
+
+    /// <summary>
+    /// Returns true if succeeded spawning a valid GameMode, otherwise false
+    /// </summary>
+    private bool SpawnChosenGameMode()
+    {
+        switch (ChosenGameModeType)
+        {
+            case EGameMode.FFA_LIVES:
+                CurrentGameMode = gameObject.AddComponent<GM_FFA_Lives>();
+                break; 
+
+            case EGameMode.FFA_TIME:
+
+                break;
+
+            case EGameMode.INSANE:
+
+                break;
+
+            case EGameMode.DUNGEON:
+                CurrentGameMode = gameObject.AddComponent<GM_Single_Dungeon>();          
+                break;
+        }
+        if ((IS_NOT_NULL(CurrentGameMode))
+           && (ARE_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
+        {
+            LogConsole("Spawned : " + ChosenGameModeType);
+            return true;
+        }
+        return false;
+    }
+
+
+    private void PauseOrUnpauseGame()
+    {
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        {
+            EventManager.Instance.Invoke_GAME_GamePaused(CurrentGameMode);
+        }
+        else if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_PAUSED)
+        {
+            EventManager.Instance.Invoke_GAME_GameUnPaused(CurrentGameMode);
+        }
+    }
+
+    private void EndGame(bool wasAborted = false)
+    {
+        // Invoke event
+        EventManager.Instance.Invoke_GAME_GameEnded(CurrentGameMode, wasAborted);
+    }
+
+    #endregion
+
+
+    #region Event Callbacks 
     //public void OnGameOver<T>(AbstractGameMode<T> gameMode, ETeamID teamID) where T: AbstractPlayerStats
     //{
 
@@ -42,123 +117,44 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
-        Debug.Log("[GAME_LOOP_FIX] Game started event");
-
-        StartGame(EGameMode.FFA_LIVES);
-    }
-
-
-
-    protected override void OnReinitializeManager()
-    {
-        base.OnReinitializeManager();
-
-        FindAndBindButtonActions();
-    }
-
-
-
-    #region Game Actions
-    private void StartGame(EGameMode gameModeToStart)
-    {
-        currentGameMode = gameModeToStart;
-
-        switch (gameModeToStart)
+        if ((IS_NOT_NULL(CurrentGameMode))
+            && (ARE_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
         {
-            case EGameMode.FFA_LIVES:
-                Debug.Log("[GAME_LOOP_FIX] Starting GM_FFA_Lives");
-                gameObject.AddComponent<GM_FFA_Lives>();          
-                break; 
-
-            case EGameMode.FFA_TIME:
-
-                break;
-
-            case EGameMode.INSANE:
-
-                break;
-
-            case EGameMode.DUNGEON:
-                gameObject.AddComponent<GM_Single_Dungeon>();          
-
-                break;
-        }
-
-        EventManager.Instance.Invoke_GAME_GameStarted(currentGameMode);
-    }
-
-
-    private void PauseOrUnpauseGame()
-    {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
-        {
-            EventManager.Instance.Invoke_GAME_GamePaused(currentGameMode);
-        }
-        else if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_PAUSED)
-        {
-            EventManager.Instance.Invoke_GAME_GameUnPaused(currentGameMode);
+            EventManager.Instance.Invoke_GAME_GameStarted(CurrentGameMode);
         }
     }
 
-    private void EndGame(bool wasAborted = false)
-    {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
-        {
-            EventManager.Instance.Invoke_GAME_GameEnded(currentGameMode, wasAborted);
-        }
-    }
-
-    #endregion
-
-
-    #region Event Callbacks 
     private void ON_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
-        EndGame();
-        //Todo change back to enable other game modes
-        EGameMode gameMode = EGameMode.FFA_LIVES;
-                                                                                    // TODO Show player stats according to game mode
-        switch (gameMode)
+        if (ARE_EQUAL(AppStateManager.Instance.CurrentState, EAppState.IN_GAME_IN_RUNNING))
         {
-            case EGameMode.FFA_LIVES:
-                GM_FFA_Lives gameModeInstanceFFA = GetComponent<GM_FFA_Lives>();
-                Dictionary<EPlayerID, PlayerStats_Lives> playerStatsFFA = gameModeInstanceFFA.PlayerStats;
-
-
-                Destroy(gameModeInstanceFFA);
-                break;
-
-            case EGameMode.DUNGEON:
-                GM_Single_Dungeon gameModeInstanceDungeon = GetComponent<GM_Single_Dungeon>();
-                Dictionary<EPlayerID, PlayerStats_Dungeon> playerStatsDungeon = gameModeInstanceDungeon.PlayerStats;
-
-
-                Destroy(gameModeInstanceDungeon);
-                break;
+            EndGame();
         }
     }
+
+
     #endregion
 
     private void FindAndBindButtonActions()
     {
         /* In GAME */
-        StartTestGameAction[] startTestGameActions = FindObjectsOfType<StartTestGameAction>();
-        foreach (StartTestGameAction action in startTestGameActions)
-        {
-            action.ActionButtonPressed += () =>
-            {
-                StartGame(EGameMode.FFA_LIVES);
-            };
-        }
+        //StartTestGameAction[] startTestGameActions = FindObjectsOfType<StartTestGameAction>();
+        //foreach (StartTestGameAction action in startTestGameActions)
+        //{
+        //    action.ActionButtonPressed += () =>
+        //    {
+        //        StartGame(EGameMode.FFA_LIVES);
+        //    };
+        //}
 
-        StartDungeonSingleGame[] startDungeonSingleGameActions = FindObjectsOfType<StartDungeonSingleGame>();
-        foreach (StartDungeonSingleGame action in startDungeonSingleGameActions)
-        {
-            action.ActionButtonPressed += () =>
-            {
-                StartGame(EGameMode.DUNGEON);
-            };
-        }
+        //StartDungeonSingleGame[] startDungeonSingleGameActions = FindObjectsOfType<StartDungeonSingleGame>();
+        //foreach (StartDungeonSingleGame action in startDungeonSingleGameActions)
+        //{
+        //    action.ActionButtonPressed += () =>
+        //    {
+        //        StartGame(EGameMode.DUNGEON);
+        //    };
+        //}
 
         //StartGameAction[] startGameActions = FindObjectsOfType<StartGameAction>();
         //foreach (StartGameAction action in startGameActions)

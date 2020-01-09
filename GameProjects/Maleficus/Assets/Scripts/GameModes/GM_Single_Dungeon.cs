@@ -1,31 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static Maleficus.MaleficusConsts;
 
-public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
+public class GM_Single_Dungeon : ConcreteGameMode<PlayerStats_Dungeon>
 {
     // Should only be called directly after object construction (used in Start method)
-    public int TotalLives { get { return totalLives; } }
-    public int TotalItemsToCollect { get { return totalItemsToCollect; } }
-
-    private int totalLives = 10;
-    private int totalItemsToCollect = 3;
-
+    public int TotalLives               { get; private set; } = 10;
+    public int TotalItemsToCollect      { get; private set; } = 3;
 
     protected override void Awake()
     {
         base.Awake();
 
         // Define in child class correct game mode!
-        gameMode = EGameMode.DUNGEON;
+        GameModeType = EGameMode.DUNGEON;
     }
-
 
     protected override void Start()
     {
-        totalItemsToCollect = CoinManager.Instance.NumberOfCoins;
-        totalLives = PLAYER_LIVES_IN_DUNGEON_MODE;
+        TotalItemsToCollect = CoinManager.Instance.NumberOfCoins;
+        TotalLives = PLAYER_LIVES_IN_DUNGEON_MODE;
 
         base.Start();
 
@@ -35,9 +31,38 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         EventManager.Instance.ENEMIES_WaveCompleted += On_ENEMIES_WaveCompleted;
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (IsRunning)
+        {
+            foreach (PlayerStats_Dungeon playerStat in PlayerStats.Values)
+            {
+                DebugManager.Instance.Log(103, "* " + playerStat.PlayerID + " *"
+                    + "\nFrags : " + playerStat.NumberOfKilledEnemies
+                    + "\nRemaining lives :" + playerStat.RemainingLives
+                    + "\nNumber of remaining items :" + playerStat.RemainingNumberOfCollectedItems
+                    + "\n-------------------------\n"
+                    );
+            }
+        }
+    }
+
+    protected override void InitializePlayerStats()
+    {
+        foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
+        {
+            PlayerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
+        }
+    }
+
     private void On_ENEMIES_WaveCompleted(int waveIndex)
     {
-        if (waveIndex == totalItemsToCollect)
+        if (IsRunning == false)
+        {
+            return;
+        }
+        if (waveIndex == TotalItemsToCollect)
         {
             ETeamID teamID = ETeamID.NONE;
             EClientID clientID = NetworkManager.Instance.OwnerClientID;
@@ -49,31 +74,43 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
 
     private void On_PLAYERS_PlayerCollectedCoin()
     {
-        foreach (PlayerStats_Dungeon playerStat in playerStats.Values)
+        if (IsRunning == false)
+        {
+            return;
+        }
+        foreach (PlayerStats_Dungeon playerStat in PlayerStats.Values)
         {
             playerStat.DecrementNumberOfRemainingCoinsToCollect();
 
-            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameMode);
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameModeType);
         }
     }
 
     private void On_ENEMIES_EnemyDied(IEnemy diedEnemy)
     {
-        foreach (PlayerStats_Dungeon playerStat in playerStats.Values)
+        if (IsRunning == false)
+        {
+            return;
+        }
+        foreach (PlayerStats_Dungeon playerStat in PlayerStats.Values)
         {
             playerStat.IncrementNumberOfKilledEnemies();
 
-            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameMode);
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameModeType);
         }
     }
 
     private void On_ENEMIES_EnemyAttackedPlayer(IEnemy attackingEnemy)
     {
-        foreach (PlayerStats_Dungeon playerStat in playerStats.Values)
+        if (IsRunning == false)
+        {
+            return;
+        }
+        foreach (PlayerStats_Dungeon playerStat in PlayerStats.Values)
         {
             playerStat.DecrementPlayerLives();
 
-            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameMode);
+            EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(playerStat, GameModeType);
 
             // Check if player is dead
             if (playerStat.IsGameOver == true)
@@ -86,26 +123,5 @@ public class GM_Single_Dungeon : AbstractGameMode<PlayerStats_Dungeon>
         }
     }
 
-    private void Update()
-    {
-        foreach (PlayerStats_Dungeon playerStat in PlayerStats.Values)
-        {
-            DebugManager.Instance.Log(103, "* " + playerStat.PlayerID + " *"
-                + "\nFrags : " + playerStat.NumberOfKilledEnemies
-                + "\nRemaining lives :" + playerStat.RemainingLives
-                + "\nNumber of remaining items :" + playerStat.RemainingNumberOfCollectedItems
-                + "\n-------------------------\n"
-                );
-        }
-    }
-
-
-    protected override void InitializePlayerStats()
-    {
-        foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
-        {
-            playerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
-        }
-    }
 }
 
