@@ -219,7 +219,6 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 AbstractSpell chosenSpell = SpellManager.Instance.GetChosenSpell(PlayerID, spellSlot);
                 if (IS_NOT_NULL(chosenSpell))
                 {
-                    LogConsole(PlayerID + " - " + spellSlot + " : " + chosenSpell.name);
                     SpellCooldown[spellSlot] = chosenSpell.Cooldown;
                     SpellDuration[spellSlot] = chosenSpell.CastingDuration;
                 }

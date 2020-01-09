@@ -42,7 +42,6 @@ public abstract class AbstractManager : MaleficusMonoBehaviour
 
     protected virtual void OnReinitializeManager()
     {
-        LogConsole("Reinitializing manager");
         // Define in specification
     }
 

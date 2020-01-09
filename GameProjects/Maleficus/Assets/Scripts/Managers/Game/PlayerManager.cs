@@ -9,8 +9,7 @@ using static Maleficus.MaleficusConsts;
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
     /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
-    /// <summary> Reference to all player prefabs to be spawned. </summary>
-    public Dictionary<EPlayerID, Player> PlayerPrefabs { get; } = new Dictionary<EPlayerID, Player>();
+
 
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
     public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions { get; } = new Dictionary<EPlayerID, PlayerSpawnPosition>();
@@ -31,6 +30,13 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     /// <summary> The join status of player that have connected with a controllers </summary>
     public Dictionary<EPlayerID, PlayerJoinStatus> PlayersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
+
+    private Dictionary<EPlayerID, Vector3> PlayersDeathPositions = new Dictionary<EPlayerID, Vector3>();
+    private Dictionary<EPlayerID, Quaternion> PlayersDeathRotations = new Dictionary<EPlayerID, Quaternion>();
+
+    private Dictionary<EPlayerID, Player> playersPrefabs { get; } = new Dictionary<EPlayerID, Player>();
+    private PlayerSpawnPosition playerSpawnPositionPrefab;
+    private PlayerRespawnGhost playerRespawnGhostPrefab;
 
     /// <summary>
     /// Get all players that are connected with a controller.
@@ -60,7 +66,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return false;
     }
 
-    // TODO: Add a list of active Coroutines for every player to stop when he dies
     protected override void Awake()
     {
         base.Awake();
@@ -116,8 +121,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
 
 
-
-
     protected override void OnReinitializeManager()
     {
         base.OnReinitializeManager();
@@ -141,7 +144,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
             if (ActivePlayers.ContainsKey(playerID) == false)
             {
-                Player playerPrefab = PlayerPrefabs[playerID];
+                Player playerPrefab = playersPrefabs[playerID];
                 PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[playerID];
                 Vector3 playerPosition = playerSpawnPosition.Position;
                 Quaternion playerRotation = playerSpawnPosition.Rotation;
@@ -150,7 +153,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 spawnedPlayer.PlayerID = playerID;
                 spawnedPlayer.TeamID = PlayersTeam[playerID];
 
-                LogConsole("Adding " + playerID);
                 ActivePlayers.Add(playerID, spawnedPlayer);
 
                 // Place player under parent of SpawnPosition
@@ -159,13 +161,75 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     spawnedPlayer.transform.parent = playerSpawnPosition.transform.parent;
                 }
 
-                LogConsole("Spawn player : " + playerID);
-
                 EventManager.Instance.Invoke_PLAYERS_PlayerSpawned(playerID);
             }
             else
             {
                 Debug.LogWarning("Trying to spawn a player that is still active");
+            }
+        }
+    }
+
+    public void RespawnPlayer(EPlayerID playerID)
+    {
+        if ((IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
+            && (IS_KEY_CONTAINED(PlayersDeathPositions, playerID))
+            && (IS_KEY_CONTAINED(PlayersDeathRotations, playerID))
+            && (IS_KEY_CONTAINED(PlayersSpawnPositions, playerID)))
+        {
+            Vector3 startPostion = PlayersDeathPositions[playerID];
+            Quaternion startRotation = PlayersDeathRotations[playerID];
+            Vector3 endPosition = PlayersSpawnPositions[playerID].Position;
+            Quaternion endRotation = PlayersSpawnPositions[playerID].Rotation;
+
+            PlayerRespawnGhost playerRespawnGhost = Instantiate(playerRespawnGhostPrefab, startPostion, startRotation);
+            playerRespawnGhost.PlayerID = playerID;
+            playerRespawnGhost.RespawnAnimationDone += On_RespawnAnimationDone;
+            playerRespawnGhost.StartRespawnAnimation(startPostion, startRotation, endPosition, endRotation);
+        }
+    }
+
+    private void DestroyPlayer(EPlayerID playerID)
+    {
+        if (IS_KEY_CONTAINED(ActivePlayers, playerID))
+        {
+            Player player = ActivePlayers[playerID];
+            if ((IS_KEY_CONTAINED(PlayersDeathPositions, playerID))
+                && (IS_KEY_CONTAINED(PlayersDeathRotations, playerID)))
+            {
+                PlayersDeathPositions[playerID] = player.Position;
+                PlayersDeathRotations[playerID] = player.Rotation;
+            }
+
+            ActivePlayers.Remove(playerID);
+            player.DestroyPlayer();
+            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
+        }
+    }
+
+    private void SpawnAllJoinedPlayers()
+    {
+        foreach (EPlayerID playerID in PlayersJoinStatus.Keys)
+        {
+            if ((PlayersJoinStatus[playerID].HasJoined == true)
+                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+            {
+                SpawnPlayer(playerID);
+            }
+        }
+    }
+
+    private void SpawnRemaningAIPlayers()
+    {
+        foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
+        {
+            EControllerID controllerID = pair.Key;
+            EPlayerID playerID = pair.Value;
+
+            if ((controllerID.ContainedIn(AI_CONTROLLERS))
+                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+            {
+                SpawnPlayer(playerID);
             }
         }
     }
@@ -219,13 +283,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
         ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
 
-        LogConsole(playerID + " - " + ActivePlayers.ContainsKey(playerID));
-
         if ((spellSlot != ESpellSlot.NONE)
             && (ActivePlayers.ContainsKey(playerID) == true))
         {
             AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
-            LogConsole(playerID + " - Spawn : " + spell.name);
             if (IS_NOT_NULL(spell))
             {
                 // Instantiate spell now ?
@@ -347,6 +408,20 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             SpawnAllJoinedPlayers();
         }
     }
+
+    public void OnPlayerOutOfBound(EPlayerID playerID)
+    {
+        DestroyPlayer(playerID);
+    }
+
+    private void On_RespawnAnimationDone(PlayerRespawnGhost playerRespawnGhost)
+    {
+        playerRespawnGhost.RespawnAnimationDone -= On_RespawnAnimationDone;
+
+        LogConsole(playerRespawnGhost.PlayerID + " completed respawn animation");
+        SpawnPlayer(playerRespawnGhost.PlayerID);
+        playerRespawnGhost.DestroyGhost();
+    }
     #endregion
 
     #region Initialization
@@ -359,20 +434,37 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         Teams[ETeamID.TEAM_4] = new List<EPlayerID>();
 
         PlayersTeam.Clear();
-        PlayersTeam[EPlayerID.PLAYER_1] = ETeamID.NONE;
-        PlayersTeam[EPlayerID.PLAYER_2] = ETeamID.NONE;
-        PlayersTeam[EPlayerID.PLAYER_3] = ETeamID.NONE;
-        PlayersTeam[EPlayerID.PLAYER_4] = ETeamID.NONE;
+        PlayersDeathPositions.Clear();
+        PlayersDeathRotations.Clear();
+        foreach (EPlayerID playerID in Enum.GetValues(typeof(EPlayerID)))
+        {
+            if (playerID != EPlayerID.NONE)
+            {
+                PlayersTeam.Add(playerID, ETeamID.NONE);
+                PlayersDeathPositions.Add(playerID, Vector3.zero);
+                PlayersDeathRotations.Add(playerID, Quaternion.identity);
+            }
+        }
     }
 
 
     private void LoadPlayerResources()
     {
-        PlayerPrefabs.Clear();
-        PlayerPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
-        PlayerPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
+        playersPrefabs.Clear();
+        playersPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
+        playersPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
+        playersPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
+        playersPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_1]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_2]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_3]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_4]);
+
+        playerSpawnPositionPrefab = Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION);
+        IS_NOT_NULL(playerSpawnPositionPrefab);
+
+        playerRespawnGhostPrefab = Resources.Load<PlayerRespawnGhost>(PATH_PLAYER_RESPAWN_GHOST);
+        IS_NOT_NULL(playerRespawnGhostPrefab);
     }
 
     private void FindPlayerSpawnGhost()
@@ -396,7 +488,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 EPlayerID playerID = GetPlayerIDFrom(i);
                 if (PlayersSpawnPositions.ContainsKey(playerID) == false)
                 {
-                    PlayerSpawnPosition spawnGhost = Instantiate(Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION));
+                    PlayerSpawnPosition spawnGhost = Instantiate(playerSpawnPositionPrefab);
                     spawnGhost.ToSpawnPlayerID = playerID;
                     spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
                     spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
@@ -409,32 +501,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #endregion
 
 
-    private void SpawnAllJoinedPlayers()
-    {
-        foreach (EPlayerID playerID in PlayersJoinStatus.Keys)
-        {
-            if ((PlayersJoinStatus[playerID].HasJoined == true)
-                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
-            {
-                SpawnPlayer(playerID);
-            }
-        }
-    }
-
-    private void SpawnRemaningAIPlayers()
-    {
-        foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
-        {
-            EControllerID controllerID = pair.Key;
-            EPlayerID playerID = pair.Value;
-
-            if ((controllerID.ContainedIn(AI_CONTROLLERS))
-                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
-            {
-                SpawnPlayer(playerID);
-            }
-        }
-    }
 
     public JoystickInput GetPlayerInput(EPlayerID playerID)
     {
@@ -486,25 +552,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     }
 
-    public void OnPlayerOutOfBound(EPlayerID playerID)
-    {
-        if (ActivePlayers.ContainsKey(playerID))
-        {
-            StartCoroutine(DestroyPlayerCoroutine(playerID));
-        }
-    }
 
-    private IEnumerator DestroyPlayerCoroutine(EPlayerID playerID)
-    {
-        yield return new WaitForSeconds(PLAYER_FALLING_TIME);
-        if (ActivePlayers.ContainsKey(playerID))
-        {
-            Player playerToDestroy = ActivePlayers[playerID];
-            ActivePlayers.Remove(playerID);
-            playerToDestroy.DestroyPlayer();
-            EventManager.Instance.Invoke_PLAYERS_PlayerDied(playerID);
-        }
-    }
 
     private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {

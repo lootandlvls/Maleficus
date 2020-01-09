@@ -49,7 +49,7 @@ public class MaleficusEvent<H> where H : AbstractEventHandle
                     && (debugMessage != "")
                     && (debugEvent == true))
                 {
-                    Debug.Log("[EVENT] " + Name + " : " + debugMessage);
+                    Debug.Log("<color=green>[EVENT]</color> " + Name + " : " + debugMessage);
                 }
 
                 // Invoke event to all local listeners

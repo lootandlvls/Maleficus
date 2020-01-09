@@ -211,7 +211,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
         {
             SPELLS_SpellHitPlayer.Invoke(hitInfo);
         }
-        Debug.Log(hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
+        DebugLog(hitInfo.CastedSpell.SpellName + " from player " + hitInfo.CastingPlayerID + " hit player " + hitInfo.HitPlayerID);
     }
 
     public event Action<IEnemy> SPELLS_SpellHitEnemy;
@@ -372,7 +372,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
     {
         if (MotherOfManagers.Instance.IsDebugLogEvents == true)
         {
-            Debug.Log("[EVENT (old)] " + messageLog);
+            Debug.Log("<color=green>[EVENT (old)]</color> " + messageLog);
         }
     }
 
