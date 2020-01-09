@@ -12,14 +12,25 @@ public class PlayerRespawnGhost : MaleficusMonoBehaviour
 
     [SerializeField] private AnimationCurve speedCurve;
     [SerializeField] private AnimationCurve deviationCurve;
-    [SerializeField] private float animationLength = 3.0f;
+    [SerializeField] private float animationLength_FirstSection = 3.0f;
+    [SerializeField] private float animationLength_Secondsection = 2.0f;
     [SerializeField] private float heightFromSpawnPosition = 5.0f;
     [SerializeField] private float deviationFactor = 7.0f;
 
-    [SerializeField] private ParticleSystem deathEffect;
-    //[SerializeField] private ParticleSystem deathEffect;
+    [SerializeField] private GameObject deathEffect;
+    [SerializeField] private GameObject chanelingEffect;
 
     private Vector3 elevatedEndPosition;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (deathEffect != null)
+        {
+            Instantiate(deathEffect, transform.position, transform.rotation);
+        }
+    }
 
     protected override void Start()
     {
@@ -33,10 +44,10 @@ public class PlayerRespawnGhost : MaleficusMonoBehaviour
 
     public void StartRespawnAnimation(Vector3 startPosition, Quaternion startRotation, Vector3 endPosition, Quaternion endRotation)
     {
-        StartCoroutine(RespawnAnimationCoroutine(startPosition, startRotation, endPosition, endRotation));
+        StartCoroutine(PlayFirstSectionAnimationCoroutine(startPosition, startRotation, endPosition, endRotation));
     }
 
-    private IEnumerator RespawnAnimationCoroutine(Vector3 startPosition, Quaternion startRotation, Vector3 endPosition, Quaternion endRotation)
+    private IEnumerator PlayFirstSectionAnimationCoroutine(Vector3 startPosition, Quaternion startRotation, Vector3 endPosition, Quaternion endRotation)
     {
         elevatedEndPosition = new Vector3
         {
@@ -49,7 +60,7 @@ public class PlayerRespawnGhost : MaleficusMonoBehaviour
         float progressionPercentage = 0.0f;
         while (progressionPercentage < 1.0f)
         {
-            progressionPercentage = (Time.time - startTime) / animationLength;
+            progressionPercentage = (Time.time - startTime) / animationLength_FirstSection;
             progressionPercentage = Mathf.Clamp(progressionPercentage, 0.0f, 1.0f);
 
             float speedAlpha = speedCurve.Evaluate(progressionPercentage);
@@ -59,6 +70,28 @@ public class PlayerRespawnGhost : MaleficusMonoBehaviour
             Vector3 newPosition = Vector3.Lerp(startPosition, elevatedEndPosition, speedAlpha);
             newPosition += Vector3.up * deviationFactor * deviationAlpha;
 
+            transform.position = newPosition;
+
+            transform.rotation = Quaternion.Lerp(startRotation, endRotation, speedAlpha);
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        StartCoroutine(PlaySecondSectionAnimationCoroutine(transform.position, transform.rotation, endPosition, endRotation));
+    }
+
+    private IEnumerator PlaySecondSectionAnimationCoroutine(Vector3 startPosition, Quaternion startRotation, Vector3 endPosition, Quaternion endRotation)
+    {
+        float startTime = Time.time;
+        float progressionPercentage = 0.0f;
+        while (progressionPercentage < 1.0f)
+        {
+            progressionPercentage = (Time.time - startTime) / animationLength_Secondsection;
+            progressionPercentage = Mathf.Clamp(progressionPercentage, 0.0f, 1.0f);
+
+            float speedAlpha = speedCurve.Evaluate(progressionPercentage);
+
+            Vector3 newPosition = Vector3.Lerp(startPosition, endPosition, speedAlpha);
             transform.position = newPosition;
 
             transform.rotation = Quaternion.Lerp(startRotation, endRotation, speedAlpha);

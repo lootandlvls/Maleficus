@@ -78,8 +78,6 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
     private void UpdateLives(int remainingLives)
     {
-
-        Debug.Log("lives updated Remaining Live = " + remainingLives);
         switch (remainingLives)
         {
             case 0:
