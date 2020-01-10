@@ -51,7 +51,7 @@ public class Linear_Hit : AbstractSpell
 
         if (shield == null)
         {
-            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
+            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
             {
                 Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.GetIntFrom(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.GetIntFrom(otherPlayer.PlayerID));
                 ProcessHits(otherPlayer);

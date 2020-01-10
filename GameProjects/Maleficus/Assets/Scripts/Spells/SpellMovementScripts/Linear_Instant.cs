@@ -10,7 +10,7 @@ public class Linear_Instant : AbstractSpell
         direction = transform.TransformDirection(movingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
 
-        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
+        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
         {
             ProcessHits(otherPlayer);
         }

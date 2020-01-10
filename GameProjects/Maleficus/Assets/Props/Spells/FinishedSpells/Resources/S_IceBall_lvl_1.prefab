@@ -65,11 +65,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   hitPower: 20
   speed: 800
-  spellName: S_IceBall
+  spellName: Ice Ball
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 0

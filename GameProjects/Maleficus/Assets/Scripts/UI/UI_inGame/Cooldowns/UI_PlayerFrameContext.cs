@@ -44,6 +44,7 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
                 UpdateLives(gM_FFA_Lives.TotalLives);
                 break;
         }
+        InitializeSpellsIcons();
     }
 
     private void On_SpellSpawned(ISpell spell, EPlayerID playerID, ESpellSlot spellSlot)
@@ -127,5 +128,13 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
         }
         
+    }
+
+    private void InitializeSpellsIcons()
+    {
+        spellCooldownsIcons[ESpellSlot.SPELL_1].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_1].SpellIcon;
+        spellCooldownsIcons[ESpellSlot.SPELL_2].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_2].SpellIcon;
+        spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_3].SpellIcon;
+
     }
 }

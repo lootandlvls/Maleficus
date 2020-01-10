@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class UI_SpellCooldowns : MaleficusMonoBehaviour
 {
 
-    private Image spellIcon;
+    public Image SpellIcon { get { return spellIcon; } }
     public ESpellSlot SpellSlot { get { return spellSlot; } }
+
     [SerializeField] ESpellSlot spellSlot;
+    [SerializeField] Image spellIcon ;
 
     protected override void InitializeEventsCallbacks()
     {
@@ -42,5 +44,7 @@ public class UI_SpellCooldowns : MaleficusMonoBehaviour
         }
 
     }
+
+   
 
 }

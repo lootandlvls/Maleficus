@@ -54,7 +54,7 @@ public class Traps : AbstractSpell
                     hitEnemies.Add(otherEnemy);
 
                 }
-                if (otherPlayer != null)
+                if (otherPlayer != null &&   collider.tag == "Player")
                 {
                     if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
                     {

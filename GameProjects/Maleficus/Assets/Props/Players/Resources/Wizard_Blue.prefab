@@ -7,23 +7,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1505730576139328073, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1fa0a1571d389254caacee3ef88d0b94, type: 2}
     - target: {fileID: 1515304141566281053, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: m_Name
       value: Wizard_Blue
       objectReference: {fileID: 0}
-    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
+    - target: {fileID: 1515304141566281053, guid: c54733bccde00434389154d36c388460,
         type: 3}
-      propertyPath: spellSlot_1
-      value: 
-      objectReference: {fileID: 1369919918315290314, guid: 739d238671aaa334a8b1a907a756dd07,
-        type: 3}
-    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
-        type: 3}
-      propertyPath: spellSlot_3
-      value: 
-      objectReference: {fileID: 1046419516417460918, guid: 7204a205bc9444e449a6f8ae15b17268,
-        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 1516624554419814651, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -79,10 +77,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1505730576139328073, guid: c54733bccde00434389154d36c388460,
+    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: spellSlot_1
       value: 
-      objectReference: {fileID: 2100000, guid: 1fa0a1571d389254caacee3ef88d0b94, type: 2}
+      objectReference: {fileID: 1369919918315290314, guid: 739d238671aaa334a8b1a907a756dd07,
+        type: 3}
+    - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: spellSlot_3
+      value: 
+      objectReference: {fileID: 1046419516417460918, guid: 7204a205bc9444e449a6f8ae15b17268,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c54733bccde00434389154d36c388460, type: 3}
