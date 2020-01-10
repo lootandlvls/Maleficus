@@ -14444,11 +14444,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   hitPower: 10
   speed: 1000
-  spellName: 
+  spellName: Rapidfire Plasma
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1

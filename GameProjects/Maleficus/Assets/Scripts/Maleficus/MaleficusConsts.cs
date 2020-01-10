@@ -11,6 +11,8 @@ namespace Maleficus
     {
         /* GameObjects Tags */
         public const string TAG_SPELL_HITTABLE = "SpellHittable";
+        public const string TAG_SPELL_UNHITTABLE = "UnHittable";
+        public const string TAG_PLAYER = "Player";
 
         /* Scene names (in build settings) */
         public const string SCENE_ENTRY = "ENTRY";
@@ -38,7 +40,7 @@ namespace Maleficus
         public const string PATH_EFFECT_FROZEN = "E_Snowman";
         public const string PATH_EFFECT_CHARGING_BODYENERGY = "BodyEnergyEffect";
         public const string PATH_EFFECT_CHARGING_WANDENERGY = "WandEnergyEffect";
-
+        public const string PATH_EFFECT_UNHITTABLE = "E_UnhittableEffect";
         public const int NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE = 3;
 
         /* Player characters paths */

@@ -12,7 +12,7 @@ public class Linear_Laser : AbstractSpell
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
 
-        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID))
+        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
         {
             ProcessHits(otherPlayer);
 

@@ -100,7 +100,7 @@ public class Parabolic_Explosive : AbstractSpell
         List<IPlayer> hitPlayers = new List<IPlayer>();
         while (i < hitColliders.Length)
         {
-            if ((hitColliders[i] != null) && hitColliders[i].tag == "Player1")
+            if ((hitColliders[i] != null) && hitColliders[i].tag == "Player")
             {
                 IPlayer otherPlayer = hitColliders[i].gameObject.GetComponent<IPlayer>();
                 AbstractSpell abstractSpell = this.GetComponent<AbstractSpell>();

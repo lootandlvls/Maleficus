@@ -19187,13 +19187,13 @@ MonoBehaviour:
   logCategoriesToIgnore: []
   hitPower: 40
   speed: 10
-  spellName: 
+  spellName: Energy Ball
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 0
   spell: 0
   isChargeable: 0
-  spellIcon: {fileID: 0}
+  spellIcon: {fileID: 21300000, guid: 9e7cb15b8e52732419b368e0ff3a19ce, type: 3}
   skillPoint: 0
   isTripleCast: 0
   movementType: 0

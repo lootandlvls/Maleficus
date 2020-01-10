@@ -4885,11 +4885,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   hitPower: 19
   speed: 800
-  spellName: FireBall_lvl_
+  spellName: FireBall
   spellLevel: 1
   OnSelfEffect: 0
   hasPushPower: 1

@@ -19173,11 +19173,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   hitPower: 15
   speed: 600
-  spellName: 
+  spellName: Plasma Fission
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1

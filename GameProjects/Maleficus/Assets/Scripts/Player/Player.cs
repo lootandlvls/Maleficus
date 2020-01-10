@@ -59,11 +59,19 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        //TODO: only activate after respawn
+        StartCoroutine(UnhittableCoroutine());
+   
+
+    }
     protected override void Start()
     {
         base.Start();
 
-        IsReadyToShoot = true;
+        IsReadyToShoot = false;
         IsPlayerCharging = false;
 
         InitializeDictionaries();
@@ -472,5 +480,20 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         }
 
         return myGrandParentTransform;
+    }
+
+
+   private IEnumerator UnhittableCoroutine()
+    {
+        this.tag = "Unhittable";
+       
+        GameObject visualEffects = Resources.Load<GameObject>(Maleficus.MaleficusConsts.PATH_EFFECT_UNHITTABLE);
+        GameObject effect = Instantiate(visualEffects, transform.position, transform.rotation);
+        effect.transform.parent = this.transform;
+        Debug.Log("Player Unhittable");
+        yield return new WaitForSeconds(3);
+        this.tag = "Player";
+        IsReadyToShoot = true;
+        Debug.Log("Player hittable");
     }
 }

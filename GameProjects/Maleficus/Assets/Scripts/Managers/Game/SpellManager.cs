@@ -20,7 +20,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject paralyzeEffect;
 
-    private Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> playersChosenSpells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
+    public Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> playersChosenSpells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
     // PlayerManager's activePlayers reference
     private Dictionary<EPlayerID, Player> activePlayers = new Dictionary<EPlayerID, Player>();
 

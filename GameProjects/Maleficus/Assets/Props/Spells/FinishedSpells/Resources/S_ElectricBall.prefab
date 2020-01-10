@@ -19151,11 +19151,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
-  logWarningsAsErrors: 1
   logCategoriesToIgnore: []
   hitPower: 5
   speed: 1200
-  spellName: S_ElectricBall
+  spellName: ElectricBall
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1

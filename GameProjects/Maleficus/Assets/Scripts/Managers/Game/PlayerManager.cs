@@ -331,7 +331,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     }
                 }
 
-                else if (spell.IsChargeable)
+                else if (spell.IsChargeable && ActivePlayers[playerID].IsReadyToShoot)
                 {
                     ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
                     Debug.Log("Start charging");
