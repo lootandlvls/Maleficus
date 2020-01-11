@@ -2,13 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 {
     [SerializeField] EPlayerID PlayerID;
     [SerializeField] int RemainingLives;
+    [SerializeField] Image PlayerDeadImage;
+
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
+  
 
     protected override void InitializeEventsCallbacks()
     {
@@ -31,6 +35,8 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         {
             PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
         }
+
+
     }
 
     protected override void Start()
@@ -89,6 +95,7 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
                 PlayerLivesIcons[3].gameObject.SetActive(false);
                 PlayerLivesIcons[4].gameObject.SetActive(false);
                 PlayerLivesIcons[5].gameObject.SetActive(false);
+                PlayerDeadImage.gameObject.SetActive(true);
                 break;
             case 1:
                 PlayerLivesIcons[1].gameObject.SetActive(true);
