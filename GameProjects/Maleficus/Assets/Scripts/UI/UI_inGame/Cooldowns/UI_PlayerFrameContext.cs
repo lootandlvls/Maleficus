@@ -8,9 +8,9 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 {
     [SerializeField] private EPlayerID PlayerID = EPlayerID.NONE;
     [SerializeField] private GameObject playerFrameView;
-    [SerializeField] Image PlayerDeadImage;
-    [SerializeField] Image PlayerDeadMaleficusHead;
-    [SerializeField] Image PlayerAliveMaleficusHead;
+    [SerializeField] private GameObject playerHead_AliveImage;
+    [SerializeField] private GameObject playerHead_DeadImage;
+    [SerializeField] private GameObject gameOverImage;
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
     private bool isPlayerActive = false;
@@ -79,7 +79,7 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
     {
         if (playerID == PlayerID)
         {
-            PlayerDeadMaleficusHead.gameObject.SetActive(false);
+            SetAliveHead();
         }
     }
 
@@ -87,7 +87,7 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
     {
         if (playerID == PlayerID)
         {
-            PlayerDeadMaleficusHead.gameObject.SetActive(true);
+                SetDeadHead();
         }
     }
 
@@ -128,6 +128,32 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         }
     }
 
+    private void SetDeadHead()
+    {
+        playerHead_AliveImage.SetActive(false);
+        playerHead_DeadImage.SetActive(true);
+    }
+
+    private void SetAliveHead()
+    {
+        if (IS_NOT_NULL(playerHead_AliveImage))
+        {
+            playerHead_AliveImage.SetActive(true);
+        }
+        if (IS_NOT_NULL(playerHead_DeadImage))
+        {
+            playerHead_DeadImage.SetActive(false);
+        }
+    }
+
+    private void SetGameOver()
+    {
+        if (IS_NOT_NULL(gameOverImage))
+        {
+            gameOverImage.SetActive(true);
+        }
+    }
+
     private void UpdateLives(int remainingLives)
     {
         switch (remainingLives)
@@ -138,7 +164,8 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
                 PlayerLivesIcons[3].gameObject.SetActive(false);
                 PlayerLivesIcons[4].gameObject.SetActive(false);
                 PlayerLivesIcons[5].gameObject.SetActive(false);
-                PlayerDeadImage.gameObject.SetActive(true);
+                SetDeadHead();
+                SetGameOver();
                 break;
             case 1:
                 PlayerLivesIcons[1].gameObject.SetActive(true);
