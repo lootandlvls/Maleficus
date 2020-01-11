@@ -8,8 +8,9 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 {
     [SerializeField] private EPlayerID PlayerID = EPlayerID.NONE;
     [SerializeField] private GameObject playerFrameView;
-    [SerializeField] private Image PlayerDeadImage;
-
+    [SerializeField] Image PlayerDeadImage;
+    [SerializeField] Image PlayerDeadMaleficusHead;
+    [SerializeField] Image PlayerAliveMaleficusHead;
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
     private bool isPlayerActive = false;
@@ -21,9 +22,10 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         EventManager.Instance.SPELLS_SpellSpawned += On_SpellSpawned;
         EventManager.Instance.GAME_PlayerStatsUpdated += On_GAME_PlayerStatsUpdated;
         EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;    
+        EventManager.Instance.PLAYERS_PlayerDied += On_PLAYERS_PlayerDied;
+        EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
+
     }
-
-
 
     protected override void InitializeComponents()
     {
@@ -73,6 +75,21 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
     }
 
+    private void On_PLAYERS_PlayerSpawned(EPlayerID playerID)
+    {
+        if (playerID == PlayerID)
+        {
+            PlayerDeadMaleficusHead.gameObject.SetActive(false);
+        }
+    }
+
+    private void On_PLAYERS_PlayerDied(EPlayerID playerID)
+    {
+        if (playerID == PlayerID)
+        {
+            PlayerDeadMaleficusHead.gameObject.SetActive(true);
+        }
+    }
 
     private void On_SpellSpawned(ISpell spell, EPlayerID playerID, ESpellSlot spellSlot)
     {
