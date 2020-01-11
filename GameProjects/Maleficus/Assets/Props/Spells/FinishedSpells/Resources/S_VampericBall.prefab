@@ -24043,7 +24043,7 @@ MonoBehaviour:
   debuffEffects: 08000000
   buffEffects: 02000000
   cooldown: 5
-  spellDuration: 3
+  spellDuration: 0
   pushDuration: 1
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
