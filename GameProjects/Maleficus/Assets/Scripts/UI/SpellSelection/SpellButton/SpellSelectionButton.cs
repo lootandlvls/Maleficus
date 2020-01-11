@@ -15,6 +15,7 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
     [SerializeField] private AbstractSpell spell;
     [SerializeField] private int rowIndex;
     [SerializeField] private int columnIndex;
+    [SerializeField] private SpellSkillPointText skillPointText;
 
     private Button myButton;
     private Text myDebugIndexText;
@@ -36,6 +37,7 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
         base.OnValidate();
 
         // Reinitialize debug text from object name
+        skillPointText = GetComponentInChildren<SpellSkillPointText>();
         myDebugIndexText = GetComponentInChildren<Text>();
         if (myDebugIndexText != null)
         {
@@ -47,12 +49,13 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
 
         // Reinitialize button image 
         myButton = GetComponent<Button>();
+      Text SPtext = skillPointText.GetComponent<Text>();
         if (myButton != null)
         {
             if (spell != null)
             {
                 myButton.image.sprite = spell.SpellIcon;
-
+                SPtext.text = spell.SkillPoint + "";
                 // Update the name of the gameobject accordingly
                 name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex + " : " + spell.SpellName;
             }
