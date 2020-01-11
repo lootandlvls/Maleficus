@@ -9,13 +9,13 @@ public class Arena : MonoBehaviour
     public float MaxLimit { get { return maxLimit; } }
 
     [SerializeField] float shrinkingRate;
-    [SerializeField] bool IsReadyToshrink;
+
     [SerializeField] float maxLimit;
     [SerializeField] float shrinkingDuration;
 
     private Vector2 currentSize;
     private Transform ArenaTransform;
-
+    private bool IsReadyToshrink;
 
     // Start is called before the first frame update
     void Start()
