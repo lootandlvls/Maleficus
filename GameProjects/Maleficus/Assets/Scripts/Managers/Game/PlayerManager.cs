@@ -299,7 +299,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
                     {
 
-                        StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                        StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.Duration));
                         SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
                         StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
@@ -311,7 +311,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     {
                         if (!ActivePlayers[playerID].hasCastedSpell)
                         {
-                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastingDuration));
+                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.Duration));
                             SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
                             StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
                         }

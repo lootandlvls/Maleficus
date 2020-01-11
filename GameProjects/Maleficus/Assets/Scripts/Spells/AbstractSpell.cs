@@ -35,7 +35,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public float Cooldown { get { return cooldown; } }
 
-    public float CastingDuration { get { return spellDuration; } }
+    public float Duration { get { return spellDuration; } }
 
     public float PushDuration { get { return pushDuration; } }
 

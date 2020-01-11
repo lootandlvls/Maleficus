@@ -28,7 +28,7 @@ public interface ISpell
 
     float Cooldown { get; }
 
-    float CastingDuration { get; }
+    float Duration { get; }
 
     float PushDuration { get; }
 

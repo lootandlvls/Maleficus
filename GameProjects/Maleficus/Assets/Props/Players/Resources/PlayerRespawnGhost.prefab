@@ -1042,10 +1042,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationLength_FirstSection: 3
-  animationLength_Secondsection: 2
-  heightFromSpawnPosition: 7
-  deviationFactor: 10
+  animationLength_FirstSection: 2.5
+  animationLength_Secondsection: 1.5
+  heightFromSpawnPosition: 5
+  deviationFactor: 8
   deathEffect: {fileID: 0}
   chanelingEffect: {fileID: 0}
 --- !u!1 &2255715231462430540

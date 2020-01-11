@@ -77,6 +77,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1662585545835860111, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.4237285
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662585545835860111, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1662585545835860111, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.15686274
+      objectReference: {fileID: 0}
     - target: {fileID: 4285941913085856244, guid: c54733bccde00434389154d36c388460,
         type: 3}
       propertyPath: spellSlot_1
@@ -89,5 +104,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1046419516417460918, guid: 7204a205bc9444e449a6f8ae15b17268,
         type: 3}
+    - target: {fileID: 7413372201235238613, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.4237285
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413372201235238613, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7413372201235238613, guid: c54733bccde00434389154d36c388460,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.15686274
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c54733bccde00434389154d36c388460, type: 3}

@@ -1,4 +1,4 @@
-﻿Shader "Custom/Toon"
+﻿Shader "BNJMO/Toon"
 {
 	Properties
 	{

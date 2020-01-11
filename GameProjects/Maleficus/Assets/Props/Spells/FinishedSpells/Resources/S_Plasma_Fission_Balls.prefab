@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 6629491280664412532}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.60936, y: 0.60936, z: 0.60936}
   m_Children: []
   m_Father: {fileID: 6635077260716854624}
   m_RootOrder: 0
@@ -4803,7 +4803,7 @@ Transform:
   m_GameObject: {fileID: 6629508382578117520}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.60936, y: 0.60936, z: 0.60936}
   m_Children: []
   m_Father: {fileID: 6635077260716854624}
   m_RootOrder: 1
@@ -9579,7 +9579,7 @@ Transform:
   m_GameObject: {fileID: 6629575724052879170}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.60936, y: 0.60936, z: 0.60936}
   m_Children: []
   m_Father: {fileID: 6635077260716854624}
   m_RootOrder: 2
@@ -14355,7 +14355,7 @@ Transform:
   m_GameObject: {fileID: 6629718787433680218}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.60936, y: 0.60936, z: 0.60936}
   m_Children: []
   m_Father: {fileID: 6635077260716854624}
   m_RootOrder: 3
@@ -19188,7 +19188,7 @@ MonoBehaviour:
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
   hitPower: 25
-  speed: 1000
+  speed: 1600
   spellName: 
   spellLevel: 0
   OnSelfEffect: 0
@@ -19196,6 +19196,8 @@ MonoBehaviour:
   spell: 11
   isChargeable: 0
   spellIcon: {fileID: 0}
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
   skillPoint: 0
   isTripleCast: 0
   movementType: 0
@@ -19251,7 +19253,7 @@ Transform:
   m_GameObject: {fileID: 6631076414416825340}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.60936, y: 0.60936, z: 0.60936}
   m_Children: []
   m_Father: {fileID: 6635077260716854624}
   m_RootOrder: 4

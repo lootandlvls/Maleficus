@@ -97,7 +97,7 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         {
             if (IS_KEY_CONTAINED(spellCooldownsIcons, spellSlot))
             {
-                spellCooldownsIcons[spellSlot].StartCooldown(spell.Cooldown + spell.CastingDuration);
+                spellCooldownsIcons[spellSlot].StartCooldown(spell.Cooldown + spell.Duration);
             }
         }
     }

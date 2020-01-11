@@ -19,10 +19,12 @@ public class Traps : AbstractSpell
     {
         float size = 1;
 
-        while ( size < 60)
+        float startTime = Time.time;
+
+        while (Time.time - startTime < Duration)
         {
          //   Debug.Log(size);
-            size++;
+            size = 1.0f + (59.0f / (Time.time - startTime));
             Vector3 vecSize = new Vector3(size/1000 , size / 1000, size  / 1000);
             childTransform.localScale += vecSize;
             yield return new WaitForSeconds(0.05f);

@@ -4803,6 +4803,8 @@ MonoBehaviour:
   spell: 12
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: bf9c7208243f46747ba55cef0304f30b, type: 3}
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
   skillPoint: 3
   isTripleCast: 0
   movementType: 10
@@ -4841,4 +4843,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  time: 3
+  time: 1.5

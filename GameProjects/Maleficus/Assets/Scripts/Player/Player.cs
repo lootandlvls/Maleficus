@@ -30,6 +30,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     [SerializeField] private float speed;
     [Range(0.1f, 3.0f)]
     [SerializeField] private float fallingTime = 0.3f;
+    [SerializeField] private float unhittableTime = 1.0f;
     [SerializeField] private Transform spellInitPosition;
     [SerializeField] private Transform spellEndPosition;
     private int spellChargingLVL = 1;
@@ -206,7 +207,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
         {
-            StartCoroutine(SlowDownPlayerCoroutine(0, spell.CastingDuration));
+            StartCoroutine(SlowDownPlayerCoroutine(0, spell.Duration));
         }
         else
         {
@@ -231,7 +232,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 if (IS_NOT_NULL(chosenSpell))
                 {
                     SpellCooldown[spellSlot] = chosenSpell.Cooldown;
-                    SpellDuration[spellSlot] = chosenSpell.CastingDuration;
+                    SpellDuration[spellSlot] = chosenSpell.Duration;
                 }
             }
         }
@@ -500,13 +501,17 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     {
         this.tag = "Unhittable";
        
-        GameObject visualEffects = Resources.Load<GameObject>(Maleficus.MaleficusConsts.PATH_EFFECT_UNHITTABLE);
-        GameObject effect = Instantiate(visualEffects, transform.position, transform.rotation);
+        GameObject effectPrefab = Resources.Load<GameObject>(Maleficus.MaleficusConsts.PATH_EFFECT_UNHITTABLE);
+        GameObject effect = Instantiate(effectPrefab, transform.position, transform.rotation);
         effect.transform.parent = this.transform;
-        Debug.Log("Player Unhittable");
-        yield return new WaitForSeconds(3);
+        SpellTimer spellTimer = effect.GetComponent<SpellTimer>();
+        if (IS_NOT_NULL(spellTimer))
+        {
+            spellTimer.time = unhittableTime;
+        }
+        yield return new WaitForSeconds(unhittableTime);
+
         this.tag = "Player";
         IsReadyToShoot = true;
-        Debug.Log("Player hittable");
     }
 }

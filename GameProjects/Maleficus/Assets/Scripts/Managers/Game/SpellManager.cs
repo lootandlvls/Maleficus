@@ -104,7 +104,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         Vector3 TeleportDirection = activePlayers[castingPlayerID].transform.forward;
 
-        activePlayers[castingPlayerID].transform.position += TeleportDirection * 5;
+        activePlayers[castingPlayerID].transform.position += TeleportDirection * castedSpell.HitPower;
     }
 
     private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
