@@ -12,7 +12,7 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
-  
+    private bool isPlayerActive = false;
 
     protected override void InitializeEventsCallbacks()
     {
@@ -50,7 +50,32 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
                 UpdateLives(gM_FFA_Lives.TotalLives);
                 break;
         }
-        InitializeSpellsIcons();
+        CheckIsPlayerActive();
+        if (isPlayerActive)
+        {
+            InitializeSpellsIcons();
+        }
+
+
+       
+
+    }
+
+    private void CheckIsPlayerActive()
+    {
+        EPlayerID[] activePlayerList = PlayerManager.Instance.GetConnectedPlayers();
+        foreach (EPlayerID player in activePlayerList)
+        {
+            if (player == PlayerID)
+            {
+                isPlayerActive = true;
+            }
+
+        }
+        if (!isPlayerActive)
+        {
+            this.gameObject.SetActive(false);
+        }
     }
 
     private void On_SpellSpawned(ISpell spell, EPlayerID playerID, ESpellSlot spellSlot)
@@ -137,9 +162,21 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
     private void InitializeSpellsIcons()
     {
-        spellCooldownsIcons[ESpellSlot.SPELL_1].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_1].SpellIcon;
-        spellCooldownsIcons[ESpellSlot.SPELL_2].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_2].SpellIcon;
-        spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_3].SpellIcon;
+        if (SpellManager.Instance.playersChosenSpells[PlayerID] != null) {
+
+            spellCooldownsIcons[ESpellSlot.SPELL_1].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_1].SpellIcon;
+        }
+        if (spellCooldownsIcons[ESpellSlot.SPELL_2].SpellIcon != null)
+        {
+            spellCooldownsIcons[ESpellSlot.SPELL_2].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_2].SpellIcon;
+        }
+        if (spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon != null)
+        {
+            spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_3].SpellIcon;
+        }
+
+            
+       
 
     }
 }

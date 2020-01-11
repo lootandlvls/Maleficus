@@ -1562,9 +1562,9 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   DebugSpells_Player1:
-  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
+  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
-  - {fileID: 3422349035452184312, guid: 20355bb8b8727734aa4fb7d0ba25d73a, type: 3}
+  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
   DebugSpells_Player2:
   - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}
   - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}

@@ -4907,8 +4907,6 @@ MonoBehaviour:
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1262490536792160, guid: b364b2e1b67030b41b0d034b293f04cf, type: 3}
   trails:
-  - {fileID: 5167562852309430166}
-  - {fileID: 5167634775298860820}
   - {fileID: 5167806128211538230}
   - {fileID: 5166936958848267940}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
