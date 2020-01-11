@@ -61,7 +61,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.SPELLS_Teleport       += On_SPELLS_Teleport;
         EventManager.Instance.UI_SpellChosen        += On_UI_SpellChosen;
         EventManager.Instance.UI_SpellRemoved       += On_UI_SpellRemoved;
+        EventManager.Instance.INPUT_ControllerConnected.Event += On_INPUT_ControllerConnected_Event;
     }
+
 
     protected override void OnReinitializeManager()
     {
@@ -125,6 +127,38 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         foreach (ESpellEffects buffeffect in hitInfo.BuffEffects)
         {
             ApplyBuff(buffeffect, hitInfo.HitPlayerID , hitInfo.CastingPlayerID);
+        }
+    }
+
+
+    private void On_INPUT_ControllerConnected_Event(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
+    {
+        EControllerID controllerID = eventHandle.Arg1;
+        EPlayerID playerID = eventHandle.Arg2;
+        if (controllerID.ContainedIn(AI_CONTROLLERS))
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                ESpellSlot spellID = GetSpellSlotFrom(j + 1);
+                switch (playerID)
+                {
+                    case EPlayerID.PLAYER_1:
+                        playersChosenSpells[EPlayerID.PLAYER_1][spellID] = DebugSpells_Player1[j];
+                        break;
+
+                         case EPlayerID.PLAYER_2:
+                        playersChosenSpells[EPlayerID.PLAYER_2][spellID] = DebugSpells_Player2[j];
+                        break;
+
+                         case EPlayerID.PLAYER_3:
+                        playersChosenSpells[EPlayerID.PLAYER_3][spellID] = DebugSpells_Player3[j];
+                        break;
+
+                         case EPlayerID.PLAYER_4:
+                        playersChosenSpells[EPlayerID.PLAYER_4][spellID] = DebugSpells_Player4[j];
+                        break;
+                }
+            }
         }
     }
 
@@ -433,14 +467,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void InitializeSpellsDictionnary()
     {
+        // Initialize dictionnary with keys
         playersChosenSpells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
-
         foreach (EPlayerID playerID in Enum.GetValues(typeof(EPlayerID)))
         {
             if (playerID != EPlayerID.NONE)
             {
                 playersChosenSpells.Add(playerID, new Dictionary<ESpellSlot, AbstractSpell>());
-
                 foreach (ESpellSlot spellSlot in Enum.GetValues(typeof(ESpellSlot)))
                 {
                     if (spellSlot != ESpellSlot.NONE)
@@ -451,7 +484,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             }
         }
 
-
+        // Load debug spells
         if (MotherOfManagers.Instance.IsLoadDebugSpells == true)
         {
             for (int j = 0; j < 3; j++)

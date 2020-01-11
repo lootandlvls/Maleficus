@@ -38,5 +38,8 @@ public interface ISpell
 
     Sprite SpellIcon { get; }
 
+    AudioClip CastSound { get; }
+    AudioClip HitSound { get; }
+
     int SkillPoint { get; }
 }

@@ -49,7 +49,9 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public int SkillPoint { get { return skillPoint; } }
 
+    public AudioClip CastSound { get { return castSound; } }
 
+    public AudioClip HitSound { get { return hitSound; } }
 
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
@@ -60,6 +62,8 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     [SerializeField] private ESpellID spell;
     [SerializeField] private bool isChargeable;
     [SerializeField] private Sprite spellIcon;
+    [SerializeField] private AudioClip castSound;
+    [SerializeField] private AudioClip hitSound;
     [SerializeField] private int skillPoint;
     [SerializeField] private bool isTripleCast;
 
