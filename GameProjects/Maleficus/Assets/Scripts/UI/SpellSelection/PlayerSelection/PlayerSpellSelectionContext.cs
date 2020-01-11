@@ -16,7 +16,7 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
     [SerializeField] GameObject readyView;
 
     
-    private PlayerMaxSkillPoints PlayerMaxSkillPoints;
+    private PlayerSkillPointsIndicator playerSkillPointsIndicator;
 
     private ESpellSelectionState spellSelectionState = ESpellSelectionState.NOT_CONNECTED;
     private enum ESpellSelectionState
@@ -49,11 +49,15 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
 
         // Initialize selected spells
         connectedView.SetActive(true);
+
         foreach (SelectedSpell SelectedSpell in GetComponentsInChildren<SelectedSpell>())
         {
             selectedSpellsIcons.Add(SelectedSpell.SpellSlot, SelectedSpell);
         }
-        PlayerMaxSkillPoints = GetComponentInChildren<PlayerMaxSkillPoints>();
+
+        playerSkillPointsIndicator = GetComponentInChildren<PlayerSkillPointsIndicator>();
+        IS_NOT_NULL(playerSkillPointsIndicator);
+
         connectedView.SetActive(false);
         
     }
@@ -130,16 +134,18 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
     {
         if (SpellManager.Instance.CheckPlayerSpells(playerID, spell))
         {
-            selectedSpellsIcons[spellSlot].ChangeImage(spell);
-            if (PlayerMaxSkillPoints != null)
+            if ((IS_NOT_NULL(playerSkillPointsIndicator))
+                && (playerSkillPointsIndicator.CanChoseSpell(spell) == true))
             {
-                PlayerMaxSkillPoints.RemoveSkillPoints(spell.SkillPoint);
-            }
+                playerSkillPointsIndicator.RemoveSkillPoints(spell.SkillPoint);
 
-            EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, spellSlot);
-            if (selectedSpellsCounter < 3)
-            {
-                selectedSpellsCounter++;
+                selectedSpellsIcons[spellSlot].ChangeImage(spell);
+
+                EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, spellSlot);
+                if (selectedSpellsCounter < 3)
+                {
+                    selectedSpellsCounter++;
+                }
             }
         }
     }
@@ -147,8 +153,6 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
     //Remove a spell 
     private void RemoveSpell(EPlayerID playerID)
     {
-        
-
         if (playerID == this.playerID)
         {
             switch (selectedSpellsCounter)
@@ -159,9 +163,9 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
                         LogConsole("Spell 1 has been Chosen");
                         selectedSpellsIcons[ESpellSlot.SPELL_1].RemoveImage();
                         AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][ESpellSlot.SPELL_1];
-                        if (PlayerMaxSkillPoints != null && spell != null)
+                        if (playerSkillPointsIndicator != null && spell != null)
                         {
-                            PlayerMaxSkillPoints.AddSkillPoints(spell.SkillPoint);
+                            playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
                         }
                         EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_1);
                     }
@@ -173,9 +177,9 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
                         LogConsole("Spell 2 has been Chosen");
                         selectedSpellsIcons[ESpellSlot.SPELL_2].RemoveImage();
                         AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][ESpellSlot.SPELL_2];
-                        if (PlayerMaxSkillPoints != null && spell != null)
+                        if (playerSkillPointsIndicator != null && spell != null)
                         {
-                            PlayerMaxSkillPoints.AddSkillPoints(spell.SkillPoint);
+                            playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
                         }
                         EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_2);
                     }
@@ -187,9 +191,9 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
                         LogConsole("Spell 3 has been Chosen");
                         selectedSpellsIcons[ESpellSlot.SPELL_3].RemoveImage();
                         AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][ESpellSlot.SPELL_3];
-                        if (PlayerMaxSkillPoints != null && spell != null)
+                        if (playerSkillPointsIndicator != null && spell != null)
                         {
-                            PlayerMaxSkillPoints.AddSkillPoints(spell.SkillPoint);
+                            playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
                         }
                         EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_3);
                     }
@@ -210,7 +214,7 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
     private void ConnectPlayer()
     {
         UpdateState(ESpellSelectionState.CHOOSING_SPELLS);
-        PlayerMaxSkillPoints.ResetSkillPoints();
+        playerSkillPointsIndicator.ResetSkillPoints();
         selectedSpellsCounter = 0;
 
         EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);

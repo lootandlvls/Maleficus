@@ -75,7 +75,7 @@ MonoBehaviour:
   spell: 3
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: 510dc3fb9a84c324f9a15b88cd437348, type: 3}
-  skillPoint: 0
+  skillPoint: 4
   isTripleCast: 0
   movementType: 0
   debuffEffects: 06000000

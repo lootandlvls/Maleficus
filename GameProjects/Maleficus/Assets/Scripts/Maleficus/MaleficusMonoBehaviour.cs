@@ -8,10 +8,10 @@ using MyBox;
 public abstract class MaleficusMonoBehaviour : MonoBehaviour
 {
     [Separator("Maleficus MonoBehaviour")]
+    [Space (10)]
     [SerializeField] bool showMaleficusMonoBehaviourConfiguration = false;
     [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool debugLogConsoleEnabled = true;
     [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] List<string> logCategoriesToIgnore;
-
 
     #region Life Cycle
     protected virtual void Awake()

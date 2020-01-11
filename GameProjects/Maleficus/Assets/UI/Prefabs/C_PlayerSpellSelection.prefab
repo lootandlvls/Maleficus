@@ -334,6 +334,7 @@ GameObject:
   - component: {fileID: 5868613524506801929}
   - component: {fileID: 6646750591187416747}
   - component: {fileID: 575418183292820352}
+  - component: {fileID: 1513444439307543958}
   m_Layer: 5
   m_Name: I_SkillPoints
   m_TagString: Untagged
@@ -397,6 +398,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1513444439307543958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3122814153685590620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f8491c937f12942b221b28472b19af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
 --- !u!1 &3429897137403089732
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +424,6 @@ GameObject:
   - component: {fileID: 3660943330926253709}
   - component: {fileID: 8846907347276098355}
   - component: {fileID: 4892361713861564993}
-  - component: {fileID: 5017323727044344512}
   m_Layer: 5
   m_Name: T_SkillPoints
   m_TagString: Untagged
@@ -475,18 +490,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 10
---- !u!114 &5017323727044344512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3429897137403089732}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f8491c937f12942b221b28472b19af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4010365042915249542
 GameObject:
   m_ObjectHideFlags: 0
