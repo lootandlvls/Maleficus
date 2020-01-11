@@ -25,7 +25,7 @@ public class Traps : AbstractSpell
             size++;
             Vector3 vecSize = new Vector3(size/1000 , size / 1000, size  / 1000);
             childTransform.localScale += vecSize;
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
         GameObject trapExplosion = Instantiate(explosion, transform.position, transform.rotation);
         OnExplosionEnter(transform.position, 5);  
