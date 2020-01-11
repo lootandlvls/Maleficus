@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1324690934861586665}
   - component: {fileID: 7936006925037267425}
   m_Layer: 0
-  m_Name: Shield
+  m_Name: S_Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4803,7 +4803,7 @@ MonoBehaviour:
   spell: 12
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: bf9c7208243f46747ba55cef0304f30b, type: 3}
-  skillPoint: 4
+  skillPoint: 3
   isTripleCast: 0
   movementType: 10
   debuffEffects: 

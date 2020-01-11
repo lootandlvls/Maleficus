@@ -115,7 +115,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 50
+  hitPower: 35
   speed: 0
   spellName: Arcane Trap
   spellLevel: 0
@@ -124,12 +124,12 @@ MonoBehaviour:
   spell: 0
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: c0d2ae823a9bc7b4689f80cb025c3f32, type: 3}
-  skillPoint: 4
+  skillPoint: 3
   isTripleCast: 0
   movementType: 8
   debuffEffects: 
   buffEffects: 
-  cooldown: 0
+  cooldown: 2
   spellDuration: 0
   pushDuration: 0
   shotSFX: {fileID: 0}

@@ -19174,7 +19174,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 15
+  hitPower: 28
   speed: 600
   spellName: Plasma Fission
   spellLevel: 0
@@ -19183,7 +19183,7 @@ MonoBehaviour:
   spell: 10
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: 9c223d2d2f48b7f469e4570ae200a77a, type: 3}
-  skillPoint: 5
+  skillPoint: 4
   isTripleCast: 0
   movementType: 9
   debuffEffects: 

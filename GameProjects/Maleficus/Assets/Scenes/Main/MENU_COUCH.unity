@@ -1951,7 +1951,7 @@ MonoBehaviour:
   IsUseDebugGameMode: 1
   DebugGameMode: 1
   IsJoinAndSpawnPlayerOnControllerConnect: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 1
+  IsSpawnRemainingAIPlayersOnGameStart: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsLoadDebugSpells: 0
@@ -3712,32 +3712,32 @@ PrefabInstance:
     - target: {fileID: 1968480870191373021, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1968480870655343528, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1968480870712951612, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1968480870884427377, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1968480871247326697, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1968480871470189892, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2007763134933137687, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
@@ -3823,7 +3823,7 @@ PrefabInstance:
     - target: {fileID: 7012592734538856917, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7052013537602615538, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}

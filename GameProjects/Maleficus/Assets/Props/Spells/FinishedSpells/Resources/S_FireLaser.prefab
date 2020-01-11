@@ -13967,7 +13967,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 5
+  hitPower: 15
   speed: 0
   spellName: Fire Laser
   spellLevel: 0
@@ -13976,7 +13976,7 @@ MonoBehaviour:
   spell: 1
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: a21c3aa21a03c7e419948d2974bae10d, type: 3}
-  skillPoint: 6
+  skillPoint: 5
   isTripleCast: 0
   movementType: 6
   debuffEffects: 
