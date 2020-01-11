@@ -28,10 +28,10 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     [SerializeField] private float angularSpeed;
     [SerializeField] private float speed;
-
+    [Range(0.1f, 3.0f)]
+    [SerializeField] private float fallingTime = 0.3f;
     [SerializeField] private Transform spellInitPosition;
     [SerializeField] private Transform spellEndPosition;
-
     private int spellChargingLVL = 1;
 
     private float lastTimeSinceRotated;
@@ -41,7 +41,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     private IEnumerator SpellChargingEnumerator;
 
     /// <summary> Spell Manager will initialize the variables for this Dictionary </summary> 
-    Dictionary<ESpellSlot, GameObject> ChargingEffects = new Dictionary<ESpellSlot, GameObject>();
+    private Dictionary<ESpellSlot, GameObject> chargingEffects = new Dictionary<ESpellSlot, GameObject>();
 
     private Vector3 movingDirection;
     //private Rigidbody myRigidBody;
@@ -466,9 +466,17 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             IsDead = true;
             StopAllCoroutines();
             IsReadyToShoot = false;
-            PlayerManager.Instance.OnPlayerOutOfBound(PlayerID);
+
+            StartCoroutine(FallingCoroutine());
         }
-       
+    }
+
+    private IEnumerator FallingCoroutine()
+    {
+
+        yield return new WaitForSeconds(fallingTime);
+        PlayerManager.Instance.OnPlayerDead(PlayerID);
+
     }
 
     public void DestroyPlayer()
