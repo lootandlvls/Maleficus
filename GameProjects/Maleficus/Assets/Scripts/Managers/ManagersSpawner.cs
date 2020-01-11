@@ -44,7 +44,7 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsUseDebugGameMode = IsUseDebugGameMode;
             managersInstance.DebugGameMode = DebugGameMode;
             // Player
-            managersInstance.IsSpawnPlayerOnControllerConnect = IsSpawnPlayerOnControllerConnect;
+            managersInstance.IsJoinAndSpawnPlayerOnControllerConnect = IsJoinAndSpawnPlayerOnControllerConnect;
             managersInstance.IsSpawnRemainingAIPlayersOnGameStart = IsSpawnRemainingAIPlayersOnGameStart;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;

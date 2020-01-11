@@ -42,7 +42,7 @@ public class UI_SpellCooldowns : MaleficusMonoBehaviour
             yield return new WaitForEndOfFrame();
            
         }
-
+        spellIcon.fillAmount = 1.0f;
     }
 
    

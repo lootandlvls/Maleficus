@@ -8,8 +8,8 @@ using static Maleficus.MaleficusConsts;
 
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
-    /* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
-
+    ///* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
+    //public List<EPlayerID> JoinedPlayers { get; private set; } = new List<EPlayerID>();
 
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
     public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions { get; } = new Dictionary<EPlayerID, PlayerSpawnPosition>();
@@ -29,7 +29,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     public Dictionary<EPlayerID, JoystickInput> PlayersMovement { get; } = new Dictionary<EPlayerID, JoystickInput>();
 
     /// <summary> The join status of player that have connected with a controllers </summary>
-    public Dictionary<EPlayerID, PlayerJoinStatus> PlayersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
+    private Dictionary<EPlayerID, PlayerJoinStatus> playersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
 
     private Dictionary<EPlayerID, Vector3> PlayersDeathPositions = new Dictionary<EPlayerID, Vector3>();
     private Dictionary<EPlayerID, Quaternion> PlayersDeathRotations = new Dictionary<EPlayerID, Quaternion>();
@@ -38,28 +38,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private PlayerSpawnPosition playerSpawnPositionPrefab;
     private PlayerRespawnGhost playerRespawnGhostPrefab;
 
-    /// <summary>
-    /// Get all players that are connected with a controller.
-    /// Warning! A connected player is not necessarily a player that has joined the game session
-    /// </summary>
-    public EPlayerID[] GetConnectedPlayers() // TODO Change to JoinedPlayers and get from PlayersJoinStatus instead 
-    {
-        return InputManager.Instance.ConnectedControllers.Values.ToArray<EPlayerID>();
-    }
 
-    /// <summary>
-    /// Get the player that is connected with the given controller.
-    /// Warning! A connected player is not necessarily a player that has joined the game session
-    /// </summary>
-    public bool IsPlayerConnected(EPlayerID playerID)
+    public List<EPlayerID> GetJoinedPlayers()
     {
-        return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
+        List<EPlayerID> result = new List<EPlayerID>();
+        foreach (KeyValuePair<EPlayerID, PlayerJoinStatus> pair in playersJoinStatus)
+        {
+            if (pair.Value.HasJoined == true)
+            {
+                result.Add(pair.Key);
+            }
+        }
+        return result;
     }
 
     public bool HasPlayerJoined(EPlayerID playerID)
     {
-        if ((PlayersJoinStatus.ContainsKey(playerID))
-            && (PlayersJoinStatus[playerID].HasJoined == true))
+        if ((playersJoinStatus.ContainsKey(playerID))
+            && (playersJoinStatus[playerID].HasJoined))
         {
             return true;
         }
@@ -109,13 +105,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         base.Update();
 
         string playerStatusLog = "";
-        //foreach (var pair in PlayersJoinStatus)
-        //{
-        //    playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
-        //}   
-        foreach (var pair in ActivePlayers)
+        foreach (var pair in playersJoinStatus)
         {
-            playerStatusLog += pair.Key + " - joined : " + pair.Value.name + "\n";
+            playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
         }
         LogCanvas(69, playerStatusLog);
     }
@@ -208,10 +200,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnAllJoinedPlayers()
     {
-        foreach (EPlayerID playerID in PlayersJoinStatus.Keys)
+        foreach (EPlayerID playerID in GetJoinedPlayers())
         {
-            if ((PlayersJoinStatus[playerID].HasJoined == true)
-                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+            if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
             {
                 SpawnPlayer(playerID);
             }
@@ -564,16 +555,23 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             PlayersMovement.Add(playerID, new JoystickInput());
         }
-        if (IS_KEY_NOT_CONTAINED(PlayersJoinStatus, playerID))
+        if (IS_KEY_NOT_CONTAINED(playersJoinStatus, playerID))
         {
-            PlayersJoinStatus.Add(playerID, new PlayerJoinStatus());
+            playersJoinStatus.Add(playerID, new PlayerJoinStatus());
         }
 
         // Spawn player On Connect?
-        if ((MotherOfManagers.Instance.IsSpawnPlayerOnControllerConnect == true)
+        if ((MotherOfManagers.Instance.IsJoinAndSpawnPlayerOnControllerConnect == true)
             && (ActivePlayers.ContainsKey(playerID) == false)
             && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
         {
+            // Join player and set him to ready
+            if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+            {
+                playersJoinStatus[playerID].HasJoined = true;
+                playersJoinStatus[playerID].IsReady = true;
+                EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);
+            }
             SpawnPlayer(playerID);
         }
     }
@@ -594,27 +592,26 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(PlayersJoinStatus, playerID))
+        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
         {
-            PlayersJoinStatus[playerID].HasJoined = true;
+            playersJoinStatus[playerID].HasJoined = true;
         }
     }
 
     private void On_PLAYERS_PlayerLeft(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(PlayersJoinStatus, playerID))
+        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
         {
-            PlayersJoinStatus[playerID].HasJoined = false;
-
+            playersJoinStatus[playerID].HasJoined = false;
             CheckIfAllPlayersAreReady();
         }
     }
 
     private void On_PLAYERS_PlayerReady(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(PlayersJoinStatus, playerID))
+        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
         {
-            PlayersJoinStatus[playerID].IsReady = true;
+            playersJoinStatus[playerID].IsReady = true;
 
             CheckIfAllPlayersAreReady();
         }
@@ -622,9 +619,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(PlayersJoinStatus, playerID))
+        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
         {
-            PlayersJoinStatus[playerID].IsReady = false;
+            playersJoinStatus[playerID].IsReady = false;
         }
     }
 
@@ -653,7 +650,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void CheckIfAllPlayersAreReady()
     {
         bool areAllReady = false;
-        foreach (PlayerJoinStatus playerJoinStatus in PlayersJoinStatus.Values)
+        foreach (PlayerJoinStatus playerJoinStatus in playersJoinStatus.Values)
         {
             if (playerJoinStatus.HasJoined == true)
             {
@@ -669,5 +666,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             EventManager.Instance.Invoke_PLAYERS_AllPlayersReady();
         }
+    }
+
+
+    /// <summary>
+    /// Get the player that is connected with the given controller.
+    /// Warning! A connected player is not necessarily a player that has joined the game session
+    /// </summary>
+    private bool IsPlayerConnected(EPlayerID playerID)
+    {
+        return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
     }
 }

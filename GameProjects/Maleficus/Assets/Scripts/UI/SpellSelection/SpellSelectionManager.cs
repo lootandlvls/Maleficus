@@ -72,8 +72,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
             EInputButton inputButton = eventHandle.InputButton;
             EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-            if ((IS_KEY_CONTAINED(PlayerManager.Instance.PlayersJoinStatus, playerID))
-                && (PlayerManager.Instance.PlayersJoinStatus[playerID].HasJoined == true))
+            if (PlayerManager.Instance.HasPlayerJoined(playerID))
             {
                 if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
                 {

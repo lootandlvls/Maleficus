@@ -6,34 +6,43 @@ using UnityEngine.UI;
 
 public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 {
-    [SerializeField] EPlayerID PlayerID;
-    [SerializeField] int RemainingLives;
-    [SerializeField] Image PlayerDeadImage;
+    [SerializeField] private EPlayerID PlayerID = EPlayerID.NONE;
+    [SerializeField] private GameObject playerFrameView;
+    [SerializeField] private Image PlayerDeadImage;
 
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
     private bool isPlayerActive = false;
+    private int remainingLives;
 
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
         EventManager.Instance.SPELLS_SpellSpawned += On_SpellSpawned;
         EventManager.Instance.GAME_PlayerStatsUpdated += On_GAME_PlayerStatsUpdated;
+        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;    
     }
 
-   
+
+
     protected override void InitializeComponents()
     {
         base.InitializeComponents();
 
         foreach (UI_SpellCooldowns SpellCooldown in GetComponentsInChildren<UI_SpellCooldowns>())
         {
-            spellCooldownsIcons.Add(SpellCooldown.SpellSlot, SpellCooldown);
+            if (IS_KEY_NOT_CONTAINED(spellCooldownsIcons, SpellCooldown.SpellSlot))
+            {
+                spellCooldownsIcons.Add(SpellCooldown.SpellSlot, SpellCooldown);
+            }
         }
 
         foreach (UI_PlayerLives PlayerLife in GetComponentsInChildren<UI_PlayerLives>())
         {
-            PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
+            if (IS_KEY_NOT_CONTAINED(PlayerLivesIcons, PlayerLife.LiveNumber))
+            {
+                PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
+            }
         }
 
 
@@ -50,33 +59,20 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
                 UpdateLives(gM_FFA_Lives.TotalLives);
                 break;
         }
-        CheckIsPlayerActive();
-        if (isPlayerActive)
+
+        // Check if player has joined
+        if (PlayerManager.Instance.HasPlayerJoined(PlayerID))
         {
+            isPlayerActive = true;
             InitializeSpellsIcons();
         }
-
-
-       
+        else
+        {
+            playerFrameView.SetActive(false);
+        }
 
     }
 
-    private void CheckIsPlayerActive()
-    {
-        EPlayerID[] activePlayerList = PlayerManager.Instance.GetConnectedPlayers();
-        foreach (EPlayerID player in activePlayerList)
-        {
-            if (player == PlayerID)
-            {
-                isPlayerActive = true;
-            }
-
-        }
-        if (!isPlayerActive)
-        {
-            this.gameObject.SetActive(false);
-        }
-    }
 
     private void On_SpellSpawned(ISpell spell, EPlayerID playerID, ESpellSlot spellSlot)
     {
@@ -98,15 +94,22 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
                 if (PlayerID == playerStatsFFA.PlayerID)
                 {
-                    RemainingLives = playerStatsFFA.RemainingLives;
+                    remainingLives = playerStatsFFA.RemainingLives;
                     UpdateLives(playerStatsFFA.RemainingLives);
                 }
-               
-
                 break;
         }
     }
 
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    {
+        if (playerID == PlayerID)
+        {
+            playerFrameView.SetActive(true);
+            isPlayerActive = true;
+            InitializeSpellsIcons();
+        }
+    }
 
     private void UpdateLives(int remainingLives)
     {
@@ -174,9 +177,5 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
         {
             spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_3].SpellIcon;
         }
-
-            
-       
-
     }
 }

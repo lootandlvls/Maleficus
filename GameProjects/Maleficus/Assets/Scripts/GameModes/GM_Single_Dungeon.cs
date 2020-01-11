@@ -50,7 +50,7 @@ public class GM_Single_Dungeon : ConcreteGameMode<PlayerStats_Dungeon>
 
     protected override void InitializePlayerStats()
     {
-        foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
+        foreach (EPlayerID playerID in PlayerManager.Instance.GetJoinedPlayers())
         {
             PlayerStats[playerID] = new PlayerStats_Dungeon(playerID, TotalLives, TotalItemsToCollect);
         }

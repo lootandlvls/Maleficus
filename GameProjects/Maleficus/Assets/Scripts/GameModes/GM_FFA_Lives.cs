@@ -50,7 +50,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
     protected override void InitializePlayerStats()
     {
         PlayerStats.Clear();
-        foreach (EPlayerID playerID in PlayerManager.Instance.GetConnectedPlayers())
+        foreach (EPlayerID playerID in PlayerManager.Instance.GetJoinedPlayers())
         {
             PlayerStats.Add(playerID, new PlayerStats_Lives(playerID, TotalLives));
         }
