@@ -267,7 +267,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Traps>() != null)
         {
-            Vector3 position = activePlayers[playerID].SpellInitPosition + new Vector3(0,0,2);
+
+            Vector3 position = activePlayers[playerID].SpellInitPosition ;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             AbstractSpell spell = Instantiate(spellToCast, position, rotation);               
             spell.CastingPlayerID = playerID;

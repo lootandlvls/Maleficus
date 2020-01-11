@@ -85,6 +85,15 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
     }
 
+    public event Action<int> GAME_GameTimeUpdated;
+    public void Invoke_GAME_GameTimeUpdated(int time)
+    {
+         if (GAME_GameTimeUpdated != null)
+        {
+            GAME_GameTimeUpdated.Invoke(time);
+        }
+        DebugLog("Time has been Updated to : " + time);
+    }
     public MaleficusEvent<NetEvent_GameOver> GAME_GameOver 
         = new MaleficusEvent<NetEvent_GameOver>("Game_GameOver");
 

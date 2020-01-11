@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arena : MonoBehaviour
+public class Arena : MaleficusMonoBehaviour
 {
     public float ShrinkingRate { get { return shrinkingRate; } }
     public float ShrinkingDuration { get { return shrinkingDuration; } }
@@ -17,16 +18,36 @@ public class Arena : MonoBehaviour
     private Transform ArenaTransform;
     private bool IsReadyToshrink;
 
-    // Start is called before the first frame update
-    void Start()
+    protected override void InitializeEventsCallbacks()
     {
-        ArenaTransform = GetComponent<Transform>();
+        base.InitializeEventsCallbacks();
+        EventManager.Instance.GAME_GameTimeUpdated += On_GAME_GameTimeUpdated;
+    }
+
+
+
+
+    // Start is called before the first frame update
+    protected override void InitializeObjecsInScene()
+    {
+        base.InitializeObjecsInScene();
+    
+        
+        ArenaTransform = GetComponentWithCheck<Transform>();
         currentSize = new Vector2(transform.localScale.x, transform.localScale.y);
 
 
     }
 
-
+    private void On_GAME_GameTimeUpdated(int countdown)
+    {
+        LogConsole("Time Updated");
+        if (countdown == 100 || countdown == 50)
+        {
+            LogConsole("Starting to shrink");
+            StartToShrink();
+        }
+    }
     public void StartToShrink()
     {
         StartCoroutine(ShrinkCourotine());

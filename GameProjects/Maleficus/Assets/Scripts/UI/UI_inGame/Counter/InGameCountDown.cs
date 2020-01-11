@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class InGameCountDown : MaleficusMonoBehaviour
 {
-    [SerializeField] private int countdownSeconds;
-
+    public int CountdownSeconds { get { return countdownSeconds; } }
+    [SerializeField] int countdownSeconds;
+    
     private Text myText;
     private bool isGameRunning;
 
@@ -54,8 +55,13 @@ public class InGameCountDown : MaleficusMonoBehaviour
 
         for (int i = countdownSeconds; i > 0; i--)
         {
-            myText.text = "Remainging Time : " + i ;
+
+            myText.text = "" + i ;
+            EventManager.Instance.Invoke_GAME_GameTimeUpdated(i);
+            LogConsole(myText.text);
             yield return new WaitForSeconds(1.0f);
+
+
         }
     }
 }

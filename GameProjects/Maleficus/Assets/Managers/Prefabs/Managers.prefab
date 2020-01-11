@@ -820,7 +820,7 @@ MonoBehaviour:
   CanDebugJoystickEvents: 0
   IsUseDebugGameMode: 0
   DebugGameMode: 0
-  IsSpawnPlayerOnControllerConnect: 1
+  IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnRemainingAIPlayersOnGameStart: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
@@ -1562,7 +1562,7 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   DebugSpells_Player1:
-  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
+  - {fileID: 4881839978439356376, guid: bca058ddfee72814bb33efe897551b02, type: 3}
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
   - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
   DebugSpells_Player2:
