@@ -408,7 +408,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    public void OnPlayerOutOfBound(EPlayerID playerID)
+    public void OnPlayerDead(EPlayerID playerID)
     {
         DestroyPlayer(playerID);
     }
