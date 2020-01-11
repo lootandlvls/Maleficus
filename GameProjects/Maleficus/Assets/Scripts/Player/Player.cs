@@ -24,6 +24,8 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
 
+   
+
     [SerializeField] private float angularSpeed;
     [SerializeField] private float speed;
 
@@ -49,6 +51,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     private Vector3 pushVelocity;
     private Vector3 GravityVelocity;
 
+    private bool HitEffectActive = false;
 
     protected override void InitializeComponents()
     {
@@ -454,6 +457,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     }
 
+   
     private void OnTriggerExit(Collider other)
     {
         if (other.tag.Equals("Ground"))
@@ -464,6 +468,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             IsReadyToShoot = false;
             PlayerManager.Instance.OnPlayerOutOfBound(PlayerID);
         }
+       
     }
 
     public void DestroyPlayer()

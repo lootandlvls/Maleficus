@@ -10,6 +10,8 @@ TagManager:
   - Object
   - SpellHittable
   - Unhittable
+  - enemy
+  - Laser
   layers:
   - Default
   - TransparentFX
