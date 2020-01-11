@@ -336,34 +336,47 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private IEnumerator PlayerFrozen(EPlayerID playerID)
     {
-        activePlayers[playerID].SetPlayerFrozen(true);
+        if (activePlayers.ContainsKey(playerID))
+        {
+            activePlayers[playerID].SetPlayerFrozen(true);
         GameObject snowman = Instantiate(frozenEffect, activePlayers[playerID].transform.position, activePlayers[playerID].transform.rotation);
         activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(false);
         snowman.transform.parent = activePlayers[playerID].transform;
 
         yield return new WaitForSeconds(1.5f);
+        
+            activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
+            activePlayers[playerID].SetPlayerFrozen(false);
+        }
 
-        activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
-        activePlayers[playerID].SetPlayerFrozen(false);
+            
     }
 
     private IEnumerator PlayerStunned(EPlayerID playerID)
     {
-        activePlayers[playerID].SetPlayerStunned(true);
+        if (activePlayers.ContainsKey(playerID))
+        {
+            activePlayers[playerID].SetPlayerStunned(true);
 
-        yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(2.5f);
 
-        activePlayers[playerID].SetPlayerStunned(false);
+            activePlayers[playerID].SetPlayerStunned(false);
+        }
     }
 
     private IEnumerator PlayerParalyzed(EPlayerID playerID , int effectStrenght)
     {
-        activePlayers[playerID].SetPlayerParalyzed(true , effectStrenght);
+        if (activePlayers.ContainsKey(playerID))
+        {
+            activePlayers[playerID].SetPlayerParalyzed(true , effectStrenght);
         Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y +1 , activePlayers[playerID].transform.position.z);
         GameObject ParalyzeEffect = Instantiate(paralyzeEffect, position, activePlayers[playerID].transform.rotation);
         ParalyzeEffect.transform.parent = activePlayers[playerID].transform;
         yield return new WaitForSeconds(2f);
-        activePlayers[playerID].SetPlayerParalyzed(false , effectStrenght);
+        
+            activePlayers[playerID].SetPlayerParalyzed(false, effectStrenght);
+        }
+        
     }
 
 
