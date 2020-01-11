@@ -24034,7 +24034,7 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 6
+  spell: 9
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: 00db1bd9e0565844a87ef537dcce787d, type: 3}
   skillPoint: 2
