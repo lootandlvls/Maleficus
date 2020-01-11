@@ -678,9 +678,9 @@ public class ServerManager : NetworkManager
         {
             yield return new WaitForSeconds(GAME_STATE_UPDATE_FREQUENCY);
 
-            foreach (EPlayerID connectedPlayerIDj in PlayerManager.Instance.GetConnectedPlayers())
+            foreach (EPlayerID connectedPlayerIDj in PlayerManager.Instance.GetJoinedPlayers())
             {
-                foreach (EPlayerID activePlayerIDi in PlayerManager.Instance.GetConnectedPlayers())
+                foreach (EPlayerID activePlayerIDi in PlayerManager.Instance.GetJoinedPlayers())
                 {
                     if (PlayerManager.Instance.ActivePlayers.ContainsKey(activePlayerIDi))
                     {
