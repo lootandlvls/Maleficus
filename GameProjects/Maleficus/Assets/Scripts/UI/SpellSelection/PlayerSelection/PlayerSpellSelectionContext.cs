@@ -9,12 +9,11 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
 
 
     [Header("Player Spell Selection Context")]
-    [SerializeField] EPlayerID playerID;
-    [SerializeField] GameObject connectedView;
-    [SerializeField] GameObject notConnectedView;
-    [SerializeField] GameObject spellSelectionView;
-    [SerializeField] GameObject readyView;
-
+    [SerializeField] private EPlayerID playerID;
+    [SerializeField] private GameObject connectedView;
+    [SerializeField] private GameObject notConnectedView;
+    [SerializeField] private GameObject spellSelectionView;
+    [SerializeField] private GameObject readyView;
     
     private PlayerSkillPointsIndicator playerSkillPointsIndicator;
 
@@ -34,13 +33,7 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
         base.InitializeEventsCallbacks();
 
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
-        EventManager.Instance.APP_AppStateUpdated.Event += On_APP_AppStateUpdated_Event;        
 
-    }
-
-    private void On_APP_AppStateUpdated_Event(Event_StateUpdated<EAppState> eventHandle)
-    {
-        
     }
 
     protected override void InitializeComponents()
@@ -60,6 +53,13 @@ public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
 
         connectedView.SetActive(false);
         
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        UpdateState(ESpellSelectionState.NOT_CONNECTED);
     }
 
     private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
