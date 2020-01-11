@@ -533,11 +533,19 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (ActivePlayers.ContainsKey(playerID))
         {
             yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellSlot]);
-            ActivePlayers[playerID].IsReadyToShoot = true;
+            if (ActivePlayers.ContainsKey(playerID))
+            {
+                ActivePlayers[playerID].IsReadyToShoot = true;
+            }
 
             yield return new WaitForSeconds(ActivePlayers[playerID].SpellCooldown[spellSlot]);
-            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
-            ActivePlayers[playerID].hasCastedSpell = false;
+
+            if (ActivePlayers.ContainsKey(playerID))
+            {
+                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
+                ActivePlayers[playerID].hasCastedSpell = false;
+            }
+            
         }
 
     }

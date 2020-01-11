@@ -269,6 +269,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
+            activePlayers[playerID].DoShockwaveAnimation();
             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
 
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
@@ -408,8 +409,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         GameObject ParalyzeEffect = Instantiate(paralyzeEffect, position, activePlayers[playerID].transform.rotation);
         ParalyzeEffect.transform.parent = activePlayers[playerID].transform;
         yield return new WaitForSeconds(2f);
-        
-            activePlayers[playerID].SetPlayerParalyzed(false, effectStrenght);
+            if (activePlayers.ContainsKey(playerID))
+            {
+                activePlayers[playerID].SetPlayerParalyzed(false, effectStrenght);
+            }
         }
         
     }

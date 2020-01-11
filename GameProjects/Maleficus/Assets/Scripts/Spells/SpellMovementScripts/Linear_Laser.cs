@@ -13,17 +13,20 @@ public class Linear_Laser : AbstractSpell
         direction = transform.TransformDirection(movingDirection);
         IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
-       
-        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
+        Shield shield = other.gameObject.GetComponent<Shield>();
+        if (shield == null)
         {
-         
-            ProcessHits(otherPlayer);
+            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
+            {
 
-        }
-        else if (otherEnemy != null)
-        {
-            ProcessHits(otherEnemy);
+                ProcessHits(otherPlayer);
 
+            }
+            else if (otherEnemy != null)
+            {
+                ProcessHits(otherEnemy);
+
+            }
         }
     }
 }
