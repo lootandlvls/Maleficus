@@ -6,7 +6,7 @@ using static Maleficus.MaleficusConsts;
 public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 {
     public int TotalLives { get; private set; }
-
+    public int GameLenght { get; private set; }
 
     protected override void Awake()
     {
