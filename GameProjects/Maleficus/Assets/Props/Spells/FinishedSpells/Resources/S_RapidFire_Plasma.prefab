@@ -14451,7 +14451,7 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 0
+  spell: 13
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: aff9d82f9d1093c4e8192202f2eab832, type: 3}
   castSound: {fileID: 0}
@@ -14461,9 +14461,10 @@ MonoBehaviour:
   movementType: 7
   debuffEffects: 
   buffEffects: 
-  cooldown: 3.5
-  spellDuration: 1
+  cooldown: 5
+  castDuration: 3
   pushDuration: 1
+  spellDuration: 5
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1329826249346808, guid: 7a37fbaa558a2b54d9aef711134128e1, type: 3}

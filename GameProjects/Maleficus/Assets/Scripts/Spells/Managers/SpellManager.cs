@@ -266,14 +266,15 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         else if (spellToCast.GetComponent<Linear_Instant>() != null)
 
         {
-
+            
+         
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             activePlayers[playerID].DoShockwaveAnimation();
             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
 
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
-            spell.transform.parent = activePlayers[playerID].transform;
+            //spell.transform.parent = activePlayers[playerID].transform;
             spell.CastingPlayerID = playerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
         }
@@ -312,18 +313,30 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Shield>() != null)
         {
-            Vector3 position = activePlayers[playerID].transform.position + new Vector3(0, 2, 0);
+            Vector3 position = activePlayers[playerID].transform.position + new Vector3(0, 0.5f, 0);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
             spell.CastingPlayerID = playerID;
             spell.transform.parent = activePlayers[playerID].transform;
+            activePlayers[playerID].ActivateShield(spell.SpellDuration);
         }
-        else
+        else if (spellToCast.GetComponent<Linear_Hit>())
         {
-            Vector3 position = activePlayers[playerID].transform.position;
-            Quaternion rotation = activePlayers[playerID].transform.rotation;
-            activePlayers[playerID].DoProjectileAttackAnimation();
-            StartCoroutine(animationDelay(spellToCast, playerID, 1));
+            if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)
+            {
+              
+                    StartCoroutine(DelayBetweenMultipleSpellCastingCoroutine(0.05f , playerID , spellToCast) ) ;
+                
+               
+            }
+            else
+            {
+                Vector3 position = activePlayers[playerID].transform.position;
+                Quaternion rotation = activePlayers[playerID].transform.rotation;
+                activePlayers[playerID].DoProjectileAttackAnimation();
+                StartCoroutine(animationDelay(spellToCast, playerID, 1));
+            }
+            
         }
 
         activePlayers[playerID].resetSpellChargingLVL();
@@ -416,8 +429,22 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         
     }
-
-
+    //USED FOR RAPIDFIRE SPELLS
+    IEnumerator DelayBetweenMultipleSpellCastingCoroutine(float delay , EPlayerID playerID , AbstractSpell spell)
+    {
+        activePlayers[playerID].DoProjectileAttackAnimation();
+        for (int i = 0; i <= spell.CastDuration; i++)
+        {
+            Vector3 position = activePlayers[playerID].transform.position;
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+                     
+             LogConsole("Delay activated");
+            AbstractSpell spellToCast = Instantiate(spell, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
+            spellToCast.CastingPlayerID = playerID;
+            yield return new WaitForSeconds(delay);
+            LogConsole("Delay ended");
+        }
+    }
 
     IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID, int animationID)
     {

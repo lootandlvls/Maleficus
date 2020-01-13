@@ -12,6 +12,7 @@ TagManager:
   - Unhittable
   - enemy
   - Laser
+  - Shielded
   layers:
   - Default
   - TransparentFX

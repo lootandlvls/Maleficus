@@ -28,9 +28,11 @@ public interface ISpell
 
     float Cooldown { get; }
 
-    float Duration { get; }
+    float CastDuration { get; }
 
     float PushDuration { get; }
+
+    float SpellDuration { get; }
 
     bool IsChargeable { get; }
 

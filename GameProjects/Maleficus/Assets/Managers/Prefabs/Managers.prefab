@@ -263,14 +263,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5409742357272549645}
-  - component: {fileID: 3988087738987800745}
   m_Layer: 0
   m_Name: ShopManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5409742357272549645
 Transform:
   m_ObjectHideFlags: 0
@@ -285,21 +284,6 @@ Transform:
   m_Father: {fileID: 2613532659259175318}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3988087738987800745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772026473110625058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbd13aa99716933458f3cc890396499d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &898608065508071772
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,12 +803,12 @@ MonoBehaviour:
   CanDebugButtonEvents: 0
   CanDebugJoystickEvents: 0
   IsUseDebugGameMode: 0
-  DebugGameMode: 0
+  DebugGameMode: 1
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnRemainingAIPlayersOnGameStart: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsLoadDebugSpells: 0
+  IsLoadDebugSpells: 1
   IsDebugLogEvents: 0
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
@@ -1244,16 +1228,6 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  ambiamce_AudioSource: {fileID: 7902778028624163180}
-  startFighting__AudioSource: {fileID: 1348411854551532653}
-  fighting_AudioSource: {fileID: 8667944723138714777}
-  gameOver_AudioSource: {fileID: 380152982801246493}
-  gameWon_AudioSource: {fileID: 380152982801246493}
-  Castspell_FireBall_AudioSource: {fileID: 2174955199965382795}
-  Hitspell_FireBall_AudioSource: {fileID: 842527512433721666}
-  castSpell_AOE_AudioSource: {fileID: 75424656360464546}
-  castSpell_Laser_AudioSource: {fileID: 9140945901885795683}
-  stagePlaced: {fileID: 7706931365396027148}
 --- !u!1 &6677882287011659283
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,7 +1536,7 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   DebugSpells_Player1:
-  - {fileID: 4881839978439356376, guid: bca058ddfee72814bb33efe897551b02, type: 3}
+  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
   - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
   DebugSpells_Player2:

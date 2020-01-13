@@ -49,32 +49,34 @@ public class Linear_Hit : AbstractSpell
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
         Shield shield = other.gameObject.GetComponent<Shield>();
 
-        if (shield == null)
-        {
-            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
+        
+            if (shield == null)
             {
-                Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.GetIntFrom(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.GetIntFrom(otherPlayer.PlayerID));
-                ProcessHits(otherPlayer);
-            }
-            else if (otherEnemy != null)
-            {
-                ProcessHits(otherEnemy);
-            }
-            else if (other.tag.Equals("Object"))
-            {
+                if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.MaleficusConsts.TAG_PLAYER)
+                {
+                    Debug.Log("Casting player : " + Maleficus.MaleficusUtilities.GetIntFrom(CastingPlayerID) + " Player HIT : " + Maleficus.MaleficusUtilities.GetIntFrom(otherPlayer.PlayerID));
+                    ProcessHits(otherPlayer);
+                }
+                else if (otherEnemy != null)
+                {
+                    ProcessHits(otherEnemy);
+                }
+                else if (other.tag.Equals("Object"))
+                {
 
-                DestroySpell();
+                    DestroySpell();
 
+                }
             }
-        }
-        else
-        {
-            if (CastingPlayerID != shield.CastingPlayerID)
+            else
             {
-                transform.Rotate(180, 0, 0);
-                CastingPlayerID = shield.CastingPlayerID;
+                LogConsole("SHIELD DETECTED !!!!");
+                if (CastingPlayerID != shield.CastingPlayerID)
+                {
+                    transform.Rotate(180, 0, 0);
+                    CastingPlayerID = shield.CastingPlayerID;
+                }
             }
-        }
-    
+        
     }
 }

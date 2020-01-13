@@ -12,14 +12,14 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public bool IsDead                                                      { get; private set; } = false;                                          
     public Dictionary<ESpellSlot, bool> ReadyToUseSpell                     { get; } = new Dictionary<ESpellSlot, bool>();
     public Dictionary<ESpellSlot, float> SpellCooldown                      { get; } = new Dictionary<ESpellSlot, float>();
-    public Dictionary<ESpellSlot, float> SpellDuration                      { get; } = new Dictionary<ESpellSlot, float>();
+    public Dictionary<ESpellSlot, float> SpellCastDuration                      { get; } = new Dictionary<ESpellSlot, float>();
     public bool IsReadyToShoot                                              { get; set; }
     public bool IsPlayerCharging                                            { get; set; }
     public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
     public int SpellChargingLVL                                             { get { return spellChargingLVL; } }
     public bool hasCastedSpell = false;
-
+   
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
@@ -33,6 +33,9 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     [SerializeField] private float unhittableTime = 1.0f;
     [SerializeField] private Transform spellInitPosition;
     [SerializeField] private Transform spellEndPosition;
+
+    
+
     private int spellChargingLVL = 1;
 
     private float lastTimeSinceRotated;
@@ -207,7 +210,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
         {
-            StartCoroutine(SlowDownPlayerCoroutine(0, spell.Duration));
+            StartCoroutine(SlowDownPlayerCoroutine(0, spell.CastDuration));
         }
         else
         {
@@ -232,7 +235,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 if (IS_NOT_NULL(chosenSpell))
                 {
                     SpellCooldown[spellSlot] = chosenSpell.Cooldown;
-                    SpellDuration[spellSlot] = chosenSpell.Duration;
+                    SpellCastDuration[spellSlot] = chosenSpell.CastDuration;
                 }
             }
         }
@@ -496,7 +499,16 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         return myGrandParentTransform;
     }
 
-
+    public void ActivateShield(float duration)
+    {
+        StartCoroutine(ShieldActivatedCoroutine(duration));
+    }
+    private IEnumerator ShieldActivatedCoroutine(float duration)
+    {
+        this.tag  = Maleficus.MaleficusConsts.TAG_PLAYER_SHIELDED;
+        yield return new WaitForSeconds(duration);
+        this.tag = Maleficus.MaleficusConsts.TAG_PLAYER;
+    }
    private IEnumerator UnhittableCoroutine()
     {
         this.tag = "Unhittable";

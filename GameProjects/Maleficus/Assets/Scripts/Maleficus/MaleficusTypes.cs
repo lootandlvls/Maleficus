@@ -133,7 +133,8 @@ public enum ESpellID
     VAMPERICBALL,
     PLASMA_FISSION,
     PLASMA_FISSION_BALLS,
-    SHIELD
+    SHIELD,
+    RAPID_FIRE_PLASMA
 }
 #endregion
 

@@ -35,7 +35,9 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public float Cooldown { get { return cooldown; } }
 
-    public float Duration { get { return spellDuration; } }
+    public float CastDuration { get { return castDuration; } }
+
+    public float SpellDuration { get { return spellDuration; } }
 
     public float PushDuration { get { return pushDuration; } }
 
@@ -53,6 +55,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     public AudioClip HitSound { get { return hitSound; } }
 
+    
     [SerializeField] public int hitPower;
     [SerializeField] public float speed;
     [SerializeField] private string spellName;
@@ -73,8 +76,9 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     [SerializeField] private List<ESpellEffects> buffEffects;
 
     [SerializeField] private float cooldown;
-    [SerializeField] private float spellDuration;
+    [SerializeField] private float castDuration;
     [SerializeField] private float pushDuration;
+    [SerializeField] private float spellDuration;
 
     protected Rigidbody myRigidBody;
 
@@ -104,6 +108,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPushPower, isChargeable , isTripleCast, debuffEffects, buffEffects);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
+        StartCoroutine(WaitBeforeDestroySpellCoroutine(spellDuration));
     }
 
     private void On_SPELLS_UniqueEffectActivated(ESpellID SpellID, EPlayerID PlayerID)
@@ -298,6 +303,12 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     }
 
 
+
+    private IEnumerator WaitBeforeDestroySpellCoroutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        DestroySpell();
+    }
 
 
 }

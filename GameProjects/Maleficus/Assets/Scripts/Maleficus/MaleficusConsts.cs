@@ -13,7 +13,7 @@ namespace Maleficus
         public const string TAG_SPELL_HITTABLE = "SpellHittable";
         public const string TAG_SPELL_UNHITTABLE = "UnHittable";
         public const string TAG_PLAYER = "Player";
-
+        public const string TAG_PLAYER_SHIELDED = "Shielded";
         /* Scene names (in build settings) */
         public const string SCENE_ENTRY = "ENTRY";
         public const string SCENE_MENU_COUCH = "MENU_COUCH";

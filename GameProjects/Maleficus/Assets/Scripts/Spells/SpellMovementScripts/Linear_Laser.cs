@@ -16,7 +16,7 @@ public class Linear_Laser : AbstractSpell
         Shield shield = other.gameObject.GetComponent<Shield>();
         if (shield == null)
         {
-            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
+            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.MaleficusConsts.TAG_PLAYER)
             {
 
                 ProcessHits(otherPlayer);
@@ -28,5 +28,6 @@ public class Linear_Laser : AbstractSpell
 
             }
         }
+       
     }
 }

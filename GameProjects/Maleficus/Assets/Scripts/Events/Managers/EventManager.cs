@@ -92,7 +92,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
         {
             GAME_GameTimeUpdated.Invoke(time);
         }
-        DebugLog("Time has been Updated to : " + time);
+       // DebugLog("Time has been Updated to : " + time);
     }
     public MaleficusEvent<NetEvent_GameOver> GAME_GameOver 
         = new MaleficusEvent<NetEvent_GameOver>("Game_GameOver");

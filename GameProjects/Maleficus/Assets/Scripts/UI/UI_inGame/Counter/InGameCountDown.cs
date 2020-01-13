@@ -58,7 +58,7 @@ public class InGameCountDown : MaleficusMonoBehaviour
 
             myText.text = "" + i ;
             EventManager.Instance.Invoke_GAME_GameTimeUpdated(i);
-            LogConsole(myText.text);
+           
             yield return new WaitForSeconds(1.0f);
 
 

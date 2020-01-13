@@ -21,12 +21,12 @@ public class Traps : AbstractSpell
 
         float startTime = Time.time;
 
-        while (Time.time - startTime < Duration)
+        while (Time.time - startTime < SpellDuration)
         {
-         //   Debug.Log(size);
-            size = 1.0f + (59.0f / (Time.time - startTime));
-            Vector3 vecSize = new Vector3(size/1000 , size / 1000, size  / 1000);
-            childTransform.localScale += vecSize;
+            //   Debug.Log(size);
+            size+= 3;
+          Vector3 vecSize = new Vector3(size/1000 , size / 1000, size  / 1000);
+           childTransform.localScale += vecSize;
             yield return new WaitForSeconds(0.05f);
         }
         GameObject trapExplosion = Instantiate(explosion, transform.position, transform.rotation);

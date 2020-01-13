@@ -9651,8 +9651,9 @@ MonoBehaviour:
   debuffEffects: 
   buffEffects: 
   cooldown: 2
-  spellDuration: 0
+  castDuration: 0
   pushDuration: 1.3
+  spellDuration: 6
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1423167456353516, guid: dbd5e0890374e364f9925a8ba6460fc4, type: 3}

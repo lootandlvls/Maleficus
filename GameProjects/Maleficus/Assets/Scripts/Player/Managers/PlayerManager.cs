@@ -299,7 +299,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
                     {
 
-                        StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.Duration));
+                        // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+                        ActivePlayers[playerID].IsReadyToShoot = false;
+                        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                         SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
                         StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
@@ -311,7 +313,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                     {
                         if (!ActivePlayers[playerID].hasCastedSpell)
                         {
-                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.Duration));
+                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
                             SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
                             StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
                         }
@@ -532,7 +534,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         if (ActivePlayers.ContainsKey(playerID))
         {
-            yield return new WaitForSeconds(ActivePlayers[playerID].SpellDuration[spellSlot]);
+            yield return new WaitForSeconds(ActivePlayers[playerID].SpellCastDuration[spellSlot]);
             if (ActivePlayers.ContainsKey(playerID))
             {
                 ActivePlayers[playerID].IsReadyToShoot = true;

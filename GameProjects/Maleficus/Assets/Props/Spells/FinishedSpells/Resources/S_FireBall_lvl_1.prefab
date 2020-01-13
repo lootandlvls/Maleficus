@@ -4865,7 +4865,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5167001418836066224}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
   m_Name: 
@@ -4891,7 +4891,7 @@ MonoBehaviour:
   spellName: FireBall
   spellLevel: 1
   OnSelfEffect: 0
-  hasPushPower: 1
+  hasPushPower: 0
   spell: 0
   isChargeable: 1
   spellIcon: {fileID: 21300000, guid: e6648342b626fd749b089d6867eee241, type: 3}
@@ -4903,8 +4903,9 @@ MonoBehaviour:
   debuffEffects: 
   buffEffects: 
   cooldown: 1
-  spellDuration: 0
+  castDuration: 0
   pushDuration: 1.7
+  spellDuration: 3
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1262490536792160, guid: b364b2e1b67030b41b0d034b293f04cf, type: 3}
@@ -9665,10 +9666,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 1.3
-  m_Height: 0.8
+  m_Radius: 1.0027204
+  m_Height: 2.0054407
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0.10359594}
 --- !u!1 &5167562852309430166
 GameObject:
   m_ObjectHideFlags: 0
