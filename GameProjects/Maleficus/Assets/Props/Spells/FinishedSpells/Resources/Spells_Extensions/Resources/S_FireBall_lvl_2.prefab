@@ -14411,7 +14411,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 15
+  hitPower: 8
   speed: 800
   spellName: FireBall_lvl_2
   spellLevel: 2

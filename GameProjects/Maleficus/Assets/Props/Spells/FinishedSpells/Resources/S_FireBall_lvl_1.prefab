@@ -4886,7 +4886,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 10
+  hitPower: 6
   speed: 800
   spellName: FireBall
   spellLevel: 1
@@ -4897,7 +4897,7 @@ MonoBehaviour:
   spellIcon: {fileID: 21300000, guid: e6648342b626fd749b089d6867eee241, type: 3}
   castSound: {fileID: 0}
   hitSound: {fileID: 0}
-  skillPoint: 2
+  skillPoint: 1
   isTripleCast: 0
   movementType: 0
   debuffEffects: 

@@ -288,7 +288,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             AbstractSpell spell = Instantiate(spellToCast, position, rotation);
 
             spell.transform.rotation = activePlayers[playerID].transform.rotation;
-            //spell.transform.parent = activePlayers[playerID].transform;
+            spell.transform.parent = activePlayers[playerID].transform;
             spell.CastingPlayerID = playerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
         }

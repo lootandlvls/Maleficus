@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MyBox;
 
 public class Player : MaleficusMonoBehaviour, IPlayer                                                
 {
@@ -28,12 +29,14 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     [SerializeField] private float angularSpeed;
     [SerializeField] private float speed;
+    [SerializeField] private bool isClampPushVelocity = true;
+    [ConditionalField(nameof(isClampPushVelocity))] [SerializeField] private float maximumPushVelocity = 25.0f;
     [Range(0.1f, 3.0f)]
     [SerializeField] private float fallingTime = 0.3f;
     [SerializeField] private float unhittableTime = 1.0f;
     [SerializeField] private Transform spellInitPosition;
     [SerializeField] private Transform spellEndPosition;
-
+    
     
 
     private int spellChargingLVL = 1;
@@ -147,6 +150,8 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 }
             }
         }
+
+        LogCanvas(69, PlayerID + " push vel : " + pushVelocity.magnitude);
     }
 
     
@@ -433,6 +438,11 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public void PushPlayer(Vector3 velocity, float duration)
     {
         pushVelocity += velocity;
+        if ((isClampPushVelocity)
+            && (pushVelocity.magnitude > maximumPushVelocity))
+        { 
+                pushVelocity = pushVelocity.normalized * maximumPushVelocity;
+        }
 
         if (duration <= 0.0f)
         {

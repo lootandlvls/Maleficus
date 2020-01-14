@@ -13986,11 +13986,17 @@ MonoBehaviour:
   cooldown: 5
   castDuration: 0
   pushDuration: 0.2
-  spellDuration: 2.5
+  spellDuration: 2
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}
-  trails: []
+  trails:
+  - {fileID: 3870202742417870167}
+  - {fileID: 3870020238712434183}
+  - {fileID: 3868657883985328589}
+  - {fileID: 3870169780497151305}
+  - {fileID: 3870225384778224809}
+  - {fileID: 3868611317914537683}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!65 &8270885389934248921
 BoxCollider:
@@ -18624,7 +18630,7 @@ Transform:
   m_GameObject: {fileID: 3870036814551827905}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.33854, y: 1.33854, z: 1.33854}
   m_Children: []
   m_Father: {fileID: 3872389534490520989}
   m_RootOrder: 3

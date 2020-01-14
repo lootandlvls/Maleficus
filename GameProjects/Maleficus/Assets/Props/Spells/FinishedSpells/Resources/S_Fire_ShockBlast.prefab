@@ -222,7 +222,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.9811321, g: 0.32942528, b: 0.0786757, a: 1}
+      maxColor: {r: 0.9811321, g: 0.32942528, b: 0.0786757, a: 0.31764707}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4764,8 +4764,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.2572927, y: 1, z: 11.064164}
-  m_Center: {x: 0, y: 0, z: 5.032082}
+  m_Size: {x: 3.1, y: 1, z: 10.03}
+  m_Center: {x: 0, y: 0, z: 4.38}
 --- !u!114 &3462094080666256724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4797,17 +4797,20 @@ MonoBehaviour:
   movementType: 3
   debuffEffects: 
   buffEffects: 
-  cooldown: 1
+  cooldown: 3.5
   castDuration: 0
-  pushDuration: 0.3
+  pushDuration: 0.7
   spellDuration: 0.2
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}
   trails:
   - {fileID: 6990203985104957395}
-  - {fileID: 5174734814475007282}
   - {fileID: 6990076623635933625}
+  - {fileID: 6989908497551876399}
+  - {fileID: 6990025026801615487}
+  - {fileID: 6990896707834385845}
+  - {fileID: 6989875467044313393}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &6989875467044313393
 GameObject:
@@ -9418,8 +9421,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6989908497551876399}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.19}
-  m_LocalScale: {x: 3.51, y: 2, z: 18.891962}
+  m_LocalPosition: {x: 3.58, y: 0, z: 1.19}
+  m_LocalScale: {x: 2.5354133, y: 2, z: 18.891962}
   m_Children: []
   m_Father: {fileID: 6996339226307243695}
   m_RootOrder: 0
@@ -18720,7 +18723,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6990025026801615487}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.8, y: 0, z: -0}
+  m_LocalPosition: {x: 3.62, y: 0, z: -0}
   m_LocalScale: {x: 3.25, y: 2, z: 18.89196}
   m_Children: []
   m_Father: {fileID: 6996339226307243695}
@@ -23313,7 +23316,7 @@ Transform:
   m_GameObject: {fileID: 6990076623635933625}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.03000025, y: 0, z: -0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.12552, y: 1.12552, z: 1.12552}
   m_Children: []
   m_Father: {fileID: 6992367968623542757}
   m_RootOrder: 2
@@ -32676,7 +32679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6990641942191060393}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 4.19}
+  m_LocalPosition: {x: 0, y: 0, z: 0.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6992302253443764967}

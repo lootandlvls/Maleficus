@@ -19152,7 +19152,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 8
+  hitPower: 5
   speed: 1500
   spellName: ElectricBall
   spellLevel: 0
@@ -19168,9 +19168,9 @@ MonoBehaviour:
   movementType: 0
   debuffEffects: 08000000
   buffEffects: 
-  cooldown: 1
+  cooldown: 2
   castDuration: 0
-  pushDuration: 1
+  pushDuration: 0.5
   spellDuration: 6
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}

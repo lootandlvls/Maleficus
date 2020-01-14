@@ -9634,7 +9634,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 12
+  hitPower: 6
   speed: 1000
   spellName: Energy Triangles
   spellLevel: 0

@@ -14445,7 +14445,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 10
+  hitPower: 5
   speed: 1000
   spellName: Rapidfire Plasma
   spellLevel: 0
@@ -14461,7 +14461,7 @@ MonoBehaviour:
   movementType: 7
   debuffEffects: 
   buffEffects: 
-  cooldown: 5
+  cooldown: 3
   castDuration: 0
   pushDuration: 1
   spellDuration: 4

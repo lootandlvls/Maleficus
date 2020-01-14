@@ -19187,7 +19187,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 14
+  hitPower: 12.5
   speed: 1600
   spellName: 
   spellLevel: 0
@@ -19205,7 +19205,7 @@ MonoBehaviour:
   buffEffects: 
   cooldown: 1
   castDuration: 0
-  pushDuration: 0.5
+  pushDuration: 0.7
   spellDuration: 6
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
