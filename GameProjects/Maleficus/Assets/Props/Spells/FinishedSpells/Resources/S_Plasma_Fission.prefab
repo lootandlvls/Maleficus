@@ -19174,7 +19174,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 25
+  hitPower: 13
   speed: 600
   spellName: Plasma Fission
   spellLevel: 0
@@ -19191,8 +19191,9 @@ MonoBehaviour:
   debuffEffects: 
   buffEffects: 
   cooldown: 4
-  spellDuration: 0
+  castDuration: 0
   pushDuration: 1
+  spellDuration: 6
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}

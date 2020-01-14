@@ -432,7 +432,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     public void PushPlayer(Vector3 velocity, float duration)
     {
-        pushVelocity = velocity;
+        pushVelocity += velocity;
 
         if (duration <= 0.0f)
         {

@@ -115,7 +115,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 22
+  hitPower: 16
   speed: 0
   spellName: Arcane Trap
   spellLevel: 0

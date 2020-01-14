@@ -12,7 +12,7 @@ public interface ISpell
 
     EPlayerID CastingPlayerID { get;  }
 
-    int HitPower { get;  }
+    float HitPower { get;  }
 
     Vector3 Direction { get; }
 

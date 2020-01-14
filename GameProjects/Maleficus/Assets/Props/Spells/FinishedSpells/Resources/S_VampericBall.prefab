@@ -24028,7 +24028,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 25
+  hitPower: 13
   speed: 1000
   spellName: Vamperic Ball
   spellLevel: 0

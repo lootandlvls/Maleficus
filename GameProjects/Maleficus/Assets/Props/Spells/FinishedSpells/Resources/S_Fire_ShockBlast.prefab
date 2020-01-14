@@ -4781,7 +4781,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 23
+  hitPower: 3
   speed: 0
   spellName: Fire Shock Blast
   spellLevel: 0
@@ -4799,7 +4799,7 @@ MonoBehaviour:
   buffEffects: 
   cooldown: 1
   castDuration: 0
-  pushDuration: 1
+  pushDuration: 0.3
   spellDuration: 0.2
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}

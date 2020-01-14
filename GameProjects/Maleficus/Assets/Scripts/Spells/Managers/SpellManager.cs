@@ -164,7 +164,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void PushPlayer(SHitInfo hitInfo)
     {
-        activePlayers[hitInfo.HitPlayerID].PushPlayer(hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
+        if ( hitInfo.CastedSpell.SpellID == ESpellID.BLACK_HOLE)
+        {
+            activePlayers[hitInfo.HitPlayerID].PushPlayer(-hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
+        }
+        else
+        {
+            activePlayers[hitInfo.HitPlayerID].PushPlayer(hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
+        }
+        
+
     }
 
     private void ApplyDebuff(ESpellEffects debuff, EPlayerID playerID)
@@ -263,11 +272,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             Debug.Log("AOE SPELL CASTED");
             //spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
         }
+        else if (spellToCast.GetComponent<Linear_Explosive>())
+        {
+            Vector3 position = activePlayers[playerID].transform.position  + new Vector3(0,0.5f,0);
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+            activePlayers[playerID].DoProjectileAttackAnimation();
+            StartCoroutine(animationDelay(spellToCast, playerID, 1));
+        }
         else if (spellToCast.GetComponent<Linear_Instant>() != null)
 
-        {
-            
-         
+        {       
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             activePlayers[playerID].DoShockwaveAnimation();
@@ -433,7 +447,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     IEnumerator DelayBetweenMultipleSpellCastingCoroutine(float delay , EPlayerID playerID , AbstractSpell spell)
     {
         activePlayers[playerID].DoProjectileAttackAnimation();
-        for (int i = 0; i <= spell.CastDuration; i++)
+        for (int i = 0; i <= spell.SpellDuration; i++)
         {
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;

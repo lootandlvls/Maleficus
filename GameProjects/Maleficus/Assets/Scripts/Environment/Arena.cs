@@ -41,10 +41,10 @@ public class Arena : MaleficusMonoBehaviour
 
     private void On_GAME_GameTimeUpdated(int countdown)
     {
-        LogConsole("Time Updated");
+       // LogConsole("Time Updated");
         if (countdown == 100 || countdown == 50)
         {
-            LogConsole("Starting to shrink");
+          //  LogConsole("Starting to shrink");
             StartToShrink();
         }
     }

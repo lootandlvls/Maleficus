@@ -19152,7 +19152,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 15
+  hitPower: 8
   speed: 1500
   spellName: ElectricBall
   spellLevel: 0

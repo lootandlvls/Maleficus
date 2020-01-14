@@ -9,7 +9,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
 
 
-    public int HitPower { get {
+    public float HitPower { get {
            // Debug.Log("$%&$/$%& Hit power : " + hitPower);
             return hitPower; } }
 
@@ -56,7 +56,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     public AudioClip HitSound { get { return hitSound; } }
 
     
-    [SerializeField] public int hitPower;
+    [SerializeField] public float hitPower;
     [SerializeField] public float speed;
     [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
@@ -111,6 +111,11 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         StartCoroutine(WaitBeforeDestroySpellCoroutine(spellDuration));
     }
 
+    public void setDirection(Vector3 direction)
+    {
+        direction.y = 0;
+        this.direction = direction;
+    }
     private void On_SPELLS_UniqueEffectActivated(ESpellID SpellID, EPlayerID PlayerID)
     {
         if (this != null)
@@ -179,7 +184,7 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
            
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
             
-           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST )
+           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.BLACK_HOLE )
            {
                 DestroySpell();
            }

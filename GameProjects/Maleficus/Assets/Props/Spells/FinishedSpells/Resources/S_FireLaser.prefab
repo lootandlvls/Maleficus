@@ -13967,7 +13967,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 15
+  hitPower: 0.5
   speed: 0
   spellName: Fire Laser
   spellLevel: 0
@@ -13984,9 +13984,9 @@ MonoBehaviour:
   debuffEffects: 
   buffEffects: 
   cooldown: 5
-  spellDuration: 2.5
-  pushDuration: 0.2
   castDuration: 0
+  pushDuration: 0.2
+  spellDuration: 2.5
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}

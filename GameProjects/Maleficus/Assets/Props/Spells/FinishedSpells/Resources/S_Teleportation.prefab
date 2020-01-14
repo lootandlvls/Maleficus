@@ -9498,7 +9498,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 10
+  hitPower: 7
   speed: 0
   spellName: Teleport
   spellLevel: 0
@@ -9515,8 +9515,9 @@ MonoBehaviour:
   debuffEffects: 
   buffEffects: 
   cooldown: 3
-  spellDuration: 0
+  castDuration: 0
   pushDuration: 0
+  spellDuration: 1
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}

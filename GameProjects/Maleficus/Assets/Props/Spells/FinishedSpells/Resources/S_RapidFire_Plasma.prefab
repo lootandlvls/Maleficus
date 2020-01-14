@@ -14445,7 +14445,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 15
+  hitPower: 10
   speed: 1000
   spellName: Rapidfire Plasma
   spellLevel: 0
@@ -14462,9 +14462,9 @@ MonoBehaviour:
   debuffEffects: 
   buffEffects: 
   cooldown: 5
-  castDuration: 3
+  castDuration: 0
   pushDuration: 1
-  spellDuration: 5
+  spellDuration: 4
   shotSFX: {fileID: 0}
   hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1329826249346808, guid: 7a37fbaa558a2b54d9aef711134128e1, type: 3}
