@@ -417,6 +417,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         GameObject ParalyzeEffect = Instantiate(paralyzeEffect, position, activePlayers[playerID].transform.rotation);
         ParalyzeEffect.transform.parent = activePlayers[playerID].transform;
         yield return new WaitForSeconds(duration);
+            Destroy(ParalyzeEffect);
             if (activePlayers.ContainsKey(playerID))
             {
                 activePlayers[playerID].SetPlayerParalyzed(false, effectStrenght);
