@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6519450539831470820}
   - component: {fileID: 2529863791790152314}
-  - component: {fileID: 8425177651819473937}
   - component: {fileID: 6536862604725729376}
   - component: {fileID: 6043731753490096032}
   m_Layer: 0
@@ -59,11 +58,11 @@ MonoBehaviour:
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 0
-  spell: 3
+  spell: 4
   isChargeable: 0
   spellIcon: {fileID: 21300000, guid: 510dc3fb9a84c324f9a15b88cd437348, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  castSound: {fileID: 8300000, guid: cfe4de7ac1d3bee49b3439d0de06c78b, type: 3}
+  hitSound: {fileID: 8300000, guid: c86cf6d3b33e35445ad99cfc43d06784, type: 3}
   skillPoint: 3
   isTripleCast: 0
   movementType: 0
@@ -73,6 +72,8 @@ MonoBehaviour:
   castDuration: 0
   pushDuration: 0
   spellDuration: 6
+  debuffDuration: 3
+  buffDuration: 0
   hitPrefab: {fileID: 1312591640859010, guid: 57073eed22326fd489c9cfeb9a76b7b9, type: 3}
   trails:
   - {fileID: 6517137874974288690}
@@ -82,19 +83,6 @@ MonoBehaviour:
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0
---- !u!114 &8425177651819473937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6516738258802375036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 3
 --- !u!54 &6536862604725729376
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -119,7 +107,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6516738258802375036}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.8
@@ -346,7 +334,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 0.4174791, b: 0.125, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0.19842473, g: 0.5561526, b: 0.8584906, a: 0.23921569}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4917,7 +4905,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6519037528979480220
 Transform:
   m_ObjectHideFlags: 0
@@ -5122,7 +5110,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 0.4174791, b: 0.125, a: 1}
-      maxColor: {r: 0.07352942, g: 0.6549693, b: 1, a: 1}
+      maxColor: {r: 0, g: 0.90836334, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5184,7 +5172,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4
+      scalar: 2
       minScalar: 1.5
       maxCurve:
         serializedVersion: 2
@@ -5500,7 +5488,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 100
+    maxNumParticles: 30
     size3D: 0
     rotation3D: 0
     gravityModifier:

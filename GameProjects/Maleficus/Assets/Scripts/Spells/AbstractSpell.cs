@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MyBox;
 using UnityEngine;
 
 public abstract class AbstractSpell : BNJMOBehaviour, ISpell
@@ -16,7 +17,11 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public bool HasPushPower { get { return hasPushPower; } }
     public ESpellMovementType MovementType { get { return movementType; } }
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
+    public float DebuffDuration { get { return debuffDuration; } }
+    public float DebuffPower { get { return debuffPower; } }
     public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
+    public float BuffPower { get { return buffPower; } }
+    public float BuffDuration { get { return buffDuration; } }
     public EPlayerID CastingPlayerID { get; set; }
     public float Cooldown { get { return cooldown; } }
     public float CastDuration { get { return castDuration; } }
@@ -29,7 +34,8 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public int SkillPoint { get { return skillPoint; } }
     public AudioClip CastSound { get { return castSound; } }
     public AudioClip HitSound { get { return hitSound; } }
-    
+
+    [Separator("Characteristics")]
     [SerializeField] public float hitPower;
     [SerializeField] public float speed;
     [SerializeField] private string spellName;
@@ -38,18 +44,33 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     [SerializeField] private bool hasPushPower;
     [SerializeField] private ESpellID spell;
     [SerializeField] private bool isChargeable;
-    [SerializeField] private Sprite spellIcon;
-    [SerializeField] private AudioClip castSound;
-    [SerializeField] private AudioClip hitSound;
-    [SerializeField] private int skillPoint;
     [SerializeField] private bool isTripleCast;
     [SerializeField] private ESpellMovementType movementType;
+    [SerializeField] private int skillPoint;
+    
+    [Separator("Debuffs")]
     [SerializeField] private List<ESpellEffects> debuffEffects;
+    [SerializeField] private float debuffDuration;
+    [SerializeField] private float debuffPower;
+
+    [Separator("Buffs")]
     [SerializeField] private List<ESpellEffects> buffEffects;
+    [SerializeField] private float buffDuration;
+    [SerializeField] private float buffPower;
+
+    [Separator("Durations")]
     [SerializeField] private float cooldown;
     [SerializeField] private float castDuration;
     [SerializeField] private float pushDuration;
     [SerializeField] private float spellDuration;
+
+    [Separator("Audio")]
+    [SerializeField] private AudioClip castSound;
+    [SerializeField] private AudioClip hitSound;
+    [Separator("UI")]
+    [SerializeField] private Sprite spellIcon;
+
+
 
     protected Rigidbody myRigidBody;
     protected Vector3 direction;

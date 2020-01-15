@@ -87,7 +87,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     public void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
-        ISpell spell = hitInfo.CastedSpell;
+        AbstractSpell spell =  (AbstractSpell) hitInfo.CastedSpell;
         if (IS_NOT_NULL(spell))
         {
             if (spell.HasPushPower)
@@ -100,12 +100,12 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
             foreach (ESpellEffects debuffeffect in spell.DebuffEffects)
             {
-                ApplyDebuff(debuffeffect, hitInfo.HitPlayerID);
+                ApplyDebuff(debuffeffect, hitInfo.HitPlayerID , spell.DebuffDuration);
             }
 
             foreach (ESpellEffects buffeffect in spell.BuffEffects)
             {
-                ApplyBuff(buffeffect, hitInfo.HitPlayerID, hitInfo.CastingPlayerID);
+                ApplyBuff(buffeffect, hitInfo.HitPlayerID, hitInfo.CastingPlayerID , spell.BuffDuration);
             }
         }
     }
@@ -156,13 +156,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     }
 
-    private void ApplyDebuff(ESpellEffects debuff, EPlayerID playerID)
+    private void ApplyDebuff(ESpellEffects debuff, EPlayerID playerID , float debuffDuration)
     {
         switch (debuff)
         {
             case ESpellEffects.FROZEN:
                 Debug.Log("Player Frozen");
-                StartCoroutine(PlayerFrozen(playerID));
+                StartCoroutine(PlayerFrozen(playerID , debuffDuration));
                 break;
 
             case ESpellEffects.STUN:
@@ -171,7 +171,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
             case ESpellEffects.SLOWDOWN:
                 Debug.Log("Player Paralyzed");
-                StartCoroutine(PlayerParalyzed(playerID , 3));
+                StartCoroutine(PlayerParalyzed(playerID , 3 , debuffDuration));
                 break;
 
             case ESpellEffects.CHARM:
@@ -181,7 +181,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-    private void ApplyBuff(ESpellEffects buff, EPlayerID playerID, EPlayerID CastingPlayerID)
+    private void ApplyBuff(ESpellEffects buff, EPlayerID playerID, EPlayerID CastingPlayerID , float buffDuration)
     {
         Debug.Log("Apply Buff on player " + playerID);
         switch (buff)
@@ -366,28 +366,28 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
     //BUFFS
-    private IEnumerator PlayerSpeedBoost(EPlayerID playerID , int SpeedBoost)
+    private IEnumerator PlayerSpeedBoost(EPlayerID playerID , int buffDuration)
     {
-        activePlayers[playerID].SetPlayerSpeedBoost(SpeedBoost);
+        activePlayers[playerID].SetPlayerSpeedBoost(buffDuration);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(buffDuration);
 
         activePlayers[playerID].SetPlayerSpeedBoost(1);
     }
 
     //DEBUFFS
 
-    private IEnumerator PlayerFrozen(EPlayerID playerID)
+    private IEnumerator PlayerFrozen(EPlayerID playerID , float debuffDuration)
     {
         if (activePlayers.ContainsKey(playerID))
         {
             activePlayers[playerID].SetPlayerFrozen(true);
-        GameObject snowman = Instantiate(frozenEffect, activePlayers[playerID].transform.position, activePlayers[playerID].transform.rotation);
-        activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(false);
-        snowman.transform.parent = activePlayers[playerID].transform;
+            GameObject snowman = Instantiate(frozenEffect, activePlayers[playerID].transform.position, activePlayers[playerID].transform.rotation);
+            activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(false);
+            snowman.transform.parent = activePlayers[playerID].transform;
 
-        yield return new WaitForSeconds(1.5f);
-        
+            yield return new WaitForSeconds(debuffDuration);
+            Destroy(snowman);
             activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
             activePlayers[playerID].SetPlayerFrozen(false);
         }
@@ -407,7 +407,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-    private IEnumerator PlayerParalyzed(EPlayerID playerID , int effectStrenght)
+    private IEnumerator PlayerParalyzed(EPlayerID playerID , float effectStrenght , float duration)
     {
         if (activePlayers.ContainsKey(playerID))
         {
@@ -415,7 +415,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y +1 , activePlayers[playerID].transform.position.z);
         GameObject ParalyzeEffect = Instantiate(paralyzeEffect, position, activePlayers[playerID].transform.rotation);
         ParalyzeEffect.transform.parent = activePlayers[playerID].transform;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(duration);
             if (activePlayers.ContainsKey(playerID))
             {
                 activePlayers[playerID].SetPlayerParalyzed(false, effectStrenght);
