@@ -10,11 +10,13 @@ using static Maleficus.MaleficusConsts;
 public class ManagersSpawner : MotherOfManagers
 {
     [Separator("Managers Spawner Specific")]
-    [SerializeField] private EScene currentScene;
+    [SerializeField] private EScene currentScene = EScene.NONE;
 
     protected override void Awake()
     {
         // Do not call base.Awake() to prevent setting Instance of MotherOfManagers to this one
+        InitializeComponents();
+        InitializeObjecsInScene();
 
         MotherOfManagers managersInstance = FindObjectOfType<MotherOfManagers>();
         if ((managersInstance == null) || (managersInstance == this))

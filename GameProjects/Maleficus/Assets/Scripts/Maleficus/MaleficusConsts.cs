@@ -14,6 +14,7 @@ namespace Maleficus
         public const string TAG_SPELL_UNHITTABLE = "UnHittable";
         public const string TAG_PLAYER = "Player";
         public const string TAG_PLAYER_SHIELDED = "Shielded";
+
         /* Scene names (in build settings) */
         public const string SCENE_ENTRY = "ENTRY";
         public const string SCENE_MENU_COUCH = "MENU_COUCH";
@@ -24,6 +25,12 @@ namespace Maleficus
         /* Managers path */
         public const string PATH_MANAGERS_CLIENT = "Managers_CLIENT";
         public const string PATH_MANAGERS_SERVER = "Managers_SERVER";
+
+
+        /* Sound paths */
+        public const string PATH_SOUND_OBJECT = "SoundObject";
+
+
 
         /* Spells path */
         public const string PATH_SPELL_FIREBALL_LVL_1 = "S_FireBall_lvl_1";

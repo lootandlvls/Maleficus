@@ -84,9 +84,6 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
     protected Vector3 direction;
 
-
-    public AudioClip shotSFX;
-    public AudioClip hitSFX;
     public GameObject hitPrefab;
     public List<GameObject> trails;
     public Vector3 parabolicSpell_EndPosition;
@@ -233,12 +230,6 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     //Funtion to destroy the spell
     public void DestroySpell()
     {
-
-        if (shotSFX != null && GetComponent<AudioSource>())
-        {
-            GetComponent<AudioSource>().PlayOneShot(hitSFX);
-        }
-
         if (trails.Count > 0)
         {
             for (int i = 0; i < trails.Count; i++)

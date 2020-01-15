@@ -6,13 +6,14 @@ using MyBox;
 
 public class SoundObject : MaleficusMonoBehaviour
 {
-    public event Action SoundFinishedPlayed;
-
+    public event Action<SoundObject> SoundFinishedPlayed;
+    public event Action<SoundObject> SoundObjectWillGetDestroyed;
+    
     [Separator("Sound Object")]
     [SerializeField] private AudioClip audioClip;
 
     private AudioSource myAudioSource;
-    private IEnumerator DestroyAfterDelayEnumerator;
+    private IEnumerator OnSoundFinishedPlayinEnumerator;
 
     protected override void InitializeComponents()
     {
@@ -47,11 +48,8 @@ public class SoundObject : MaleficusMonoBehaviour
                 // Play sound
                 myAudioSource.Play();
                 
-                // Destroy when finished
-                if (destroyWhenFinished)
-                {
-                    StartNewCoroutine(ref DestroyAfterDelayEnumerator, DestroyAfterDelayCoroutine(audioClip.length));
-                }
+                // Callback for when sound finished playing
+                StartNewCoroutine(ref OnSoundFinishedPlayinEnumerator, OnSoundFinishedPlayingCoroutine(myAudioSource.clip.length, destroyWhenFinished));
             }
         }
     }
@@ -93,11 +91,17 @@ public class SoundObject : MaleficusMonoBehaviour
     }
 
 
-    private IEnumerator DestroyAfterDelayCoroutine(float delay)
+    private IEnumerator OnSoundFinishedPlayingCoroutine(float delay, bool destroyWhenFinished)
     {
         yield return new WaitForSeconds(delay);
 
-        Destroy(gameObject);
+        InvokeEventIfBound(SoundFinishedPlayed, this);
+
+        if (destroyWhenFinished)
+        {
+            InvokeEventIfBound(SoundObjectWillGetDestroyed, this);
+            Destroy(gameObject);
+        }
     }
 
 }

@@ -1,32 +1,73 @@
 ﻿
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+using static Maleficus.MaleficusConsts;
 
 public class SoundManager : AbstractSingletonManager<SoundManager>
 {
 
-    protected override void Start()
+    private List<SoundObject> aliveSoundObjects = new List<SoundObject>();
+    private SoundObject soundObjectPrefab;
+
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
-
+        soundObjectPrefab = Resources.Load<SoundObject>(PATH_SOUND_OBJECT);
+        IS_NOT_NULL(soundObjectPrefab);
     }
 
-    public void SpawnSoundObject(AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
+    public SoundObject SpawnSoundObject(AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
     {
-        if (IS_NULL(audioClipToPlay))
+        SoundObject soundObject = SpawnSoundObject(audioClipToPlay);
+        if (soundObject)
         {
-            GameObject gameObject = new GameObject("SO_" + audioClipToPlay.name);
-            //SoundObject soundObjec = Ins
+            soundObject.PlaySound(audioClipToPlay, destroyWhenFinished, isLoop);
+        }
+        return soundObject;
+    }
+
+    public SoundObject SpawnSoundObject(Vector3 position, AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
+    {
+        SoundObject soundObject = SpawnSoundObject(audioClipToPlay);
+        if (soundObject)
+        {
+            soundObject.PlaySound(position, audioClipToPlay, destroyWhenFinished, isLoop);
+        }
+        return soundObject;
+    }
+
+    public SoundObject SpawnSoundObject(Transform transform, AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
+    {
+        SoundObject soundObject = SpawnSoundObject(audioClipToPlay);
+        if (soundObject)
+        {
+            soundObject.PlaySound(transform, audioClipToPlay, destroyWhenFinished, isLoop);
+        }
+        return soundObject;
+    }
+
+    private SoundObject SpawnSoundObject(AudioClip audioClipToPlay)
+    {
+        if ((IS_NOT_NULL(audioClipToPlay))
+            && (IS_NOT_NULL(soundObjectPrefab)))
+        {
+            SoundObject soundObject = Instantiate(soundObjectPrefab);
+            soundObject.gameObject.name = "SO_" + audioClipToPlay.name;
+            aliveSoundObjects.Add(soundObject);
+            soundObject.SoundObjectWillGetDestroyed += On_SoundObject_SoundObjectWillGetDestroyed;
+            return soundObject;
+        }
+        return null;
+    }
 
 
+    private void On_SoundObject_SoundObjectWillGetDestroyed(SoundObject soundObject)
+    {
+        if (IS_VALUE_CONTAINED(aliveSoundObjects, soundObject))
+        {
+            aliveSoundObjects.Remove(soundObject);
         }
     }
-
-
-
-
-    
 }

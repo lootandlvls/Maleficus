@@ -118,7 +118,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     {
         if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
         {
-            Debug.Log("<color=yellow>Warning! </color>" + "<color=gray>[" + name + "]</color> " + logText);
+            Debug.Log("<color=yellow>WARNING! </color>" + "<color=gray>[" + name + "]</color> " + logText);
         }
     }
 
@@ -131,7 +131,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     {
         if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
         {
-            Debug.Log("<color=red>Error! </color>" + "<color=gray>[" + name + "]</color> " + logText);
+            Debug.Log("<color=red>ERROR! </color>" + "<color=gray>[" + name + "]</color> " + logText);
         }
     }
 

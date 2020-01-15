@@ -4895,8 +4895,8 @@ MonoBehaviour:
   spell: 0
   isChargeable: 1
   spellIcon: {fileID: 21300000, guid: e6648342b626fd749b089d6867eee241, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  castSound: {fileID: 8300000, guid: 7696580094909f54684e881971773723, type: 3}
+  hitSound: {fileID: 8300000, guid: 50987dc19aaf5a544945fbb3de5b7fc0, type: 3}
   skillPoint: 1
   isTripleCast: 0
   movementType: 0
@@ -4906,8 +4906,6 @@ MonoBehaviour:
   castDuration: 0
   pushDuration: 1
   spellDuration: 3
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1262490536792160, guid: b364b2e1b67030b41b0d034b293f04cf, type: 3}
   trails:
   - {fileID: 5167806128211538230}
