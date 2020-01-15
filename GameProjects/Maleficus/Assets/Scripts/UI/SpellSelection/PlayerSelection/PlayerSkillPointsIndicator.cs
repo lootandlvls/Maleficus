@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerSkillPointsIndicator : MaleficusMonoBehaviour
+public class PlayerSkillPointsIndicator : BNJMOBehaviour
 {
     public int ReaminingSkillPoints { get; private set; }
 

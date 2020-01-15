@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 
 [RequireComponent(typeof(Button))]
-public class MaleficusButton : MaleficusMonoBehaviour
+public class MaleficusButton : BNJMOBehaviour
 {
     public MaleficusButton LeftButton   { get { return leftButton; }    set { leftButton = value; } }
     public MaleficusButton RightButton  { get { return rightButton; }   set { rightButton = value; } }

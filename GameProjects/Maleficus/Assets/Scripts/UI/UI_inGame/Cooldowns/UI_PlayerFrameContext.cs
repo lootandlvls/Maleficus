@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_PlayerFrameContext : MaleficusMonoBehaviour
+public class UI_PlayerFrameContext : BNJMOBehaviour
 {
     [SerializeField] private EPlayerID PlayerID = EPlayerID.NONE;
     [SerializeField] private GameObject playerFrameView;
@@ -209,17 +209,19 @@ public class UI_PlayerFrameContext : MaleficusMonoBehaviour
 
     private void InitializeSpellsIcons()
     {
-        if (SpellManager.Instance.playersChosenSpells[PlayerID] != null) {
-
-            spellCooldownsIcons[ESpellSlot.SPELL_1].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_1].SpellIcon;
-        }
-        if (spellCooldownsIcons[ESpellSlot.SPELL_2].SpellIcon != null)
+        foreach (ESpellSlot spellSlot in Enum.GetValues(typeof(ESpellSlot)))
         {
-            spellCooldownsIcons[ESpellSlot.SPELL_2].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_2].SpellIcon;
-        }
-        if (spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon != null)
-        {
-            spellCooldownsIcons[ESpellSlot.SPELL_3].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][ESpellSlot.SPELL_3].SpellIcon;
+            if ((spellSlot != ESpellSlot.NONE)
+                && (IS_KEY_CONTAINED(spellCooldownsIcons, spellSlot))
+                && (IS_NOT_NULL(spellCooldownsIcons[spellSlot]))
+                && (IS_NOT_NULL(spellCooldownsIcons[spellSlot].SpellIcon))
+                && (IS_KEY_CONTAINED(SpellManager.Instance.playersChosenSpells, PlayerID))
+                && (IS_NOT_NULL(SpellManager.Instance.playersChosenSpells[PlayerID]))
+                && (IS_KEY_CONTAINED(SpellManager.Instance.playersChosenSpells[PlayerID], spellSlot))
+                && (IS_NOT_NULL(SpellManager.Instance.playersChosenSpells[PlayerID][spellSlot])))
+            {
+                spellCooldownsIcons[spellSlot].SpellIcon.sprite = SpellManager.Instance.playersChosenSpells[PlayerID][spellSlot].SpellIcon;
+            }
         }
     }
 }

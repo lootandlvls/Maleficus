@@ -3,20 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arena : MaleficusMonoBehaviour
+public class Arena : BNJMOBehaviour
 {
     public float ShrinkingRate { get { return shrinkingRate; } }
     public float ShrinkingDuration { get { return shrinkingDuration; } }
-    public float MaxLimit { get { return maxLimit; } }
+    public float ShrinkingLimit { get { return shrinkingLimit; } }
+    public float ArenaRadius { get; private set; }
 
+    [Header("Shrinking")]
     [SerializeField] float shrinkingRate;
-
-    [SerializeField] float maxLimit;
+    [SerializeField] float shrinkingLimit;
     [SerializeField] float shrinkingDuration;
 
-    private Vector2 currentSize;
-    private Transform ArenaTransform;
-    private bool IsReadyToshrink;
+    private ArenaLimit myArenaLimit;
+
+    private Vector2 currentScale;
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        currentScale = new Vector2(transform.localScale.x, transform.localScale.y);
+    }
 
     protected override void InitializeEventsCallbacks()
     {
@@ -24,19 +33,25 @@ public class Arena : MaleficusMonoBehaviour
         EventManager.Instance.GAME_GameTimeUpdated += On_GAME_GameTimeUpdated;
     }
 
-
-
-
-    // Start is called before the first frame update
-    protected override void InitializeObjecsInScene()
+    protected override void InitializeComponents()
     {
-        base.InitializeObjecsInScene();
-    
-        
-        ArenaTransform = GetComponentWithCheck<Transform>();
-        currentSize = new Vector2(transform.localScale.x, transform.localScale.y);
+        base.InitializeComponents();
 
+        myArenaLimit = GetComponentInChildren<ArenaLimit>();
+        if (IS_NOT_NULL(myArenaLimit))
+        {
+            ArenaRadius = Mathf.Abs((myArenaLimit.Position - transform.position).magnitude);
+        }
+    }
 
+    /// <summary>
+    /// Transforms the position of the given player in local normalized Arena coordinate realtive to its size
+    /// </summary>
+    public Vector2 GetInArenaPosition(Player player)
+    {
+        Vector2 player2DPosition = new Vector2(player.Position.x, player.Position.z);
+        Vector2 arena2DPosition = new Vector2(transform.position.x, transform.position.z);
+        return (player2DPosition - arena2DPosition) / ArenaRadius;
     }
 
     private void On_GAME_GameTimeUpdated(int countdown)
@@ -48,22 +63,22 @@ public class Arena : MaleficusMonoBehaviour
             StartToShrink();
         }
     }
-    public void StartToShrink()
+
+    private void StartToShrink()
     {
         StartCoroutine(ShrinkCourotine());
     }
-
 
     private IEnumerator ShrinkCourotine()
     {
         float startTime = Time.time;
         while (Time.time - startTime <= ShrinkingDuration)
         {
-            if(currentSize.x >= 0 && currentSize.y >= 0)
+            if(currentScale.x >= 0 && currentScale.y >= 0)
             {
-                currentSize.x -= ShrinkingRate;
-                currentSize.y -= ShrinkingRate;
-                ArenaTransform.localScale = new Vector3(currentSize.x, currentSize.y, transform.localScale.z);
+                currentScale.x -= ShrinkingRate;
+                currentScale.y -= ShrinkingRate;
+                transform.localScale = new Vector3(currentScale.x, currentScale.y, transform.localScale.z);
 
             }
 

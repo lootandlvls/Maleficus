@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 using static Maleficus.Consts;
@@ -7,79 +6,51 @@ using static Maleficus.Utils;
 
 public class AIInputSource : AbstractInputSource
 {
-    //private List<EControllerID> connectedAIControllers = new List<EControllerID>();
+    [Header("AI Initialization")]
+    [SerializeField] float rotationSpeed = 3.0f;
 
+    private List<AIPlayerController> activeAIControllers = new List<AIPlayerController>();
 
-    protected override void Update()
+    protected override void InitializeEventsCallbacks()
     {
-        base.Update();
+        base.InitializeEventsCallbacks();
 
-        DebugAI();
-
+        EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
     }
 
-
-    protected override void FixedUpdate()
+    private void On_PLAYERS_PlayerSpawned(EPlayerID playerID)
     {
-        base.FixedUpdate();
-
-
-
-
-        foreach (Player aiPlayer in PlayerManager.Instance.ActivePlayers.Values)
+        // Add an AIPlayerController on the spawned player if he's an AI
+        EControllerID controllerID = InputManager.Instance.GetConnectedControllerIDFrom(playerID);
+        
+        if ((controllerID.ContainedIn(AI_CONTROLLERS))
+            && (IS_KEY_CONTAINED(PlayerManager.Instance.ActivePlayers, playerID))
+            && (IS_NOT_NULL(PlayerManager.Instance.ActivePlayers[playerID])))
         {
-            EControllerID controllerID = InputManager.Instance.GetConnectedControllerID(aiPlayer.PlayerID);
-            if (controllerID.ContainedIn(AI_CONTROLLERS) == true)
-            {
-                Player closestPlayer = GetClosestPlayerTo(aiPlayer);
-                if (closestPlayer == null)
-                {
-                    continue;
-                }
-
-                Vector3 lookVector3 = (closestPlayer.Position - aiPlayer.Position).normalized;
-
-                InvokeJoystickMoved(controllerID, EJoystickType.ROTATION, lookVector3.x, -lookVector3.z);
-            }
+            Player player = PlayerManager.Instance.ActivePlayers[playerID];
+            AIPlayerController aIPlayerController = player.gameObject.AddComponent<AIPlayerController>();
+            aIPlayerController.MoveJoystick += On_AIPlayerController_MoveJoystick;
+            aIPlayerController.WillGetDestroyed += On_AIPlayerController_WillGetDestroyed;
+            aIPlayerController.RotationSpeed = rotationSpeed;
+            activeAIControllers.Add(aIPlayerController);
         }
-
     }
 
-
-    private void DebugAI()
+    private void On_AIPlayerController_MoveJoystick(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
-        string aIDebug = "";
-        foreach (EControllerID controllerID in AI_CONTROLLERS)
-        {
-            if (InputManager.Instance.IsControllerConnected(controllerID))
-            {
-                aIDebug += "Controlling : " + controllerID + " \n";
-            }
-        }
-        LogCanvas(6, aIDebug);
+        InvokeJoystickMoved(controllerID, joystickType, x, y);
     }
 
-
-
-
-    private Player GetClosestPlayerTo(Player player)
+    private void On_AIPlayerController_WillGetDestroyed(AIPlayerController aIPlayerController)
     {
-        Player closestOtherPlayer = null;
-        float closestDistanceToOtherPlayer = float.MaxValue;
-        foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
+        if (aIPlayerController)
         {
-            if (otherPlayer.PlayerID == player.PlayerID)
+            aIPlayerController.MoveJoystick -= On_AIPlayerController_MoveJoystick;
+            aIPlayerController.WillGetDestroyed -= On_AIPlayerController_WillGetDestroyed;
+            if (IS_VALUE_CONTAINED(activeAIControllers, aIPlayerController))
             {
-                continue;
-            }
-
-            float distanceToOtherPlayer = Vector3.Distance(player.Position, otherPlayer.Position);
-            if (distanceToOtherPlayer < closestDistanceToOtherPlayer)
-            {
-                closestOtherPlayer = otherPlayer;
-                closestDistanceToOtherPlayer = distanceToOtherPlayer;
+                activeAIControllers.Remove(aIPlayerController);
             }
         }
-        return closestOtherPlayer;
     }
 }

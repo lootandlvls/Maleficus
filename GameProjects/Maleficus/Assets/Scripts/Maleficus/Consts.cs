@@ -11,7 +11,7 @@ namespace Maleficus
     {
         /* GameObjects Tags */
         public const string TAG_SPELL_HITTABLE = "SpellHittable";
-        public const string TAG_SPELL_UNHITTABLE = "UnHittable";
+        public const string TAG_SPELL_UNHITTABLE = "Unhittable";
         public const string TAG_PLAYER = "Player";
         public const string TAG_PLAYER_SHIELDED = "Shielded";
 

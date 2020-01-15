@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class SpellSelectionCountdown : MaleficusMonoBehaviour
+public class SpellSelectionCountdown : BNJMOBehaviour
 {
     [SerializeField] private int countdownSeconds = 5;
 
@@ -28,6 +28,18 @@ public class SpellSelectionCountdown : MaleficusMonoBehaviour
         EventManager.Instance.PLAYERS_AllPlayersReady += On_PLAYERS_AllPlayersReady;
         EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
         EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.PLAYERS_AllPlayersReady -= On_PLAYERS_AllPlayersReady;
+            EventManager.Instance.PLAYERS_PlayerJoined -= On_PLAYERS_PlayerJoined;
+            EventManager.Instance.PLAYERS_PlayerCanceledReady -= On_PLAYERS_PlayerCanceledReady;
+        }
     }
 
     private void On_PLAYERS_AllPlayersReady()

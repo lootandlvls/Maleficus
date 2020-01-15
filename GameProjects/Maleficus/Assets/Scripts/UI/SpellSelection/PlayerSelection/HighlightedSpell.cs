@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HighlightedSpell : MaleficusMonoBehaviour
+public class HighlightedSpell : BNJMOBehaviour
 {
     [SerializeField] private Image spellIcon;
     [SerializeField] private Text spellNameText;

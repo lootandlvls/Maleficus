@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ServerMovementRepresentation : MaleficusMonoBehaviour
+public class ServerMovementRepresentation : BNJMOBehaviour
 {
     public Vector3 Position { get { return transform.position; } set { transform.position = value; } }
 

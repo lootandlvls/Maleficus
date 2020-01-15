@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Spawned when a new device has joined and responsible for transmetting the input controls to the DeviceInputSource
 /// </summary>
-public class PlayerInputListener : MaleficusMonoBehaviour
+public class PlayerInputListener : BNJMOBehaviour
 {
     public event Action<EControllerID, EInputButton> ButtonPressed;
     public event Action<EControllerID, EInputButton> ButtonReleased;

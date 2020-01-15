@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class UI_SpellCooldowns : MaleficusMonoBehaviour
+public class UI_SpellCooldowns : BNJMOBehaviour
 {
 
     public Image SpellIcon { get { return spellIcon; } }

@@ -203,19 +203,19 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnRemaningAIPlayers()
     {
-        LogConsole("Spawning remaining AI playeres");
-
         // First connect AI Controllers on reamining slots if not already connected
         InputManager.Instance.ConnectAllRemainingAIPlayers();
 
-        // Spawn connectec AI Controllers
+        LogConsole("Spawning remaining AI playeres");
+
         foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
         {
             EControllerID controllerID = pair.Key;
             EPlayerID playerID = pair.Value;
 
             if ((controllerID.ContainedIn(AI_CONTROLLERS))
-                && (ActivePlayers.ContainsKey(playerID) == false))
+                && (ActivePlayers.ContainsKey(playerID) == false)
+                && (InputManager.Instance.IsControllerConnected(controllerID)))
             {
                 SpawnPlayer(playerID);
             }
@@ -267,66 +267,69 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
-        EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-        ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
-
-        if ((spellSlot != ESpellSlot.NONE)
-            && (ActivePlayers.ContainsKey(playerID) == true))
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
-            if (IS_NOT_NULL(spell))
+            EInputButton inputButton = eventHandle.InputButton;
+            EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+            ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
+
+            if ((spellSlot != ESpellSlot.NONE)
+                && (ActivePlayers.ContainsKey(playerID) == true))
             {
-                // Instantiate spell now ?
-                if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+                AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+                if (IS_NOT_NULL(spell))
                 {
-                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    // Instantiate spell now ?
+                    if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
                     {
-
-                        ActivePlayers[playerID].IsReadyToShoot = false;
-                        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                        ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
-
-                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-                    }
-                }
-                else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
-                {
-                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-                    {
-
-                        // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
-                        ActivePlayers[playerID].IsReadyToShoot = false;
-                        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-                    }
-                }
-                else if (spell.MovementType == ESpellMovementType.UNIQUE)
-                {
-                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-                    {
-                        if (!ActivePlayers[playerID].HasCastedSpell)
+                        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
                         {
-                            StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+
+                            ActivePlayers[playerID].IsReadyToShoot = false;
+                            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                            ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+
                             SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
                             StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
                         }
                     }
-                    else
+                    else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
                     {
-                        EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                        {
+
+                            // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+                            ActivePlayers[playerID].IsReadyToShoot = false;
+                            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                            SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                        }
                     }
-                }
+                    else if (spell.MovementType == ESpellMovementType.UNIQUE)
+                    {
+                        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                        {
+                            if (!ActivePlayers[playerID].HasCastedSpell)
+                            {
+                                StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+                                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                            }
+                        }
+                        else
+                        {
+                            EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                        }
+                    }
 
-                else if (spell.IsChargeable && ActivePlayers[playerID].IsReadyToShoot)
-                {
-                    ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
-                    Debug.Log("Start charging");
+                    else if (spell.IsChargeable && ActivePlayers[playerID].IsReadyToShoot)
+                    {
+                        ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
+                        Debug.Log("Start charging");
 
+                    }
                 }
             }
         }
@@ -370,15 +373,21 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_APP_SceneChanged_Event(Event_GenericHandle<EScene> eventHandle)
     {
         EScene scene = eventHandle.Arg1;
-
         if (scene == EScene.GAME)
         {
-            SpawnAllJoinedPlayers();
+            StartCoroutine(DelayedSpawnAllOnSceneChangeCoroutine());
+        }
+    }
 
-            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-            {
-                SpawnRemaningAIPlayers();
-            }
+    private IEnumerator DelayedSpawnAllOnSceneChangeCoroutine()
+    {
+        yield return new WaitForEndOfFrame();
+
+        SpawnAllJoinedPlayers();
+
+        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
+        {
+            SpawnRemaningAIPlayers();
         }
     }
 
@@ -541,20 +550,28 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             playersJoinStatus.Add(playerID, new PlayerJoinStatus());
         }
 
-        // Spawn player On Connect?
         if ((MotherOfManagers.Instance.IsJoinAndSpawnPlayerOnControllerConnect == true)
-            && (ActivePlayers.ContainsKey(playerID) == false)
-            && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES)))
+            || (controllerID.ContainedIn(AI_CONTROLLERS)))
         {
-            // Join player and set him to ready
-            if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+            if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
             {
                 playersJoinStatus[playerID].HasJoined = true;
                 playersJoinStatus[playerID].IsReady = true;
-                EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);
+                StartCoroutine(DelayedTriggerJoinEvent(playerID));
             }
-            SpawnPlayer(playerID);
+
+            if (MotherOfManagers.Instance.IsJoinAndSpawnPlayerOnControllerConnect == true)
+            {
+                SpawnPlayer(playerID);
+            }
         }
+    }
+
+    private IEnumerator DelayedTriggerJoinEvent(EPlayerID playerID)
+    {
+        yield return new WaitForEndOfFrame();
+
+        EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);
     }
 
     private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)

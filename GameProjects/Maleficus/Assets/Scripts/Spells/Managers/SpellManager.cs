@@ -53,10 +53,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     {
         base.InitializeEventsCallbacks();
 
-        EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
-        EventManager.Instance.UI_SpellChosen        += On_UI_SpellChosen;
-        EventManager.Instance.UI_SpellRemoved       += On_UI_SpellRemoved;
-        EventManager.Instance.INPUT_ControllerConnected.Event += On_INPUT_ControllerConnected_Event;
+        EventManager.Instance.SPELLS_SpellHitPlayer             += On_SPELLS_SpellHitPlayer;
+        EventManager.Instance.UI_SpellChosen                    += On_UI_SpellChosen;
+        EventManager.Instance.UI_SpellRemoved                   += On_UI_SpellRemoved;
+        EventManager.Instance.INPUT_ControllerConnected.Event   += On_INPUT_ControllerConnected;
     }
 
     protected override void OnReinitializeManager()
@@ -85,8 +85,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-
-
     public void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
         ISpell spell = hitInfo.CastedSpell;
@@ -112,12 +110,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-    private void On_INPUT_ControllerConnected_Event(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
+    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
         EControllerID controllerID = eventHandle.Arg1;
         EPlayerID playerID = eventHandle.Arg2;
         if (controllerID.ContainedIn(AI_CONTROLLERS))
         {
+            LogConsole("Adding debug spells for AI");
             for (int j = 0; j < 3; j++)
             {
                 ESpellSlot spellID = GetSpellSlotFrom(j + 1);

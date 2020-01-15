@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-public class SpellSelectionButton : MaleficusMonoBehaviour
+public class SpellSelectionButton : BNJMOBehaviour
 {
     public AbstractSpell Spell                  { get { return spell; } }
     public MaleficusButton MaleficusButton      { get { return GetComponent<MaleficusButton>(); } }
@@ -102,7 +102,8 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
     {
         if (playerID != EPlayerID.NONE)
         {
-            if (IS_KEY_CONTAINED(playerHighlights, playerID))
+            if ((IS_KEY_CONTAINED(playerHighlights, playerID))
+                && (IS_NOT_NULL(playerHighlights[playerID])))
             {
                 playerHighlights[playerID].ShowHighlight();
             }
@@ -113,7 +114,8 @@ public class SpellSelectionButton : MaleficusMonoBehaviour
     {
         if (playerID != EPlayerID.NONE)
         {
-            if (IS_KEY_CONTAINED(playerHighlights, playerID))
+            if ((IS_KEY_CONTAINED(playerHighlights, playerID))
+                && (IS_NOT_NULL(playerHighlights[playerID])))
             {
                 playerHighlights[playerID].HideHighlight();
             }

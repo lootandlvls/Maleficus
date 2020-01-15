@@ -3,7 +3,7 @@ using UnityEngine;
 
 using static Maleficus.Utils;
 
-public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
+public class PlayerSpellSelectionContext : BNJMOBehaviour
 {
     public EPlayerID PlayerID { get { return playerID; } }
 

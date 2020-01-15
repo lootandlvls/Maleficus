@@ -6,7 +6,7 @@ using static Maleficus.Utils;
 using static Maleficus.Consts;
 
 
-public class NetworkMovement : MaleficusMonoBehaviour
+public class NetworkMovement : BNJMOBehaviour
 {
     private TrailRenderer myTrailRenderer;
 

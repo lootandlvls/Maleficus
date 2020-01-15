@@ -67,7 +67,63 @@ namespace Maleficus
             axis_X = controllerAxis.x;
             axis_Z = controllerAxis.y;
         }
+
+        public static Vector2 Get2DVector(Vector3 vector3)
+        {
+            return new Vector2(vector3.x, vector3.z);
+        }
+
+        public static Vector3 Get3DVector(Vector2 vector2)
+        {
+            return new Vector3(vector2.x, 0.0f, vector2.y);
+        }
+
+
+
         #endregion
+
+        #region Debug Draw
+        public static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            Gizmos.DrawRay(pos, direction);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
+            Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+        }
+
+        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            Gizmos.color = color;
+            Gizmos.DrawRay(pos, direction);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
+            Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+        }
+
+        public static void DebugDrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            Debug.DrawRay(pos, direction);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Debug.DrawRay(pos + direction, right * arrowHeadLength);
+            Debug.DrawRay(pos + direction, left * arrowHeadLength);
+        }
+        public static void DebugDrawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        {
+            Debug.DrawRay(pos, direction, color);
+
+            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+            Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
+            Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
+        }
+        #endregion
+
 
         #region Sound
         /// <summary>

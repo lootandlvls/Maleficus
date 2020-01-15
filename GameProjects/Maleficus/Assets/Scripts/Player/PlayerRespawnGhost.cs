@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 
-public class PlayerRespawnGhost : MaleficusMonoBehaviour
+public class PlayerRespawnGhost : BNJMOBehaviour
 {
     public event Action<PlayerRespawnGhost> RespawnAnimationDone;
 
