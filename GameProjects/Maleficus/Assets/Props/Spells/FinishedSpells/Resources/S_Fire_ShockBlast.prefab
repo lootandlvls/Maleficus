@@ -4727,8 +4727,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6991870466736591699}
-  - component: {fileID: 6589609418096585809}
   - component: {fileID: 3462094080666256724}
+  - component: {fileID: 6589609418096585809}
   m_Layer: 0
   m_Name: S_Fire_ShockBlast
   m_TagString: Untagged
@@ -4753,19 +4753,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6589609418096585809
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6989609835842788713}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.1, y: 1, z: 10.03}
-  m_Center: {x: 0, y: 0, z: 4.38}
 --- !u!114 &3462094080666256724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4801,8 +4788,6 @@ MonoBehaviour:
   castDuration: 0
   pushDuration: 0.7
   spellDuration: 0.2
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}
   trails:
   - {fileID: 6990203985104957395}
@@ -4812,6 +4797,19 @@ MonoBehaviour:
   - {fileID: 6990896707834385845}
   - {fileID: 6989875467044313393}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+--- !u!65 &6589609418096585809
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6989609835842788713}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.1, y: 1, z: 10.03}
+  m_Center: {x: 0, y: 0, z: 4.38}
 --- !u!1 &6989875467044313393
 GameObject:
   m_ObjectHideFlags: 0

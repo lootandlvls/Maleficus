@@ -2971,6 +2971,7 @@ MonoBehaviour:
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsLoadDebugSpells: 1
+  IsLimitMaxPushPower: 1
   IsDebugLogEvents: 1
   IsReduceLightIntensityOnSceneStart: 0
   currentScene: 3

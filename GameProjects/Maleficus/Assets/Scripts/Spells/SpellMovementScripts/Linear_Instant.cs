@@ -12,7 +12,7 @@ public class Linear_Instant : AbstractSpell
 
         if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == "Player")
         {
-            ProcessHits(otherPlayer);
+            ProcessHits(otherPlayer, ESpellStatus.STAY);
         }
     }
 }

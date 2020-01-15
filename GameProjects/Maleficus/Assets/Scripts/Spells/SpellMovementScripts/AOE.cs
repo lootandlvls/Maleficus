@@ -4,22 +4,18 @@ using UnityEngine;
 
 public class AOE : AbstractSpell
 {
-
-   private Vector3 startPosition;
-   public float radius;
+    public float radius;
 
     protected override void Start()
     {
         base.Start();
 
-        OnExplosionEnter( transform.position, radius); // 1f was sizeFactor in ar
+        OnExplosionEnter( transform.position, radius);
     }
 
 
-  //  && (this.GetComponent<AbstractSpell>().CastingPlayerID != hitColliders[i].GetComponent<IPlayer>().PlayerID)
     private void OnExplosionEnter(Vector3 center , float radius)
     {
-        AbstractSpell abstractSpell = GetComponent<AbstractSpell>();
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
         List<IPlayer> hitPlayers = new List<IPlayer>();
         List<IEnemy> hitEnemies = new List<IEnemy>();
@@ -28,29 +24,22 @@ public class AOE : AbstractSpell
         {
             if (collider != null)
             {
-                Debug.Log("Collider : " + collider.name);
-
                 IPlayer otherPlayer = collider.gameObject.GetComponent<IPlayer>();
                
                 if (collider.tag.Equals("Enemy"))
                 {
                     IEnemy otherEnemy = collider.gameObject.GetComponent<IEnemy>();
                     hitEnemies.Add(otherEnemy);
-                    
                 }
                 if (otherPlayer != null  && collider.tag == "Player")
                 {
-                    if (abstractSpell.CastingPlayerID != otherPlayer.PlayerID)
+                    if (CastingPlayerID != otherPlayer.PlayerID)
                     {
                         hitPlayers.Add(otherPlayer);
                     }
                 }
-              
-
             }
         }
         ExplosionProcessHits(hitPlayers.ToArray());
-        //ExplosionProcessHits(hitEnemies.ToArray());
-
     }
 }

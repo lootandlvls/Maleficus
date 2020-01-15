@@ -101,8 +101,6 @@ public enum ESpellEffects
     NONE
 }
 
-
-
 public enum ESpellMovementType
 {
     LINEAR_HIT,
@@ -136,7 +134,13 @@ public enum ESpellID
     SHIELD,
     RAPID_FIRE_PLASMA,
     BLACK_HOLE
+}
 
+public enum ESpellStatus
+{
+    ENTER,
+    STAY,
+    EXIT
 }
 #endregion
 
@@ -161,39 +165,27 @@ public enum ETeamID
 
 public struct SHitInfo
 {
-    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, Vector3 hitPosition, bool hasPower, bool chargeable  , bool isTripleCast, List<ESpellEffects> debuffEffects, List<ESpellEffects> buffEffects)
+    public SHitInfo(ISpell castedSpell, EPlayerID castingPlayerID, EPlayerID hitplayerID, ESpellStatus spellStatus, Vector3 hitPosition)
     {
         CastedSpell = castedSpell;
         CastingPlayerID = castingPlayerID;
         HitPlayerID = hitplayerID;
-        this.hitPosition = hitPosition;
-        HasPushPower = hasPower;
-        BuffEffects = buffEffects;
-        DebuffEffects = debuffEffects;
-        Chargeable = chargeable;
-        IsTripleCast = isTripleCast;
-
+        SpellStatus = spellStatus;
+        HitPosition = hitPosition;
     }
 
     public ISpell CastedSpell { get; }
     public EPlayerID CastingPlayerID { get; }
     public EPlayerID HitPlayerID { get; }
-    public Vector3 HitPosition { get { return hitPosition; } }
+    public ESpellStatus SpellStatus { get; }
+    public Vector3 HitPosition { get; }
     public Vector3 HitVelocity
     {
         get
         {
-           // Debug.Log("§$%§$%§ dir : " + castedSpell.Direction + " | pow : " + castedSpell.HitPower);
             return CastedSpell.Direction * CastedSpell.HitPower;
         }
     }
-    public bool HasPushPower { get; }
-    public List<ESpellEffects> DebuffEffects { get; }
-    public List<ESpellEffects> BuffEffects { get; }
-    public bool Chargeable { get; }
-    public bool IsTripleCast { get; }
-
-    private Vector3 hitPosition;
 }
 
 public class PlayerJoinStatus

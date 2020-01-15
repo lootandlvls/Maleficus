@@ -7,54 +7,28 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 {
     //  private Vector3 movingDirection;
 
-
-
-    public float HitPower { get {
-           // Debug.Log("$%&$/$%& Hit power : " + hitPower);
-            return hitPower; } }
-
+    public float HitPower { get { return hitPower; } }
     public float Speed { get { return speed; } }
-
     public Vector3 Direction { get { return direction; } }
-
     public Vector3 EndDestination { get; set; }
-
     public string SpellName { get { return spellName; } }
-
     public int SpellLevel { get { return spellLevel; } }
-
-    public bool HasPower { get { return hasPushPower; } }
-
+    public bool HasPushPower { get { return hasPushPower; } }
     public ESpellMovementType MovementType { get { return movementType; } }
-
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
-
     public List<ESpellEffects> BuffEffects { get { return buffEffects; } }
-
     public EPlayerID CastingPlayerID { get; set; }
-
     public float Cooldown { get { return cooldown; } }
-
     public float CastDuration { get { return castDuration; } }
-
     public float SpellDuration { get { return spellDuration; } }
-
     public float PushDuration { get { return pushDuration; } }
-
     public ESpellID SpellID { get { return spell; } }
-
     public bool IsChargeable { get { return isChargeable; } }
-
     public bool IsTripleCast { get { return isTripleCast; } }
-
     public Sprite SpellIcon { get { return spellIcon; } }
-
     public int SkillPoint { get { return skillPoint; } }
-
     public AudioClip CastSound { get { return castSound; } }
-
     public AudioClip HitSound { get { return hitSound; } }
-
     
     [SerializeField] public float hitPower;
     [SerializeField] public float speed;
@@ -69,19 +43,15 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private int skillPoint;
     [SerializeField] private bool isTripleCast;
-
-
     [SerializeField] private ESpellMovementType movementType;
     [SerializeField] private List<ESpellEffects> debuffEffects;
     [SerializeField] private List<ESpellEffects> buffEffects;
-
     [SerializeField] private float cooldown;
     [SerializeField] private float castDuration;
     [SerializeField] private float pushDuration;
     [SerializeField] private float spellDuration;
 
     protected Rigidbody myRigidBody;
-
     protected Vector3 direction;
 
     public GameObject hitPrefab;
@@ -89,8 +59,6 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
     public Vector3 parabolicSpell_EndPosition;
 
 
-
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
@@ -102,83 +70,36 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
         if (OnSelfEffect)
         {
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, transform.position, hasPushPower, isChargeable , isTripleCast, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, ESpellStatus.ENTER, transform.position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
         StartCoroutine(WaitBeforeDestroySpellCoroutine(spellDuration));
     }
 
-    public void setDirection(Vector3 direction)
+    protected void SetDirection(Vector3 direction)
     {
         direction.y = 0;
         this.direction = direction;
     }
-    private void On_SPELLS_UniqueEffectActivated(ESpellID SpellID, EPlayerID PlayerID)
-    {
-        if (this != null)
-        {
-            if (MovementType == ESpellMovementType.UNIQUE)
-            {
-                if (CastingPlayerID == PlayerID)
-                {
-                    if (SpellID == ESpellID.PLASMA_FISSION)
-                    {
-                        AbstractSpell Part_1 = null;
-                        AbstractSpell Part_2 = null;
-                        foreach (var spell in SpellManager.Instance.All_Spells)
-                        {
-                            if (spell.SpellID == ESpellID.PLASMA_FISSION_BALLS)
-                            {
-                                Part_1 = (AbstractSpell)spell;
-                                Part_2 = (AbstractSpell)spell;
-                            }
-                        }
-                        
-                        Vector3 rotation_1 = this.transform.rotation.eulerAngles + new Vector3(0, 90, 0);
-                        Vector3 rotation_2 = this.transform.rotation.eulerAngles - new Vector3(0, 90, 0);
 
-                        Quaternion Qrotation_1 = Quaternion.Euler(rotation_1);
-                        Quaternion Qrotation_2 = Quaternion.Euler(rotation_2);
-                        if (Part_1 != null && Part_2 != null)
-                        {
-                            AbstractSpell spell_Part_1 = Instantiate(Part_1, transform.position, Qrotation_1);
-                            spell_Part_1.CastingPlayerID = CastingPlayerID;
-                            AbstractSpell spell_Part_2 = Instantiate(Part_2, transform.position, Qrotation_2);
-                            spell_Part_2.CastingPlayerID = CastingPlayerID;
-                        }
-                        DestroySpell();
-
-                    }
-
-                }
-            }
-        }
-    }
-
-    protected void ProcessHits(IPlayer[] hitPlayers)
+    protected void ProcessHits(IPlayer[] hitPlayers, ESpellStatus spellStatus)
     {
         foreach (IPlayer hitPlayer in hitPlayers)
         {
-
-            // Debug.Log(dirVector);
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, isTripleCast, debuffEffects, buffEffects);
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, spellStatus, hitPlayer.Position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
             if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST)
             {
                 DestroySpell();
             }
-            
-           
         }
     }
 
-    protected void ProcessHits(IPlayer hitPlayer)
+    protected void ProcessHits(IPlayer hitPlayer, ESpellStatus spellStatus)
     {
         if (hitPlayer.IsDead == false)
         {
-          //  Debug.Log("333333333333333333333333 player hit");
-            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, hitPlayer.Position, hasPushPower, isChargeable, isTripleCast, debuffEffects, buffEffects);
-           
+            SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, spellStatus, hitPlayer.Position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
             
            if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.BLACK_HOLE )
@@ -194,28 +115,21 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         {
             EventManager.Instance.Invoke_SPELLS_SpellHitEnemy(hitEnemy);
 
-                  
-                DestroySpell();
+            DestroySpell();
         
         }
     }
 
-
-
-
-    // Vector3 dir = (other.transform.position - transform.position) * power;
     protected void ExplosionProcessHits(IPlayer[] hitPlayers)
     {
         foreach (IPlayer hitPlayer in hitPlayers)
         {
             Vector3 movingDirection = (hitPlayer.Position - transform.position).normalized;
             direction = new Vector3(movingDirection.x, 0.0f, movingDirection.z);
-            ProcessHits(hitPlayer);
+            ProcessHits(hitPlayer, ESpellStatus.ENTER);
         }
-
-
-
     }
+
     protected void ExplosionProcessHits(IEnemy[] hitEnemies)
     {
         foreach (IEnemy hitEnemy in hitEnemies)
@@ -223,12 +137,9 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
 
             ProcessHits(hitEnemy);
         }
-
-
-
     }
-    //Funtion to destroy the spell
-    public void DestroySpell()
+
+    protected void DestroySpell()
     {
         if (trails.Count > 0)
         {
@@ -250,7 +161,6 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
             GetComponent<Rigidbody>().isKinematic = true;
         }
 
-
         Quaternion rot = Quaternion.FromToRotation(Vector3.up, Vector3.down);
         Vector3 pos = transform.position;
 
@@ -268,12 +178,11 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
                 Destroy(hitVFX, ps.main.duration);
         }
 
-        StartCoroutine(DestroyParticle(0f));
-
+        StartCoroutine(DestroyParticleCoroutine(0f));
     }
-    public IEnumerator DestroyParticle(float waitTime)
+        
+    private IEnumerator DestroyParticleCoroutine(float waitTime)
     {
-
         if (transform.childCount > 0 && waitTime != 0)
         {
             List<Transform> tList = new List<Transform>();
@@ -298,13 +207,52 @@ public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
         Destroy(gameObject);
     }
 
-
-
     private IEnumerator WaitBeforeDestroySpellCoroutine(float duration)
     {
         yield return new WaitForSeconds(duration);
         DestroySpell();
     }
 
+    private void On_SPELLS_UniqueEffectActivated(ESpellID SpellID, EPlayerID PlayerID)
+    {
+        if (this != null)
+        {
+            if (MovementType == ESpellMovementType.UNIQUE)
+            {
+                if (CastingPlayerID == PlayerID)
+                {
+                    if (SpellID == ESpellID.PLASMA_FISSION)
+                    {
+                        AbstractSpell Part_1 = null;
+                        AbstractSpell Part_2 = null;
+                        foreach (var spell in SpellManager.Instance.All_Spells)
+                        {
+                            if (spell.SpellID == ESpellID.PLASMA_FISSION_BALLS)
+                            {
+                                Part_1 = (AbstractSpell)spell;
+                                Part_2 = (AbstractSpell)spell;
+                            }
+                        }
+
+                        Vector3 rotation_1 = this.transform.rotation.eulerAngles + new Vector3(0, 90, 0);
+                        Vector3 rotation_2 = this.transform.rotation.eulerAngles - new Vector3(0, 90, 0);
+
+                        Quaternion Qrotation_1 = Quaternion.Euler(rotation_1);
+                        Quaternion Qrotation_2 = Quaternion.Euler(rotation_2);
+                        if (Part_1 != null && Part_2 != null)
+                        {
+                            AbstractSpell spell_Part_1 = Instantiate(Part_1, transform.position, Qrotation_1);
+                            spell_Part_1.CastingPlayerID = CastingPlayerID;
+                            AbstractSpell spell_Part_2 = Instantiate(Part_2, transform.position, Qrotation_2);
+                            spell_Part_2.CastingPlayerID = CastingPlayerID;
+                        }
+                        DestroySpell();
+                    }
+                }
+            }
+        }
+    }
 
 }
+
+

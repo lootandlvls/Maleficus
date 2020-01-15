@@ -52,6 +52,7 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
             // Spell
             managersInstance.IsLoadDebugSpells = IsLoadDebugSpells;
+            managersInstance.IsLimitMaxPushPower = IsLimitMaxPushPower;
             // Debug
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;

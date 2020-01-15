@@ -19100,10 +19100,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2066722109303247096}
-  - component: {fileID: 2053149467997023508}
-  - component: {fileID: 2115879066726159730}
   - component: {fileID: 3422349035452184312}
   - component: {fileID: 7743013983033758444}
+  - component: {fileID: 2053149467997023508}
+  - component: {fileID: 2115879066726159730}
   m_Layer: 0
   m_Name: S_Plasma_Fission
   m_TagString: Untagged
@@ -19130,6 +19130,59 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3422349035452184312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070465781686738434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
+  hitPower: 33
+  speed: 600
+  spellName: Plasma Fission
+  spellLevel: 0
+  OnSelfEffect: 0
+  hasPushPower: 1
+  spell: 10
+  isChargeable: 0
+  spellIcon: {fileID: 21300000, guid: 9c223d2d2f48b7f469e4570ae200a77a, type: 3}
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  skillPoint: 4
+  isTripleCast: 0
+  movementType: 9
+  debuffEffects: 
+  buffEffects: 
+  cooldown: 4
+  castDuration: 0
+  pushDuration: 1.5
+  spellDuration: 6
+  hitPrefab: {fileID: 0}
+  trails: []
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  directionVector: {x: 0, y: 0, z: 0}
+  shoot: 0
+--- !u!114 &7743013983033758444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070465781686738434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 4
 --- !u!54 &2053149467997023508
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19157,63 +19210,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Radius: 1.1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3422349035452184312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070465781686738434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
-  hitPower: 11
-  speed: 600
-  spellName: Plasma Fission
-  spellLevel: 0
-  OnSelfEffect: 0
-  hasPushPower: 1
-  spell: 10
-  isChargeable: 0
-  spellIcon: {fileID: 21300000, guid: 9c223d2d2f48b7f469e4570ae200a77a, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  skillPoint: 4
-  isTripleCast: 0
-  movementType: 9
-  debuffEffects: 
-  buffEffects: 
-  cooldown: 4
-  castDuration: 0
-  pushDuration: 1.5
-  spellDuration: 6
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
-  hitPrefab: {fileID: 0}
-  trails: []
-  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
-  directionVector: {x: 0, y: 0, z: 0}
-  shoot: 0
---- !u!114 &7743013983033758444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2070465781686738434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 4
 --- !u!1 &2070474436884593388
 GameObject:
   m_ObjectHideFlags: 0

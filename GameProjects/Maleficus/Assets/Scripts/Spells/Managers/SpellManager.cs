@@ -107,26 +107,28 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         activePlayers[castingPlayerID].transform.position += TeleportDirection * castedSpell.HitPower;
     }
 
-    private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
+    public void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
-        if (hitInfo.HasPushPower)
+        ISpell spell = hitInfo.CastedSpell;
+        if (IS_NOT_NULL(spell))
         {
-            LogConsole("player hit he will be pushed");
-            if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID )
+            if (spell.HasPushPower)
             {
-                PushPlayer(hitInfo);
+                if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
+                {
+                    PushPlayer(hitInfo);
+                }
             }
-        }
- 
-        foreach (ESpellEffects debuffeffect in hitInfo.DebuffEffects)
-        {
-            Debug.Log("Spell has debuffeffect");
-            ApplyDebuff(debuffeffect, hitInfo.HitPlayerID);
-        }
 
-        foreach (ESpellEffects buffeffect in hitInfo.BuffEffects)
-        {
-            ApplyBuff(buffeffect, hitInfo.HitPlayerID , hitInfo.CastingPlayerID);
+            foreach (ESpellEffects debuffeffect in spell.DebuffEffects)
+            {
+                ApplyDebuff(debuffeffect, hitInfo.HitPlayerID);
+            }
+
+            foreach (ESpellEffects buffeffect in spell.BuffEffects)
+            {
+                ApplyBuff(buffeffect, hitInfo.HitPlayerID, hitInfo.CastingPlayerID);
+            }
         }
     }
 

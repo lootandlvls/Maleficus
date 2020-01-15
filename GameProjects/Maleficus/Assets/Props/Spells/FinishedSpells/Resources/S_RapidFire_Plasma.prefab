@@ -14375,10 +14375,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2429824220225414117}
-  - component: {fileID: 2728095637082864476}
-  - component: {fileID: 2998166218539528268}
-  - component: {fileID: 1357507747990590128}
+  - component: {fileID: 7485585819118396062}
   - component: {fileID: 7893525993616841485}
+  - component: {fileID: 2998166218539528268}
+  - component: {fileID: 3090731644570954542}
   m_Layer: 0
   m_Name: S_RapidFire_Plasma
   m_TagString: Untagged
@@ -14401,36 +14401,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &2728095637082864476
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7400366768256408283}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5, z: 0.5}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &2998166218539528268
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7400366768256408283}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &1357507747990590128
+--- !u!114 &7485585819118396062
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14445,7 +14416,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 5
+  hitPower: 15
   speed: 1000
   spellName: Rapidfire Plasma
   spellLevel: 0
@@ -14465,8 +14436,6 @@ MonoBehaviour:
   castDuration: 0
   pushDuration: 1
   spellDuration: 4
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1329826249346808, guid: 7a37fbaa558a2b54d9aef711134128e1, type: 3}
   trails: []
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
@@ -14485,3 +14454,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   time: 3
+--- !u!54 &2998166218539528268
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7400366768256408283}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &3090731644570954542
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7400366768256408283}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.7
+  m_Center: {x: 0, y: 0, z: 0}

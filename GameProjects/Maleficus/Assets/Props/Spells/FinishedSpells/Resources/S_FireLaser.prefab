@@ -13901,8 +13901,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3872112132480712491}
-  - component: {fileID: 3757880027999616581}
   - component: {fileID: 3012738371414162866}
+  - component: {fileID: 3757880027999616581}
   - component: {fileID: 8270885389934248921}
   m_Layer: 0
   m_Name: S_FireLaser
@@ -13927,31 +13927,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &3757880027999616581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3869868896117027089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2a73eca993e21e4aa0284d1f4cce37d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  INFINITE_LOOP: 0
-  DESTROY_ON_END: 1
-  duration: 2.5
-  all_particles:
-  - {fileID: 3995501076996145179}
-  - {fileID: 3995572608694204185}
-  - {fileID: 3995676660401953013}
-  - {fileID: 3995416013104684305}
-  - {fileID: 3966661417737176739}
-  - {fileID: 3995727469008741919}
-  - {fileID: 3995617969607418457}
-  - {fileID: 3966572912605067289}
-  - {fileID: 3995679063558567629}
 --- !u!114 &3012738371414162866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13987,8 +13962,6 @@ MonoBehaviour:
   castDuration: 0
   pushDuration: 0.2
   spellDuration: 2
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
   hitPrefab: {fileID: 0}
   trails:
   - {fileID: 3870202742417870167}
@@ -13998,6 +13971,31 @@ MonoBehaviour:
   - {fileID: 3870225384778224809}
   - {fileID: 3868611317914537683}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &3757880027999616581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3869868896117027089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a73eca993e21e4aa0284d1f4cce37d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  INFINITE_LOOP: 0
+  DESTROY_ON_END: 1
+  duration: 2.5
+  all_particles:
+  - {fileID: 3995501076996145179}
+  - {fileID: 3995572608694204185}
+  - {fileID: 3995676660401953013}
+  - {fileID: 3995416013104684305}
+  - {fileID: 3966661417737176739}
+  - {fileID: 3995727469008741919}
+  - {fileID: 3995617969607418457}
+  - {fileID: 3966572912605067289}
+  - {fileID: 3995679063558567629}
 --- !u!65 &8270885389934248921
 BoxCollider:
   m_ObjectHideFlags: 0

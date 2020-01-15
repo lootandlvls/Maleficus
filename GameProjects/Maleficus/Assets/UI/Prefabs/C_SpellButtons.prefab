@@ -1597,7 +1597,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 1-1 : Rapidfire Plasma'
+      value: B_SpellSelectionButton 1-1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}

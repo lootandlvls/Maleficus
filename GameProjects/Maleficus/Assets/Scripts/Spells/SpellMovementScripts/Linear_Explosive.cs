@@ -40,12 +40,12 @@ public class Linear_Explosive : AbstractSpell {
                 if ((other.transform.position - transform.position )!= Vector3.zero )
                 {
 
-                    setDirection(other.transform.position - transform.position);
+                    SetDirection(other.transform.position - transform.position);
                     Debug.Log(other.transform.position - transform.position);
                     
 
                 }
-                ProcessHits(otherPlayer);
+                ProcessHits(otherPlayer, ESpellStatus.STAY);
             }
             else if (otherEnemy != null)
             {

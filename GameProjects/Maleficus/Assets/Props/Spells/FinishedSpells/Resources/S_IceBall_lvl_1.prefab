@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6519450539831470820}
-  - component: {fileID: 8425177651819473937}
   - component: {fileID: 2529863791790152314}
+  - component: {fileID: 8425177651819473937}
   - component: {fileID: 6536862604725729376}
-  - component: {fileID: 2641138727745751977}
+  - component: {fileID: 6043731753490096032}
   m_Layer: 0
   m_Name: S_IceBall_lvl_1
   m_TagString: Untagged
@@ -38,19 +38,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8425177651819473937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6516738258802375036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 3
 --- !u!114 &2529863791790152314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +53,7 @@ MonoBehaviour:
   showMaleficusMonoBehaviourConfiguration: 0
   debugLogConsoleEnabled: 1
   logCategoriesToIgnore: []
-  hitPower: 20
+  hitPower: 0
   speed: 800
   spellName: Ice Ball
   spellLevel: 0
@@ -86,8 +73,6 @@ MonoBehaviour:
   castDuration: 0
   pushDuration: 0
   spellDuration: 6
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
   hitPrefab: {fileID: 1312591640859010, guid: 57073eed22326fd489c9cfeb9a76b7b9, type: 3}
   trails:
   - {fileID: 6517137874974288690}
@@ -97,6 +82,19 @@ MonoBehaviour:
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0
+--- !u!114 &8425177651819473937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6516738258802375036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 3
 --- !u!54 &6536862604725729376
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -113,19 +111,18 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &2641138727745751977
-CapsuleCollider:
+--- !u!135 &6043731753490096032
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6516738258802375036}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.74
-  m_Height: 1
-  m_Direction: 1
+  serializedVersion: 2
+  m_Radius: 0.8
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6517137874974288690
 GameObject:

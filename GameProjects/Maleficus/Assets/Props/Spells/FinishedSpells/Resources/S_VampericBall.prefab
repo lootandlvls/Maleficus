@@ -23958,9 +23958,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6331235886916983465}
+  - component: {fileID: 2999941136915841016}
   - component: {fileID: 6273106246521614943}
   - component: {fileID: 6209408203767335155}
-  - component: {fileID: 2999941136915841016}
   - component: {fileID: 233505010195409203}
   m_Layer: 0
   m_Name: S_VampericBall
@@ -23984,6 +23984,46 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2999941136915841016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327023432654859817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore: []
+  hitPower: 39
+  speed: 1000
+  spellName: Vamperic Ball
+  spellLevel: 0
+  OnSelfEffect: 0
+  hasPushPower: 1
+  spell: 9
+  isChargeable: 0
+  spellIcon: {fileID: 21300000, guid: 00db1bd9e0565844a87ef537dcce787d, type: 3}
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  skillPoint: 1
+  isTripleCast: 0
+  movementType: 0
+  debuffEffects: 08000000
+  buffEffects: 02000000
+  cooldown: 1.5
+  castDuration: 0
+  pushDuration: 1
+  spellDuration: 6
+  hitPrefab: {fileID: 1617182999080564, guid: 1f75933a51cadad45a3f983bb8168fdc, type: 3}
+  trails: []
+  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  directionVector: {x: 0, y: 0, z: 0}
+  shoot: 0
 --- !u!54 &6273106246521614943
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24011,50 +24051,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8
+  m_Radius: 0.9
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2999941136915841016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6327023432654859817}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
-  hitPower: 13
-  speed: 1000
-  spellName: Vamperic Ball
-  spellLevel: 0
-  OnSelfEffect: 0
-  hasPushPower: 1
-  spell: 9
-  isChargeable: 0
-  spellIcon: {fileID: 21300000, guid: 00db1bd9e0565844a87ef537dcce787d, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  skillPoint: 1
-  isTripleCast: 0
-  movementType: 0
-  debuffEffects: 08000000
-  buffEffects: 02000000
-  cooldown: 1.5
-  castDuration: 0
-  pushDuration: 1
-  spellDuration: 6
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
-  hitPrefab: {fileID: 1617182999080564, guid: 1f75933a51cadad45a3f983bb8168fdc, type: 3}
-  trails: []
-  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
-  directionVector: {x: 0, y: 0, z: 0}
-  shoot: 0
 --- !u!114 &233505010195409203
 MonoBehaviour:
   m_ObjectHideFlags: 0

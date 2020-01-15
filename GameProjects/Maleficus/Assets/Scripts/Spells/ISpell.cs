@@ -18,7 +18,7 @@ public interface ISpell
 
     Vector3 EndDestination { get;  }
 
-    bool HasPower { get; }
+    bool HasPushPower { get; }
 
     List<ESpellEffects> DebuffEffects { get; }
 
@@ -41,6 +41,7 @@ public interface ISpell
     Sprite SpellIcon { get; }
 
     AudioClip CastSound { get; }
+
     AudioClip HitSound { get; }
 
     int SkillPoint { get; }
