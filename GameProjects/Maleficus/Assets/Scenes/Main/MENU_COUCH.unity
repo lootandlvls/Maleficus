@@ -3577,6 +3577,16 @@ PrefabInstance:
       propertyPath: m_Text
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2007763135452651771, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_Name
+      value: 'B_SpellSelectionButton 1-1 : Rapidfire Plasma'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2007763135553054724, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_Name
+      value: 'B_SpellSelectionButton 1-2 : Ice Ball'
+      objectReference: {fileID: 0}
     - target: {fileID: 2007763136347188867, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Name
@@ -3697,6 +3707,12 @@ PrefabInstance:
       propertyPath: spell
       value: 
       objectReference: {fileID: 2719309341420855504, guid: b7bd2456ebc0d6342a28d11b596aa566,
+        type: 3}
+    - target: {fileID: 9004779412122083917, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: spell
+      value: 
+      objectReference: {fileID: 7485585819118396062, guid: cce72bbbbefc08c43812c4831d1af8ae,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f787d2e0c4b02e42aaae6f8284cb01a, type: 3}

@@ -444,7 +444,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         }
     }
 
-    public void SetPlayerParalyzed(bool isParalyzed , int effectStrenght)
+    public void SetPlayerParalyzed(bool isParalyzed , float effectStrenght)
     {
         if (isParalyzed == true)
         {
