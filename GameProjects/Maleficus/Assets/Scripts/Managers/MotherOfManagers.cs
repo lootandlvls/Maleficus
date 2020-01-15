@@ -26,6 +26,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [Separator("Player")]
     [SerializeField] public bool IsJoinAndSpawnPlayerOnControllerConnect = false;
     [SerializeField] public bool IsSpawnRemainingAIPlayersOnGameStart = false;
+    [SerializeField] public float MaximumNumberOfAIToSpawn = 4.0f;
     [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
 

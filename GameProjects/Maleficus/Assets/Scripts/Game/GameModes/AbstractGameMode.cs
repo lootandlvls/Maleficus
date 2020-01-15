@@ -1,4 +1,4 @@
-﻿public abstract class AbstractGameMode : MaleficusMonoBehaviour
+﻿public abstract class AbstractGameMode : BNJMOBehaviour
 {
     public EGameMode GameModeType   { get; protected set; } = EGameMode.NONE;
     public bool IsRunning           { get; private set; } = false;

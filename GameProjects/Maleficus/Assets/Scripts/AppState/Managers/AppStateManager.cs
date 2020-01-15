@@ -8,14 +8,11 @@ using static Maleficus.Consts;
 
 public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppStateManager, EAppState>
 {
-    public EScene CurrentScene { get { return currentScene; } }  //return GetScene(CurrentState); } }
-
-
-    private EScene currentScene = EScene.ENTRY;
-
-    private List<AbstractUIAction> boundActions = new List<AbstractUIAction>();
+    public EScene CurrentScene { get; private set; } = EScene.ENTRY; 
 
     private EDungeonID dungeonIDtoLoad = EDungeonID.NONE;
+    private bool isLoadingScene = false;
+
 
     protected override void Awake()
     {
@@ -33,7 +30,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         if (MotherOfManagers.Instance.IsServer == true)
         {
-            currentScene = EScene.GAME;
+            CurrentScene = EScene.GAME;
         }
 
         // 3) Bind event in start method of child class!
@@ -128,12 +125,15 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private void LoadScene(EScene sceneToLoad)
     {
+        LogConsole("Scene to load : " + sceneToLoad);
+        isLoadingScene = true;
         switch (sceneToLoad)
         {
             case EScene.ENTRY:
                 SceneManager.LoadScene(SCENE_ENTRY);
-                currentScene = EScene.ENTRY;
+                CurrentScene = EScene.ENTRY;
                 break;
+
             case EScene.MENU:
                 if (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.PLAY_OFFLINE)
                 {
@@ -143,19 +143,21 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
                 {
                     SceneManager.LoadScene(SCENE_MENU_MOBILE);
                 }
-                currentScene = EScene.MENU;
+                CurrentScene = EScene.MENU;
                 break;
 
             case EScene.GAME:
                 SceneManager.LoadScene(SCENE_GAME);
-                currentScene = EScene.GAME;
+                CurrentScene = EScene.GAME;
                 break;
+
             case EScene.MENU_DUNGEON:
                 SceneManager.LoadScene(SCENE_DUNGEON_SELECTION);
-                currentScene = EScene.MENU_DUNGEON;
+                CurrentScene = EScene.MENU_DUNGEON;
                 break;
 
             default:
+                isLoadingScene = false;
                 Debug.LogError(sceneToLoad + " is not a valid scene to load!");
                 break;
         }
@@ -254,18 +256,16 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
     #region Event Callbacks
     private void On_SceneLoaded(Scene newScene, LoadSceneMode loadSceneMode)
     {
-        Debug.Log("Loading level done : " + newScene.name);
-        EventManager.Instance.APP_SceneChanged.Invoke(new Event_GenericHandle<EScene>(CurrentScene));
-
-        //// Validity test
-        //if ((newScene.name != SCENE_GAME)
-        //    && (newScene.name != SCENE_MENU)
-        //    && (newScene.name != SCENE_ENTRY)
-        //    && (newScene.name != SCENE_DUNGEON_SELECTION)
-        //    )
-        //{
-        //    Debug.LogError("Loaded level doesn't match to build levels");
-        //}
+        if (isLoadingScene)
+        {
+            Debug.Log("Loading level done : " + newScene.name + " - load mode : " + loadSceneMode);
+            EventManager.Instance.APP_SceneChanged.Invoke(new Event_GenericHandle<EScene>(CurrentScene));
+            isLoadingScene = false;
+        }
+        else
+        {
+            Debug.Log("Prevented double scene loading.");
+        }
     }
 
     private void On_GAME_CountdownFinished()
@@ -304,7 +304,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     public void SetUpDebugStartScene(EScene startedScene)
     {
-        currentScene = startedScene;
+        CurrentScene = startedScene;
     }
 
 

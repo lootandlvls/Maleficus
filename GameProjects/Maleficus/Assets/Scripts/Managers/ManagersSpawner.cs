@@ -48,6 +48,7 @@ public class ManagersSpawner : MotherOfManagers
             // Player
             managersInstance.IsJoinAndSpawnPlayerOnControllerConnect = IsJoinAndSpawnPlayerOnControllerConnect;
             managersInstance.IsSpawnRemainingAIPlayersOnGameStart = IsSpawnRemainingAIPlayersOnGameStart;
+            managersInstance.MaximumNumberOfAIToSpawn = MaximumNumberOfAIToSpawn;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
             // Spell

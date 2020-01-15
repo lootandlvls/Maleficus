@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class AbstractManager : MaleficusMonoBehaviour
+public abstract class AbstractManager : BNJMOBehaviour
 {
     /// <summary>
     /// Mark this object as should not be destroyed when a new scene is loaded

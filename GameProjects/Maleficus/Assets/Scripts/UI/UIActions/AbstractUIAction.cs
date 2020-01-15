@@ -11,7 +11,7 @@ using System;
 
 [RequireComponent(typeof (Button))]
 [RequireComponent(typeof (MaleficusButton))]
-public abstract class AbstractUIAction : MaleficusMonoBehaviour
+public abstract class AbstractUIAction : BNJMOBehaviour
 {
     [SerializeField] private bool delayedEventExecution = false;
 

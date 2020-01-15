@@ -153,9 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 361447242}
@@ -480,9 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 252770785}
@@ -499,9 +493,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 0
   fromState: 10
   toState: 11
@@ -616,9 +607,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5b3921dd7de9848a09b7236c7776c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 1
 --- !u!1 &125765370
 GameObject:
@@ -1014,9 +1002,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 1143176445}
@@ -1033,9 +1018,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5b3921dd7de9848a09b7236c7776c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 1
 --- !u!114 &252770787
 MonoBehaviour:
@@ -1049,9 +1031,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 0
   fromState: 10
   toState: 11
@@ -1374,9 +1353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 1439711086}
@@ -1393,9 +1369,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 0
   fromState: 9
   toState: 10
@@ -1926,9 +1899,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef8e6c4bf0929e4591fb8093ec21509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 1
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   IsServer: 0
   ConnectionMode: 2
   InputMode: 1
@@ -1939,6 +1909,7 @@ MonoBehaviour:
   DebugGameMode: 1
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnRemainingAIPlayersOnGameStart: 0
+  MaximumNumberOfAIToSpawn: 4
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsLoadDebugSpells: 0
@@ -2091,9 +2062,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 0
   fromState: 10
   toState: 11
@@ -2109,9 +2077,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 125230225}
@@ -2207,9 +2172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5b3921dd7de9848a09b7236c7776c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 1
 --- !u!1 &703595465
 GameObject:
@@ -2549,9 +2511,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 17308397}
@@ -2854,9 +2813,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c36b19bbc4c35f04992f34277aa1ed6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   delayedEventExecution: 0
   fromState: 10
   toState: 9
@@ -2872,9 +2828,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 624141325}
@@ -3479,9 +3432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 858029630}
@@ -3772,9 +3722,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ab704fde278e6409f8e43a88c13985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   countdownSeconds: 3
 --- !u!114 &1571817337
 MonoBehaviour:
@@ -3973,9 +3920,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d2abcbdf3aebd49b8a4e755dd93ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!225 &1815983275
 CanvasGroup:
   m_ObjectHideFlags: 0

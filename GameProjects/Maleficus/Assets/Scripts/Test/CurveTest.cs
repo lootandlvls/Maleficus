@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-public class CurveTest : MaleficusMonoBehaviour
+public class CurveTest : BNJMOBehaviour
 {
     [SerializeField] private AnimationCurve speedCurve;
     [SerializeField] private AnimationCurve hightCurve;

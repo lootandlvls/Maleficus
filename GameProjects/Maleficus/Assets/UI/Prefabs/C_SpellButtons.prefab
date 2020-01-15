@@ -61,9 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe1b958296dfbf74cb7ed8fbb2fa3180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1001 &2114330957
 PrefabInstance:
   m_ObjectHideFlags: 0

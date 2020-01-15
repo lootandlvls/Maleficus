@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InGameCountDown : MaleficusMonoBehaviour
+public class InGameCountDown : BNJMOBehaviour
 {
     public int CountdownSeconds { get { return countdownSeconds; } }
     [SerializeField] int countdownSeconds;

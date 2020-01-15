@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanvasActivator : MaleficusMonoBehaviour
+public class CanvasActivator : BNJMOBehaviour
 {
     protected override void Awake()
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_PlayerLives : MaleficusMonoBehaviour
+public class UI_PlayerLives : BNJMOBehaviour
 {
 
     public int LiveNumber { get { return liveNumber; } }

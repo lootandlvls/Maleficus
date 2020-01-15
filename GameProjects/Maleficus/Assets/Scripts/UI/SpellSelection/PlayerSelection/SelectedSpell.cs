@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectedSpell : MaleficusMonoBehaviour
+public class SelectedSpell : BNJMOBehaviour
 {
 
      public  ESpellSlot SpellSlot { get { return spellSlot; } }

@@ -5,14 +5,12 @@ using System;
 
 using MyBox;
 
-public abstract class MaleficusMonoBehaviour : MonoBehaviour
+/// <summary>
+/// A stack on the MonoBehaviour that defines some useful utilities functions
+/// Copyright BNJMO
+/// </summary>
+public abstract class BNJMOBehaviour : MonoBehaviour
 {
-    [Separator("Maleficus MonoBehaviour")]
-    [Space (10)]
-    [SerializeField] bool showMaleficusMonoBehaviourConfiguration = false;
-    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] bool debugLogConsoleEnabled = true;
-    [ConditionalField(nameof(showMaleficusMonoBehaviourConfiguration), inverse: false)] [SerializeField] List<string> logCategoriesToIgnore;
-
     #region Life Cycle
     protected virtual void Awake()
     {
@@ -103,10 +101,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     /// <param name="category"> Category of the log text </param>
     protected void LogConsole(string logText, string category = "Default")
     {
-        if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
-        {
-            Debug.Log("<color=gray>[" + name + "]</color> " + logText);
-        }
+        Debug.Log("<color=gray>[" + name + "]</color> " + logText);
     }
 
     /// <summary>
@@ -116,10 +111,8 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     /// <param name="category"> Category of the log text </param>
     protected void LogConsoleWarning(string logText, string category = "Default")
     {
-        if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
-        {
-            Debug.Log("<color=yellow>WARNING! </color>" + "<color=gray>[" + name + "]</color> " + logText);
-        }
+        Debug.Log("<color=yellow>WARNING! </color>" + "<color=gray>[" + name + "]</color> " + logText);
+
     }
 
       /// <summary>
@@ -129,10 +122,7 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     /// <param name="category"> Category of the log text </param>
     protected void LogConsoleError(string logText, string category = "Default")
     {
-        if ((debugLogConsoleEnabled == true) && (logCategoriesToIgnore.Contains(category) == false))
-        {
-            Debug.Log("<color=red>ERROR! </color>" + "<color=gray>[" + name + "]</color> " + logText);
-        }
+        Debug.Log("<color=red>ERROR! </color>" + "<color=gray>[" + name + "]</color> " + logText);
     }
 
     /// <summary>
@@ -146,6 +136,9 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
     }
     #endregion
 
+    #region Debug Draw
+    
+    #endregion
 
     #region Checkers
 
@@ -530,5 +523,61 @@ public abstract class MaleficusMonoBehaviour : MonoBehaviour
             return false;
         }
     }
+
+    /// <summary>
+    /// Invoke an event with the given parameters, after checking if it is bound (i.e. different from null)
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Second generic parameter type of the event </typeparam>
+    /// <typeparam name="C"> Third generic parameter type of the event </typeparam>
+    /// <typeparam name="D"> Fourth generic parameter type of the event </typeparam>
+    /// <param name="eventToInvoke"> event to invoke </param>
+    /// <param name="arg1" > First generic parameter of the event </param>
+    /// <param name="arg2" > Second generic parameter of the event </param>
+    /// <param name="arg3" > Third generic parameter of the event </param>
+    /// <param name="arg4" > Fourth generic parameter of the event </param>
+    /// <returns> true if invoked, otherwise false if not bound </returns>
+    protected bool InvokeEventIfBound<A, B, C, D>(Action<A, B, C, D> eventToInvoke, A arg1, B arg2, C arg3, D arg4)
+    {
+        if (eventToInvoke != null)
+        {
+            eventToInvoke.Invoke(arg1, arg2, arg3, arg4);
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Invoke an event with the given parameters, after checking if it is bound (i.e. different from null)
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Second generic parameter type of the event </typeparam>
+    /// <typeparam name="C"> Third generic parameter type of the event </typeparam>
+    /// <typeparam name="D"> Fourth generic parameter type of the event </typeparam>
+    /// <typeparam name="E"> Fifth generic parameter type of the event </typeparam>
+    /// <param name="eventToInvoke"> event to invoke </param>
+    /// <param name="arg1" > First generic parameter of the event </param>
+    /// <param name="arg2" > Second generic parameter of the event </param>
+    /// <param name="arg3" > Third generic parameter of the event </param>
+    /// <param name="arg4" > Fourth generic parameter of the event </param>
+    /// <param name="arg5" > Fifth generic parameter of the event </param>
+    /// <returns> true if invoked, otherwise false if not bound </returns>
+    protected bool InvokeEventIfBound<A, B, C, D, E>(Action<A, B, C, D, E> eventToInvoke, A arg1, B arg2, C arg3, D arg4, E arg5)
+    {
+        if (eventToInvoke != null)
+        {
+            eventToInvoke.Invoke(arg1, arg2, arg3, arg4, arg5);
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+
     #endregion
 }

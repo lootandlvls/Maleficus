@@ -173,9 +173,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abd2becd8d85748b31bbb4cf08ebfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   playerID: 3
 --- !u!1 &2157153290544443594
 GameObject:
@@ -334,9 +331,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abd2becd8d85748b31bbb4cf08ebfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   playerID: 1
 --- !u!1 &5547775021222199177
 GameObject:
@@ -421,9 +415,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abd2becd8d85748b31bbb4cf08ebfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   playerID: 4
 --- !u!1 &5722256176738287712
 GameObject:
@@ -508,9 +499,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81abd2becd8d85748b31bbb4cf08ebfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   playerID: 2
 --- !u!1 &8791247594938183410
 GameObject:
@@ -649,9 +637,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   leftButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 0}
@@ -668,9 +653,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdd6232cc77f1494dbbcab9f7ea473ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   disableDebugTextOnStart: 1
   spell: {fileID: 0}
   rowIndex: 0

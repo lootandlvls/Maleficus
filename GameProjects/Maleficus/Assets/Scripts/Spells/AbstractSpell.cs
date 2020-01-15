@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using MyBox;
 using UnityEngine;
 
-public abstract class AbstractSpell : MaleficusMonoBehaviour, ISpell
+public abstract class AbstractSpell : BNJMOBehaviour, ISpell
 {
     //  private Vector3 movingDirection;
 

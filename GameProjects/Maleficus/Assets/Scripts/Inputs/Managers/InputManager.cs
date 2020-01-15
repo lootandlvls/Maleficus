@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using static Maleficus.Consts;
 using static Maleficus.Utils;
@@ -10,18 +8,16 @@ using static Maleficus.Utils;
 /// </summary>
 public class InputManager : AbstractSingletonManager<InputManager>
 {
-    public EInputMode                                   InputMode                               { get { return MotherOfManagers.Instance.InputMode; } }
+    public EInputMode                           InputMode                   { get { return MotherOfManagers.Instance.InputMode; } }
 
     /// <summary> Mapping from controllerID to playerID </summary> 
-    public Dictionary<EControllerID, EPlayerID>         ConnectedControllers                    { get { return connectedControllers; } }
+    public Dictionary<EControllerID, EPlayerID> ConnectedControllers        { get; } = new Dictionary<EControllerID, EPlayerID>();
 
-
-    private Dictionary<EControllerID, EPlayerID>        connectedControllers                    = new Dictionary<EControllerID, EPlayerID>();
     AbstractInputSource[] inputSources;
 
-    protected override void InitializeObjecsInScene()
+    protected override void InitializeComponents()
     {
-        base.InitializeObjecsInScene();
+        base.InitializeComponents();
 
         inputSources = GetComponents<AbstractInputSource>();
         foreach (AbstractInputSource inputSource in inputSources)
@@ -31,7 +27,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
             inputSource.JoystickMoved += On_InputSource_JoystickMoved;
         }
     }
-
 
     protected override void InitializeEventsCallbacks()
     {
@@ -221,7 +216,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
             return;
         }
 
-        EPlayerID playerID = connectedControllers[controllerID];
+        EPlayerID playerID = ConnectedControllers[controllerID];
 
         ConnectedControllers.Remove(controllerID);
 
@@ -232,16 +227,17 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     public void ConnectAllRemainingAIPlayers()
     {
-        LogConsole("Connecting remaining AI playeres");
+        LogConsole("Connecting remaining AI playeres. Max : " + MotherOfManagers.Instance.MaximumNumberOfAIToSpawn);
 
+        int connectCounter = 0;
         foreach (EControllerID aIControllerID in AI_CONTROLLERS)
         {
-            if (IsControllerConnected(aIControllerID) == false)
+            if ((connectCounter < MotherOfManagers.Instance.MaximumNumberOfAIToSpawn)
+                && (IsControllerConnected(aIControllerID) == false))
             {
-                ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
-                ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
-                ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
-                ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
+                TryToConnectController(aIControllerID);
+                connectCounter++;
+                LogConsole("connectCounter : " + connectCounter);
             }
         }
     }
@@ -257,7 +253,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     /// Gets the connected PlayerID to the given ControllerID
     /// </summary>
     /// <returns> NONE if given controllerID is not connected</returns>
-    public EPlayerID GetConnectedPlayerID(EControllerID controllerID)
+    public EPlayerID GetConnectedPlayerIDFrom(EControllerID controllerID)
     {
         if (ConnectedControllers.ContainsKey(controllerID))
         {
@@ -266,12 +262,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
         return EPlayerID.NONE;
     }
 
-
     /// <summary>
     /// Gets the connected ControllerID from the given PlayerID
     /// </summary>
     /// <returns> NONE if given playerID is not connected</returns>
-    public EControllerID GetConnectedControllerID(EPlayerID playerID)
+    public EControllerID GetConnectedControllerIDFrom(EPlayerID playerID)
     {
         foreach(EControllerID controllerID in ConnectedControllers.Keys)
         {

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class SpellSelectionPlayerHighlight : MaleficusMonoBehaviour
+public class SpellSelectionPlayerHighlight : BNJMOBehaviour
 {
     public EPlayerID PlayerID   { get { return playerID; } }
     public bool IsHighlighted   { get; private set; } = false;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
 
-public class Player : MaleficusMonoBehaviour, IPlayer                                                
+public class Player : BNJMOBehaviour, IPlayer                                                
 {
     public EPlayerID PlayerID                                               { get; set; }
     public ETeamID TeamID                                                   { get; set; }
@@ -16,6 +16,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public Dictionary<ESpellSlot, float> SpellCastDuration                  { get; } = new Dictionary<ESpellSlot, float>();
     public bool IsReadyToShoot                                              { get; set; }
     public bool IsPlayerCharging                                            { get; set; }
+    public bool IsUnhittable                                                { get; set; } = false;
     public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
     public int SpellChargingLVL                                             { get; private set; } = 1;
@@ -552,8 +553,8 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     }
    private IEnumerator UnhittableCoroutine()
     {
-        this.tag = "Unhittable";
-       
+        this.tag = Maleficus.Consts.TAG_PLAYER_SHIELDED;
+        IsUnhittable = true;
         GameObject effectPrefab = Resources.Load<GameObject>(Maleficus.Consts.PATH_EFFECT_UNHITTABLE);
         GameObject effect = Instantiate(effectPrefab, transform.position, transform.rotation);
         effect.transform.parent = this.transform;
@@ -564,7 +565,8 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         }
         yield return new WaitForSeconds(unhittableTime);
 
-        this.tag = "Player";
+        this.tag = Maleficus.Consts.TAG_PLAYER;
         IsReadyToShoot = true;
+        IsUnhittable = false;
     }
 }

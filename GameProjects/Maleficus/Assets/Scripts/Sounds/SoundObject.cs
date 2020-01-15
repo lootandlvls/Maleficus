@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using MyBox;
 
-public class SoundObject : MaleficusMonoBehaviour
+public class SoundObject : BNJMOBehaviour
 {
     public event Action<SoundObject> SoundFinishedPlayed;
     public event Action<SoundObject> SoundObjectWillGetDestroyed;

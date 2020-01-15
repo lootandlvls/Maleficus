@@ -8,8 +8,6 @@ using static Maleficus.Utils;
 
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>
 {
-
-
     public event Action<EPlayerID, AbstractSpell> SpellButtonHighlighted;
 
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
@@ -35,14 +33,26 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
 
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
         EventManager.Instance.PLAYERS_PlayerJoined      += On_PLAYERS_PlayerJoined;
-        EventManager.Instance.PLAYERS_PlayerLeft        += On_PLAYERS_PlayerLeft; ;
+        EventManager.Instance.PLAYERS_PlayerLeft        += On_PLAYERS_PlayerLeft;
     }
 
-    
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.INPUT_ButtonPressed.Event -= On_INPUT_ButtonPressed_Event;
+            EventManager.Instance.PLAYERS_PlayerJoined -= On_PLAYERS_PlayerJoined;
+            EventManager.Instance.PLAYERS_PlayerLeft -= On_PLAYERS_PlayerLeft;
+        }
+    }
+
 
     private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
+        if ((IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
+            && (IS_NOT_NULL(highlightedSpellButtons[playerID])))
         {
             highlightedSpellButtons[playerID].HighlightPlayerSelection(playerID);
         }
@@ -50,7 +60,8 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
 
     private void On_PLAYERS_PlayerLeft(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
+        if ((IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
+            && (IS_NOT_NULL(highlightedSpellButtons[playerID])))
         {
             highlightedSpellButtons[playerID].UnHighlightPlayerSelection(playerID);
         }
