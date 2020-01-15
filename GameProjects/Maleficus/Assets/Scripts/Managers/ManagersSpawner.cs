@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 /// <summary>
 /// Utility class that makes it possible to start and test any scene (instead of entry scene) by spawning needed managers if they are not found in the scene.

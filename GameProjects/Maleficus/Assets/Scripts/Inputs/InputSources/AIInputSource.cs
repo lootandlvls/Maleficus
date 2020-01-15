@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Consts;
+using static Maleficus.Utils;
 
 public class AIInputSource : AbstractInputSource
 {

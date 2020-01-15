@@ -1942,6 +1942,7 @@ MonoBehaviour:
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsLoadDebugSpells: 0
+  IsLimitMaxPushPower: 1
   IsDebugLogEvents: 1
   IsReduceLightIntensityOnSceneStart: 0
   currentScene: 2
@@ -3574,7 +3575,7 @@ PrefabInstance:
     - target: {fileID: 1968480871470189892, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2007763136347188867, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}

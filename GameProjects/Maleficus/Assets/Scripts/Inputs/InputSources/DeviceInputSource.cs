@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 public class DeviceInputSource : AbstractInputSource
 {

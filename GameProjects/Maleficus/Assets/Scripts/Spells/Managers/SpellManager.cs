@@ -2,13 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Consts;
+using static Maleficus.Utils;
 
 
 public class SpellManager : AbstractSingletonManager<SpellManager>
 {
-
     public List<AbstractSpell> SpellsUpgrade { get { return spellsUpgrade; } }
     public List<GameObject> ChargingSpells_Effects { get; } = new List<GameObject>();
     public List<AbstractSpell> All_Spells { get; } = new List<AbstractSpell>();
@@ -34,7 +33,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     private Dictionary<ETouchJoystickType, MaleficusJoystick> spellJoysticks = new Dictionary<ETouchJoystickType, MaleficusJoystick>();
 
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -43,8 +41,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         LoadEffectsResources();
         InitializeSpellsDictionnary();
     }
-
-
 
     protected override void Start()
     {
@@ -58,12 +54,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         base.InitializeEventsCallbacks();
 
         EventManager.Instance.SPELLS_SpellHitPlayer += On_SPELLS_SpellHitPlayer;
-        EventManager.Instance.SPELLS_Teleport       += On_SPELLS_Teleport;
         EventManager.Instance.UI_SpellChosen        += On_UI_SpellChosen;
         EventManager.Instance.UI_SpellRemoved       += On_UI_SpellRemoved;
         EventManager.Instance.INPUT_ControllerConnected.Event += On_INPUT_ControllerConnected_Event;
     }
-
 
     protected override void OnReinitializeManager()
     {
@@ -72,8 +66,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         FinTouochJoysticks();
 
     }
-
-
 
     private void On_UI_SpellRemoved(EPlayerID playerID, ESpellSlot spellSlot)
     {
@@ -93,19 +85,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-    private void On_SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
-    {
-        Debug.Log("Teleportation spell executed");
 
-        JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(castingPlayerID);
-
-        float InputH = playerInput.JoystickValues[EInputAxis.ROTATE_X];
-        float InputV = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
-
-        Vector3 TeleportDirection = activePlayers[castingPlayerID].transform.forward;
-
-        activePlayers[castingPlayerID].transform.position += TeleportDirection * castedSpell.HitPower;
-    }
 
     public void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
@@ -131,7 +111,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             }
         }
     }
-
 
     private void On_INPUT_ControllerConnected_Event(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {

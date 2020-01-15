@@ -53,7 +53,7 @@ public class Linear_Hit : AbstractSpell
 
             if (shield == null)
             {
-                if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.MaleficusConsts.TAG_PLAYER)
+                if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.Consts.TAG_PLAYER)
                 {
                     hasBeenTriggered = true;
                     Explode();
@@ -104,7 +104,7 @@ public class Linear_Hit : AbstractSpell
         IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
         Shield shield = other.gameObject.GetComponent<Shield>();
 
-        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.MaleficusConsts.TAG_PLAYER)
+        if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.Consts.TAG_PLAYER)
         {
             LogConsole("Trigger exti");
         }

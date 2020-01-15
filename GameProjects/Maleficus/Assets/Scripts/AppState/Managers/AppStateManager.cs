@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 
 public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppStateManager, EAppState>

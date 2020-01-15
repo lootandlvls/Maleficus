@@ -15,7 +15,7 @@ namespace Maleficus
     /// <summary>
     /// Contains utility functions.
     /// </summary>
-    public static class MaleficusUtilities
+    public static class Utils
     {
 
         #region General

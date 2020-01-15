@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 
 [System.Serializable]
 public class NetEvent_ButtonReleased : AbstractEventHandle

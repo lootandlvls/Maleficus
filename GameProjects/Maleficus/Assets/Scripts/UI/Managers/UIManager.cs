@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Utils;
+using static Maleficus.Consts;
 
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>

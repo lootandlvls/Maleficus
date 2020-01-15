@@ -7,7 +7,7 @@ namespace Maleficus
     /// <summary>
     /// Contains pre-defines constant members.
     /// </summary>
-    public static class MaleficusConsts
+    public static class Consts
     {
         /* GameObjects Tags */
         public const string TAG_SPELL_HITTABLE = "SpellHittable";
@@ -26,11 +26,8 @@ namespace Maleficus
         public const string PATH_MANAGERS_CLIENT = "Managers_CLIENT";
         public const string PATH_MANAGERS_SERVER = "Managers_SERVER";
 
-
         /* Sound paths */
         public const string PATH_SOUND_OBJECT = "SoundObject";
-
-
 
         /* Spells path */
         public const string PATH_SPELL_FIREBALL_LVL_1 = "S_FireBall_lvl_1";

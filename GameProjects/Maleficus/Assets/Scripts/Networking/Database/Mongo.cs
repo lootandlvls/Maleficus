@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 using System.Text.RegularExpressions;
 
 public class Mongo

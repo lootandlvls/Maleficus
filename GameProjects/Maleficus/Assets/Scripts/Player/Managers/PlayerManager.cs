@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Utils;
+using static Maleficus.Consts;
 
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
@@ -24,9 +24,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     /// <summary> Assigned team of every player </summary>
     public Dictionary<EPlayerID, ETeamID> PlayersTeam { get; } = new Dictionary<EPlayerID, ETeamID>();
     public EPlayerID OwnPlayerID { get { return GetPlayerIDFrom(NetworkManager.Instance.OwnerClientID); } }
-
-    /// <summary> Joysticks inputs for every player (movement, rotation). </summary>
-    public Dictionary<EPlayerID, JoystickInput> PlayersMovement { get; } = new Dictionary<EPlayerID, JoystickInput>();
 
     /// <summary> The join status of player that have connected with a controllers </summary>
     private Dictionary<EPlayerID, PlayerJoinStatus> playersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
@@ -81,12 +78,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
         EventManager.Instance.INPUT_ButtonPressed.AddListener(On_INPUT_ButtonPressed);
         EventManager.Instance.INPUT_ButtonReleased.AddListener(On_INPUT_ButtonReleased);
-        //EventManager.Instance.INPUT_JoystickMoved.AddListener                   (On_INPUT_JoystickMoved);
-        // Listen to broadcasted inputs 
-        EventManager.Instance.INPUT_JoystickMoved.AddListener(On_SERVER_INPUT_JoystickMoved);
 
         // Scene changed event
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+        EventManager.Instance.APP_SceneChanged.Event += On_APP_SceneChanged_Event;
 
         //Network
         //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
@@ -98,6 +92,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         EventManager.Instance.PLAYERS_PlayerReady += On_PLAYERS_PlayerReady;
         EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
     }
+
 
 
     protected override void Update()
@@ -128,12 +123,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     #region Players Management
     public void SpawnPlayer(EPlayerID playerID)
     {
-        if ((IsPlayerConnected(playerID) == true)
-            || ((MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
-                && (AppStateManager.Instance.CurrentScene.ContainedIn(GAME_SCENES))))
+        if (IsPlayerConnected(playerID) == true)
         {
-
-            if (ActivePlayers.ContainsKey(playerID) == false)
+            if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
             {
                 Player playerPrefab = playersPrefabs[playerID];
                 PlayerSpawnPosition playerSpawnPosition = PlayersSpawnPositions[playerID];
@@ -211,13 +203,19 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnRemaningAIPlayers()
     {
+        LogConsole("Spawning remaining AI playeres");
+
+        // First connect AI Controllers on reamining slots if not already connected
+        InputManager.Instance.ConnectAllRemainingAIPlayers();
+
+        // Spawn connectec AI Controllers
         foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
         {
             EControllerID controllerID = pair.Key;
             EPlayerID playerID = pair.Value;
 
             if ((controllerID.ContainedIn(AI_CONTROLLERS))
-                && (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID)))
+                && (ActivePlayers.ContainsKey(playerID) == false))
             {
                 SpawnPlayer(playerID);
             }
@@ -311,7 +309,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 {
                     if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
                     {
-                        if (!ActivePlayers[playerID].hasCastedSpell)
+                        if (!ActivePlayers[playerID].HasCastedSpell)
                         {
                             StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
                             SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
@@ -365,39 +363,31 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
+    #endregion
 
-    private void On_SERVER_INPUT_JoystickMoved(NetEvent_JoystickMoved eventHandle)
+    #region Events Callbacks
+
+    private void On_APP_SceneChanged_Event(Event_GenericHandle<EScene> eventHandle)
     {
-        EJoystickType joystickType = eventHandle.JoystickType;
-        float joystick_X = eventHandle.Joystick_X;
-        float joystick_Y = eventHandle.Joystick_Y;
-        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+        EScene scene = eventHandle.Arg1;
 
-
-        if (PlayersMovement.ContainsKey(playerID))
+        if (scene == EScene.GAME)
         {
-            if (joystickType == EJoystickType.MOVEMENT)
+            SpawnAllJoinedPlayers();
+
+            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
             {
-                PlayersMovement[playerID].JoystickValues[EInputAxis.MOVE_X] = joystick_X;
-                PlayersMovement[playerID].JoystickValues[EInputAxis.MOVE_Y] = joystick_Y;
-            }
-            else if (joystickType == EJoystickType.ROTATION)
-            {
-                PlayersMovement[playerID].JoystickValues[EInputAxis.ROTATE_X] = joystick_X;
-                PlayersMovement[playerID].JoystickValues[EInputAxis.ROTATE_Y] = joystick_Y;
+                SpawnRemaningAIPlayers();
             }
         }
     }
 
-    #endregion
-
-    #region Events Callbacks
-    private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
+    private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
-        LogConsole("joining players : " + eventHandle.NewState);
-        if (eventHandle.NewState == EAppState.IN_GAME_IN_NOT_STARTED)
+        // Connect and spawn reamining players as AI
+        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
         {
-            SpawnAllJoinedPlayers();
+            SpawnRemaningAIPlayers();
         }
     }
 
@@ -492,21 +482,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
     #endregion
 
-
-
-    public JoystickInput GetPlayerInput(EPlayerID playerID)
-    {
-        if (PlayersMovement.ContainsKey(playerID) == false)
-        {
-            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-            {
-                Debug.LogError("No player movement found for : " + playerID);
-            }
-            return new JoystickInput();
-        }
-        return PlayersMovement[playerID];
-    }
-
     public bool IsPlayerActive(EPlayerID playerID)
     {
         return ActivePlayers.ContainsKey(playerID);
@@ -521,9 +496,9 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private IEnumerator FirstTimeSpellCastedCoroutine(EPlayerID playerID, ESpellSlot spellSlot, float duration)
     {
 
-        if (!ActivePlayers[playerID].hasCastedSpell)
+        if (!ActivePlayers[playerID].HasCastedSpell)
         {
-            ActivePlayers[playerID].hasCastedSpell = true;
+            ActivePlayers[playerID].HasCastedSpell = true;
             yield return new WaitForSeconds(duration);
             ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
             ActivePlayers[playerID].IsReadyToShoot = false;
@@ -545,7 +520,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             if (ActivePlayers.ContainsKey(playerID))
             {
                 ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
-                ActivePlayers[playerID].hasCastedSpell = false;
+                ActivePlayers[playerID].HasCastedSpell = false;
             }
             
         }
@@ -561,10 +536,6 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         AssignPlayerToTeam(playerID, GetIdenticPlayerTeam(playerID));
 
         // Initialize dictionaries for the new player
-        if (IS_KEY_NOT_CONTAINED(PlayersMovement, playerID))
-        {
-            PlayersMovement.Add(playerID, new JoystickInput());
-        }
         if (IS_KEY_NOT_CONTAINED(playersJoinStatus, playerID))
         {
             playersJoinStatus.Add(playerID, new PlayerJoinStatus());
@@ -589,14 +560,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
         EPlayerID playerID = eventHandle.Arg2;
-        if (PlayersMovement.ContainsKey(playerID) == true)
-        {
-            PlayersMovement.Remove(playerID);
-        }
-        else
-        {
-            Debug.LogError("Trying to disconnect a player that is not connected");
-        }
+        // TODO
     }
 
 
@@ -646,15 +610,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
-    {
-        // Connect and spawn reamining players as AI
-        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
-        {
-            InputManager.Instance.ConnectAllRemainingAIPlayers();
-            SpawnRemaningAIPlayers();
-        }
-    }
+
 
 
     private void CheckIfAllPlayersAreReady()

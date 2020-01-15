@@ -144,6 +144,7 @@ MonoBehaviour:
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsLoadDebugSpells: 1
+  IsLimitMaxPushPower: 0
   IsDebugLogEvents: 0
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
@@ -623,9 +624,9 @@ MonoBehaviour:
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   DebugSpells_Player1:
-  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
-  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
+  - {fileID: 2873473120091955154, guid: 43ca197a48ff08941936b053d830b4ce, type: 3}
+  - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
   DebugSpells_Player2:
   - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}
   - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}

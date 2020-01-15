@@ -105,7 +105,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
     private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
     {
         EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = Maleficus.MaleficusUtilities.GetPlayerIDFrom(eventHandle.SenderID);
+        EPlayerID playerID = Maleficus.Utils.GetPlayerIDFrom(eventHandle.SenderID);
         if ((AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_NOT_STARTED)
             && (eventHandle.InputButton == EInputButton.CONFIRM)
             && (PlayerManager.Instance.HasPlayerJoined(playerID) == true))

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 public class SoundManager : AbstractSingletonManager<SoundManager>
 {

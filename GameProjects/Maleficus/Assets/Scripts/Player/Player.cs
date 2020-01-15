@@ -13,21 +13,17 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     public bool IsDead                                                      { get; private set; } = false;                                          
     public Dictionary<ESpellSlot, bool> ReadyToUseSpell                     { get; } = new Dictionary<ESpellSlot, bool>();
     public Dictionary<ESpellSlot, float> SpellCooldown                      { get; } = new Dictionary<ESpellSlot, float>();
-    public Dictionary<ESpellSlot, float> SpellCastDuration                      { get; } = new Dictionary<ESpellSlot, float>();
+    public Dictionary<ESpellSlot, float> SpellCastDuration                  { get; } = new Dictionary<ESpellSlot, float>();
     public bool IsReadyToShoot                                              { get; set; }
     public bool IsPlayerCharging                                            { get; set; }
     public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
-    public int SpellChargingLVL                                             { get { return spellChargingLVL; } }
-    public bool hasCastedSpell = false;
+    public int SpellChargingLVL                                             { get; private set; } = 1;
+    public bool HasCastedSpell                                              { get; set; } = false;
    
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
-
-   
-
-    [SerializeField] private float angularSpeed;
     [SerializeField] private float speed;
     [SerializeField] private float maximumPushVelocity = 25.0f;
     [Range(0.1f, 3.0f)]
@@ -35,29 +31,18 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     [SerializeField] private float unhittableTime = 1.0f;
     [SerializeField] private Transform spellInitPosition;
     [SerializeField] private Transform spellEndPosition;
-    
-    
 
-    private int spellChargingLVL = 1;
+    private Animator myAnimator;
+    private DirectionalSprite[] myDirectionalSprites;
 
     private float lastTimeSinceRotated;
-
     private float currentSpeed;
     private IEnumerator UpdatePushVelocityEnumerator;
     private IEnumerator SpellChargingEnumerator;
-
-    /// <summary> Spell Manager will initialize the variables for this Dictionary </summary> 
-    private Dictionary<ESpellSlot, GameObject> chargingEffects = new Dictionary<ESpellSlot, GameObject>();
-
     private Vector3 movingDirection;
-    //private Rigidbody myRigidBody;
-    private DirectionalSprite[] myDirectionalSprites;
-    private Animator myAnimator;
-
     private Vector3 pushVelocity;
     private Vector3 GravityVelocity;
-
-    private bool HitEffectActive = false;
+    private JoysticksInput joysticksInput = new JoysticksInput();
 
     protected override void InitializeComponents()
     {
@@ -68,9 +53,19 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     }
 
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.INPUT_JoystickMoved.Event += On_INPUT_JoystickMoved_Event;
+        EventManager.Instance.SPELLS_Teleport += On_SPELLS_Teleport;
+
+    }
+
     protected override void Awake()
     {
         base.Awake();
+
         //TODO: only activate after respawn
         StartCoroutine(UnhittableCoroutine());
    
@@ -94,66 +89,103 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     {
         base.Update();
 
-        if (true)//AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-
-            JoystickInput playerInput = PlayerManager.Instance.GetPlayerInput(PlayerID);
-            if (playerInput != null)
-            {
-
-                float Move_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
-                float Move_Y = playerInput.JoystickValues[EInputAxis.MOVE_Y];
-                float Rotate_X = playerInput.JoystickValues[EInputAxis.ROTATE_X];
-                float Rotate_Y = playerInput.JoystickValues[EInputAxis.ROTATE_Y];
-
-                Move(Move_X, Move_Y);
-                Rotate(Rotate_X, Rotate_Y);
-
-                if (playerInput.HasMoved() == true)
-                // Moving?
-                {
-                    if (myAnimator != null)
-                    {
-                        myAnimator.SetBool("idle", false);
-                    }
-                }
-                // Not moving?
-                else
-                {
-                    if (myAnimator != null)
-                    {
-                        myAnimator.SetBool("idle", true);
-                    }
-                   
-                   
-                }
-
-                if (playerInput.HasRotated() == true)
-                // Rotating?
-                {
-
-                    SetDirectionalSpritesVisible(true);
-                    lastTimeSinceRotated = Time.time;
-                }
-                else
-                // Not Rotating?
-                {
-                    SetDirectionalSpritesVisible(false);
-
-                    if ((playerInput.HasMoved() == true)
-                        && (Time.time - lastTimeSinceRotated > 0.5f))
-                    // Moving for 1 second since last rortation?
-                    {
-                        LookAtMovingDirection(playerInput);
-                    }
-                }
-            }
+            UpdateMovementAndRotation();
         }
 
         LogCanvas(69, PlayerID + " push vel : " + pushVelocity.magnitude);
     }
 
-    
+    private void On_INPUT_JoystickMoved_Event(NetEvent_JoystickMoved eventHandle)
+    {
+        EJoystickType joystickType = eventHandle.JoystickType;
+        float joystick_X = eventHandle.Joystick_X;
+        float joystick_Y = eventHandle.Joystick_Y;
+        EPlayerID playerID = Maleficus.Utils.GetPlayerIDFrom(eventHandle.SenderID);
+
+
+        if (PlayerID == playerID)
+        {
+            if (joystickType == EJoystickType.MOVEMENT)
+            {
+                joysticksInput.JoystickValues[EInputAxis.MOVE_X] = joystick_X;
+                joysticksInput.JoystickValues[EInputAxis.MOVE_Y] = joystick_Y;
+            }
+            else if (joystickType == EJoystickType.ROTATION)
+            {
+                joysticksInput.JoystickValues[EInputAxis.ROTATE_X] = joystick_X;
+                joysticksInput.JoystickValues[EInputAxis.ROTATE_Y] = joystick_Y;
+            }
+        }
+    }
+
+    private void On_SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
+    {
+        EPlayerID playerID = castedSpell.CastingPlayerID;
+        if ((PlayerID == playerID)
+         && (IS_NOT_NULL(joysticksInput)))
+        {
+            float InputH = joysticksInput.JoystickValues[EInputAxis.ROTATE_X];
+            float InputV = joysticksInput.JoystickValues[EInputAxis.ROTATE_Y];
+
+            Vector3 TeleportDirection = transform.forward;
+            transform.position += TeleportDirection * castedSpell.HitPower;
+        }
+    }
+
+    private void UpdateMovementAndRotation()
+    {
+        if (IS_NOT_NULL(joysticksInput))
+        {
+            float Move_X = joysticksInput.JoystickValues[EInputAxis.MOVE_X];
+            float Move_Y = joysticksInput.JoystickValues[EInputAxis.MOVE_Y];
+            float Rotate_X = joysticksInput.JoystickValues[EInputAxis.ROTATE_X];
+            float Rotate_Y = joysticksInput.JoystickValues[EInputAxis.ROTATE_Y];
+
+            Move(Move_X, Move_Y);
+            Rotate(Rotate_X, Rotate_Y);
+
+            if (joysticksInput.HasMoved() == true)
+            // if moving
+            {
+                if (myAnimator != null)
+                {
+                    myAnimator.SetBool("idle", false);
+                }
+            }
+            // if not moving
+            else
+            {
+                if (myAnimator != null)
+                {
+                    myAnimator.SetBool("idle", true);
+                }
+            }
+
+            if (joysticksInput.HasRotated() == true)
+            // if rotating
+            {
+
+                SetDirectionalSpritesVisible(true);
+                lastTimeSinceRotated = Time.time;
+            }
+            else
+            // if not Rotating
+            {
+                SetDirectionalSpritesVisible(false);
+
+                if ((joysticksInput.HasMoved() == true)
+                    && (Time.time - lastTimeSinceRotated > 0.5f))
+                // if moving for 1 second since last rortation
+                {
+                    LookAtMovingDirection();
+                }
+            }
+        }
+    }
+
+
     #region INPUT
     private void Move(float axis_X, float axis_Z)
     {
@@ -174,10 +206,10 @@ public class Player : MaleficusMonoBehaviour, IPlayer
         }
     }
 
-    private void LookAtMovingDirection(JoystickInput playerInput)
+    private void LookAtMovingDirection()
     {
-        float axis_X = playerInput.JoystickValues[EInputAxis.MOVE_X];
-        float axis_Z = playerInput.JoystickValues[EInputAxis.MOVE_Y];
+        float axis_X = joysticksInput.JoystickValues[EInputAxis.MOVE_X];
+        float axis_Z = joysticksInput.JoystickValues[EInputAxis.MOVE_Y];
 
         RotateRelativeToGrandParentRotation(axis_X, axis_Z);
     }
@@ -307,7 +339,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
             ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
             ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
 
-            spellChargingLVL = 0;
+            SpellChargingLVL = 0;
             while (IsPlayerCharging)
             {
                 var mainPS = particleSystemBodyEffect.main;
@@ -319,18 +351,18 @@ public class Player : MaleficusMonoBehaviour, IPlayer
                 counter += 4;       // TODO: Add how an attribute in spell to influence how fast second level is charged
                 if (counter > 100)
                 {
-                    if (spellChargingLVL != 2)
+                    if (SpellChargingLVL != 2)
                     {
-                        spellChargingLVL = 2;
+                        SpellChargingLVL = 2;
                         LogConsole("Spell upgraded to lvl 2", "SPELL_CHARGE");
                     }
                 }
                 else
                 {
-                    if (spellChargingLVL != 1)
+                    if (SpellChargingLVL != 1)
                     {
 
-                    spellChargingLVL = 1;
+                    SpellChargingLVL = 1;
                     LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
                     }
 
@@ -431,7 +463,7 @@ public class Player : MaleficusMonoBehaviour, IPlayer
 
     public void resetSpellChargingLVL()
     {
-        spellChargingLVL = 1;
+        SpellChargingLVL = 1;
     }
 
     public void PushPlayer(Vector3 velocity, float duration)
@@ -514,15 +546,15 @@ public class Player : MaleficusMonoBehaviour, IPlayer
     }
     private IEnumerator ShieldActivatedCoroutine(float duration)
     {
-        this.tag  = Maleficus.MaleficusConsts.TAG_PLAYER_SHIELDED;
+        this.tag  = Maleficus.Consts.TAG_PLAYER_SHIELDED;
         yield return new WaitForSeconds(duration);
-        this.tag = Maleficus.MaleficusConsts.TAG_PLAYER;
+        this.tag = Maleficus.Consts.TAG_PLAYER;
     }
    private IEnumerator UnhittableCoroutine()
     {
         this.tag = "Unhittable";
        
-        GameObject effectPrefab = Resources.Load<GameObject>(Maleficus.MaleficusConsts.PATH_EFFECT_UNHITTABLE);
+        GameObject effectPrefab = Resources.Load<GameObject>(Maleficus.Consts.PATH_EFFECT_UNHITTABLE);
         GameObject effect = Instantiate(effectPrefab, transform.position, transform.rotation);
         effect.transform.parent = this.transform;
         SpellTimer spellTimer = effect.GetComponent<SpellTimer>();

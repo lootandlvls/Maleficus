@@ -6,8 +6,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Networking;
 using MongoDB.Bson;
-using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Consts;
+using static Maleficus.Utils;
 using static UserManager;
 
 public class NetworkManager : AbstractSingletonManager<NetworkManager>

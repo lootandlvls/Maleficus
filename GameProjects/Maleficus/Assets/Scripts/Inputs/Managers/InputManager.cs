@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Consts;
+using static Maleficus.Utils;
 
 /// <summary>
 /// Responsible for managing input controller sources attached to the same gameobject
@@ -41,7 +41,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
     }
 
-
     protected override void LateStart()
     {
         base.LateStart();
@@ -52,8 +51,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         {
             ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
         }
-
-
     }
 
     private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
@@ -235,10 +232,18 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     public void ConnectAllRemainingAIPlayers()
     {
-        ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
-        ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
-        ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
-        ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
+        LogConsole("Connecting remaining AI playeres");
+
+        foreach (EControllerID aIControllerID in AI_CONTROLLERS)
+        {
+            if (IsControllerConnected(aIControllerID) == false)
+            {
+                ConnectControllerToPlayer(EControllerID.AI_1, EPlayerID.PLAYER_1);
+                ConnectControllerToPlayer(EControllerID.AI_2, EPlayerID.PLAYER_2);
+                ConnectControllerToPlayer(EControllerID.AI_3, EPlayerID.PLAYER_3);
+                ConnectControllerToPlayer(EControllerID.AI_4, EPlayerID.PLAYER_4);
+            }
+        }
     }
 
     public bool IsControllerConnected(EControllerID controllerID)

@@ -35,7 +35,7 @@ public class Linear_Explosive : AbstractSpell {
           ;
         if (shield == null)
         {
-            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.MaleficusConsts.TAG_PLAYER)
+            if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.Consts.TAG_PLAYER)
             {
                 if ((other.transform.position - transform.position )!= Vector3.zero )
                 {

@@ -6,8 +6,8 @@ using UnityEngine.Networking;
 using MongoDB.Bson;
 using System.Collections.Generic;
 using System.Collections;
-using static Maleficus.MaleficusConsts;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Consts;
+using static Maleficus.Utils;
 
 public class ServerManager : NetworkManager
 {

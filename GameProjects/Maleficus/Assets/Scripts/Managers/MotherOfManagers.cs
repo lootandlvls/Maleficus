@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MyBox;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {

@@ -6006,9 +6006,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1516624554419814651}
+  - component: {fileID: 4285941913085856244}
   - component: {fileID: 1464117566350752285}
   - component: {fileID: 1506201097449065619}
-  - component: {fileID: 4285941913085856244}
   - component: {fileID: 490479312750579945}
   - component: {fileID: 5407023651269880443}
   - component: {fileID: 2630372558410990984}
@@ -6037,6 +6037,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4285941913085856244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515304141566281053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showMaleficusMonoBehaviourConfiguration: 0
+  debugLogConsoleEnabled: 1
+  logCategoriesToIgnore:
+  - SPELL_CHARGE
+  hasCastedSpell: 0
+  chargingBodyEnergy: {fileID: 1820421771836070987, guid: 8fe5d31d8d3b7f4408c5ce8686c271de,
+    type: 3}
+  chargingWandEnergy: {fileID: 5551467226034161610, guid: 2b649d7e1c9688b4788d9cf712bcefcc,
+    type: 3}
+  speed: 75
+  maximumPushVelocity: 30
+  fallingTime: 0.49
+  unhittableTime: 1.5
+  spellInitPosition: {fileID: 608549788462845129}
+  spellEndPosition: {fileID: 7339631618129149989}
 --- !u!95 &1464117566350752285
 Animator:
   serializedVersion: 3
@@ -6070,35 +6097,6 @@ CapsuleCollider:
   m_Height: 2.38
   m_Direction: 1
   m_Center: {x: -0.036681354, y: 0.81514454, z: -0.049384773}
---- !u!114 &4285941913085856244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1515304141566281053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5891a3fa64cb66c40aa43d20480c37cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore:
-  - SPELL_CHARGE
-  hasCastedSpell: 0
-  chargingBodyEnergy: {fileID: 1820421771836070987, guid: 8fe5d31d8d3b7f4408c5ce8686c271de,
-    type: 3}
-  chargingWandEnergy: {fileID: 5551467226034161610, guid: 2b649d7e1c9688b4788d9cf712bcefcc,
-    type: 3}
-  angularSpeed: 28
-  speed: 75
-  isClampPushVelocity: 1
-  maximumPushVelocity: 30
-  fallingTime: 0.49
-  unhittableTime: 1.5
-  spellInitPosition: {fileID: 608549788462845129}
-  spellEndPosition: {fileID: 7339631618129149989}
 --- !u!65 &490479312750579945
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 
 public class PlayerSpellSelectionContext : MaleficusMonoBehaviour
 {

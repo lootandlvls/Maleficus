@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {

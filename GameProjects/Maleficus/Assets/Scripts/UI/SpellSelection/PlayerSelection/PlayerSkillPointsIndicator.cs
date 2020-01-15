@@ -11,7 +11,7 @@ public class PlayerSkillPointsIndicator : MaleficusMonoBehaviour
     {
         base.Start();
 
-        ReaminingSkillPoints = Maleficus.MaleficusConsts.SPELL_MAX_SKILL_POINTS;
+        ReaminingSkillPoints = Maleficus.Consts.SPELL_MAX_SKILL_POINTS;
         skillPointsText = GetComponentInChildren<Text>();
     }
 

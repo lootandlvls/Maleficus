@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 public class LifeBar : MonoBehaviour {
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Consts;
 
 public class GM_Single_Dungeon : ConcreteGameMode<PlayerStats_Dungeon>
 {

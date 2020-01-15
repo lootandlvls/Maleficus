@@ -4,8 +4,8 @@ using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using MongoDB.Bson;
 using System.IO;
-using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Utils;
+using static Maleficus.Consts;
 using System.Runtime.Serialization;
 
 public class UserManager : AbstractSingletonManager<UserManager>

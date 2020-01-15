@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 
 // Klasse fuer Huendchen Gegner
 public class BasicEnemy : MonoBehaviour, IEnemy

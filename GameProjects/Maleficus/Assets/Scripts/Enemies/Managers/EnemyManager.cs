@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 
 public class EnemyManager : AbstractSingletonManager<EnemyManager>
 {

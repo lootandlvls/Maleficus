@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Utils;
+using static Maleficus.Consts;
 
 public class TouchJoystickInputSource : AbstractInputSource
 {

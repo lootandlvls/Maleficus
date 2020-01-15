@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System;
 
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 
 
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System;
-using static Maleficus.MaleficusUtilities;
+using static Maleficus.Utils;
 
 public class MaleficusEvent<H> where H : AbstractEventHandle
 {

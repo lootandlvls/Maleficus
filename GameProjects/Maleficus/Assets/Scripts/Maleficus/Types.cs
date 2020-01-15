@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public static class MaleficusTypes
+public static class Types
 {
 
 }
@@ -287,11 +287,11 @@ public enum EJoystickState
     SELECTED_CANNOT_TRIGGER_BUTTON
 }
 
-public class JoystickInput
+public class JoysticksInput
 {
     public Dictionary<EInputAxis, float> JoystickValues = new Dictionary<EInputAxis, float>();
 
-    public JoystickInput()
+    public JoysticksInput()
     {
         Flush();
     }

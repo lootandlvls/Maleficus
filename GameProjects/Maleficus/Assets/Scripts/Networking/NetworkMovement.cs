@@ -2,8 +2,8 @@
 using UnityEngine;
 using System.Collections;
 
-using static Maleficus.MaleficusUtilities;
-using static Maleficus.MaleficusConsts;
+using static Maleficus.Utils;
+using static Maleficus.Consts;
 
 
 public class NetworkMovement : MaleficusMonoBehaviour
