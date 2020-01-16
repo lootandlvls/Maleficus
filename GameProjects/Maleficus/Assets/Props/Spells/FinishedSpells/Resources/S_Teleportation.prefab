@@ -9447,6 +9447,7 @@ GameObject:
   - component: {fileID: 8004448758370885323}
   - component: {fileID: 7967797922335698527}
   - component: {fileID: 2873473120091955154}
+  - component: {fileID: 2961951851154664143}
   m_Layer: 0
   m_Name: S_Teleportation
   m_TagString: Untagged
@@ -9495,9 +9496,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eda7c0e832cab14e9bc7169d6680c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   hitPower: 7
   speed: 0
   spellName: Teleport
@@ -9506,20 +9504,118 @@ MonoBehaviour:
   hasPushPower: 0
   spell: 4
   isChargeable: 0
-  spellIcon: {fileID: 21300000, guid: fd1b7805d92fa4d40857a08243081a50, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  skillPoint: 2
   isTripleCast: 0
   movementType: 4
+  skillPoint: 2
   debuffEffects: 
+  debuffDuration: 0
+  debuffPower: 0
   buffEffects: 
+  buffDuration: 0
+  buffPower: 0
   cooldown: 3
   castDuration: 0
   pushDuration: 0
   spellDuration: 1
-  shotSFX: {fileID: 0}
-  hitSFX: {fileID: 0}
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  spellIcon: {fileID: 21300000, guid: fd1b7805d92fa4d40857a08243081a50, type: 3}
   hitPrefab: {fileID: 0}
   trails: []
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+--- !u!82 &2961951851154664143
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7999465360711208889}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 16f0a3a66bdc79643b865818706859b7, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

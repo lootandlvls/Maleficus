@@ -19104,6 +19104,7 @@ GameObject:
   - component: {fileID: 7743013983033758444}
   - component: {fileID: 2053149467997023508}
   - component: {fileID: 2115879066726159730}
+  - component: {fileID: 1004560649196803573}
   m_Layer: 0
   m_Name: S_Plasma_Fission
   m_TagString: Untagged
@@ -19142,9 +19143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   hitPower: 33
   speed: 600
   spellName: Plasma Fission
@@ -19153,18 +19151,22 @@ MonoBehaviour:
   hasPushPower: 1
   spell: 10
   isChargeable: 0
-  spellIcon: {fileID: 21300000, guid: 9c223d2d2f48b7f469e4570ae200a77a, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  skillPoint: 4
   isTripleCast: 0
   movementType: 9
+  skillPoint: 4
   debuffEffects: 
+  debuffDuration: 0
+  debuffPower: 0
   buffEffects: 
+  buffDuration: 0
+  buffPower: 0
   cooldown: 4
   castDuration: 0
   pushDuration: 1.5
   spellDuration: 6
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  spellIcon: {fileID: 21300000, guid: 9c223d2d2f48b7f469e4570ae200a77a, type: 3}
   hitPrefab: {fileID: 0}
   trails: []
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
@@ -19212,6 +19214,102 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!82 &1004560649196803573
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070465781686738434}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 7f6afabbb3449f44da95b59f91d0bbfa, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2070474436884593388
 GameObject:
   m_ObjectHideFlags: 0

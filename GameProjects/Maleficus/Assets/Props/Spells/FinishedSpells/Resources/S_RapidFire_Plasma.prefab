@@ -14379,6 +14379,7 @@ GameObject:
   - component: {fileID: 7893525993616841485}
   - component: {fileID: 2998166218539528268}
   - component: {fileID: 3090731644570954542}
+  - component: {fileID: 2349107173702621715}
   m_Layer: 0
   m_Name: S_RapidFire_Plasma
   m_TagString: Untagged
@@ -14413,9 +14414,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   hitPower: 15
   speed: 1000
   spellName: Rapidfire Plasma
@@ -14424,18 +14422,22 @@ MonoBehaviour:
   hasPushPower: 1
   spell: 13
   isChargeable: 0
-  spellIcon: {fileID: 21300000, guid: aff9d82f9d1093c4e8192202f2eab832, type: 3}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  skillPoint: 3
   isTripleCast: 0
   movementType: 7
+  skillPoint: 3
   debuffEffects: 
+  debuffDuration: 0
+  debuffPower: 0
   buffEffects: 
+  buffDuration: 0
+  buffPower: 0
   cooldown: 3
   castDuration: 0
   pushDuration: 1
   spellDuration: 4
+  castSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: c5757b30a26d1a44ba5cd2d214ac7352, type: 3}
+  spellIcon: {fileID: 21300000, guid: aff9d82f9d1093c4e8192202f2eab832, type: 3}
   hitPrefab: {fileID: 1329826249346808, guid: 7a37fbaa558a2b54d9aef711134128e1, type: 3}
   trails: []
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
@@ -14478,8 +14480,104 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7400366768256408283}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.7
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!82 &2349107173702621715
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7400366768256408283}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: bff3c1a9ebc5b6348b6afbcfb267d60a, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
