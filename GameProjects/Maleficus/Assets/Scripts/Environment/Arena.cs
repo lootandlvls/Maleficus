@@ -45,11 +45,11 @@ public class Arena : BNJMOBehaviour
     }
 
     /// <summary>
-    /// Transforms the position of the given player in local normalized Arena coordinate realtive to its size
+    /// Transforms the position of the given object in local normalized Arena coordinate realtive to its size
     /// </summary>
-    public Vector2 GetInArenaPosition(Player player)
+    public Vector2 GetInArenaPosition(Vector3 position)
     {
-        Vector2 player2DPosition = new Vector2(player.Position.x, player.Position.z);
+        Vector2 player2DPosition = new Vector2(position.x, position.z);
         Vector2 arena2DPosition = new Vector2(transform.position.x, transform.position.z);
         return (player2DPosition - arena2DPosition) / ArenaRadius;
     }

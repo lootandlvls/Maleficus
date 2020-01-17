@@ -83,44 +83,29 @@ namespace Maleficus
         #endregion
 
         #region Debug Draw
-        public static void DrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawDebugArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
         {
-            Gizmos.DrawRay(pos, direction);
+            if (direction.magnitude > 0.0f)
+            {
+                Debug.DrawRay(pos, direction);
 
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
-            Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
+                Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+                Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+                Debug.DrawRay(pos + direction, right * arrowHeadLength);
+                Debug.DrawRay(pos + direction, left * arrowHeadLength);
+            }
         }
-
-        public static void DrawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
+        public static void DrawDebugArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
         {
-            Gizmos.color = color;
-            Gizmos.DrawRay(pos, direction);
+            if (direction.magnitude > 0.0f)
+            {
+                Debug.DrawRay(pos, direction, color);
 
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Gizmos.DrawRay(pos + direction, right * arrowHeadLength);
-            Gizmos.DrawRay(pos + direction, left * arrowHeadLength);
-        }
-
-        public static void DebugDrawArrow(Vector3 pos, Vector3 direction, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
-        {
-            Debug.DrawRay(pos, direction);
-
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Debug.DrawRay(pos + direction, right * arrowHeadLength);
-            Debug.DrawRay(pos + direction, left * arrowHeadLength);
-        }
-        public static void DebugDrawArrow(Vector3 pos, Vector3 direction, Color color, float arrowHeadLength = 0.25f, float arrowHeadAngle = 20.0f)
-        {
-            Debug.DrawRay(pos, direction, color);
-
-            Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
-            Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
-            Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
+                Vector3 right = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 + arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+                Vector3 left = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 180 - arrowHeadAngle, 0) * new Vector3(0, 0, 1);
+                Debug.DrawRay(pos + direction, right * arrowHeadLength, color);
+                Debug.DrawRay(pos + direction, left * arrowHeadLength, color);
+            }
         }
         #endregion
 
@@ -576,6 +561,27 @@ namespace Maleficus
                     break;
 
                 case ESpellSlot.SPELL_3:
+                    result = EInputButton.CAST_SPELL_3;
+                    break;
+            }
+            return result;
+        }
+        
+        /// <summary> Convert an int (index of spell) to an InputButton enum (1 -> CAST_SPELL_1)</summary>
+        public static EInputButton GetInputButtonFrom(int spellID)
+        {
+            EInputButton result = EInputButton.NONE;
+            switch (spellID)
+            {
+                case 1:
+                    result = EInputButton.CAST_SPELL_1;
+                    break;
+
+                case 2:
+                    result = EInputButton.CAST_SPELL_2;
+                    break;
+
+                case 3:
                     result = EInputButton.CAST_SPELL_3;
                     break;
             }

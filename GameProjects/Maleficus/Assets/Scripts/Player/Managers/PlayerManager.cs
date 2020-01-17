@@ -337,30 +337,33 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
     {
-        EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-
-        ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
-        if ((spellSlot == ESpellSlot.NONE) || (ActivePlayers.ContainsKey(playerID) == false))
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
         {
-            return;
-        }
+            EInputButton inputButton = eventHandle.InputButton;
+            EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-        AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
-        if (IS_NOT_NULL(spell))
-        {
-            if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
+            ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
+            if ((spellSlot == ESpellSlot.NONE) || (ActivePlayers.ContainsKey(playerID) == false))
             {
-                if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                return;
+            }
+
+            AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+            if (IS_NOT_NULL(spell))
+            {
+                if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
                 {
+                    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    {
 
-                    ActivePlayers[playerID].IsReadyToShoot = false;
-                    ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                    ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+                        ActivePlayers[playerID].IsReadyToShoot = false;
+                        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                        ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
 
-                    SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
-                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    }
                 }
             }
         }

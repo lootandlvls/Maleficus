@@ -4825,7 +4825,7 @@ MonoBehaviour:
   buffPower: 0
   cooldown: 1
   castDuration: 0
-  pushDuration: 1
+  pushDuration: 0.7
   spellDuration: 3
   castSound: {fileID: 0}
   hitSound: {fileID: 8300000, guid: 740e417cde6c97d459c22f3d7c69b146, type: 3}

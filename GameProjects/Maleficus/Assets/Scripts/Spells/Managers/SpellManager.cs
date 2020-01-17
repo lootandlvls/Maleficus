@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,14 +9,12 @@ using static Maleficus.Utils;
 
 public class SpellManager : AbstractSingletonManager<SpellManager>
 {
-    public List<AbstractSpell> SpellsUpgrade { get { return spellsUpgrade; } }
-    public List<GameObject> ChargingSpells_Effects { get; } = new List<GameObject>();
-    public List<AbstractSpell> All_Spells { get; } = new List<AbstractSpell>();
+    public List<AbstractSpell> ActiveMovingSpells         { get; private set; } = new List<AbstractSpell>();
+    public List<AbstractSpell> SpellsUpgrade        { get { return spellsUpgrade; } }
+    public List<GameObject> ChargingSpells_Effects  { get; } = new List<GameObject>();
+    public List<AbstractSpell> All_Spells           { get; } = new List<AbstractSpell>();
 
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
-    [SerializeField] private float friction;
-    //Spell Effects
-
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject paralyzeEffect;
 
@@ -28,8 +27,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<AbstractSpell> DebugSpells_Player3 = new List<AbstractSpell>();
     public List<AbstractSpell> DebugSpells_Player4 = new List<AbstractSpell>();
 
-    private int Counter = 0;
-    private bool temp = false;
     private Dictionary<ETouchJoystickType, MaleficusJoystick> spellJoysticks = new Dictionary<ETouchJoystickType, MaleficusJoystick>();
 
 
@@ -65,6 +62,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         FinTouochJoysticks();
 
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        foreach(AbstractSpell spell in ActiveMovingSpells)
+        {
+            LogCanvas(10, spell.CastingPlayerID + " : " + spell.SpellName);
+        }
     }
 
     private void On_UI_SpellRemoved(EPlayerID playerID, ESpellSlot spellSlot)
@@ -139,6 +146,17 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                         break;
                 }
             }
+        }
+    }
+
+
+    private void On_SpellNotActiveAnymore(AbstractSpell spell)
+    {
+        spell.SpellNotActiveAnymore -= On_SpellNotActiveAnymore;
+
+        if (IS_VALUE_CONTAINED(ActiveMovingSpells, spell))
+        {
+            ActiveMovingSpells.Remove(spell);
         }
     }
 
@@ -239,101 +257,100 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void SpawnSpell(AbstractSpell spellToCast, EPlayerID playerID)
     {
+        AbstractSpell spawnedSpell = null;
         if (spellToCast.GetComponent<AOE>() != null)
-
         {
             activePlayers[playerID].DoShockwaveAnimation();
             Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.5f, activePlayers[playerID].transform.position.z);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            AbstractSpell spell = Instantiate(spellToCast, position, rotation);
+            spawnedSpell = Instantiate(spellToCast, position, rotation);
 
-            spell.CastingPlayerID = playerID;
-            spell.transform.parent = activePlayers[playerID].transform;
+            spawnedSpell.CastingPlayerID = playerID;
+            spawnedSpell.transform.parent = activePlayers[playerID].transform;
             Debug.Log("AOE SPELL CASTED");
             //spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
         }
         else if (spellToCast.GetComponent<Linear_Explosive>())
         {
-            Vector3 position = activePlayers[playerID].transform.position  + new Vector3(0,0.5f,0);
+            Vector3 position = activePlayers[playerID].transform.position + new Vector3(0, 0.5f, 0);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             activePlayers[playerID].DoProjectileAttackAnimation();
-            StartCoroutine(animationDelay(spellToCast, playerID, 1));
+            StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, 1));
         }
         else if (spellToCast.GetComponent<Linear_Instant>() != null)
-
-        {       
+        {
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             activePlayers[playerID].DoShockwaveAnimation();
-            AbstractSpell spell = Instantiate(spellToCast, position, rotation);
+            spawnedSpell = Instantiate(spellToCast, position, rotation);
 
-            spell.transform.rotation = activePlayers[playerID].transform.rotation;
-            spell.transform.parent = activePlayers[playerID].transform;
-            spell.CastingPlayerID = playerID;
+            spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;
+            spawnedSpell.transform.parent = activePlayers[playerID].transform;
+            spawnedSpell.CastingPlayerID = playerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
         }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
-       
             activePlayers[playerID].DoTeleportAnimation();
-
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            StartCoroutine(animationDelay(spellToCast, playerID, 2));
+            StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, 2));
             Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
-          //  AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
-        //    spell.CastingPlayerID = playerID;
+            //  AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
+            //    spell.CastingPlayerID = playerID;
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
             // activePlayers[playerID].animator.SetBool("channeling", true);
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            AbstractSpell spell = Instantiate(spellToCast, position, rotation);
+            spawnedSpell = Instantiate(spellToCast, position, rotation);
 
-            spell.transform.rotation = activePlayers[playerID].transform.rotation;
-            spell.transform.parent = activePlayers[playerID].transform;
-            spell.CastingPlayerID = playerID;
-          //  StartCoroutine(PlayerCantMove());
+            spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;
+            spawnedSpell.transform.parent = activePlayers[playerID].transform;
+            spawnedSpell.CastingPlayerID = playerID;
+            //  StartCoroutine(PlayerCantMove());
         }
         else if (spellToCast.GetComponent<Traps>() != null)
         {
-
-            Vector3 position = activePlayers[playerID].SpellInitPosition ;
+            Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            AbstractSpell spell = Instantiate(spellToCast, position, rotation);               
-            spell.CastingPlayerID = playerID;
-
-            
+            spawnedSpell = Instantiate(spellToCast, position, rotation);
+            spawnedSpell.CastingPlayerID = playerID;
         }
         else if (spellToCast.GetComponent<Shield>() != null)
         {
             Vector3 position = activePlayers[playerID].transform.position + new Vector3(0, 0.5f, 0);
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            AbstractSpell spell = Instantiate(spellToCast, position, rotation);
-            spell.CastingPlayerID = playerID;
-            spell.transform.parent = activePlayers[playerID].transform;
-            activePlayers[playerID].ActivateShield(spell.SpellDuration);
+            spawnedSpell = Instantiate(spellToCast, position, rotation);
+            spawnedSpell.CastingPlayerID = playerID;
+            spawnedSpell.transform.parent = activePlayers[playerID].transform;
+            activePlayers[playerID].ActivateShield(spawnedSpell.SpellDuration);
         }
         else if (spellToCast.GetComponent<Linear_Hit>())
         {
             if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)
             {
-              
-                    StartCoroutine(DelayBetweenMultipleSpellCastingCoroutine(0.05f , playerID , spellToCast) ) ;
-                
-               
+                StartCoroutine(DelayBetweenMultipleSpellCastingCoroutine(0.05f, playerID, spellToCast));
             }
             else
             {
                 Vector3 position = activePlayers[playerID].transform.position;
                 Quaternion rotation = activePlayers[playerID].transform.rotation;
                 activePlayers[playerID].DoProjectileAttackAnimation();
-                StartCoroutine(animationDelay(spellToCast, playerID, 1));
+                StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, 1));
             }
-            
         }
 
-        activePlayers[playerID].resetSpellChargingLVL();
+        activePlayers[playerID].ResetSpellChargingLVL();
+    }
+
+    private void AddSpellToActiveMovingSpells(AbstractSpell spawnedSpell)
+    {
+        if (spawnedSpell != null)
+        {
+            ActiveMovingSpells.Add(spawnedSpell);
+            spawnedSpell.SpellNotActiveAnymore += On_SpellNotActiveAnymore;
+        }
     }
 
     private void LoadSpellResources()
@@ -436,12 +453,16 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
              LogConsole("Delay activated");
             AbstractSpell spellToCast = Instantiate(spell, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
             spellToCast.CastingPlayerID = playerID;
+            AddSpellToActiveMovingSpells(spellToCast);
+
             yield return new WaitForSeconds(delay);
             LogConsole("Delay ended");
+
+
         }
     }
 
-    IEnumerator animationDelay(AbstractSpell spellToCast, EPlayerID playerID, int animationID)
+    IEnumerator AnimationDelayCoroutine(AbstractSpell spellToCast, EPlayerID playerID, int animationID)
     {
         switch (animationID)
         {
@@ -462,9 +483,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else
         {
-             AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
-             spell.CastingPlayerID = playerID;       
-             spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+            AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
+            spell.CastingPlayerID = playerID;       
+            spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+            AddSpellToActiveMovingSpells(spell);
         }
     }
 
@@ -480,14 +502,17 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         AbstractSpell cast_1 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
         cast_1.CastingPlayerID = playerID;
         cast_1.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        AddSpellToActiveMovingSpells(cast_1);
 
         AbstractSpell cast_2 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, rotation_2);
         cast_2.CastingPlayerID = playerID;
         cast_2.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        AddSpellToActiveMovingSpells(cast_2);
 
         AbstractSpell cast_3 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, rotation_3);
         cast_3.CastingPlayerID = playerID;
         cast_3.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        AddSpellToActiveMovingSpells(cast_3);
     }
 
     private void InitializeSpellsDictionnary()

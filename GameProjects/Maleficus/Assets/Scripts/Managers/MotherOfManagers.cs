@@ -22,13 +22,20 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [SerializeField] public bool IsUseDebugGameMode = false;
     [ConditionalField(nameof(IsUseDebugGameMode))] [SerializeField] public EGameMode DebugGameMode = EGameMode.NONE;
 
-
     [Separator("Player")]
     [SerializeField] public bool IsJoinAndSpawnPlayerOnControllerConnect = false;
-    [SerializeField] public bool IsSpawnRemainingAIPlayersOnGameStart = false;
-    [SerializeField] public float MaximumNumberOfAIToSpawn = 4.0f;
     [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
+
+    [Separator("AI")]
+    [SerializeField] public bool IsSpawnRemainingAIPlayersOnGameStart = false;
+    [SerializeField] public float MaximumNumberOfAIToSpawn = 4.0f;
+    [SerializeField] public bool IsAISpawnSpellsEneabled = true;
+    [SerializeField] public bool IsAIArenaCenterAttractionEnabled = true;
+    [SerializeField] public bool IsAIClosestPlayerDeviationEnabled = true;
+    [SerializeField] public bool IsAIClosestSpellDeviationEnabled = true;
+    [SerializeField] public bool IsAIPushDeviationEnabled = true;
+
 
     [Separator("Spell")]
     [SerializeField] public bool IsLoadDebugSpells = false;

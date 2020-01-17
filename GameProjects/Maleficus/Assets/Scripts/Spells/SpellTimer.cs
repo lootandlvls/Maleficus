@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class SpellTimer : MonoBehaviour {
+    public event Action SpellTimerDone;
+
     public float time;
     // Use this for initialization
 
@@ -27,7 +30,14 @@ public class SpellTimer : MonoBehaviour {
             }
             if (canDie == true)
             {
-                Destroy(gameObject);
+                if (SpellTimerDone != null)
+                {
+                    SpellTimerDone.Invoke();
+                }
+                else
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

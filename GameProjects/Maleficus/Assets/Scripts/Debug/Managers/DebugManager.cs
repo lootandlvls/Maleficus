@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /// 2  - Joystick 
 /// 6  - AI
 /// 9  - Player Input Listener
+/// 10 - SpellManager : active spells
 /// 12 - Players join status
 /// 50 - UI state
 /// 51 - App state 

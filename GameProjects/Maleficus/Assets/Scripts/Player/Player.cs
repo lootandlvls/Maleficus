@@ -21,7 +21,9 @@ public class Player : BNJMOBehaviour, IPlayer
     public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
     public int SpellChargingLVL                                             { get; private set; } = 1;
     public bool HasCastedSpell                                              { get; set; } = false;
-   
+    public Vector3 PushVelocity                                             { get; private set; }
+    public float MaxPushVelocity                                          { get { return maximumPushVelocity; } }
+
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
@@ -41,7 +43,6 @@ public class Player : BNJMOBehaviour, IPlayer
     private IEnumerator UpdatePushVelocityEnumerator;
     private IEnumerator SpellChargingEnumerator;
     private Vector3 movingDirection;
-    private Vector3 pushVelocity;
     private Vector3 GravityVelocity;
     private JoysticksInput joysticksInput = new JoysticksInput();
 
@@ -95,7 +96,7 @@ public class Player : BNJMOBehaviour, IPlayer
             UpdateMovementAndRotation();
         }
 
-        LogCanvas(69, PlayerID + " push vel : " + pushVelocity.magnitude);
+        LogCanvas(69, PlayerID + " push vel : " + PushVelocity.magnitude);
     }
 
     private void On_INPUT_JoystickMoved_Event(NetEvent_JoystickMoved eventHandle)
@@ -194,7 +195,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
         Vector3 movementVelocity = movingDirection * currentSpeed * 0.1f;
         
-        Vector3 finalVelocity = movementVelocity + pushVelocity + GravityVelocity;
+        Vector3 finalVelocity = movementVelocity + PushVelocity + GravityVelocity;
         transform.localPosition += finalVelocity * Time.deltaTime;
     }
 
@@ -232,7 +233,7 @@ public class Player : BNJMOBehaviour, IPlayer
             {
                 IsPlayerCharging = true;
 
-                LogConsole("Player started Charging", "SPELL_CHARGE");
+                //LogConsole("Player started Charging", "SPELL_CHARGE");
                 StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
             }
@@ -242,7 +243,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
     public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        LogConsole("player stopped charging " + spellSlot, "SPELL_CHARGE");
+        //LogConsole("player stopped charging " + spellSlot, "SPELL_CHARGE");
         IsPlayerCharging = false;
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
@@ -308,18 +309,18 @@ public class Player : BNJMOBehaviour, IPlayer
         IsReadyToShoot = true;
         ReadyToUseSpell[spellSlot] = true;
 
-        LogConsole("ready to use the spell again", "SPELL_CHARGE");
+        //LogConsole("ready to use the spell again", "SPELL_CHARGE");
     }
 
 
 
     private IEnumerator SpellChargingCoroutine(ESpellSlot spellSlot)
     {
-        LogConsole("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
+        //LogConsole("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
         while ((IsPlayerCharging == true)
             && ((ReadyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
         {
-            LogConsole("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
+            //LogConsole("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
             yield return new WaitForEndOfFrame();
         }
 
@@ -355,7 +356,7 @@ public class Player : BNJMOBehaviour, IPlayer
                     if (SpellChargingLVL != 2)
                     {
                         SpellChargingLVL = 2;
-                        LogConsole("Spell upgraded to lvl 2", "SPELL_CHARGE");
+                        //LogConsole("Spell upgraded to lvl 2", "SPELL_CHARGE");
                     }
                 }
                 else
@@ -364,13 +365,13 @@ public class Player : BNJMOBehaviour, IPlayer
                     {
 
                     SpellChargingLVL = 1;
-                    LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
+                    //LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
                     }
 
                 }
                 yield return new WaitForEndOfFrame();
             }
-            LogConsole("spellCharging function Done!!", "SPELL_CHARGE");
+            //LogConsole("spellCharging function Done!!", "SPELL_CHARGE");
 
             myAnimator.SetBool("charging", false);
             StopSlowDownPlayer();
@@ -378,7 +379,7 @@ public class Player : BNJMOBehaviour, IPlayer
             particleSystemBodyEffect.Stop();
             particleSystemWandEffect.Stop();
 
-            LogConsole("counter = " + counter, "SPELL_CHARGE");
+            //LogConsole("counter = " + counter, "SPELL_CHARGE");
         }
     }
     #endregion
@@ -462,18 +463,18 @@ public class Player : BNJMOBehaviour, IPlayer
         currentSpeed = speed * speedBoost;
     }
 
-    public void resetSpellChargingLVL()
+    public void ResetSpellChargingLVL()
     {
         SpellChargingLVL = 1;
     }
 
     public void PushPlayer(Vector3 velocity, float duration)
     {
-        pushVelocity += velocity;
+        PushVelocity += velocity;
         if ((MotherOfManagers.Instance.IsLimitMaxPushPower)
-            && (pushVelocity.magnitude > maximumPushVelocity))
-        { 
-                pushVelocity = pushVelocity.normalized * maximumPushVelocity;
+            && (PushVelocity.magnitude > maximumPushVelocity))
+        {
+            PushVelocity = PushVelocity.normalized * maximumPushVelocity;
         }
 
         if (duration <= 0.0f)
@@ -489,14 +490,14 @@ public class Player : BNJMOBehaviour, IPlayer
     private IEnumerator UpdatePushVelocityCoroutine(float duration)
     {
         float startTime = Time.time;
-        Vector3 startVelocity = pushVelocity;
+        Vector3 startVelocity = PushVelocity;
 
         float progress = (Time.time - startTime) / duration;
         while (progress < 1.0f)
         {
             progress = (Time.time - startTime) / duration;
 
-            pushVelocity = Vector3.Lerp(startVelocity, Vector3.zero, progress);
+            PushVelocity = Vector3.Lerp(startVelocity, Vector3.zero, progress);
 
             yield return new WaitForEndOfFrame();
         }

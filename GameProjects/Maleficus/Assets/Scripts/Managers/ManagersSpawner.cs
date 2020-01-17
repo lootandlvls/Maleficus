@@ -47,10 +47,17 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.DebugGameMode = DebugGameMode;
             // Player
             managersInstance.IsJoinAndSpawnPlayerOnControllerConnect = IsJoinAndSpawnPlayerOnControllerConnect;
-            managersInstance.IsSpawnRemainingAIPlayersOnGameStart = IsSpawnRemainingAIPlayersOnGameStart;
-            managersInstance.MaximumNumberOfAIToSpawn = MaximumNumberOfAIToSpawn;
             managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
+            // AI
+            managersInstance.IsSpawnRemainingAIPlayersOnGameStart = IsSpawnRemainingAIPlayersOnGameStart;
+            managersInstance.MaximumNumberOfAIToSpawn = MaximumNumberOfAIToSpawn;
+            managersInstance.IsAISpawnSpellsEneabled = IsAISpawnSpellsEneabled;
+            managersInstance.IsAIArenaCenterAttractionEnabled = IsAIArenaCenterAttractionEnabled;
+            managersInstance.IsAIClosestPlayerDeviationEnabled = IsAIClosestPlayerDeviationEnabled;
+            managersInstance.IsAIClosestSpellDeviationEnabled = IsAIClosestSpellDeviationEnabled;
+            managersInstance.IsAIPushDeviationEnabled = IsAIPushDeviationEnabled;
+
             // Spell
             managersInstance.IsLoadDebugSpells = IsLoadDebugSpells;
             managersInstance.IsLimitMaxPushPower = IsLimitMaxPushPower;

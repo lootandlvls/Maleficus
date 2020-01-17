@@ -14,6 +14,8 @@ public interface ISpell
 
     float HitPower { get;  }
 
+    Vector3 Position { get; }
+
     Vector3 Direction { get; }
 
     Vector3 EndDestination { get;  }

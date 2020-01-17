@@ -80,9 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ad9086efa0b04409a463505312cb8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &4335998295704777600
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,9 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be6cd55cde3b0ed4682f0d471db7c139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   IsServer: 0
   ConnectionMode: 2
   InputMode: 1
@@ -140,9 +134,14 @@ MonoBehaviour:
   IsUseDebugGameMode: 0
   DebugGameMode: 1
   IsJoinAndSpawnPlayerOnControllerConnect: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
+  IsSpawnRemainingAIPlayersOnGameStart: 0
+  MaximumNumberOfAIToSpawn: 4
+  IsAIArenaCenterAttractionEnabled: 1
+  IsAIClosestPlayerDeviationEnabled: 1
+  IsAIClosestSpellDeviationEnabled: 1
+  IsAIPushDeviationEnabled: 1
   IsLoadDebugSpells: 1
   IsLimitMaxPushPower: 0
   IsDebugLogEvents: 0
@@ -190,9 +189,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd9b5f6edcec5742a1da35394e589e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &4335998295998743998
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,8 +200,8 @@ GameObject:
   - component: {fileID: 4335998295998743996}
   - component: {fileID: 4335998295998743999}
   - component: {fileID: 8235437520970104786}
-  - component: {fileID: 5843528688104263127}
   - component: {fileID: 3260712311203817852}
+  - component: {fileID: 5843528688104263127}
   m_Layer: 0
   m_Name: InputManager
   m_TagString: Untagged
@@ -240,9 +236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 431d8d5cd9abea64eb849725c63eb898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!114 &8235437520970104786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,24 +248,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7710a370895981041afc4a9ced488f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
---- !u!114 &5843528688104263127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4335998295998743998}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f02d728cfe836084a8ef8a188c542eaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!114 &3260712311203817852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,9 +260,137 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a26a41d2fa00f9743a5d6f4d9c47e6aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
+--- !u!114 &5843528688104263127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4335998295998743998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f02d728cfe836084a8ef8a188c542eaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MinMovementThreshold: 0.2
+  MinSmoothMovementThreshold: 0.06
+  RotationSmoothSpeed: 3
+  MovemeSmoothSpeed: 3
+  ArenaSafeRadius: 0.3
+  ArenaDangerRadius: 0.65
+  ClosestEnemyDangerArenaDistanceStartThreshold: 0.8
+  ClosestEnemyDangerArenaDistanceMaxThreshold: 0.4
+  ClosestSpellDangerArenaDistanceStartThreshold: 0.6
+  ClosestSpellDangerArenaDistanceMaxThreshold: 0.17
+  ArenaPositionInfluenceFactor: 1
+  ClosestPlayerInfluenceFactor: 1
+  ClosestSpellInfluenceFactor: 1
+  PushInfluenceFactor: 1
+  ArenaPositionInfluenceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 3.3
+      outSlope: 3.3
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.083333336
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.5227274
+      outSlope: 0.5227274
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.27499998
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ClosestPlayerInfluenceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.031914894
+      outSlope: 0.031914894
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.19583334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.14423078
+      outSlope: 0.14423078
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21666664
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ClosestSpellInfluenceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  PushInfluenceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 6.9625444
+      outSlope: 6.9625444
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.2371704
+    - serializedVersion: 3
+      time: 0.1782114
+      value: 0.65858537
+      inSlope: 1.5982517
+      outSlope: 1.5982517
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.17193438
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.023437591
+      outSlope: 0.023437591
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.26666665
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4335998296063043094
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,9 +434,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8906518179ce3c94f89a4994164bb75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &4335998296438487357
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,9 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71fd42a054186c04d9cf980f40fc3cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &4335998297404941566
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,9 +520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2e4102fc697074583a0c3ca5d1bdd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &5169349337228766896
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,9 +563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4eae2af4e287d4485eceb1a8a5e71b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   PlayingOffline: 0
 --- !u!1 &5503119419134137403
 GameObject:
@@ -552,9 +643,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1715f15a61fa443afb680dbda224ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!114 &7106284003101973562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -567,9 +655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 996ffb7e3b0e8df41a8c1a85830b29a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &7356349721199471078
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,24 +698,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512cf275eaaa21b4393825f97f72fd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   spellsUpgrade:
   - {fileID: 4978913634343584972, guid: 1ddccfed81fb70c4389f5ba790eef4ac, type: 3}
-  friction: 0
   frozenEffect: {fileID: 8333159550493524451, guid: 041befb866d1ae646b3760d7ec3b284f,
     type: 3}
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
   DebugSpells_Player1:
   - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
-  - {fileID: 2873473120091955154, guid: 43ca197a48ff08941936b053d830b4ce, type: 3}
+  - {fileID: 7485585819118396062, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
   - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
   DebugSpells_Player2:
   - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}
-  - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}
-  - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}
+  - {fileID: 3192603726563579907, guid: a5f1558f45cacb641b0ed304f7db35cd, type: 3}
+  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
   DebugSpells_Player3:
   - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
   - {fileID: 4881839978439356376, guid: bca058ddfee72814bb33efe897551b02, type: 3}
@@ -638,7 +719,7 @@ MonoBehaviour:
   DebugSpells_Player4:
   - {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07, type: 3}
   - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
-  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
+  - {fileID: 7485585819118396062, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
 --- !u!1 &7881203136435955458
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,9 +763,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a726f62aa46dde645926d62660a88477, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &8098184902868246776
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,9 +806,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5af407d41952745a283afbca211213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
 --- !u!1 &8705121572368194172
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,9 +933,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd2d1f1c37160e4681c8bacc2785b39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
   basicEnemyPrefab: {fileID: 114409282968527766, guid: 359597ca943bcba48b221bef1fffc8fd,
     type: 3}
   basicEnemyMaxNumber: 5

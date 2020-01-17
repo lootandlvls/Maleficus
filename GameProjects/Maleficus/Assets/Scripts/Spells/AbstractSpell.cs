@@ -6,10 +6,11 @@ using UnityEngine;
 
 public abstract class AbstractSpell : BNJMOBehaviour, ISpell
 {
-    //  private Vector3 movingDirection;
+    public event Action<AbstractSpell> SpellNotActiveAnymore;
 
     public float HitPower { get { return hitPower; } }
     public float Speed { get { return speed; } }
+    public Vector3 Position { get { return transform.position; } }
     public Vector3 Direction { get { return direction; } }
     public Vector3 EndDestination { get; set; }
     public string SpellName { get { return spellName; } }
@@ -35,6 +36,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public AudioClip CastSound { get { return castSound; } }
     public AudioClip HitSound { get { return hitSound; } }
 
+
     [Separator("Characteristics")]
     [SerializeField] public float hitPower;
     [SerializeField] public float speed;
@@ -47,7 +49,13 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     [SerializeField] private bool isTripleCast;
     [SerializeField] private ESpellMovementType movementType;
     [SerializeField] private int skillPoint;
-    
+
+    [Separator("Durations")]
+    [SerializeField] private float cooldown;
+    [SerializeField] private float castDuration;
+    [SerializeField] private float pushDuration;
+    [SerializeField] private float spellDuration;
+
     [Separator("Debuffs")]
     [SerializeField] private List<ESpellEffects> debuffEffects;
     [SerializeField] private float debuffDuration;
@@ -58,15 +66,10 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     [SerializeField] private float buffDuration;
     [SerializeField] private float buffPower;
 
-    [Separator("Durations")]
-    [SerializeField] private float cooldown;
-    [SerializeField] private float castDuration;
-    [SerializeField] private float pushDuration;
-    [SerializeField] private float spellDuration;
-
     [Separator("Audio")]
     [SerializeField] private AudioClip castSound;
     [SerializeField] private AudioClip hitSound;
+
     [Separator("UI")]
     [SerializeField] private Sprite spellIcon;
 
@@ -79,6 +82,17 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public List<GameObject> trails;
     public Vector3 parabolicSpell_EndPosition;
 
+
+    protected override void InitializeComponents()
+    {
+        base.InitializeComponents();
+
+        SpellTimer spellTimer = GetComponent<SpellTimer>();
+        if (spellTimer)
+        {
+            spellTimer.SpellTimerDone += DestroySpell;
+        }
+    }
 
     protected override void Start()
     {
@@ -162,6 +176,8 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
 
     protected void DestroySpell()
     {
+        InvokeEventIfBound(SpellNotActiveAnymore, this);
+
         if (trails.Count > 0)
         {
             for (int i = 0; i < trails.Count; i++)

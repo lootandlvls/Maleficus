@@ -14,6 +14,7 @@ public class DeviceInputSource : AbstractInputSource
         EventManager.Instance.APP_AppStateUpdated.Event += On_APP_AppStateUpdated;
     }
 
+    // TODO: disconnect player
     private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         //switch(eventHandle.NewState)
@@ -39,7 +40,6 @@ public class DeviceInputSource : AbstractInputSource
             PlayerInputListener_OnJoystickMoved(controllerID, EJoystickType.ROTATION, playerInputListener.RotateAxis);
         }
     }
-
 
     /// <summary>
     /// Called from a PlayerInputListener when spawned to connect to the next available ControllerID

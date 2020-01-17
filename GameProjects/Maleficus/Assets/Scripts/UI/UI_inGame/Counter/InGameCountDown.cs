@@ -40,28 +40,24 @@ public class InGameCountDown : BNJMOBehaviour
 
     private void On_GAME_GameStarted(AbstractGameMode gameMode)
     {
-       switch(gameMode.GameModeType)
+        switch(gameMode.GameModeType)
         {
             case EGameMode.FFA_LIVES:
                 GM_FFA_Lives FFA_Lives = (GM_FFA_Lives)gameMode;
                 countdownSeconds = FFA_Lives.GameLenght;
-               StartNewCoroutine(ref StartCountDownEnumerator , startCountDownCoroutine(countdownSeconds));
+                StartNewCoroutine(ref StartCountDownEnumerator , startCountDownCoroutine(countdownSeconds));
                 break;
         }
     }
 
     private IEnumerator startCountDownCoroutine(int countDown)
     {
-
-        for (int i = countdownSeconds; i > 0; i--)
+        for (int i = countdownSeconds; i >= 0; i--)
         {
-
             myText.text = "" + i ;
             EventManager.Instance.Invoke_GAME_GameTimeUpdated(i);
            
             yield return new WaitForSeconds(1.0f);
-
-
         }
     }
 }

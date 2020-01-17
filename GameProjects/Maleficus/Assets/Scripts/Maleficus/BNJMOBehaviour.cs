@@ -91,6 +91,11 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     {
 
     }
+
+    protected virtual void OnDrawGizmos()
+    {
+
+    }
     #endregion
 
     #region Debug Log
@@ -134,10 +139,6 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     {
         DebugManager.Instance.Log(debugID, logText);
     }
-    #endregion
-
-    #region Debug Draw
-    
     #endregion
 
     #region Checkers

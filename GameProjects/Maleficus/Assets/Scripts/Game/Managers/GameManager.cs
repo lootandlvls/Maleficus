@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : AbstractSingletonManager<GameManager>
@@ -26,7 +27,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed;
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
-
+        EventManager.Instance.GAME_GameTimeUpdated += On_GAME_GameTimeUpdated;
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver); // TODO : Not clean! use public OnGameOver method instead
     }
 
@@ -121,6 +122,14 @@ public class GameManager : AbstractSingletonManager<GameManager>
             && (ARE_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
         {
             EventManager.Instance.Invoke_GAME_GameStarted(CurrentGameMode);
+        }
+    }
+
+    private void On_GAME_GameTimeUpdated(int newTime)
+    {
+        if (newTime == 0)
+        {
+            EndGame();
         }
     }
 
