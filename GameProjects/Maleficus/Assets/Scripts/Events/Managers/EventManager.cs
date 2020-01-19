@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 
 public class EventManager : AbstractSingletonManager<EventManager>
 {
-
     public MaleficusEvent<TestEventHandle> TEST_TestEvent 
         = new MaleficusEvent<TestEventHandle>("TEST_TestEvent");
 

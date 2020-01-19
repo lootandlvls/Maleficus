@@ -22,7 +22,6 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
     private int hostId;
     // for lookup of error codes unitydocs networking networkError
     private byte error;
-    protected int debugStateID;
     protected string currentDebugText="";
 
     private string token;
@@ -53,30 +52,20 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
     }
 
-    protected override void Awake()
-    {
-        base.Awake();
-        debugStateID = 60;
-    }
     protected override void Start()
     {
         base.Start();
         pingedSuccessfully = false;
         StartCoroutine(ConnectToServerCoroutine());
     }
-    protected override void OnReinitializeManager()
-    {
-        base.OnReinitializeManager();
-
-        Init();
-    }
 
     protected override void Update()
     {
         base.Update();
-        DebugManager.Instance.Log(debugStateID, currentDebugText);
+        DebugManager.Instance.Log(63, currentDebugText);
     }
     #endregion
+    
     public virtual void BroadcastNetMessage(AbstractNetMessage netMessage)
     {
         // Prevent that other clients who recieve an event Triggered by a different client, to broadcast the same event again
@@ -88,14 +77,12 @@ public class NetworkManager : AbstractSingletonManager<NetworkManager>
         // Broadcast event if main sender
         SendServer(netMessage);
     }
+    
     protected void UpdateReceivedMessage(ENetworkMessageType receivedMessage)
     {
         EventManager.Instance.Invoke_NETWORK_ReceivedMessageUpdated(receivedMessage);
     }
-    public virtual void Init()
-    {
-
-    }
+    
     private IEnumerator ConnectToServerCoroutine()
     {
         if (Application.internetReachability == NetworkReachability.NotReachable || MotherOfManagers.Instance.ServerIP == PLAY_OFFLINE_IP)
@@ -151,10 +138,12 @@ Debug.Log("Connecting from Web");
         // Start fetching network messages
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
+
     public void Shutdown()
     {
         NetworkTransport.Shutdown();
     }
+
     private IEnumerator UpdateMessagePumpCoroutine()
     {
         currentDebugText = "Trying to connect to the Server...";
@@ -177,12 +166,15 @@ Debug.Log("Connecting from Web");
                     case NetworkEventType.ConnectEvent:
                         Debug.Log("Connected to server");
                         currentDebugText = "";
+
                         yield return new WaitForSeconds(NETWORK_UPDATE_FREQUENCY);
+
                         UpdateReceivedMessage(ENetworkMessageType.CONNECTED);
                         Net_Connected c = new Net_Connected();
                         isConnected = true;
                         CheckForSavedLoginData();
                         break;
+
                     case NetworkEventType.DisconnectEvent:
                         Debug.Log("Disconnected from server");
                         UpdateReceivedMessage(ENetworkMessageType.DISCONNECTED);
@@ -397,6 +389,7 @@ Debug.Log("Connecting from Web");
     }
 
     #region Account related
+    
     public void SendCreateAccount(bool random, string user_name="", string password="", string email="")
     {
         Net_CreateAccount ca = new Net_CreateAccount();
@@ -404,6 +397,7 @@ Debug.Log("Connecting from Web");
 
         SendServer(ca);
     }
+    
     public void SendUpdateAccount(bool update_random, string user_name="", string old_password="", string password="", string email="")
     {
         Net_UpdateAccount ua = new Net_UpdateAccount();
@@ -416,6 +410,7 @@ Debug.Log("Connecting from Web");
 
         SendServer(ua);
     }
+    
     public void SendLoginRequest(bool is_automatic_login, string user_name_or_email, string password)
     {
         if (!is_automatic_login)
@@ -444,6 +439,7 @@ Debug.Log("Connecting from Web");
         currentDebugText = "Logging in...";
         SendServer(lr);
     }
+    
     public void SendAddFollow(string usernameOrEmail)
     {
         Net_AddFollow af = new Net_AddFollow();
@@ -452,6 +448,7 @@ Debug.Log("Connecting from Web");
 
         SendServer(af);
     }
+    
     public void SendRemoveFollow(string username)
     {
         Net_RemoveFollow rf = new Net_RemoveFollow();
@@ -460,6 +457,7 @@ Debug.Log("Connecting from Web");
 
         SendServer(rf);
     }
+    
     public void SendRequestFollow()
     {
         Net_RequestFollow rf = new Net_RequestFollow();
@@ -469,6 +467,7 @@ Debug.Log("Connecting from Web");
         SendServer(rf);
         Debug.Log("trying to send requestollow");
     }
+    
     private void UpdateFollow(Net_UpdateFollow fu)
     {
         if (FriendsContext.Instance != null)
@@ -476,6 +475,7 @@ Debug.Log("Connecting from Web");
             FriendsContext.Instance.UpdateFollow(fu.Follow);
         }
     }
+    
     protected virtual void CheckForSavedLoginData()
     {
         if(user != null)
@@ -516,6 +516,7 @@ Debug.Log("Connecting from Web");
     #region Listeners
 
     #region AccountListeners
+    
     private void OnCreateAccount(Net_OnCreateAccount oca)
     {
         Debug.Log("createdaccount");
@@ -530,6 +531,7 @@ Debug.Log("Connecting from Web");
             token = oca.token;
         }
     }
+    
     private void OnUpdateAccount(Net_OnUpdateAccount oca)
     {
         if (oca.success == 2)
@@ -561,6 +563,7 @@ Debug.Log("Connecting from Web");
         AutoAccountContext.Instance.EnableInputs();
         UpdateReceivedMessage(ENetworkMessageType.REGISTERED);
     }
+    
     private void OnLoginRequest(Net_OnLoginRequest olr)
     {
         if(olr.success == 3)
@@ -589,6 +592,7 @@ Debug.Log("Connecting from Web");
             UpdateReceivedMessage(ENetworkMessageType.LOGGED_IN);
         }
     }
+    
     private void OnAddFollow(Net_OnAddFollow oaf)
     {
         if (oaf.Success == 1)
@@ -596,6 +600,7 @@ Debug.Log("Connecting from Web");
             FriendsContext.Instance.AddFollowToUi(oaf.Follow);
         }
     }
+    
     private void OnRequestFollow(Net_OnRequestFollow orf)
     {
         foreach (var follow in orf.Follows)
@@ -603,9 +608,11 @@ Debug.Log("Connecting from Web");
             FriendsContext.Instance.AddFollowToUi(follow);
         }
     }
+    
     #endregion
 
     #region ManagerEventListeners
+    
     protected virtual void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
     {
         switch (eventHandle.NewState)
@@ -615,6 +622,7 @@ Debug.Log("Connecting from Web");
                 break;
         }
     }
+    
     protected virtual void On_UI_MenuStateUpdated(Event_StateUpdated<EMenuState> eventHandle)
     {
         switch (eventHandle.NewState)
@@ -632,6 +640,7 @@ Debug.Log("Connecting from Web");
                 break;
         }
     }
+    
     #endregion
 
     #endregion
