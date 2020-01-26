@@ -301,7 +301,8 @@ public class AIPlayerController : BNJMOBehaviour
         float closestDistanceToOtherPlayer = float.MaxValue;
         foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
         {
-            if (otherPlayer.PlayerID == playerID)
+            if ((otherPlayer.PlayerID == playerID)
+                || (otherPlayer.IsDead == true))
             {
                 continue;
             }
