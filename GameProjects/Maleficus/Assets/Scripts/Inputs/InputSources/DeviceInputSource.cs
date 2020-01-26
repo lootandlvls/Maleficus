@@ -5,7 +5,7 @@ using static Maleficus.Consts;
 
 public class DeviceInputSource : AbstractInputSource
 {
-    private Dictionary<EControllerID, PlayerInputListener> connectedControllers = new Dictionary<EControllerID, PlayerInputListener>();
+    private Dictionary<EControllerID, PlayerInputListener> connectedGamepadControllers = new Dictionary<EControllerID, PlayerInputListener>();
 
     protected override void InitializeEventsCallbacks()
     {
@@ -13,6 +13,7 @@ public class DeviceInputSource : AbstractInputSource
 
         EventManager.Instance.APP_AppStateUpdated.Event += On_APP_AppStateUpdated;
     }
+
 
     // TODO: disconnect player
     private void On_APP_AppStateUpdated(Event_StateUpdated<EAppState> eventHandle)
@@ -33,9 +34,9 @@ public class DeviceInputSource : AbstractInputSource
     {
         base.FixedUpdate();
 
-        foreach (EControllerID controllerID in connectedControllers.Keys)
+        foreach (EControllerID controllerID in connectedGamepadControllers.Keys)
         {
-            PlayerInputListener playerInputListener = connectedControllers[controllerID];
+            PlayerInputListener playerInputListener = connectedGamepadControllers[controllerID];
             PlayerInputListener_OnJoystickMoved(controllerID, EJoystickType.MOVEMENT, playerInputListener.MoveAxis);
             PlayerInputListener_OnJoystickMoved(controllerID, EJoystickType.ROTATION, playerInputListener.RotateAxis);
         }
@@ -50,31 +51,35 @@ public class DeviceInputSource : AbstractInputSource
     {
         IS_NOT_NULL(playerInputListener);
 
-        // Assign a ControllerID
-        EControllerID controllerID = GetNextFreeControllerID(playerInputListener);
-
-        if (controllerID != EControllerID.NONE)
+        if (MotherOfManagers.Instance.InputMode == EInputMode.CONTROLLER)
         {
-            // Connect controller on Input Manager
-            if (InputManager.Instance.TryToConnectController(controllerID) == true)
-            {
-                connectedControllers.Add(controllerID, playerInputListener);
+            // Assign a ControllerID
+            EControllerID controllerID = GetNextFreeGamepadControllerID();
 
-                // Bind Input events
-                playerInputListener.ButtonPressed   += PlayerInputListener_OnButtonPressed;
-                playerInputListener.ButtonReleased  += PlayerInputListener_OnButtonReleased;
+            if (controllerID != EControllerID.NONE)
+            {
+                // Connect controller on Input Manager
+                if (InputManager.Instance.TryToConnectController(controllerID) == true)
+                {
+                    connectedGamepadControllers.Add(controllerID, playerInputListener);
+
+                    // Bind Input events
+                    playerInputListener.ButtonPressed += PlayerInputListener_OnButtonPressed;
+                    playerInputListener.ButtonReleased += PlayerInputListener_OnButtonReleased;
+                }
+                else
+                {
+                    return EControllerID.NONE;
+                }
             }
             else
             {
-                return EControllerID.NONE;
+                LogConsoleWarning("No free Controller ID found for new connected device : " + playerInputListener.DeviceName);
             }
+
+            return controllerID;
         }
-        else
-        {
-            LogConsoleWarning("No free Controller ID found for new connected device : " + playerInputListener.DeviceName);
-        }
-        
-        return controllerID;
+        return EControllerID.NONE;
     }
 
     // TODO
@@ -109,12 +114,12 @@ public class DeviceInputSource : AbstractInputSource
         InvokeJoystickMoved(controllerID, joystickType, axisValues.x, axisValues.y);
     }
 
-    private EControllerID GetNextFreeControllerID(PlayerInputListener playerInputListener)
+    private EControllerID GetNextFreeGamepadControllerID()
     {
         EControllerID controllerID = EControllerID.NONE;
         foreach (EControllerID controllerIDitr in GAMEPADS_CONTROLLERS)
         {
-            if (connectedControllers.ContainsKey(controllerIDitr) == false)
+            if (connectedGamepadControllers.ContainsKey(controllerIDitr) == false)
             {
                 controllerID = controllerIDitr;
                 break;

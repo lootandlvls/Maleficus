@@ -1989,7 +1989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef8e6c4bf0929e4591fb8093ec21509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsServer: 1
+  IsServer: 0
   ConnectionMode: 2
   InputMode: 1
   IsConnectControllerInAnyState: 1

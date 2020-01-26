@@ -45,6 +45,7 @@ public class CurveTest : BNJMOBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(CurveTest))]
 public class CurveTestEditr : Editor
 {
@@ -60,3 +61,4 @@ public class CurveTestEditr : Editor
         }
     }
 }
+#endif

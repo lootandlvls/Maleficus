@@ -104,6 +104,7 @@ public class PlayerRespawnGhost : BNJMOBehaviour
 
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(PlayerRespawnGhost))]
 public class GhostPlayerEditor : Editor
 {
@@ -119,3 +120,4 @@ public class GhostPlayerEditor : Editor
         }
     }
 }
+#endif

@@ -22,7 +22,10 @@ public abstract class AbstractManager : BNJMOBehaviour
         base.InitializeEventsCallbacks();
 
         // Reinitialize manager whenever the scene is changed
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+        }
     }
 
     protected override void OnDestroy()

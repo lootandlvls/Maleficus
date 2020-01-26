@@ -14,6 +14,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
 
 
     public ETouchJoystickType JoystickType      { get { return joystickType; } }
+    public bool IsNetController                 { get { return isNetController; } }
     public float Horizontal                     { get { return (snapX) ? SnapFloat(input.x, EJoystickAxisRestriction.HORIZONTAL) : input.x; } }
     public float Vertical                       { get { return (snapY) ? SnapFloat(input.y, EJoystickAxisRestriction.VERTICAL) : input.y; } }
     public Vector2 Direction                    { get { return new Vector2(Horizontal, Vertical); } }
@@ -28,6 +29,7 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     [SerializeField] private ETouchJoystickType joystickType = ETouchJoystickType.NONE;
 
     [Header("Joystick Settings")]
+    [SerializeField] private bool isNetController = false;
     [SerializeField] private float moveThreshold = 1;
     [SerializeField] private ESnappingMode snappingMode = ESnappingMode.Dynamic;
     [SerializeField] private float handleRange = 1;
@@ -81,7 +83,8 @@ public class MaleficusJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
         fixedPosition = background.anchoredPosition;
         SetMode(snappingMode);
 
-        if (InputManager.Instance.InputMode != EInputMode.TOUCH)
+        if ((InputManager.IsInstanceSet)
+            && (InputManager.Instance.InputMode != EInputMode.TOUCH))
         {
             gameObject.SetActive(false);
         }
