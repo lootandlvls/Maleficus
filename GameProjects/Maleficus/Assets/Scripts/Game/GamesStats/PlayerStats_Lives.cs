@@ -9,6 +9,8 @@ public class PlayerStats_Lives : AbstractPlayerStats
     private int numberOfHitPlayers;
     private int numberOfKilledPlayers;
     private EPlayerID lastHitBy;
+    private int timeOfDeath;
+    private int rank = 0;
 
     public PlayerStats_Lives()
     {
@@ -26,7 +28,9 @@ public class PlayerStats_Lives : AbstractPlayerStats
     public int RemainingLives { get { return remainingLives; } }
     public int NumberOfHitPlayers { get { return numberOfHitPlayers; } }
     public int NumberOfKilledPlayers { get { return numberOfKilledPlayers; } }
+    public int TimeOfDeath { get { return timeOfDeath; } }
     public bool IsGameOver { get { return remainingLives == 0; } }
+    public int Rank { get { return rank; } }
     public EPlayerID LastHitBy { get { return lastHitBy; } }
 
     /// <summary>
@@ -45,6 +49,21 @@ public class PlayerStats_Lives : AbstractPlayerStats
     public void IncrementNumberOfHitPlayers()
     {
         numberOfHitPlayers++;
+    }
+    /// <summary>
+    ///  Set the time when the player is killed
+    /// </summary>
+    public void SetTimeOfDeath(int time)
+    {
+        timeOfDeath = time;
+    }
+    /// <summary>
+    /// Set the player rank
+    /// </summary>
+    /// <param name="playerRank"></param>
+    public void SetRank(int playerRank)
+    {
+        rank = playerRank;
     }
 
     /// <summary>

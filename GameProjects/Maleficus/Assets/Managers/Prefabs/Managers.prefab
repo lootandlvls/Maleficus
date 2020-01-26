@@ -136,15 +136,16 @@ MonoBehaviour:
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 0
-  MaximumNumberOfAIToSpawn: 4
+  IsSpawnRemainingAIPlayersOnGameStart: 1
+  MaximumNumberOfAIToSpawn: 3
+  IsAISpawnSpellsEneabled: 1
   IsAIArenaCenterAttractionEnabled: 1
   IsAIClosestPlayerDeviationEnabled: 1
   IsAIClosestSpellDeviationEnabled: 1
   IsAIPushDeviationEnabled: 1
   IsLoadDebugSpells: 1
   IsLimitMaxPushPower: 0
-  IsDebugLogEvents: 0
+  IsDebugLogEvents: 1
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
 GameObject:

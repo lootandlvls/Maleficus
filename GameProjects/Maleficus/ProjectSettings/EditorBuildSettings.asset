@@ -17,4 +17,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Main/MENU_MOBILE.unity
     guid: cc82ca596278a5744b121a5c24aa75da
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 2fcd39f6a88d02f4d82e84b7de694ab2,
+      type: 2}

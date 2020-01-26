@@ -204,7 +204,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void SpawnRemaningAIPlayers()
     {
         // First connect AI Controllers on reamining slots if not already connected
-        InputManager.Instance.ConnectAllRemainingAIPlayers();
+         InputManager.Instance.ConnectAllRemainingAIPlayers();
 
         LogConsole("Spawning remaining AI playeres");
 
@@ -399,7 +399,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // Connect and spawn reamining players as AI
         if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
         {
-            SpawnRemaningAIPlayers();
+          //  SpawnRemaningAIPlayers();
         }
     }
 

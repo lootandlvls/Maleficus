@@ -11,6 +11,7 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
     [SerializeField] private GameObject playerHead_AliveImage;
     [SerializeField] private GameObject playerHead_DeadImage;
     [SerializeField] private GameObject gameOverImage;
+
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
     private bool isPlayerActive = false;

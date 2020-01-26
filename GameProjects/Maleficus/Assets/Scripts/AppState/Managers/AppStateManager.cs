@@ -9,10 +9,11 @@ using static Maleficus.Consts;
 public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppStateManager, EAppState>
 {
     public EScene CurrentScene { get; private set; } = EScene.ENTRY; 
+    public bool IsIntroFinished { get { return isIntroFinished; } }
 
     private EDungeonID dungeonIDtoLoad = EDungeonID.NONE;
     private bool isLoadingScene = false;
-
+    private bool isIntroFinished = false;
 
     protected override void Awake()
     {
@@ -48,9 +49,14 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
         EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
         EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
-
+        EventManager.Instance.GAME_IntroFinished += On_GAME_IntroFinished;
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
+    }
+
+    private void On_GAME_IntroFinished(bool isReady)
+    {
+        isIntroFinished = isReady;
     }
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted obj)
@@ -275,7 +281,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private void On_GAME_GameEnded(AbstractGameMode gameMode, bool wasAborted)
     {
-        StartCoroutine(EndGameCoroutine());
+       StartCoroutine(EndGameCoroutine());
     }
     private IEnumerator EndGameCoroutine()
     {
@@ -297,6 +303,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
     private void On_GAME_GameStarted(AbstractGameMode gameMode)
     {
+
         UpdateState(EAppState.IN_GAME_IN_RUNNING);
     }
     #endregion
