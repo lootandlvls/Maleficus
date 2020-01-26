@@ -294,19 +294,20 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                             StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
                         }
                     }
-                    else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
-                    {
-                        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-                        {
+                    // TODO: clean this (Removed because it felt wrong on android NetController)
+                    //else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
+                    //{
+                    //    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                    //    {
 
-                            // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
-                            ActivePlayers[playerID].IsReadyToShoot = false;
-                            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                            SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                    //        // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+                    //        ActivePlayers[playerID].IsReadyToShoot = false;
+                    //        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                    //        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
-                            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-                        }
-                    }
+                    //        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                    //    }
+                    //}
                     else if (spell.MovementType == ESpellMovementType.UNIQUE)
                     {
                         if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
@@ -351,7 +352,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
             if (IS_NOT_NULL(spell))
             {
-                if (spell.MovementType != ESpellMovementType.LINEAR_LASER && spell.MovementType != ESpellMovementType.RAPID_FIRE && spell.MovementType != ESpellMovementType.UNIQUE)
+                                                                            // TODO: clean this (Removed because it felt wrong on android NetController)
+                if (spell.MovementType != ESpellMovementType.LINEAR_LASER /*&& spell.MovementType != ESpellMovementType.RAPID_FIRE*/ && spell.MovementType != ESpellMovementType.UNIQUE)
                 {
                     if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
                     {

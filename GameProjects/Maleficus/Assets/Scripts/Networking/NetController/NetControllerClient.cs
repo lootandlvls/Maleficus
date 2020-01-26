@@ -80,7 +80,7 @@ public class NetControllerClient : AbstractSingletonManager<NetControllerClient>
             {
                 if (GUI.Button(new Rect(10, 10, 60, 50), "Connect"))
                 {
-                    Connect();
+                    client.Connect("192.168.2.105", 25000);
                 }
             }
         }
@@ -138,15 +138,4 @@ public class NetControllerClient : AbstractSingletonManager<NetControllerClient>
             client.Send(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, message);
         }
     }
-
-    private void Connect()
-    {
-        client.Connect("192.168.2.105", 25000);
-    }
-
-
-    
-
-
-
 }
