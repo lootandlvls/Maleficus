@@ -7,7 +7,9 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 {
     public int TotalLives { get; private set; }
     public int GameLenght { get { return gameLenght; } }
+    public int RemainingTime { get { return remainingTime; } }
 
+    private int remainingTime = 100;
     private int gameLenght = 180;
     protected override void Awake()
     {
@@ -25,6 +27,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 
         EventManager.Instance.PLAYERS_PlayerDied            += On_PLAYERS_PlayerDied;
         EventManager.Instance.SPELLS_SpellHitPlayer         += On_SPELLS_SpellHitPlayer;
+        EventManager.Instance.GAME_GameTimeUpdated += On_GAME_GameTimeUpdated;
     }
 
     protected override void Update()
@@ -57,6 +60,11 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         }
     }
 
+    private void On_GAME_GameTimeUpdated(int newTime)
+    {
+        remainingTime = newTime;      
+    }
+
     private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
     {
         if (IsRunning == false)
@@ -69,7 +77,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         PlayerStats[hitByPlayerID].IncrementNumberOfHitPlayers();
 
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitPlayerID], GameModeType);
-        EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitByPlayerID], GameModeType);
+       // EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitByPlayerID], GameModeType);
     }
 
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
@@ -81,6 +89,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         // Update Killed Player stats
         PlayerStats_Lives killedPlayerStats = PlayerStats[diedPlayerID];
         killedPlayerStats.DecrementPlayerLives();
+        killedPlayerStats.SetTimeOfDeath(remainingTime);
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayerStats, GameModeType);
 
         // Update Killer stats
@@ -90,7 +99,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
             killingPlayer.IncrementNumberOfKilledPlayers();
             EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killingPlayer, GameModeType);
         }
-
+      
         // Respawn Killed Player
         if (killedPlayerStats.RemainingLives > 0)
         {
@@ -108,9 +117,15 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
             }
             else
             {
+               
                 winnerPlayerID = playerID;
             }
+       
         }
+
+
+        
+      
 
         //TODO[BNJMO] fix this when only one player is connected
         if (gameOverPlayerCounter == PlayerStats.Count - 1)
@@ -119,7 +134,27 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
             ETeamID winnerTeamID = PlayerManager.Instance.PlayersTeam[winnerPlayerID];
             ETeamID teamID = ETeamID.NONE;
 
-            if ((NetworkManager.Instance.HasAuthority == true)
+
+            //Itirate through the the players time of death and set the ranking
+           foreach (PlayerStats_Lives playerStats in PlayerStats.Values)
+            {
+                int counter = 0;
+                foreach (PlayerStats_Lives otherPlayerStats in PlayerStats.Values )
+                {
+                    
+                    if (playerStats != otherPlayerStats && playerStats.TimeOfDeath > otherPlayerStats.TimeOfDeath)
+                    {
+                        counter++;
+                    }
+
+
+                }
+
+                playerStats.SetRank(counter + 1);
+
+            }
+
+           if ((NetworkManager.Instance.HasAuthority == true)
                 || (MotherOfManagers.Instance.ConnectionMode == EConnectionMode.PLAY_OFFLINE))
             {
                 NetEvent_GameOver gameOverEventHandle = new NetEvent_GameOver(EClientID.SERVER, teamID);

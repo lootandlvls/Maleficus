@@ -2000,8 +2000,8 @@ MonoBehaviour:
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 0
-  MaximumNumberOfAIToSpawn: 4
+  IsSpawnRemainingAIPlayersOnGameStart: 1
+  MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 1
   IsAIArenaCenterAttractionEnabled: 1
   IsAIClosestPlayerDeviationEnabled: 1

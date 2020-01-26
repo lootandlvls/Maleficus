@@ -33,6 +33,16 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region GAME
+    public event Action<bool> GAME_IntroFinished;
+    public void Invoke_GAME_IntroFinished(bool isReady)
+    {
+        if (GAME_IntroFinished != null)
+        {
+            GAME_IntroFinished.Invoke(isReady);
+        }
+        
+    }
+
 
     public event Action<AbstractGameMode> GAME_GameStarted;
     public void Invoke_GAME_GameStarted(AbstractGameMode gameMode)
@@ -43,6 +53,7 @@ public class EventManager : AbstractSingletonManager<EventManager>
         }
         DebugLog("Game started : " + gameMode.GameModeType);
     }
+
 
     public event Action<AbstractGameMode> GAME_GamePaused;
     public void Invoke_GAME_GamePaused(AbstractGameMode gameMode)
@@ -81,7 +92,17 @@ public class EventManager : AbstractSingletonManager<EventManager>
         {
             GAME_PlayerStatsUpdated.Invoke(updatedPlayerStats, fromGameMode);
         }
-        DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
+       // DebugLog("Player stats " + updatedPlayerStats.ToString() + " updated for " + fromGameMode);
+    }
+
+    public event Action<AbstractGameMode> GAME_SetPlayersScores;
+    public void Invoke_GAME_SetPlayersScores(AbstractGameMode gameMode)
+    {
+        if (GAME_SetPlayersScores != null)
+        {
+            GAME_SetPlayersScores.Invoke(gameMode);
+        }
+        DebugLog("Set Players Scores");
     }
 
     public event Action<int> GAME_GameTimeUpdated;
