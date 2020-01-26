@@ -92,6 +92,11 @@ public abstract class BNJMOBehaviour : MonoBehaviour
 
     }
 
+    protected virtual void OnGUI()
+    {
+
+    }
+
     protected virtual void OnDrawGizmos()
     {
 

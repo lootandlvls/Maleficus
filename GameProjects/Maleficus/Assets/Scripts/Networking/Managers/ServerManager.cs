@@ -98,6 +98,7 @@ public class ServerManager : NetworkManager
         LogConsole("Starting to receive messages from client");
         StartCoroutine(UpdateMessagePumpCoroutine());
     }
+
     private IEnumerator UpdateMessagePumpCoroutine()
     {
         int recHostId;      // is this from web? standalone?
@@ -309,6 +310,7 @@ public class ServerManager : NetworkManager
 
         SendClient(recHostId, cnnId, oca);
     }
+    
     private void UpdateAccount(int cnnId, int channelId, int recHostId, Net_UpdateAccount ua)
     {
         Net_OnUpdateAccount oua = new Net_OnUpdateAccount();
@@ -360,6 +362,7 @@ public class ServerManager : NetworkManager
         }
         SendClient(recHostId, cnnId, oua);
     }
+    
     private void LoginRequest(int cnnId, int channelId, int recHostId, Net_LoginRequest lr)
     {
         Model_Account account = dataBank.FindAccount(default(ObjectId), lr.user_name, lr.email);
@@ -409,6 +412,7 @@ public class ServerManager : NetworkManager
 
         SendClient(recHostId, cnnId, olr);
     }
+    
     private void AddFollow(int cnnId, int channelId, int recHostId, Net_AddFollow msg)
     {
         Net_OnAddFollow oaf = new Net_OnAddFollow();
@@ -436,10 +440,12 @@ public class ServerManager : NetworkManager
 
         //SendClient(recHostId, cnnId, oaf);
     }
+    
     private void RemoveFollow(int cnnId, int channelId, int recHostId, Net_RemoveFollow msg)
     {
         //dataBank.RemoveFollow(msg.Token, msg.UsernameDiscriminator);
     }
+    
     private void RequestFollow(int cnnId, int channelId, int recHostId, Net_RequestFollow msg)
     {
         //Net_OnRequestFollow orf = new Net_OnRequestFollow();

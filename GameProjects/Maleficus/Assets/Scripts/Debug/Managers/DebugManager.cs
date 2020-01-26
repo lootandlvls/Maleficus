@@ -15,7 +15,7 @@ using UnityEngine.UI;
 /// 50 - UI state
 /// 51 - App state 
 /// 52 - Scene
-/// 60 - InfoText for Players
+/// 63 - NetworkManager 
 /// 80 - Enemies
 /// 89 - AR Anchor status
 /// 92 - Network Player Movement

@@ -109,7 +109,6 @@ namespace Maleficus
         }
         #endregion
 
-
         #region Sound
         /// <summary>
         /// Plays a random clip from a given clip soundbank on a given AudioSource component
@@ -241,6 +240,20 @@ namespace Maleficus
         #endregion
 
         #region Networking
+        public static string GetLocalIPAddress()
+        {
+            var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+
+            throw new System.Exception("No network adapters with an IPv4 address in the system!");
+        }
+
         public const string EMAIL_PATTERN = @"^[\w!#$%&'*+\-/=?\^_`{|}~]+(\.[\w!#$%&'*+\-/=?\^_`{|}~]+)*" + "@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$";
         public const string USERNAME_PATTERN = @"^[a-zA-Z0-9!#$%&*?^+_~.,=-]{1,18}$";
         public const string USERNAME_PLAYER_PATTERN = "^(player_[0-9]{1,14})$";
