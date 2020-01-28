@@ -1,28 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.NetworkSystem;
 using static Maleficus.Utils;
+using static Maleficus.Consts;
 
-public class NetControllerClient : BNJMOBehaviour
+public class NetControllerClient : AbstractSingletonManager<NetControllerClient>
 {
-    NetworkClient client;
+    private NetworkClient client;
+    private bool controllerIDRequestSent = false;
+    private string controllerGuid;
 
-    protected override void OnGUI()
+    private float debugX;
+    private float debugY;
+
+    protected override void InitializeObjecsInScene()
     {
-        base.OnGUI();
+        base.InitializeObjecsInScene();
 
-        string ipAddress = GetLocalIPAddress();
-        GUI.Box(new Rect(10, Screen.height - 50, 100, 50), ipAddress);
-        GUI.Label(new Rect(20, Screen.height - 30, 100, 20), "Status : " + client.isConnected);
-
-        if (client.isConnected == false)
+        ConfirmUIAction confirmUIAction = FindObjectOfType<ConfirmUIAction>();
+        if (IS_NOT_NULL(confirmUIAction))
         {
-            if (GUI.Button(new Rect(10, 10, 60, 50), "Connect"))
-            {
-                Connect();
-            }
+            confirmUIAction.ActionButtonPressed += On_ConfirmUIAction_ActionButtonPressed;
+        }
+
+        CancelUIAction cancelUIAction = FindObjectOfType<CancelUIAction>();
+        if (IS_NOT_NULL(cancelUIAction))
+        {
+            cancelUIAction.ActionButtonPressed += On_CancelUIAction_ActionButtonPressed; ;
         }
     }
 
@@ -30,12 +34,108 @@ public class NetControllerClient : BNJMOBehaviour
     {
         base.Start();
 
+        NetworkTransport.Init();
+        controllerGuid = System.Guid.NewGuid().ToString();
         client = new NetworkClient();
     }
 
-    private void Connect()
+    protected override void Update()
     {
-        client.Connect("192.168.1.97", 25000);
+        base.Update();
+
+        if ((client != null)
+            && (client.isConnected)
+            && (controllerIDRequestSent == false))
+        {
+            StringMessage message = new StringMessage();
+            message.value = controllerGuid;
+            client.Send(NET_CONTROLLER_MESSAGE_CONNECT, message);
+
+            controllerIDRequestSent = true;
+        }
+
+
+        LogCanvas(82, "Net Ctrl  - X : " + debugX + " - Y : " + debugY);
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        NetworkTransport.Shutdown();
+
+    }
+
+    protected override void OnGUI()
+    {
+        base.OnGUI();
+
+        string ipAddress = GetLocalIPAddress();
+        GUI.Box(new Rect(10, Screen.height - 50, 100, 50), ipAddress);
+        if (client != null)
+        {
+            GUI.Label(new Rect(20, Screen.height - 30, 100, 20), "Status : " + client.isConnected);
+
+            if (client.isConnected == false)
+            {
+                if (GUI.Button(new Rect(10, 10, 60, 50), "Connect"))
+                {
+                    client.Connect("192.168.2.105", 25000);
+                }
+            }
+        }
+    }
+
+    public void SendJoystickMoved(EJoystickType joystickType, float horizontalDelta, float verticalDelta)
+    {
+        debugX = horizontalDelta;
+        debugY = verticalDelta;
+
+        if (client.isConnected)
+        {
+            StringMessage message = new StringMessage();
+            message.value = controllerGuid + "|" + (int)joystickType + "|" + horizontalDelta + "|" + verticalDelta;
+            client.Send(NET_CONTROLLER_MESSAGE_JOYSTICK_MOVED, message);
+        }
+    }
+
+    public void SendButtonPressed(EInputButton inputButton)
+    {
+        if (client.isConnected)
+        {
+            StringMessage message = new StringMessage();
+            message.value = controllerGuid + "|" + ((int)inputButton).ToString();
+            client.Send(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, message);
+        }
+    }
+
+    public void SendButtonReleased(EInputButton inputButton)
+    {
+        if (client.isConnected)
+        {
+            StringMessage message = new StringMessage();
+            message.value = controllerGuid + "|" + ((int)inputButton).ToString();
+            client.Send(NET_CONTROLLER_MESSAGE_BUTTON_RELEASED, message);
+        }
+    }
+
+    private void On_ConfirmUIAction_ActionButtonPressed()
+    {
+        if (client.isConnected)
+        {
+            StringMessage message = new StringMessage();
+            message.value = controllerGuid + "|" + ((int)EInputButton.CONFIRM).ToString();
+            client.Send(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, message);
+        }
+    }
+
+    private void On_CancelUIAction_ActionButtonPressed()
+    {
+        if (client.isConnected)
+        {
+            StringMessage message = new StringMessage();
+            message.value = controllerGuid + "|" + ((int)EInputButton.CANCEL).ToString();
+            client.Send(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, message);
+        }
+    }
 }

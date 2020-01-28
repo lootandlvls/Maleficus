@@ -323,7 +323,8 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
     }
 }
 
- [CustomEditor(typeof(SpellSelectionManager))]
+#if UNITY_EDITOR
+[CustomEditor(typeof(SpellSelectionManager))]
 public class SpellSelectionManagerEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -339,5 +340,5 @@ public class SpellSelectionManagerEditor : Editor
             spellSelectionManager.PopulateSpellButtonsNavigation();
         }
     }
-
 }
+#endif

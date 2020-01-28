@@ -136,8 +136,8 @@ MonoBehaviour:
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 1
-  MaximumNumberOfAIToSpawn: 3
+  IsSpawnRemainingAIPlayersOnGameStart: 0
+  MaximumNumberOfAIToSpawn: 4
   IsAISpawnSpellsEneabled: 1
   IsAIArenaCenterAttractionEnabled: 1
   IsAIClosestPlayerDeviationEnabled: 1
@@ -145,7 +145,7 @@ MonoBehaviour:
   IsAIPushDeviationEnabled: 1
   IsLoadDebugSpells: 1
   IsLimitMaxPushPower: 0
-  IsDebugLogEvents: 1
+  IsDebugLogEvents: 0
   IsReduceLightIntensityOnSceneStart: 0
 --- !u!1 &4335998295768301887
 GameObject:
@@ -202,6 +202,7 @@ GameObject:
   - component: {fileID: 4335998295998743999}
   - component: {fileID: 8235437520970104786}
   - component: {fileID: 3260712311203817852}
+  - component: {fileID: 8168083521935478539}
   - component: {fileID: 5843528688104263127}
   m_Layer: 0
   m_Name: InputManager
@@ -259,6 +260,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a26a41d2fa00f9743a5d6f4d9c47e6aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8168083521935478539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4335998295998743998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f278b280dafd3784b8a14117b1d468fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5843528688104263127

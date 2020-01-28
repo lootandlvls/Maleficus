@@ -218,20 +218,20 @@ public enum EInputMode
 
 public enum EControllerID
 {
-    NONE = 'X',
-    TOUCH,
-    AI_1,
-    AI_2,
-    AI_3,
-    AI_4,
-    GAMEPAD_A,
-    GAMEPAD_B,
-    GAMEPAD_C,
-    GAMEPAD_D,
-    NETWORK_1,
-    NETWORK_2,
-    NETWORK_3,
-    NETWORK_4
+    NONE = 0,
+    TOUCH = 1,
+    AI_1 = 2,
+    AI_2 = 3,
+    AI_3 = 4,
+    AI_4 = 5,
+    GAMEPAD_A = 6,
+    GAMEPAD_B = 7,
+    GAMEPAD_C = 8,
+    GAMEPAD_D = 9,
+    NETWORK_1 = 10,
+    NETWORK_2 = 11,
+    NETWORK_3 = 12,
+    NETWORK_4 = 13
 }
 
 public enum EInputButton

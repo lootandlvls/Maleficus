@@ -6,11 +6,9 @@ using static Maleficus.Consts;
 public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 {
     public int TotalLives { get; private set; }
-    public int GameLenght { get { return gameLenght; } }
-    public int RemainingTime { get { return remainingTime; } }
+    public int GameLenght { get; } = 180;
+    public int RemainingTime { get; private set; } = 100;
 
-    private int remainingTime = 100;
-    private int gameLenght = 180;
     protected override void Awake()
     {
         base.Awake();
@@ -62,7 +60,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 
     private void On_GAME_GameTimeUpdated(int newTime)
     {
-        remainingTime = newTime;      
+        RemainingTime = newTime;      
     }
 
     private void On_SPELLS_SpellHitPlayer(SHitInfo hitInfo)
@@ -73,11 +71,16 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         }
         EPlayerID hitPlayerID = hitInfo.HitPlayerID;
         EPlayerID hitByPlayerID = hitInfo.CastingPlayerID;
-        PlayerStats[hitPlayerID].SetLastHitBy(hitByPlayerID);
-        PlayerStats[hitByPlayerID].IncrementNumberOfHitPlayers();
+        if (IS_KEY_CONTAINED(PlayerStats, hitPlayerID))
+        {
+            PlayerStats[hitPlayerID].SetLastHitBy(hitByPlayerID);
+        }
+        if (IS_KEY_CONTAINED(PlayerStats, hitByPlayerID))
+        {
+            PlayerStats[hitByPlayerID].IncrementNumberOfHitPlayers();
+        }
 
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitPlayerID], GameModeType);
-       // EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(PlayerStats[hitByPlayerID], GameModeType);
     }
 
     private void On_PLAYERS_PlayerDied(EPlayerID diedPlayerID)
@@ -89,7 +92,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         // Update Killed Player stats
         PlayerStats_Lives killedPlayerStats = PlayerStats[diedPlayerID];
         killedPlayerStats.DecrementPlayerLives();
-        killedPlayerStats.SetTimeOfDeath(remainingTime);
+        killedPlayerStats.SetTimeOfDeath(RemainingTime);
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayerStats, GameModeType);
 
         // Update Killer stats
@@ -117,20 +120,12 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
             }
             else
             {
-               
                 winnerPlayerID = playerID;
             }
-       
         }
 
-
-        
-      
-
-        //TODO[BNJMO] fix this when only one player is connected
         if (gameOverPlayerCounter == PlayerStats.Count - 1)
         {
-            
             ETeamID winnerTeamID = PlayerManager.Instance.PlayersTeam[winnerPlayerID];
             ETeamID teamID = ETeamID.NONE;
 
@@ -141,17 +136,12 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
                 int counter = 0;
                 foreach (PlayerStats_Lives otherPlayerStats in PlayerStats.Values )
                 {
-                    
                     if (playerStats != otherPlayerStats && playerStats.TimeOfDeath > otherPlayerStats.TimeOfDeath)
                     {
                         counter++;
                     }
-
-
                 }
-
                 playerStats.SetRank(counter + 1);
-
             }
 
            if ((NetworkManager.Instance.HasAuthority == true)

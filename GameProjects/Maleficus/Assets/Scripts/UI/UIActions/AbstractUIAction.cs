@@ -16,6 +16,7 @@ public abstract class AbstractUIAction : BNJMOBehaviour
     [SerializeField] private bool delayedEventExecution = false;
 
     public event Action ActionButtonPressed;
+    //public event Action ActionButtonReleased; // Todo
     public event Action ActionButtonHighlighted;
 
     /// <summary>

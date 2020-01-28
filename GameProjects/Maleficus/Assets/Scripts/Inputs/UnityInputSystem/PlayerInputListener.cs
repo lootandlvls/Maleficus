@@ -118,9 +118,6 @@ public class PlayerInputListener : BNJMOBehaviour
             {
                 ProcessButtonEvent(callbackContext.phase, EInputButton.CAST_SPELL_3);
             }
-           
-
-
         };
 
         myPlayerInput.onDeviceLost += (PlayerInput playerInput) =>

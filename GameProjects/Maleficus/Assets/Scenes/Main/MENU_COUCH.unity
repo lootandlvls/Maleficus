@@ -1989,7 +1989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef8e6c4bf0929e4591fb8093ec21509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsServer: 1
+  IsServer: 0
   ConnectionMode: 2
   InputMode: 1
   IsConnectControllerInAnyState: 1
@@ -2000,7 +2000,7 @@ MonoBehaviour:
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 1
+  IsSpawnRemainingAIPlayersOnGameStart: 0
   MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 1
   IsAIArenaCenterAttractionEnabled: 1

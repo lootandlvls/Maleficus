@@ -76,7 +76,11 @@ namespace Maleficus
         public const float NETWORK_UPDATE_FREQUENCY = 0.0078125f;
         public const float NETWORK_CONNECT_FREQUENCY = 0.75f;
 
-
+        /* Net Controllers */
+        public const int NET_CONTROLLER_MESSAGE_CONNECT = 800;
+        public const int NET_CONTROLLER_MESSAGE_JOYSTICK_MOVED = 810;
+        public const int NET_CONTROLLER_MESSAGE_BUTTON_PRESSED = 811;
+        public const int NET_CONTROLLER_MESSAGE_BUTTON_RELEASED = 812;
 
         /// <summary> Threshold to know what joystick value can be considered as a directional button </summary>  
         public const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;
@@ -86,8 +90,8 @@ namespace Maleficus
 
         // Input
         public const float THRESHOLD_JOYSTICK_ACTIVATION = 0.2f;
-        public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.1f;
-        public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.1f;
+        public const float THRESHOLD_JOYSTICK_DISTANCE_MOVEMENT = 0.07f;
+        public const float THRESHOLD_JOYSTICK_DISTANCE_ROTATION = 0.05f;
 
         public const float ENG_GAME_SCENE_TRANSITION_DURATION = 10.0f;
 
