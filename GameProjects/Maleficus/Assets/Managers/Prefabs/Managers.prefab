@@ -705,8 +705,10 @@ MonoBehaviour:
     type: 3}
   paralyzeEffect: {fileID: 5834648782685597420, guid: aff03afec32f91449b3060657c2aeba1,
     type: 3}
+  Slash_Effect: {fileID: 2133118376549866022, guid: 1a5fbdccdefce434f9c09a7ec6f3680f,
+    type: 3}
   DebugSpells_Player1:
-  - {fileID: 4591344874823209658, guid: cc46feac957fa224197e992baa297072, type: 3}
+  - {fileID: 7056800616819618443, guid: df83ad0e710f4df40b7283622107fed2, type: 3}
   - {fileID: 7485585819118396062, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
   - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
   DebugSpells_Player2:

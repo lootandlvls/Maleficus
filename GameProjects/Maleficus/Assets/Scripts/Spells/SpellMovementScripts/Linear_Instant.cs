@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Linear_Instant : AbstractSpell
 {
+    bool temp = false;
     private void OnTriggerStay(Collider other)
     {
         Vector3 movingDirection = Vector3.forward;
@@ -15,4 +16,5 @@ public class Linear_Instant : AbstractSpell
             ProcessHits(otherPlayer, ESpellStatus.STAY);
         }
     }
+
 }

@@ -17,6 +17,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
     [SerializeField] private GameObject frozenEffect;
     [SerializeField] private GameObject paralyzeEffect;
+    [SerializeField] private GameObject Slash_Effect;
 
     public Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>> playersChosenSpells = new Dictionary<EPlayerID, Dictionary<ESpellSlot, AbstractSpell>>();
     // PlayerManager's activePlayers reference
@@ -289,6 +290,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spawnedSpell.CastingPlayerID = playerID;
             Debug.Log("LINEAR INSTANT SPELL CASTED");
         }
+        else if (spellToCast.GetComponent<Linear_Wave>() != null)
+        {
+            
+        }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
             activePlayers[playerID].DoTeleportAnimation();
@@ -331,6 +336,19 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)
             {
                 StartCoroutine(DelayBetweenMultipleSpellCastingCoroutine(0.05f, playerID, spellToCast));
+            }
+            else if (spellToCast.SpellID == ESpellID.AIR_SLASH)
+            {
+                Vector3 position = activePlayers[playerID].SpellInitPosition;
+                Quaternion rotation = activePlayers[playerID].transform.rotation;
+                activePlayers[playerID].DoShockwaveAnimation();
+                Instantiate(Slash_Effect, position, transform.rotation);
+                spawnedSpell = Instantiate(spellToCast, position, rotation);
+
+                spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;
+                //  spawnedSpell.transform.parent = activePlayers[playerID].transform;
+                spawnedSpell.CastingPlayerID = playerID;
+                Debug.Log("LINEAR WAVE SPELL CASTED");
             }
             else
             {

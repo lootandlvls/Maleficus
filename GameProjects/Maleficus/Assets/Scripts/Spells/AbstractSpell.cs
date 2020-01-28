@@ -123,7 +123,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
         {
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, spellStatus, hitPlayer.Position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-            if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST)
+            if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.AIR_SLASH)
             {
                 DestroySpell();
             }
@@ -137,7 +137,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, spellStatus, hitPlayer.Position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
             
-           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.BLACK_HOLE )
+           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.BLACK_HOLE && SpellID != ESpellID.AIR_SLASH )
            {
                 DestroySpell();
            }

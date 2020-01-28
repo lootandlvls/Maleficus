@@ -110,6 +110,7 @@ public enum ESpellMovementType
     TELEPORT,
     AOE,
     LINEAR_LASER,
+    LINEAR_WAVE,
     RAPID_FIRE,
     Traps,
     UNIQUE,
@@ -133,7 +134,8 @@ public enum ESpellID
     PLASMA_FISSION_BALLS,
     SHIELD,
     RAPID_FIRE_PLASMA,
-    BLACK_HOLE
+    BLACK_HOLE,
+    AIR_SLASH
 }
 
 public enum ESpellStatus

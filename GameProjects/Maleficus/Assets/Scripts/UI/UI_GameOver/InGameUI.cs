@@ -23,7 +23,7 @@ public class InGameUI : BNJMOBehaviour
 
     IEnumerator wait(AbstractGameMode gameMode)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         EventManager.Instance.Invoke_GAME_SetPlayersScores(gameMode);
     }
 }

@@ -40,8 +40,11 @@ public class Linear_Hit : AbstractSpell
 
     }
 
+   
     private void OnTriggerEnter(Collider other)
     {
+
+
         if (hasBeenTriggered == false)
         {
             Vector3 pushingDirection = Vector3.forward;
