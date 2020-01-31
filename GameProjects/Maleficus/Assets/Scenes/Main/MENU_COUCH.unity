@@ -929,7 +929,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &237037880
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2007,6 +2007,7 @@ MonoBehaviour:
   IsAIClosestPlayerDeviationEnabled: 1
   IsAIClosestSpellDeviationEnabled: 1
   IsAIPushDeviationEnabled: 1
+  IsSpellSelectionWithSpellButtons: 1
   IsLoadDebugSpells: 0
   IsLimitMaxPushPower: 1
   IsDebugLogEvents: 1

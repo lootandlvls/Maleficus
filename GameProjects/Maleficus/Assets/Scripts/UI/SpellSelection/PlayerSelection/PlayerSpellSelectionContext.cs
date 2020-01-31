@@ -25,7 +25,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         READY
     }
 
-    private Dictionary<ESpellSlot, SelectedSpell> selectedSpellsIcons = new Dictionary<ESpellSlot, SelectedSpell>();
+    private Dictionary<ESpellSlot, SelectedSpell> selectedSpells = new Dictionary<ESpellSlot, SelectedSpell>();
     private int selectedSpellsCounter = 0;
 
     protected override void InitializeEventsCallbacks()
@@ -45,7 +45,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
         foreach (SelectedSpell SelectedSpell in GetComponentsInChildren<SelectedSpell>())
         {
-            selectedSpellsIcons.Add(SelectedSpell.SpellSlot, SelectedSpell);
+            selectedSpells.Add(SelectedSpell.SpellSlot, SelectedSpell);
         }
 
         playerSkillPointsIndicator = GetComponentInChildren<PlayerSkillPointsIndicator>();
@@ -84,20 +84,21 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
                             case ESpellSelectionState.CHOOSING_SPELLS:
 
+                                
                                 AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
 
                                 if (selectedSpellsCounter == 3)
                                 {
-                                    LogConsole("Set ready");
                                     SetToReady();
                                 }
                                 else 
                                 {
                                     // Get and check spell slot
-                                    ESpellSlot spellSlot = GetSpellSlotFrom(selectedSpellsCounter + 1);
-                                    if (IS_NOT_NULL(spellSlot))
+                                    ESpellSlot spellSlot = GetNextUnselectedSpellSlotFromLeft();
+                                    if ((IS_NOT_NONE(spellSlot))
+                                        && (CanAddSpell(spell, spellSlot)))
                                     {
-                                        CheckAndAddSpell(playerID, spell, spellSlot);
+                                        AddSpell(spell, spellSlot);
                                     }
                                 }
                                 break;
@@ -114,8 +115,11 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
                                 }
                                 else
                                 {
-                                   
-                                    RemoveSpell(playerID);
+                                    ESpellSlot spellSlot = GetNextSelectedSpellSlotFromRight();
+                                    if (IS_NOT_NONE(spellSlot))
+                                    {
+                                        RemoveSpell(spellSlot);
+                                    }
                                 }
                                 break;
 
@@ -125,91 +129,92 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
                         }
 
                         break;
+
+                    default:
+                        if (spellSelectionState == ESpellSelectionState.CHOOSING_SPELLS)
+                        {
+                            AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
+
+                            ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
+                            if (spellSlot != ESpellSlot.NONE)
+                            {
+                                if (CanAddSpell(spell, spellSlot))
+                                {
+                                    if (selectedSpells[spellSlot].IsSelected == true)
+                                    {
+                                        RemoveSpell(spellSlot);
+                                    }
+                                    AddSpell(spell, spellSlot);
+                                }
+                            }
+                        }
+                        break;
                 }
             }
         }
     }
 
-    private void CheckAndAddSpell(EPlayerID playerID, AbstractSpell spell , ESpellSlot spellSlot)
+
+    private void AddSpell(AbstractSpell spell , ESpellSlot spellSlot)
     {
-        if (SpellManager.Instance.CheckPlayerSpells(playerID, spell))
+        playerSkillPointsIndicator.RemoveSkillPoints(spell.SkillPoint);
+
+        selectedSpells[spellSlot].SelectSpell(spell);
+                
+        EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, spellSlot);
+        if (selectedSpellsCounter < 3)
         {
-            if ((IS_NOT_NULL(playerSkillPointsIndicator))
-                && (playerSkillPointsIndicator.CanChoseSpell(spell) == true))
+            selectedSpellsCounter++;
+        }
+    }
+
+    private bool CanAddSpell(AbstractSpell spell, ESpellSlot spellSlot)
+    {
+        if ((SpellManager.Instance.IsSpellAlreadyChosen(playerID, spell) == false)
+            && (IS_NOT_NULL(playerSkillPointsIndicator)))
+        {
+            if (selectedSpells[spellSlot].IsSelected == true)
             {
-                playerSkillPointsIndicator.RemoveSkillPoints(spell.SkillPoint);
-
-                selectedSpellsIcons[spellSlot].ChangeImage(spell);
-
-                EventManager.Instance.Invoke_UI_SpellChosen(playerID, spell, spellSlot);
-                if (selectedSpellsCounter < 3)
+                if (playerSkillPointsIndicator.CanSwapSpell(spell, selectedSpells[spellSlot].CurrentSelectedSpell) == true)
                 {
-                    selectedSpellsCounter++;
+                    LogConsole("spell will be swapped");
+                    return true;
+                }
+            }
+            else
+            {
+                if (playerSkillPointsIndicator.CanChoseSpell(spell) == true)
+                {
+                    LogConsole("spell will be chosen");
+                    return true;
                 }
             }
         }
+        return false;
     }
 
-    //Remove a spell 
-    private void RemoveSpell(EPlayerID playerID)
+    private void RemoveSpell(ESpellSlot spellSlot)
     {
-        if (playerID == this.playerID)
+        if (selectedSpells[spellSlot] != null)
         {
-            switch (selectedSpellsCounter)
+            selectedSpells[spellSlot].RemoveSpell();
+            LogConsole("Removing spell");
+            AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][spellSlot];
+            if (playerSkillPointsIndicator != null && spell != null)
             {
-                case 1:
-                    if (selectedSpellsIcons[ESpellSlot.SPELL_1] != null)
-                    {
-                        LogConsole("Spell 1 has been Chosen");
-                        selectedSpellsIcons[ESpellSlot.SPELL_1].RemoveImage();
-                        AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][ESpellSlot.SPELL_1];
-                        if (playerSkillPointsIndicator != null && spell != null)
-                        {
-                            playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
-                        }
-                        EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_1);
-                    }
-                    break;
-
-                case 2:
-                    if (selectedSpellsIcons[ESpellSlot.SPELL_2] != null)
-                    {
-                        LogConsole("Spell 2 has been Chosen");
-                        selectedSpellsIcons[ESpellSlot.SPELL_2].RemoveImage();
-                        AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][ESpellSlot.SPELL_2];
-                        if (playerSkillPointsIndicator != null && spell != null)
-                        {
-                            playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
-                        }
-                        EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_2);
-                    }
-                    break;
-
-                case 3:
-                    if (selectedSpellsIcons[ESpellSlot.SPELL_3] != null)
-                    {
-                        LogConsole("Spell 3 has been Chosen");
-                        selectedSpellsIcons[ESpellSlot.SPELL_3].RemoveImage();
-                        AbstractSpell spell = SpellManager.Instance.playersChosenSpells[playerID][ESpellSlot.SPELL_3];
-                        if (playerSkillPointsIndicator != null && spell != null)
-                        {
-                            playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
-                        }
-                        EventManager.Instance.Invoke_UI_SpellRemoved(playerID, ESpellSlot.SPELL_3);
-                    }
-                    break;
-
+                LogConsole("Adding SKP");
+                playerSkillPointsIndicator.AddSkillPoints(spell.SkillPoint);
             }
-            if (selectedSpellsCounter >= 0)
-            {
-                selectedSpellsCounter--;
-            }
-            
-            LogConsole("Counter : " + selectedSpellsCounter);
+            EventManager.Instance.Invoke_UI_SpellRemoved(playerID, spellSlot);
         }
+                 
+        if (selectedSpellsCounter >= 0)
+        {
+            selectedSpellsCounter--;
+        }
+            
+        LogConsole("Counter : " + selectedSpellsCounter);
     }
-
-    
 
     private void ConnectPlayer()
     {
@@ -270,4 +275,55 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         }
     }
    
+
+    private ESpellSlot ConvertSpellSlot(int index)
+    {
+        LogConsole("convertin : " + index);
+        switch (index)
+        {
+            case 0:
+                return ESpellSlot.SPELL_2;
+
+            case 1:
+                return ESpellSlot.SPELL_1;
+            
+            case 2:
+                return ESpellSlot.SPELL_3;
+        }
+        return ESpellSlot.NONE;
+    }
+
+    private ESpellSlot GetNextSelectedSpellSlotFromRight()
+    {
+        ESpellSlot spellSlot = ESpellSlot.NONE;
+        for (int i = 2; i >= 0; i--)
+        {
+            spellSlot = ConvertSpellSlot(i);
+            LogConsole("i : " + i + " | spell slot " + spellSlot);
+
+            if (selectedSpells[spellSlot].IsSelected == true)
+            {
+                return spellSlot;
+            }
+        }
+        return ESpellSlot.NONE;
+    }
+
+    private ESpellSlot GetNextUnselectedSpellSlotFromLeft()
+    {
+        ESpellSlot spellSlot = ESpellSlot.NONE;
+        for (int i = 0; i <= 2; i++)
+        {
+            spellSlot = ConvertSpellSlot(i);
+            LogConsole("i : " + i + " | spell slot " + spellSlot);
+
+            if (selectedSpells[spellSlot].IsSelected == false)
+            {
+                return spellSlot;
+            }
+        }
+        return ESpellSlot.NONE;
+    }
+
+
 }

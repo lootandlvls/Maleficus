@@ -46,4 +46,16 @@ public class PlayerSkillPointsIndicator : BNJMOBehaviour
         }
         return false;
     }
+
+    public bool CanSwapSpell(AbstractSpell newSpell, AbstractSpell spellSelected)
+    {
+        if ((IS_NOT_NULL(spellSelected))
+            && (IS_NOT_NULL(newSpell)))
+        {
+            return (ReaminingSkillPoints + spellSelected.SkillPoint - newSpell.SkillPoint) >= 0;
+        }
+        return false;
+    }
+
+
 }
