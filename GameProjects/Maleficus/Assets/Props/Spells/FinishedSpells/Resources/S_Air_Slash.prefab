@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 713714104146262733}
   - component: {fileID: 1490188899311883311}
   - component: {fileID: -1492602455601131928}
-  - component: {fileID: 7056800616819618443}
+  - component: {fileID: 39706416385440908}
   m_Layer: 0
   m_Name: S_Air_Slash
   m_TagString: Untagged
@@ -62,9 +62,9 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 2.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7056800616819618443
+--- !u!114 &39706416385440908
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,10 +73,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 540372959243565596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
+  m_Script: {fileID: 11500000, guid: 302da19f49e93474ca6554961aa61551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 10
+  hitPower: 12
   speed: 1000
   spellName: Air Slash
   spellLevel: 0
@@ -87,9 +87,9 @@ MonoBehaviour:
   isTripleCast: 0
   movementType: 0
   skillPoint: 3
-  cooldown: 3
+  cooldown: 2
   castDuration: 0
-  pushDuration: 1
+  pushDuration: 1.4
   spellDuration: 4
   debuffEffects: 
   debuffDuration: 0
@@ -327,7 +327,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.8720377, b: 0.41960788, a: 1}
+      maxColor: {r: 0.41960788, g: 1, b: 0.9265356, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5139,7 +5139,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.97507274, g: 1, b: 0.64705884, a: 1}
+      maxColor: {r: 0.8160377, g: 1, b: 0.96409976, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb44c94ef594ab04dbe6b1de1a78848a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 16
+  hitPower: 15
   speed: 0
   spellName: Arcane Trap
   spellLevel: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   spell: 7
   isChargeable: 0
   isTripleCast: 0
-  movementType: 8
+  movementType: 9
   skillPoint: 3
   cooldown: 1
   castDuration: 0
@@ -113,6 +113,7 @@ MonoBehaviour:
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   explosion: {fileID: 2964017320102134093, guid: 2859ffd0c63644344a2ae2d773429ee1,
     type: 3}
+  explosionRadius: 2
 --- !u!54 &1474340511456559422
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -140,7 +141,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 3
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &1929546688036080721
 AudioSource:

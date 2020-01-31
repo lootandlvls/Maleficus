@@ -292,16 +292,20 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Linear_Wave>() != null)
         {
-            
+            Vector3 position = activePlayers[playerID].transform.position;
+            Quaternion rotation = activePlayers[playerID].transform.rotation;
+            activePlayers[playerID].DoProjectileAttackAnimation();
+            StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, 1));
         }
         else if (spellToCast.GetComponent<Teleport>() != null)
         {
             activePlayers[playerID].DoTeleportAnimation();
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-            StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, 2));
+         //   StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, 2));
             Vector3 position = new Vector3(activePlayers[playerID].transform.position.x, activePlayers[playerID].transform.position.y + 0.1f, activePlayers[playerID].transform.position.z);
-            //  AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
-            //    spell.CastingPlayerID = playerID;
+            AbstractSpell spell = Instantiate(spellToCast, position, transform.rotation);
+            spell.CastingPlayerID = playerID;
+            
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
@@ -423,8 +427,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
             yield return new WaitForSeconds(debuffDuration);
             Destroy(snowman);
-            activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
             activePlayers[playerID].SetPlayerFrozen(false);
+            activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
+           
         }
 
             
@@ -467,14 +472,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         {
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
-                     
-             LogConsole("Delay activated");
+           
             AbstractSpell spellToCast = Instantiate(spell, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
             spellToCast.CastingPlayerID = playerID;
             AddSpellToActiveMovingSpells(spellToCast);
 
             yield return new WaitForSeconds(delay);
-            LogConsole("Delay ended");
+            
 
 
         }

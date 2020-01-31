@@ -257,14 +257,14 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
 
     //USED IN SPELL MANAGER TO TELEPORT THE PLAYER
-    public event Action<ISpell, EPlayerID> SPELLS_Teleport;
-    public void Invoke_SPELLS_Teleport(ISpell castedSpell , EPlayerID castingPlayerID)
+    public event Action<float,EPlayerID> SPELLS_Teleport;
+    public void Invoke_SPELLS_Teleport( float distance , EPlayerID castingPlayerID)
     {
         DebugLog("Invoke spell event");
         if (SPELLS_Teleport != null)
         {
             
-            SPELLS_Teleport.Invoke(castedSpell, castingPlayerID);
+            SPELLS_Teleport.Invoke( distance ,castingPlayerID);
         }
     }
 

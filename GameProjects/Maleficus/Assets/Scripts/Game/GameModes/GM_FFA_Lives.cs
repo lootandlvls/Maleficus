@@ -92,7 +92,6 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         // Update Killed Player stats
         PlayerStats_Lives killedPlayerStats = PlayerStats[diedPlayerID];
         killedPlayerStats.DecrementPlayerLives();
-        killedPlayerStats.SetTimeOfDeath(RemainingTime);
         EventManager.Instance.Invoke_GAME_PlayerStatsUpdated(killedPlayerStats, GameModeType);
 
         // Update Killer stats
@@ -107,6 +106,10 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
         if (killedPlayerStats.RemainingLives > 0)
         {
             PlayerManager.Instance.RespawnPlayer(diedPlayerID);
+        }
+        else
+        {
+            killedPlayerStats.SetTimeOfDeath(RemainingTime);
         }
 
         // Check if game over (only one player still alive)
@@ -139,6 +142,7 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
                     if (playerStats != otherPlayerStats && playerStats.TimeOfDeath > otherPlayerStats.TimeOfDeath)
                     {
                         counter++;
+                      //  Debug.Log(" Player " + Maleficus.Utils.GetIntFrom(playerStats.PlayerID)  + " Time of Death = " + playerStats.TimeOfDeath + " died before Player " + Maleficus.Utils.GetIntFrom(otherPlayerStats.PlayerID) + " with a Time of Death = " + otherPlayerStats.TimeOfDeath);
                     }
                 }
                 playerStats.SetRank(counter + 1);

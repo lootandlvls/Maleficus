@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class Teleport : AbstractSpell
 {
-    AbstractSpell castedSpell;
-    EPlayerID playerID;
+  
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
 
-        
-        castedSpell = this.GetComponent<AbstractSpell>();
-        playerID = castedSpell.CastingPlayerID;
-      
-        EventManager.Instance.Invoke_SPELLS_Teleport(castedSpell, playerID);
+          
+        EventManager.Instance.Invoke_SPELLS_Teleport(HitPower, CastingPlayerID);
        
     }
 }

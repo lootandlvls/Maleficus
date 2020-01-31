@@ -994,7 +994,7 @@ PrefabInstance:
         type: 3}
       propertyPath: spell
       value: 
-      objectReference: {fileID: 7056800616819618443, guid: df83ad0e710f4df40b7283622107fed2,
+      objectReference: {fileID: 39706416385440908, guid: df83ad0e710f4df40b7283622107fed2,
         type: 3}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2234,7 +2234,7 @@ PrefabInstance:
         type: 3}
       propertyPath: leftButton
       value: 
-      objectReference: {fileID: 8791247596649320368}
+      objectReference: {fileID: 6135373494187142901}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rightButton

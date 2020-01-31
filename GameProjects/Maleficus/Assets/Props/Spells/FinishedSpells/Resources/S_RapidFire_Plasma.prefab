@@ -14414,7 +14414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 15
+  hitPower: 10
   speed: 1000
   spellName: Rapidfire Plasma
   spellLevel: 0
@@ -14425,16 +14425,16 @@ MonoBehaviour:
   isTripleCast: 0
   movementType: 7
   skillPoint: 3
+  cooldown: 3
+  castDuration: 0
+  pushDuration: 0.5
+  spellDuration: 4
   debuffEffects: 
   debuffDuration: 0
   debuffPower: 0
   buffEffects: 
   buffDuration: 0
   buffPower: 0
-  cooldown: 3
-  castDuration: 0
-  pushDuration: 1
-  spellDuration: 4
   castSound: {fileID: 0}
   hitSound: {fileID: 8300000, guid: c5757b30a26d1a44ba5cd2d214ac7352, type: 3}
   spellIcon: {fileID: 21300000, guid: aff9d82f9d1093c4e8192202f2eab832, type: 3}

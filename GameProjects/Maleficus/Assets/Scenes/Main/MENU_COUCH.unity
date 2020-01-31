@@ -2002,10 +2002,10 @@ MonoBehaviour:
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   IsSpawnRemainingAIPlayersOnGameStart: 0
   MaximumNumberOfAIToSpawn: 3
-  IsAISpawnSpellsEneabled: 1
+  IsAISpawnSpellsEneabled: 0
   IsAIArenaCenterAttractionEnabled: 1
-  IsAIClosestPlayerDeviationEnabled: 1
-  IsAIClosestSpellDeviationEnabled: 1
+  IsAIClosestPlayerDeviationEnabled: 0
+  IsAIClosestSpellDeviationEnabled: 0
   IsAIPushDeviationEnabled: 1
   IsLoadDebugSpells: 0
   IsLimitMaxPushPower: 1
@@ -3406,6 +3406,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 237037880}
     m_Modifications:
+    - target: {fileID: 6135373494187142906, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_Name
+      value: 'B_SpellSelectionButton 1-7 : Air Slash'
+      objectReference: {fileID: 0}
     - target: {fileID: 7052013537602615538, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Name

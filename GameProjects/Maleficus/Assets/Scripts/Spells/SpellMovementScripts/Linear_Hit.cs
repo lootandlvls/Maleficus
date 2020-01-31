@@ -43,7 +43,7 @@ public class Linear_Hit : AbstractSpell
    
     private void OnTriggerEnter(Collider other)
     {
-
+        Debug.Log(other.name);
 
         if (hasBeenTriggered == false)
         {
@@ -86,6 +86,7 @@ public class Linear_Hit : AbstractSpell
         {
             if (collider != null)
             {
+               // Debug.Log(collider.name);
                 IPlayer otherPlayer = collider.gameObject.GetComponent<IPlayer>();
                 if (otherPlayer != null && collider.tag == "Player")
                 {

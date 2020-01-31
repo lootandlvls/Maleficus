@@ -64,6 +64,15 @@ public class Player : BNJMOBehaviour, IPlayer
 
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+
+        EventManager.Instance.INPUT_JoystickMoved.Event -= On_INPUT_JoystickMoved_Event;
+        EventManager.Instance.SPELLS_Teleport -= On_SPELLS_Teleport;
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -122,17 +131,18 @@ public class Player : BNJMOBehaviour, IPlayer
         }
     }
 
-    private void On_SPELLS_Teleport(ISpell castedSpell, EPlayerID castingPlayerID)
+    private void On_SPELLS_Teleport(float distance , EPlayerID castingPlayerID)
     {
-        EPlayerID playerID = castedSpell.CastingPlayerID;
-        if ((PlayerID == playerID)
+        if ((PlayerID == castingPlayerID)
          && (IS_NOT_NULL(joysticksInput)))
         {
             float InputH = joysticksInput.JoystickValues[EInputAxis.ROTATE_X];
             float InputV = joysticksInput.JoystickValues[EInputAxis.ROTATE_Y];
 
             Vector3 TeleportDirection = transform.forward;
-            transform.position += TeleportDirection * castedSpell.HitPower;
+            transform.position += TeleportDirection * distance;
+
+
         }
     }
 
@@ -426,11 +436,13 @@ public class Player : BNJMOBehaviour, IPlayer
     {
         if (isFrozen == true)
         {
+            IsReadyToShoot = false;
             currentSpeed = 0;
         }
         else
         {
             currentSpeed = speed;
+            IsReadyToShoot = true;
         }
     }
 
