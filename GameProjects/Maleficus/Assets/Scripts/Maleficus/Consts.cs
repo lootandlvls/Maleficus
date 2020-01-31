@@ -46,6 +46,7 @@ namespace Maleficus
         public const string PATH_EFFECT_CHARGING_WANDENERGY = "WandEnergyEffect";
         public const string PATH_EFFECT_UNHITTABLE = "E_UnhittableEffect";
         public const string PATH_EFFECT_FIRELASER_HITEFFECT = "E_Fire_LaserHitEffect";
+        public const string PATH_EFFECT_TELEPORT = "E_TeleportEffect";
 
         public const int NUMBERS_OF_FRAMES_TO_WAIT_BEFORE_CHANGING_SCENE = 3;
 

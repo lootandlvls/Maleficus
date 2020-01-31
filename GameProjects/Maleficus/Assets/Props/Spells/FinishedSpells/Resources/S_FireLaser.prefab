@@ -13952,7 +13952,7 @@ MonoBehaviour:
   movementType: 6
   skillPoint: 5
   cooldown: 5
-  castDuration: 0
+  castDuration: 2
   pushDuration: 0.2
   spellDuration: 2
   debuffEffects: 
