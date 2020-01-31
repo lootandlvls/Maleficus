@@ -141,7 +141,8 @@ public class Player : BNJMOBehaviour, IPlayer
 
             Vector3 TeleportDirection = transform.forward;
             transform.position += TeleportDirection * distance;
-
+            GameObject teleportEffect = Resources.Load<GameObject>(Maleficus.Consts.PATH_EFFECT_TELEPORT);
+            Instantiate(teleportEffect, transform.position, transform.rotation);
 
         }
     }
@@ -416,7 +417,25 @@ public class Player : BNJMOBehaviour, IPlayer
         }
     }
 
-    public void DoShockwaveAnimation()
+    public void DoLazerAnimation(float spellDuration)
+    {
+        StartCoroutine(LazerAnimationCoroutine(spellDuration));
+    }
+
+    IEnumerator  LazerAnimationCoroutine(float spellDuration)
+    {
+        currentSpeed = 0;
+        IsReadyToShoot = false;
+        myAnimator.SetBool("channeling", true);
+        yield return new WaitForSeconds(spellDuration);
+        myAnimator.SetBool("channeling", false);
+        currentSpeed = speed;
+        IsReadyToShoot = true;
+
+    }
+
+
+        public void DoShockwaveAnimation()
     {
         myAnimator.SetTrigger("shockwave");
     }

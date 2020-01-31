@@ -309,7 +309,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
-            // activePlayers[playerID].animator.SetBool("channeling", true);
+            activePlayers[playerID].DoLazerAnimation(spellToCast.CastDuration);
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
             spawnedSpell = Instantiate(spellToCast, position, rotation);
@@ -317,7 +317,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;
             spawnedSpell.transform.parent = activePlayers[playerID].transform;
             spawnedSpell.CastingPlayerID = playerID;
-            //  StartCoroutine(PlayerCantMove());
+            
         }
         else if (spellToCast.GetComponent<Traps>() != null)
         {
@@ -434,6 +434,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
             
     }
+
+    
 
     private IEnumerator PlayerStunned(EPlayerID playerID)
     {
