@@ -401,7 +401,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         // Connect and spawn reamining players as AI
         if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
         {
-          //  SpawnRemaningAIPlayers();
+            SpawnRemaningAIPlayers();
         }
     }
 
