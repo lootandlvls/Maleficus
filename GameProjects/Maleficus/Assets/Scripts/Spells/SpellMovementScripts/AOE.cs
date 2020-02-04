@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class AOE : AbstractSpell
 {
-    public float radius;
 
     protected override void Start()
     {
         base.Start();
 
-        OnExplosionEnter( transform.position, radius);
+        SphereCollider sphereCollider = GetComponent<SphereCollider>();
+        if (IS_NOT_NULL(sphereCollider))
+        {
+            OnExplosionEnter(transform.position, sphereCollider.radius);
+        }
     }
 
 

@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302da19f49e93474ca6554961aa61551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 12
+  hitPower: 15
   speed: 1000
   spellName: Air Slash
   spellLevel: 0
@@ -87,9 +87,9 @@ MonoBehaviour:
   isTripleCast: 0
   movementType: 0
   skillPoint: 3
-  cooldown: 2
+  cooldown: 1.5
   castDuration: 0
-  pushDuration: 1.4
+  pushDuration: 2
   spellDuration: 4
   debuffEffects: 
   debuffDuration: 0

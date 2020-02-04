@@ -5,15 +5,14 @@ using UnityEngine.UI;
 
 public class SelectedSpell : BNJMOBehaviour
 {
-
-     public  ESpellSlot SpellSlot { get { return spellSlot; } }
+    public ESpellSlot SpellSlot                 { get { return spellSlot; } }
+    public bool IsSelected                      { get { return CurrentSelectedSpell != null; } }
+    public AbstractSpell CurrentSelectedSpell   { get; private set; }
 
     [SerializeField] ESpellSlot spellSlot;
-    
+    [SerializeField] Text skillPointIndicator;
 
     private Image spellIcon;
-    private int counter = 0;
-
 
     protected override void InitializeComponents()
     {
@@ -23,46 +22,21 @@ public class SelectedSpell : BNJMOBehaviour
     }
 
 
-    
-    public void ChangeImage(AbstractSpell spell)
+
+    public void SelectSpell(AbstractSpell spell)
     {
-        spellIcon.sprite = spell.SpellIcon;
+        if (IS_NOT_NULL(spell))
+        {
+            spellIcon.sprite = spell.SpellIcon;
+            CurrentSelectedSpell = spell;
+            skillPointIndicator.text = spell.SkillPoint.ToString();
+        }
     }
-    public void RemoveImage()
+
+    public void RemoveSpell()
     {
         spellIcon.sprite = null;
+        CurrentSelectedSpell = null;
+        skillPointIndicator.text = "";
     }
-
-    //private void OnSpellButtonPressed(EPlayerID playerID, AbstractSpell chosenSpell)
-    //{
-    //    Debug.Log("EVENT CALLED " + "Counter = " + counter);
-           
-    //        if (counter == 0 && spellSlot == ESpellSlot.SPELL_1 && player == playerID)
-    //        {
-    //            spellIcon.sprite = chosenSpell.SpellIcon;
-                
-    //        EventManager.Instance.Invoke_UI_SpellChosen(playerID, chosenSpell, spellSlot);        
-    //        Debug.Log("Spell 1 has been CHosen");
-    //    }
-    //        if (counter == 1 && spellSlot == ESpellSlot.SPELL_2 && player == playerID)
-    //        {
-    //            spellIcon.sprite = chosenSpell.SpellIcon;
-            
-    //        EventManager.Instance.Invoke_UI_SpellChosen(playerID, chosenSpell, spellSlot);
-    //        Debug.Log("Spell 1 has been CHosen");
-    //    }
-    //        if (counter == 2 && spellSlot == ESpellSlot.SPELL_3 && player == playerID)
-    //        {
-    //            spellIcon.sprite = chosenSpell.SpellIcon;
-           
-    //        EventManager.Instance.Invoke_UI_SpellChosen(playerID, chosenSpell, spellSlot);
-    //        Debug.Log("Spell 1 has been CHosen");
-    //    }
-       
-    //    counter++;
-        
-
-
-   // }
-  
 }

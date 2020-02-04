@@ -23997,7 +23997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 39
+  hitPower: 17
   speed: 1000
   spellName: Vamperic Ball
   spellLevel: 0
@@ -24008,9 +24008,9 @@ MonoBehaviour:
   isTripleCast: 0
   movementType: 0
   skillPoint: 1
-  cooldown: 1.5
+  cooldown: 2
   castDuration: 0
-  pushDuration: 1
+  pushDuration: 0.6
   spellDuration: 6
   debuffEffects: 08000000
   debuffDuration: 2

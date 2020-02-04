@@ -1371,7 +1371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &349846199
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1678,7 +1678,7 @@ PrefabInstance:
     - target: {fileID: 3134534792627890947, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3137683070482165413, guid: c333dacb8e4af4b45870a4e182a019c5,
         type: 3}
@@ -2004,9 +2004,10 @@ MonoBehaviour:
   MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 0
   IsAIArenaCenterAttractionEnabled: 1
-  IsAIClosestPlayerDeviationEnabled: 0
-  IsAIClosestSpellDeviationEnabled: 0
+  IsAIClosestPlayerDeviationEnabled: 1
+  IsAIClosestSpellDeviationEnabled: 1
   IsAIPushDeviationEnabled: 1
+  IsSpellSelectionWithSpellButtons: 1
   IsLoadDebugSpells: 0
   IsLimitMaxPushPower: 1
   IsDebugLogEvents: 1
@@ -2784,7 +2785,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1092948368
 RectTransform:
   m_ObjectHideFlags: 0

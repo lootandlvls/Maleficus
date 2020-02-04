@@ -9579,7 +9579,7 @@ Transform:
   m_GameObject: {fileID: 2155933224171526793}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5336895, y: 1.5336895, z: 1.5336895}
   m_Children:
   - {fileID: 912224361633343255}
   - {fileID: 31819953861848256}
@@ -23894,8 +23894,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2240130883715882924}
   - component: {fileID: 3192603726563579907}
-  - component: {fileID: 178593770562574596}
   - component: {fileID: 7955169875773639299}
+  - component: {fileID: 6267107939284959786}
   m_Layer: 0
   m_Name: S_AOE_Explosion
   m_TagString: Untagged
@@ -23912,7 +23912,7 @@ Transform:
   m_GameObject: {fileID: 7584670280421684884}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7450642477142793328}
   m_Father: {fileID: 0}
@@ -23930,7 +23930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c0df8cd2f7b7b41be180d72e30b932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 10
+  hitPower: 19
   speed: 0
   spellName: AOE Explosion
   spellLevel: 1
@@ -23941,16 +23941,16 @@ MonoBehaviour:
   isTripleCast: 0
   movementType: 5
   skillPoint: 2
+  cooldown: 2
+  castDuration: 0
+  pushDuration: 1.3
+  spellDuration: 0.2
   debuffEffects: 
   debuffDuration: 0
   debuffPower: 0
   buffEffects: 
   buffDuration: 0
   buffPower: 0
-  cooldown: 3
-  castDuration: 0
-  pushDuration: 1
-  spellDuration: 0.2
   castSound: {fileID: 8300000, guid: 194cc8a39bbac804283a384dbd4c8d7e, type: 3}
   hitSound: {fileID: 8300000, guid: 740e417cde6c97d459c22f3d7c69b146, type: 3}
   spellIcon: {fileID: 21300000, guid: 99f9c9b543496554eb67ce27f53ef2a1, type: 3}
@@ -23960,20 +23960,6 @@ MonoBehaviour:
   - {fileID: 592063311389522299}
   - {fileID: 5649359071165970059}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
-  radius: 3.3
---- !u!114 &178593770562574596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7584670280421684884}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d8a118f20b93c84fa1d6a667d55c928, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  time: 1
 --- !u!82 &7955169875773639299
 AudioSource:
   m_ObjectHideFlags: 0
@@ -24070,3 +24056,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &6267107939284959786
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7584670280421684884}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 3.92
+  m_Center: {x: 0, y: 0, z: 0}

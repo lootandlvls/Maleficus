@@ -396,11 +396,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         ChargingSpells_Effects.Add(Resources.Load<GameObject>(PATH_EFFECT_FROZEN));
     }
 
-    public bool CheckPlayerSpells(EPlayerID playerID , AbstractSpell chosenSpell)
+    public bool IsSpellAlreadyChosen(EPlayerID playerID , AbstractSpell chosenSpell)
     {
         if (IS_KEY_CONTAINED(playersChosenSpells, playerID))
         {
-            return !playersChosenSpells[playerID].ContainsValue(chosenSpell);
+            return playersChosenSpells[playerID].ContainsValue(chosenSpell);
         }
         return true;
     }

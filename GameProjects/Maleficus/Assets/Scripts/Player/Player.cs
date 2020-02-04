@@ -68,9 +68,11 @@ public class Player : BNJMOBehaviour, IPlayer
     {
         base.OnDestroy();
 
-
-        EventManager.Instance.INPUT_JoystickMoved.Event -= On_INPUT_JoystickMoved_Event;
-        EventManager.Instance.SPELLS_Teleport -= On_SPELLS_Teleport;
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.INPUT_JoystickMoved.Event -= On_INPUT_JoystickMoved_Event;
+            EventManager.Instance.SPELLS_Teleport -= On_SPELLS_Teleport;
+        }
     }
 
     protected override void Awake()
