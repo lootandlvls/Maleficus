@@ -2007,7 +2007,6 @@ MonoBehaviour:
   IsAIClosestPlayerDeviationEnabled: 1
   IsAIClosestSpellDeviationEnabled: 1
   IsAIPushDeviationEnabled: 1
-  IsSpellSelectionWithSpellButtons: 1
   IsLoadDebugSpells: 0
   IsLimitMaxPushPower: 1
   IsDebugLogEvents: 1
