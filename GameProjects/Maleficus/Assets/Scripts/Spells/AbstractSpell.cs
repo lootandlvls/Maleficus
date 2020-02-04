@@ -16,6 +16,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public string SpellName { get { return spellName; } }
     public int SpellLevel { get { return spellLevel; } }
     public bool HasPushPower { get { return hasPushPower; } }
+    public bool HasGrabPower { get { return hasGrabPower; } }
     public ESpellMovementType MovementType { get { return movementType; } }
     public List<ESpellEffects> DebuffEffects { get { return debuffEffects; } }
     public float DebuffDuration { get { return debuffDuration; } }
@@ -44,6 +45,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPushPower;
+    [SerializeField] private bool hasGrabPower;
     [SerializeField] private ESpellID spell;
     [SerializeField] private bool isChargeable;
     [SerializeField] private bool isTripleCast;
@@ -108,7 +110,11 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, CastingPlayerID, ESpellStatus.ENTER, transform.position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
         }
-        StartCoroutine(WaitBeforeDestroySpellCoroutine(spellDuration));
+        if ( SpellID != ESpellID.GET_OVER_HERE)
+        {
+               StartCoroutine(WaitBeforeDestroySpellCoroutine(spellDuration));
+        }
+
     }
 
     protected void SetDirection(Vector3 direction)
@@ -117,13 +123,19 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
         this.direction = direction;
     }
 
+    protected void SetPushDuration(float duration)
+    {
+        pushDuration = duration;
+        LogConsole("PUSHDURATION SET TO : " + pushDuration);
+    }
+
     protected void ProcessHits(IPlayer[] hitPlayers, ESpellStatus spellStatus)
     {
         foreach (IPlayer hitPlayer in hitPlayers)
         {
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, spellStatus, hitPlayer.Position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
-            if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.AIR_SLASH)
+            if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.AIR_SLASH )
             {
                 DestroySpell();
             }
@@ -134,11 +146,13 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     {
         if (hitPlayer.IsDead == false)
         {
+            Debug.Log("PROCESSHITS");
             SHitInfo hitInfo = new SHitInfo(this, CastingPlayerID, hitPlayer.PlayerID, spellStatus, hitPlayer.Position);
             EventManager.Instance.Invoke_SPELLS_SpellHitPlayer(hitInfo);
             
-           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.BLACK_HOLE && SpellID != ESpellID.AIR_SLASH )
+           if (SpellID != ESpellID.AOE_EXPLOSION && SpellID != ESpellID.FIRE_LASER && SpellID != ESpellID.FIRE_SHOCKBLAST && SpellID != ESpellID.BLACK_HOLE && SpellID != ESpellID.AIR_SLASH && SpellID != ESpellID.GET_OVER_HERE)
            {
+                Debug.Log("SPELL DESTROYED");
                 DestroySpell();
            }
         }

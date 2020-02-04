@@ -66694,7 +66694,8 @@ MonoBehaviour:
   spellName: Black Hole
   spellLevel: 1
   OnSelfEffect: 0
-  hasPushPower: 1
+  hasPushPower: 0
+  hasGrabPower: 1
   spell: 14
   isChargeable: 0
   isTripleCast: 0

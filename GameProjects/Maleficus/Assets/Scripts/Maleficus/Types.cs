@@ -81,7 +81,9 @@ public enum ESpellType
 {
     BUFF_ONSELF,
     PUSH,
-    BUFF_ONTEAMMATE
+    BUFF_ONTEAMMATE,
+    PULL
+
 }
 
 
@@ -115,6 +117,7 @@ public enum ESpellMovementType
     Traps,
     UNIQUE,
     STATIC
+    
 
 }
 
@@ -135,7 +138,9 @@ public enum ESpellID
     SHIELD,
     RAPID_FIRE_PLASMA,
     BLACK_HOLE,
-    AIR_SLASH
+    AIR_SLASH,
+    GET_OVER_HERE,
+
 }
 
 public enum ESpellStatus

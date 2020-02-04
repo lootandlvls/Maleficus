@@ -105,6 +105,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                     PushPlayer(hitInfo);
                 }
             }
+            if (spell.HasGrabPower)
+            {
+                if (activePlayers[hitInfo.HitPlayerID].PlayerID == hitInfo.HitPlayerID)
+                {
+                    GrabPlayer(hitInfo);
+                }
+            }
 
             foreach (ESpellEffects debuffeffect in spell.DebuffEffects)
             {
@@ -161,18 +168,15 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
+    private void GrabPlayer(SHitInfo hitInfo)
+    {
+        
+            activePlayers[hitInfo.HitPlayerID].PushPlayer(-hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
+        
+    }
     private void PushPlayer(SHitInfo hitInfo)
     {
-        if ( hitInfo.CastedSpell.SpellID == ESpellID.BLACK_HOLE)
-        {
-            activePlayers[hitInfo.HitPlayerID].PushPlayer(-hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
-        }
-        else
-        {
-            activePlayers[hitInfo.HitPlayerID].PushPlayer(hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);
-        }
-        
-
+        activePlayers[hitInfo.HitPlayerID].PushPlayer(hitInfo.HitVelocity, hitInfo.CastedSpell.PushDuration);   
     }
 
     private void ApplyDebuff(ESpellEffects debuff, EPlayerID playerID , float debuffDuration)
@@ -348,11 +352,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 activePlayers[playerID].DoShockwaveAnimation();
                 Instantiate(Slash_Effect, position, transform.rotation);
                 spawnedSpell = Instantiate(spellToCast, position, rotation);
-
-                spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;
-                //  spawnedSpell.transform.parent = activePlayers[playerID].transform;
-                spawnedSpell.CastingPlayerID = playerID;
-                Debug.Log("LINEAR WAVE SPELL CASTED");
+                spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;             
+                spawnedSpell.CastingPlayerID = playerID;Debug.Log("LINEAR WAVE SPELL CASTED");
             }
             else
             {
@@ -508,7 +509,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         else
         {
             AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
-            spell.CastingPlayerID = playerID;       
+            spell.CastingPlayerID = playerID;
+           
             spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
             AddSpellToActiveMovingSpells(spell);
         }

@@ -136,8 +136,8 @@ MonoBehaviour:
   IsJoinAndSpawnPlayerOnControllerConnect: 0
   IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 0
-  MaximumNumberOfAIToSpawn: 4
+  IsSpawnRemainingAIPlayersOnGameStart: 1
+  MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 1
   IsAIArenaCenterAttractionEnabled: 1
   IsAIClosestPlayerDeviationEnabled: 1
@@ -721,21 +721,21 @@ MonoBehaviour:
   Slash_Effect: {fileID: 2133118376549866022, guid: 1a5fbdccdefce434f9c09a7ec6f3680f,
     type: 3}
   DebugSpells_Player1:
-  - {fileID: 7056800616819618443, guid: df83ad0e710f4df40b7283622107fed2, type: 3}
+  - {fileID: 6497704888537925138, guid: 140e111529559e64887900a4a3058de2, type: 3}
+  - {fileID: 2719309341420855504, guid: b7bd2456ebc0d6342a28d11b596aa566, type: 3}
   - {fileID: 7485585819118396062, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
-  - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
   DebugSpells_Player2:
   - {fileID: 6663163324108133333, guid: 05c51fa055951b745a55388fb2aec7d5, type: 3}
   - {fileID: 3192603726563579907, guid: a5f1558f45cacb641b0ed304f7db35cd, type: 3}
   - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
   DebugSpells_Player3:
-  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
-  - {fileID: 4881839978439356376, guid: bca058ddfee72814bb33efe897551b02, type: 3}
-  - {fileID: 2999941136915841016, guid: 6a2efc722d3fe4e429b2bc5cd2eb29b9, type: 3}
-  DebugSpells_Player4:
-  - {fileID: 3462094080666256724, guid: 739d238671aaa334a8b1a907a756dd07, type: 3}
+  - {fileID: 1759835135373706898, guid: d7641fafc6f891e4c995131e785eca96, type: 3}
   - {fileID: 2990601863943891826, guid: 742551d1057733c43bd87f1040edc19c, type: 3}
   - {fileID: 7485585819118396062, guid: cce72bbbbefc08c43812c4831d1af8ae, type: 3}
+  DebugSpells_Player4:
+  - {fileID: 3012738371414162866, guid: 2b4f447012b009d4daa9d310610dfb7d, type: 3}
+  - {fileID: 2719309341420855504, guid: b7bd2456ebc0d6342a28d11b596aa566, type: 3}
+  - {fileID: 39706416385440908, guid: df83ad0e710f4df40b7283622107fed2, type: 3}
 --- !u!1 &7881203136435955458
 GameObject:
   m_ObjectHideFlags: 0

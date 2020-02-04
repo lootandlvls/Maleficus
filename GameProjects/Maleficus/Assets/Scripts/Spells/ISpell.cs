@@ -22,6 +22,8 @@ public interface ISpell
 
     bool HasPushPower { get; }
 
+    bool HasGrabPower { get; }
+
     List<ESpellEffects> DebuffEffects { get; }
 
     List<ESpellEffects> BuffEffects { get; }

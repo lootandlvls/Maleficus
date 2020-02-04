@@ -7,8 +7,10 @@ public class Linear_Hit : AbstractSpell
 {
     private Vector3 movingDirection;
     public Vector3 directionVector;
-    private Vector3 forward = Vector3.forward;
-
+    private Vector3 dir = Vector3.forward;
+    private Vector3 startPosition;
+    private float startTime;
+    private float backDuration ;
     [SerializeField] private bool shoot;
 
     private SphereCollider mySphereCollider;
@@ -22,33 +24,62 @@ public class Linear_Hit : AbstractSpell
         mySphereCollider = GetComponentWithCheck<SphereCollider>();
     }
 
+    protected override void Start()
+    {
+        base.Start();
+        startPosition = transform.position;
+        backDuration = SpellDuration;
+
+      if (SpellID == ESpellID.GET_OVER_HERE)
+        {
+            StartCoroutine(returnCoroutine());
+        }
+      
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
 
         Move();
+
+        if ( dir == Vector3.back && SpellID == ESpellID.GET_OVER_HERE)
+        {
+            StartCoroutine(waitAndDestroy());
+        }
     }
 
 
     private void Move()
     {
 
-        movingDirection = forward * Speed * Time.deltaTime;
-
+        movingDirection = dir * Speed * Time.deltaTime;
         directionVector = transform.TransformDirection(movingDirection);
         myRigidBody.velocity = new Vector3(directionVector.x, directionVector.y, directionVector.z);
 
     }
 
+    IEnumerator waitAndDestroy()
+    {
+        yield return new WaitForSeconds(backDuration);
+        DestroySpell();
+    }
+    IEnumerator returnCoroutine()
+    {
+        startTime = Time.time;
+        yield return new WaitForSeconds(SpellDuration);
+        dir = Vector3.back;
+       
+    }
    
     private void OnTriggerEnter(Collider other)
     {
+        float collisionTime = Time.time;
         Debug.Log(other.name);
 
         if (hasBeenTriggered == false)
         {
-            Vector3 pushingDirection = Vector3.forward;
-            direction = transform.TransformDirection(pushingDirection);
+       
+            direction = transform.TransformDirection(dir);
             IPlayer otherPlayer = other.gameObject.GetComponent<IPlayer>();
             IEnemy otherEnemy = other.gameObject.GetComponent<IEnemy>();
             Shield shield = other.gameObject.GetComponent<Shield>();
@@ -59,10 +90,29 @@ public class Linear_Hit : AbstractSpell
                 if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.Consts.TAG_PLAYER)
                 {
                     hasBeenTriggered = true;
-                    Explode();
-                    //ProcessHits(otherPlayer, ESpellStatus.ENTER);
+                    if (HasPushPower)
+                    {                       
+                         Explode();
+                    }
+                    else if (HasGrabPower)
+                    {
+                        if (SpellID == ESpellID.GET_OVER_HERE)
+                        {
+                            backDuration = collisionTime - startTime;
+                            dir = Vector3.back;
+                            SetPushDuration(backDuration);                       
+                            ProcessHits(otherPlayer, ESpellStatus.ENTER);
+                        }
+                        else
+                        {
+                            ProcessHits(otherPlayer, ESpellStatus.ENTER);
+                        }
+                        
+
+                    }
+                    
                 }
-                else if (other.tag.Equals("Object"))
+               else if (other.tag.Equals("Object"))
                 {
                     DestroySpell();
                 }
