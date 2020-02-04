@@ -24,13 +24,15 @@ public class Linear_Hit : AbstractSpell
         mySphereCollider = GetComponentWithCheck<SphereCollider>();
     }
 
+    
     protected override void Start()
     {
         base.Start();
         startPosition = transform.position;
         backDuration = SpellDuration;
 
-      if (SpellID == ESpellID.GET_OVER_HERE)
+        LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(CastingPlayerID));
+        if (SpellID == ESpellID.GET_OVER_HERE)
         {
             StartCoroutine(returnCoroutine());
         }
@@ -67,7 +69,12 @@ public class Linear_Hit : AbstractSpell
     {
         startTime = Time.time;
         yield return new WaitForSeconds(SpellDuration);
-        dir = Vector3.back;
+
+        if (dir == Vector3.forward)
+        {
+            dir = Vector3.back;
+        }
+
        
     }
    
@@ -100,7 +107,9 @@ public class Linear_Hit : AbstractSpell
                         {
                             backDuration = collisionTime - startTime;
                             dir = Vector3.back;
-                            SetPushDuration(backDuration);                       
+                            speed = 800;
+                            SetPushDuration(backDuration);
+                            SetDebuffDuration(backDuration);
                             ProcessHits(otherPlayer, ESpellStatus.ENTER);
                         }
                         else

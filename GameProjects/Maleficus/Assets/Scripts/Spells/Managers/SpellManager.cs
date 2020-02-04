@@ -189,7 +189,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 break;
 
             case ESpellEffects.STUN:
-
+                StartCoroutine(PlayerStunned(playerID, debuffDuration));
                 break;
 
             case ESpellEffects.SLOWDOWN:
@@ -438,13 +438,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     
 
-    private IEnumerator PlayerStunned(EPlayerID playerID)
+    private IEnumerator PlayerStunned(EPlayerID playerID , float debuffDuration)
     {
         if (activePlayers.ContainsKey(playerID))
         {
             activePlayers[playerID].SetPlayerStunned(true);
 
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(debuffDuration);
 
             activePlayers[playerID].SetPlayerStunned(false);
         }
@@ -507,10 +507,10 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             TripleCastSpell(spellToCast, playerID);
         }
         else
-        {
+        {          
             AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
             spell.CastingPlayerID = playerID;
-           
+            LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(playerID));
             spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
             AddSpellToActiveMovingSpells(spell);
         }

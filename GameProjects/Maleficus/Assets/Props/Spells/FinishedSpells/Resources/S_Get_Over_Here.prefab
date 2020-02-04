@@ -11,9 +11,6 @@ GameObject:
   - component: {fileID: 3281770940799521889}
   - component: {fileID: 5121382309043873351}
   - component: {fileID: 2158028299884292493}
-  - component: {fileID: 1473267596129522724}
-  - component: {fileID: 968980936318391902}
-  - component: {fileID: 1696013670393385683}
   m_Layer: 0
   m_Name: SD_Prop_Skull_01
   m_TagString: Untagged
@@ -85,80 +82,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &1473267596129522724
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 420909086560003069}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.53
-  m_Center: {x: 0, y: 0.44379744, z: 0}
---- !u!114 &968980936318391902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 420909086560003069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hitPower: 50
-  speed: 850
-  spellName: Get Over Here
-  spellLevel: 1
-  OnSelfEffect: 0
-  hasPushPower: 0
-  hasGrabPower: 1
-  spell: 16
-  isChargeable: 0
-  isTripleCast: 0
-  movementType: 0
-  skillPoint: 1
-  cooldown: 1
-  castDuration: 0
-  pushDuration: 2
-  spellDuration: 0.7
-  debuffEffects: 07000000
-  debuffDuration: 0
-  debuffPower: 0
-  buffEffects: 
-  buffDuration: 0
-  buffPower: 0
-  castSound: {fileID: 0}
-  hitSound: {fileID: 8300000, guid: 740e417cde6c97d459c22f3d7c69b146, type: 3}
-  spellIcon: {fileID: 21300000, guid: e6648342b626fd749b089d6867eee241, type: 3}
-  hitPrefab: {fileID: 0}
-  trails:
-  - {fileID: 3359550607730485717}
-  - {fileID: 8322302015911415146}
-  - {fileID: 8651860615426444108}
-  parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
-  directionVector: {x: 0, y: 0, z: 0}
-  shoot: 0
---- !u!54 &1696013670393385683
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 420909086560003069}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &1788862903070757890
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,8 +93,9 @@ GameObject:
   - component: {fileID: 1415139862913118015}
   - component: {fileID: 4814500334189774815}
   - component: {fileID: 6497704888537925138}
+  - component: {fileID: 7369775644185796929}
   m_Layer: 0
-  m_Name: Chains
+  m_Name: S_Get_Over_Here
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -204,8 +128,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.00001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.53
+  m_Center: {x: 0, y: 0.44379744, z: 0}
 --- !u!114 &6497704888537925138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,41 +137,60 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1788862903070757890}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPower: 0
-  speed: 0
-  spellName: 
-  spellLevel: 0
+  hitPower: 50
+  speed: 600
+  spellName: Get Over Here
+  spellLevel: 1
   OnSelfEffect: 0
   hasPushPower: 0
-  hasGrabPower: 0
-  spell: 0
+  hasGrabPower: 1
+  spell: 16
   isChargeable: 0
   isTripleCast: 0
   movementType: 0
-  skillPoint: 0
-  cooldown: 0
+  skillPoint: 1
+  cooldown: 2
   castDuration: 0
   pushDuration: 0
-  spellDuration: 0
-  debuffEffects: 
-  debuffDuration: 0
+  spellDuration: 0.7
+  debuffEffects: 07000000
+  debuffDuration: 1
   debuffPower: 0
   buffEffects: 
   buffDuration: 0
   buffPower: 0
   castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  spellIcon: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 740e417cde6c97d459c22f3d7c69b146, type: 3}
+  spellIcon: {fileID: 21300000, guid: 92b50f0d177cca1478bb5b0247c16165, type: 3}
   hitPrefab: {fileID: 0}
-  trails: []
+  trails:
+  - {fileID: 3359550607730485717}
+  - {fileID: 8322302015911415146}
+  - {fileID: 8651860615426444108}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0
+--- !u!54 &7369775644185796929
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1788862903070757890}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3359550607730485717
 GameObject:
   m_ObjectHideFlags: 0
@@ -14554,6 +14497,18 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &6504874653719560442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8651860615426444108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7118111f251d88e4ba4f93fe25b657ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6228490638908126707
 PrefabInstance:
   m_ObjectHideFlags: 0

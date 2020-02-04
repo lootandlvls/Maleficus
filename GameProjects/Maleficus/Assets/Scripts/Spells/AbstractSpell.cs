@@ -126,7 +126,11 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     protected void SetPushDuration(float duration)
     {
         pushDuration = duration;
-        LogConsole("PUSHDURATION SET TO : " + pushDuration);
+    }
+
+    protected void SetDebuffDuration(float duration)
+    {
+        debuffDuration = duration; 
     }
 
     protected void ProcessHits(IPlayer[] hitPlayers, ESpellStatus spellStatus)
