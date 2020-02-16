@@ -2,27 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyBox;
 
-public class Player : BNJMOBehaviour, IPlayer                                                
+using static Maleficus.Utils;
+
+public class Player : BNJMOBehaviour, IPlayer
 {
-    public EPlayerID PlayerID                                               { get; set; }
-    public ETeamID TeamID                                                   { get; set; }
-    public Vector3 Position                                                 { get { return transform.position; } }
-    public Quaternion Rotation                                              { get { return transform.rotation; } }
-    public bool IsDead                                                      { get; private set; } = false;                                          
-    public Dictionary<ESpellSlot, bool> ReadyToUseSpell                     { get; } = new Dictionary<ESpellSlot, bool>();
-    public Dictionary<ESpellSlot, float> SpellCooldown                      { get; } = new Dictionary<ESpellSlot, float>();
-    public Dictionary<ESpellSlot, float> SpellCastDuration                  { get; } = new Dictionary<ESpellSlot, float>();
-    public bool IsReadyToShoot                                              { get; set; }
-    public bool IsPlayerCharging                                            { get; set; }
-    public bool IsUnhittable                                                { get; set; } = false;
-    public Vector3 SpellInitPosition                                        { get { return spellInitPosition.position; } }
-    public Vector3 SpellEndPosition                                         { get { return spellEndPosition.position; } }
-    public int SpellChargingLVL                                             { get; private set; } = 1;
-    public bool HasCastedSpell                                              { get; set; } = false;
-    public Vector3 PushVelocity                                             { get; private set; }
-    public float MaxPushVelocity                                          { get { return maximumPushVelocity; } }
+    public EPlayerID PlayerID { get; set; }
+    public ETeamID TeamID { get; set; }
+    public Vector3 Position { get { return transform.position; } }
+    public Quaternion Rotation { get { return transform.rotation; } }
+    public bool IsDead { get; private set; } = false;
+    public Dictionary<ESpellSlot, bool> ReadyToUseSpell { get; } = new Dictionary<ESpellSlot, bool>();
+    public Dictionary<ESpellSlot, float> SpellCooldown { get; } = new Dictionary<ESpellSlot, float>();
+    public Dictionary<ESpellSlot, float> SpellCastDuration { get; } = new Dictionary<ESpellSlot, float>();
+    public bool IsReadyToShoot { get; set; }
+    public bool IsPlayerCharging { get; set; }
+    public bool IsUnhittable { get; set; } = false;
+    public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
+    public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
+    public int SpellChargingLVL { get; private set; } = 1;
+    public bool HasCastedSpell { get; set; } = false;
+    public Vector3 PushVelocity { get; private set; }
+    public float MaxPushVelocity { get { return maximumPushVelocity; } }
 
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
@@ -81,7 +82,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
         //TODO: only activate after respawn
         StartCoroutine(UnhittableCoroutine());
-   
+
 
     }
     protected override void Start()
@@ -106,8 +107,6 @@ public class Player : BNJMOBehaviour, IPlayer
         {
             UpdateMovementAndRotation();
         }
-
-        LogCanvas(69, PlayerID + " push vel : " + PushVelocity.magnitude);
     }
 
     private void On_INPUT_JoystickMoved_Event(NetEvent_JoystickMoved eventHandle)
@@ -133,7 +132,7 @@ public class Player : BNJMOBehaviour, IPlayer
         }
     }
 
-    private void On_SPELLS_Teleport(float distance , EPlayerID castingPlayerID)
+    private void On_SPELLS_Teleport(float distance, EPlayerID castingPlayerID)
     {
         if ((PlayerID == castingPlayerID)
          && (IS_NOT_NULL(joysticksInput)))
@@ -161,7 +160,7 @@ public class Player : BNJMOBehaviour, IPlayer
             Move(Move_X, Move_Y);
             Rotate(Rotate_X, Rotate_Y);
 
-            if (joysticksInput.HasMoved() == true)
+            if (joysticksInput.IsMoving() == true)
             // if moving
             {
                 if (myAnimator != null)
@@ -178,7 +177,7 @@ public class Player : BNJMOBehaviour, IPlayer
                 }
             }
 
-            if (joysticksInput.HasRotated() == true)
+            if (joysticksInput.IsRotating() == true)
             // if rotating
             {
 
@@ -190,7 +189,7 @@ public class Player : BNJMOBehaviour, IPlayer
             {
                 SetDirectionalSpritesVisible(false);
 
-                if ((joysticksInput.HasMoved() == true)
+                if ((joysticksInput.IsMoving() == true)
                     && (Time.time - lastTimeSinceRotated > 0.5f))
                 // if moving for 1 second since last rortation
                 {
@@ -207,7 +206,7 @@ public class Player : BNJMOBehaviour, IPlayer
         movingDirection = new Vector3(axis_X, 0.0f, axis_Z).normalized * (Mathf.Pow(axis_X, 2.0f) + Mathf.Pow(axis_Z, 2.0f));
 
         Vector3 movementVelocity = movingDirection * currentSpeed * 0.1f;
-        
+
         Vector3 finalVelocity = movementVelocity + PushVelocity + GravityVelocity;
         transform.localPosition += finalVelocity * Time.deltaTime;
     }
@@ -250,13 +249,14 @@ public class Player : BNJMOBehaviour, IPlayer
                 StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
             }
-            
+
         }
     }
 
     public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
         //LogConsole("player stopped charging " + spellSlot, "SPELL_CHARGE");
+
         IsPlayerCharging = false;
 
         if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
@@ -269,11 +269,23 @@ public class Player : BNJMOBehaviour, IPlayer
 
         }
     }
- 
-    private void InitializeChargingEffects()
-    {
 
+    public void RotateToClosestPlayer()
+    {
+        if (joysticksInput.IsRotating() == false)
+        {
+            lastTimeSinceRotated = Time.time;
+
+            Player closestPlayer = GetClosestPlayer(this);
+            if (closestPlayer)
+            {
+                Vector2 closestPlayerDirection = (Get2DVector(closestPlayer.Position - Position)).normalized;
+                Rotate(closestPlayerDirection.x, -closestPlayerDirection.y);
+            }
+        }
     }
+
+
 
     private void InitializeDictionaries()
     {
@@ -315,7 +327,7 @@ public class Player : BNJMOBehaviour, IPlayer
         currentSpeed = speed;
     }
 
-    private IEnumerator SetReadyToUseSpellCoroutine(float time, ESpellSlot spellSlot)                    
+    private IEnumerator SetReadyToUseSpellCoroutine(float time, ESpellSlot spellSlot)
     {
         yield return new WaitForSeconds(time);
 
@@ -377,8 +389,8 @@ public class Player : BNJMOBehaviour, IPlayer
                     if (SpellChargingLVL != 1)
                     {
 
-                    SpellChargingLVL = 1;
-                    //LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
+                        SpellChargingLVL = 1;
+                        //LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
                     }
 
                 }
@@ -424,7 +436,7 @@ public class Player : BNJMOBehaviour, IPlayer
         StartCoroutine(LazerAnimationCoroutine(spellDuration));
     }
 
-    IEnumerator  LazerAnimationCoroutine(float spellDuration)
+    IEnumerator LazerAnimationCoroutine(float spellDuration)
     {
         currentSpeed = 0;
         IsReadyToShoot = false;
@@ -437,7 +449,7 @@ public class Player : BNJMOBehaviour, IPlayer
     }
 
 
-        public void DoShockwaveAnimation()
+    public void DoShockwaveAnimation()
     {
         myAnimator.SetTrigger("shockwave");
     }
@@ -479,7 +491,7 @@ public class Player : BNJMOBehaviour, IPlayer
         }
     }
 
-    public void SetPlayerParalyzed(bool isParalyzed , float effectStrenght)
+    public void SetPlayerParalyzed(bool isParalyzed, float effectStrenght)
     {
         if (isParalyzed == true)
         {
@@ -517,8 +529,8 @@ public class Player : BNJMOBehaviour, IPlayer
         StartNewCoroutine(ref UpdatePushVelocityEnumerator, UpdatePushVelocityCoroutine(duration));
     }
 
-    
-  
+
+
 
     private IEnumerator UpdatePushVelocityCoroutine(float duration)
     {
@@ -537,7 +549,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
     }
 
-   
+
     private void OnTriggerExit(Collider other)
     {
         if (other.tag.Equals("Ground"))
@@ -581,11 +593,11 @@ public class Player : BNJMOBehaviour, IPlayer
     }
     private IEnumerator ShieldActivatedCoroutine(float duration)
     {
-        this.tag  = Maleficus.Consts.TAG_PLAYER_SHIELDED;
+        this.tag = Maleficus.Consts.TAG_PLAYER_SHIELDED;
         yield return new WaitForSeconds(duration);
         this.tag = Maleficus.Consts.TAG_PLAYER;
     }
-   private IEnumerator UnhittableCoroutine()
+    private IEnumerator UnhittableCoroutine()
     {
         this.tag = Maleficus.Consts.TAG_PLAYER_SHIELDED;
         IsUnhittable = true;

@@ -361,6 +361,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                         ActivePlayers[playerID].IsReadyToShoot = false;
                         ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                         ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+                        ActivePlayers[playerID].RotateToClosestPlayer();
+
 
                         SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 

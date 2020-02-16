@@ -201,7 +201,7 @@ public class AIPlayerController : BNJMOBehaviour
         if (MotherOfManagers.Instance.IsAIClosestPlayerDeviationEnabled)
         {
             // Closest player
-            currentClosestPlayer = GetClosestPlayer();
+            currentClosestPlayer = GetClosestPlayer(myPlayer);
             currentArenaDistanceToClosestPlayer = Vector2.Distance(arena.GetInArenaPosition(myPlayer.Position), arena.GetInArenaPosition(currentClosestPlayer.Position));
 
             // Attraction and deviation vectors
@@ -293,28 +293,6 @@ public class AIPlayerController : BNJMOBehaviour
                 currentArenaZone = EAIArenaZone.DANGER;
             }
         }
-    }
-
-    private Player GetClosestPlayer()
-    {
-        Player closestOtherPlayer = null;
-        float closestDistanceToOtherPlayer = float.MaxValue;
-        foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
-        {
-            if ((otherPlayer.PlayerID == playerID)
-                || (otherPlayer.IsDead == true))
-            {
-                continue;
-            }
-
-            float distanceToOtherPlayer = Vector3.Distance(myPlayer.Position, otherPlayer.Position);
-            if (distanceToOtherPlayer < closestDistanceToOtherPlayer)
-            {
-                closestOtherPlayer = otherPlayer;
-                closestDistanceToOtherPlayer = distanceToOtherPlayer;
-            }
-        }
-        return closestOtherPlayer;
     }
 
     private AbstractSpell GetClosestSpell()

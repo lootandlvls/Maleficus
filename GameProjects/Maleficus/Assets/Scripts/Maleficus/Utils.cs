@@ -326,6 +326,30 @@ namespace Maleficus
 
         #endregion
 
+        #region Maleficus
+        public static Player GetClosestPlayer(Player toPlayer)
+        {
+            Player closestOtherPlayer = null;
+            float closestDistanceToOtherPlayer = float.MaxValue;
+            foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
+            {
+                if ((otherPlayer.PlayerID == toPlayer.PlayerID)
+                    || (otherPlayer.IsDead == true))
+                {
+                    continue;
+                }
+
+                float distanceToOtherPlayer = Vector3.Distance(toPlayer.Position, otherPlayer.Position);
+                if (distanceToOtherPlayer < closestDistanceToOtherPlayer)
+                {
+                    closestOtherPlayer = otherPlayer;
+                    closestDistanceToOtherPlayer = distanceToOtherPlayer;
+                }
+            }
+            return closestOtherPlayer;
+        }
+        #endregion
+
         #region Maleficus Types Conversions
         /// <summary> Convert a PlayerID enum to an int </summary>
         public static int GetIntFrom(EPlayerID playerID)

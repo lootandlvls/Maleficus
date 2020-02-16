@@ -19,6 +19,7 @@ namespace Maleficus
         public const string SCENE_ENTRY = "ENTRY";
         public const string SCENE_MENU_COUCH = "MENU_COUCH";
         public const string SCENE_MENU_MOBILE = "MENU_MOBILE";
+        //public const string SCENE_GAME = "GAME_CAVE";
         public const string SCENE_GAME = "GAME";
         public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
