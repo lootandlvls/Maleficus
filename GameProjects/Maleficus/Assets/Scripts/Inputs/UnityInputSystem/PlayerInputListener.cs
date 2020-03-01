@@ -65,7 +65,7 @@ public class PlayerInputListener : BNJMOBehaviour
             DeviceInputSource deviceInputSource = InputManager.Instance.GetInputSource<DeviceInputSource>();
             if (IS_NOT_NULL(deviceInputSource))
             {
-                if (Time.time > 1.0f) // TODO: This is a hack
+                if (Time.time > 0.3f) // TODO: This is a hack
                 {
                     myControllerID = deviceInputSource.OnNewDeviceJoined(this);
                     IS_NOT_NONE(myControllerID);
