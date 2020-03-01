@@ -14,6 +14,8 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
     [SerializeField] private GameObject notConnectedView;
     [SerializeField] private GameObject spellSelectionView;
     [SerializeField] private GameObject readyView;
+    [SerializeField] private GameObject spellStartPosition;
+
     
     private PlayerSkillPointsIndicator playerSkillPointsIndicator;
 
@@ -33,6 +35,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         base.InitializeEventsCallbacks();
 
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
+        EventManager.Instance.UI_SpellChosen            += On_UI_SpellChosen;
 
     }
 
@@ -151,6 +154,14 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
                         break;
                 }
             }
+        }
+    }
+
+    private void On_UI_SpellChosen(EPlayerID playerID, AbstractSpell abstractSpell, ESpellSlot spellSlot)
+    {
+        if (playerID == PlayerID)
+        {
+            SpellManager.Instance.SpawnPreviewSpell(abstractSpell, spellStartPosition.transform);
         }
     }
 

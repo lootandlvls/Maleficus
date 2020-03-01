@@ -367,6 +367,35 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         activePlayers[playerID].ResetSpellChargingLVL();
     }
 
+    public void SpawnPreviewSpell(AbstractSpell spellToCast, Transform transform)
+    {
+        Vector3 position = transform.position;
+        Quaternion rotation = transform.rotation;
+        AbstractSpell castedSpell = Instantiate(spellToCast, position, rotation);
+        castedSpell.transform.localScale /= 3.0f;
+        castedSpell.speed /= 3.0f;
+
+        // Special cases
+        if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)
+        {
+            // TODO: spawn multiple successive
+        }
+        else if (spellToCast.SpellID == ESpellID.ICEBALL)
+        {
+            // TODO: transform spell to snowman
+        }
+        else if (spellToCast.SpellID == ESpellID.PLASMA_FISSION)
+        {
+            // TODO: divide spell 
+        }
+        else if (spellToCast.SpellID == ESpellID.ENERGY_TRIANGLES)
+        {
+            // TODO: spawn sided
+        }
+
+
+    }
+
     private void AddSpellToActiveMovingSpells(AbstractSpell spawnedSpell)
     {
         if (spawnedSpell != null)
@@ -481,9 +510,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             AddSpellToActiveMovingSpells(spellToCast);
 
             yield return new WaitForSeconds(delay);
-            
-
-
         }
     }
 
