@@ -348,6 +348,32 @@ namespace Maleficus
             }
             return closestOtherPlayer;
         }
+
+        public static Player GetAngularClosestPlayer(Player toPlayer)
+        {
+            Player closestOtherPlayer = null;
+            float closestAngularDistanceToOtherPlayer = float.MinValue;
+            foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
+            {
+                if ((otherPlayer.PlayerID == toPlayer.PlayerID)
+                    || (otherPlayer.IsDead == true))
+                {
+                    continue;
+                }
+
+                Vector3 toOtherPlayerDirection = (otherPlayer.Position - toPlayer.Position).normalized;
+                float angularDistanceToOtherPlayer = Vector3.Dot(toPlayer.transform.forward, toOtherPlayerDirection);
+
+                Debug.Log(otherPlayer.PlayerID + " : " + angularDistanceToOtherPlayer);
+
+                if (angularDistanceToOtherPlayer > closestAngularDistanceToOtherPlayer)
+                {
+                    closestOtherPlayer = otherPlayer;
+                    closestAngularDistanceToOtherPlayer = angularDistanceToOtherPlayer;
+                }
+            }
+            return closestOtherPlayer;
+        }
         #endregion
 
         #region Maleficus Types Conversions

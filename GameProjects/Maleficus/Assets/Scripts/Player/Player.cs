@@ -275,8 +275,18 @@ public class Player : BNJMOBehaviour, IPlayer
         if (joysticksInput.IsRotating() == false)
         {
             lastTimeSinceRotated = Time.time;
+            Player closestPlayer = null;
 
-            Player closestPlayer = GetClosestPlayer(this);
+            // Closest player method
+            if (joysticksInput.IsMoving() == false)
+            {
+                closestPlayer = GetClosestPlayer(this);
+            }
+            else 
+            {
+                closestPlayer = GetAngularClosestPlayer(this);
+            }
+
             if (closestPlayer)
             {
                 Vector2 closestPlayerDirection = (Get2DVector(closestPlayer.Position - Position)).normalized;
