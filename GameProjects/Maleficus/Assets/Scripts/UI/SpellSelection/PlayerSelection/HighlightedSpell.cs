@@ -41,11 +41,24 @@ public class HighlightedSpell : BNJMOBehaviour
 
     protected override void InitializeEventsCallbacks()
     {
-        
         base.InitializeEventsCallbacks();
 
         SpellSelectionManager.Instance.SpellButtonHighlighted   += OnSpellHighlighted;
         EventManager.Instance.PLAYERS_PlayerJoined              += On_PLAYERS_PlayerJoined;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (SpellSelectionManager.IsInstanceSet)
+        {
+            SpellSelectionManager.Instance.SpellButtonHighlighted -= OnSpellHighlighted;
+        }
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.PLAYERS_PlayerJoined -= On_PLAYERS_PlayerJoined;
+        }
     }
 
     private void On_PLAYERS_PlayerJoined(EPlayerID playerID)

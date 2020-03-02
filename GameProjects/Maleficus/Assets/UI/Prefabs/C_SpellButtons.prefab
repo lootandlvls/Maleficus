@@ -1279,12 +1279,12 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-6 : Get Over Here'
+      value: 'B_SpellSelectionButton 0-7 : Get Over Here'
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1435,7 +1435,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-6
+      value: 0-7
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}

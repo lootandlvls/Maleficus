@@ -18,7 +18,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
         IS_NOT_NULL(soundObjectPrefab);
     }
 
-    public SoundObject SpawnSoundObject(AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
+    public SoundObject SpawnSoundObject(AudioClip audioClipToPlay, bool destroyWhenFinished = true, bool isLoop = false)
     {
         SoundObject soundObject = SpawnSoundObject(audioClipToPlay);
         if (soundObject)
@@ -28,7 +28,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
         return soundObject;
     }
 
-    public SoundObject SpawnSoundObject(Vector3 position, AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
+    public SoundObject SpawnSoundObject(Vector3 position, AudioClip audioClipToPlay, bool destroyWhenFinished = true, bool isLoop = false)
     {
         SoundObject soundObject = SpawnSoundObject(audioClipToPlay);
         if (soundObject)
@@ -38,7 +38,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
         return soundObject;
     }
 
-    public SoundObject SpawnSoundObject(Transform transform, AudioClip audioClipToPlay = null, bool destroyWhenFinished = true, bool isLoop = false)
+    public SoundObject SpawnSoundObject(Transform transform, AudioClip audioClipToPlay, bool destroyWhenFinished = true, bool isLoop = false)
     {
         SoundObject soundObject = SpawnSoundObject(audioClipToPlay);
         if (soundObject)
@@ -50,7 +50,7 @@ public class SoundManager : AbstractSingletonManager<SoundManager>
 
     private SoundObject SpawnSoundObject(AudioClip audioClipToPlay)
     {
-        if ((IS_NOT_NULL(audioClipToPlay))
+        if ((audioClipToPlay != null)
             && (IS_NOT_NULL(soundObjectPrefab)))
         {
             SoundObject soundObject = Instantiate(soundObjectPrefab);

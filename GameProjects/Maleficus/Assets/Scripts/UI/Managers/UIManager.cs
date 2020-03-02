@@ -8,8 +8,8 @@ using static Maleficus.Consts;
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
-    private MaleficusButton highlightedButton;
 
+    private MaleficusButton highlightedButton;
     private bool canPressButton;
 
     protected override void Awake()
@@ -84,6 +84,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             {
                 case EInputButton.CONFIRM:
                     highlightedButton.Select();
+                    //UISoundManager.Instance.SpawnSound_ButtonSelected();
                     canPressButton = true;
                     break;
 
@@ -111,6 +112,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                 highlightedButton = nextButton;
                 nextButton.Highlight();
                 canPressButton = false;
+                UISoundManager.Instance.SpawnSound_ButtonHighlighted();
             }
         }
     }
@@ -131,6 +133,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                     if (canPressButton == true)
                     {
                         highlightedButton.Press();
+                        UISoundManager.Instance.SpawnSound_ButtonPressed();
                     }
                     break;
             }

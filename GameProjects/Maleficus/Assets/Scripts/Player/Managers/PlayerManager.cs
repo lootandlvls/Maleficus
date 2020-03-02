@@ -384,6 +384,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         {
             StartCoroutine(DelayedSpawnAllOnSceneChangeCoroutine());
         }
+        else if (scene == EScene.MENU)
+        {
+            // Reinitalize teams
+        }
     }
 
     private IEnumerator DelayedSpawnAllOnSceneChangeCoroutine()
@@ -584,7 +588,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
         EPlayerID playerID = eventHandle.Arg2;
-        // TODO
+
+        // Initialize dictionaries for the new player
+        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+        {
+            LogConsole("Removing " + playerID + " from joind status list");
+            playersJoinStatus.Remove(playerID);
+        }
+
+        // TODO : team?
     }
 
 

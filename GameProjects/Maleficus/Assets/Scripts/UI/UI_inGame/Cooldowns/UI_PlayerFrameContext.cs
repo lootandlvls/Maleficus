@@ -25,7 +25,20 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
         EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;    
         EventManager.Instance.PLAYERS_PlayerDied += On_PLAYERS_PlayerDied;
         EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
+    }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.SPELLS_SpellSpawned       -= On_SpellSpawned;
+            EventManager.Instance.GAME_PlayerStatsUpdated   -= On_GAME_PlayerStatsUpdated;
+            EventManager.Instance.PLAYERS_PlayerJoined      -= On_PLAYERS_PlayerJoined;
+            EventManager.Instance.PLAYERS_PlayerDied        -= On_PLAYERS_PlayerDied;
+            EventManager.Instance.PLAYERS_PlayerSpawned     -= On_PLAYERS_PlayerSpawned;
+        }
     }
 
     protected override void InitializeComponents()

@@ -136,7 +136,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             int randomPositionIndex;
             do
             {
-                randomPositionIndex = GetRndIndex(enemySpawnPositions.Length);
+                randomPositionIndex = GetRandomIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
             
@@ -172,7 +172,7 @@ public class EnemyManager : AbstractSingletonManager<EnemyManager>
             int randomPositionIndex;
             do
             {
-                randomPositionIndex = GetRndIndex(enemySpawnPositions.Length);
+                randomPositionIndex = GetRandomIndex(enemySpawnPositions.Length);
             } while (randomPositionIndex == lastChosedIndex);
             lastChosedIndex = randomPositionIndex;
 

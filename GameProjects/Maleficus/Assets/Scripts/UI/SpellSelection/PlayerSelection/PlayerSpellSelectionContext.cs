@@ -36,7 +36,17 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
         EventManager.Instance.UI_SpellChosen            += On_UI_SpellChosen;
+    }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.INPUT_ButtonPressed.Event -= On_INPUT_ButtonPressed_Event;
+            EventManager.Instance.UI_SpellChosen            -= On_UI_SpellChosen;
+        }
     }
 
     protected override void InitializeComponents()

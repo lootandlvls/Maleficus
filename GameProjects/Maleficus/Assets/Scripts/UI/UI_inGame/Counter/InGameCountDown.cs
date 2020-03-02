@@ -27,8 +27,17 @@ public class InGameCountDown : BNJMOBehaviour
 
         EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
         EventManager.Instance.GAME_GameEnded += On_Game_GameEnded;
+    }
 
-      
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.GAME_GameStarted -= On_GAME_GameStarted;
+            EventManager.Instance.GAME_GameEnded -= On_Game_GameEnded;
+        }
     }
 
     private void On_Game_GameEnded(AbstractGameMode gameMode, bool wasAborted)

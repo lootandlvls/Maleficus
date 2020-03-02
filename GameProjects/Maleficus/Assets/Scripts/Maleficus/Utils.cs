@@ -20,10 +20,24 @@ namespace Maleficus
 
         #region General
         /// <summary> Gets a random index for a given array </summary>
-        public static int GetRndIndex(int arrayLength)
+        public static int GetRandomIndex(int arrayLength)
         {
             return UnityEngine.Random.Range(0, arrayLength);
         }
+
+        /// <summary> Gets a random element from the given array </summary>
+        public static A GetRandomElement<A>(A[] array)
+        {
+            return array[UnityEngine.Random.Range(0, array.Length)];
+        }
+
+        /// <summary> Gets a random element from the given list </summary>
+        public static A GetRandomElement<A>(List<A> list)
+        {
+            return list[UnityEngine.Random.Range(0, list.Count)];
+        }
+
+
 
         /// <summary> Gets a random rotation over Y axis. Can be used to get a random orientation for a gived character. </summary>
         public static Quaternion GetRndStandRotation()
@@ -119,7 +133,7 @@ namespace Maleficus
             {
                 if (source != null)
                 {
-                    source.clip = clips[GetRndIndex(clips.Length)];
+                    source.clip = clips[GetRandomIndex(clips.Length)];
                     source.Play();
                 }
                 else

@@ -5,11 +5,20 @@ using UnityEngine;
 
 public class Fireworks : BNJMOBehaviour
 {
-    // Start is called before the first frame update
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
         EventManager.Instance.GAME_IntroFinished += On_GAME_IntroFinished;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.GAME_IntroFinished -= On_GAME_IntroFinished;
+        }
     }
 
     private void On_GAME_IntroFinished(bool obj)
