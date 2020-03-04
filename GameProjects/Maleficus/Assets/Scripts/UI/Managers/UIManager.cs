@@ -8,7 +8,9 @@ using static Maleficus.Consts;
 
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
+
     private MaleficusButton highlightedButton;
+    private bool canPressButton;
 
     protected override void Awake()
     {
@@ -28,16 +30,16 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         StateUpdateEvent += EventManager.Instance.UI_MenuStateUpdated.Invoke;
 
         EventManager.Instance.NETWORK_ReceivedMessageUpdated += On_NETWORK_ReceivedMessageUpdated;
-        EventManager.Instance.APP_AppStateUpdated.AddListener(On_APP_AppStateUpdated);
+        EventManager.Instance.APP_AppStateUpdated.Event += On_APP_AppStateUpdated;
 
-        EventManager.Instance.INPUT_ButtonPressed.AddListener       (On_INPUT_ButtonPressed);
+        EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed;
+        EventManager.Instance.INPUT_ButtonReleased.Event += On_INPUT_ButtonReleased;
 
         EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
         EventManager.Instance.GAME_GamePaused += On_GAME_GamePaused;
         EventManager.Instance.GAME_GameUnPaused += On_GAME_GameUnPaused;
         EventManager.Instance.GAME_GameEnded += On_GAME_GameEnded;
     }
-
 
     protected override void OnReinitializeManager()
     {
@@ -70,16 +72,20 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
+        
+
         if ((highlightedButton != null)
              && (AppStateManager.Instance.CurrentState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE) == false)
-             && (AppStateManager.Instance.CurrentState!= EAppState.IN_MENU_IN_SPELL_SELECTION)) // TODO : remove when multiplayer UI is defined
+             && (AppStateManager.Instance.CurrentState != EAppState.IN_MENU_IN_SPELL_SELECTION)) // TODO : remove when multiplayer UI is defined
         {
 
             MaleficusButton nextButton = null;
             switch (inputButton)
             {
                 case EInputButton.CONFIRM:
-                    highlightedButton.Press();
+                    highlightedButton.Select();
+                    //UISoundManager.Instance.SpawnSound_ButtonSelected();
+                    canPressButton = true;
                     break;
 
                 case EInputButton.LEFT:
@@ -102,8 +108,34 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             // Update highlighted button
             if (nextButton != null)
             {
+                highlightedButton.UnSelect();
                 highlightedButton = nextButton;
                 nextButton.Highlight();
+                canPressButton = false;
+                UISoundManager.Instance.SpawnSound_ButtonHighlighted();
+            }
+        }
+    }
+
+    private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
+    {
+        EInputButton inputButton = eventHandle.InputButton;
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+
+        if ((highlightedButton != null)
+             && (AppStateManager.Instance.CurrentState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE) == false)
+             && (AppStateManager.Instance.CurrentState != EAppState.IN_MENU_IN_SPELL_SELECTION)) // TODO : remove when multiplayer UI is defined
+        {
+
+            switch (inputButton)
+            {
+                case EInputButton.CONFIRM:
+                    if (canPressButton == true)
+                    {
+                        highlightedButton.Press();
+                        UISoundManager.Instance.SpawnSound_ButtonPressed();
+                    }
+                    break;
             }
         }
     }

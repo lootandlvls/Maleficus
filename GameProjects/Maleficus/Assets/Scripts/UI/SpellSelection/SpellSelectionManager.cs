@@ -43,8 +43,8 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         if (EventManager.IsInstanceSet)
         {
             EventManager.Instance.INPUT_ButtonPressed.Event -= On_INPUT_ButtonPressed_Event;
-            EventManager.Instance.PLAYERS_PlayerJoined -= On_PLAYERS_PlayerJoined;
-            EventManager.Instance.PLAYERS_PlayerLeft -= On_PLAYERS_PlayerLeft;
+            EventManager.Instance.PLAYERS_PlayerJoined      -= On_PLAYERS_PlayerJoined;
+            EventManager.Instance.PLAYERS_PlayerLeft        -= On_PLAYERS_PlayerLeft;
         }
     }
 

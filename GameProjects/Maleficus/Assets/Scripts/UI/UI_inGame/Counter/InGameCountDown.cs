@@ -7,12 +7,10 @@ using UnityEngine.UI;
 public class InGameCountDown : BNJMOBehaviour
 {
     public int CountdownSeconds { get { return countdownSeconds; } }
+
     [SerializeField] int countdownSeconds;
     
     private Text myText;
-    private bool isGameRunning;
-
-    
     private IEnumerator StartCountDownEnumerator;
 
     protected override void InitializeComponents()
@@ -29,8 +27,17 @@ public class InGameCountDown : BNJMOBehaviour
 
         EventManager.Instance.GAME_GameStarted += On_GAME_GameStarted;
         EventManager.Instance.GAME_GameEnded += On_Game_GameEnded;
+    }
 
-      
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.GAME_GameStarted -= On_GAME_GameStarted;
+            EventManager.Instance.GAME_GameEnded -= On_Game_GameEnded;
+        }
     }
 
     private void On_Game_GameEnded(AbstractGameMode gameMode, bool wasAborted)

@@ -47,6 +47,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7140744973992432358}
   - component: {fileID: 1186782637667187825}
+  - component: {fileID: 2150614848636681778}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -80,6 +81,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ad9086efa0b04409a463505312cb8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2150614848636681778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4151174934001310998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a176e1b1be09cf4881c01c28f03841b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonHighlighted_Clip: {fileID: 8300000, guid: d8f714810233a7e488f1583b6a0b221a,
+    type: 3}
+  buttonPressed_Clip: {fileID: 8300000, guid: 1d58cfbd157be074293f3a423a033971, type: 3}
+  countdown_Clip: {fileID: 8300000, guid: 0e052a3240fff8747b9d698048876886, type: 3}
+  countdownFinished_Clip: {fileID: 8300000, guid: 2b4de74227128cb458f206c85f09d396,
+    type: 3}
+  playerJoined_Clip: {fileID: 8300000, guid: 43be8f554b7f041488eff363f96b1a0a, type: 3}
+  playerLeft_Clip: {fileID: 8300000, guid: 6a5c88b360b49d0439d62bdda666d0d1, type: 3}
+  playerReady_Clip: {fileID: 8300000, guid: ab16d51b9b9af7c4dad923f3911569b4, type: 3}
 --- !u!1 &4335998295704777600
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,7 +34,6 @@ public class Traps : AbstractSpell
         LogConsole("BEFORE WHILE LOOP");
         while (Time.time - startTime < SpellDuration)
         {
-            Debug.Log(size);
             size += 0.2f;
             Vector3 vecSize = new Vector3(size / 1000, size / 1000, size / 1000);
             childTransform.localScale += vecSize;

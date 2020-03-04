@@ -280,7 +280,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
                     {
                         AbstractSpell Part_1 = null;
                         AbstractSpell Part_2 = null;
-                        foreach (var spell in SpellManager.Instance.All_Spells)
+                        foreach (var spell in SpellManager.Instance.AllSpells) // TODO: Optimize this algorithm !!!!!
                         {
                             if (spell.SpellID == ESpellID.PLASMA_FISSION_BALLS)
                             {

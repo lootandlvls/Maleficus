@@ -12,7 +12,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     public List<AbstractSpell> ActiveMovingSpells         { get; private set; } = new List<AbstractSpell>();
     public List<AbstractSpell> SpellsUpgrade        { get { return spellsUpgrade; } }
     public List<GameObject> ChargingSpells_Effects  { get; } = new List<GameObject>();
-    public List<AbstractSpell> All_Spells           { get; } = new List<AbstractSpell>();
+    public List<AbstractSpell> AllSpells           { get; } = new List<AbstractSpell>();
 
     [SerializeField] private List<AbstractSpell> spellsUpgrade = new List<AbstractSpell>();
     [SerializeField] private GameObject frozenEffect;
@@ -55,6 +55,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.UI_SpellChosen                    += On_UI_SpellChosen;
         EventManager.Instance.UI_SpellRemoved                   += On_UI_SpellRemoved;
         EventManager.Instance.INPUT_ControllerConnected.Event   += On_INPUT_ControllerConnected;
+        EventManager.Instance.APP_SceneChanged.Event            += On_APP_SceneChanged;    
     }
 
     protected override void OnReinitializeManager()
@@ -62,7 +63,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         base.OnReinitializeManager();
 
         FinTouochJoysticks();
-
     }
 
     protected override void Update()
@@ -125,36 +125,118 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
+    // Assign spells to connected AI player
     private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
         EControllerID controllerID = eventHandle.Arg1;
         EPlayerID playerID = eventHandle.Arg2;
         if (controllerID.ContainedIn(AI_CONTROLLERS))
         {
-            LogConsole("Adding debug spells for AI");
-            for (int j = 0; j < 3; j++)
+            LogConsole("Choosing random spells for : " + playerID);
+            AbstractSpell[] spells = ChooseRandomSpells();
+            if (spells.Length == 3)
             {
-                ESpellSlot spellID = GetSpellSlotFrom(j + 1);
-                switch (playerID)
+                playersChosenSpells[playerID][ESpellSlot.SPELL_1] = spells[0];
+                playersChosenSpells[playerID][ESpellSlot.SPELL_2] = spells[1];
+                playersChosenSpells[playerID][ESpellSlot.SPELL_3] = spells[2];
+            }
+            else
+            {
+                LogConsoleError("Randomly chosing spells went wrong!");
+            }
+
+            //LogConsole("Adding debug spells for AI");
+            //for (int j = 0; j < 3; j++)
+            //{
+            //    ESpellSlot spellSlot = GetSpellSlotFrom(j + 1);
+            //    switch (playerID)
+            //    {
+            //        case EPlayerID.PLAYER_1:
+            //            playersChosenSpells[EPlayerID.PLAYER_1][spellSlot] = DebugSpells_Player1[j];
+            //            break;
+
+            //             case EPlayerID.PLAYER_2:
+            //            playersChosenSpells[EPlayerID.PLAYER_2][spellSlot] = DebugSpells_Player2[j];
+            //            break;
+
+            //             case EPlayerID.PLAYER_3:
+            //            playersChosenSpells[EPlayerID.PLAYER_3][spellSlot] = DebugSpells_Player3[j];
+            //            break;
+
+            //             case EPlayerID.PLAYER_4:
+            //            playersChosenSpells[EPlayerID.PLAYER_4][spellSlot] = DebugSpells_Player4[j];
+            //            break;
+            //    }
+            //}
+        }
+    }
+
+    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
+    {
+        if (eventHandle.Arg1 == EScene.MENU)
+        {
+            InitializeSpellsDictionnary();
+        }
+    }
+
+    /// <summary>
+    /// Choose 3 random spells from all available spells.
+    /// </summary>
+    /// <returns> An array with exactly 3 entries </returns>
+    public AbstractSpell[] ChooseRandomSpells()
+    {
+        AbstractSpell spell1 = null;
+        AbstractSpell spell2 = null;
+        AbstractSpell spell3 = null;
+
+        int remainingSkillPoints = 10;
+
+        // Copy all spells
+        List<AbstractSpell> allSpellsCopy = new List<AbstractSpell>();
+        foreach (AbstractSpell abstractSpell in AllSpells)
+        {
+            allSpellsCopy.Add(abstractSpell);
+        }
+
+        // Get first spell
+        spell1 = GetRandomElement(allSpellsCopy);
+        allSpellsCopy.Remove(spell1);
+        remainingSkillPoints -= spell1.SkillPoint;
+        LogConsole("RandSpell 1 " + spell1.SpellName + " - remaining : " + remainingSkillPoints);
+
+        // Get second and third spell
+        bool validSpellFound = false;
+        do
+        {
+            spell2 = GetRandomElement(allSpellsCopy);
+            LogConsole("RandSpell 2 " + spell2.SpellName + " - remaining : " + (remainingSkillPoints - spell2.SkillPoint));
+            foreach (AbstractSpell nextSpell in allSpellsCopy)
+            {
+                // Skip if the same as the chosen one
+                if (nextSpell == spell2)
                 {
-                    case EPlayerID.PLAYER_1:
-                        playersChosenSpells[EPlayerID.PLAYER_1][spellID] = DebugSpells_Player1[j];
-                        break;
+                    continue;
+                }
 
-                         case EPlayerID.PLAYER_2:
-                        playersChosenSpells[EPlayerID.PLAYER_2][spellID] = DebugSpells_Player2[j];
-                        break;
+                // Have enough SP to select third one?
+                if (remainingSkillPoints - spell2.SkillPoint - nextSpell.SkillPoint >= 0)
+                {
+                    validSpellFound = true;
+                    spell3 = nextSpell;
+                    LogConsole("RandSpell 3 " + spell3.SpellName + " - remaining : " + (remainingSkillPoints - spell2.SkillPoint - nextSpell.SkillPoint));
+                    break;
 
-                         case EPlayerID.PLAYER_3:
-                        playersChosenSpells[EPlayerID.PLAYER_3][spellID] = DebugSpells_Player3[j];
-                        break;
-
-                         case EPlayerID.PLAYER_4:
-                        playersChosenSpells[EPlayerID.PLAYER_4][spellID] = DebugSpells_Player4[j];
-                        break;
                 }
             }
-        }
+
+        } while (validSpellFound == false);
+
+        IS_NOT_NULL(spell1);
+        IS_NOT_NULL(spell2);
+        IS_NOT_NULL(spell3);
+
+        AbstractSpell[] result = { spell1, spell2, spell3 };
+        return result;
     }
 
 
@@ -367,6 +449,35 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         activePlayers[playerID].ResetSpellChargingLVL();
     }
 
+    public void SpawnPreviewSpell(AbstractSpell spellToCast, Transform transform)
+    {
+        Vector3 position = transform.position;
+        Quaternion rotation = transform.rotation;
+        AbstractSpell castedSpell = Instantiate(spellToCast, position, rotation);
+        castedSpell.transform.localScale /= 3.0f;
+        castedSpell.speed /= 3.0f;
+
+        // Special cases
+        if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)
+        {
+            // TODO: spawn multiple successive
+        }
+        else if (spellToCast.SpellID == ESpellID.ICEBALL)
+        {
+            // TODO: transform spell to snowman
+        }
+        else if (spellToCast.SpellID == ESpellID.PLASMA_FISSION)
+        {
+            // TODO: divide spell 
+        }
+        else if (spellToCast.SpellID == ESpellID.ENERGY_TRIANGLES)
+        {
+            // TODO: spawn sided
+        }
+
+
+    }
+
     private void AddSpellToActiveMovingSpells(AbstractSpell spawnedSpell)
     {
         if (spawnedSpell != null)
@@ -378,15 +489,23 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void LoadSpellResources()
     {
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_AOE_EXPLOSION_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIREBALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIREBALL_LVL_2));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIRE__LASER_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_ICEBALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_TELEPORT_LVL_1));
-        All_Spells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PLASMA_FISSION_BALLS));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_AOE_EXPLOSION_LVL_1));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIREBALL_LVL_1));
+        //AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIREBALL_LVL_2));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIRE_SHOCKBLAST_LVL_1));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_FIRE__LASER_LVL_1));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_ICEBALL_LVL_1));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_TELEPORT_LVL_1));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_PLASMA_FISSION_BALLS));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_AIR_SLASH));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_BLACK_HOLE));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_ELECTRIC_BALL));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_ENERGY_TRIANGLE));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_GET_OVER_HERE));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_RAPID_FIRE_PLASMA));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_SHIELD));
+        AllSpells.Add(Resources.Load<AbstractSpell>(PATH_SPELL_TRAP));
     }
 
     private void LoadEffectsResources()
@@ -481,9 +600,6 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             AddSpellToActiveMovingSpells(spellToCast);
 
             yield return new WaitForSeconds(delay);
-            
-
-
         }
     }
 

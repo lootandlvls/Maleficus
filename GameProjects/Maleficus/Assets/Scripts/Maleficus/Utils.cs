@@ -20,10 +20,24 @@ namespace Maleficus
 
         #region General
         /// <summary> Gets a random index for a given array </summary>
-        public static int GetRndIndex(int arrayLength)
+        public static int GetRandomIndex(int arrayLength)
         {
             return UnityEngine.Random.Range(0, arrayLength);
         }
+
+        /// <summary> Gets a random element from the given array </summary>
+        public static A GetRandomElement<A>(A[] array)
+        {
+            return array[UnityEngine.Random.Range(0, array.Length)];
+        }
+
+        /// <summary> Gets a random element from the given list </summary>
+        public static A GetRandomElement<A>(List<A> list)
+        {
+            return list[UnityEngine.Random.Range(0, list.Count)];
+        }
+
+
 
         /// <summary> Gets a random rotation over Y axis. Can be used to get a random orientation for a gived character. </summary>
         public static Quaternion GetRndStandRotation()
@@ -119,7 +133,7 @@ namespace Maleficus
             {
                 if (source != null)
                 {
-                    source.clip = clips[GetRndIndex(clips.Length)];
+                    source.clip = clips[GetRandomIndex(clips.Length)];
                     source.Play();
                 }
                 else
@@ -324,6 +338,56 @@ namespace Maleficus
             return DateTime.Now.Millisecond + DateTime.Now.Second * 1000 + DateTime.Now.Minute * 100000 + DateTime.Now.Hour * 10000000;
         }
 
+        #endregion
+
+        #region Maleficus
+        public static Player GetClosestPlayer(Player toPlayer)
+        {
+            Player closestOtherPlayer = null;
+            float closestDistanceToOtherPlayer = float.MaxValue;
+            foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
+            {
+                if ((otherPlayer.PlayerID == toPlayer.PlayerID)
+                    || (otherPlayer.IsDead == true))
+                {
+                    continue;
+                }
+
+                float distanceToOtherPlayer = Vector3.Distance(toPlayer.Position, otherPlayer.Position);
+                if (distanceToOtherPlayer < closestDistanceToOtherPlayer)
+                {
+                    closestOtherPlayer = otherPlayer;
+                    closestDistanceToOtherPlayer = distanceToOtherPlayer;
+                }
+            }
+            return closestOtherPlayer;
+        }
+
+        public static Player GetAngularClosestPlayer(Player toPlayer)
+        {
+            Player closestOtherPlayer = null;
+            float closestAngularDistanceToOtherPlayer = float.MinValue;
+            foreach (Player otherPlayer in PlayerManager.Instance.ActivePlayers.Values)
+            {
+                if ((otherPlayer.PlayerID == toPlayer.PlayerID)
+                    || (otherPlayer.IsDead == true))
+                {
+                    continue;
+                }
+
+                Vector3 toOtherPlayerDirection = (otherPlayer.Position - toPlayer.Position).normalized;
+                float angularDistanceToOtherPlayer = Vector3.Dot(toPlayer.transform.forward, toOtherPlayerDirection);
+
+                Debug.Log(otherPlayer.PlayerID + " : " + angularDistanceToOtherPlayer);
+
+                if (angularDistanceToOtherPlayer > closestAngularDistanceToOtherPlayer)
+                {
+                    closestOtherPlayer = otherPlayer;
+                    closestAngularDistanceToOtherPlayer = angularDistanceToOtherPlayer;
+                }
+            }
+            return closestOtherPlayer;
+        }
         #endregion
 
         #region Maleficus Types Conversions

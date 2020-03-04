@@ -6,7 +6,7 @@ using static Maleficus.Consts;
 public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 {
     public int TotalLives { get; private set; }
-    public int GameLenght { get; } = 180;
+    public int GameLenght { get; private set; } = 180;
     public int RemainingTime { get; private set; } = 100;
 
     protected override void Awake()
@@ -15,8 +15,8 @@ public class GM_FFA_Lives : ConcreteGameMode<PlayerStats_Lives>
 
         // Define in child class correct game mode!
         GameModeType = EGameMode.FFA_LIVES;
-
-        TotalLives = PLAYER_LIVES_IN_FFA_MODE;
+        GameLenght = FFA_MODE_GAME_LENGHT;
+        TotalLives = FFA_MODE_PLAYER_LIVES;
     }
 
     protected override void Start()

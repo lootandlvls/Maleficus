@@ -67,9 +67,11 @@ public class SpellSelectionCountdown : BNJMOBehaviour
         for (int i = countdownSeconds; i > 0; i--)
         {
             myText.text = "Starting in " + i + "...";
+            UISoundManager.Instance.SpawnSound_Countdown();
             yield return new WaitForSeconds(1.0f);
         }
         myText.text = "Game starting...";
+        UISoundManager.Instance.SpawnSound_CountdownFinished();
         EventManager.Instance.Invoke_GAME_CountdownFinished();
     }
 }

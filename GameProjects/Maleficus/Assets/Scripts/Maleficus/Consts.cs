@@ -19,6 +19,7 @@ namespace Maleficus
         public const string SCENE_ENTRY = "ENTRY";
         public const string SCENE_MENU_COUCH = "MENU_COUCH";
         public const string SCENE_MENU_MOBILE = "MENU_MOBILE";
+        //public const string SCENE_GAME = "GAME_CAVE";
         public const string SCENE_GAME = "GAME";
         public const string SCENE_DUNGEON_SELECTION = "LVL_SELECTION";
 
@@ -30,15 +31,23 @@ namespace Maleficus
         public const string PATH_SOUND_OBJECT = "SoundObject";
 
         /* Spells path */
-        public const string PATH_SPELL_FIREBALL_LVL_1 = "S_FireBall_lvl_1";
-        public const string PATH_SPELL_FIREBALL_LVL_2 = "S_FireBall_lvl_2";
-        public const string PATH_SPELL_ICEBALL_LVL_1 = "S_IceBall_lvl_1";
-        public const string PATH_SPELL_AOE_EXPLOSION_LVL_1 = "S_AOE_Explosion";
-        public const string PATH_SPELL_FIRE_SHOCKBLAST_LVL_1 = "S_Fire_ShockBlast";
-        public const string PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1 = "S_EnergyBalll_Parabolic";
-        public const string PATH_SPELL_FIRE__LASER_LVL_1 = "S_FireLaser";
-        public const string PATH_SPELL_TELEPORT_LVL_1 = "S_Teleportation";
-        public const string PATH_SPELL_PLASMA_FISSION_BALLS = "S_Plasma_Fission_Balls"; 
+        public const string PATH_SPELL_FIREBALL_LVL_1               = "S_FireBall_lvl_1";
+        public const string PATH_SPELL_FIREBALL_LVL_2               = "S_FireBall_lvl_2";
+        public const string PATH_SPELL_ICEBALL_LVL_1                = "S_IceBall_lvl_1";
+        public const string PATH_SPELL_AOE_EXPLOSION_LVL_1          = "S_AOE_Explosion";
+        public const string PATH_SPELL_FIRE_SHOCKBLAST_LVL_1        = "S_Fire_ShockBlast";
+        public const string PATH_SPELL_PARABOLIC_ENERGY_BALL_LVL_1  = "S_EnergyBalll_Parabolic";
+        public const string PATH_SPELL_FIRE__LASER_LVL_1            = "S_FireLaser";
+        public const string PATH_SPELL_TELEPORT_LVL_1               = "S_Teleportation";
+        public const string PATH_SPELL_PLASMA_FISSION_BALLS         = "S_Plasma_Fission_Balls"; 
+        public const string PATH_SPELL_AIR_SLASH                    = "S_Air_Slash"; 
+        public const string PATH_SPELL_BLACK_HOLE                   = "S_BlackHole"; 
+        public const string PATH_SPELL_ELECTRIC_BALL                = "S_ElectricBall"; 
+        public const string PATH_SPELL_ENERGY_TRIANGLE              = "S_EnergyTriangle"; 
+        public const string PATH_SPELL_GET_OVER_HERE                = "S_Get_Over_Here"; 
+        public const string PATH_SPELL_RAPID_FIRE_PLASMA            = "S_RapidFire_Plasma"; 
+        public const string PATH_SPELL_SHIELD                       = "S_Shield"; 
+        public const string PATH_SPELL_TRAP                         = "S_Trap"; 
 
         /* Effects path */
         public const string PATH_EFFECT_FROZEN = "E_Snowman";
@@ -97,7 +106,8 @@ namespace Maleficus
         public const float ENG_GAME_SCENE_TRANSITION_DURATION = 10.0f;
 
         public const int PLAYER_LIVES_IN_DUNGEON_MODE = 10;
-        public const int PLAYER_LIVES_IN_FFA_MODE = 5;
+        public const int FFA_MODE_PLAYER_LIVES = 5;
+        public const int FFA_MODE_GAME_LENGHT = 2; // TODO: REset 180
 
 
         public const int SPELL_MAX_SKILL_POINTS = 10;

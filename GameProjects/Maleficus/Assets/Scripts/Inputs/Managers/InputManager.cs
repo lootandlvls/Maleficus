@@ -32,9 +32,11 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         base.InitializeEventsCallbacks();
 
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
-        EventManager.Instance.GAME_GameOver.AddListener                         (On_GAME_GameOver);
+        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Event += On_NETWORK_ReceivedGameSessionInfo;
+        EventManager.Instance.APP_SceneChanged.Event                += On_APP_SceneChanged;
     }
+
+
 
     protected override void LateStart()
     {
@@ -45,24 +47,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
             && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true))
         {
             ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
-        }
-    }
-
-    private void On_GAME_GameOver(NetEvent_GameOver eventHandle)
-    {
-        // Disconnect all network controllers and AI
-        List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
-        foreach (EControllerID controllerID in ConnectedControllers.Keys)
-        {
-            if (controllerID.ContainedIn(NETWORK_CONTROLLERS)
-                || (controllerID == EControllerID.AI_1))
-            {
-                controllerIDsToRemove.Add(controllerID);
-            }
-        }
-        foreach (EControllerID controllerID in controllerIDsToRemove)
-        {
-            ConnectedControllers.Remove(controllerID);
         }
     }
 
@@ -130,6 +114,27 @@ public class InputManager : AbstractSingletonManager<InputManager>
             else
             {
                 ConnectControllerToPlayer(GetControllerNeteworkID(playerID), playerID);
+            }
+        }
+    }
+
+    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
+    {
+        if (eventHandle.Arg1 == EScene.MENU)
+        {
+            // Disconnect all network controllers and AI
+            List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
+            foreach (EControllerID controllerID in ConnectedControllers.Keys)
+            {
+                if (controllerID.ContainedIn(NETWORK_CONTROLLERS)
+                    || (controllerID.ContainedIn(AI_CONTROLLERS)))
+                {
+                    controllerIDsToRemove.Add(controllerID);
+                }
+            }
+            foreach (EControllerID controllerID in controllerIDsToRemove)
+            {
+                DisconnectController(controllerID);
             }
         }
     }
@@ -237,7 +242,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
             {
                 TryToConnectController(aIControllerID);
                 connectCounter++;
-                LogConsole("connectCounter : " + connectCounter);
             }
         }
     }

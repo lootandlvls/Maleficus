@@ -16,22 +16,32 @@ public class MaleficusButton : BNJMOBehaviour
     [SerializeField] private MaleficusButton buttomButton;
 
     private Button myButton;
+    private Image myButtonImage;
     private AbstractUIAction[] myUIActions;
 
     protected override void InitializeComponents()
     {
         base.InitializeComponents();
 
+        // Get Unity's Button and its belonging image
         myButton = GetComponent<Button>();
+        if (IS_NOT_NULL(myButton))
+        {
+            myButtonImage = myButton.image;
+            IS_NOT_NULL(myButtonImage);
+        }
+
+        // Get attached UIActions
         myUIActions = GetComponents<AbstractUIAction>();
     }
 
     public void Highlight()
     {
-        myButton.Select();
+        myButtonImage.color = myButton.colors.highlightedColor;
 
         UIManager.Instance.OnButtonHighlighted(this);
 
+        // Inform attached UIActions
         foreach (AbstractUIAction abstractUIAction in myUIActions)
         {
             abstractUIAction.OnHighlighted();
@@ -40,10 +50,22 @@ public class MaleficusButton : BNJMOBehaviour
 
     public void Press()
     {
+        myButtonImage.color = myButton.colors.highlightedColor;
+
         foreach (AbstractUIAction abstractUIAction in myUIActions)
         {
             abstractUIAction.Execute();
         }
+    }
+
+    public void Select()
+    {
+        myButtonImage.color = myButton.colors.selectedColor;
+    }
+
+    public void UnSelect()
+    {
+        myButtonImage.color = myButton.colors.normalColor;
     }
 
     public MaleficusButton GetNextButton(EButtonDirection buttonDirection)

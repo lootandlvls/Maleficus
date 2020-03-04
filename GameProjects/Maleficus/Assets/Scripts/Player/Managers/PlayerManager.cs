@@ -361,6 +361,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                         ActivePlayers[playerID].IsReadyToShoot = false;
                         ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
                         ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+                        ActivePlayers[playerID].RotateToClosestPlayer();
+
 
                         SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
 
@@ -381,6 +383,10 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         if (scene == EScene.GAME)
         {
             StartCoroutine(DelayedSpawnAllOnSceneChangeCoroutine());
+        }
+        else if (scene == EScene.MENU)
+        {
+            // Reinitalize teams
         }
     }
 
@@ -582,7 +588,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
         EPlayerID playerID = eventHandle.Arg2;
-        // TODO
+
+        // Initialize dictionaries for the new player
+        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+        {
+            LogConsole("Removing " + playerID + " from joind status list");
+            playersJoinStatus.Remove(playerID);
+        }
+
+        // TODO : team?
     }
 
 

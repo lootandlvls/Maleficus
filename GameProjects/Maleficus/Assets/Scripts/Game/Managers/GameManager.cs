@@ -33,6 +33,19 @@ public class GameManager : AbstractSingletonManager<GameManager>
         EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
         EventManager.Instance.GAME_GameTimeUpdated += On_GAME_GameTimeUpdated;
         EventManager.Instance.GAME_GameOver.AddListener(ON_GAME_GameOver); // TODO : Not clean! use public OnGameOver method instead
+
+        EventManager.Instance.APP_SceneChanged.Event += On_APP_SceneChanged;
+    }
+
+    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
+    {
+        if (eventHandle.Arg1 == EScene.MENU)
+        {
+            if (CurrentGameMode != null)
+            {
+                Destroy(CurrentGameMode);
+            }
+        }
     }
 
     protected override void OnReinitializeManager()

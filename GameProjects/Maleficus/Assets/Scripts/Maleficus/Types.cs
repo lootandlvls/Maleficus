@@ -312,12 +312,12 @@ public class JoysticksInput
         JoystickValues[EInputAxis.ROTATE_Y] = 0.0f;
     }
 
-    public bool HasMoved()
+    public bool IsMoving()
     {
         return ((JoystickValues[EInputAxis.MOVE_X] != 0.0f) || (JoystickValues[EInputAxis.MOVE_Y] != 0.0f));
     }
 
-    public bool HasRotated()
+    public bool IsRotating()
     {
         return ((JoystickValues[EInputAxis.ROTATE_X] != 0.0f) || (JoystickValues[EInputAxis.ROTATE_Y] != 0.0f));
     }
