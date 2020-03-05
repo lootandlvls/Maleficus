@@ -107,7 +107,7 @@ namespace Maleficus
 
         public const int PLAYER_LIVES_IN_DUNGEON_MODE = 10;
         public const int FFA_MODE_PLAYER_LIVES = 5;
-        public const int FFA_MODE_GAME_LENGHT = 2; // TODO: REset 180
+        public const int FFA_MODE_GAME_LENGHT = 180;
 
 
         public const int SPELL_MAX_SKILL_POINTS = 10;
