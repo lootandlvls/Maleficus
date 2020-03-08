@@ -26,7 +26,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     public EPlayerID OwnPlayerID { get { return GetPlayerIDFrom(NetworkManager.Instance.OwnerClientID); } }
 
     /// <summary> The join status of player that have connected with a controllers </summary>
-    private Dictionary<EPlayerID, PlayerJoinStatus> playersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
+    private Dictionary<EControllerID, PlayerJoinStatus> playersJoinStatus { get; } = new Dictionary<EControllerID, PlayerJoinStatus>();
 
     private Dictionary<EPlayerID, Vector3> PlayersDeathPositions = new Dictionary<EPlayerID, Vector3>();
     private Dictionary<EPlayerID, Quaternion> PlayersDeathRotations = new Dictionary<EPlayerID, Quaternion>();
@@ -39,11 +39,12 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     public List<EPlayerID> GetJoinedPlayers()
     {
         List<EPlayerID> result = new List<EPlayerID>();
-        foreach (KeyValuePair<EPlayerID, PlayerJoinStatus> pair in playersJoinStatus)
+        foreach (KeyValuePair<EControllerID, PlayerJoinStatus> pair in playersJoinStatus)
         {
-            if (pair.Value.HasJoined == true)
+            PlayerJoinStatus playerJoinStatus = pair.Value;
+            if (playerJoinStatus.HasJoined == true)
             {
-                result.Add(pair.Key);
+                result.Add(playerJoinStatus.PlayerID);
             }
         }
         return result;
@@ -51,10 +52,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     public bool HasPlayerJoined(EPlayerID playerID)
     {
-        if ((playersJoinStatus.ContainsKey(playerID))
-            && (playersJoinStatus[playerID].HasJoined))
+        foreach (KeyValuePair<EControllerID, PlayerJoinStatus> pair in playersJoinStatus)
         {
-            return true;
+            PlayerJoinStatus playerJoinStatus = pair.Value;
+            if ((playerID == playerJoinStatus.PlayerID)
+                && (playerJoinStatus.HasJoined == true))
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -203,8 +208,8 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnRemaningAIPlayers()
     {
-        // First connect AI Controllers on reamining slots if not already connected
-         InputManager.Instance.ConnectAllRemainingAIPlayers();
+        //// First connect AI Controllers on reamining slots if not already connected
+        //InputManager.Instance.ConnectAllRemainingAIPlayers();
 
         LogConsole("Spawning remaining AI playeres");
 
@@ -556,18 +561,19 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         AssignPlayerToTeam(playerID, GetIdenticPlayerTeam(playerID));
 
         // Initialize dictionaries for the new player
-        if (IS_KEY_NOT_CONTAINED(playersJoinStatus, playerID))
+        if (IS_KEY_NOT_CONTAINED(playersJoinStatus, controllerID))
         {
-            playersJoinStatus.Add(playerID, new PlayerJoinStatus());
+            playersJoinStatus.Add(controllerID, new PlayerJoinStatus(playerID));
         }
 
+        // For testing
         if ((MotherOfManagers.Instance.IsJoinAndSpawnPlayerOnControllerConnect == true)
             || (controllerID.ContainedIn(AI_CONTROLLERS)))
         {
             if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
             {
-                playersJoinStatus[playerID].HasJoined = true;
-                playersJoinStatus[playerID].IsReady = true;
+                playersJoinStatus[controllerID].HasJoined = true;
+                playersJoinStatus[controllerID].IsReady = true;
                 StartCoroutine(DelayedTriggerJoinEvent(playerID));
             }
 
@@ -587,13 +593,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
     {
+        EControllerID controllerID = eventHandle.Arg1;
         EPlayerID playerID = eventHandle.Arg2;
 
         // Initialize dictionaries for the new player
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+        if (IS_KEY_CONTAINED(playersJoinStatus, controllerID))
         {
             LogConsole("Removing " + playerID + " from joind status list");
-            playersJoinStatus.Remove(playerID);
+            playersJoinStatus.Remove(controllerID);
         }
 
         // TODO : team?
@@ -602,9 +609,14 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
     {
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+        //if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+        //{
+        //    playersJoinStatus[playerID].HasJoined = true;
+        //}
+    
+        if (HasPlayerJoined(playerID) == false)
         {
-            playersJoinStatus[playerID].HasJoined = true;
+
         }
     }
 

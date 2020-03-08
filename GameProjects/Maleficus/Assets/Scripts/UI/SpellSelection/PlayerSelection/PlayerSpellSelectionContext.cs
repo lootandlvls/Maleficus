@@ -75,7 +75,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         UpdateState(ESpellSelectionState.NOT_CONNECTED);
     }
 
-    private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
+    private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)   // TODO: Change logic here so that joining player is handled inside PlayerManager
     {
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
@@ -92,7 +92,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
                         switch (spellSelectionState)
                         {
                             case ESpellSelectionState.NOT_CONNECTED:
-                                ConnectPlayer();
+                                ConnectPlayer();  
                                 break;
 
                             case ESpellSelectionState.CHOOSING_SPELLS:

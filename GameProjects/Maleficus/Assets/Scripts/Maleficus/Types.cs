@@ -198,16 +198,13 @@ public struct SHitInfo
 
 public class PlayerJoinStatus
 {
-    public PlayerJoinStatus()
-    {
-        HasJoined = false;
-        IsReady = false;
-    }
-    public PlayerJoinStatus(bool hasJoined, bool isRead)
+    public PlayerJoinStatus(EPlayerID playerID, bool hasJoined = false, bool isReady = false)
     {
         HasJoined = hasJoined;
-        IsReady = isRead;
+        IsReady = isReady;
+        PlayerID = playerID;
     }
+    public EPlayerID PlayerID { get; set; } = EPlayerID.NONE;
     public bool HasJoined { get; set; } = false;
     public bool IsReady { get; set; } = false;
 }

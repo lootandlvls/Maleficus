@@ -37,7 +37,12 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.APP_SceneChanged.Event                += On_APP_SceneChanged;
     }
 
+    protected override void Start()
+    {
+        base.Start();
 
+        ConnectAllAIControllers();
+    }
 
     protected override void LateStart()
     {
@@ -147,55 +152,55 @@ public class InputManager : AbstractSingletonManager<InputManager>
     /// </summary>
     /// <param name="controllerID"> contrllerID </param>
     /// <returns></returns>
-    private bool TryToConnectController(EControllerID controllerID)
-    {
-        // Check ControllerID
-        if (controllerID == EControllerID.NONE)
-        {
-            Debug.LogError("Warning! Trying to connect a controller that is NONE.");
-            return false;
-        }
+    //private bool TryToConnectController(EControllerID controllerID)
+    //{
+    //    // Check ControllerID
+    //    if (controllerID == EControllerID.NONE)
+    //    {
+    //        Debug.LogError("Warning! Trying to connect a controller that is NONE.");
+    //        return false;
+    //    }
 
-        // Get and check PlayerID
-        EPlayerID playerID = PlayerManager.Instance.GetNextFreePlayerID();
-        if (playerID == EPlayerID.NONE)
-        {
-            Debug.Log("Warning! Couldn't get a valid PlayerID for : " + controllerID);
-            return false;
-        }
+    //    // Get and check PlayerID
+    //    EPlayerID playerID = PlayerManager.Instance.GetNextFreePlayerID();
+    //    if (playerID == EPlayerID.NONE)
+    //    {
+    //        Debug.Log("Warning! Couldn't get a valid PlayerID for : " + controllerID);
+    //        return false;
+    //    }
 
-        // Check parameters
-        if ((ConnectedControllers.ContainsKey(controllerID) == true)
-            || (ConnectedControllers.ContainsValue(playerID) == true))
-        {
-            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-            {
-                Debug.LogError("Warning! Trying to connect a controller that is already connected.");
-            }
-            return false;
-        }
+    //    // Check parameters
+    //    if ((ConnectedControllers.ContainsKey(controllerID) == true)
+    //        || (ConnectedControllers.ContainsValue(playerID) == true))
+    //    {
+    //        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
+    //        {
+    //            Debug.LogError("Warning! Trying to connect a controller that is already connected.");
+    //        }
+    //        return false;
+    //    }
 
-        // Successful
-        ConnectedControllers.Add(controllerID, playerID);
+    //    // Successful
+    //    ConnectedControllers.Add(controllerID, playerID);
 
-        // Invoke event
-        Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
-        EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
+    //    // Invoke event
+    //    Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
+    //    EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
 
-        return true;
-    }
+    //    return true;
+    //}
 
     public void ConnectControllerAsSpectator(EControllerID controllerID)
     {
-        // Check parameters
-        if (ConnectedControllers.ContainsKey(controllerID) == true)
-        {
-            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-            {
-                Debug.LogError("Trying to connect a controller that is already connected.");
-            }
-            return;
-        }
+        //// Check parameters
+        //if (ConnectedControllers.ContainsKey(controllerID) == true)
+        //{
+        //    if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
+        //    {
+        //        Debug.LogError("Trying to connect a controller that is already connected.");
+        //    }
+        //    return;
+        //}
 
         if (controllerID == EControllerID.NONE)
         {
@@ -258,19 +263,25 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.INPUT_ControllerDisconnected.Invoke(controllerDisconnected);
     }
 
-    public void ConnectAllRemainingAIPlayers()
+    private void ConnectAllAIControllers()
     {
-        LogConsole("Connecting remaining AI playeres. Max : " + MotherOfManagers.Instance.MaximumNumberOfAIToSpawn);
+        //LogConsole("Connecting remaining AI playeres. Max : " + MotherOfManagers.Instance.MaximumNumberOfAIToSpawn);
 
-        int connectCounter = 0;
+        //int connectCounter = 0;
+        //foreach (EControllerID aIControllerID in AI_CONTROLLERS)
+        //{
+        //    if ((connectCounter < MotherOfManagers.Instance.MaximumNumberOfAIToSpawn)
+        //        && (IsControllerConnected(aIControllerID) == false))
+        //    {
+        //        TryToConnectController(aIControllerID);
+        //        connectCounter++;
+        //    }
+        //}
+
+
         foreach (EControllerID aIControllerID in AI_CONTROLLERS)
         {
-            if ((connectCounter < MotherOfManagers.Instance.MaximumNumberOfAIToSpawn)
-                && (IsControllerConnected(aIControllerID) == false))
-            {
-                TryToConnectController(aIControllerID);
-                connectCounter++;
-            }
+            ConnectControllerAsSpectator(aIControllerID);
         }
     }
 
