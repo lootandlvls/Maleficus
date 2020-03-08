@@ -11,7 +11,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
     public EInputMode                           InputMode                   { get { return MotherOfManagers.Instance.InputMode; } }
 
     /// <summary> Mapping from controllerID to playerID </summary> 
-    //public Dictionary<EControllerID, EPlayerID> ConnectedControllers        { get; } = new Dictionary<EControllerID, EPlayerID>();
     public Dictionary<EControllerID, EPlayerID> ConnectedControllers        { get; } = new Dictionary<EControllerID, EPlayerID>();
 
     AbstractInputSource[] inputSources;
@@ -147,7 +146,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     /// </summary>
     /// <param name="controllerID"> contrllerID </param>
     /// <returns></returns>
-    private bool TryToConnectController(EControllerID controllerID)
+    public bool TryToConnectController(EControllerID controllerID)
     {
         // Check ControllerID
         if (controllerID == EControllerID.NONE)
@@ -183,33 +182,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
 
         return true;
-    }
-
-    public void ConnectControllerAsSpectator(EControllerID controllerID)
-    {
-        // Check parameters
-        if (ConnectedControllers.ContainsKey(controllerID) == true)
-        {
-            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-            {
-                Debug.LogError("Trying to connect a controller that is already connected.");
-            }
-            return;
-        }
-
-        if (controllerID == EControllerID.NONE)
-        {
-            Debug.LogError("Trying to connect a controller that is NONE.");
-            return;
-        }
-
-        ConnectedControllers.Add(controllerID, EPlayerID.SPECTATOR);
-
-        Debug.Log("Connecting new controller " + controllerID + " to player : " + EPlayerID.SPECTATOR);
-
-        // Invoke event
-        Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, EPlayerID.SPECTATOR);
-        EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
     }
 
     private void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
