@@ -100,7 +100,7 @@ namespace NetController
                 {
                     if (GUI.Button(new Rect(10, 10, 60, 50), "Connect"))
                     {
-                        client.Connect("192.168.137.1", 25000);
+                        client.Connect(NCUIContext.Instance.IpAddress, 25000);
                     }
                 }
             }
