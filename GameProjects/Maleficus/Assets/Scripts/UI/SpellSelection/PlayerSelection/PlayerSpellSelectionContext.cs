@@ -293,6 +293,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
                                 if (selectedSpellsCounter == 3)
                                 {
+                                    LogConsole("ReadyRequest");
                                     InvokeEventIfBound(ReadyRequest, playerID);
                                 }
                                 else

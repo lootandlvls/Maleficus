@@ -364,6 +364,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void On_PlayerSpellSelectionContext_ReadyRequest(EPlayerID playerID)
     {
+        LogConsole(playerID + " ready");
         if ((IS_KEY_CONTAINED(partyStatus, playerID))
         && (IS_TRUE(partyStatus[playerID].HasJoined))
         && (IS_NOT_TRUE(partyStatus[playerID].IsReady)))
