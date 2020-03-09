@@ -5674,8 +5674,6 @@ MonoBehaviour:
   CanDebugJoystickEvents: 0
   IsUseDebugGameMode: 1
   DebugGameMode: 1
-  IsJoinAndSpawnPlayerOnControllerConnect: 1
-  IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
   MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 1
@@ -5951,8 +5949,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 362, y: 714.5}
-  m_SizeDelta: {x: 1372.2, y: 1309.5}
+  m_AnchoredPosition: {x: 425.7, y: 714.5}
+  m_SizeDelta: {x: 1689.5, y: 1309.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1455587363
 MonoBehaviour:

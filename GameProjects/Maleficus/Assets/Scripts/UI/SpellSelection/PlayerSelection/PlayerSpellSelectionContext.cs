@@ -281,7 +281,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
                 switch (inputButton)
                 {
                     case EInputButton.CONFIRM:
-
+                        LogConsole(playerID + " - Player selection  : " + selectedSpellsCounter);
                         switch (spellSelectionState)
                         {
                             case ESpellSelectionState.NOT_CONNECTED:

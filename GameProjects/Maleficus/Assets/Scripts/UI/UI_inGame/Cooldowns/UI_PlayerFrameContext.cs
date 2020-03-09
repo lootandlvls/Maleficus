@@ -60,8 +60,6 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
                 PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
             }
         }
-
-
     }
 
     protected override void Start()

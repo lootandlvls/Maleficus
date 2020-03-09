@@ -23,9 +23,6 @@ public class PlayerScoreFrame : BNJMOBehaviour
          //EventManager.Instance.GAME_GameEnded += On_Game_GameEnded;
         EventManager.Instance.GAME_SetPlayersScores += On_Game_SetPlayersScores;
     }
-
-    
-
     protected override void InitializeComponents()
     {
         base.InitializeComponents();
@@ -41,6 +38,7 @@ public class PlayerScoreFrame : BNJMOBehaviour
         //    PlayerScoreFrameView.SetActive(false);
         //}
     }
+
     protected override void Start()
     {
         base.Start();
@@ -54,8 +52,18 @@ public class PlayerScoreFrame : BNJMOBehaviour
         {
             PlayerScoreFrameView.SetActive(false);
         }
-
     }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        if (EventManager.IsInstanceSet)
+        {
+            EventManager.Instance.GAME_SetPlayersScores -= On_Game_SetPlayersScores;
+        }
+    }
+
     private void On_Game_SetPlayersScores(AbstractGameMode GameMode)
     {
         

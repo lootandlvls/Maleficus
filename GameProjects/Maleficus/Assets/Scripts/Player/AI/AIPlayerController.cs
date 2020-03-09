@@ -202,16 +202,22 @@ public class AIPlayerController : BNJMOBehaviour
         {
             // Closest player
             currentClosestPlayer = GetClosestPlayer(myPlayer);
-            currentArenaDistanceToClosestPlayer = Vector2.Distance(arena.GetInArenaPosition(myPlayer.Position), arena.GetInArenaPosition(currentClosestPlayer.Position));
+            if (currentClosestPlayer)
+            {
+                currentArenaDistanceToClosestPlayer = Vector2.Distance(arena.GetInArenaPosition(myPlayer.Position), arena.GetInArenaPosition(currentClosestPlayer.Position));
 
-            // Attraction and deviation vectors
-            closestPlayerDeviation = (Get2DVector(myPlayer.Position - currentClosestPlayer.Position)).normalized;
-
-            // Influnce closest player
-            currentClosestPlayerInfluence = 1.0f - ((currentArenaDistanceToClosestPlayer - aIInputSource.ClosestEnemyDangerArenaDistanceMaxThreshold) / (aIInputSource.ClosestEnemyDangerArenaDistanceStartThreshold - aIInputSource.ClosestEnemyDangerArenaDistanceMaxThreshold));
-            currentClosestPlayerInfluence = Mathf.Clamp(currentClosestPlayerInfluence, 0.0f, 1.0f);
-            currentClosestPlayerInfluence = aIInputSource.ClosestPlayerInfluenceCurve.Evaluate(currentClosestPlayerInfluence);
-            currentClosestPlayerInfluence *= aIInputSource.ClosestPlayerInfluenceFactor;
+                // Attraction and deviation vectors
+                closestPlayerDeviation = (Get2DVector(myPlayer.Position - currentClosestPlayer.Position)).normalized;
+                // Influnce closest player
+                currentClosestPlayerInfluence = 1.0f - ((currentArenaDistanceToClosestPlayer - aIInputSource.ClosestEnemyDangerArenaDistanceMaxThreshold) / (aIInputSource.ClosestEnemyDangerArenaDistanceStartThreshold - aIInputSource.ClosestEnemyDangerArenaDistanceMaxThreshold));
+                currentClosestPlayerInfluence = Mathf.Clamp(currentClosestPlayerInfluence, 0.0f, 1.0f);
+                currentClosestPlayerInfluence = aIInputSource.ClosestPlayerInfluenceCurve.Evaluate(currentClosestPlayerInfluence);
+                currentClosestPlayerInfluence *= aIInputSource.ClosestPlayerInfluenceFactor;
+            }
+            else
+            {
+                currentClosestPlayerInfluence = 0.0f;
+            }
         }
     }
 

@@ -6,7 +6,6 @@ using static Maleficus.Utils;
 
 public class AIInputSource : AbstractInputSource
 {
-
     [Header("AI Initialization")]
     [SerializeField] public float MinMovementThreshold = 0.2f;
     [SerializeField] public float MinSmoothMovementThreshold = 0.06f;
@@ -41,8 +40,6 @@ public class AIInputSource : AbstractInputSource
         EventManager.Instance.PLAYERS_PlayerSpawned += On_PLAYERS_PlayerSpawned;
     }
 
-
-
     private void On_PLAYERS_PlayerSpawned(EPlayerID playerID)
     {
         // Add an AIPlayerController on the spawned player if he's an AI
@@ -62,8 +59,6 @@ public class AIInputSource : AbstractInputSource
             activeAIControllers.Add(aIPlayerController);
         }
     }
-
-    
 
     private void On_AIPlayerController_JoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {

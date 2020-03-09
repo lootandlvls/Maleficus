@@ -46,7 +46,6 @@ public class ManagersSpawner : MotherOfManagers
             managersInstance.IsUseDebugGameMode = IsUseDebugGameMode;
             managersInstance.DebugGameMode = DebugGameMode;
             // Player
-            managersInstance.IsSpawnTouchAsPlayer1 = IsSpawnTouchAsPlayer1;
             managersInstance.IsSpawnGhostPlayerPositionsIfNotFound = IsSpawnGhostPlayerPositionsIfNotFound;
             // AI
             managersInstance.MaximumNumberOfAIToSpawn = MaximumNumberOfAIToSpawn;

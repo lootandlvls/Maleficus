@@ -141,7 +141,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog(playerID + " died");
     }
 
-
     public event Action PLAYERS_PlayerCollectedCoin;
     public void Invoke_PLAYERS_PlayerCollectedCoin()
     {

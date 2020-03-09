@@ -33,9 +33,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
         base.InitializeEventsCallbacks();
 
         //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Event += On_NETWORK_ReceivedGameSessionInfo;
-        EventManager.Instance.APP_SceneChanged.Event                += On_APP_SceneChanged;
     }
-
 
     protected override void LateStart()
     {
@@ -89,7 +87,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         }
     }
 
-
     private void On_InputSource_JoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
         if (connectedControllers.Contains(controllerID))
@@ -126,72 +123,9 @@ public class InputManager : AbstractSingletonManager<InputManager>
     //    }
     //}
 
-    private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
-    {
-        //if (eventHandle.Arg1 == EScene.MENU)
-        //{
-        //    // Disconnect all network controllers and AI
-        //    List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
-        //    foreach (EControllerID controllerID in ConnectedControllers.Keys)
-        //    {
-        //        if (controllerID.ContainedIn(NETWORK_CONTROLLERS)
-        //            || (controllerID.ContainedIn(AI_CONTROLLERS)))
-        //        {
-        //            controllerIDsToRemove.Add(controllerID);
-        //        }
-        //    }
-        //    foreach (EControllerID controllerID in controllerIDsToRemove)
-        //    {
-        //        DisconnectController(controllerID);
-        //    }
-        //}
-    }
     #endregion
 
     #region Controller Connection
-    /// <summary>
-    /// Tries to connect the given controllerID (if not already connected) to the next free PlayerID available
-    /// </summary>
-    /// <param name="controllerID"> contrllerID </param>
-    /// <returns></returns>
-    //private bool TryToConnectController(EControllerID controllerID)
-    //{
-    //    // Check ControllerID
-    //    if (controllerID == EControllerID.NONE)
-    //    {
-    //        Debug.LogError("Warning! Trying to connect a controller that is NONE.");
-    //        return false;
-    //    }
-
-    //    // Get and check PlayerID
-    //    EPlayerID playerID = PlayerManager.Instance.GetNextFreePlayerID();
-    //    if (playerID == EPlayerID.NONE)
-    //    {
-    //        Debug.Log("Warning! Couldn't get a valid PlayerID for : " + controllerID);
-    //        return false;
-    //    }
-
-    //    // Check parameters
-    //    if ((ConnectedControllers.ContainsKey(controllerID) == true)
-    //        || (ConnectedControllers.ContainsValue(playerID) == true))
-    //    {
-    //        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-    //        {
-    //            Debug.LogError("Warning! Trying to connect a controller that is already connected.");
-    //        }
-    //        return false;
-    //    }
-
-    //    // Successful
-    //    ConnectedControllers.Add(controllerID, playerID);
-
-    //    // Invoke event
-    //    Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
-    //    EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
-
-    //    return true;
-    //}
-
     public bool ConnectController(EControllerID controllerID)
     {
         if (controllerID == EControllerID.NONE)
@@ -216,35 +150,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         return true;
     }
 
-    //private void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
-    //{
-    //    // Check parameters
-    //    if ((ConnectedControllers.ContainsKey(controllerID) == true)
-    //        || (ConnectedControllers.ContainsValue(playerID) == true))
-    //    {
-    //        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-    //        {
-    //            Debug.LogError("Trying to connect a controller that is already connected.");
-    //        }
-    //        return;
-    //    }
-    //    if ((playerID == EPlayerID.NONE)
-    //        || (controllerID == EControllerID.NONE))
-    //    {
-    //        Debug.LogError("Trying to connect a controller or player that is NONE.");
-    //        return;
-    //    }
-
-    //    ConnectedControllers.Add(controllerID, playerID);
-
-    //    Debug.Log("Connecting new controller " + controllerID + " to player : " + playerID);
-
-    //    // Invoke event
-    //    Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
-    //    EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
-    //}
-
-
     public void DisconnectController(EControllerID controllerID)
     {
         if (connectedControllers.Contains(controllerID) == false)
@@ -262,20 +167,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void ConnectAllAIControllers()
     {
-        //LogConsole("Connecting remaining AI playeres. Max : " + MotherOfManagers.Instance.MaximumNumberOfAIToSpawn);
-
-        //int connectCounter = 0;
-        //foreach (EControllerID aIControllerID in AI_CONTROLLERS)
-        //{
-        //    if ((connectCounter < MotherOfManagers.Instance.MaximumNumberOfAIToSpawn)
-        //        && (IsControllerConnected(aIControllerID) == false))
-        //    {
-        //        TryToConnectController(aIControllerID);
-        //        connectCounter++;
-        //    }
-        //}
-
-
         foreach (EControllerID aIControllerID in AI_CONTROLLERS)
         {
             ConnectController(aIControllerID);
@@ -287,36 +178,6 @@ public class InputManager : AbstractSingletonManager<InputManager>
         return connectedControllers.Contains(controllerID);
     }
     #endregion
-
-
-    ///// <summary>
-    ///// Gets the connected PlayerID to the given ControllerID
-    ///// </summary>
-    ///// <returns> NONE if given controllerID is not connected</returns>
-    //public EPlayerID GetConnectedPlayerIDFrom(EControllerID controllerID)
-    //{
-    //    if (connectedControllers.Contains(controllerID))
-    //    {
-    //        return connectedControllers[controllerID];
-    //    }
-    //    return EPlayerID.NONE;
-    //}
-
-    ///// <summary>
-    ///// Gets the connected ControllerID from the given PlayerID
-    ///// </summary>
-    ///// <returns> NONE if given playerID is not connected</returns>
-    //public EControllerID GetConnectedControllerIDFrom(EPlayerID playerID)
-    //{
-    //    foreach(EControllerID controllerID in connectedControllers.Keys)
-    //    {
-    //        if (connectedControllers[controllerID] == playerID)
-    //        {
-    //            return controllerID;
-    //        }
-    //    }
-    //    return EControllerID.NONE;
-    //}
 
     /// <summary>
     /// Returns (the first) Input Source of type "A" attached on the Input Manager.
