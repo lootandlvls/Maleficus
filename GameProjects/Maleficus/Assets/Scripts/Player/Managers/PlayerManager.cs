@@ -220,6 +220,17 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnAllJoinedPlayers()
     {
+        // Fill empty slots with AI
+        int emptySlots = 4 - GetJoinedPlayers().Count;
+        int remainingAI = MotherOfManagers.Instance.MaximumNumberOfAIToSpawn;
+        while ((emptySlots > 0) && (remainingAI > 0))
+        {
+            EControllerID aIControllerID = GetAIControllerIDFrom(MotherOfManagers.Instance.MaximumNumberOfAIToSpawn - remainingAI + 1);
+            JoinNextAIPlayer(aIControllerID);
+            emptySlots--;
+            remainingAI--;
+        }
+
         foreach (EPlayerID playerID in GetJoinedPlayers())
         {
             if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
@@ -269,7 +280,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     }
     #endregion
 
-    #region Player Join Status
+    #region Party Join
     //private bool CanControllerJoin(EControllerID controllerID)
     //{
     //    bool isControllerAlreadyJoined = false;
@@ -327,8 +338,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 controllersMap[controllerID] = playerID;
             }
 
-            EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);
+            EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID, controllerID);
         }
+    }
+
+    private EPlayerID JoinNextAIPlayer(EControllerID controllerID)
+    {
+        foreach(var pair in partyStatus)
+        {
+            EPlayerID playerID = pair.Key;
+            PlayerJoinStatus playerJoinStatus = pair.Value;
+
+            if (playerJoinStatus.HasJoined == false)
+            {
+                JoinPlayer(playerID, controllerID);
+                return playerID;
+            }
+        }
+        return EPlayerID.NONE;
     }
 
     private void On_PlayerSpellSelectionContext_LeaveRequest(EPlayerID playerID)
@@ -554,20 +581,15 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         yield return new WaitForEndOfFrame();
 
         SpawnAllJoinedPlayers();
-
-        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-        {
-            //SpawnRemaningAIPlayers();
-        }
     }
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
         // Connect and spawn reamining players as AI
-        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
-        {
-            //SpawnRemaningAIPlayers();
-        }
+        //if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
+        //{
+        //    //SpawnRemaningAIPlayers();
+        //}
     }
 
     public void OnPlayerDead(EPlayerID playerID)

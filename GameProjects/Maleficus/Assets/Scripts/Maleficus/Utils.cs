@@ -813,6 +813,26 @@ namespace Maleficus
         }
 
 
+        public static EControllerID GetAIControllerIDFrom(int index)
+        {
+            switch(index)
+            {
+                case 1:
+                    return EControllerID.AI_1;
+                        
+                case 2:
+                    return EControllerID.AI_2;
+                                 
+                case 3:
+                    return EControllerID.AI_3;
+                        
+                case 4:
+                    return EControllerID.AI_4;
+
+                default:
+                    return EControllerID.NONE;
+            }
+        }
 
 
         /// <summary> Converts an array with 3 elements to a Vector3 </summary>

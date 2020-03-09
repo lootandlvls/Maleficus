@@ -54,7 +54,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.SPELLS_SpellHitPlayer             += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.UI_SpellChosen                    += On_UI_SpellChosen;
         EventManager.Instance.UI_SpellRemoved                   += On_UI_SpellRemoved;
-        //EventManager.Instance.INPUT_ControllerConnected.Event   += On_INPUT_ControllerConnected; // TODO: Move this to PlayerJoined and refactor AI
+        EventManager.Instance.PLAYERS_PlayerJoined              += On_PLAYERS_PlayerJoined;
         EventManager.Instance.APP_SceneChanged.Event            += On_APP_SceneChanged;    
     }
 
@@ -126,25 +126,25 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
     // Assign spells to connected AI player
-    //private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID> eventHandle)
-    //{
-    //    EControllerID controllerID = eventHandle.Arg1;
-    //    if (controllerID.ContainedIn(AI_CONTROLLERS))
-    //    {
-    //        LogConsole("Choosing random spells for : " + playerID);
-    //        AbstractSpell[] spells = ChooseRandomSpells();
-    //        if (spells.Length == 3)
-    //        {
-    //            playersChosenSpells[playerID][ESpellSlot.SPELL_1] = spells[0];
-    //            playersChosenSpells[playerID][ESpellSlot.SPELL_2] = spells[1];
-    //            playersChosenSpells[playerID][ESpellSlot.SPELL_3] = spells[2];
-    //        }
-    //        else
-    //        {
-    //            LogConsoleError("Randomly chosing spells went wrong!");
-    //        }
-    //    }
-    //}
+
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
+    {
+        if (controllerID.ContainedIn(AI_CONTROLLERS))
+        {
+            LogConsole("Choosing random spells for : " + playerID);
+            AbstractSpell[] spells = ChooseRandomSpells();
+            if (spells.Length == 3)
+            {
+                playersChosenSpells[playerID][ESpellSlot.SPELL_1] = spells[0];
+                playersChosenSpells[playerID][ESpellSlot.SPELL_2] = spells[1];
+                playersChosenSpells[playerID][ESpellSlot.SPELL_3] = spells[2];
+            }
+            else
+            {
+                LogConsoleError("Randomly chosing spells went wrong!");
+            }
+        }
+    }
 
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {
@@ -179,32 +179,43 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         remainingSkillPoints -= spell1.SkillPoint;
         LogConsole("RandSpell 1 " + spell1.SpellName + " - remaining : " + remainingSkillPoints);
 
-        // Get second and third spell
-        bool validSpellFound = false;
+        // Get second and candidates for third spell
+        int numberOfTries = 0;
+        List<AbstractSpell> spell3Candidates = new List<AbstractSpell>();
         do
         {
             spell2 = GetRandomElement(allSpellsCopy);
             LogConsole("RandSpell 2 " + spell2.SpellName + " - remaining : " + (remainingSkillPoints - spell2.SkillPoint));
-            foreach (AbstractSpell nextSpell in allSpellsCopy)
+           
+            spell3Candidates.Clear();
+            foreach (AbstractSpell lastSpell in allSpellsCopy)
             {
                 // Skip if the same as the chosen one
-                if (nextSpell == spell2)
+                if (lastSpell == spell2)
                 {
                     continue;
                 }
 
                 // Have enough SP to select third one?
-                if (remainingSkillPoints - spell2.SkillPoint - nextSpell.SkillPoint >= 0)
+                if (remainingSkillPoints - spell2.SkillPoint - lastSpell.SkillPoint >= 0)
                 {
-                    validSpellFound = true;
-                    spell3 = nextSpell;
-                    LogConsole("RandSpell 3 " + spell3.SpellName + " - remaining : " + (remainingSkillPoints - spell2.SkillPoint - nextSpell.SkillPoint));
-                    break;
+                    spell3Candidates.Add(lastSpell);
+                    //spell3 = lastSpell;
+                    //break;
 
                 }
             }
+            numberOfTries++;
 
-        } while (validSpellFound == false);
+        } while ((spell3Candidates.Count == 0) && (numberOfTries < 10));
+
+        if (numberOfTries >= 10)
+        {
+            LogConsoleError("Couldn't not find a suitable set of spells for AI!");
+        }
+
+        spell3 = GetRandomElement(spell3Candidates);
+        LogConsole("RandSpell 3 " + spell3.SpellName + " - remaining : " + (remainingSkillPoints - spell2.SkillPoint - spell3.SkillPoint));
 
         IS_NOT_NULL(spell1);
         IS_NOT_NULL(spell2);

@@ -82,6 +82,11 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
         if (EventManager.IsInstanceSet)
         {
+            EventManager.Instance.PLAYERS_PlayerJoined -= On_PLAYERS_PlayerJoined;
+            EventManager.Instance.PLAYERS_PlayerLeft -= On_PLAYERS_PlayerLeft;
+            EventManager.Instance.PLAYERS_PlayerReady -= On_PLAYERS_PlayerReady;
+            EventManager.Instance.PLAYERS_PlayerCanceledReady -= On_PLAYERS_PlayerCanceledReady;
+
             EventManager.Instance.INPUT_ButtonPressed.Event -= On_INPUT_ButtonPressed_Event;
             EventManager.Instance.UI_SpellChosen -= On_UI_SpellChosen;
         }
@@ -228,7 +233,7 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
 
     #region Event Callbacks
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if (playerID == this.playerID)
         {

@@ -36,16 +36,12 @@ public class InputManager : AbstractSingletonManager<InputManager>
         EventManager.Instance.APP_SceneChanged.Event                += On_APP_SceneChanged;
     }
 
-    protected override void Start()
-    {
-        base.Start();
-
-        ConnectAllAIControllers();
-    }
 
     protected override void LateStart()
     {
         base.LateStart();
+
+        ConnectAllAIControllers();
 
         // Connect Touch player as first player
         //if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)

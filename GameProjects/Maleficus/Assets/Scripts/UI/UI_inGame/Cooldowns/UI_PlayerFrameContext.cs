@@ -132,7 +132,7 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
         }
     }
 
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if (playerID == PlayerID)
         {

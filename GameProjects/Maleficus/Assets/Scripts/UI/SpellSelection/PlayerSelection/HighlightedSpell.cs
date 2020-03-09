@@ -61,7 +61,7 @@ public class HighlightedSpell : BNJMOBehaviour
         }
     }
 
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if (playerID == this.playerID)
         {

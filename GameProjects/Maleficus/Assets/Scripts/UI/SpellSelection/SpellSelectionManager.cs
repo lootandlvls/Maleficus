@@ -49,7 +49,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
     }
 
 
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if ((IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
             && (IS_NOT_NULL(highlightedSpellButtons[playerID])))

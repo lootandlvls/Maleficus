@@ -152,14 +152,14 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player collected a coin");
     }
         
-    public event Action<EPlayerID> PLAYERS_PlayerJoined;
-    public void Invoke_PLAYERS_PlayerJoined(EPlayerID playerID)
+    public event Action<EPlayerID, EControllerID> PLAYERS_PlayerJoined;
+    public void Invoke_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if (PLAYERS_PlayerJoined != null)
         {
-            PLAYERS_PlayerJoined.Invoke(playerID);
+            PLAYERS_PlayerJoined.Invoke(playerID, controllerID);
         }
-        DebugLog("Player " + playerID + " joined");
+        DebugLog(controllerID + " joined as : " + playerID);
     }
         
     public event Action<EPlayerID> PLAYERS_PlayerLeft;

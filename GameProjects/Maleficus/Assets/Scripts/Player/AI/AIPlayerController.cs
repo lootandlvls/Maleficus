@@ -322,7 +322,7 @@ public class AIPlayerController : BNJMOBehaviour
         {
             if (MotherOfManagers.Instance.IsAISpawnSpellsEneabled)
             {
-                EInputButton spellButton = GetInputButtonFrom(UnityEngine.Random.Range(1, 3));
+                EInputButton spellButton = GetInputButtonFrom(UnityEngine.Random.Range(1, 4));
                 if (IS_NOT_NONE(spellButton))
                 {
                     InvokeEventIfBound(ButtonPressed, controllerID, spellButton);
