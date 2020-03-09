@@ -92,8 +92,8 @@ namespace NetController
         {
             base.OnGUI();
 
-            string ipAddress = GetLocalIPAddress();
-            GUI.Box(new Rect(10, Screen.height - 50, 100, 50), ipAddress);
+            string myIpAddress = GetLocalIPAddress();
+            GUI.Box(new Rect(10, Screen.height - 50, 100, 50), myIpAddress);
             if (client != null)
             {
                 GUI.Label(new Rect(20, Screen.height - 30, 100, 20), "Status : " + client.isConnected);
@@ -102,7 +102,13 @@ namespace NetController
                 {
                     if (GUI.Button(new Rect(10, 10, 60, 50), "Connect"))
                     {
-                        client.Connect(NCUIContext.Instance.IpAddress, 25000);
+                        string clientIpAddress = GetLocalIPAddress();
+                        if ((NCUIContext.IsInstanceSet)
+                            && (NCUIContext.Instance.IpAddress != ""))
+                        {
+                            clientIpAddress = NCUIContext.Instance.IpAddress;
+                        }
+                        client.Connect(clientIpAddress, 25000);
                     }
                 }
             }
