@@ -84,8 +84,8 @@ public class NetControllerInputSource : AbstractInputSource
         if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerGuid))
         {
             EJoystickType joystickType = (EJoystickType)int.Parse(deltas[1]);
-            float x = Convert.ToSingle(deltas[2]);
-            float y = Convert.ToSingle(deltas[3]);
+            float x = float.Parse(deltas[2], System.Globalization.CultureInfo.InvariantCulture);
+            float y = float.Parse(deltas[3], System.Globalization.CultureInfo.InvariantCulture);
 
             EControllerID controllerID;
             connectedNetworkControllers.TryGetValue(controllerGuid, out controllerID);
