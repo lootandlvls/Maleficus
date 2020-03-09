@@ -49,7 +49,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
     }
 
 
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if ((IS_KEY_CONTAINED(highlightedSpellButtons, playerID))
             && (IS_NOT_NULL(highlightedSpellButtons[playerID])))
@@ -81,6 +81,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
         {
             EInputButton inputButton = eventHandle.InputButton;
+            EControllerID controllerID = eventHandle.ControllerID;
             EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
             if (PlayerManager.Instance.HasPlayerJoined(playerID))

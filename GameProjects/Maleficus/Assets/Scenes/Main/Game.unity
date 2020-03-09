@@ -1942,7 +1942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &314596084
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3685,7 +3685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &793477899
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3702,8 +3702,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 662.7174, y: 217.6344}
-  m_SizeDelta: {x: 1839.3, y: 197.4}
+  m_AnchoredPosition: {x: 662.7174, y: 342}
+  m_SizeDelta: {x: 1839.3, y: 575.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &793477900
 MonoBehaviour:
@@ -4622,7 +4622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029872965
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5242,12 +5242,12 @@ GameObject:
   - component: {fileID: 1090416308}
   - component: {fileID: 1090416307}
   m_Layer: 5
-  m_Name: T_Movement
+  m_Name: T_ConnectedControllers (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1090416306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5257,15 +5257,15 @@ RectTransform:
   m_GameObject: {fileID: 1090416305}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.79440963, y: 0.79440963, z: 0.79440963}
+  m_LocalScale: {x: 0.5217285, y: 0.5217285, z: 0.5217285}
   m_Children: []
   m_Father: {fileID: 1029872965}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 895.3991, y: -462.2784}
-  m_SizeDelta: {x: 1841.4, y: 298}
+  m_AnchoredPosition: {x: 1550.8, y: -494.8}
+  m_SizeDelta: {x: 1016.9, y: 960.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1090416307
 MonoBehaviour:
@@ -5279,7 +5279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2c03ba313c52847979c89ef0296640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugID: 123
+  DebugID: 13
 --- !u!114 &1090416308
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5311,7 +5311,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Menu state
+  m_Text: T_ConnectedControllers (13)
 --- !u!222 &1090416309
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5674,10 +5674,7 @@ MonoBehaviour:
   CanDebugJoystickEvents: 0
   IsUseDebugGameMode: 1
   DebugGameMode: 1
-  IsJoinAndSpawnPlayerOnControllerConnect: 1
-  IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 1
   MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 1
   IsAIArenaCenterAttractionEnabled: 1
@@ -5930,12 +5927,12 @@ GameObject:
   - component: {fileID: 1455587364}
   - component: {fileID: 1455587363}
   m_Layer: 5
-  m_Name: T_NetworkMovement
+  m_Name: T_PlayerJoinStatus (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1455587362
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5945,15 +5942,15 @@ RectTransform:
   m_GameObject: {fileID: 1455587361}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6577479, y: 0.6577479, z: 0.6577479}
+  m_LocalScale: {x: 0.40122625, y: 0.40122625, z: 0.40122625}
   m_Children: []
   m_Father: {fileID: 1029872965}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 662.7174, y: 105.96973}
-  m_SizeDelta: {x: 1839.3, y: 80.7}
+  m_AnchoredPosition: {x: 425.7, y: 714.5}
+  m_SizeDelta: {x: 1689.5, y: 1309.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1455587363
 MonoBehaviour:
@@ -5967,7 +5964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2c03ba313c52847979c89ef0296640, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugID: 92
+  DebugID: 12
 --- !u!114 &1455587364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5999,7 +5996,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Network Player Movement
+  m_Text: T_PlayerJoinStatus (12)
 --- !u!222 &1455587365
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using static Maleficus.Utils;
 using static Maleficus.Consts;
 
 public class PlayerManager : AbstractSingletonManager<PlayerManager>
 {
-    ///* Dictionaries that are initialized with all 4 players (weither they are connected or not) */
-    //public List<EPlayerID> JoinedPlayers { get; private set; } = new List<EPlayerID>();
-
     /// <summary> Positions in the scene (or around PlayerManager if not found) where the players will be spawned. </summary>
     public Dictionary<EPlayerID, PlayerSpawnPosition> PlayersSpawnPositions { get; } = new Dictionary<EPlayerID, PlayerSpawnPosition>();
 
-    /* Dictionaries that are defined only for connected players  */
     /// <summary> Added whenever a player has spawned. Removed when he dies. </summary>
     public Dictionary<EPlayerID, Player> ActivePlayers { get; } = new Dictionary<EPlayerID, Player>();
 
@@ -23,107 +18,169 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     /// <summary> Assigned team of every player </summary>
     public Dictionary<EPlayerID, ETeamID> PlayersTeam { get; } = new Dictionary<EPlayerID, ETeamID>();
+
     public EPlayerID OwnPlayerID { get { return GetPlayerIDFrom(NetworkManager.Instance.OwnerClientID); } }
 
-    /// <summary> The join status of player that have connected with a controllers </summary>
-    private Dictionary<EPlayerID, PlayerJoinStatus> playersJoinStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
-
+    /// <summary> The join status of all the players in the current party </summary>
+    private Dictionary<EPlayerID, PlayerJoinStatus> partyStatus { get; } = new Dictionary<EPlayerID, PlayerJoinStatus>();
+    private Dictionary<EControllerID, EPlayerID> controllersMap { get; } = new Dictionary<EControllerID, EPlayerID>();
     private Dictionary<EPlayerID, Vector3> PlayersDeathPositions = new Dictionary<EPlayerID, Vector3>();
     private Dictionary<EPlayerID, Quaternion> PlayersDeathRotations = new Dictionary<EPlayerID, Quaternion>();
-
     private Dictionary<EPlayerID, Player> playersPrefabs { get; } = new Dictionary<EPlayerID, Player>();
     private PlayerSpawnPosition playerSpawnPositionPrefab;
     private PlayerRespawnGhost playerRespawnGhostPrefab;
 
-
-    public List<EPlayerID> GetJoinedPlayers()
-    {
-        List<EPlayerID> result = new List<EPlayerID>();
-        foreach (KeyValuePair<EPlayerID, PlayerJoinStatus> pair in playersJoinStatus)
-        {
-            if (pair.Value.HasJoined == true)
-            {
-                result.Add(pair.Key);
-            }
-        }
-        return result;
-    }
-
-    public bool HasPlayerJoined(EPlayerID playerID)
-    {
-        if ((playersJoinStatus.ContainsKey(playerID))
-            && (playersJoinStatus[playerID].HasJoined))
-        {
-            return true;
-        }
-        return false;
-    }
-
+    #region BNJMO Behaviour
     protected override void Awake()
     {
         base.Awake();
 
-        InitializeDictionaries();
         LoadPlayerResources();
+        ReinitializeDictionaries();
     }
 
+    protected override void Start()
+    {
+        base.Start();
+
+        On_APP_SceneChanged_Event(new Event_GenericHandle<EScene>(AppStateManager.Instance.CurrentScene));
+    }
 
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
 
         // Input events
-        EventManager.Instance.INPUT_ControllerConnected.AddListener(On_INPUT_ControllerConnected);
-        EventManager.Instance.INPUT_ControllerDisconnected.AddListener(On_INPUT_ControllerDisconnected);
+        EventManager.Instance.INPUT_ControllerConnected.Event += On_INPUT_ControllerConnected;
+        EventManager.Instance.INPUT_ControllerDisconnected.Event += On_INPUT_ControllerDisconnected;
 
-        EventManager.Instance.INPUT_ButtonPressed.AddListener(On_INPUT_ButtonPressed);
-        EventManager.Instance.INPUT_ButtonReleased.AddListener(On_INPUT_ButtonReleased);
+        EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed;
+        EventManager.Instance.INPUT_ButtonReleased.Event += On_INPUT_ButtonReleased;
 
         // Scene changed event
         EventManager.Instance.APP_SceneChanged.Event += On_APP_SceneChanged_Event;
 
         //Network
         //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.AddListener       (On_NETWORK_ReceivedGameSessionInfo);
-        EventManager.Instance.NETWORK_GameStateReplication.AddListener(On_NETWORK_GameStateReplicate);
-        EventManager.Instance.NETWORK_GameStarted.AddListener(On_NETWORK_GameStarted);
-
-        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
-        EventManager.Instance.PLAYERS_PlayerLeft += On_PLAYERS_PlayerLeft;
-        EventManager.Instance.PLAYERS_PlayerReady += On_PLAYERS_PlayerReady;
-        EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
+        EventManager.Instance.NETWORK_GameStateReplication.Event += On_NETWORK_GameStateReplicate;
+        EventManager.Instance.NETWORK_GameStarted.Event += On_NETWORK_GameStarted;
     }
-
-
 
     protected override void Update()
     {
         base.Update();
 
-        string playerStatusLog = "";
-        foreach (var pair in playersJoinStatus)
-        {
-            playerStatusLog += pair.Key + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
-        }
-        LogCanvas(69, playerStatusLog);
+        UpdatePartyDebugText();
     }
 
+    #endregion
 
-    protected override void OnReinitializeManager()
+    #region Initialization
+    private void ReinitializeDictionaries()
     {
-        base.OnReinitializeManager();
+        Teams.Clear();
+        Teams[ETeamID.TEAM_1] = new List<EPlayerID>();
+        Teams[ETeamID.TEAM_2] = new List<EPlayerID>();
+        Teams[ETeamID.TEAM_3] = new List<EPlayerID>();
+        Teams[ETeamID.TEAM_4] = new List<EPlayerID>();
 
-        FindPlayerSpawnGhost();
-
-        ActivePlayers.Clear();
+        partyStatus.Clear();
+        PlayersTeam.Clear();
+        PlayersDeathPositions.Clear();
+        PlayersDeathRotations.Clear();
+        foreach (EPlayerID playerID in Enum.GetValues(typeof(EPlayerID)))
+        {
+            if ((playerID != EPlayerID.NONE)
+                && (playerID != EPlayerID.SPECTATOR))
+            {
+                PlayersTeam.Add(playerID, ETeamID.NONE);
+                PlayersDeathPositions.Add(playerID, Vector3.zero);
+                PlayersDeathRotations.Add(playerID, Quaternion.identity);
+                partyStatus.Add(playerID, new PlayerJoinStatus(EControllerID.NONE));
+            }
+        }
     }
 
+    private void LoadPlayerResources()
+    {
+        playersPrefabs.Clear();
+        playersPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
+        playersPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
+        playersPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
+        playersPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_1]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_2]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_3]);
+        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_4]);
 
+        playerSpawnPositionPrefab = Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION);
+        IS_NOT_NULL(playerSpawnPositionPrefab);
 
+        playerRespawnGhostPrefab = Resources.Load<PlayerRespawnGhost>(PATH_PLAYER_RESPAWN_GHOST);
+        IS_NOT_NULL(playerRespawnGhostPrefab);
+    }
+
+    private void FindPlayerSpawnGhost()
+    {
+        PlayersSpawnPositions.Clear();
+
+        // Try to find already placed player spawn positions in the scene
+        PlayerSpawnPosition[] spawnPositions = FindObjectsOfType<PlayerSpawnPosition>();
+        foreach (PlayerSpawnPosition spawnPosition in spawnPositions)
+        {
+            PlayersSpawnPositions.Add(spawnPosition.ToSpawnPlayerID, spawnPosition);
+        }
+
+        // Determine spawn positions relative to this transform if no PlayerSpawnPosition found in scene
+        if (MotherOfManagers.Instance.IsSpawnGhostPlayerPositionsIfNotFound == true)
+        {
+            int angle;
+            for (int i = 1; i < 5; i++)
+            {
+                angle = 90 * i;
+                EPlayerID playerID = GetPlayerIDFrom(i);
+                if (PlayersSpawnPositions.ContainsKey(playerID) == false)
+                {
+                    PlayerSpawnPosition spawnGhost = Instantiate(playerSpawnPositionPrefab);
+                    spawnGhost.ToSpawnPlayerID = playerID;
+                    spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
+                    spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
+                    spawnGhost.Rotation = transform.rotation;
+                    PlayersSpawnPositions.Add(playerID, spawnGhost);
+                }
+            }
+        }
+    }
+
+    private void FindPlayerSpellSelectionContexts()
+    {
+        foreach (PlayerSpellSelectionContext playerSpellSelectionContext in FindObjectsOfType<PlayerSpellSelectionContext>())
+        {
+            playerSpellSelectionContext.LeaveRequest += On_PlayerSpellSelectionContext_LeaveRequest;
+            playerSpellSelectionContext.ReadyRequest += On_PlayerSpellSelectionContext_ReadyRequest;
+            playerSpellSelectionContext.CancelReadyRequest += On_PlayerSpellSelectionContext_CancelReadyRequest;
+        }
+    }
+
+    private void ReinitializeControllersMap()
+    {
+        List<EControllerID> keys = new List<EControllerID>();
+        foreach (EControllerID key in controllersMap.Keys)
+        {
+            keys.Add(key);
+
+        }
+        foreach (EControllerID controllerID in keys)
+        {
+            controllersMap[controllerID] = EPlayerID.SPECTATOR;
+        }
+    }
+    #endregion
 
     #region Players Management
-    public void SpawnPlayer(EPlayerID playerID)
+    private void SpawnPlayer(EPlayerID playerID)
     {
-        if (IsPlayerConnected(playerID) == true)
+        if (IS_TRUE(HasPlayerJoined(playerID)))
         {
             if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
             {
@@ -192,30 +249,21 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
 
     private void SpawnAllJoinedPlayers()
     {
+        LogConsole("Spawning remaining AI players");
+        // Fill empty slots with AI
+        int emptySlots = 4 - GetJoinedPlayers().Count;
+        int remainingAI = MotherOfManagers.Instance.MaximumNumberOfAIToSpawn;
+        while ((emptySlots > 0) && (remainingAI > 0))
+        {
+            EControllerID aIControllerID = GetAIControllerIDFrom(MotherOfManagers.Instance.MaximumNumberOfAIToSpawn - remainingAI + 1);
+            JoinNextAIPlayer(aIControllerID);
+            emptySlots--;
+            remainingAI--;
+        }
+
         foreach (EPlayerID playerID in GetJoinedPlayers())
         {
             if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
-            {
-                SpawnPlayer(playerID);
-            }
-        }
-    }
-
-    private void SpawnRemaningAIPlayers()
-    {
-        // First connect AI Controllers on reamining slots if not already connected
-         InputManager.Instance.ConnectAllRemainingAIPlayers();
-
-        LogConsole("Spawning remaining AI playeres");
-
-        foreach (KeyValuePair<EControllerID, EPlayerID> pair in InputManager.Instance.ConnectedControllers)
-        {
-            EControllerID controllerID = pair.Key;
-            EPlayerID playerID = pair.Value;
-
-            if ((controllerID.ContainedIn(AI_CONTROLLERS))
-                && (ActivePlayers.ContainsKey(playerID) == false)
-                && (InputManager.Instance.IsControllerConnected(controllerID)))
             {
                 SpawnPlayer(playerID);
             }
@@ -239,101 +287,222 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
     {
         // TODO: Implement removing player from team
     }
-
-    /// <summary>
-    /// Looks for the next possibe free slot of a PlayerID
-    /// </summary>
-    /// <returns> The ID of the PlayerID free spot (NONE if none found)</returns>
-    public EPlayerID GetNextFreePlayerID()
-    {
-        EPlayerID result = EPlayerID.NONE;
-        for (int i = 1; i < 5; i++)
-        {
-            EPlayerID currentPlayerID = GetPlayerIDFrom(i);
-            if (IsPlayerConnected(currentPlayerID) == false)
-            {
-                result = currentPlayerID;
-                break;
-            }
-        }
-        return result;
-    }
-
-
     #endregion
 
-    #region Input
-
-
-    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
+    #region Party Join
+    private EPlayerID GetNextFreePlayerSpot()
     {
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_RUNNING)
+        foreach (var pair in partyStatus)
         {
-            EInputButton inputButton = eventHandle.InputButton;
-            EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
-            ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
+            EPlayerID playerID = pair.Key;
+            PlayerJoinStatus playerJoinStatus = pair.Value;
 
-            if ((spellSlot != ESpellSlot.NONE)
-                && (ActivePlayers.ContainsKey(playerID) == true))
+            if (playerJoinStatus.HasJoined == false)
             {
-                AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
-                if (IS_NOT_NULL(spell))
+                return playerID;
+            }
+        }
+        return EPlayerID.NONE;
+    }
+
+    private void JoinPlayer(EPlayerID playerID, EControllerID controllerID)
+    {
+        if ((IS_KEY_CONTAINED(partyStatus, playerID))
+            && (IS_NOT_TRUE(partyStatus[playerID].HasJoined)))
+        {
+            partyStatus[playerID].ControllerID = controllerID;
+            partyStatus[playerID].HasJoined = true;
+
+            // Update assigned PlayerID in the controller map (instead of Spectator)
+            if (IS_KEY_CONTAINED(controllersMap, controllerID))
+            {
+                controllersMap[controllerID] = playerID;
+            }
+
+            EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID, controllerID);
+        }
+    }
+
+    private EPlayerID JoinNextAIPlayer(EControllerID controllerID)
+    {
+        foreach(var pair in partyStatus)
+        {
+            EPlayerID playerID = pair.Key;
+            PlayerJoinStatus playerJoinStatus = pair.Value;
+
+            if (playerJoinStatus.HasJoined == false)
+            {
+                JoinPlayer(playerID, controllerID);
+                return playerID;
+            }
+        }
+        return EPlayerID.NONE;
+    }
+
+    private void On_PlayerSpellSelectionContext_LeaveRequest(EPlayerID playerID)
+    {
+        if ((IS_KEY_CONTAINED(partyStatus, playerID))
+        && (IS_TRUE(partyStatus[playerID].HasJoined)))
+        {
+            // Reset controller to Spectator
+            EControllerID controllerID = partyStatus[playerID].ControllerID;
+            if (IS_KEY_CONTAINED(controllersMap, controllerID))
+            {
+                controllersMap[controllerID] = EPlayerID.SPECTATOR;
+            }
+
+            // Reset entry of playerID in party status 
+            partyStatus[playerID] = new PlayerJoinStatus(EControllerID.NONE);
+
+            // Trigger global event
+            EventManager.Instance.Invoke_PLAYERS_PlayerLeft(playerID);
+
+            // Are the rest of the joined players ready?
+            CheckIfAllPlayersAreReady();
+        }
+    }
+
+    private void On_PlayerSpellSelectionContext_ReadyRequest(EPlayerID playerID)
+    {
+        if ((IS_KEY_CONTAINED(partyStatus, playerID))
+        && (IS_TRUE(partyStatus[playerID].HasJoined))
+        && (IS_NOT_TRUE(partyStatus[playerID].IsReady)))
+        {
+            partyStatus[playerID].IsReady = true;
+
+            EventManager.Instance.Invoke_PLAYERS_PlayerReady(playerID);
+
+            CheckIfAllPlayersAreReady();
+        }
+    }
+
+    private void On_PlayerSpellSelectionContext_CancelReadyRequest(EPlayerID playerID)
+    {
+        if ((IS_KEY_CONTAINED(partyStatus, playerID))
+        && (IS_TRUE(partyStatus[playerID].HasJoined))
+        && (IS_TRUE(partyStatus[playerID].IsReady)))
+        {
+            partyStatus[playerID].IsReady = false;
+
+            EventManager.Instance.Invoke_PLAYERS_PLAYERS_PlayerCanceledReady(playerID);
+        }
+    }
+    
+    private void CheckIfAllPlayersAreReady()
+    {
+        bool areAllReady = false;
+        foreach (PlayerJoinStatus playerJoinStatus in partyStatus.Values)
+        {
+            if (playerJoinStatus.HasJoined == true)
+            {
+                areAllReady = true;
+                if (playerJoinStatus.IsReady == false)
                 {
-                    // Instantiate spell now ?
-                    if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
-                    {
-                        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-                        {
-
-                            ActivePlayers[playerID].IsReadyToShoot = false;
-                            ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                            ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
-
-                            SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                            StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-                        }
-                    }
-                    // TODO: clean this (Removed because it felt wrong on android NetController)
-                    //else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
-                    //{
-                    //    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-                    //    {
-
-                    //        // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
-                    //        ActivePlayers[playerID].IsReadyToShoot = false;
-                    //        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
-                    //        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-
-                    //        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-                    //    }
-                    //}
-                    else if (spell.MovementType == ESpellMovementType.UNIQUE)
-                    {
-                        if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
-                        {
-                            if (!ActivePlayers[playerID].HasCastedSpell)
-                            {
-                                StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
-                                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
-                                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
-                            }
-                        }
-                        else
-                        {
-                            EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
-                        }
-                    }
-
-                    else if (spell.IsChargeable && ActivePlayers[playerID].IsReadyToShoot)
-                    {
-                        ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
-                        Debug.Log("Start charging");
-
-                    }
+                    areAllReady = false;
+                    break;
                 }
             }
         }
+        if (areAllReady == true)
+        {
+            EventManager.Instance.Invoke_PLAYERS_AllPlayersReady();
+        }
+    }
+    #endregion
+
+    #region Input
+    private void On_INPUT_ButtonPressed(NetEvent_ButtonPressed eventHandle)
+    {
+        EInputButton inputButton = eventHandle.InputButton;
+        EControllerID controllerID = eventHandle.ControllerID;
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+
+        switch (AppStateManager.Instance.CurrentState)
+        {
+            case EAppState.IN_GAME_IN_RUNNING:
+                ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
+
+                if ((spellSlot != ESpellSlot.NONE)
+                    && (ActivePlayers.ContainsKey(playerID) == true))
+                {
+                    AbstractSpell spell = SpellManager.Instance.GetChosenSpell(playerID, spellSlot);
+                    if (IS_NOT_NULL(spell))
+                    {
+                        // Instantiate spell now ?
+                        if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+                        {
+                            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                            {
+
+                                ActivePlayers[playerID].IsReadyToShoot = false;
+                                ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                                ActivePlayers[playerID].StopChargingSpell(spell, spellSlot);
+
+                                SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                                StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                            }
+                        }
+                        // TODO: clean this (Removed because it felt wrong on android NetController)
+                        //else if (spell.MovementType == ESpellMovementType.RAPID_FIRE)
+                        //{
+                        //    if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                        //    {
+
+                        //        // StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+                        //        ActivePlayers[playerID].IsReadyToShoot = false;
+                        //        ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = false;
+                        //        SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+
+                        //        StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                        //    }
+                        //}
+                        else if (spell.MovementType == ESpellMovementType.UNIQUE)
+                        {
+                            if (ActivePlayers[playerID].IsReadyToShoot && ActivePlayers[playerID].ReadyToUseSpell[spellSlot])
+                            {
+                                if (!ActivePlayers[playerID].HasCastedSpell)
+                                {
+                                    StartCoroutine(FirstTimeSpellCastedCoroutine(playerID, spellSlot, spell.CastDuration));
+                                    SpellManager.Instance.CastSpell(playerID, spellSlot, ActivePlayers[playerID].SpellChargingLVL);
+                                    StartCoroutine(SetReadyToUseSpellCoroutine(playerID, spellSlot));
+                                }
+                            }
+                            else
+                            {
+                                EventManager.Instance.Invoke_SPELLS_UniqueEffectActivated(spell.SpellID, playerID);
+                            }
+                        }
+
+                        else if (spell.IsChargeable && ActivePlayers[playerID].IsReadyToShoot)
+                        {
+                            ActivePlayers[playerID].StartChargingSpell(spell, spellSlot);
+                            Debug.Log("Start charging");
+
+                        }
+                    }
+                }
+                break;
+
+            case EAppState.IN_MENU_IN_SPELL_SELECTION:
+                // Join player if Confirm button is presssed
+                if (inputButton == EInputButton.CONFIRM)
+                {
+                    // Is Controller not alreay joined?
+                    if ((IS_KEY_CONTAINED(controllersMap, controllerID)
+                        && (controllersMap[controllerID] == EPlayerID.SPECTATOR)))
+                    {
+                        EPlayerID nextPlayerID = GetNextFreePlayerSpot();
+                        // Is party not full already?
+                        if (nextPlayerID != EPlayerID.NONE)
+                        {
+                            JoinPlayer(nextPlayerID, controllerID);
+                        }
+                    }
+                }
+                break;
+        }
+ 
     }
 
     private void On_INPUT_ButtonReleased(NetEvent_ButtonReleased eventHandle)
@@ -372,43 +541,44 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
             }
         }
     }
-
     #endregion
 
     #region Events Callbacks
-
     private void On_APP_SceneChanged_Event(Event_GenericHandle<EScene> eventHandle)
     {
+        ActivePlayers.Clear();
+
         EScene scene = eventHandle.Arg1;
-        if (scene == EScene.GAME)
+        switch (scene)
         {
-            StartCoroutine(DelayedSpawnAllOnSceneChangeCoroutine());
+            case EScene.GAME:
+                FindPlayerSpawnGhost();
+                StartCoroutine(DelayedSpawnAllCoroutine());
+                break;
+
+            case EScene.MENU:
+                ReinitializeDictionaries();
+                FindPlayerSpellSelectionContexts();
+                ReinitializeControllersMap();
+                break;
         }
-        else if (scene == EScene.MENU)
-        {
-            // Reinitalize teams
-        }
+
     }
 
-    private IEnumerator DelayedSpawnAllOnSceneChangeCoroutine()
+    private IEnumerator DelayedSpawnAllCoroutine()
     {
         yield return new WaitForEndOfFrame();
 
         SpawnAllJoinedPlayers();
-
-        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-        {
-            SpawnRemaningAIPlayers();
-        }
     }
 
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
         // Connect and spawn reamining players as AI
-        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
-        {
-            SpawnRemaningAIPlayers();
-        }
+        //if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == true)
+        //{
+        //    //SpawnRemaningAIPlayers();
+        //}
     }
 
     public void OnPlayerDead(EPlayerID playerID)
@@ -424,85 +594,70 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         SpawnPlayer(playerRespawnGhost.PlayerID);
         playerRespawnGhost.DestroyGhost();
     }
-    #endregion
 
-    #region Initialization
-    private void InitializeDictionaries()
+    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID> eventHandle)
     {
-        Teams.Clear();
-        Teams[ETeamID.TEAM_1] = new List<EPlayerID>();
-        Teams[ETeamID.TEAM_2] = new List<EPlayerID>();
-        Teams[ETeamID.TEAM_3] = new List<EPlayerID>();
-        Teams[ETeamID.TEAM_4] = new List<EPlayerID>();
+        EControllerID controllerID = eventHandle.Arg1;
 
-        PlayersTeam.Clear();
-        PlayersDeathPositions.Clear();
-        PlayersDeathRotations.Clear();
-        foreach (EPlayerID playerID in Enum.GetValues(typeof(EPlayerID)))
+        // Add connected controller as a spectator
+        if (IS_KEY_NOT_CONTAINED(controllersMap, controllerID))
         {
-            if (playerID != EPlayerID.NONE)
-            {
-                PlayersTeam.Add(playerID, ETeamID.NONE);
-                PlayersDeathPositions.Add(playerID, Vector3.zero);
-                PlayersDeathRotations.Add(playerID, Quaternion.identity);
-            }
+            controllersMap.Add(controllerID, EPlayerID.SPECTATOR);
         }
     }
 
-
-    private void LoadPlayerResources()
+    private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID> eventHandle)
     {
-        playersPrefabs.Clear();
-        playersPrefabs.Add(EPlayerID.PLAYER_1, Resources.Load<Player>(PATH_PLAYER_RED));
-        playersPrefabs.Add(EPlayerID.PLAYER_2, Resources.Load<Player>(PATH_PLAYER_BLUE));
-        playersPrefabs.Add(EPlayerID.PLAYER_3, Resources.Load<Player>(PATH_PLAYER_YELLOW));
-        playersPrefabs.Add(EPlayerID.PLAYER_4, Resources.Load<Player>(PATH_PLAYER_GREEN));
-        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_1]);
-        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_2]);
-        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_3]);
-        IS_NOT_NULL(playersPrefabs[EPlayerID.PLAYER_4]);
+        EControllerID controllerID = eventHandle.Arg1;
 
-        playerSpawnPositionPrefab = Resources.Load<PlayerSpawnPosition>(PATH_PLAYER_SPAWN_POSITION);
-        IS_NOT_NULL(playerSpawnPositionPrefab);
-
-        playerRespawnGhostPrefab = Resources.Load<PlayerRespawnGhost>(PATH_PLAYER_RESPAWN_GHOST);
-        IS_NOT_NULL(playerRespawnGhostPrefab);
-    }
-
-    private void FindPlayerSpawnGhost()
-    {
-        PlayersSpawnPositions.Clear();
-
-        // Try to find already placed player spawn positions in the scene
-        PlayerSpawnPosition[] spawnPositions = FindObjectsOfType<PlayerSpawnPosition>();
-        foreach (PlayerSpawnPosition spawnPosition in spawnPositions)
+        if (IS_KEY_CONTAINED(controllersMap, controllerID))
         {
-            PlayersSpawnPositions.Add(spawnPosition.ToSpawnPlayerID, spawnPosition);
+            controllersMap.Remove(controllerID);
         }
+    }
+    
+    private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
+    {
+        EPlayerID playerID = eventHandle.UpdatedPlayerID;
+        float[] playerPosition = eventHandle.playerPosition;
 
-        // Determine spawn positions relative to this transform if no PlayerSpawnPosition found in scene
-        if (MotherOfManagers.Instance.IsSpawnGhostPlayerPositionsIfNotFound == true)
+        if (ActivePlayers.ContainsKey(playerID))
         {
-            int angle;
-            for (int i = 1; i < 5; i++)
-            {
-                angle = 90 * i;
-                EPlayerID playerID = GetPlayerIDFrom(i);
-                if (PlayersSpawnPositions.ContainsKey(playerID) == false)
-                {
-                    PlayerSpawnPosition spawnGhost = Instantiate(playerSpawnPositionPrefab);
-                    spawnGhost.ToSpawnPlayerID = playerID;
-                    spawnGhost.Position = transform.position + Vector3.forward * 3.0f + Vector3.left * 3.0f;
-                    spawnGhost.transform.RotateAround(transform.position, Vector3.up, angle);
-                    spawnGhost.Rotation = transform.rotation;
-                    PlayersSpawnPositions.Add(playerID, spawnGhost);
-                }
-            }
+            ActivePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
         }
     }
     #endregion
 
-    public bool IsPlayerActive(EPlayerID playerID)
+    #region public methods
+    public List<EPlayerID> GetJoinedPlayers()
+    {
+        List<EPlayerID> result = new List<EPlayerID>();
+        foreach (KeyValuePair<EPlayerID, PlayerJoinStatus> pair in partyStatus)
+        {
+            PlayerJoinStatus playerJoinStatus = pair.Value;
+            if (playerJoinStatus.HasJoined == true)
+            {
+                result.Add(pair.Key);
+            }
+        }
+        return result;
+    }
+
+    public bool HasPlayerJoined(EPlayerID playerID)
+    {
+        foreach (KeyValuePair<EPlayerID, PlayerJoinStatus> pair in partyStatus)
+        {
+            PlayerJoinStatus playerJoinStatus = pair.Value;
+            if ((playerID == pair.Key)
+                && (playerJoinStatus.HasJoined == true))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool IsPlayerAlive(EPlayerID playerID)
     {
         return ActivePlayers.ContainsKey(playerID);
     }
@@ -512,6 +667,24 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         return Teams[inTeamID].ToArray();
     }
 
+    public EPlayerID GetAssignedPlayerID(EControllerID controllerID)
+    {
+        if (IS_KEY_CONTAINED(controllersMap, controllerID))
+        {
+            return controllersMap[controllerID];
+        }
+        return EPlayerID.NONE;
+    }
+
+    public EControllerID GetAssignedControllerID(EPlayerID playerID)
+    {
+        if (IS_KEY_CONTAINED(partyStatus, playerID))
+        {
+            return partyStatus[playerID].ControllerID;
+        }
+        return EControllerID.NONE;
+    }
+    #endregion
 
     private IEnumerator FirstTimeSpellCastedCoroutine(EPlayerID playerID, ESpellSlot spellSlot, float duration)
     {
@@ -525,6 +698,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
         else { yield return new WaitForSeconds(0f); }
     }
+    
     private IEnumerator SetReadyToUseSpellCoroutine(EPlayerID playerID, ESpellSlot spellSlot)
     {
         if (ActivePlayers.ContainsKey(playerID))
@@ -542,141 +716,16 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
                 ActivePlayers[playerID].ReadyToUseSpell[spellSlot] = true;
                 ActivePlayers[playerID].HasCastedSpell = false;
             }
-            
-        }
-
-    }
-
-
-
-    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
-    {
-        EControllerID controllerID = eventHandle.Arg1;
-        EPlayerID playerID = eventHandle.Arg2;
-        AssignPlayerToTeam(playerID, GetIdenticPlayerTeam(playerID));
-
-        // Initialize dictionaries for the new player
-        if (IS_KEY_NOT_CONTAINED(playersJoinStatus, playerID))
-        {
-            playersJoinStatus.Add(playerID, new PlayerJoinStatus());
-        }
-
-        if ((MotherOfManagers.Instance.IsJoinAndSpawnPlayerOnControllerConnect == true)
-            || (controllerID.ContainedIn(AI_CONTROLLERS)))
-        {
-            if (IS_KEY_NOT_CONTAINED(ActivePlayers, playerID))
-            {
-                playersJoinStatus[playerID].HasJoined = true;
-                playersJoinStatus[playerID].IsReady = true;
-                StartCoroutine(DelayedTriggerJoinEvent(playerID));
-            }
-
-            if (MotherOfManagers.Instance.IsJoinAndSpawnPlayerOnControllerConnect == true)
-            {
-                SpawnPlayer(playerID);
-            }
         }
     }
 
-    private IEnumerator DelayedTriggerJoinEvent(EPlayerID playerID)
+    private void UpdatePartyDebugText()
     {
-        yield return new WaitForEndOfFrame();
-
-        EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);
-    }
-
-    private void On_INPUT_ControllerDisconnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
-    {
-        EPlayerID playerID = eventHandle.Arg2;
-
-        // Initialize dictionaries for the new player
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
+        string playerStatusLog = "Party join status : \n";
+        foreach (var pair in partyStatus)
         {
-            LogConsole("Removing " + playerID + " from joind status list");
-            playersJoinStatus.Remove(playerID);
+            playerStatusLog += pair.Key + " : " + pair.Value.ControllerID + " - joined : " + pair.Value.HasJoined + " | is ready : " + pair.Value.IsReady + "\n";
         }
-
-        // TODO : team?
-    }
-
-
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
-    {
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
-        {
-            playersJoinStatus[playerID].HasJoined = true;
-        }
-    }
-
-    private void On_PLAYERS_PlayerLeft(EPlayerID playerID)
-    {
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
-        {
-            playersJoinStatus[playerID].HasJoined = false;
-            CheckIfAllPlayersAreReady();
-        }
-    }
-
-    private void On_PLAYERS_PlayerReady(EPlayerID playerID)
-    {
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
-        {
-            playersJoinStatus[playerID].IsReady = true;
-
-            CheckIfAllPlayersAreReady();
-        }
-    }
-
-    private void On_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
-    {
-        if (IS_KEY_CONTAINED(playersJoinStatus, playerID))
-        {
-            playersJoinStatus[playerID].IsReady = false;
-        }
-    }
-
-    private void On_NETWORK_GameStateReplicate(NetEvent_GameStateReplication eventHandle)
-    {
-        EPlayerID playerID = eventHandle.UpdatedPlayerID;
-        float[] playerPosition = eventHandle.playerPosition;
-
-        if (ActivePlayers.ContainsKey(playerID))
-        {
-            ActivePlayers[playerID].transform.localPosition = new Vector3(playerPosition[0], playerPosition[1], playerPosition[2]);
-        }
-    }
-
-
-
-
-    private void CheckIfAllPlayersAreReady()
-    {
-        bool areAllReady = false;
-        foreach (PlayerJoinStatus playerJoinStatus in playersJoinStatus.Values)
-        {
-            if (playerJoinStatus.HasJoined == true)
-            {
-                areAllReady = true;
-                if (playerJoinStatus.IsReady == false)
-                {
-                    areAllReady = false;
-                    break;
-                }
-            }
-        }
-        if (areAllReady == true)
-        {
-            EventManager.Instance.Invoke_PLAYERS_AllPlayersReady();
-        }
-    }
-
-
-    /// <summary>
-    /// Get the player that is connected with the given controller.
-    /// Warning! A connected player is not necessarily a player that has joined the game session
-    /// </summary>
-    private bool IsPlayerConnected(EPlayerID playerID)
-    {
-        return InputManager.Instance.ConnectedControllers.ContainsValue(playerID);
+        LogCanvas(12, playerStatusLog);
     }
 }

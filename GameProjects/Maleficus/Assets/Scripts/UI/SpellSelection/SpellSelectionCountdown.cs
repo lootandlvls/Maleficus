@@ -47,7 +47,7 @@ public class SpellSelectionCountdown : BNJMOBehaviour
         StartNewCoroutine(ref StartCountdownEnumerator, StartCountdownCoroutine());
     }
 
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         
         StopCoroutineIfRunning(StartCountdownEnumerator);

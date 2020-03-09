@@ -60,8 +60,6 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
                 PlayerLivesIcons.Add(PlayerLife.LiveNumber, PlayerLife);
             }
         }
-
-
     }
 
     protected override void Start()
@@ -132,7 +130,7 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
         }
     }
 
-    private void On_PLAYERS_PlayerJoined(EPlayerID playerID)
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if (playerID == PlayerID)
         {

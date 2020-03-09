@@ -18,10 +18,6 @@ public class GameManager : AbstractSingletonManager<GameManager>
         if (MotherOfManagers.Instance.IsUseDebugGameMode == true)
         {
             ChosenGameModeType = MotherOfManagers.Instance.DebugGameMode;
-            if (SpawnChosenGameMode() == false)
-            {
-                LogConsoleError("Was not able to spawn GameMode for : " + ChosenGameModeType);
-            }
         }
     }
 
@@ -39,12 +35,19 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {
-        if (eventHandle.Arg1 == EScene.MENU)
+        EScene scene = eventHandle.Arg1;
+        switch (scene)
         {
-            if (CurrentGameMode != null)
-            {
-                Destroy(CurrentGameMode);
-            }
+            case EScene.MENU:
+                if (CurrentGameMode != null)
+                {
+                    Destroy(CurrentGameMode);
+                }
+                break;
+
+            case EScene.GAME:
+                SpawnChosenGameMode();
+                break;
         }
     }
 
@@ -86,6 +89,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
             LogConsole("Spawned : " + ChosenGameModeType);
             return true;
         }
+        LogConsole("Couldn't spawn : " + ChosenGameModeType);
         return false;
     }
 

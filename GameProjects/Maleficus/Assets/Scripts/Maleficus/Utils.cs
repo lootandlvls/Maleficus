@@ -484,16 +484,16 @@ namespace Maleficus
             char result = 'X';
             switch (ControllerID)
             {
-                case EControllerID.GAMEPAD_A:
+                case EControllerID.GAMEPAD_1:
                     result = 'A';
                     break;
-                case EControllerID.GAMEPAD_B:
+                case EControllerID.GAMEPAD_2:
                     result = 'B';
                     break;
-                case EControllerID.GAMEPAD_C:
+                case EControllerID.GAMEPAD_3:
                     result = 'C';
                     break;
-                case EControllerID.GAMEPAD_D:
+                case EControllerID.GAMEPAD_4:
                     result = 'D';
                     break;
             }
@@ -507,16 +507,16 @@ namespace Maleficus
             switch (ControllerID)
             {
                 case 'A':
-                    result = EControllerID.GAMEPAD_A;
+                    result = EControllerID.GAMEPAD_1;
                     break;
                 case 'B':
-                    result = EControllerID.GAMEPAD_B;
+                    result = EControllerID.GAMEPAD_2;
                     break;
                 case 'C':
-                    result = EControllerID.GAMEPAD_C;
+                    result = EControllerID.GAMEPAD_3;
                     break;
                 case 'D':
-                    result = EControllerID.GAMEPAD_D;
+                    result = EControllerID.GAMEPAD_4;
                     break;
             }
             return result;
@@ -711,6 +711,10 @@ namespace Maleficus
                 case EPlayerID.PLAYER_4:
                     result = EClientID.CLIENT_4;
                     break;
+
+                case EPlayerID.SPECTATOR:
+                    result = EClientID.SPECTATOR;
+                    break;
             }
             return result;
         }
@@ -809,6 +813,26 @@ namespace Maleficus
         }
 
 
+        public static EControllerID GetAIControllerIDFrom(int index)
+        {
+            switch(index)
+            {
+                case 1:
+                    return EControllerID.AI_1;
+                        
+                case 2:
+                    return EControllerID.AI_2;
+                                 
+                case 3:
+                    return EControllerID.AI_3;
+                        
+                case 4:
+                    return EControllerID.AI_4;
+
+                default:
+                    return EControllerID.NONE;
+            }
+        }
 
 
         /// <summary> Converts an array with 3 elements to a Vector3 </summary>

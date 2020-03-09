@@ -81,7 +81,6 @@ public class Linear_Hit : AbstractSpell
     private void OnTriggerEnter(Collider other)
     {
         float collisionTime = Time.time;
-        Debug.Log(other.name);
 
         if (hasBeenTriggered == false)
         {

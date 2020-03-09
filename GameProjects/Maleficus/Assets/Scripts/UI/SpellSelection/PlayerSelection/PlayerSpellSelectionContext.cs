@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 using static Maleficus.Utils;
 
 public class PlayerSpellSelectionContext : BNJMOBehaviour
 {
-    public EPlayerID PlayerID { get { return playerID; } }
+    public event Action<EPlayerID> LeaveRequest;
+    public event Action<EPlayerID> ReadyRequest;
+    public event Action<EPlayerID> CancelReadyRequest;
 
+    public EPlayerID PlayerID { get { return playerID; } }
 
     [Header("Player Spell Selection Context")]
     [SerializeField] private EPlayerID playerID;
@@ -16,7 +20,6 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
     [SerializeField] private GameObject readyView;
     [SerializeField] private GameObject spellStartPosition;
 
-    
     private PlayerSkillPointsIndicator playerSkillPointsIndicator;
 
     private ESpellSelectionState spellSelectionState = ESpellSelectionState.NOT_CONNECTED;
@@ -34,19 +37,13 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
     {
         base.InitializeEventsCallbacks();
 
+        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
+        EventManager.Instance.PLAYERS_PlayerLeft += On_PLAYERS_PlayerLeft;
+        EventManager.Instance.PLAYERS_PlayerReady += On_PLAYERS_PlayerReady;
+        EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
+
         EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
         EventManager.Instance.UI_SpellChosen            += On_UI_SpellChosen;
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-
-        if (EventManager.IsInstanceSet)
-        {
-            EventManager.Instance.INPUT_ButtonPressed.Event -= On_INPUT_ButtonPressed_Event;
-            EventManager.Instance.UI_SpellChosen            -= On_UI_SpellChosen;
-        }
     }
 
     protected override void InitializeComponents()
@@ -75,103 +72,23 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         UpdateState(ESpellSelectionState.NOT_CONNECTED);
     }
 
-    private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
+    protected override void OnDestroy()
     {
-        EInputButton inputButton = eventHandle.InputButton;
-        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+        base.OnDestroy();
 
+        ClearEventCallbakcs(LeaveRequest);
+        ClearEventCallbakcs(ReadyRequest);
+        ClearEventCallbakcs(CancelReadyRequest);
 
-        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
+        if (EventManager.IsInstanceSet)
         {
-            if (playerID == this.playerID)
-            {
-                switch (inputButton)
-                {
-                    case EInputButton.CONFIRM:
-                        
-                        switch (spellSelectionState)
-                        {
-                            case ESpellSelectionState.NOT_CONNECTED:
-                                ConnectPlayer();
-                                break;
+            EventManager.Instance.PLAYERS_PlayerJoined -= On_PLAYERS_PlayerJoined;
+            EventManager.Instance.PLAYERS_PlayerLeft -= On_PLAYERS_PlayerLeft;
+            EventManager.Instance.PLAYERS_PlayerReady -= On_PLAYERS_PlayerReady;
+            EventManager.Instance.PLAYERS_PlayerCanceledReady -= On_PLAYERS_PlayerCanceledReady;
 
-                            case ESpellSelectionState.CHOOSING_SPELLS:
-
-                                
-                                AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
-
-                                if (selectedSpellsCounter == 3)
-                                {
-                                    SetToReady();
-                                }
-                                else 
-                                {
-                                    // Get and check spell slot
-                                    ESpellSlot spellSlot = GetNextUnselectedSpellSlotFromLeft();
-                                    if ((IS_NOT_NONE(spellSlot))
-                                        && (CanAddSpell(spell, spellSlot)))
-                                    {
-                                        AddSpell(spell, spellSlot);
-                                    }
-                                }
-                                break;
-                        }
-                        break;
-
-                    case EInputButton.CANCEL:
-                        switch (spellSelectionState)
-                        {
-                            case ESpellSelectionState.CHOOSING_SPELLS:
-                                if (selectedSpellsCounter == 0)
-                                {
-                                    DisconnectPlayer();
-                                }
-                                else
-                                {
-                                    ESpellSlot spellSlot = GetNextSelectedSpellSlotFromRight();
-                                    if (IS_NOT_NONE(spellSlot))
-                                    {
-                                        RemoveSpell(spellSlot);
-                                    }
-                                }
-                                break;
-
-                            case ESpellSelectionState.READY:
-                                CancelReady();
-                                break;
-                        }
-
-                        break;
-
-                    default:
-                        if (spellSelectionState == ESpellSelectionState.CHOOSING_SPELLS)
-                        {
-                            AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
-
-                            ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
-                            if (spellSlot != ESpellSlot.NONE)
-                            {
-                                if (CanAddSpell(spell, spellSlot))
-                                {
-                                    if (selectedSpells[spellSlot].IsSelected == true)
-                                    {
-                                        RemoveSpell(spellSlot);
-                                    }
-                                    AddSpell(spell, spellSlot);
-                                }
-                            }
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
-    private void On_UI_SpellChosen(EPlayerID playerID, AbstractSpell abstractSpell, ESpellSlot spellSlot)
-    {
-        if (playerID == PlayerID)
-        {
-            SpellManager.Instance.SpawnPreviewSpell(abstractSpell, spellStartPosition.transform);
+            EventManager.Instance.INPUT_ButtonPressed.Event -= On_INPUT_ButtonPressed_Event;
+            EventManager.Instance.UI_SpellChosen -= On_UI_SpellChosen;
         }
     }
 
@@ -237,37 +154,6 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         LogConsole("Counter : " + selectedSpellsCounter);
     }
 
-    private void ConnectPlayer()
-    {
-        UpdateState(ESpellSelectionState.CHOOSING_SPELLS);
-        playerSkillPointsIndicator.ResetSkillPoints();
-        selectedSpellsCounter = 0;
-
-        EventManager.Instance.Invoke_PLAYERS_PlayerJoined(playerID);
-    }
-
-    private void DisconnectPlayer()
-    {
-        UpdateState(ESpellSelectionState.NOT_CONNECTED);
-
-        EventManager.Instance.Invoke_PLAYERS_PlayerLeft(playerID);
-    }
-
-    private void SetToReady()
-    {
-        UpdateState(ESpellSelectionState.READY);
-
-        EventManager.Instance.Invoke_PLAYERS_PlayerReady(playerID);
-    }
-
-    private void CancelReady()
-    {
-        UpdateState(ESpellSelectionState.CHOOSING_SPELLS);
-
-        EventManager.Instance.Invoke_PLAYERS_PLAYERS_PlayerCanceledReady(playerID);
-    }
-
-
     private void UpdateState(ESpellSelectionState newSpellSelectionState)
     {
         spellSelectionState = newSpellSelectionState;
@@ -296,7 +182,6 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         }
     }
    
-
     private ESpellSlot ConvertSpellSlot(int index)
     {
         LogConsole("convertin : " + index);
@@ -346,5 +231,141 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         return ESpellSlot.NONE;
     }
 
+
+    #region Event Callbacks
+    private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
+    {
+        if (playerID == this.playerID)
+        {
+            UpdateState(ESpellSelectionState.CHOOSING_SPELLS);
+            playerSkillPointsIndicator.ResetSkillPoints();
+            selectedSpellsCounter = 0;
+        }
+    }
+
+    private void On_PLAYERS_PlayerLeft(EPlayerID playerID)
+    {
+        if (playerID == this.playerID)
+        {
+            UpdateState(ESpellSelectionState.NOT_CONNECTED);
+        }
+    }
+
+    private void On_PLAYERS_PlayerReady(EPlayerID playerID)
+    {
+        if (playerID == this.playerID)
+        {
+            UpdateState(ESpellSelectionState.READY);
+        }
+    }
+
+    private void On_PLAYERS_PlayerCanceledReady(EPlayerID playerID)
+    {
+        if (playerID == this.playerID)
+        {
+            UpdateState(ESpellSelectionState.CHOOSING_SPELLS);
+        }
+    }
+
+    private void On_INPUT_ButtonPressed_Event(NetEvent_ButtonPressed eventHandle)
+    {
+        EInputButton inputButton = eventHandle.InputButton;
+        EControllerID controllerID = eventHandle.ControllerID;
+        EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
+
+
+        if (AppStateManager.Instance.CurrentState == EAppState.IN_MENU_IN_SPELL_SELECTION)
+        {
+            if (playerID == this.playerID)
+            {
+                switch (inputButton)
+                {
+                    case EInputButton.CONFIRM:
+                        LogConsole(playerID + " - Player selection  : " + selectedSpellsCounter);
+                        switch (spellSelectionState)
+                        {
+                            case ESpellSelectionState.NOT_CONNECTED:
+                                // Player join is handeled by PlayerManager
+                                break;
+
+                            case ESpellSelectionState.CHOOSING_SPELLS:
+                                AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
+
+                                if (selectedSpellsCounter == 3)
+                                {
+                                    InvokeEventIfBound(ReadyRequest, playerID);
+                                }
+                                else
+                                {
+                                    // Get and check spell slot
+                                    ESpellSlot spellSlot = GetNextUnselectedSpellSlotFromLeft();
+                                    if ((IS_NOT_NONE(spellSlot))
+                                        && (CanAddSpell(spell, spellSlot)))
+                                    {
+                                        AddSpell(spell, spellSlot);
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+
+                    case EInputButton.CANCEL:
+                        switch (spellSelectionState)
+                        {
+                            case ESpellSelectionState.CHOOSING_SPELLS:
+                                if (selectedSpellsCounter == 0)
+                                {
+                                    InvokeEventIfBound(LeaveRequest, playerID);
+                                }
+                                else
+                                {
+                                    ESpellSlot spellSlot = GetNextSelectedSpellSlotFromRight();
+                                    if (IS_NOT_NONE(spellSlot))
+                                    {
+                                        RemoveSpell(spellSlot);
+                                    }
+                                }
+                                break;
+
+                            case ESpellSelectionState.READY:
+                                InvokeEventIfBound(CancelReadyRequest, playerID);
+                                break;
+                        }
+
+                        break;
+
+                    default:
+                        if (spellSelectionState == ESpellSelectionState.CHOOSING_SPELLS)
+                        {
+                            AbstractSpell spell = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID).Spell;
+
+                            ESpellSlot spellSlot = GetSpellSlotFrom(inputButton);
+                            if (spellSlot != ESpellSlot.NONE)
+                            {
+                                if (CanAddSpell(spell, spellSlot))
+                                {
+                                    if (selectedSpells[spellSlot].IsSelected == true)
+                                    {
+                                        RemoveSpell(spellSlot);
+                                    }
+                                    AddSpell(spell, spellSlot);
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    private void On_UI_SpellChosen(EPlayerID playerID, AbstractSpell abstractSpell, ESpellSlot spellSlot)
+    {
+        if (playerID == PlayerID)
+        {
+            SpellManager.Instance.SpawnPreviewSpell(abstractSpell, spellStartPosition.transform);
+        }
+    }
+
+    #endregion
 
 }

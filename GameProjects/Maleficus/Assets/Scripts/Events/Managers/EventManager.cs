@@ -141,7 +141,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog(playerID + " died");
     }
 
-
     public event Action PLAYERS_PlayerCollectedCoin;
     public void Invoke_PLAYERS_PlayerCollectedCoin()
     {
@@ -152,14 +151,14 @@ public class EventManager : AbstractSingletonManager<EventManager>
         DebugLog("Player collected a coin");
     }
         
-    public event Action<EPlayerID> PLAYERS_PlayerJoined;
-    public void Invoke_PLAYERS_PlayerJoined(EPlayerID playerID)
+    public event Action<EPlayerID, EControllerID> PLAYERS_PlayerJoined;
+    public void Invoke_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
         if (PLAYERS_PlayerJoined != null)
         {
-            PLAYERS_PlayerJoined.Invoke(playerID);
+            PLAYERS_PlayerJoined.Invoke(playerID, controllerID);
         }
-        DebugLog("Player " + playerID + " joined");
+        DebugLog(controllerID + " joined as : " + playerID);
     }
         
     public event Action<EPlayerID> PLAYERS_PlayerLeft;
@@ -318,11 +317,11 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #region INPUT
 
-    public MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>> INPUT_ControllerConnected
-        = new MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>>("INPUT_ControllerConnected");
+    public MaleficusEvent<Event_GenericHandle<EControllerID>> INPUT_ControllerConnected
+        = new MaleficusEvent<Event_GenericHandle<EControllerID>>("INPUT_ControllerConnected");
 
-    public MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>> INPUT_ControllerDisconnected
-        = new MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>>("INPUT_ControllerDisconnected");
+    public MaleficusEvent<Event_GenericHandle<EControllerID>> INPUT_ControllerDisconnected
+        = new MaleficusEvent<Event_GenericHandle<EControllerID>>("INPUT_ControllerDisconnected");
 
     public MaleficusEvent<NetEvent_ButtonPressed> INPUT_ButtonPressed 
         = new MaleficusEvent<NetEvent_ButtonPressed>("INPUT_ButtonPressed");

@@ -6,7 +6,7 @@ using static Maleficus.Consts;
 
 public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
 {
-    // When adding a new attribute here, remember to add profile setup in SpawnManager class
+    // When adding a new attribute here, remember to add profile setup in SpawnManager class !!!
 
     [Separator("Networking")]
     [SerializeField] public bool IsServer = false;
@@ -23,13 +23,10 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [ConditionalField(nameof(IsUseDebugGameMode))] [SerializeField] public EGameMode DebugGameMode = EGameMode.NONE;
 
     [Separator("Player")]
-    [SerializeField] public bool IsJoinAndSpawnPlayerOnControllerConnect = false;
-    [SerializeField] public bool IsSpawnTouchAsPlayer1 = false;
     [SerializeField] public bool IsSpawnGhostPlayerPositionsIfNotFound = false;
 
     [Separator("AI")]
-    [SerializeField] public bool IsSpawnRemainingAIPlayersOnGameStart = false;
-    [SerializeField] public float MaximumNumberOfAIToSpawn = 4.0f;
+    [SerializeField] public int MaximumNumberOfAIToSpawn = 4;
     [SerializeField] public bool IsAISpawnSpellsEneabled = true;
     [SerializeField] public bool IsAIArenaCenterAttractionEnabled = true;
     [SerializeField] public bool IsAIClosestPlayerDeviationEnabled = true;
