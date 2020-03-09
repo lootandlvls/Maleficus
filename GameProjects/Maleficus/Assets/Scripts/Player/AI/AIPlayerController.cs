@@ -72,7 +72,7 @@ public class AIPlayerController : BNJMOBehaviour
         base.Start();
 
         playerID = myPlayer.PlayerID;
-        controllerID = InputManager.Instance.GetConnectedControllerIDFrom(playerID);
+        controllerID = PlayerManager.Instance.GetAssignedControllerID(playerID);
         IS_NOT_NONE(playerID);
         IS_NOT_NONE(controllerID);
 

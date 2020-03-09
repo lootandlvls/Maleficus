@@ -36,14 +36,7 @@ public abstract class AbstractUIAction : BNJMOBehaviour
     {
         base.OnDestroy();
 
-        if (ActionButtonPressed != null)
-        {
-            Delegate[] delegates = ActionButtonPressed.GetInvocationList();
-            foreach (Delegate myDelegate in delegates)
-            {
-                ActionButtonPressed -= (myDelegate as Action);
-            }
-        }
+        ClearEventCallbakcs(ActionButtonPressed);
     }
 
     /// <summary>

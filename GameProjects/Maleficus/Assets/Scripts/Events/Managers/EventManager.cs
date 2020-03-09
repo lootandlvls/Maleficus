@@ -318,11 +318,11 @@ public class EventManager : AbstractSingletonManager<EventManager>
 
     #region INPUT
 
-    public MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>> INPUT_ControllerConnected
-        = new MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>>("INPUT_ControllerConnected");
+    public MaleficusEvent<Event_GenericHandle<EControllerID>> INPUT_ControllerConnected
+        = new MaleficusEvent<Event_GenericHandle<EControllerID>>("INPUT_ControllerConnected");
 
-    public MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>> INPUT_ControllerDisconnected
-        = new MaleficusEvent<Event_GenericHandle<EControllerID, EPlayerID>>("INPUT_ControllerDisconnected");
+    public MaleficusEvent<Event_GenericHandle<EControllerID>> INPUT_ControllerDisconnected
+        = new MaleficusEvent<Event_GenericHandle<EControllerID>>("INPUT_ControllerDisconnected");
 
     public MaleficusEvent<NetEvent_ButtonPressed> INPUT_ButtonPressed 
         = new MaleficusEvent<NetEvent_ButtonPressed>("INPUT_ButtonPressed");

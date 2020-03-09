@@ -8,11 +8,10 @@ using static Maleficus.Utils;
 /// </summary>
 public class InputManager : AbstractSingletonManager<InputManager>
 {
-    public EInputMode                           InputMode                   { get { return MotherOfManagers.Instance.InputMode; } }
+    public EInputMode           InputMode                       { get { return MotherOfManagers.Instance.InputMode; } }
 
     /// <summary> Mapping from controllerID to playerID </summary> 
-    //public Dictionary<EControllerID, EPlayerID> ConnectedControllers        { get; } = new Dictionary<EControllerID, EPlayerID>();
-    public Dictionary<EControllerID, EPlayerID> ConnectedControllers        { get; } = new Dictionary<EControllerID, EPlayerID>();
+    private List<EControllerID>  connectedControllers         { get; } = new List<EControllerID>();
 
     AbstractInputSource[] inputSources;
 
@@ -33,7 +32,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     {
         base.InitializeEventsCallbacks();
 
-        EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Event += On_NETWORK_ReceivedGameSessionInfo;
+        //EventManager.Instance.NETWORK_ReceivedGameSessionInfo.Event += On_NETWORK_ReceivedGameSessionInfo;
         EventManager.Instance.APP_SceneChanged.Event                += On_APP_SceneChanged;
     }
 
@@ -49,24 +48,31 @@ public class InputManager : AbstractSingletonManager<InputManager>
         base.LateStart();
 
         // Connect Touch player as first player
-        if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
-            && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true))
-        {
-            ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
-        }
+        //if ((MotherOfManagers.Instance.InputMode == EInputMode.TOUCH)
+        //    && (MotherOfManagers.Instance.IsSpawnTouchAsPlayer1 == true))
+        //{
+        //    ConnectControllerToPlayer(EControllerID.TOUCH, EPlayerID.PLAYER_1);
+        //}
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        UpdateControllersDebugText();
     }
 
     #region Input Source Callbacks
     private void On_InputSource_ButtonPressed(EControllerID controllerID, EInputButton inputButton)
     {
-        if (ConnectedControllers.ContainsKey(controllerID))
+        if (connectedControllers.Contains(controllerID))
         {
-            EPlayerID playerID = ConnectedControllers[controllerID];
+            EPlayerID playerID = PlayerManager.Instance.GetAssignedPlayerID(controllerID);
             EClientID clientID = GetClientIDFrom(playerID);
 
             if (inputButton != EInputButton.NONE)
             {
-                NetEvent_ButtonPressed buttonPressed = new NetEvent_ButtonPressed(clientID, inputButton);
+                NetEvent_ButtonPressed buttonPressed = new NetEvent_ButtonPressed(clientID, controllerID, inputButton);
                 EventManager.Instance.INPUT_ButtonPressed.Invoke(buttonPressed, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugButtonEvents);
             }
         }
@@ -74,14 +80,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void On_InputSource_ButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
-        if (ConnectedControllers.ContainsKey(controllerID))
+        if (connectedControllers.Contains(controllerID))
         {
-            EPlayerID playerID = ConnectedControllers[controllerID];
+            EPlayerID playerID = PlayerManager.Instance.GetAssignedPlayerID(controllerID);
             EClientID clientID = GetClientIDFrom(playerID);
 
             if (inputButton != EInputButton.NONE)
             {
-                NetEvent_ButtonReleased buttonReleased = new NetEvent_ButtonReleased(clientID, inputButton);
+                NetEvent_ButtonReleased buttonReleased = new NetEvent_ButtonReleased(clientID, controllerID, inputButton);
                 EventManager.Instance.INPUT_ButtonReleased.Invoke(buttonReleased, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugButtonEvents);
             }
         }
@@ -90,14 +96,14 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void On_InputSource_JoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
-        if (ConnectedControllers.ContainsKey(controllerID))
+        if (connectedControllers.Contains(controllerID))
         {
-            EPlayerID playerID = ConnectedControllers[controllerID];
+            EPlayerID playerID = PlayerManager.Instance.GetAssignedPlayerID(controllerID);
             EClientID clientID = GetClientIDFrom(playerID);
 
             if (joystickType != EJoystickType.NONE)
             {
-                NetEvent_JoystickMoved joystickMoved = new NetEvent_JoystickMoved(clientID, joystickType, x, y);
+                NetEvent_JoystickMoved joystickMoved = new NetEvent_JoystickMoved(clientID, controllerID, joystickType, x, y);
                 EventManager.Instance.INPUT_JoystickMoved.Invoke(joystickMoved, EEventInvocationType.TO_SERVER_ONLY, MotherOfManagers.Instance.CanDebugJoystickEvents);
             }
         }
@@ -105,44 +111,44 @@ public class InputManager : AbstractSingletonManager<InputManager>
     #endregion
 
     #region Server Input
-    private void On_NETWORK_ReceivedGameSessionInfo(Event_GenericHandle<List<EPlayerID>, EPlayerID> eventHandle)
-    {
-        List<EPlayerID> connectedPlayers = eventHandle.Arg1;
-        EPlayerID ownPlayer = eventHandle.Arg2;
+    //private void On_NETWORK_ReceivedGameSessionInfo(Event_GenericHandle<List<EPlayerID>, EPlayerID> eventHandle)
+    //{
+    //    List<EPlayerID> connectedPlayers = eventHandle.Arg1;
+    //    EPlayerID ownPlayer = eventHandle.Arg2;
 
-        // Connect controllers
-        foreach (EPlayerID playerID in connectedPlayers)
-        {
-            if (playerID == ownPlayer)
-            {
-                ConnectControllerToPlayer(EControllerID.TOUCH, playerID);
-            }
-            else
-            {
-                ConnectControllerToPlayer(GetControllerNeteworkID(playerID), playerID);
-            }
-        }
-    }
+    //    // Connect controllers
+    //    foreach (EPlayerID playerID in connectedPlayers)
+    //    {
+    //        if (playerID == ownPlayer)
+    //        {
+    //            ConnectControllerToPlayer(EControllerID.TOUCH, playerID);
+    //        }
+    //        else
+    //        {
+    //            ConnectControllerToPlayer(GetControllerNeteworkID(playerID), playerID);
+    //        }
+    //    }
+    //}
 
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {
-        if (eventHandle.Arg1 == EScene.MENU)
-        {
-            // Disconnect all network controllers and AI
-            List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
-            foreach (EControllerID controllerID in ConnectedControllers.Keys)
-            {
-                if (controllerID.ContainedIn(NETWORK_CONTROLLERS)
-                    || (controllerID.ContainedIn(AI_CONTROLLERS)))
-                {
-                    controllerIDsToRemove.Add(controllerID);
-                }
-            }
-            foreach (EControllerID controllerID in controllerIDsToRemove)
-            {
-                DisconnectController(controllerID);
-            }
-        }
+        //if (eventHandle.Arg1 == EScene.MENU)
+        //{
+        //    // Disconnect all network controllers and AI
+        //    List<EControllerID> controllerIDsToRemove = new List<EControllerID>();
+        //    foreach (EControllerID controllerID in ConnectedControllers.Keys)
+        //    {
+        //        if (controllerID.ContainedIn(NETWORK_CONTROLLERS)
+        //            || (controllerID.ContainedIn(AI_CONTROLLERS)))
+        //        {
+        //            controllerIDsToRemove.Add(controllerID);
+        //        }
+        //    }
+        //    foreach (EControllerID controllerID in controllerIDsToRemove)
+        //    {
+        //        DisconnectController(controllerID);
+        //    }
+        //}
     }
     #endregion
 
@@ -190,76 +196,71 @@ public class InputManager : AbstractSingletonManager<InputManager>
     //    return true;
     //}
 
-    public void ConnectControllerAsSpectator(EControllerID controllerID)
+    public bool ConnectController(EControllerID controllerID)
     {
-        //// Check parameters
-        //if (ConnectedControllers.ContainsKey(controllerID) == true)
-        //{
-        //    if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-        //    {
-        //        Debug.LogError("Trying to connect a controller that is already connected.");
-        //    }
-        //    return;
-        //}
-
         if (controllerID == EControllerID.NONE)
         {
             Debug.LogError("Trying to connect a controller that is NONE.");
-            return;
+            return false;
+        }
+        if (connectedControllers.Contains(controllerID))
+        {
+            Debug.LogError("Trying to connect a controller that is already connected.");
+            return false;
         }
 
-        ConnectedControllers.Add(controllerID, EPlayerID.SPECTATOR);
+        connectedControllers.Add(controllerID);
 
-        Debug.Log("Connecting new controller " + controllerID + " to player : " + EPlayerID.SPECTATOR);
+        Debug.Log("Connecting new controller " + controllerID);
 
         // Invoke event
-        Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, EPlayerID.SPECTATOR);
+        Event_GenericHandle<EControllerID> controllerConnected = new Event_GenericHandle<EControllerID>(controllerID);
         EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
+
+        return true;
     }
 
-    private void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
-    {
-        // Check parameters
-        if ((ConnectedControllers.ContainsKey(controllerID) == true)
-            || (ConnectedControllers.ContainsValue(playerID) == true))
-        {
-            if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
-            {
-                Debug.LogError("Trying to connect a controller that is already connected.");
-            }
-            return;
-        }
-        if ((playerID == EPlayerID.NONE)
-            || (controllerID == EControllerID.NONE))
-        {
-            Debug.LogError("Trying to connect a controller or player that is NONE.");
-            return;
-        }
+    //private void ConnectControllerToPlayer(EControllerID controllerID, EPlayerID playerID)
+    //{
+    //    // Check parameters
+    //    if ((ConnectedControllers.ContainsKey(controllerID) == true)
+    //        || (ConnectedControllers.ContainsValue(playerID) == true))
+    //    {
+    //        if (MotherOfManagers.Instance.IsSpawnRemainingAIPlayersOnGameStart == false)
+    //        {
+    //            Debug.LogError("Trying to connect a controller that is already connected.");
+    //        }
+    //        return;
+    //    }
+    //    if ((playerID == EPlayerID.NONE)
+    //        || (controllerID == EControllerID.NONE))
+    //    {
+    //        Debug.LogError("Trying to connect a controller or player that is NONE.");
+    //        return;
+    //    }
 
-        ConnectedControllers.Add(controllerID, playerID);
+    //    ConnectedControllers.Add(controllerID, playerID);
 
-        Debug.Log("Connecting new controller " + controllerID + " to player : " + playerID);
+    //    Debug.Log("Connecting new controller " + controllerID + " to player : " + playerID);
 
-        // Invoke event
-        Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
-        EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
-    }
+    //    // Invoke event
+    //    Event_GenericHandle<EControllerID, EPlayerID> controllerConnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
+    //    EventManager.Instance.INPUT_ControllerConnected.Invoke(controllerConnected);
+    //}
 
 
     public void DisconnectController(EControllerID controllerID)
     {
-        if (ConnectedControllers.ContainsKey(controllerID) == false)
+        if (connectedControllers.Contains(controllerID) == false)
         {
             Debug.LogError("Trying to disconnect a controller that is not connected.");
             return;
         }
 
-        EPlayerID playerID = ConnectedControllers[controllerID];
-
-        ConnectedControllers.Remove(controllerID);
+        connectedControllers.Remove(controllerID);
 
         // Invoke event
-        Event_GenericHandle<EControllerID, EPlayerID> controllerDisconnected = new Event_GenericHandle<EControllerID, EPlayerID>(controllerID, playerID);
+        Event_GenericHandle<EControllerID> controllerDisconnected = new Event_GenericHandle<EControllerID>(controllerID);
         EventManager.Instance.INPUT_ControllerDisconnected.Invoke(controllerDisconnected);
     }
 
@@ -281,45 +282,45 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
         foreach (EControllerID aIControllerID in AI_CONTROLLERS)
         {
-            ConnectControllerAsSpectator(aIControllerID);
+            ConnectController(aIControllerID);
         }
     }
 
     public bool IsControllerConnected(EControllerID controllerID)
     {
-        return ConnectedControllers.ContainsKey(controllerID);
+        return connectedControllers.Contains(controllerID);
     }
     #endregion
 
 
-    /// <summary>
-    /// Gets the connected PlayerID to the given ControllerID
-    /// </summary>
-    /// <returns> NONE if given controllerID is not connected</returns>
-    public EPlayerID GetConnectedPlayerIDFrom(EControllerID controllerID)
-    {
-        if (ConnectedControllers.ContainsKey(controllerID))
-        {
-            return ConnectedControllers[controllerID];
-        }
-        return EPlayerID.NONE;
-    }
+    ///// <summary>
+    ///// Gets the connected PlayerID to the given ControllerID
+    ///// </summary>
+    ///// <returns> NONE if given controllerID is not connected</returns>
+    //public EPlayerID GetConnectedPlayerIDFrom(EControllerID controllerID)
+    //{
+    //    if (connectedControllers.Contains(controllerID))
+    //    {
+    //        return connectedControllers[controllerID];
+    //    }
+    //    return EPlayerID.NONE;
+    //}
 
-    /// <summary>
-    /// Gets the connected ControllerID from the given PlayerID
-    /// </summary>
-    /// <returns> NONE if given playerID is not connected</returns>
-    public EControllerID GetConnectedControllerIDFrom(EPlayerID playerID)
-    {
-        foreach(EControllerID controllerID in ConnectedControllers.Keys)
-        {
-            if (ConnectedControllers[controllerID] == playerID)
-            {
-                return controllerID;
-            }
-        }
-        return EControllerID.NONE;
-    }
+    ///// <summary>
+    ///// Gets the connected ControllerID from the given PlayerID
+    ///// </summary>
+    ///// <returns> NONE if given playerID is not connected</returns>
+    //public EControllerID GetConnectedControllerIDFrom(EPlayerID playerID)
+    //{
+    //    foreach(EControllerID controllerID in connectedControllers.Keys)
+    //    {
+    //        if (connectedControllers[controllerID] == playerID)
+    //        {
+    //            return controllerID;
+    //        }
+    //    }
+    //    return EControllerID.NONE;
+    //}
 
     /// <summary>
     /// Returns (the first) Input Source of type "A" attached on the Input Manager.
@@ -347,4 +348,13 @@ public class InputManager : AbstractSingletonManager<InputManager>
         return result;
     }
 
+    private void UpdateControllersDebugText()
+    {
+        string playerStatusLog = "Connected controllers : \n";
+        foreach (EControllerID controllerID in connectedControllers)
+        {
+            playerStatusLog += controllerID + "\n";
+        }
+        LogCanvas(13, playerStatusLog);
+    }
 }

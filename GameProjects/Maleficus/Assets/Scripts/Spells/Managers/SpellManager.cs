@@ -54,7 +54,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.SPELLS_SpellHitPlayer             += On_SPELLS_SpellHitPlayer;
         EventManager.Instance.UI_SpellChosen                    += On_UI_SpellChosen;
         EventManager.Instance.UI_SpellRemoved                   += On_UI_SpellRemoved;
-        EventManager.Instance.INPUT_ControllerConnected.Event   += On_INPUT_ControllerConnected;
+        //EventManager.Instance.INPUT_ControllerConnected.Event   += On_INPUT_ControllerConnected; // TODO: Move this to PlayerJoined and refactor AI
         EventManager.Instance.APP_SceneChanged.Event            += On_APP_SceneChanged;    
     }
 
@@ -126,50 +126,25 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
     // Assign spells to connected AI player
-    private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID, EPlayerID> eventHandle)
-    {
-        EControllerID controllerID = eventHandle.Arg1;
-        EPlayerID playerID = eventHandle.Arg2;
-        if (controllerID.ContainedIn(AI_CONTROLLERS))
-        {
-            LogConsole("Choosing random spells for : " + playerID);
-            AbstractSpell[] spells = ChooseRandomSpells();
-            if (spells.Length == 3)
-            {
-                playersChosenSpells[playerID][ESpellSlot.SPELL_1] = spells[0];
-                playersChosenSpells[playerID][ESpellSlot.SPELL_2] = spells[1];
-                playersChosenSpells[playerID][ESpellSlot.SPELL_3] = spells[2];
-            }
-            else
-            {
-                LogConsoleError("Randomly chosing spells went wrong!");
-            }
-
-            //LogConsole("Adding debug spells for AI");
-            //for (int j = 0; j < 3; j++)
-            //{
-            //    ESpellSlot spellSlot = GetSpellSlotFrom(j + 1);
-            //    switch (playerID)
-            //    {
-            //        case EPlayerID.PLAYER_1:
-            //            playersChosenSpells[EPlayerID.PLAYER_1][spellSlot] = DebugSpells_Player1[j];
-            //            break;
-
-            //             case EPlayerID.PLAYER_2:
-            //            playersChosenSpells[EPlayerID.PLAYER_2][spellSlot] = DebugSpells_Player2[j];
-            //            break;
-
-            //             case EPlayerID.PLAYER_3:
-            //            playersChosenSpells[EPlayerID.PLAYER_3][spellSlot] = DebugSpells_Player3[j];
-            //            break;
-
-            //             case EPlayerID.PLAYER_4:
-            //            playersChosenSpells[EPlayerID.PLAYER_4][spellSlot] = DebugSpells_Player4[j];
-            //            break;
-            //    }
-            //}
-        }
-    }
+    //private void On_INPUT_ControllerConnected(Event_GenericHandle<EControllerID> eventHandle)
+    //{
+    //    EControllerID controllerID = eventHandle.Arg1;
+    //    if (controllerID.ContainedIn(AI_CONTROLLERS))
+    //    {
+    //        LogConsole("Choosing random spells for : " + playerID);
+    //        AbstractSpell[] spells = ChooseRandomSpells();
+    //        if (spells.Length == 3)
+    //        {
+    //            playersChosenSpells[playerID][ESpellSlot.SPELL_1] = spells[0];
+    //            playersChosenSpells[playerID][ESpellSlot.SPELL_2] = spells[1];
+    //            playersChosenSpells[playerID][ESpellSlot.SPELL_3] = spells[2];
+    //        }
+    //        else
+    //        {
+    //            LogConsoleError("Randomly chosing spells went wrong!");
+    //        }
+    //    }
+    //}
 
     private void On_APP_SceneChanged(Event_GenericHandle<EScene> eventHandle)
     {

@@ -125,7 +125,7 @@ public abstract class BNJMOBehaviour : MonoBehaviour
 
     }
 
-      /// <summary>
+    /// <summary>
     /// Prints an error log text into the console if logging is enabled and the category of the text to log is not already added into the ignore list.
     /// </summary>
     /// <param name="logText"> Log text to print </param>
@@ -147,7 +147,6 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     #endregion
 
     #region Checkers
-
     /// <summary>
     /// Checks if the the given object's reference is null.
     /// Prints a warning in the console if not null.
@@ -177,6 +176,38 @@ public abstract class BNJMOBehaviour : MonoBehaviour
         if (objectToCheck == null)
         {
             LogConsoleWarning("An object of type <color=cyan>" + typeof(O) + "</color> is null! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the the given boolean is true
+    /// Prints a warning in the console if not True.
+    /// </summary>
+    /// <param name="value"> boolean to check</param>
+    /// <returns> True if the given boolean is true, otherwise false</returns>
+    protected bool IS_TRUE (bool booleanToCheck)
+    {
+        if (booleanToCheck == false)
+        {
+            LogConsoleWarning("A boolean is false! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the the given boolean is true
+    /// Prints a warning in the console if not True.
+    /// </summary>
+    /// <param name="value"> boolean to check</param>
+    /// <returns> True if the given boolean is true, otherwise false</returns>
+    protected bool IS_NOT_TRUE (bool booleanToCheck)
+    {
+        if (booleanToCheck == true)
+        {
+            LogConsoleWarning("A boolean is true! ");
             return false;
         }
         return true;
@@ -254,8 +285,6 @@ public abstract class BNJMOBehaviour : MonoBehaviour
         return true;
     }
 
-
-
     /// <summary>
     /// Checks if the given dictionary contains the given key.
     /// Prints a warning in the console if key is not found.
@@ -332,8 +361,6 @@ public abstract class BNJMOBehaviour : MonoBehaviour
         return true;
     }
 
-
-
     /// <summary>
     /// Checks if the given list contains the given value.
     /// Prints a warning in the console if value is not found.
@@ -369,10 +396,6 @@ public abstract class BNJMOBehaviour : MonoBehaviour
         }
         return true;
     }
-
-
-
-
     #endregion
 
     #region Coroutine
@@ -408,7 +431,6 @@ public abstract class BNJMOBehaviour : MonoBehaviour
         }
         return false;
     }
-
     #endregion
 
     #region Get Component
@@ -584,6 +606,115 @@ public abstract class BNJMOBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Clear all the callbacks registered to the given event
+    /// </summary>
+    /// <param name="eventToClear"> Event to clear the callbacks from </param>
+    protected void ClearEventCallbakcs(Action eventToClear)
+    {
+        if (eventToClear != null)
+        {
+            Delegate[] delegates = eventToClear.GetInvocationList();
+            foreach (Delegate myDelegate in delegates)
+            {
+                eventToClear -= (myDelegate as Action);
+            }
+        }
+    }
 
+    /// <summary>
+    /// Clear all the callbacks registered to the given event
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <param name="eventToClear"> Event to clear the callbacks from </param>
+    protected void ClearEventCallbakcs<A>(Action<A> eventToClear)
+    {
+        if (eventToClear != null)
+        {
+            Delegate[] delegates = eventToClear.GetInvocationList();
+            foreach (Delegate myDelegate in delegates)
+            {
+                eventToClear -= (myDelegate as Action<A>);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Clear all the callbacks registered to the given event
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Second generic parameter type of the event </typeparam>
+    /// <param name="eventToClear"> Event to clear the callbacks from </param>
+    protected void ClearEventCallbakcs<A, B>(Action<A, B> eventToClear)
+    {
+        if (eventToClear != null)
+        {
+            Delegate[] delegates = eventToClear.GetInvocationList();
+            foreach (Delegate myDelegate in delegates)
+            {
+                eventToClear -= (myDelegate as Action<A, B>);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Clear all the callbacks registered to the given event
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Second generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Third generic parameter type of the event </typeparam>
+    /// <param name="eventToClear"> Event to clear the callbacks from </param>
+    protected void ClearEventCallbakcs<A, B, C>(Action<A, B, C> eventToClear)
+    {
+        if (eventToClear != null)
+        {
+            Delegate[] delegates = eventToClear.GetInvocationList();
+            foreach (Delegate myDelegate in delegates)
+            {
+                eventToClear -= (myDelegate as Action<A, B, C>);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Clear all the callbacks registered to the given event
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Second generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Third generic parameter type of the event </typeparam>
+    /// <typeparam name="D"> Fourth generic parameter type of the event </typeparam>
+    /// <param name="eventToClear"> Event to clear the callbacks from </param>
+    protected void ClearEventCallbakcs<A, B, C, D>(Action<A, B, C, D> eventToClear)
+    {
+        if (eventToClear != null)
+        {
+            Delegate[] delegates = eventToClear.GetInvocationList();
+            foreach (Delegate myDelegate in delegates)
+            {
+                eventToClear -= (myDelegate as Action<A, B, C, D>);
+            }
+        }
+    }
+        
+    /// <summary>
+    /// Clear all the callbacks registered to the given event
+    /// </summary>
+    /// <typeparam name="A"> First generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Second generic parameter type of the event </typeparam>
+    /// <typeparam name="B"> Third generic parameter type of the event </typeparam>
+    /// <typeparam name="D"> Fourth generic parameter type of the event </typeparam>
+    /// <typeparam name="E"> Fifth generic parameter type of the event </typeparam>
+    /// <param name="eventToClear"> Event to clear the callbacks from </param>
+    protected void ClearEventCallbakcs<A, B, C, D, E>(Action<A, B, C, D, E> eventToClear)
+    {
+        if (eventToClear != null)
+        {
+            Delegate[] delegates = eventToClear.GetInvocationList();
+            foreach (Delegate myDelegate in delegates)
+            {
+                eventToClear -= (myDelegate as Action<A, B, C, D, E>);
+            }
+        }
+    }
     #endregion
 }

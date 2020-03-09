@@ -11,7 +11,8 @@ using UnityEngine.UI;
 /// 6  - AI
 /// 9  - Player Input Listener
 /// 10 - SpellManager : active spells
-/// 12 - Players join status
+/// 12 - Players join status map
+/// 13 - Connected controllers list
 /// 50 - UI state
 /// 51 - App state 
 /// 52 - Scene

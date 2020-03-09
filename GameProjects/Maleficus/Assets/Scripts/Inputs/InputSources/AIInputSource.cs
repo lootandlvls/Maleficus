@@ -46,7 +46,7 @@ public class AIInputSource : AbstractInputSource
     private void On_PLAYERS_PlayerSpawned(EPlayerID playerID)
     {
         // Add an AIPlayerController on the spawned player if he's an AI
-        EControllerID controllerID = InputManager.Instance.GetConnectedControllerIDFrom(playerID);
+        EControllerID controllerID = PlayerManager.Instance.GetAssignedControllerID(playerID);
         
         if ((controllerID.ContainedIn(AI_CONTROLLERS))
             && (IS_KEY_CONTAINED(PlayerManager.Instance.ActivePlayers, playerID))

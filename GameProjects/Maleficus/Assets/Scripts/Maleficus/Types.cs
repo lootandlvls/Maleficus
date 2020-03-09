@@ -154,21 +154,21 @@ public enum ESpellStatus
 #region Player
 public enum EPlayerID
 {
-    NONE,
-    PLAYER_1,
-    PLAYER_2,
-    PLAYER_3,
-    PLAYER_4,
-    SPECTATOR
+    NONE = 0,
+    PLAYER_1 = 1,
+    PLAYER_2 = 2,
+    PLAYER_3 = 3,
+    PLAYER_4 = 4,
+    SPECTATOR = 101
 }
 
 public enum ETeamID
 {
-    NONE,
-    TEAM_1,
-    TEAM_2,
-    TEAM_3,
-    TEAM_4
+    NONE = 0,
+    TEAM_1 = 1,
+    TEAM_2 = 2,
+    TEAM_3 = 3,
+    TEAM_4 = 4
 }
 
 public struct SHitInfo
@@ -198,13 +198,13 @@ public struct SHitInfo
 
 public class PlayerJoinStatus
 {
-    public PlayerJoinStatus(EPlayerID playerID, bool hasJoined = false, bool isReady = false)
+    public PlayerJoinStatus(EControllerID controllerID, bool hasJoined = false, bool isReady = false)
     {
         HasJoined = hasJoined;
         IsReady = isReady;
-        PlayerID = playerID;
+        ControllerID = controllerID;
     }
-    public EPlayerID PlayerID { get; set; } = EPlayerID.NONE;
+    public EControllerID ControllerID { get; set; } = EControllerID.NONE;
     public bool HasJoined { get; set; } = false;
     public bool IsReady { get; set; } = false;
 }
@@ -222,15 +222,27 @@ public enum EInputMode
 public enum EControllerID
 {
     NONE = 0,
+    /* Touch */
     TOUCH = 1,
+    /* AI */
     AI_1 = 2,
     AI_2 = 3,
     AI_3 = 4,
     AI_4 = 5,
-    GAMEPAD_A = 6,
-    GAMEPAD_B = 7,
-    GAMEPAD_C = 8,
-    GAMEPAD_D = 9,
+    /* Gamepad */
+    GAMEPAD_1 = 6,
+    GAMEPAD_2 = 7,
+    GAMEPAD_3 = 8,
+    GAMEPAD_4 = 9,
+    GAMEPAD_5 = 14,
+    GAMEPAD_6 = 15,
+    GAMEPAD_7 = 16,
+    GAMEPAD_8 = 17,
+    GAMEPAD_9 = 18,
+    GAMEPAD_10 = 19,
+    GAMEPAD_11 = 20,
+    GAMEPAD_12 = 21,
+    /* Network */
     NETWORK_1 = 10,
     NETWORK_2 = 11,
     NETWORK_3 = 12,
@@ -443,6 +455,7 @@ public enum EClientID
     CLIENT_2,
     CLIENT_3,
     CLIENT_4,
+    SPECTATOR,
     TEST
 }
 

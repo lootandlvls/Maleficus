@@ -65,7 +65,7 @@ public class NetControllerInputSource : AbstractInputSource
             if (controllerID != EControllerID.NONE)
             {
                 // Connect controller on Input Manager
-                if (InputManager.Instance.TryToConnectController(controllerID) == true)
+                if (InputManager.Instance.ConnectController(controllerID) == true)
                 {
                     LogConsole("Connecting : " + controllerID);
                     connectedNetworkControllers.Add(controllerGuid, controllerID);
