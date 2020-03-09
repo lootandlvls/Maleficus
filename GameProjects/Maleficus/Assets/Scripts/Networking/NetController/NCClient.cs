@@ -46,6 +46,8 @@ namespace NetController
         {
             base.Start();
 
+            UpdateState(ENCClientState.NOT_CONNECTED);
+
             NetworkTransport.Init();
             controllerGuid = Guid.NewGuid().ToString();
             client = new NetworkClient();

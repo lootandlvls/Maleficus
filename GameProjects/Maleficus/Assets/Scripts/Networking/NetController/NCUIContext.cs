@@ -11,17 +11,17 @@ namespace NetController
         public string IpAddress { get; private set; }
 
         [SerializeField] private ENCClientState activeOnState;
-
-        private InputField inputField_ipAddress;
+        [SerializeField] private InputField iF_ipAddress;
+        [SerializeField] private GameObject c_buttons;
         
         protected override void InitializeComponents()
         {
             base.InitializeComponents();
 
-            inputField_ipAddress = GetComponentInChildren<InputField>();
-            if (IS_NOT_NULL(inputField_ipAddress))
+            iF_ipAddress = GetComponentInChildren<InputField>();
+            if (IS_NOT_NULL(iF_ipAddress))
             {
-                inputField_ipAddress.onEndEdit.AddListener(OnInputFieldUpdated);
+                iF_ipAddress.onEndEdit.AddListener(OnInputFieldUpdated);
             }
         }
 
@@ -36,11 +36,11 @@ namespace NetController
         {
             if (newState == activeOnState)
             {
-                gameObject.SetActive(true);
+                c_buttons.SetActive(true);
             }
             else
             {
-                gameObject.SetActive(false);
+                c_buttons.SetActive(false);
             }
         }
 

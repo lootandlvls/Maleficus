@@ -172,6 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeOnState: 1
+  iF_ipAddress: {fileID: 1716110048}
+  c_buttons: {fileID: 551041012}
 --- !u!1001 &348093985
 PrefabInstance:
   m_ObjectHideFlags: 0
