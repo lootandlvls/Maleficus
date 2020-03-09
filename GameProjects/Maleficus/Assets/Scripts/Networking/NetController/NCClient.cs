@@ -100,7 +100,7 @@ namespace NetController
 
                 if (client.isConnected == false)
                 {
-                    if (GUI.Button(new Rect(10, 10, 60, 50), "Connect"))
+                    if (GUI.Button(new Rect(30, 50, 120, 70), "Connect"))
                     {
                         string clientIpAddress = GetLocalIPAddress();
                         if ((NCUIContext.IsInstanceSet)

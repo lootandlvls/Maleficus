@@ -21,6 +21,7 @@ namespace NetController
             iF_ipAddress = GetComponentInChildren<InputField>();
             if (IS_NOT_NULL(iF_ipAddress))
             {
+                iF_ipAddress.text = "192.168.";
                 iF_ipAddress.onEndEdit.AddListener(OnInputFieldUpdated);
             }
         }
