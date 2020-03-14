@@ -23,7 +23,10 @@
 
 #Plugins
 **/[Aa]ssets/Packages/GabrielAguiarProductions
-
+**/[Aa]ssets/Ludiq
+**/[Aa]ssets/Ludiq.meta
+**/[Aa]ssets/Ludiq.Generated
+**/[Aa]ssets/Ludiq.Generated.meta
 
 # Gradle cache directory
 .gradle/
