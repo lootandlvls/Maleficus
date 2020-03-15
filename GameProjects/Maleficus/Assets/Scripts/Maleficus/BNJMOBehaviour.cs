@@ -401,6 +401,7 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     #region Coroutine
     /// <summary>
     /// Starts a couroutine and store it in the given enumerator. If the enumerator is already running a coroutine, then stop it and start a new one.
+    /// Note : Add "ref" to the first enumerator argument and "()" at the end of the second coroutine argument.
     /// </summary>
     /// <param name="enumerator"> where the coroutine reference will be stored (define as a member in your class) </param>
     /// <param name="coroutine"> the coroutine name function to run + () with parameters if defined </param>
