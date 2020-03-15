@@ -46,6 +46,16 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         EventManager.Instance.UI_SpellChosen            += On_UI_SpellChosen;
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        if (PlayerManager.IsInstanceSet)
+        {
+            PlayerManager.Instance.FindPlayerSpellSelectionContexts();
+        }
+    }
+
     protected override void InitializeComponents()
     {
         base.InitializeComponents();

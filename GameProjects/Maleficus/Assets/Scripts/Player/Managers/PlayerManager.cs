@@ -152,7 +152,7 @@ public class PlayerManager : AbstractSingletonManager<PlayerManager>
         }
     }
 
-    private void FindPlayerSpellSelectionContexts()
+    public void FindPlayerSpellSelectionContexts()
     {
         foreach (PlayerSpellSelectionContext playerSpellSelectionContext in FindObjectsOfType<PlayerSpellSelectionContext>())
         {
