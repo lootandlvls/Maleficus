@@ -105,7 +105,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             // Update highlighted button
             if (nextButton != null)
             {
-                highlightedButton.Unpress();
+                highlightedButton.Unhighlighted();
                 highlightedButton = nextButton;
                 nextButton.Highlight();
                 canPressButton = false;

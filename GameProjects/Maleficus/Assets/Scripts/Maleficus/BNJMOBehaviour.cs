@@ -407,15 +407,18 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     /// <param name="coroutine"> the coroutine name function to run + () with parameters if defined </param>
     protected void StartNewCoroutine(ref IEnumerator enumerator, IEnumerator coroutine)
     {
-        // Stop running coroutine
-        if (enumerator != null)
+        if (gameObject.activeInHierarchy)
         {
-            StopCoroutine(enumerator);
+            // Stop running coroutine
+            if (enumerator != null)
+            {
+                StopCoroutine(enumerator);
+            }
+            // Assign reference
+            enumerator = coroutine;
+            // Start new coroutine
+            StartCoroutine(enumerator);
         }
-        // Assign reference
-        enumerator = coroutine;
-        // Start new coroutine
-        StartCoroutine(enumerator);
     }
 
     /// <summary>

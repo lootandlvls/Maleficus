@@ -49,7 +49,7 @@ public class SpellSelectionButton : BNJMOBehaviour
 
         // Reinitialize button image 
         myButton = GetComponent<Button>();
-      Text SPtext = skillPointText.GetComponent<Text>();
+        Text SPtext = skillPointText.GetComponent<Text>();
         if (myButton != null)
         {
             if (spell != null)

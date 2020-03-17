@@ -7,7 +7,7 @@ public class MaleficusButton : BNJMOBehaviour
 {
     public event Action<MaleficusButton> ButtonHighlighted;
     public event Action<MaleficusButton> ButtonPressed;
-    public event Action<MaleficusButton> ButtonUnpressed;
+    public event Action<MaleficusButton> ButtonUnhighlighted;
     public event Action<MaleficusButton> ButtonSuccessfullyReleased;
 
     public MaleficusButton LeftButton { get { return leftButton; } set { leftButton = value; } }
@@ -15,18 +15,32 @@ public class MaleficusButton : BNJMOBehaviour
     public MaleficusButton UpperButton { get { return upperButton; } set { upperButton = value; } }
     public MaleficusButton BottomButton { get { return buttomButton; } set { buttomButton = value; } }
 
+    [Header("Button")]
+    [SerializeField] private string buttonName = "MenuButton";
+    [SerializeField] private bool writeUppercase = false;
+    [SerializeField] private bool overrideGameOjbectName = true;
+    
+    [Header("Navigation")]
     [SerializeField] private MaleficusButton leftButton;
+    [SerializeField] private MaleficusButton buttomButton;
     [SerializeField] private MaleficusButton rightButton;
     [SerializeField] private MaleficusButton upperButton;
-    [SerializeField] private MaleficusButton buttomButton;
 
     private Button myButton;
     private Image myButtonImage;
+    private Text myText;
     private AbstractUIAction[] myUIActions;
 
     protected override void InitializeComponents()
     {
         base.InitializeComponents();
+
+        // Get button text
+        myText = GetComponentInChildren<Text>();
+        if (myText == null)
+        {
+            myText = GetComponent<Text>();
+        }
 
         // Get Unity's Button
         myButton = GetComponent<Button>();
@@ -42,6 +56,14 @@ public class MaleficusButton : BNJMOBehaviour
 
         // Get attached UIActions
         myUIActions = GetComponents<AbstractUIAction>();
+    }
+
+    protected override void OnValidate()
+    {
+        base.OnValidate();
+
+        ValidateName();
+
     }
 
     public void Highlight()
@@ -65,12 +87,11 @@ public class MaleficusButton : BNJMOBehaviour
         InvokeEventIfBound(ButtonPressed, this);
     }
 
-    public void Unpress()
+    public void Unhighlighted()
     {
         myButtonImage.color = myButton.colors.normalColor;
 
-        InvokeEventIfBound(ButtonUnpressed, this);
-
+        InvokeEventIfBound(ButtonUnhighlighted, this);
     }
 
     public MaleficusButton GetNextButton(EButtonDirection buttonDirection)
@@ -104,5 +125,32 @@ public class MaleficusButton : BNJMOBehaviour
         RightButton = null;
         UpperButton = null;
         BottomButton = null;
+    }
+
+    private void ValidateName()
+    {
+        // Update GameObject name
+        if (overrideGameOjbectName == true)
+        {
+            gameObject.name = "B_" + buttonName;
+        }
+
+        // Update text
+        myText = GetComponentInChildren<Text>();
+        if (myText == null)
+        {
+            myText = GetComponent<Text>();
+        }
+        if (myText)
+        {
+            if (writeUppercase == true)
+            {
+                myText.text = buttonName.ToUpper();
+            }
+            else
+            {
+                myText.text = buttonName;
+            }
+        }
     }
 }

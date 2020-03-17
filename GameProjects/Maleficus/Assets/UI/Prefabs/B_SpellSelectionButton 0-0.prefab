@@ -637,10 +637,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttonName: 
+  writeUppercase: 0
+  overrideGameOjbectName: 0
   leftButton: {fileID: 0}
+  buttomButton: {fileID: 0}
   rightButton: {fileID: 0}
   upperButton: {fileID: 0}
-  buttomButton: {fileID: 0}
 --- !u!114 &2101685524027812932
 MonoBehaviour:
   m_ObjectHideFlags: 0

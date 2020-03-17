@@ -16,9 +16,10 @@ namespace BNJMO
         public event Action<AnimationLerp<A>, A> AnimationProgressed;
         public event Action<AnimationLerp<A>> AnimationRlooped;
         public event Action<AnimationLerp<A>> AnimationEnded;
+        public event Action<AnimationLerp<A>> AnimationStopped;
 
-        public string AnimationName     { get { return animationName; } }
-        [SerializeField] private string animationName = "AnimLep_X";
+        public string AnimationName { get { return animationName; } set { animationName = value; } }
+        [SerializeField] private string animationName = "AnimLerp_X";
         public float PlayTime = 3.0f;
         public bool PlayInReverse = false;
         public A StartValue;
@@ -45,6 +46,7 @@ namespace BNJMO
             AnimationProgressed += On_AnimationProgressed;
             AnimationRlooped += On_AnimationRlooped;
             AnimationEnded += On_AnimationEnded;
+            AnimationStopped += On_AnimationStopped;
         }
 
         protected override void Update()
@@ -73,6 +75,12 @@ namespace BNJMO
             {
                 LogConsoleError("Trying to start an AnimationLerp that has playTime set to 0!");
             }
+        }
+
+        public void StopAnimation()
+        {
+            InvokeEventIfBound(AnimationStopped, this);
+            StopCoroutine(CurrentAnimationEnumerator);
         }
 
         protected IEnumerator CurrentAnimationCoroutine(bool isFirstRun)
@@ -156,6 +164,14 @@ namespace BNJMO
             if (logAnimationEvents == true)
             {
                 LogConsole(AnimationName + " ended");
+            }
+        }
+
+        private void On_AnimationStopped(AnimationLerp<A> animationLerp)
+        {
+            if (logAnimationEvents == true)
+            {
+                LogConsole(AnimationName + " stopped");
             }
         }
         #endregion
