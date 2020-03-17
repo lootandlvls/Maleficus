@@ -1,14 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+using System;
 
 [RequireComponent(typeof(Button))]
 public class MaleficusButton : BNJMOBehaviour
 {
-    public MaleficusButton LeftButton   { get { return leftButton; }    set { leftButton = value; } }
-    public MaleficusButton RightButton  { get { return rightButton; }   set { rightButton = value; } }
-    public MaleficusButton UpperButton  { get { return upperButton; }   set { upperButton = value; } }
-    public MaleficusButton BottomButton { get { return buttomButton; }  set { buttomButton = value; } }
+    public event Action<MaleficusButton> ButtonHighlighted;
+    public event Action<MaleficusButton> ButtonPressed;
+    public event Action<MaleficusButton> ButtonUnpressed;
+    public event Action<MaleficusButton> ButtonSuccessfullyReleased;
+
+    public MaleficusButton LeftButton { get { return leftButton; } set { leftButton = value; } }
+    public MaleficusButton RightButton { get { return rightButton; } set { rightButton = value; } }
+    public MaleficusButton UpperButton { get { return upperButton; } set { upperButton = value; } }
+    public MaleficusButton BottomButton { get { return buttomButton; } set { buttomButton = value; } }
 
     [SerializeField] private MaleficusButton leftButton;
     [SerializeField] private MaleficusButton rightButton;
@@ -23,10 +28,14 @@ public class MaleficusButton : BNJMOBehaviour
     {
         base.InitializeComponents();
 
-        // Get Unity's Button and its belonging image
+        // Get Unity's Button
         myButton = GetComponent<Button>();
         if (IS_NOT_NULL(myButton))
         {
+            // Bind clicked event
+            GetComponent<Button>().onClick.AddListener(Release);
+            
+            // Get image
             myButtonImage = myButton.image;
             IS_NOT_NULL(myButtonImage);
         }
@@ -39,33 +48,29 @@ public class MaleficusButton : BNJMOBehaviour
     {
         myButtonImage.color = myButton.colors.highlightedColor;
 
-        UIManager.Instance.OnButtonHighlighted(this);
+        InvokeEventIfBound(ButtonHighlighted, this);
+    }
 
-        // Inform attached UIActions
-        foreach (AbstractUIAction abstractUIAction in myUIActions)
-        {
-            abstractUIAction.OnHighlighted();
-        }
+    public void Release()
+    {
+        myButtonImage.color = myButton.colors.highlightedColor;
+
+        InvokeEventIfBound(ButtonSuccessfullyReleased, this);
     }
 
     public void Press()
     {
-        myButtonImage.color = myButton.colors.highlightedColor;
-
-        foreach (AbstractUIAction abstractUIAction in myUIActions)
-        {
-            abstractUIAction.Execute();
-        }
-    }
-
-    public void Select()
-    {
         myButtonImage.color = myButton.colors.selectedColor;
+
+        InvokeEventIfBound(ButtonPressed, this);
     }
 
-    public void UnSelect()
+    public void Unpress()
     {
         myButtonImage.color = myButton.colors.normalColor;
+
+        InvokeEventIfBound(ButtonUnpressed, this);
+
     }
 
     public MaleficusButton GetNextButton(EButtonDirection buttonDirection)

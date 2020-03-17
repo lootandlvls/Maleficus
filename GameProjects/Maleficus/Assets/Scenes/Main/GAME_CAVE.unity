@@ -14,17 +14,17 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0.8862745, g: 0.69411767, b: 0.3647059, a: 1}
   m_FogMode: 1
   m_FogDensity: 0.01
   m_LinearFogStart: 24.1
   m_LinearFogEnd: 78.5
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientIntensity: 1.66
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -44,21 +44,21 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
     m_IndirectOutputScale: 1
     m_AlbedoBoost: 1
-    m_EnvironmentLightingMode: 0
+    m_EnvironmentLightingMode: 1
     m_EnableBakedLightmaps: 1
-    m_EnableRealtimeLightmaps: 1
+    m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
     serializedVersion: 12
     m_Resolution: 2
-    m_BakeResolution: 40
-    m_AtlasSize: 1024
-    m_AO: 0
+    m_BakeResolution: 5
+    m_AtlasSize: 128
+    m_AO: 1
     m_AOMaxDistance: 1
     m_CompAOExponent: 1
     m_CompAOExponentDirect: 0
@@ -74,19 +74,19 @@ LightmapSettings:
     m_MixedBakeMode: 2
     m_BakeBackend: 1
     m_PVRSampling: 1
-    m_PVRDirectSampleCount: 32
-    m_PVRSampleCount: 500
+    m_PVRDirectSampleCount: 16
+    m_PVRSampleCount: 256
     m_PVRBounces: 2
-    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentSampleCount: 256
     m_PVREnvironmentReferencePointCount: 2048
-    m_PVRFilteringMode: 2
+    m_PVRFilteringMode: 1
     m_PVRDenoiserTypeDirect: 0
     m_PVRDenoiserTypeIndirect: 0
     m_PVRDenoiserTypeAO: 0
     m_PVRFilterTypeDirect: 0
     m_PVRFilterTypeIndirect: 0
     m_PVRFilterTypeAO: 0
-    m_PVREnvironmentMIS: 0
+    m_PVREnvironmentMIS: 1
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
     m_PVRFilteringGaussRadiusIndirect: 5
@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 90c203baf2289c544b0f455e937ca253,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -131,6 +132,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -254,6 +259,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_05
       objectReference: {fileID: 0}
+    - target: {fileID: 145242, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 498230, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -49.916832
@@ -308,11 +317,11 @@ GameObject:
   m_Component:
   - component: {fileID: 15946428}
   m_Layer: 0
-  m_Name: PointLights
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &15946428
 Transform:
@@ -325,17 +334,9 @@ Transform:
   m_LocalPosition: {x: 7.8047156, y: -6.930482, z: -3.546074}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 2106202612}
   - {fileID: 389139122}
-  - {fileID: 1622091052}
-  - {fileID: 344324297}
-  - {fileID: 244063834}
-  - {fileID: 199155286}
-  - {fileID: 350463673}
-  - {fileID: 109870814}
-  - {fileID: 874641333}
-  - {fileID: 805282969}
-  - {fileID: 1664998974}
-  - {fileID: 308046072}
+  - {fileID: 1042757515}
   m_Father: {fileID: 1694747600}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -346,6 +347,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1723186850}
     m_Modifications:
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -29.916832
@@ -400,6 +405,10 @@ PrefabInstance:
     - target: {fileID: 140628, guid: 8510ab189db0e1540899381375761818, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Hut_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 140628, guid: 8510ab189db0e1540899381375761818, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 430912, guid: 8510ab189db0e1540899381375761818, type: 3}
       propertyPath: m_LocalPosition.x
@@ -468,6 +477,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_08
       objectReference: {fileID: 0}
+    - target: {fileID: 145242, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 498230, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -79.91683
@@ -522,6 +535,10 @@ PrefabInstance:
     - target: {fileID: 149172, guid: d9ff7e72926132045b3bfb72526f5cc3, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Tunnel_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 149172, guid: d9ff7e72926132045b3bfb72526f5cc3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 402966, guid: d9ff7e72926132045b3bfb72526f5cc3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -669,6 +686,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.1
@@ -731,6 +752,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -795,6 +820,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_13
       objectReference: {fileID: 0}
+    - target: {fileID: 145242, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 498230, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -29.916832
@@ -839,98 +868,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 100971213}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &109870813
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 109870814}
-  - component: {fileID: 109870815}
-  m_Layer: 0
-  m_Name: Point light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &109870814
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109870813}
-  m_LocalRotation: {x: -0, y: 0.93144286, z: -0, w: -0.36388776}
-  m_LocalPosition: {x: -19.18, y: 10.56, z: 7.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &109870815
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109870813}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 6.08
-  m_Range: 12.946953
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.691
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &121338496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -941,6 +878,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1005,6 +946,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_03 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.07
@@ -1068,6 +1013,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.45
@@ -1127,6 +1076,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1723186850}
     m_Modifications:
+    - target: {fileID: 147116, guid: e4ef91e2d35876d4b89b158e13f33e84, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 493714, guid: e4ef91e2d35876d4b89b158e13f33e84, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.8368301
@@ -1177,6 +1130,10 @@ PrefabInstance:
     - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_17
+      objectReference: {fileID: 0}
+    - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 493828, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1236,7 +1193,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &174341272
 Transform:
@@ -1294,6 +1251,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 22.19
@@ -1346,98 +1307,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 189697641}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &199155285
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 199155286}
-  - component: {fileID: 199155287}
-  m_Layer: 0
-  m_Name: Point light 14
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &199155286
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199155285}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -21.36, y: 15.11, z: 12.44}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &199155287
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 199155285}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.18620688, b: 0, a: 1}
-  m_Intensity: 2.02
-  m_Range: 39.229225
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 1
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 0
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 2.7105054e-20, z: 2.3509887e-38, w: -169.8883}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &215933176
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1448,6 +1317,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1637,6 +1510,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1184253067}
     m_Modifications:
+    - target: {fileID: 161946, guid: 7098fb36b610961409481b19c3c89f3d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 420714, guid: 7098fb36b610961409481b19c3c89f3d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -33.162025
@@ -1689,98 +1566,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 241293236}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &244063833
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 244063834}
-  - component: {fileID: 244063835}
-  m_Layer: 0
-  m_Name: Point light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &244063834
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244063833}
-  m_LocalRotation: {x: -0, y: 0.9554294, z: -0, w: -0.29521993}
-  m_LocalPosition: {x: 18.63, y: 6.5002375, z: 12.59}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &244063835
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 244063833}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 4.98
-  m_Range: 14.809006
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.664
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 0
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &245031289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1791,6 +1576,10 @@ PrefabInstance:
     - target: {fileID: 147116, guid: e4ef91e2d35876d4b89b158e13f33e84, type: 3}
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_Entrance_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 147116, guid: e4ef91e2d35876d4b89b158e13f33e84, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 493714, guid: e4ef91e2d35876d4b89b158e13f33e84, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1855,6 +1644,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_02 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 194208, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 464140, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.15
@@ -1917,6 +1710,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2153,6 +1950,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_27
       objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -37.525627
@@ -2365,6 +2166,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.44
@@ -2425,98 +2230,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 305902453}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &308046071
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 308046072}
-  - component: {fileID: 308046073}
-  m_Layer: 0
-  m_Name: Point light (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &308046072
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308046071}
-  m_LocalRotation: {x: -0, y: 0.9554294, z: -0, w: -0.29521993}
-  m_LocalPosition: {x: 4.25, y: 3.22, z: 32.07}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &308046073
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308046071}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 3.7
-  m_Range: 17.85
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.664
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 0
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1 &314596083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2621,6 +2334,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_03 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.81
@@ -2687,6 +2404,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2759,6 +2480,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Crane_01 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 187804, guid: 2c0f7fb2941562346a966cf93b2b5d78, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 438206, guid: 2c0f7fb2941562346a966cf93b2b5d78, type: 3}
       propertyPath: m_LocalPosition.x
       value: -48.14
@@ -2815,190 +2540,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 335758118}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &344324296
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 344324297}
-  - component: {fileID: 344324298}
-  m_Layer: 0
-  m_Name: Point light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &344324297
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 344324296}
-  m_LocalRotation: {x: -0, y: 0.9800987, z: -0, w: -0.19851099}
-  m_LocalPosition: {x: -19.72092, y: 11.898911, z: 1.7357714}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &344324298
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 344324296}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 2.2
-  m_Range: 12.5
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.691
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
---- !u!1 &350463672
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 350463673}
-  - component: {fileID: 350463674}
-  m_Layer: 0
-  m_Name: Point light (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &350463673
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350463672}
-  m_LocalRotation: {x: -0, y: 0.9800987, z: -0, w: -0.19851099}
-  m_LocalPosition: {x: -4.7, y: 7.94, z: -2.44}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &350463674
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 350463672}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 4.75
-  m_Range: 12.19
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.691
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &353238792
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3009,6 +2550,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3072,6 +2617,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3139,7 +2688,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &378951054
 Transform:
@@ -3174,8 +2723,8 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 0
 --- !u!4 &389139122
 Transform:
   m_ObjectHideFlags: 0
@@ -3184,11 +2733,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 389139121}
   m_LocalRotation: {x: -0, y: 0.72671205, z: -0, w: 0.6869422}
-  m_LocalPosition: {x: -27.700397, y: -1.0467596, z: 1.5129321}
+  m_LocalPosition: {x: -15.02, y: 21.28, z: 8.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 15946428}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &389139123
 Light:
@@ -3197,13 +2746,13 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 389139121}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
   m_Intensity: 3.69
-  m_Range: 12.669334
+  m_Range: 30.2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -3261,6 +2810,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_26
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3333,6 +2886,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_10 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -32.73
@@ -3391,6 +2948,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3455,6 +3016,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_11
       objectReference: {fileID: 0}
+    - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 493828, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -79.91683
@@ -3510,6 +3075,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_30
       objectReference: {fileID: 0}
+    - target: {fileID: 199620, guid: c2b76d8503c414d408591f2c3b62f5cc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 413848, guid: c2b76d8503c414d408591f2c3b62f5cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -41.73
@@ -3564,6 +3133,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (16)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3627,6 +3200,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3782,6 +3359,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Tunnel_Supports_05
       objectReference: {fileID: 0}
+    - target: {fileID: 167164, guid: 1378514d79bd4bb4d98191df08121fb1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 434388, guid: 1378514d79bd4bb4d98191df08121fb1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.376831
@@ -3836,6 +3417,10 @@ PrefabInstance:
     - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3908,6 +3493,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_03 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.1
@@ -3960,6 +3549,60 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 586255407}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &592056835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 592056837}
+  - component: {fileID: 592056836}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &592056836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592056835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72473f72f6b5e064a9b19e50c5e833fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animationName: 
+  playTime: 5
+  startValue: {r: 0, g: 0, b: 0, a: 0}
+  endValue: {r: 0, g: 0, b: 0, a: 0}
+  isLoop: 0
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &592056837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592056835}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.513808, y: 4.721836, z: -0.8249302}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &610755518
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4104,6 +3747,10 @@ PrefabInstance:
     - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_03 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4418,6 +4065,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 677665600}
+  - {fileID: 2043037507}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 0}
@@ -4431,6 +4079,10 @@ PrefabInstance:
     - target: {fileID: 144442, guid: 0643624d73670a34a85c08095cb6f6bc, type: 3}
       propertyPath: m_Name
       value: SD_Prop_CoinPile_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 144442, guid: 0643624d73670a34a85c08095cb6f6bc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 459238, guid: 0643624d73670a34a85c08095cb6f6bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4529,8 +4181,8 @@ Camera:
   m_GameObject: {fileID: 677665599}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4687,6 +4339,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21.1
@@ -4749,6 +4405,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_06 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4927,7 +4587,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &681235170
 PrefabInstance:
@@ -4939,6 +4599,10 @@ PrefabInstance:
     - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_10
+      objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4994,6 +4658,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5053,6 +4721,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5117,6 +4789,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_04
       objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -59.916832
@@ -5171,6 +4847,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5411,6 +5091,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_30 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 199620, guid: c2b76d8503c414d408591f2c3b62f5cc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 413848, guid: c2b76d8503c414d408591f2c3b62f5cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -35.91
@@ -5469,6 +5153,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5537,6 +5225,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_10
       objectReference: {fileID: 0}
+    - target: {fileID: 145242, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 498230, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -79.91683
@@ -5596,6 +5288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_09
       objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -79.91683
@@ -5650,6 +5346,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5809,6 +5509,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -44.99
@@ -5875,7 +5579,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &790302954
 Transform:
@@ -6015,7 +5719,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &802729579
 Transform:
@@ -6050,98 +5754,6 @@ Transform:
   m_Father: {fileID: 2066772463}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &805282968
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 805282969}
-  - component: {fileID: 805282970}
-  m_Layer: 0
-  m_Name: Point light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &805282969
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805282968}
-  m_LocalRotation: {x: -0, y: 0.0425456, z: -0, w: 0.9990946}
-  m_LocalPosition: {x: -6.810916, y: -4.041091, z: 30.325771}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &805282970
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805282968}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 3.8
-  m_Range: 13.083851
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.691
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &822842274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6152,6 +5764,10 @@ PrefabInstance:
     - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_14
+      objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6207,6 +5823,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6274,7 +5894,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &861830292
 Transform:
@@ -6291,98 +5911,6 @@ Transform:
   m_Father: {fileID: 1943902689}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 0}
---- !u!1 &874641332
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 874641333}
-  - component: {fileID: 874641334}
-  m_Layer: 0
-  m_Name: Point light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &874641333
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874641332}
-  m_LocalRotation: {x: -0, y: 0.99610037, z: -0, w: 0.088228345}
-  m_LocalPosition: {x: -2.11, y: 10.36, z: 11.65}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &874641334
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 874641332}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 5.53
-  m_Range: 13.750931
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.691
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1 &881045403
 GameObject:
   m_ObjectHideFlags: 0
@@ -6787,6 +6315,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Cage_02 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 125420, guid: dc0812e74328c2b49bd11a062b2a935e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 436418, guid: dc0812e74328c2b49bd11a062b2a935e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40.51807
@@ -6922,6 +6454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -31.7
@@ -6985,6 +6521,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_16
       objectReference: {fileID: 0}
+    - target: {fileID: 145242, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 498230, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -59.916832
@@ -7036,6 +6576,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1338431951}
     m_Modifications:
+    - target: {fileID: 195958, guid: bff6e96c9a9957544a4e7e492c61f71d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 419144, guid: bff6e96c9a9957544a4e7e492c61f71d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.2
@@ -7106,7 +6650,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &978847924
 Transform:
@@ -7293,6 +6837,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -33.1
@@ -7365,7 +6913,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &997905158
 Transform:
@@ -7399,6 +6947,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7825,6 +7377,100 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1041529330}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1042757514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1042757515}
+  - component: {fileID: 1042757518}
+  - component: {fileID: 1042757517}
+  - component: {fileID: 1042757516}
+  m_Layer: 0
+  m_Name: Plane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &1042757515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042757514}
+  m_LocalRotation: {x: -0.00000065565104, y: -0.000000042147654, z: 1, w: 0.0000030240362}
+  m_LocalPosition: {x: -7.86, y: 27.66, z: 10.26}
+  m_LocalScale: {x: 1.2047839, y: 0.9644444, z: 0.9644444}
+  m_Children: []
+  m_Father: {fileID: 15946428}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180.00002}
+--- !u!64 &1042757516
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042757514}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1042757517
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042757514}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 082b5a54336c9484fa1340e1e252a32d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1042757518
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1042757514}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1044387146
 GameObject:
   m_ObjectHideFlags: 0
@@ -7874,6 +7520,10 @@ PrefabInstance:
     - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_03 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8060,6 +7710,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_03 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.56
@@ -8122,6 +7776,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8364,6 +8022,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 378951054}
     m_Modifications:
+    - target: {fileID: 186594, guid: 4e04c3eeabbed704bac28dd3e9c2a91b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 465414, guid: 4e04c3eeabbed704bac28dd3e9c2a91b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40.021
@@ -8427,6 +8089,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_13
       objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30.359505
@@ -8478,6 +8144,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 378951054}
     m_Modifications:
+    - target: {fileID: 187804, guid: 2c0f7fb2941562346a966cf93b2b5d78, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 438206, guid: 2c0f7fb2941562346a966cf93b2b5d78, type: 3}
       propertyPath: m_LocalPosition.x
       value: -48.1684
@@ -8544,6 +8214,10 @@ PrefabInstance:
     - target: {fileID: 194208, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_02 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 194208, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 464140, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8614,6 +8288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20.81332
@@ -8676,6 +8354,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8740,6 +8422,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_03
       objectReference: {fileID: 0}
+    - target: {fileID: 196542, guid: 56d8c93c1dc370a4c8c5f36fe9d50be0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 460150, guid: 56d8c93c1dc370a4c8c5f36fe9d50be0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -41
@@ -8799,6 +8485,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1723186850}
     m_Modifications:
+    - target: {fileID: 133834, guid: ef495936b8c1c8b43a57c77676d26483, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 497422, guid: ef495936b8c1c8b43a57c77676d26483, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.8368301
@@ -8853,7 +8543,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1184253067
 Transform:
@@ -8889,6 +8579,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_15
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8952,6 +8646,10 @@ PrefabInstance:
     - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_09 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 428934, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9020,6 +8718,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Torch_15
       objectReference: {fileID: 0}
+    - target: {fileID: 170120, guid: 41fe6e3d694b3b041a2e8dc96916a86a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 491250, guid: 41fe6e3d694b3b041a2e8dc96916a86a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -40.56455
@@ -9083,6 +8785,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
       value: -41.15586
@@ -9145,6 +8851,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9212,7 +8922,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1285141315
 Transform:
@@ -9243,6 +8953,10 @@ PrefabInstance:
     - target: {fileID: 144442, guid: 0643624d73670a34a85c08095cb6f6bc, type: 3}
       propertyPath: m_Name
       value: SD_Prop_CoinPile_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 144442, guid: 0643624d73670a34a85c08095cb6f6bc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 459238, guid: 0643624d73670a34a85c08095cb6f6bc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9296,6 +9010,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9356,15 +9074,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1285141315}
     m_Modifications:
+    - target: {fileID: 3676972278253352975, guid: 437e267ace22e414c9bd7dcd2a81696a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8800878222025675609, guid: 437e267ace22e414c9bd7dcd2a81696a,
         type: 3}
       propertyPath: m_Name
       value: Arena
       objectReference: {fileID: 0}
+    - target: {fileID: 8800878222025675609, guid: 437e267ace22e414c9bd7dcd2a81696a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8802254965498677983, guid: 437e267ace22e414c9bd7dcd2a81696a,
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8802254965997972864, guid: 437e267ace22e414c9bd7dcd2a81696a,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 8806504698452928873, guid: 437e267ace22e414c9bd7dcd2a81696a,
         type: 3}
@@ -9456,6 +9189,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1723186850}
     m_Modifications:
+    - target: {fileID: 100356, guid: 5889e3ed1d423134abf58ac0a4c6d974, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 449134, guid: 5889e3ed1d423134abf58ac0a4c6d974, type: 3}
       propertyPath: m_LocalPosition.x
       value: 94.9
@@ -9531,6 +9268,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.49
@@ -9597,7 +9338,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1338431951
 Transform:
@@ -9626,6 +9367,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_17
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9716,10 +9461,7 @@ MonoBehaviour:
   CanDebugJoystickEvents: 0
   IsUseDebugGameMode: 1
   DebugGameMode: 1
-  IsJoinAndSpawnPlayerOnControllerConnect: 1
-  IsSpawnTouchAsPlayer1: 0
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  IsSpawnRemainingAIPlayersOnGameStart: 1
   MaximumNumberOfAIToSpawn: 3
   IsAISpawnSpellsEneabled: 0
   IsAIArenaCenterAttractionEnabled: 1
@@ -9755,6 +9497,10 @@ PrefabInstance:
     - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9924,6 +9670,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Crane_03
       objectReference: {fileID: 0}
+    - target: {fileID: 187804, guid: 2c0f7fb2941562346a966cf93b2b5d78, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 438206, guid: 2c0f7fb2941562346a966cf93b2b5d78, type: 3}
       propertyPath: m_LocalPosition.x
       value: -23.609077
@@ -9975,6 +9725,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 997905158}
     m_Modifications:
+    - target: {fileID: 170046, guid: b7f3d37cbf09c3c4f8b2e7eaa4760597, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 417386, guid: b7f3d37cbf09c3c4f8b2e7eaa4760597, type: 3}
       propertyPath: m_LocalPosition.x
       value: -44.558247
@@ -10025,6 +9779,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10089,6 +9847,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Ladder_03
       objectReference: {fileID: 0}
+    - target: {fileID: 170046, guid: b7f3d37cbf09c3c4f8b2e7eaa4760597, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 417386, guid: b7f3d37cbf09c3c4f8b2e7eaa4760597, type: 3}
       propertyPath: m_LocalPosition.x
       value: 47.756596
@@ -10151,6 +9913,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (13)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10306,6 +10072,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_03
       objectReference: {fileID: 0}
+    - target: {fileID: 191706, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 414868, guid: 4cf48e5f011ba184585632ad4d1814ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5900006
@@ -10368,6 +10138,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10432,6 +10206,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_06
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -36.548576
@@ -10495,6 +10273,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Tunnel_06
       objectReference: {fileID: 0}
+    - target: {fileID: 143252, guid: 60e242a118584e54fbb4210131e51814, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 490370, guid: 60e242a118584e54fbb4210131e51814, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.16317
@@ -10549,6 +10331,10 @@ PrefabInstance:
     - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10613,6 +10399,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.58
@@ -10675,6 +10465,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10808,6 +10602,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1723186850}
     m_Modifications:
+    - target: {fileID: 145242, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 498230, guid: ccbd9ca656fcfe44d8f3fce467c82edd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -19.916832
@@ -11096,6 +10894,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.612774
@@ -11158,6 +10960,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11380,98 +11186,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1605645618}
   m_CullTransparentMesh: 0
---- !u!1 &1622091051
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1622091052}
-  - component: {fileID: 1622091053}
-  m_Layer: 0
-  m_Name: Point light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1622091052
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1622091051}
-  m_LocalRotation: {x: -0, y: 0.36388922, z: -0, w: 0.93144226}
-  m_LocalPosition: {x: -10.41, y: 11.92, z: 8.03}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &1622091053
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1622091051}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 3.46
-  m_Range: 13.284203
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.691
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &1639902255
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11482,6 +11196,10 @@ PrefabInstance:
     - target: {fileID: 194208, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 194208, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 464140, guid: 56497080635b1f444a0d9016c8b7f9d3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11546,6 +11264,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_01 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 428934, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.36
@@ -11598,98 +11320,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1643651873}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1664998973
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1664998974}
-  - component: {fileID: 1664998975}
-  m_Layer: 0
-  m_Name: Point light (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1664998974
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664998973}
-  m_LocalRotation: {x: -0, y: 0.9554294, z: -0, w: -0.29521993}
-  m_LocalPosition: {x: 1.58, y: -0.49, z: -12.07}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 15946428}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!108 &1664998975
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1664998973}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 2
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.7079108, b: 0.33823532, a: 1}
-  m_Intensity: 3.7
-  m_Range: 17.85
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 0.664
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 0
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0.0000000012167511}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!1001 &1669544715
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11700,6 +11330,10 @@ PrefabInstance:
     - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 428934, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11764,6 +11398,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_15
       objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -49.916832
@@ -11822,7 +11460,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1694747600
 Transform:
@@ -12047,6 +11685,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.549633
@@ -12113,7 +11755,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1723186850
 Transform:
@@ -12263,6 +11905,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 16.555248
@@ -12326,6 +11972,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298159742536885333, guid: 1f84c7d4c04c1e84a8f09c69530da834,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 2298159742537067643, guid: 1f84c7d4c04c1e84a8f09c69530da834,
         type: 3}
@@ -12492,6 +12143,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_03 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.54
@@ -12550,6 +12205,10 @@ PrefabInstance:
     - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12614,6 +12273,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_05
       objectReference: {fileID: 0}
+    - target: {fileID: 199620, guid: c2b76d8503c414d408591f2c3b62f5cc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 413848, guid: c2b76d8503c414d408591f2c3b62f5cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 50.552967
@@ -12668,6 +12331,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12731,6 +12398,10 @@ PrefabInstance:
     - target: {fileID: 195958, guid: bff6e96c9a9957544a4e7e492c61f71d, type: 3}
       propertyPath: m_Name
       value: SD_Prop_CoinPile_03 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 195958, guid: bff6e96c9a9957544a4e7e492c61f71d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 419144, guid: bff6e96c9a9957544a4e7e492c61f71d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12799,6 +12470,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_06 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -32.9
@@ -12861,6 +12536,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12925,6 +12604,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_09
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.8445702
@@ -12987,6 +12670,10 @@ PrefabInstance:
     - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_04 (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 148350, guid: 9bf33883ba838684dada756714c48024, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 454280, guid: 9bf33883ba838684dada756714c48024, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13051,6 +12738,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.301403
@@ -13113,6 +12804,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13177,6 +12872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_18
       objectReference: {fileID: 0}
+    - target: {fileID: 177636, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 448356, guid: 74be190b95c3d294b8ec26fa7513fbb4, type: 3}
       propertyPath: m_LocalPosition.x
       value: -79.91683
@@ -13231,6 +12930,10 @@ PrefabInstance:
     - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_12
+      objectReference: {fileID: 0}
+    - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 493828, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13306,7 +13009,7 @@ Transform:
   - {fileID: 218210486}
   - {fileID: 861830292}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1958191766
 PrefabInstance:
@@ -13414,6 +13117,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_07
       objectReference: {fileID: 0}
+    - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 493828, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -69.91683
@@ -13468,6 +13175,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_14
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13540,6 +13251,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Cave_Wall_06
       objectReference: {fileID: 0}
+    - target: {fileID: 147754, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 493828, guid: f7bb700f5680f3a4fb67f43ecb396f7e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -39.916832
@@ -13594,6 +13309,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13657,6 +13376,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_23 (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13739,7 +13462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 90f9aae04a4aa7744b732aac606ecf37, type: 2}
+  sharedProfile: {fileID: 11400000, guid: cdd5fe5fa0ebf524fb3e4c7853df3049, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1
@@ -13751,12 +13474,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043037505}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1105.57, y: 13.12, z: 1.8593867}
+  m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -3.2407353, y: 13.12, z: 1109.57}
   m_LocalScale: {x: 721.4852, y: 721.4852, z: 721.4852}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_Father: {fileID: 660659222}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2060553533
 GameObject:
@@ -13862,6 +13585,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Floor_Dirt_02
       objectReference: {fileID: 0}
+    - target: {fileID: 100356, guid: 5889e3ed1d423134abf58ac0a4c6d974, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 449134, guid: 5889e3ed1d423134abf58ac0a4c6d974, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.506828
@@ -13924,7 +13651,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2066772463
 Transform:
@@ -13955,6 +13682,10 @@ PrefabInstance:
     - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_SpikeBeam_22
+      objectReference: {fileID: 0}
+    - target: {fileID: 120230, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 453266, guid: 7065598f1c750924fb6340bc4470c16d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14018,6 +13749,10 @@ PrefabInstance:
     - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_Name
       value: SD_Prop_Goblin_Fence_10 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 189026, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 421560, guid: 1a85f0154386b4a4f8b7d98a7b59daf5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14318,6 +14053,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Tunnel_Supports_04
       objectReference: {fileID: 0}
+    - target: {fileID: 194728, guid: 3653d0a49394185459ecba7ba1d4ffee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 400640, guid: 3653d0a49394185459ecba7ba1d4ffee, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.1531754
@@ -14377,8 +14116,8 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 0
 --- !u!108 &2106202611
 Light:
   m_ObjectHideFlags: 0
@@ -14390,7 +14129,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.59127116, b: 0.10849059, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -14430,7 +14169,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -14447,12 +14186,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2106202610}
-  m_LocalRotation: {x: 0.31342492, y: -0.031242758, z: 0.33942798, w: 0.88632804}
-  m_LocalPosition: {x: -14.504982, y: -12.388361, z: -40.160305}
+  m_LocalRotation: {x: 0.46163672, y: 0.60463655, z: 0.018386986, w: 0.64882064}
+  m_LocalPosition: {x: -16.65472, y: 10.800482, z: 10.816066}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 15946428}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 35.226, y: 11.109, z: 45.446003}
 --- !u!1001 &2114787232
 PrefabInstance:
@@ -14464,6 +14203,10 @@ PrefabInstance:
     - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Large_01 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 106124, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 448064, guid: 325b53aabc0aa434eaf24520a2df278a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14540,6 +14283,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_09
       objectReference: {fileID: 0}
+    - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 428934, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -42.06383
@@ -14590,6 +14337,10 @@ PrefabInstance:
     - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_Name
       value: SD_Env_Goblin_Platform_Small_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 113538, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 428934, guid: 230478808a5e3ba46bec20c3c7e944f8, type: 3}
       propertyPath: m_LocalPosition.x

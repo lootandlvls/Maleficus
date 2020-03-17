@@ -32,13 +32,13 @@ namespace NetController
             ConfirmUIAction confirmUIAction = FindObjectOfType<ConfirmUIAction>();
             if (IS_NOT_NULL(confirmUIAction))
             {
-                confirmUIAction.ActionButtonPressed += On_ConfirmUIAction_ActionButtonPressed;
+                confirmUIAction.ActionButtonExecuted += On_ConfirmUIAction_ActionButtonPressed;
             }
 
             CancelUIAction cancelUIAction = FindObjectOfType<CancelUIAction>();
             if (IS_NOT_NULL(cancelUIAction))
             {
-                cancelUIAction.ActionButtonPressed += On_CancelUIAction_ActionButtonPressed; ;
+                cancelUIAction.ActionButtonExecuted += On_CancelUIAction_ActionButtonPressed; ;
             }
         }
 

@@ -13,11 +13,11 @@ using System;
 [RequireComponent(typeof (MaleficusButton))]
 public abstract class AbstractUIAction : BNJMOBehaviour
 {
+    public event Action ActionButtonExecuted;
+
     [SerializeField] private bool delayedEventExecution = false;
 
-    public event Action ActionButtonPressed;
-    //public event Action ActionButtonReleased; // Todo
-    public event Action ActionButtonHighlighted;
+    protected MaleficusButton maleficusButton;
 
     /// <summary>
     /// Trigger Execute() whenever the button is pressed.
@@ -27,6 +27,10 @@ public abstract class AbstractUIAction : BNJMOBehaviour
         base.Awake();
 
         GetComponent<Button>().onClick.AddListener(Execute);
+
+        // Bind events from MaleficusButton
+        maleficusButton = GetComponent<MaleficusButton>();
+        maleficusButton.ButtonSuccessfullyReleased += On_MaleficusButton_ButtonPressed;
     }
 
     /// <summary>
@@ -36,18 +40,23 @@ public abstract class AbstractUIAction : BNJMOBehaviour
     {
         base.OnDestroy();
 
-        ClearEventCallbakcs(ActionButtonPressed);
+        ClearEventCallbakcs(ActionButtonExecuted);
+    }
+
+    private void On_MaleficusButton_ButtonPressed(MaleficusButton maleficusButton)
+    {
+        Execute();
     }
 
     /// <summary>
     /// Action that should be triggered when Button is pressed. 
     /// Extend it in child class when needed.
     /// </summary>
-    public virtual void Execute()
+    protected virtual void Execute()
     {
         if (delayedEventExecution == false)
         {
-            InvokeActionPressedEvent();
+            InvokeActionExecutedEvent();
         }
         else
         {
@@ -57,35 +66,15 @@ public abstract class AbstractUIAction : BNJMOBehaviour
 
     private void DelayedExecuteCoroutine()
     {
-        InvokeActionPressedEvent();
+        InvokeActionExecutedEvent();
     }
 
-    /// <summary>
-    /// Action that should be triggered when Button is highlighted (selected). 
-    /// Extend it in child class when needed.
-    /// </summary>
-    public virtual void OnHighlighted()
+    protected void InvokeActionExecutedEvent()
     {
-        InvokeActionHighlightedEvent();
-    }
-
-    protected void InvokeActionPressedEvent()
-    {
-        if (ActionButtonPressed != null)
+        if (ActionButtonExecuted != null)
         {
-            ActionButtonPressed.Invoke();
-            LogConsole("Pressed");
+            ActionButtonExecuted.Invoke();
+            LogConsole("Executed");
         }
     }
-
-    protected void InvokeActionHighlightedEvent()
-    {
-        if (ActionButtonHighlighted != null)
-        {
-            ActionButtonHighlighted.Invoke();
-        }
-    }
-
-
-
 }

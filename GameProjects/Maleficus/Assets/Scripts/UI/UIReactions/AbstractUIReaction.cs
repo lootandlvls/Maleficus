@@ -8,7 +8,7 @@ using static Maleficus.Consts;
 /// </summary>
 public abstract class AbstractUIReaction : MonoBehaviour {
 
-    [SerializeField] protected bool isInitializeOnStart = true;
+    [SerializeField] protected bool isInitializeOnStart = false;
     [SerializeField] protected bool isLoadSubStates = true;
     [SerializeField] protected EMenuState[] activeOnStates = { EMenuState.NONE };
 

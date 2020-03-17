@@ -24,7 +24,7 @@ public class MenuNavigationAction : AbstractUIAction {
         }
     }
 
-    public override void Execute()
+    protected override void Execute()
     {
         if (fromState == UIManager.Instance.CurrentState)
         {

@@ -8,7 +8,7 @@ public class AddFriendAction : AbstractUIAction
 {
     public event Action AddFriendActionPressed;
 
-    public override void Execute()
+    protected override void Execute()
     {
         if (AddFriendActionPressed != null)
         {

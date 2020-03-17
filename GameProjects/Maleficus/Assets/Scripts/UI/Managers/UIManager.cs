@@ -46,16 +46,13 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         base.OnReinitializeManager();
 
         FindAndBindButtonActions();
+        FindAndBindMaleficusButtons();
+
     }
 
-
-    /// <summary>
-    /// Called from a MaleficusButton whenever it gets highlighted (selected)
-    /// </summary>
-    /// <param name="selectedButton"> calling MaleficusButton </param>
-    public void OnButtonHighlighted(MaleficusButton selectedButton)
+    private void OnButtonHighlighted(MaleficusButton selectedButton)
     {
-        this.highlightedButton = selectedButton;
+        highlightedButton = selectedButton;
     }
 
     protected override void UpdateState(EMenuState newMenuState)
@@ -83,7 +80,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             switch (inputButton)
             {
                 case EInputButton.CONFIRM:
-                    highlightedButton.Select();
+                    highlightedButton.Press();
                     //UISoundManager.Instance.SpawnSound_ButtonSelected();
                     canPressButton = true;
                     break;
@@ -108,7 +105,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
             // Update highlighted button
             if (nextButton != null)
             {
-                highlightedButton.UnSelect();
+                highlightedButton.Unpress();
                 highlightedButton = nextButton;
                 nextButton.Highlight();
                 canPressButton = false;
@@ -132,7 +129,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
                 case EInputButton.CONFIRM:
                     if (canPressButton == true)
                     {
-                        highlightedButton.Press();
+                        highlightedButton.Release();
                         UISoundManager.Instance.SpawnSound_ButtonPressed();
                     }
                     break;
@@ -201,7 +198,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         BackAction[] backActions = FindObjectsOfType<BackAction>();
         foreach (BackAction Action in backActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 UpdateState(LastState);
             };
@@ -216,7 +213,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         OpenLoginPopUpAction[] OLPUActions = FindObjectsOfType<OpenLoginPopUpAction>();
         foreach (OpenLoginPopUpAction Action in OLPUActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 UpdateState(EMenuState.IN_ENTRY_IN_LOGIN_IN_LOGIN);
             };
@@ -226,7 +223,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         OpenRegisterPopUpAction[] ORPActions = FindObjectsOfType<OpenRegisterPopUpAction>();
         foreach (OpenRegisterPopUpAction Action in ORPActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 UpdateState(EMenuState.IN_ENTRY_IN_LOGIN_IN_REGISTER);
 
@@ -236,7 +233,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         LoginRequestAction[] LRActions = FindObjectsOfType<LoginRequestAction>();
         foreach (LoginRequestAction Action in LRActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 LoginContext.Instance.OnClickLoginRequest();
             };
@@ -245,7 +242,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         RegisterRequestAction[] RRActions = FindObjectsOfType<RegisterRequestAction>();
         foreach (RegisterRequestAction Action in RRActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 AutoAccountContext.Instance.OnClickCreateAccount();
             };
@@ -263,7 +260,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         InitLobbyAction[] ILActions = FindObjectsOfType<InitLobbyAction>();
         foreach (InitLobbyAction Action in ILActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 NetworkManager.Instance.SendInitLobby();
             };
@@ -272,11 +269,20 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         UpdateAccountRequestAction[] UARActions = FindObjectsOfType<UpdateAccountRequestAction>();
         foreach (UpdateAccountRequestAction Action in UARActions)
         {
-            Action.ActionButtonPressed += () =>
+            Action.ActionButtonExecuted += () =>
             {
                 AutoAccountContext.Instance.OnClickSaveCredentials();
             };
         }
     }
+
+    private void FindAndBindMaleficusButtons()
+    {
+        foreach (MaleficusButton maleficusButton in FindObjectsOfType<MaleficusButton>())
+        {
+            maleficusButton.ButtonHighlighted += OnButtonHighlighted;
+        }
+    }
+
 }
 

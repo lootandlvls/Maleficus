@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TestUIAction : AbstractUIAction
 {
-    public override void Execute()
+    protected override void Execute()
     {
         base.Execute();
 

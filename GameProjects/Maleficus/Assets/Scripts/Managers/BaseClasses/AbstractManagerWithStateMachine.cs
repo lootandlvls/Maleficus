@@ -63,7 +63,7 @@ public abstract class AbstractSingletonManagerWithStateMachine<T, E> : AbstractS
          *  */
 
         // Register to scene change
-        EventManager.Instance.APP_SceneChanged.AddListener(On_APP_SceneChanged);
+        EventManager.Instance.APP_SceneChanged.Event += On_APP_SceneChanged;
 
     }
 

@@ -202,7 +202,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         PauseGameUIAction[] pauseGameActions = FindObjectsOfType<PauseGameUIAction>();
         foreach (PauseGameUIAction action in pauseGameActions)
         {
-            action.ActionButtonPressed += () =>
+            action.ActionButtonExecuted += () =>
             {
                 PauseOrUnpauseGame();
             };
@@ -211,7 +211,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         AbortGameUIAction[] abortGameActions = FindObjectsOfType<AbortGameUIAction>();
         foreach (AbortGameUIAction action in abortGameActions)
         {
-            action.ActionButtonPressed += () =>
+            action.ActionButtonExecuted += () =>
             {
                 EndGame(true);
             };

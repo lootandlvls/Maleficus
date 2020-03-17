@@ -964,7 +964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb6635fac656d64cac70938b54ac084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInitializeOnStart: 1
+  isInitializeOnStart: 0
   isLoadSubStates: 1
   activeOnStates: 0b000000
 --- !u!1 &252770784
@@ -1406,7 +1406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb6635fac656d64cac70938b54ac084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInitializeOnStart: 1
+  isInitializeOnStart: 0
   isLoadSubStates: 1
   activeOnStates: 09000000
 --- !u!1 &361447241
@@ -1804,7 +1804,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb6635fac656d64cac70938b54ac084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInitializeOnStart: 1
+  isInitializeOnStart: 0
   isLoadSubStates: 1
   activeOnStates: 090000000a000000
 --- !u!4 &502120401 stripped
@@ -2317,7 +2317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeb6635fac656d64cac70938b54ac084, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isInitializeOnStart: 1
+  isInitializeOnStart: 0
   isLoadSubStates: 1
   activeOnStates: 0a000000
 --- !u!1001 &708614909

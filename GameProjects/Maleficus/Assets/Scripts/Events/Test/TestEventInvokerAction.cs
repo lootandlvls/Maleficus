@@ -6,7 +6,7 @@ public class TestEventInvokerAction : AbstractUIAction
 {
     private static int counter = 0;
 
-    public override void Execute()
+    protected override void Execute()
     {
         base.Execute();
 

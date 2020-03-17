@@ -13,4 +13,14 @@ public class CanvasActivator : BNJMOBehaviour
             child.gameObject.SetActive(true);
         }
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(true);
+        }
+    }
 }

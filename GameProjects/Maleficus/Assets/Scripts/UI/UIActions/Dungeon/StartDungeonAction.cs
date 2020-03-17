@@ -9,7 +9,7 @@ public class StartDungeonAction : AbstractUIAction
 
     [SerializeField] private EDungeonID dungeonID = EDungeonID.NONE;
 
-    public override void Execute()
+    protected override void Execute()
     {
         base.Awake();
 

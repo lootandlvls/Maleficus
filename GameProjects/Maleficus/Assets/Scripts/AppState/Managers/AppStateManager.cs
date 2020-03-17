@@ -86,21 +86,6 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
             UpdateScene(newScene);
         }
-
-
-        //TODO  if connected before scene loaded [Leon]
-        /*
-        if (CurrentState == EAppState.IN_ENTRY)
-        {
-            List<AbstractNetMessage> msgs = NetworkManager.Instance.AllReceivedMsgs;
-            if ((msgs != null) && (msgs.Count != 0))
-            {
-                if (msgs[NetworkManager.Instance.AllReceivedMsgs.Count - 1].ID == ENetMessageID.CONNECTED)
-                {
-                    UpdateState(EAppState.IN_ENTRY_IN_LOGIN);
-                }
-            }
-        }*/
     }
 
     #region Scene Update
@@ -202,7 +187,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         StartConnectingPlayersUIAction[] connectPlayersActions = FindObjectsOfType<StartConnectingPlayersUIAction>();
         foreach (StartConnectingPlayersUIAction action in connectPlayersActions)
         {
-            action.ActionButtonPressed += () =>
+            action.ActionButtonExecuted += () =>
             {
                 UpdateState(EAppState.IN_MENU_IN_SPELL_SELECTION);
             };
@@ -214,7 +199,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         {
             if (action.IsStaysInSameAppState == false)
             {
-                action.ActionButtonPressed += () =>
+                action.ActionButtonExecuted += () =>
                 {
                     UpdateState(LastState);
                 };
@@ -225,7 +210,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
         PlayUIAction[] playActions = FindObjectsOfType<PlayUIAction>();
         foreach (PlayUIAction action in playActions)
         {
-            action.ActionButtonPressed += () =>
+            action.ActionButtonExecuted += () =>
             {
                 UpdateState(EAppState.IN_MENU_IN_STARTING_GAME);
             };
@@ -244,7 +229,7 @@ public class AppStateManager : AbstractSingletonManagerWithStateMachine<AppState
 
         foreach(StartGameUIAction action in FindObjectsOfType<StartGameUIAction>())
         {
-            action.ActionButtonPressed += () =>
+            action.ActionButtonExecuted += () =>
             {
                 EClientID clientID = NetworkManager.Instance.OwnerClientID;
                 NetEvent_GameStarted gameStarted = new NetEvent_GameStarted(clientID);
