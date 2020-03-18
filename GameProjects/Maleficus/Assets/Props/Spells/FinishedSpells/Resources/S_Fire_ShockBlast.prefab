@@ -4766,17 +4766,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a140ba59daf63b946a13fe4fdd1b3221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Fire Shock Blast
+  skillPoint: 1
   hitPower: 3
   speed: 0
-  spellName: Fire Shock Blast
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 3
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 3
   movementType: 3
-  skillPoint: 4
   cooldown: 3.5
   castDuration: 0
   pushDuration: 0.7

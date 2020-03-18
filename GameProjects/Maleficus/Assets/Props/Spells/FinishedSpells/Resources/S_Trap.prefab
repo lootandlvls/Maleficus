@@ -84,17 +84,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb44c94ef594ab04dbe6b1de1a78848a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Arcane Trap
+  skillPoint: 1
   hitPower: 15
   speed: 0
-  spellName: Arcane Trap
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 7
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 7
   movementType: 9
-  skillPoint: 3
   cooldown: 1
   castDuration: 0
   pushDuration: 1.8

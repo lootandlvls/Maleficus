@@ -35,7 +35,7 @@
 
     protected virtual void On_GAME_GameStarted(AbstractGameMode gameMode)
     {
-        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        if (ARE_ENUMS_EQUAL(GameModeType, gameMode.GameModeType))
         {
             IsRunning = true;
         }
@@ -43,7 +43,7 @@
 
     protected virtual void On_GAME_GameEnded(AbstractGameMode gameMode, bool wasAborted)
     {
-        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        if (ARE_ENUMS_EQUAL(GameModeType, gameMode.GameModeType))
         {
             IsRunning = false;
         }
@@ -51,7 +51,7 @@
 
     protected virtual void On_GAME_GamePaused(AbstractGameMode gameMode)
     {
-        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        if (ARE_ENUMS_EQUAL(GameModeType, gameMode.GameModeType))
         {
             IsRunning = false;
         }
@@ -60,7 +60,7 @@
 
     protected virtual void On_GAME_GameUnPaused(AbstractGameMode gameMode)
     {
-        if (ARE_EQUAL(GameModeType, gameMode.GameModeType))
+        if (ARE_ENUMS_EQUAL(GameModeType, gameMode.GameModeType))
         {
             IsRunning = true;
         }

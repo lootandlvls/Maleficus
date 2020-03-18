@@ -45,17 +45,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4eda7c0e832cab14e9bc7169d6680c73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Teleport
+  skillPoint: 1
   hitPower: 7
   speed: 0
-  spellName: Teleport
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 0
-  spell: 4
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 4
   movementType: 4
-  skillPoint: 2
   cooldown: 3
   castDuration: 0
   pushDuration: 0
@@ -177,6 +178,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8004448758370885323}
     m_Modifications:
+    - target: {fileID: 720633634358221333, guid: 201b1f228705b554ab54983d8d6610dd,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1942094575571645665, guid: 201b1f228705b554ab54983d8d6610dd,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4427411284809342750, guid: 201b1f228705b554ab54983d8d6610dd,
         type: 3}
       propertyPath: m_LocalPosition.x

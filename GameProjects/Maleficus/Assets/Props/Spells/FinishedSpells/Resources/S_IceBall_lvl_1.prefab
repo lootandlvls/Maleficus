@@ -50,17 +50,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Ice Ball
+  skillPoint: 2
   hitPower: 0
   speed: 1000
-  spellName: Ice Ball
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 0
-  spell: 4
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 4
   movementType: 0
-  skillPoint: 3
   cooldown: 3
   castDuration: 0
   pushDuration: 0

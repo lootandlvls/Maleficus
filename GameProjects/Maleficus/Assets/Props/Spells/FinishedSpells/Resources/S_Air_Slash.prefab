@@ -76,17 +76,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302da19f49e93474ca6554961aa61551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Air Slash
+  skillPoint: 2
   hitPower: 15
   speed: 1000
-  spellName: Air Slash
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 15
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 15
   movementType: 0
-  skillPoint: 3
   cooldown: 1.5
   castDuration: 0
   pushDuration: 2
@@ -212,7 +213,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -5024,7 +5025,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3

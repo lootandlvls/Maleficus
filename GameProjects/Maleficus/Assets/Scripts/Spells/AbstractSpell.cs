@@ -38,41 +38,41 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public AudioClip HitSound { get { return hitSound; } }
 
 
-    [Separator("Characteristics")]
+    [Header("Characteristics")]
+    [SerializeField] private string spellName;
+    [SerializeField] private int skillPoint;
     [SerializeField] public float hitPower;
     [SerializeField] public float speed;
-    [SerializeField] private string spellName;
     [SerializeField] private int spellLevel;
     [SerializeField] private bool OnSelfEffect;
     [SerializeField] private bool hasPushPower;
     [SerializeField] private bool hasGrabPower;
-    [SerializeField] private ESpellID spell;
     [SerializeField] private bool isChargeable;
     [SerializeField] private bool isTripleCast;
+    [SerializeField] private ESpellID spell;
     [SerializeField] private ESpellMovementType movementType;
-    [SerializeField] private int skillPoint;
 
-    [Separator("Durations")]
+    [Header("Durations")]
     [SerializeField] private float cooldown;
     [SerializeField] private float castDuration;
     [SerializeField] private float pushDuration;
     [SerializeField] private float spellDuration;
 
-    [Separator("Debuffs")]
+    [Header("Debuffs")]
     [SerializeField] private List<ESpellEffects> debuffEffects;
     [SerializeField] private float debuffDuration;
     [SerializeField] private float debuffPower;
 
-    [Separator("Buffs")]
+    [Header("Buffs")]
     [SerializeField] private List<ESpellEffects> buffEffects;
     [SerializeField] private float buffDuration;
     [SerializeField] private float buffPower;
 
-    [Separator("Audio")]
+    [Header("Audio")]
     [SerializeField] private AudioClip castSound;
     [SerializeField] private AudioClip hitSound;
 
-    [Separator("UI")]
+    [Header("UI")]
     [SerializeField] private Sprite spellIcon;
 
 
@@ -84,6 +84,19 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public List<GameObject> trails;
     public Vector3 parabolicSpell_EndPosition;
 
+    protected override void OnValidate()
+    {
+        base.OnValidate();
+
+        // Check SkillPoint correctness
+        if ((SkillPoint <= 0)
+            || (SkillPoint > 3))
+        {
+            LogConsoleWarning("Skill points should be assigned between 1 and 3! Given value will get clamped");
+            Mathf.Clamp(skillPoint, 1, 3);
+        }
+
+    }
 
     protected override void InitializeComponents()
     {

@@ -142,18 +142,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Get Over Here
+  skillPoint: 2
   hitPower: 50
   speed: 600
-  spellName: Get Over Here
   spellLevel: 1
   OnSelfEffect: 0
   hasPushPower: 0
   hasGrabPower: 1
-  spell: 16
   isChargeable: 0
   isTripleCast: 0
+  spell: 16
   movementType: 0
-  skillPoint: 3
   cooldown: 2
   castDuration: 0
   pushDuration: 0
@@ -5052,7 +5052,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -9828,7 +9828,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -14516,6 +14516,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1415139862913118015}
     m_Modifications:
+    - target: {fileID: 3232316106404504387, guid: 946448ac72a9a8249a9e64e21f77501e,
+        type: 3}
+      propertyPath: scalingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3342126531867147967, guid: 946448ac72a9a8249a9e64e21f77501e,
         type: 3}
       propertyPath: m_Name

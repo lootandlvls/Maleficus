@@ -440,8 +440,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         Vector3 position = transform.position;
         Quaternion rotation = transform.rotation;
         AbstractSpell castedSpell = Instantiate(spellToCast, position, rotation);
-        castedSpell.transform.localScale /= 3.0f;
-        castedSpell.speed /= 3.0f;
+        castedSpell.transform.localScale *= MotherOfManagers.Instance.spellPreviewScaleFactor;
+        castedSpell.speed *= MotherOfManagers.Instance.spellPreviewScaleFactor;
 
         // Special cases
         if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)

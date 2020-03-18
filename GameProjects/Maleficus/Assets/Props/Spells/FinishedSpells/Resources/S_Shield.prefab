@@ -171,7 +171,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -4822,17 +4822,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a207ca8544b58be44951b2b2847240a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Shield
+  skillPoint: 2
   hitPower: 0
   speed: 0
-  spellName: Shield
   spellLevel: 0
   OnSelfEffect: 1
   hasPushPower: 0
-  spell: 12
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 12
   movementType: 10
-  skillPoint: 4
   cooldown: 6
   castDuration: 0
   pushDuration: 0

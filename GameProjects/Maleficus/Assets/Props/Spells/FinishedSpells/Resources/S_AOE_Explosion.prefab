@@ -23930,17 +23930,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c0df8cd2f7b7b41be180d72e30b932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: AOE Explosion
+  skillPoint: 1
   hitPower: 19
   speed: 0
-  spellName: AOE Explosion
   spellLevel: 1
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 7
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 7
   movementType: 5
-  skillPoint: 2
   cooldown: 2
   castDuration: 0
   pushDuration: 1.3

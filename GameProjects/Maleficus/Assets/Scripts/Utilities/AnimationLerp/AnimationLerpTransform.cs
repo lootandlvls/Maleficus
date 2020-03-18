@@ -6,17 +6,31 @@ namespace BNJMO
 {
     public class AnimationLerpTransform : AnimationLerp<Transform>
     {
+        [Header("Transform")]
         public bool LerpPosition = true;
         public bool LerpRotation = true;
         public bool LerpScale = true;
 
-        Transform animationTransform;
+        Transform animatedTransform;
 
-        public void StartAnimation(Transform transform)
+        public void StartAnimation(Transform animatedTransform)
         {
-            animationTransform = transform;
+            if (IS_NOT_NULL(animatedTransform))
+            {
+                this.animatedTransform = animatedTransform;
 
-            StartAnimation();
+                StartAnimation();
+            }
+        }
+
+        public void StartAnimation(Transform animatedTransform, Transform startValue, Transform endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false)
+        {
+            if (IS_NOT_NULL(animatedTransform))
+            {
+                this.animatedTransform = animatedTransform;
+
+                StartAnimation(startValue, endValue, playTime, isLoop, playInReverse);
+            }
         }
 
         protected override Transform Lerp(Transform start, Transform end, float alpha)
@@ -39,18 +53,18 @@ namespace BNJMO
                 scale = Vector3.LerpUnclamped(start.localScale, end.localScale, alpha);
             }
 
-            animationTransform.position = position;
-            animationTransform.rotation = rotation;
-            animationTransform.localScale = scale;
+            animatedTransform.position = position;
+            animatedTransform.rotation = rotation;
+            animatedTransform.localScale = scale;
 
-            return animationTransform;
+            return animatedTransform;
         }
 
         protected override void On_AnimationEnded(AnimationLerp<Transform> animationLerp)
         {
             base.On_AnimationEnded(animationLerp);
 
-            animationTransform = null;
+            animatedTransform = null;
         }
     }
 }

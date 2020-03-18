@@ -19,6 +19,7 @@ namespace BNJMO
         public event Action<AnimationLerp<A>> AnimationStopped;
 
         public string AnimationName { get { return animationName; } set { animationName = value; } }
+        [Header("Animation Lerp")]
         [SerializeField] private string animationName = "AnimLerp_X";
         public float PlayTime = 3.0f;
         public bool PlayInReverse = false;
@@ -65,6 +66,20 @@ namespace BNJMO
             StartAnimation();
         }
 
+        public void StartAnimation(A startValue, A endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false)
+        {
+            StartValue = startValue;
+            EndValue = endValue;
+            if (playTime > 0.0f)
+            {
+                PlayTime = playTime;
+            }
+            IsLoop = isLoop;
+            PlayInReverse = playInReverse;
+
+            StartAnimation();
+        }
+
         public void StartAnimation()
         {
             if (PlayTime > 0.0f)
@@ -76,6 +91,8 @@ namespace BNJMO
                 LogConsoleError("Trying to start an AnimationLerp that has playTime set to 0!");
             }
         }
+
+        
 
         public void StopAnimation()
         {

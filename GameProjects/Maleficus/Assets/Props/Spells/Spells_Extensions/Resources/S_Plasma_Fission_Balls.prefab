@@ -107,7 +107,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -4883,7 +4883,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -9659,7 +9659,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -14435,7 +14435,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -19185,27 +19185,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: 
+  skillPoint: 0
   hitPower: 12.5
   speed: 1600
-  spellName: 
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 11
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 11
   movementType: 0
-  skillPoint: 0
+  cooldown: 1
+  castDuration: 0
+  pushDuration: 0.7
+  spellDuration: 6
   debuffEffects: 
   debuffDuration: 0
   debuffPower: 0
   buffEffects: 
   buffDuration: 0
   buffPower: 0
-  cooldown: 1
-  castDuration: 0
-  pushDuration: 0.7
-  spellDuration: 6
   castSound: {fileID: 8300000, guid: f321f83128583f84c8964cddb405182d, type: 3}
   hitSound: {fileID: 0}
   spellIcon: {fileID: 0}
@@ -19430,7 +19431,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3

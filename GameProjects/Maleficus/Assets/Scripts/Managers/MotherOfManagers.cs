@@ -37,6 +37,7 @@ public class MotherOfManagers: AbstractSingletonManager<MotherOfManagers>
     [Separator("Spell")]
     [SerializeField] public bool IsLoadDebugSpells = false;
     [SerializeField] public bool IsLimitMaxPushPower = false;
+    [SerializeField] public float spellPreviewScaleFactor = 1.0f;
 
     [Separator("Debug")]
     [SerializeField] public bool IsDebugLogEvents = true;

@@ -107,7 +107,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -9603,27 +9603,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Energy Triangles
+  skillPoint: 2
   hitPower: 18
   speed: 1000
-  spellName: Energy Triangles
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 5
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 1
+  spell: 5
   movementType: 0
-  skillPoint: 3
+  cooldown: 2
+  castDuration: 0
+  pushDuration: 0.7
+  spellDuration: 6
   debuffEffects: 
   debuffDuration: 0
   debuffPower: 0
   buffEffects: 
   buffDuration: 0
   buffPower: 0
-  cooldown: 2
-  castDuration: 0
-  pushDuration: 0.7
-  spellDuration: 6
   castSound: {fileID: 0}
   hitSound: {fileID: 8300000, guid: 664626b1dfc9ccb4fb6ea3e5a83441f2, type: 3}
   spellIcon: {fileID: 21300000, guid: 7d8a3ea9484be824283f1881e2cb5ced, type: 3}
@@ -9881,7 +9882,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -14657,7 +14658,7 @@ ParticleSystem:
       m_RotationOrder: 4
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3

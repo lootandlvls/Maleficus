@@ -13971,17 +13971,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2aca8fc163479549b5bf1528ae0eb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spellName: Fire Laser
+  skillPoint: 2
   hitPower: 0.5
   speed: 0
-  spellName: Fire Laser
   spellLevel: 0
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 1
+  hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
+  spell: 1
   movementType: 6
-  skillPoint: 5
   cooldown: 5
   castDuration: 0
   pushDuration: 0.5

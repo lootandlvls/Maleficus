@@ -58,6 +58,7 @@ public class ManagersSpawner : MotherOfManagers
             // Spell
             managersInstance.IsLoadDebugSpells = IsLoadDebugSpells;
             managersInstance.IsLimitMaxPushPower = IsLimitMaxPushPower;
+            managersInstance.spellPreviewScaleFactor = spellPreviewScaleFactor;
             // Debug
             managersInstance.IsDebugLogEvents = IsDebugLogEvents;
             managersInstance.IsReduceLightIntensityOnSceneStart = IsReduceLightIntensityOnSceneStart;

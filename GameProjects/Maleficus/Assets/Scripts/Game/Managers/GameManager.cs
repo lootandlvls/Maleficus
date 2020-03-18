@@ -84,7 +84,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
                 break;
         }
         if ((IS_NOT_NULL(CurrentGameMode))
-           && (ARE_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
+           && (ARE_ENUMS_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
         {
             LogConsole("Spawned : " + ChosenGameModeType);
             return true;
@@ -141,7 +141,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
     private void On_NETWORK_GameStarted(NetEvent_GameStarted eventHandle)
     {
         if ((IS_NOT_NULL(CurrentGameMode))
-            && (ARE_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
+            && (ARE_ENUMS_EQUAL(ChosenGameModeType, CurrentGameMode.GameModeType)))
         {
             EventManager.Instance.Invoke_GAME_GameStarted(CurrentGameMode);
         }
@@ -158,7 +158,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void ON_GAME_GameOver(NetEvent_GameOver eventHandle)
     {
-        if (ARE_EQUAL(AppStateManager.Instance.CurrentState, EAppState.IN_GAME_IN_RUNNING))
+        if (ARE_ENUMS_EQUAL(AppStateManager.Instance.CurrentState, EAppState.IN_GAME_IN_RUNNING))
         {
             EndGame();
         }

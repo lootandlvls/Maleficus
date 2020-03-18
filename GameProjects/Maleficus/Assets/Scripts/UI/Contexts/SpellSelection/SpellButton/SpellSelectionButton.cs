@@ -15,7 +15,9 @@ public class SpellSelectionButton : BNJMOBehaviour
     [SerializeField] private AbstractSpell spell;
     [SerializeField] private int rowIndex;
     [SerializeField] private int columnIndex;
-    [SerializeField] private SpellSkillPointText skillPointText;
+    //[SerializeField] private SpellSkillPointText skillPointText;
+    [SerializeField] private SpellSkillPointStar[] skillPointStars = new SpellSkillPointStar[3];
+
 
     private Button myButton;
     private Text myDebugIndexText;
@@ -36,28 +38,47 @@ public class SpellSelectionButton : BNJMOBehaviour
     {
         base.OnValidate();
 
-        // Reinitialize debug text from object name
-        skillPointText = GetComponentInChildren<SpellSkillPointText>();
+        // Update the debug text
         myDebugIndexText = GetComponentInChildren<Text>();
         if (myDebugIndexText != null)
         {
             myDebugIndexText.text = RowIndex + "-" + ColumnIndex;
-
-            // Update the name of the gameobject accordingly
-            name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex;
         }
 
-        // Reinitialize button image 
-        myButton = GetComponent<Button>();
-        Text SPtext = skillPointText.GetComponent<Text>();
-        if (myButton != null)
+        // Update the name of the gameobject
+        name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex;
+
+        // Update according to given spell
+        if (spell != null)
         {
-            if (spell != null)
+            // Update the name of the gameobject accordingly
+            name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex + " : " + spell.SpellName;
+
+            // Update Button image 
+            myButton = GetComponent<Button>();
+            if (myButton != null)
             {
                 myButton.image.sprite = spell.SpellIcon;
-                SPtext.text = spell.SkillPoint + "";
-                // Update the name of the gameobject accordingly
-                name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex + " : " + spell.SpellName;
+            }
+
+            // Update Stars count
+            if (ARE_EQUAL(skillPointStars.Length, 3))
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    SpellSkillPointStar spellSkillPointStar = skillPointStars[i];
+                    if (IS_NOT_NULL(spellSkillPointStar))
+                    {
+                        if (spell.SkillPoint >= i + 1)
+                        {
+                            spellSkillPointStar.ShowStar();
+                        }
+                        else
+                        {
+                            spellSkillPointStar.HideStar();
+                        }
+                    }
+                }
             }
         }
     }

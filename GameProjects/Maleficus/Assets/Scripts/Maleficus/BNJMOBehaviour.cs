@@ -214,6 +214,44 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks if the given two variable are equal.
+    /// Prints a warning in the console the variables are not equal.
+    /// Note: To compare enums, please use "ARE_ENUMS_NOT_EQUAL"!
+    /// </summary>
+    /// <typeparam name="O"> Type of the varaibles </typeparam>
+    /// <param name="variable1"> First variable </param>
+    /// <param name="variable2"> Second variable </param>
+    /// <returns></returns>
+    protected bool ARE_EQUAL<O>(O variable1, O variable2)
+    {
+        if (variable1.Equals(variable2) == false)
+        {
+            LogConsoleWarning("Two variables of type <color=cyan>" + typeof(O) + "</color> are not equal! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if the given two variable are not equal.
+    /// Prints a warning in the console the variables are equal.
+    /// Note: To compare enums, please use "ARE_ENUMS_NOT_EQUAL"!
+    /// </summary>
+    /// <typeparam name="O"> Type of the varaibles </typeparam>
+    /// <param name="variable1"> First variable </param>
+    /// <param name="variable2"> Second variable </param>
+    /// <returns></returns>
+    protected bool ARE_NOT_EQUAL<O>(O variable1, O variable2)
+    {
+        if (variable1.Equals(variable2) == true)
+        {
+            LogConsoleWarning("Two variables of type <color=cyan>" + typeof(O) + "</color> are equal! ");
+            return false;
+        }
+        return true;
+    }
+
+    /// <summary>
     /// Checks if the given enum has the value NONE. 
     /// Check is performed by a simple string conversion!
     /// Prints a warning in the console if not NONE.
@@ -257,7 +295,7 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     /// <param name="enumToCheck1"> first enum to check </param>
     /// <param name="enumToCheck2"> second enum to check with </param>
     /// <returns></returns>
-    protected bool ARE_EQUAL<E>(E enumToCheck1, E enumToCheck2) where E : Enum
+    protected bool ARE_ENUMS_EQUAL<E>(E enumToCheck1, E enumToCheck2) where E : Enum
     {
         if (enumToCheck1.ToString().Equals(enumToCheck2.ToString()) == false)
         {
@@ -275,7 +313,7 @@ public abstract class BNJMOBehaviour : MonoBehaviour
     /// <param name="enumToCheck1"> first enum to check </param>
     /// <param name="enumToCheck2"> second enum to check with </param>
     /// <returns></returns>
-    protected bool ARE_NOT_EQUAL<E>(E enumToCheck1, E enumToCheck2) where E : Enum
+    protected bool ARE_ENUMS_NOT_EQUAL<E>(E enumToCheck1, E enumToCheck2) where E : Enum
     {
         if (enumToCheck1.ToString().Equals(enumToCheck2.ToString()) == true)
         {
