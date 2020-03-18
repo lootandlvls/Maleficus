@@ -4,6 +4,14 @@ using System;
 
 using static Maleficus.Utils;
 
+public enum EHighlightSpellSide
+{
+    NONE = 0,
+    LEFT = 1,
+    RIGHT = 2
+}
+
+
 public class PlayerSpellSelectionContext : BNJMOBehaviour
 {
     public event Action<EPlayerID> LeaveRequest;
@@ -14,11 +22,13 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
 
     [Header("Player Spell Selection Context")]
     [SerializeField] private EPlayerID playerID;
+    [SerializeField] private EHighlightSpellSide highlightSpellSide = EHighlightSpellSide.NONE;
     [SerializeField] private GameObject connectedView;
     [SerializeField] private GameObject notConnectedView;
     [SerializeField] private GameObject spellSelectionView;
     [SerializeField] private GameObject readyView;
     [SerializeField] private GameObject spellStartPosition;
+    [SerializeField] private HighlightedSpell[] highlightedSpells = new HighlightedSpell[0];
 
     private PlayerSkillPointsIndicator playerSkillPointsIndicator;
 
@@ -33,17 +43,33 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
     private Dictionary<ESpellSlot, SelectedSpell> selectedSpells = new Dictionary<ESpellSlot, SelectedSpell>();
     private int selectedSpellsCounter = 0;
 
-    protected override void InitializeEventsCallbacks()
+    protected override void OnValidate()
     {
-        base.InitializeEventsCallbacks();
+        base.OnValidate();
 
-        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
-        EventManager.Instance.PLAYERS_PlayerLeft += On_PLAYERS_PlayerLeft;
-        EventManager.Instance.PLAYERS_PlayerReady += On_PLAYERS_PlayerReady;
-        EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
+        // Updated visible Highlighted Spell Side
+        foreach (HighlightedSpell highlightedSpell in highlightedSpells)
+        {
+            if (highlightedSpell)
+            {
+                highlightedSpell.PlayerID = PlayerID;
+                if (highlightedSpell.HighlightSpellSide == highlightSpellSide)
+                {
+                    highlightedSpell.Show();
+                }
+                else
+                {
+                    highlightedSpell.Hide();
+                }
+            }
+        }
+    }
 
-        EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
-        EventManager.Instance.UI_SpellChosen            += On_UI_SpellChosen;
+    protected override void Awake()
+    {
+        base.Awake();
+
+        IS_NOT_NONE(highlightSpellSide);
     }
 
     protected override void InitializeComponents()
@@ -62,7 +88,12 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         IS_NOT_NULL(playerSkillPointsIndicator);
 
         connectedView.SetActive(false);
-        
+
+        // Updated Highlighted PlayerID
+        foreach (HighlightedSpell highlightedSpell in highlightedSpells)
+        {
+            highlightedSpell.gameObject.SetActive(true);
+        }
     }
 
     protected override void Start()
@@ -70,6 +101,19 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         base.Start();
 
         UpdateState(ESpellSelectionState.NOT_CONNECTED);
+    }
+
+    protected override void InitializeEventsCallbacks()
+    {
+        base.InitializeEventsCallbacks();
+
+        EventManager.Instance.PLAYERS_PlayerJoined += On_PLAYERS_PlayerJoined;
+        EventManager.Instance.PLAYERS_PlayerLeft += On_PLAYERS_PlayerLeft;
+        EventManager.Instance.PLAYERS_PlayerReady += On_PLAYERS_PlayerReady;
+        EventManager.Instance.PLAYERS_PlayerCanceledReady += On_PLAYERS_PlayerCanceledReady;
+
+        EventManager.Instance.INPUT_ButtonPressed.Event += On_INPUT_ButtonPressed_Event;
+        EventManager.Instance.UI_SpellChosen += On_UI_SpellChosen;
     }
 
     protected override void OnDestroy()

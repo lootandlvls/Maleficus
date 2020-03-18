@@ -4,25 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class HighlightedSpell : BNJMOBehaviour
 {
+    public EPlayerID PlayerID { get; set; }
+    public EHighlightSpellSide HighlightSpellSide { get { return highlightSpellSide; } }
+
+    [SerializeField] private EHighlightSpellSide highlightSpellSide = EHighlightSpellSide.NONE;
     [SerializeField] private Image spellIcon;
     [SerializeField] private Text spellNameText;
-
-    private EPlayerID playerID;
 
     protected override void Awake()
     {
         base.Awake();
 
+        IS_NOT_NONE(highlightSpellSide);
         IS_NOT_NULL(spellIcon);
         IS_NOT_NULL(spellNameText);
-
-        PlayerSpellSelectionContext context = GetComponentInParent<PlayerSpellSelectionContext>();
-        if (IS_NOT_NULL(context))
-        {
-            playerID = context.PlayerID;
-        }
     }
 
     protected override void OnEnable()
@@ -31,7 +29,7 @@ public class HighlightedSpell : BNJMOBehaviour
 
         if (SpellSelectionManager.IsInstanceSet)
         {
-            SpellSelectionButton spellButton = SpellSelectionManager.Instance.GetHighlightedSpellButton(playerID);
+            SpellSelectionButton spellButton = SpellSelectionManager.Instance.GetHighlightedSpellButton(PlayerID);
             if (spellButton != null)
             {
                 spellIcon.sprite = spellButton.Spell.SpellIcon;
@@ -61,11 +59,27 @@ public class HighlightedSpell : BNJMOBehaviour
         }
     }
 
+    public void Show()
+    {
+        foreach (Image image in GetComponentsInChildren<Image>())
+        {
+            image.enabled = true;
+        }
+    }
+
+    public void Hide()
+    {
+        foreach (Image image in GetComponentsInChildren<Image>())
+        {
+            image.enabled = false;
+        }
+    }
+
     private void On_PLAYERS_PlayerJoined(EPlayerID playerID, EControllerID controllerID)
     {
-        if (playerID == this.playerID)
+        if (PlayerID == playerID)
         {
-            SpellSelectionButton spellButton = SpellSelectionManager.Instance.GetHighlightedSpellButton(this.playerID);
+            SpellSelectionButton spellButton = SpellSelectionManager.Instance.GetHighlightedSpellButton(PlayerID);
             if (spellButton != null)
             {
                 spellIcon.sprite = spellButton.Spell.SpellIcon;
@@ -75,7 +89,7 @@ public class HighlightedSpell : BNJMOBehaviour
 
     private void OnSpellHighlighted(EPlayerID playerID , AbstractSpell highlightedSpell)
     {
-        if (this.playerID == playerID)
+        if (PlayerID == playerID)
         {
             spellIcon.sprite = highlightedSpell.SpellIcon;
             spellNameText.text = highlightedSpell.SpellName;

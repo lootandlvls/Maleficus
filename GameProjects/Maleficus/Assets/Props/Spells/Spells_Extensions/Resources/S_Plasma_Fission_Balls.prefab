@@ -19186,7 +19186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellName: 
-  skillPoint: 0
+  skillPoint: 1
   hitPower: 12.5
   speed: 1600
   spellLevel: 0

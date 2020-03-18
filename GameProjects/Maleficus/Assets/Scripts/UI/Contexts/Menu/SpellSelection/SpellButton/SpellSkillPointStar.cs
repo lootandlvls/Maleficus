@@ -8,7 +8,7 @@ public class SpellSkillPointStar : BNJMOBehaviour
     public int StarID = 0;
 
 
-    public void ShowStar()
+    public void Show()
     {
         RawImage image = GetComponent<RawImage>();
         if (IS_NOT_NULL(image))
@@ -17,7 +17,7 @@ public class SpellSkillPointStar : BNJMOBehaviour
         }
     }
 
-    public void HideStar()
+    public void Hide()
     {
         RawImage image = GetComponent<RawImage>();
         if (IS_NOT_NULL(image))

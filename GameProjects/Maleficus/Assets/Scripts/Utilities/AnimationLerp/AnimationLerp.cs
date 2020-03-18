@@ -59,14 +59,14 @@ namespace BNJMO
                 + "CurrentAlpha : " + CurrentAlpha);
         }
 
-        public void StartAnimation(ref AnimationLerpWrapper<A> animationLerpWrapper)
+        public virtual void StartAnimation(ref AnimationLerpWrapper<A> animationLerpWrapper)
         {
             valueWrapper = animationLerpWrapper;
 
             StartAnimation();
         }
 
-        public void StartAnimation(A startValue, A endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false)
+        public virtual void StartAnimation(A startValue, A endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false)
         {
             StartValue = startValue;
             EndValue = endValue;
@@ -80,7 +80,7 @@ namespace BNJMO
             StartAnimation();
         }
 
-        public void StartAnimation()
+        public virtual void StartAnimation()
         {
             if (PlayTime > 0.0f)
             {
@@ -94,7 +94,7 @@ namespace BNJMO
 
         
 
-        public void StopAnimation()
+        public virtual void StopAnimation()
         {
             InvokeEventIfBound(AnimationStopped, this);
             StopCoroutine(CurrentAnimationEnumerator);

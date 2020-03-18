@@ -6,7 +6,7 @@ using static Maleficus.Consts;
 /// <summary>
 /// UI element that reacts to UI state change.
 /// </summary>
-public abstract class AbstractUIReaction : MonoBehaviour {
+public abstract class AbstractUIReaction : BNJMOBehaviour {
 
     [SerializeField] protected bool isInitializeOnStart = false;
     [SerializeField] protected bool isLoadSubStates = true;
@@ -14,8 +14,10 @@ public abstract class AbstractUIReaction : MonoBehaviour {
 
     protected EMenuState[] activeOnSubStates;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (isLoadSubStates == true)
         {
             // Add all sub states if selected state is a high hierarchy 
@@ -42,8 +44,10 @@ public abstract class AbstractUIReaction : MonoBehaviour {
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         EventManager.Instance.UI_MenuStateUpdated.AddListener(On_UI_MenuStateUpdated);
 
         // Initialization
@@ -53,8 +57,10 @@ public abstract class AbstractUIReaction : MonoBehaviour {
         }
     }
 
-    protected virtual void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
+
         if (EventManager.Instance != null)
         {
             EventManager.Instance.UI_MenuStateUpdated.RemoveListener(On_UI_MenuStateUpdated);

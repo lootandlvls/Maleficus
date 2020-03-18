@@ -4767,7 +4767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellName: Fire Shock Blast
-  skillPoint: 1
+  skillPoint: 2
   hitPower: 3
   speed: 0
   spellLevel: 0

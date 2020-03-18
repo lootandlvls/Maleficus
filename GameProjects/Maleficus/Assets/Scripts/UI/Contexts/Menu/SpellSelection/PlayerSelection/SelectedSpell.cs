@@ -9,19 +9,11 @@ public class SelectedSpell : BNJMOBehaviour
     public bool IsSelected                      { get { return CurrentSelectedSpell != null; } }
     public AbstractSpell CurrentSelectedSpell   { get; private set; }
 
-    [SerializeField] ESpellSlot spellSlot;
-    [SerializeField] Text skillPointIndicator;
 
-    private Image spellIcon;
-
-    protected override void InitializeComponents()
-    {
-        base.InitializeComponents();
-
-        spellIcon = GetComponentWithCheck<Image>();
-    }
-
-
+    [SerializeField] private ESpellSlot spellSlot;
+    [SerializeField] private Text skillPointIndicator;
+    [SerializeField] Image spellIcon;
+    [SerializeField] Sprite emptySpellIcon;
 
     public void SelectSpell(AbstractSpell spell)
     {
@@ -35,7 +27,7 @@ public class SelectedSpell : BNJMOBehaviour
 
     public void RemoveSpell()
     {
-        spellIcon.sprite = null;
+        spellIcon.sprite = emptySpellIcon;
         CurrentSelectedSpell = null;
         skillPointIndicator.text = "";
     }

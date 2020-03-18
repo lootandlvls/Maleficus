@@ -14408,29 +14408,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae536185af7d5ad41930a011c75c9f64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMaleficusMonoBehaviourConfiguration: 0
-  debugLogConsoleEnabled: 1
-  logCategoriesToIgnore: []
+  spellName: FireBall_lvl_2
+  skillPoint: 1
   hitPower: 24
   speed: 800
-  spellName: FireBall_lvl_2
   spellLevel: 2
   OnSelfEffect: 0
   hasPushPower: 1
-  spell: 0
+  hasGrabPower: 0
   isChargeable: 0
-  spellIcon: {fileID: 0}
-  castSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  skillPoint: 0
   isTripleCast: 0
+  spell: 0
   movementType: 0
-  debuffEffects: 
-  buffEffects: 
   cooldown: 1
   castDuration: 0
   pushDuration: 1
   spellDuration: 6
+  debuffEffects: 
+  debuffDuration: 0
+  debuffPower: 0
+  buffEffects: 
+  buffDuration: 0
+  buffPower: 0
+  castSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  spellIcon: {fileID: 0}
   hitPrefab: {fileID: 1221116321114522, guid: 13e7b1908d4d5094e9ba37c20eb5a0a0, type: 3}
   trails:
   - {fileID: 9020541765673529008}

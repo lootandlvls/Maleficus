@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellName: Air Slash
-  skillPoint: 2
+  skillPoint: 1
   hitPower: 15
   speed: 1000
   spellLevel: 0

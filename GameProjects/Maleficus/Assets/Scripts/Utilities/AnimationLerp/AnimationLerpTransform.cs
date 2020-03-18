@@ -13,6 +13,16 @@ namespace BNJMO
 
         Transform animatedTransform;
 
+        public override void StartAnimation()
+        {
+            if (animatedTransform == null)
+            {
+                animatedTransform = transform;
+            }
+
+            base.StartAnimation();
+        }
+
         public void StartAnimation(Transform animatedTransform)
         {
             if (IS_NOT_NULL(animatedTransform))

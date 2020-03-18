@@ -15,7 +15,6 @@ public class SpellSelectionButton : BNJMOBehaviour
     [SerializeField] private AbstractSpell spell;
     [SerializeField] private int rowIndex;
     [SerializeField] private int columnIndex;
-    //[SerializeField] private SpellSkillPointText skillPointText;
     [SerializeField] private SpellSkillPointStar[] skillPointStars = new SpellSkillPointStar[3];
 
 
@@ -71,11 +70,11 @@ public class SpellSelectionButton : BNJMOBehaviour
                     {
                         if (spell.SkillPoint >= i + 1)
                         {
-                            spellSkillPointStar.ShowStar();
+                            spellSkillPointStar.Show();
                         }
                         else
                         {
-                            spellSkillPointStar.HideStar();
+                            spellSkillPointStar.Hide();
                         }
                     }
                 }

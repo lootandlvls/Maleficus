@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellName: Ice Ball
-  skillPoint: 2
+  skillPoint: 1
   hitPower: 0
   speed: 1000
   spellLevel: 0

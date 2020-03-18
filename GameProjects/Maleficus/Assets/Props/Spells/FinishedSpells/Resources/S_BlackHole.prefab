@@ -66690,7 +66690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellName: Black Hole
-  skillPoint: 4
+  skillPoint: 3
   hitPower: 0.1
   speed: 200
   spellLevel: 1
