@@ -564,7 +564,7 @@ public class Player : BNJMOBehaviour, IPlayer
     {
         if (other.tag.Equals("Ground"))
         {
-            GravityVelocity = new Vector3(0, -20.0f, 0);
+            GravityVelocity = new Vector3(0, -15.0f, 0);
             IsDead = true;
             StopAllCoroutines();
             IsReadyToShoot = false;
