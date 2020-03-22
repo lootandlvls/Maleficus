@@ -82,6 +82,8 @@ public class Linear_Hit : AbstractSpell
     {
         float collisionTime = Time.time;
 
+        LogConsole("Collision " + other.gameObject.ToString());
+
         if (hasBeenTriggered == false)
         {
        

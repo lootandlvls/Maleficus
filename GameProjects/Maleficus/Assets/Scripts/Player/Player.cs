@@ -513,9 +513,9 @@ public class Player : BNJMOBehaviour, IPlayer
         }
     }
 
-    public void SetPlayerSpeedBoost(int speedBoost)
+    public void SetPlayerSpeedBoost(float speedFactor)
     {
-        currentSpeed = speed * speedBoost;
+        currentSpeed *= speedFactor;
     }
 
     public void ResetSpellChargingLVL()
@@ -564,7 +564,7 @@ public class Player : BNJMOBehaviour, IPlayer
     {
         if (other.tag.Equals("Ground"))
         {
-            GravityVelocity = new Vector3(0, -9.81f, 0);
+            GravityVelocity = new Vector3(0, -20.0f, 0);
             IsDead = true;
             StopAllCoroutines();
             IsReadyToShoot = false;

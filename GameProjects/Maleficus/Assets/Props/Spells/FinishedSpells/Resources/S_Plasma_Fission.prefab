@@ -25,11 +25,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069539762457806678}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2066722109303247096}
+  m_Father: {fileID: 6571193740357712283}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!198 &2197726237893519966
@@ -4783,7 +4783,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2066722109303247096}
+  m_Father: {fileID: 6571193740357712283}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2196888484618266884
@@ -9564,11 +9564,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2070010452360446536}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2066722109303247096}
+  m_Father: {fileID: 6571193740357712283}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2197659951304857884
@@ -14344,7 +14344,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2066722109303247096}
+  m_Father: {fileID: 6571193740357712283}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2197665883577313316
@@ -19123,11 +19123,7 @@ Transform:
   m_LocalPosition: {x: 5.65, y: 2, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 2067442706496321720}
-  - {fileID: 2067526590623594376}
-  - {fileID: 2066604691688504774}
-  - {fileID: 2066597470671934612}
-  - {fileID: 2066718041141112458}
+  - {fileID: 6571193740357712283}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19144,8 +19140,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellName: Plasma Fission
-  skillPoint: 1
-  hitPower: 33
+  skillPoint: 2
+  hitPower: 26
   speed: 600
   spellLevel: 0
   OnSelfEffect: 0
@@ -19155,9 +19151,9 @@ MonoBehaviour:
   isTripleCast: 0
   spell: 10
   movementType: 10
-  cooldown: 4
+  cooldown: 2.5
   castDuration: 0
-  pushDuration: 1.5
+  pushDuration: 2
   spellDuration: 6
   debuffEffects: 
   debuffDuration: 0
@@ -19213,7 +19209,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.1
+  m_Radius: 1.6
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &1004560649196803573
 AudioSource:
@@ -19340,7 +19336,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2066722109303247096}
+  m_Father: {fileID: 6571193740357712283}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &2197644218515603648
@@ -24087,3 +24083,38 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!1 &3171420492292923409
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6571193740357712283}
+  m_Layer: 0
+  m_Name: Effect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6571193740357712283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3171420492292923409}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_Children:
+  - {fileID: 2067442706496321720}
+  - {fileID: 2067526590623594376}
+  - {fileID: 2066604691688504774}
+  - {fileID: 2066597470671934612}
+  - {fileID: 2066718041141112458}
+  m_Father: {fileID: 2066722109303247096}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

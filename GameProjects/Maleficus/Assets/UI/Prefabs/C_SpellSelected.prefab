@@ -165,6 +165,7 @@ MonoBehaviour:
   spellSlot: 2
   skillPointIndicator: {fileID: 9012400810826635427}
   spellIcon: {fileID: 1757788022649392317}
+  emptySpellIcon: {fileID: 21300000, guid: 41b166fecbebbc1489a2000cb3bf20a9, type: 3}
 --- !u!1 &6302425079666982792
 GameObject:
   m_ObjectHideFlags: 0

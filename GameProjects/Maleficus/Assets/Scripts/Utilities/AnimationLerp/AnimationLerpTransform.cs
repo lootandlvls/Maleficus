@@ -11,13 +11,13 @@ namespace BNJMO
         public bool LerpRotation = true;
         public bool LerpScale = true;
 
-        Transform animatedTransform;
+        public Transform AnimatedTransform;
 
         public override void StartAnimation()
         {
-            if (animatedTransform == null)
+            if (AnimatedTransform == null)
             {
-                animatedTransform = transform;
+                AnimatedTransform = transform;
             }
 
             base.StartAnimation();
@@ -27,19 +27,9 @@ namespace BNJMO
         {
             if (IS_NOT_NULL(animatedTransform))
             {
-                this.animatedTransform = animatedTransform;
+                AnimatedTransform = animatedTransform;
 
                 StartAnimation();
-            }
-        }
-
-        public void StartAnimation(Transform animatedTransform, Transform startValue, Transform endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false)
-        {
-            if (IS_NOT_NULL(animatedTransform))
-            {
-                this.animatedTransform = animatedTransform;
-
-                StartAnimation(startValue, endValue, playTime, isLoop, playInReverse);
             }
         }
 
@@ -63,18 +53,18 @@ namespace BNJMO
                 scale = Vector3.LerpUnclamped(start.localScale, end.localScale, alpha);
             }
 
-            animatedTransform.position = position;
-            animatedTransform.rotation = rotation;
-            animatedTransform.localScale = scale;
+            AnimatedTransform.position = position;
+            AnimatedTransform.rotation = rotation;
+            AnimatedTransform.localScale = scale;
 
-            return animatedTransform;
+            return AnimatedTransform;
         }
 
         protected override void On_AnimationEnded(AnimationLerp<Transform> animationLerp)
         {
             base.On_AnimationEnded(animationLerp);
 
-            animatedTransform = null;
+            AnimatedTransform = null;
         }
     }
 }

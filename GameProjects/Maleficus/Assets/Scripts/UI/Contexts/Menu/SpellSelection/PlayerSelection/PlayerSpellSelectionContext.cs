@@ -63,6 +63,18 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
                 }
             }
         }
+
+        // Rotate the spell object position correctly
+        switch (highlightSpellSide)
+        {
+            case EHighlightSpellSide.LEFT:
+                spellStartPosition.transform.localRotation = Quaternion.Euler(new Vector3(0.0f, 90.0f, -90.0f));
+                break;
+
+            case EHighlightSpellSide.RIGHT:
+                spellStartPosition.transform.localRotation = Quaternion.Euler(new Vector3(0.0f, 90.0f, 90.0f));
+                break;
+        }
     }
 
     protected override void Awake()
@@ -93,6 +105,13 @@ public class PlayerSpellSelectionContext : BNJMOBehaviour
         foreach (HighlightedSpell highlightedSpell in highlightedSpells)
         {
             highlightedSpell.gameObject.SetActive(true);
+        }
+
+        // Update Spell Collision
+        PlayerSelectionSpellCollision spellCollision = GetComponentInChildren<PlayerSelectionSpellCollision>();
+        if (IS_NOT_NULL(spellCollision))
+        {
+            spellCollision.PlayerID = PlayerID;
         }
     }
 

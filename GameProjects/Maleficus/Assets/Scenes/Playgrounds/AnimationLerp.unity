@@ -620,6 +620,7 @@ MonoBehaviour:
   StartValue: {r: 0, g: 0.69125175, b: 1, a: 1}
   EndValue: {r: 1, g: 0, b: 0.7476187, a: 1}
   IsLoop: 0
+  StartDelay: 0
   curve:
     serializedVersion: 2
     m_Curve:
@@ -662,7 +663,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  logAnimationEvents: 0
+  logAnimationEvents: 1
 --- !u!114 &1626210979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,6 +768,7 @@ MonoBehaviour:
   StartValue: 0
   EndValue: 1
   IsLoop: 0
+  StartDelay: 0
   curve:
     serializedVersion: 2
     m_Curve:
@@ -819,6 +821,7 @@ MonoBehaviour:
   StartValue: {fileID: 1881292969}
   EndValue: {fileID: 816763304}
   IsLoop: 0
+  StartDelay: 0
   curve:
     serializedVersion: 2
     m_Curve:

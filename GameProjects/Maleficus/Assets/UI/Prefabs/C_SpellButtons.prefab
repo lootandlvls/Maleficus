@@ -100,21 +100,21 @@ RectTransform:
   m_Children:
   - {fileID: 3937205362167563928}
   - {fileID: 2007763134933137691}
-  - {fileID: 7052013537879955987}
-  - {fileID: 2007763135759328695}
   - {fileID: 2007763135452651770}
-  - {fileID: 2007763135553054725}
-  - {fileID: 2007763136347188866}
+  - {fileID: 7052013537879955987}
   - {fileID: 6135373494187142907}
+  - {fileID: 2007763135759328695}
+  - {fileID: 2007763135553054725}
   - {fileID: 8791247596649320382}
-  - {fileID: 2007763135534520430}
-  - {fileID: 4603513627902531153}
   - {fileID: 8975614131712861723}
-  - {fileID: 2007763135991238191}
-  - {fileID: 266933766491659217}
-  - {fileID: 8297667726543406419}
-  - {fileID: 4997602524107539741}
+  - {fileID: 4603513627902531153}
+  - {fileID: 2007763135534520430}
   - {fileID: 7491725155224621399}
+  - {fileID: 8297667726543406419}
+  - {fileID: 266933766491659217}
+  - {fileID: 2007763135991238191}
+  - {fileID: 4997602524107539741}
+  - {fileID: 2007763136347188866}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -135,6 +135,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe1b958296dfbf74cb7ed8fbb2fa3180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpellButtonStartHighlights:
+  - PlayerID: 1
+    RowID: 1
+    ColumnID: 1
+  - PlayerID: 2
+    RowID: 3
+    ColumnID: 4
+  - PlayerID: 3
+    RowID: 1
+    ColumnID: 6
+  - PlayerID: 4
+    RowID: 3
+    ColumnID: 6
 --- !u!1001 &2114330957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,11 +164,16 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -171,7 +189,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 1-1 : AOE Explosion'
+      value: 'B_SpellSelectionButton 2-2 : AOE Explosion'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -211,7 +234,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -297,7 +320,7 @@ PrefabInstance:
         type: 3}
       propertyPath: leftButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135534520416}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rightButton
@@ -337,7 +360,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 1-1
+      value: 2-2
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -346,12 +369,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
---- !u!224 &8791247596649320382 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 2114330957}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8791247596649320368 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -364,6 +381,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8791247596649320382 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 2114330957}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &472596913069525224
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -380,12 +403,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -400,7 +428,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 1-2 : Teleport'
+      value: 'B_SpellSelectionButton 2-3 : Teleport'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -440,7 +473,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -531,7 +564,7 @@ PrefabInstance:
         type: 3}
       propertyPath: rightButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4603513627902531167}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: upperButton
@@ -566,7 +599,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 1-2
+      value: 2-3
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -575,6 +608,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &8975614131712861723 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 472596913069525224}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8975614131712861717 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -587,12 +626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &8975614131712861723 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 472596913069525224}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &659766116555156384
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -609,12 +642,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -624,7 +662,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 2-2 : Shield'
+      value: 'B_SpellSelectionButton 3-3 : Shield'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -664,7 +707,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -765,7 +808,7 @@ PrefabInstance:
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763136347188876}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -790,7 +833,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 2-2
+      value: 3-3
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -799,12 +842,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
---- !u!224 &8297667726543406419 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 659766116555156384}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8297667726543406429 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -817,6 +854,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8297667726543406419 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 659766116555156384}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2007763135294387424
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -833,7 +876,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: rowIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -848,7 +901,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-2 : ElectricBall'
+      value: 'B_SpellSelectionButton 1-3 : ElectricBall'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -888,7 +946,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -984,7 +1042,7 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7052013537879955997}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
@@ -1014,7 +1072,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-2
+      value: 1-3
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1057,11 +1115,16 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -1072,7 +1135,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 2-1 : Fire Laser'
+      value: 'B_SpellSelectionButton 3-2 : Fire Laser'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1112,7 +1180,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1198,7 +1266,7 @@ PrefabInstance:
         type: 3}
       propertyPath: leftButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4997602524107539731}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rightButton
@@ -1213,7 +1281,7 @@ PrefabInstance:
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763136347188876}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -1238,16 +1306,10 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 2-1
+      value: 3-2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
---- !u!224 &7491725155224621399 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 2159261934196211620}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7491725155224621401 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -1260,6 +1322,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &7491725155224621399 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 2159261934196211620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3397386148624138248
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1276,12 +1344,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1291,12 +1364,17 @@ PrefabInstance:
     - target: {fileID: 7186197258412364727, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-3 : Air Slash'
+      value: 'B_SpellSelectionButton 1-4 : Air Slash'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1336,7 +1414,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1417,7 +1495,7 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 2007763136347188876}
+      objectReference: {fileID: 6135373494187142901}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
@@ -1447,7 +1525,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-3
+      value: 1-4
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1456,6 +1534,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &6135373494187142907 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 3397386148624138248}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6135373494187142901 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -1468,12 +1552,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &6135373494187142907 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 3397386148624138248}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4565458256352947182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1490,12 +1568,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1505,7 +1588,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 2-5 : Get Over Here'
+      value: 'B_SpellSelectionButton 3-6 : Get Over Here'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1641,12 +1729,12 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135534520416}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763136347188876}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -1671,7 +1759,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 2-5
+      value: 3-6
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1686,6 +1774,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4565458256352947182}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4997602524107539731 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 4565458256352947182}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5035655902523357346
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1702,11 +1802,16 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -1722,7 +1827,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 1-3 : Vamperic Ball'
+      value: 'B_SpellSelectionButton 2-4 : Vamperic Ball'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1762,7 +1872,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1853,12 +1963,12 @@ PrefabInstance:
         type: 3}
       propertyPath: rightButton
       value: 
-      objectReference: {fileID: 8791247596649320368}
+      objectReference: {fileID: 2007763135534520416}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 7052013537879955997}
+      objectReference: {fileID: 6135373494187142901}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
@@ -1888,7 +1998,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 1-3
+      value: 2-4
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1931,7 +2041,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: rowIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -1946,7 +2066,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-0 : FireBall'
+      value: 'B_SpellSelectionButton 1-1 : FireBall'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2082,12 +2207,12 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763134933137685}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8791247596649320368}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -2112,7 +2237,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-0
+      value: 1-1
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2121,6 +2246,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &2007763134933137691 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 7052013537771411432}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2007763134933137685 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -2133,12 +2264,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2007763134933137691 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 7052013537771411432}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7052013538245932701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2155,7 +2280,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 4
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: rowIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2170,7 +2305,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-4 : Arcane Trap'
+      value: 'B_SpellSelectionButton 2-5 : Arcane Trap'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2210,7 +2350,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2296,22 +2436,22 @@ PrefabInstance:
         type: 3}
       propertyPath: leftButton
       value: 
-      objectReference: {fileID: 2007763134933137685}
+      objectReference: {fileID: 4603513627902531167}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rightButton
       value: 
-      objectReference: {fileID: 266933766491659231}
+      objectReference: {fileID: 8791247596649320368}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 2007763136347188876}
+      objectReference: {fileID: 2007763135759328697}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 2007763136347188876}
+      objectReference: {fileID: 2007763135991238177}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -2336,7 +2476,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-4
+      value: 2-5
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2345,6 +2485,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!114 &2007763135534520416 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 7052013538245932701}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2007763135534520430 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -2367,12 +2519,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 5
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2387,7 +2544,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-5 : Ice Ball'
+      value: 'B_SpellSelectionButton 1-6 : Ice Ball'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2427,7 +2589,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2508,12 +2670,12 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135553054731}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135534520416}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -2538,7 +2700,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-5
+      value: 1-6
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2581,11 +2743,16 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -2601,7 +2768,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-1 : Rapidfire Plasma'
+      value: 'B_SpellSelectionButton 1-2 : Rapidfire Plasma'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2641,7 +2813,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2722,7 +2894,7 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135452651764}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
@@ -2752,7 +2924,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-1
+      value: 1-2
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2761,6 +2933,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &2007763135452651770 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 7052013538290404873}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2007763135452651764 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -2773,12 +2951,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2007763135452651770 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 7052013538290404873}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7052013538486979396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2795,12 +2967,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 4
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2810,12 +2987,17 @@ PrefabInstance:
     - target: {fileID: 7186197258412364727, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 0-4 : Plasma Fission'
+      value: 'B_SpellSelectionButton 1-5 : Plasma Fission'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2855,7 +3037,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -2936,12 +3118,12 @@ PrefabInstance:
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135759328697}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135534520416}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -2966,7 +3148,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 0-4
+      value: 1-5
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3009,12 +3191,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3024,7 +3211,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 2-4 : Energy Triangles'
+      value: 'B_SpellSelectionButton 3-5 : Energy Triangles'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3064,7 +3256,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3155,17 +3347,17 @@ PrefabInstance:
         type: 3}
       propertyPath: rightButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 4997602524107539731}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763135534520416}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763136347188876}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -3190,7 +3382,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 2-4
+      value: 3-5
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3199,6 +3391,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &2007763135991238191 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 7052013538829525212}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2007763135991238177 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -3211,12 +3409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2007763135991238191 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 7052013538829525212}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7052013539075358833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3233,17 +3425,27 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 3-3 : Black Hole'
+      value: 'B_SpellSelectionButton 4-4 : Black Hole'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3283,7 +3485,7 @@ PrefabInstance:
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3359,17 +3561,17 @@ PrefabInstance:
         type: 3}
       propertyPath: rightButton
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2007763136347188876}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: upperButton
       value: 
-      objectReference: {fileID: 7491725155224621401}
+      objectReference: {fileID: 266933766491659231}
     - target: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: buttomButton
       value: 
-      objectReference: {fileID: 2007763134933137685}
+      objectReference: {fileID: 2007763136347188876}
     - target: {fileID: 8791247594938183422, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Colors.m_SelectedColor.r
@@ -3394,7 +3596,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 3-3
+      value: 4-4
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3403,6 +3605,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &2007763136347188866 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 7052013539075358833}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2007763136347188876 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -3415,12 +3623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &2007763136347188866 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 7052013539075358833}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8769810041353467170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3437,12 +3639,17 @@ PrefabInstance:
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: columnIndex
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: rowIndex
-      value: 2
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101685524027812932, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2609359304772336182, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3457,7 +3664,12 @@ PrefabInstance:
     - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Name
-      value: 'B_SpellSelectionButton 2-3 : Fire Shock Blast'
+      value: 'B_SpellSelectionButton 3-4 : Fire Shock Blast'
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791247594938183410, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3623,7 +3835,7 @@ PrefabInstance:
     - target: {fileID: 8791247595626946147, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
       propertyPath: m_Text
-      value: 2-3
+      value: 3-4
       objectReference: {fileID: 0}
     - target: {fileID: 8830637611823713589, guid: 8f8ba814bc82bef41bfdc96a972ef358,
         type: 3}
@@ -3632,6 +3844,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f8ba814bc82bef41bfdc96a972ef358, type: 3}
+--- !u!224 &266933766491659217 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
+    type: 3}
+  m_PrefabInstance: {fileID: 8769810041353467170}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &266933766491659231 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8791247594938183421, guid: 8f8ba814bc82bef41bfdc96a972ef358,
@@ -3644,9 +3862,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b68fb84e1a56b6d489ccfcac59611c36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &266933766491659217 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8791247594938183411, guid: 8f8ba814bc82bef41bfdc96a972ef358,
-    type: 3}
-  m_PrefabInstance: {fileID: 8769810041353467170}
-  m_PrefabAsset: {fileID: 0}

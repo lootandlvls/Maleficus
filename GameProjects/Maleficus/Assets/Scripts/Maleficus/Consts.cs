@@ -17,7 +17,7 @@ namespace Maleficus
 
         /* Scene names (in build settings) */
         public const string SCENE_ENTRY = "ENTRY";
-        public const string SCENE_MENU_COUCH = "MENU_COUCH";
+        public const string SCENE_MENU_COUCH = "MENU";
         public const string SCENE_MENU_MOBILE = "MENU_MOBILE";
         //public const string SCENE_GAME = "GAME_CAVE";
         public const string SCENE_GAME = "GAME";
@@ -110,7 +110,7 @@ namespace Maleficus
         public const int FFA_MODE_GAME_LENGHT = 180;
 
 
-        public const int SPELL_MAX_SKILL_POINTS = 10;
+        public const int SPELL_MAX_SKILL_POINTS = 5;
 
         
 

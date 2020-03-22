@@ -17,6 +17,14 @@ public class MenuCameraTransform : BNJMOBehaviour
         }
     }
 
+    public void SetThisToCameraTransform()
+    {
+        if (Camera.main)
+        {
+            transform.position = Camera.main.transform.position;
+            transform.rotation = Camera.main.transform.rotation;
+        }
+    }
 }
 
 #if UNITY_EDITOR
@@ -32,6 +40,11 @@ public class MenuCameraTransformEditor : Editor
         if (GUILayout.Button("Set Camera Transform To This"))
         {
             myTarget.SetCameraTransformToThis();
+        }
+
+        if (GUILayout.Button("Set This To Camera Transform"))
+        {
+            myTarget.SetThisToCameraTransform();
         }
     }
 }

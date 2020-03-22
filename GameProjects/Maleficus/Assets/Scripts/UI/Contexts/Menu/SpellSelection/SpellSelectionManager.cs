@@ -5,10 +5,20 @@ using System;
 
 using static Maleficus.Utils;
 
+[Serializable]
+public struct SPlayerSpellButtonStartHighlight
+{
+    public EPlayerID PlayerID;
+    public int RowID;
+    public int ColumnID;
+
+}
 
 public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionManager>
 {
     public event Action<EPlayerID, AbstractSpell> SpellButtonHighlighted;
+
+    [SerializeField] private SPlayerSpellButtonStartHighlight[] playerSpellButtonStartHighlights = new SPlayerSpellButtonStartHighlight[0];
 
     private Dictionary<EPlayerID, SpellSelectionButton> highlightedSpellButtons= new Dictionary<EPlayerID, SpellSelectionButton>();
     private Dictionary<int, Dictionary<int, SpellSelectionButton>> allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
@@ -162,7 +172,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                 int columnCount = allSpellSelectionButtons[i].Count;
                 for (int j = 0; j < columnCount; j++)
                 {
-                    if (IS_KEY_CONTAINED(allSpellSelectionButtons[i], j))
+                    if (allSpellSelectionButtons[i].ContainsKey(j))
                     {
                         MaleficusButton currentButton = allSpellSelectionButtons[i][j].MaleficusButton;
                         currentButton.UnPopulateNavigationButtons();
@@ -277,10 +287,10 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
         allSpellSelectionButtons = new Dictionary<int, Dictionary<int, SpellSelectionButton>>();
 
         // Find all Spell Selection Buttons in the scene
-        foreach (SpellSelectionButton spellSelectionButton in FindObjectsOfType<SpellSelectionButton>())
+        foreach (SpellSelectionButton spellSelectionButton in GetComponentsInChildren<SpellSelectionButton>())
         {
-            int rowIndex = spellSelectionButton.RowIndex;
-            int columnIndex = spellSelectionButton.ColumnIndex;
+            int rowIndex = spellSelectionButton.RowIndex - 1;
+            int columnIndex = spellSelectionButton.ColumnIndex - 1;
 
             // Add row in the dictionary if not already there
             if (allSpellSelectionButtons.ContainsKey(rowIndex) == false)
@@ -300,17 +310,22 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
 
         highlightedSpellButtons = new Dictionary<EPlayerID, SpellSelectionButton>();
 
-        // Upper left corner
-        InitializeStartPlayerHighlight(EPlayerID.PLAYER_1, 0, 0);
+        foreach (SPlayerSpellButtonStartHighlight playerHighlight in playerSpellButtonStartHighlights)
+        {
+            InitializeStartPlayerHighlight(playerHighlight.PlayerID, playerHighlight.RowID - 1, playerHighlight.ColumnID - 1);
+        }
 
-        // Upper right corner
-        InitializeStartPlayerHighlight(EPlayerID.PLAYER_2, 0, allSpellSelectionButtons[0].Count - 1);
+        //// Upper left corner
+        //InitializeStartPlayerHighlight(EPlayerID.PLAYER_1, 0, 0);
 
-        // Lower left corner
-        InitializeStartPlayerHighlight(EPlayerID.PLAYER_3, allSpellSelectionButtons.Count - 1, 0);
+        //// Upper right corner
+        //InitializeStartPlayerHighlight(EPlayerID.PLAYER_2, 0, allSpellSelectionButtons[0].Count - 1);
 
-        // Lower right corner
-        InitializeStartPlayerHighlight(EPlayerID.PLAYER_4, allSpellSelectionButtons.Count - 1, allSpellSelectionButtons[allSpellSelectionButtons.Count - 1].Count - 1);
+        //// Lower left corner
+        //InitializeStartPlayerHighlight(EPlayerID.PLAYER_3, allSpellSelectionButtons.Count - 1, 0);
+
+        //// Lower right corner
+        //InitializeStartPlayerHighlight(EPlayerID.PLAYER_4, allSpellSelectionButtons.Count - 1, allSpellSelectionButtons[allSpellSelectionButtons.Count - 1].Count - 1);
     }
 
     private void InitializeStartPlayerHighlight(EPlayerID playerID, int rowIndex, int columnIndex)

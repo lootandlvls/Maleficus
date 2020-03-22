@@ -41,10 +41,7 @@ public class Linear_Explosive : AbstractSpell {
                 {
 
                     SetDirection(other.transform.position - transform.position);
-                    Debug.Log(other.transform.position - transform.position);
-                    
-
-                }
+                                    }
                 ProcessHits(otherPlayer, ESpellStatus.STAY);
             }
             else if (otherEnemy != null)

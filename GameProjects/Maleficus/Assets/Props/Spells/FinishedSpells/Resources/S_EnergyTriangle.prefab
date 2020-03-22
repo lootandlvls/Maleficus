@@ -9605,7 +9605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Energy Triangles
   skillPoint: 2
-  hitPower: 18
+  hitPower: 25
   speed: 1000
   spellLevel: 0
   OnSelfEffect: 0

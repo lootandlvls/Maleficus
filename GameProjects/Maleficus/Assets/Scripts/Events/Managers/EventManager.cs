@@ -33,17 +33,6 @@ public class EventManager : AbstractSingletonManager<EventManager>
     #endregion
 
     #region GAME
-    public event Action<bool> GAME_IntroFinished;
-    public void Invoke_GAME_IntroFinished(bool isReady)
-    {
-        if (GAME_IntroFinished != null)
-        {
-            GAME_IntroFinished.Invoke(isReady);
-        }
-        
-    }
-
-
     public event Action<AbstractGameMode> GAME_GameStarted;
     public void Invoke_GAME_GameStarted(AbstractGameMode gameMode)
     {

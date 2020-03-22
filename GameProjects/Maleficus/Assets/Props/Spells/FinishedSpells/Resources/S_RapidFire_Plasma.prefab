@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2011312174027452528}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_Children:
   - {fileID: 3956483845102927953}
   - {fileID: 2259371897341769357}
@@ -14416,7 +14416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Rapidfire Plasma
   skillPoint: 1
-  hitPower: 10
+  hitPower: 18
   speed: 1000
   spellLevel: 0
   OnSelfEffect: 0
@@ -14426,7 +14426,7 @@ MonoBehaviour:
   isTripleCast: 0
   spell: 13
   movementType: 7
-  cooldown: 3
+  cooldown: 2
   castDuration: 0
   pushDuration: 0.5
   spellDuration: 4
@@ -14484,7 +14484,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7
+  m_Radius: 0.525
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!82 &2349107173702621715
 AudioSource:

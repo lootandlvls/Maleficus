@@ -8,7 +8,7 @@ public class Fireworks : BNJMOBehaviour
     protected override void InitializeEventsCallbacks()
     {
         base.InitializeEventsCallbacks();
-        EventManager.Instance.GAME_IntroFinished += On_GAME_IntroFinished;
+        //EventManager.Instance.GAME_IntroFinished += On_GAME_IntroFinished;
     }
 
     protected override void OnDestroy()
@@ -17,7 +17,7 @@ public class Fireworks : BNJMOBehaviour
 
         if (EventManager.IsInstanceSet)
         {
-            EventManager.Instance.GAME_IntroFinished -= On_GAME_IntroFinished;
+            //EventManager.Instance.GAME_IntroFinished -= On_GAME_IntroFinished;
         }
     }
 

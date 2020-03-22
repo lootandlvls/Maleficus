@@ -66701,7 +66701,7 @@ MonoBehaviour:
   isTripleCast: 0
   spell: 14
   movementType: 1
-  cooldown: 4
+  cooldown: 5
   castDuration: 0
   pushDuration: 0.3
   spellDuration: 4

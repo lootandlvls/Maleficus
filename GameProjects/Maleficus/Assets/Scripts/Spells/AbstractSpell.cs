@@ -235,6 +235,10 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
         if (hitPrefab != null)
         {
             var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
+            if (AppStateManager.Instance.CurrentScene == EScene.MENU)
+            {
+                hitVFX.transform.localScale = Vector3.one * MotherOfManagers.Instance.spellPreviewScaleFactor;
+            }
 
             var ps = hitVFX.GetComponent<ParticleSystem>();
             if (ps == null)
@@ -302,8 +306,8 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
                             }
                         }
 
-                        Vector3 rotation_1 = this.transform.rotation.eulerAngles + new Vector3(0, 90, 0);
-                        Vector3 rotation_2 = this.transform.rotation.eulerAngles - new Vector3(0, 90, 0);
+                        Vector3 rotation_1 = this.transform.rotation.eulerAngles + new Vector3(0.0f, 90.0f, 0.0f);
+                        Vector3 rotation_2 = this.transform.rotation.eulerAngles - new Vector3(0.0f, 90.0f, 0.0f);
 
                         Quaternion Qrotation_1 = Quaternion.Euler(rotation_1);
                         Quaternion Qrotation_2 = Quaternion.Euler(rotation_2);

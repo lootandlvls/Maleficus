@@ -7,10 +7,12 @@ namespace BNJMO
     public class AnimationLerpColor : AnimationLerp<Color>
     {
         private MeshRenderer animationMeshRenderer;
+        private string parameterName;
 
-        public void StartAnimation(MeshRenderer meshRenderer)
+        public void StartAnimation(MeshRenderer meshRenderer, string name = "_Color")
         {
             animationMeshRenderer = meshRenderer;
+            parameterName = name;
 
             StartAnimation();
         }
@@ -26,7 +28,7 @@ namespace BNJMO
 
             if (animationMeshRenderer)
             {
-                animationMeshRenderer.material.color = value;
+                animationMeshRenderer.material.SetColor(parameterName, value);
             }
         }
 

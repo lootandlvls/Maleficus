@@ -70,7 +70,10 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
         {
             case EGameMode.FFA_LIVES:
                 GM_FFA_Lives gM_FFA_Lives = (GM_FFA_Lives)GameManager.Instance.CurrentGameMode;
-                UpdateLives(gM_FFA_Lives.TotalLives);
+                if (IS_NOT_NULL(gM_FFA_Lives))
+                {
+                    UpdateLives(gM_FFA_Lives.TotalLives);
+                }
                 break;
         }
 

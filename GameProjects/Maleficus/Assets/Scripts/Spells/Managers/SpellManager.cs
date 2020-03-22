@@ -278,7 +278,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         switch (buff)
         {
             case ESpellEffects.INCREACE_SPEED:
-                StartCoroutine(PlayerSpeedBoost(CastingPlayerID , 2));
+                StartCoroutine(PlayerSpeedBoost(CastingPlayerID, 1.5f, buffDuration)); // TODO: take speed factor from spell
                 break;
 
             case ESpellEffects.INCREASE_CASTING_SPEED:
@@ -511,13 +511,13 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
     //BUFFS
-    private IEnumerator PlayerSpeedBoost(EPlayerID playerID , int buffDuration)
+    private IEnumerator PlayerSpeedBoost(EPlayerID playerID , float speedFactor, float buffDuration)
     {
-        activePlayers[playerID].SetPlayerSpeedBoost(buffDuration);
+        activePlayers[playerID].SetPlayerSpeedBoost(speedFactor);
 
         yield return new WaitForSeconds(buffDuration);
 
-        activePlayers[playerID].SetPlayerSpeedBoost(1);
+        activePlayers[playerID].SetPlayerSpeedBoost(1.0f / speedFactor);
     }
 
     //DEBUFFS

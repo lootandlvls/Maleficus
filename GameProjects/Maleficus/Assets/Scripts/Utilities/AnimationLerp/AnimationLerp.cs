@@ -22,12 +22,15 @@ namespace BNJMO
         [Header("Animation Lerp")]
         [SerializeField] private string animationName = "AnimLerp_X";
         public float PlayTime = 3.0f;
+        public float StartDelay = 0.0f;
         public bool PlayInReverse = false;
         public A StartValue;
         public A EndValue;
         public bool IsLoop;
         public AnimationCurve Curve     { get { return curve; } }
         [SerializeField] private AnimationCurve curve = AnimationCurve.Linear(0.0f, 0.0f, 1.0f, 1.0f);
+
+        [Header("Debug")]
         [SerializeField] bool logAnimationEvents = false;
 
         public A CurrentValue           { get; private set; }
@@ -54,9 +57,12 @@ namespace BNJMO
         {
             base.Update();
 
-            LogCanvas(69, AnimationName + " - Is Running : " + IsRunning + "\n"
-                + "CurrentPercentage : " + CurrentPercentage + "\n"
-                + "CurrentAlpha : " + CurrentAlpha);
+            if (logAnimationEvents == true)
+            {
+                LogCanvas(69, AnimationName + " - Is Running : " + IsRunning + "\n"
+                    + "CurrentPercentage : " + CurrentPercentage + "\n"
+                    + "CurrentAlpha : " + CurrentAlpha);
+            }
         }
 
         public virtual void StartAnimation(ref AnimationLerpWrapper<A> animationLerpWrapper)
@@ -66,13 +72,17 @@ namespace BNJMO
             StartAnimation();
         }
 
-        public virtual void StartAnimation(A startValue, A endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false)
+        public virtual void StartAnimation(A startValue, A endValue, float playTime = 0.0f, bool isLoop = false, bool playInReverse = false, float startDelay = 0.0f)
         {
             StartValue = startValue;
             EndValue = endValue;
             if (playTime > 0.0f)
             {
                 PlayTime = playTime;
+            }
+            if (startDelay > 0.0f)
+            {
+                StartDelay = startDelay;
             }
             IsLoop = isLoop;
             PlayInReverse = playInReverse;
@@ -92,12 +102,15 @@ namespace BNJMO
             }
         }
 
-        
-
-        public virtual void StopAnimation()
+        public virtual void StopAnimation(bool setEndValue = false)
         {
             InvokeEventIfBound(AnimationStopped, this);
             StopCoroutine(CurrentAnimationEnumerator);
+
+            if (setEndValue == true)
+            {
+                ProgressLerpAnimation(1.0f);
+            }
         }
 
         protected IEnumerator CurrentAnimationCoroutine(bool isFirstRun)
@@ -105,6 +118,11 @@ namespace BNJMO
             if (isFirstRun == true)
             {
                 InvokeEventIfBound(AnimationStarted, this);
+
+                if (StartDelay > 0.0f)
+                {
+                    yield return new WaitForSeconds(StartDelay);
+                }
             }
 
             CurrentPercentage = 0.0f;
@@ -114,26 +132,16 @@ namespace BNJMO
 
             while (CurrentPercentage < 1.0f)
             {
-                CurrentPercentage = (Time.time - startTime) / PlayTime;
-
-                if (PlayInReverse == false)
-                {
-                    CurrentAlpha = curve.Evaluate(CurrentPercentage);
-                }         
-                else
-                {
-                    CurrentAlpha = curve.Evaluate(1.0f - CurrentPercentage);
-                }
-
-                CurrentValue = Lerp(StartValue, EndValue, CurrentAlpha);
-
-                valueWrapper.Value = CurrentValue;
+                float percentage = (Time.time - startTime) / PlayTime;
+                ProgressLerpAnimation(percentage);
 
                 InvokeEventIfBound(AnimationProgressed, this, CurrentValue);
 
                 yield return new WaitForEndOfFrame();
             }
             CurrentPercentage = 1.0f;
+
+
 
             if (IsLoop == true)
             {
@@ -146,6 +154,24 @@ namespace BNJMO
                 valueWrapper = new AnimationLerpWrapper<A>();
                 InvokeEventIfBound(AnimationEnded, this);
             }
+        }
+
+        private void ProgressLerpAnimation(float percentage)
+        {
+            CurrentPercentage = percentage;
+
+            if (PlayInReverse == false)
+            {
+                CurrentAlpha = curve.Evaluate(CurrentPercentage);
+            }
+            else
+            {
+                CurrentAlpha = curve.Evaluate(1.0f - CurrentPercentage);
+            }
+
+            CurrentValue = Lerp(StartValue, EndValue, CurrentAlpha);
+
+            valueWrapper.Value = CurrentValue;
         }
 
         protected abstract A Lerp(A start, A end, float alpha);
@@ -164,7 +190,7 @@ namespace BNJMO
         {
             if (logAnimationEvents == true)
             {
-                LogConsole(AnimationName + " progressed : " + value.ToString());
+                LogConsole(AnimationName + " progressed : " + CurrentPercentage);
             }
         }
 

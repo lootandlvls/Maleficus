@@ -4768,7 +4768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: Fire Shock Blast
   skillPoint: 2
-  hitPower: 3
+  hitPower: 2
   speed: 0
   spellLevel: 0
   OnSelfEffect: 0
@@ -4778,9 +4778,9 @@ MonoBehaviour:
   isTripleCast: 0
   spell: 3
   movementType: 3
-  cooldown: 3.5
+  cooldown: 2.5
   castDuration: 0
-  pushDuration: 0.7
+  pushDuration: 1
   spellDuration: 0.2
   debuffEffects: 
   debuffDuration: 0

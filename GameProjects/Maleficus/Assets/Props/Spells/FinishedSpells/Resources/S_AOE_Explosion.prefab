@@ -23932,7 +23932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spellName: AOE Explosion
   skillPoint: 1
-  hitPower: 19
+  hitPower: 28
   speed: 0
   spellLevel: 1
   OnSelfEffect: 0
@@ -23942,7 +23942,7 @@ MonoBehaviour:
   isTripleCast: 0
   spell: 7
   movementType: 5
-  cooldown: 2
+  cooldown: 1.5
   castDuration: 0
   pushDuration: 1.3
   spellDuration: 0.2

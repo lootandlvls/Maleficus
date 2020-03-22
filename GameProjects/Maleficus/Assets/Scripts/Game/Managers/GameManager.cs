@@ -7,9 +7,8 @@ public class GameManager : AbstractSingletonManager<GameManager>
 {
     public AbstractGameMode CurrentGameMode { get; private set; }
     public EGameMode ChosenGameModeType { get; private set; }
-    public int CountDown { get { return countDown; } }
+    public int GameRemainingTime { get; private set; }
 
-    private int countDown;
 
     protected override void Start()
     {
@@ -130,7 +129,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
         EPlayerID playerID = Maleficus.Utils.GetPlayerIDFrom(eventHandle.SenderID);
         if ((AppStateManager.Instance.CurrentState == EAppState.IN_GAME_IN_NOT_STARTED)
             && (eventHandle.InputButton == EInputButton.CONFIRM)
-            && (PlayerManager.Instance.HasPlayerJoined(playerID) == true) && (AppStateManager.Instance.IsIntroFinished))
+            && (PlayerManager.Instance.HasPlayerJoined(playerID) == true))
         {
             
             EventManager.Instance.NETWORK_GameStarted.Invoke(new NetEvent_GameStarted(eventHandle.SenderID));
@@ -149,7 +148,7 @@ public class GameManager : AbstractSingletonManager<GameManager>
 
     private void On_GAME_GameTimeUpdated(int newTime)
     {
-        countDown = newTime;
+        GameRemainingTime = newTime;
         if (newTime == 0)
         {
             EndGame();
