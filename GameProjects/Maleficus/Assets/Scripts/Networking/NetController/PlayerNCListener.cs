@@ -90,12 +90,15 @@ public class PlayerNCListener : NetworkBehaviour
     [Client]
     private void On_TouchJoystickAdapter_ButtonPressed(EInputButton inputButton)
     {
+        Debug.Log("On_TouchJoystickAdapter_ButtonPressed : " + inputButton);
         Cmd_OnButtonPressed(controllerID, inputButton);
     }
 
     [Command]
     private void Cmd_OnButtonPressed(EControllerID controllerID, EInputButton inputButton)
     {
+        Debug.Log("Cmd_OnButtonPressed : " + inputButton + " - " + controllerID);
+
         if (ButtonPressed != null)
         {
             ButtonPressed.Invoke(controllerID, inputButton);
@@ -108,12 +111,16 @@ public class PlayerNCListener : NetworkBehaviour
     [Client]
     private void On_TouchJoystickAdapter_ButtonReleased(EInputButton inputButton)
     {
+        Debug.Log("On_TouchJoystickAdapter_ButtonReleased : " + inputButton);
+
         Cmd_OnButtonReleased(controllerID, inputButton);
     }
 
     [Command]
     private void Cmd_OnButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
+        Debug.Log("Cmd_OnButtonReleased : " + inputButton + " - " + controllerID);
+
         if (ButtonReleased != null)
         {
             ButtonReleased.Invoke(controllerID, inputButton);
@@ -126,12 +133,16 @@ public class PlayerNCListener : NetworkBehaviour
     [Client]
     private void On_TouchJoystickAdapter_JoystickMoved(EJoystickType joystickType, float x, float y)
     {
+        Debug.Log("On_TouchJoystickAdapter_JoystickMoved : " + joystickType);
+
         Cmd_OnJoystickMoved(controllerID, joystickType, x, y);
     }
 
     [Command]
     private void Cmd_OnJoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
+        Debug.Log("Cmd_OnJoystickMoved : " + joystickType + " - " + controllerID);
+
         if (JoystickMoved != null)
         {
             JoystickMoved.Invoke(controllerID, joystickType, x, y);
