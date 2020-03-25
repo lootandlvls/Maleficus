@@ -207,23 +207,30 @@ namespace Maleficus
         EControllerID.NETWORK_1,
         EControllerID.NETWORK_2,
         EControllerID.NETWORK_3,
-        EControllerID.NETWORK_4
+        EControllerID.NETWORK_4,
+        EControllerID.NETWORK_5,
+        EControllerID.NETWORK_6,
+        EControllerID.NETWORK_7,
+        EControllerID.NETWORK_8,
+        EControllerID.NETWORK_9,
+        EControllerID.NETWORK_10,
+        EControllerID.NETWORK_12,
         };
 
-        public static EControllerID[] GAMEPADS_CONTROLLERS = new EControllerID[]
+        public static EControllerID[] DEVICE_CONTROLLERS = new EControllerID[]
         {
-        EControllerID.GAMEPAD_1,
-        EControllerID.GAMEPAD_2,
-        EControllerID.GAMEPAD_3,
-        EControllerID.GAMEPAD_4,
-        EControllerID.GAMEPAD_5,
-        EControllerID.GAMEPAD_6,
-        EControllerID.GAMEPAD_7,
-        EControllerID.GAMEPAD_8,
-        EControllerID.GAMEPAD_9,
-        EControllerID.GAMEPAD_10,
-        EControllerID.GAMEPAD_11,
-        EControllerID.GAMEPAD_12,
+        EControllerID.DEVICE_1,
+        EControllerID.DEVICE_2,
+        EControllerID.DEVICE_3,
+        EControllerID.DEVICE_4,
+        EControllerID.DEVICE_5,
+        EControllerID.DEVICE_6,
+        EControllerID.DEVICE_7,
+        EControllerID.DEVICE_8,
+        EControllerID.DEVICE_9,
+        EControllerID.DEVICE_10,
+        EControllerID.DEVICE_11,
+        EControllerID.DEVICE_12,
         };
 
         public static EControllerID[] AI_CONTROLLERS = new EControllerID[]

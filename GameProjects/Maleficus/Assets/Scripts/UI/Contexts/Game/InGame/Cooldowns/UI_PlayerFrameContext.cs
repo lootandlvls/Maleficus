@@ -14,8 +14,6 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
 
     private Dictionary<ESpellSlot, UI_SpellCooldowns> spellCooldownsIcons = new Dictionary<ESpellSlot, UI_SpellCooldowns>();
     private Dictionary<int, UI_PlayerLives> PlayerLivesIcons = new Dictionary<int, UI_PlayerLives>();
-    private bool isPlayerActive = false;
-    private int remainingLives;
 
     protected override void InitializeEventsCallbacks()
     {
@@ -80,7 +78,6 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
         // Check if player has joined
         if (PlayerManager.Instance.HasPlayerJoined(PlayerID))
         {
-            isPlayerActive = true;
             InitializeSpellsIcons();
         }
         else
@@ -126,7 +123,6 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
 
                 if (PlayerID == playerStatsFFA.PlayerID)
                 {
-                    remainingLives = playerStatsFFA.RemainingLives;
                     UpdateLives(playerStatsFFA.RemainingLives);
                 }
                 break;
@@ -138,7 +134,6 @@ public class UI_PlayerFrameContext : BNJMOBehaviour
         if (playerID == PlayerID)
         {
             playerFrameView.SetActive(true);
-            isPlayerActive = true;
             InitializeSpellsIcons();
         }
     }

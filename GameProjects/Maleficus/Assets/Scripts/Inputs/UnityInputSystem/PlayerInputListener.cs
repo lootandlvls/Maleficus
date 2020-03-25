@@ -10,6 +10,7 @@ public class PlayerInputListener : BNJMOBehaviour
 {
     public event Action<EControllerID, EInputButton> ButtonPressed;
     public event Action<EControllerID, EInputButton> ButtonReleased;
+    // JoystickMoved event not needed as input is evaluated on every frame directly inside DeviceInputSource using MoveAxis and RotateAxis
 
     public Vector2 MoveAxis { get { return moveAxis; } }
     public Vector2 RotateAxis { get { return rotateAxis; } }

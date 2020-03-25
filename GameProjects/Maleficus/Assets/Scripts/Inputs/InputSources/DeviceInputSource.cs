@@ -5,7 +5,7 @@ using static Maleficus.Consts;
 
 public class DeviceInputSource : AbstractInputSource
 {
-    private Dictionary<EControllerID, PlayerInputListener> connectedGamepadControllers = new Dictionary<EControllerID, PlayerInputListener>();
+    private Dictionary<EControllerID, PlayerInputListener> connectedDeviceControllers = new Dictionary<EControllerID, PlayerInputListener>();
 
     protected override void InitializeEventsCallbacks()
     {
@@ -34,9 +34,9 @@ public class DeviceInputSource : AbstractInputSource
     {
         base.FixedUpdate();
 
-        foreach (EControllerID controllerID in connectedGamepadControllers.Keys)
+        foreach (EControllerID controllerID in connectedDeviceControllers.Keys)
         {
-            PlayerInputListener playerInputListener = connectedGamepadControllers[controllerID];
+            PlayerInputListener playerInputListener = connectedDeviceControllers[controllerID];
             PlayerInputListener_OnJoystickMoved(controllerID, EJoystickType.MOVEMENT, playerInputListener.MoveAxis);
             PlayerInputListener_OnJoystickMoved(controllerID, EJoystickType.ROTATION, playerInputListener.RotateAxis);
         }
@@ -54,14 +54,14 @@ public class DeviceInputSource : AbstractInputSource
         if (MotherOfManagers.Instance.InputMode == EInputMode.CONTROLLER)
         {
             // Assign a ControllerID
-            EControllerID controllerID = GetNextFreeGamepadControllerID();
+            EControllerID controllerID = GetNextFreeDeviceControllerID();
 
             if (controllerID != EControllerID.NONE)
             {
                 // Connect controller on Input Manager
                 if (InputManager.Instance.ConnectController(controllerID) == true)
                 {
-                    connectedGamepadControllers.Add(controllerID, playerInputListener);
+                    connectedDeviceControllers.Add(controllerID, playerInputListener);
 
                     // Bind Input events
                     playerInputListener.ButtonPressed += PlayerInputListener_OnButtonPressed;
@@ -114,12 +114,12 @@ public class DeviceInputSource : AbstractInputSource
         InvokeJoystickMoved(controllerID, joystickType, axisValues.x, axisValues.y);
     }
 
-    private EControllerID GetNextFreeGamepadControllerID()
+    private EControllerID GetNextFreeDeviceControllerID()
     {
         EControllerID controllerID = EControllerID.NONE;
-        foreach (EControllerID controllerIDitr in GAMEPADS_CONTROLLERS)
+        foreach (EControllerID controllerIDitr in DEVICE_CONTROLLERS)
         {
-            if (connectedGamepadControllers.ContainsKey(controllerIDitr) == false)
+            if (connectedDeviceControllers.ContainsKey(controllerIDitr) == false)
             {
                 controllerID = controllerIDitr;
                 break;

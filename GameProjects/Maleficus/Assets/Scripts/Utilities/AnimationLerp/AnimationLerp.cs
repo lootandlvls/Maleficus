@@ -104,8 +104,9 @@ namespace BNJMO
 
         public virtual void StopAnimation(bool setEndValue = false)
         {
-            InvokeEventIfBound(AnimationStopped, this);
             StopCoroutine(CurrentAnimationEnumerator);
+
+            InvokeEventIfBound(AnimationStopped, this);
 
             if (setEndValue == true)
             {

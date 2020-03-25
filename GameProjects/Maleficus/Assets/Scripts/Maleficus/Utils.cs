@@ -484,16 +484,16 @@ namespace Maleficus
             char result = 'X';
             switch (ControllerID)
             {
-                case EControllerID.GAMEPAD_1:
+                case EControllerID.DEVICE_1:
                     result = 'A';
                     break;
-                case EControllerID.GAMEPAD_2:
+                case EControllerID.DEVICE_2:
                     result = 'B';
                     break;
-                case EControllerID.GAMEPAD_3:
+                case EControllerID.DEVICE_3:
                     result = 'C';
                     break;
-                case EControllerID.GAMEPAD_4:
+                case EControllerID.DEVICE_4:
                     result = 'D';
                     break;
             }
@@ -507,16 +507,16 @@ namespace Maleficus
             switch (ControllerID)
             {
                 case 'A':
-                    result = EControllerID.GAMEPAD_1;
+                    result = EControllerID.DEVICE_1;
                     break;
                 case 'B':
-                    result = EControllerID.GAMEPAD_2;
+                    result = EControllerID.DEVICE_2;
                     break;
                 case 'C':
-                    result = EControllerID.GAMEPAD_3;
+                    result = EControllerID.DEVICE_3;
                     break;
                 case 'D':
-                    result = EControllerID.GAMEPAD_4;
+                    result = EControllerID.DEVICE_4;
                     break;
             }
             return result;

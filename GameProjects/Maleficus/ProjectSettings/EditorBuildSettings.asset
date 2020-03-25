@@ -5,21 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main/ENTRY.unity
     guid: edafa10ac17dcf04783721d91dc6fa85
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main/MENU.unity
     guid: bddb1906bfb8023448416c99f8fc2d3a
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main/GAME.unity
     guid: 743363d1ae4177e449c4d31b46fec04e
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main/GAME_OLD.unity
     guid: 748ea2def2649e446b27d5fd8cc8d5f7
   - enabled: 0
     path: Assets/Scenes/Main/MENU_MOBILE.unity
     guid: cc82ca596278a5744b121a5c24aa75da
+  - enabled: 1
+    path: Assets/Scenes/Playgrounds/NetController/NetController_Client.unity
+    guid: 9c0336b2771b30a4380f4c72487163ec
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 2fcd39f6a88d02f4d82e84b7de694ab2,
       type: 2}

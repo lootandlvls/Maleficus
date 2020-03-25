@@ -26,7 +26,7 @@ public abstract class AbstractSingletonManager<T> : AbstractManager where T : Ab
 
         if (instance != null)
         {
-            Debug.LogErrorFormat("Trying to instantiate a second instance of singleton class {0}", GetType().Name);
+            LogConsoleWarning("Trying to instantiate a second instance of singleton class {0}", GetType().Name);
         }
         else
         {

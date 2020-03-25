@@ -26,23 +26,23 @@ namespace NetController
             }
         }
 
-        protected override void InitializeEventsCallbacks()
-        {
-            base.InitializeEventsCallbacks();
+        //protected override void InitializeEventsCallbacks()
+        //{
+        //    base.InitializeEventsCallbacks();
 
-            NCClient.Instance.StateUpdated += On_NCClient_StateUpdated;
-        }
+        //    NCClient.Instance.StateUpdated += On_NCClient_StateUpdated;
+        //}
 
         private void On_NCClient_StateUpdated(ENCClientState newState)
         {
-            if (newState == activeOnState)
-            {
-                c_buttons.SetActive(true);
-            }
-            else
-            {
-                c_buttons.SetActive(false);
-            }
+            //if (newState == activeOnState)
+            //{
+            //    c_buttons.SetActive(true);
+            //}
+            //else
+            //{
+            //    c_buttons.SetActive(false);
+            //}
         }
 
         private void OnInputFieldUpdated(String newInput)

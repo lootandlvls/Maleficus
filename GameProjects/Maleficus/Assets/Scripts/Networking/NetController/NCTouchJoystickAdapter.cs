@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using static Maleficus.Utils;
 using static Maleficus.Consts;
 
@@ -6,6 +7,11 @@ namespace NetController
 {
     public class NCTouchJoystickAdapter : BNJMOBehaviour
     {
+        public event Action<EJoystickType, float, float> JoystickMoved;
+        public event Action<EInputButton> ButtonPressed;
+        public event Action<EInputButton> ButtonReleased;
+
+
         private Vector2 oldMovementInput = new Vector2(0.0f, 0.0f);
         private Vector2 oldRotationInput = new Vector2(0.0f, 0.0f);
         private bool canPerformDirectionalButton = true;
@@ -14,12 +20,25 @@ namespace NetController
         {
             base.InitializeObjecsInScene();
 
+            // Joysticks
             MaleficusJoystick[] maleficusJoystics = FindObjectsOfType<MaleficusJoystick>();
             foreach (MaleficusJoystick maleficusJoystick in maleficusJoystics)
             {
                 maleficusJoystick.TouchJoystickPressed += On_MaleficusJoystick_TouchJoystickPressed;
                 maleficusJoystick.TouchJoystickMoved += On_MaleficusJoystick_TouchJoystickMoved;
                 maleficusJoystick.TouchJoystickReleased += On_MaleficusJoystick_TouchJoystickReleased;
+            }
+
+            // Buttons
+            ConfirmUIAction confirmUIAction = FindObjectOfType<ConfirmUIAction>();
+            if (IS_NOT_NULL(confirmUIAction))
+            {
+                confirmUIAction.ActionButtonExecuted += On_ConfirmUIAction_ActionButtonPressed;
+            }
+            CancelUIAction cancelUIAction = FindObjectOfType<CancelUIAction>();
+            if (IS_NOT_NULL(cancelUIAction))
+            {
+                cancelUIAction.ActionButtonExecuted += On_CancelUIAction_ActionButtonPressed; ;
             }
         }
 
@@ -30,13 +49,16 @@ namespace NetController
             UpdateDirectionalInput();
         }
 
+
+# region Events Callbacks
         private void On_MaleficusJoystick_TouchJoystickPressed(ETouchJoystickType touchJoystickType)
         {
             EInputButton inputButton = GetInputButtonFrom(touchJoystickType);
 
             if (inputButton != EInputButton.NONE)
             {
-                NCClient.Instance.SendButtonPressed(inputButton);
+                InvokeEventIfBound(ButtonPressed, inputButton);
+                //NCClient.Instance.SendButtonPressed(inputButton);
             }
         }
 
@@ -60,7 +82,8 @@ namespace NetController
 
                         oldMovementInput = joystickInput;
 
-                        NCClient.Instance.SendJoystickMoved(EJoystickType.MOVEMENT, joystickInput.x, joystickInput.y);
+                        InvokeEventIfBound(JoystickMoved, EJoystickType.MOVEMENT, joystickInput.x, joystickInput.y);
+                        //NCClient.Instance.SendJoystickMoved(EJoystickType.MOVEMENT, joystickInput.x, joystickInput.y);
                     }
                 }
                 else // Spell (Rotation) joystick
@@ -79,7 +102,8 @@ namespace NetController
 
                         oldRotationInput = joystickInput;
 
-                        NCClient.Instance.SendJoystickMoved(EJoystickType.ROTATION, joystickInput.x, joystickInput.y);
+                        InvokeEventIfBound(JoystickMoved, EJoystickType.ROTATION, joystickInput.x, joystickInput.y);
+                        //NCClient.Instance.SendJoystickMoved(EJoystickType.ROTATION, joystickInput.x, joystickInput.y);
                     }
                 }
             }
@@ -90,12 +114,14 @@ namespace NetController
             // Reinitialize Movement and Rotation
             if (touchJoystickType == ETouchJoystickType.MOVE)
             {
-                NCClient.Instance.SendJoystickMoved(EJoystickType.MOVEMENT, 0.0f, 0.0f);
+                InvokeEventIfBound(JoystickMoved, EJoystickType.MOVEMENT, 0.0f, 0.0f);
+                //NCClient.Instance.SendJoystickMoved(EJoystickType.MOVEMENT, 0.0f, 0.0f);
                 oldMovementInput = Vector2.zero;
             }
             else
             {
-                NCClient.Instance.SendJoystickMoved(EJoystickType.ROTATION, 0.0f, 0.0f);
+                InvokeEventIfBound(JoystickMoved, EJoystickType.ROTATION, 0.0f, 0.0f);
+                //NCClient.Instance.SendJoystickMoved(EJoystickType.ROTATION, 0.0f, 0.0f);
                 oldRotationInput = Vector2.zero;
             }
 
@@ -103,10 +129,35 @@ namespace NetController
             EInputButton inputButton = GetInputButtonFrom(touchJoystickType);
             if (inputButton != EInputButton.NONE)
             {
-                NCClient.Instance.SendButtonReleased(inputButton);
+                InvokeEventIfBound(ButtonReleased, inputButton);
+                //NCClient.Instance.SendButtonReleased(inputButton);
             }
         }
 
+        private void On_ConfirmUIAction_ActionButtonPressed()
+        {
+            //if (client.isConnected)
+            //{
+            //    StringMessage message = new StringMessage();
+            //    message.value = controllerGuid + "|" + ((int)EInputButton.CONFIRM).ToString();
+            //    client.Send(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, message);
+            //}
+
+            InvokeEventIfBound(ButtonReleased, EInputButton.CONFIRM);
+        }
+
+        private void On_CancelUIAction_ActionButtonPressed()
+        {
+            //if (client.isConnected)
+            //{
+            //    StringMessage message = new StringMessage();
+            //    message.value = controllerGuid + "|" + ((int)EInputButton.CANCEL).ToString();
+            //    client.Send(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, message);
+            //}
+            InvokeEventIfBound(ButtonReleased, EInputButton.CANCEL);
+
+        }
+        #endregion
 
 
 
@@ -123,12 +174,14 @@ namespace NetController
                         // Right move
                         if (oldMovementInput.x > 0.0f)
                         {
-                            NCClient.Instance.SendButtonPressed(EInputButton.RIGHT);
+                            InvokeEventIfBound(ButtonReleased, EInputButton.RIGHT);
+                            //NCClient.Instance.SendButtonPressed(EInputButton.RIGHT);
                         }
                         // Left move
                         else
                         {
-                            NCClient.Instance.SendButtonPressed(EInputButton.LEFT);
+                            InvokeEventIfBound(ButtonReleased, EInputButton.LEFT);
+                            //NCClient.Instance.SendButtonPressed(EInputButton.LEFT);
                         }
                     }
                     // Vertical move
@@ -137,12 +190,14 @@ namespace NetController
                         // Up move
                         if (oldMovementInput.y > 0.0f)
                         {
-                            NCClient.Instance.SendButtonPressed(EInputButton.UP);
+                            InvokeEventIfBound(ButtonReleased, EInputButton.UP);
+                            //NCClient.Instance.SendButtonPressed(EInputButton.UP);
                         }
                         // Down move
                         else
                         {
-                            NCClient.Instance.SendButtonPressed(EInputButton.DOWN);
+                            InvokeEventIfBound(ButtonReleased, EInputButton.DOWN);
+                            //NCClient.Instance.SendButtonPressed(EInputButton.DOWN);
                         }
                     }
                     canPerformDirectionalButton = false;
