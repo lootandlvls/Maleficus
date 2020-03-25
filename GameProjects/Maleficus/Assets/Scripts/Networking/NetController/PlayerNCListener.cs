@@ -14,7 +14,7 @@ public class PlayerNCListener : NetworkBehaviour
     public string IpAdress { get { return myNetworkIdentity.connectionToClient.address; } }
 
     private NetworkIdentity myNetworkIdentity;
-    private EControllerID controllerID = EControllerID.NONE;
+    [SerializeField] private EControllerID controllerID = EControllerID.NONE;
 
     private void Awake()
     {
@@ -74,12 +74,12 @@ public class PlayerNCListener : NetworkBehaviour
             EControllerID newControllerID = netControllerInputSource.OnNewNCJoined(this);
             Debug.Log("Assigned controller ID : " + newControllerID);
 
-            if (controllerID != EControllerID.NONE)
-            {
+            //if (controllerID != EControllerID.NONE)
+            //{
                 //Target_OnAssignedControllerID(networkIdentity.connectionToServer, newControllerID);
                 Target_OnAssignedControllerID(GetComponent<NetworkIdentity>().connectionToClient, newControllerID);
-                Rpc_OnAssignedControllerID(newControllerID);
-            }
+                RpcOnAssignedControllerID(newControllerID);
+            //}
         }
     }
 
@@ -91,7 +91,7 @@ public class PlayerNCListener : NetworkBehaviour
     }
 
     [ClientRpc] // Send to all clients
-    public void Rpc_OnAssignedControllerID(EControllerID assignedControllerID)
+    public void RpcOnAssignedControllerID(EControllerID assignedControllerID)
     {
         controllerID = assignedControllerID;
         Debug.Log("Rpc_OnAssignedControllerID : " + controllerID);
