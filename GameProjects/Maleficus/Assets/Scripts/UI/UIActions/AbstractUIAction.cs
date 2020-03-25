@@ -15,9 +15,9 @@ public abstract class AbstractUIAction : BNJMOBehaviour
 {
     public event Action ActionButtonExecuted;
 
-    [SerializeField] private bool delayedEventExecution = false;
+    public BNJMOButton Button { get; private set; }
 
-    protected BNJMOButton maleficusButton;
+    [SerializeField] private bool delayedEventExecution = false;
 
     /// <summary>
     /// Trigger Execute() whenever the button is pressed.
@@ -29,8 +29,8 @@ public abstract class AbstractUIAction : BNJMOBehaviour
         GetComponent<Button>().onClick.AddListener(Execute);
 
         // Bind events from MaleficusButton
-        maleficusButton = GetComponent<BNJMOButton>();
-        maleficusButton.ButtonSuccessfullyReleased += On_MaleficusButton_ButtonPressed;
+        Button = GetComponent<BNJMOButton>();
+        Button.ButtonSuccessfullyReleased += On_MaleficusButton_ButtonPressed;
     }
 
     /// <summary>
