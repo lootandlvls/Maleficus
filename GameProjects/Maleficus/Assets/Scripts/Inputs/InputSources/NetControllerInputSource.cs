@@ -42,7 +42,6 @@ public class NetControllerInputSource : AbstractInputSource
     {
         IS_NOT_NULL(playerNCListener);
 
- 
         // Assign a ControllerID
         EControllerID controllerID = GetNextFreeNetworkControllerID();
         if (controllerID != EControllerID.NONE)
@@ -50,6 +49,7 @@ public class NetControllerInputSource : AbstractInputSource
             // Connect controller on Input Manager
             if (InputManager.Instance.ConnectController(controllerID) == true)
             {
+                LogConsole("Adding new Player NC Listener : " + playerNCListener.gameObject.name);
                 connectedNetworkControllers.Add(controllerID, playerNCListener);
 
                 // Bind Input events
@@ -69,7 +69,7 @@ public class NetControllerInputSource : AbstractInputSource
         return controllerID;
     }
 
-    private void PlayerNCListener_OnJoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
+    public void PlayerNCListener_OnJoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
         if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
         {
@@ -86,6 +86,8 @@ public class NetControllerInputSource : AbstractInputSource
 
     public void PlayerNCListener_OnButtonPressed(EControllerID controllerID, EInputButton inputButton)
     {
+        LogConsole("ButtonPressed");
+
         if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
         {
             if (IS_NOT_NONE(inputButton))
@@ -97,6 +99,9 @@ public class NetControllerInputSource : AbstractInputSource
 
     public void PlayerNCListener_OnButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
+        LogConsole("ButtonReleased");
+
+
         if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
         {
             if (IS_NOT_NONE(inputButton))

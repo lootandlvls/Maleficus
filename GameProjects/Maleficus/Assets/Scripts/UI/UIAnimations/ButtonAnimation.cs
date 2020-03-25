@@ -4,11 +4,11 @@ using UnityEngine;
 using BNJMO;
 
 [RequireComponent(typeof (AnimationLerpFloat))]
-[RequireComponent(typeof (MaleficusButton))]
+[RequireComponent(typeof (BNJMOButton))]
 public class ButtonAnimation : BNJMOBehaviour
 {
     private AnimationLerpFloat animationLerpFloat;
-    private MaleficusButton maleficusButton;
+    private BNJMOButton maleficusButton;
 
     private Vector3 originalScale;
 
@@ -23,7 +23,7 @@ public class ButtonAnimation : BNJMOBehaviour
     {
         base.InitializeComponents();
 
-        maleficusButton = GetComponent<MaleficusButton>();
+        maleficusButton = GetComponent<BNJMOButton>();
         maleficusButton.ButtonHighlighted += On_MaleficusButton_ButtonHighlighted;
         maleficusButton.ButtonUnhighlighted += On_MaleficusButton_ButtonUnhighlighted;
 
@@ -34,13 +34,13 @@ public class ButtonAnimation : BNJMOBehaviour
 
 
   
-    private void On_MaleficusButton_ButtonHighlighted(MaleficusButton maleficusButton)
+    private void On_MaleficusButton_ButtonHighlighted(BNJMOButton maleficusButton)
     {
         animationLerpFloat.PlayInReverse = false;
         animationLerpFloat.StartAnimation();
     }
 
-    private void On_MaleficusButton_ButtonUnhighlighted(MaleficusButton maleficusButton)
+    private void On_MaleficusButton_ButtonUnhighlighted(BNJMOButton maleficusButton)
     {
         animationLerpFloat.PlayInReverse = true;
         animationLerpFloat.StartAnimation();

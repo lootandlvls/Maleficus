@@ -1,32 +1,38 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System;
 
-[RequireComponent(typeof(Button))]
-public class MaleficusButton : BNJMOBehaviour
+//[RequireComponent(typeof(Button))]
+public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public event Action<MaleficusButton> ButtonHighlighted;
-    public event Action<MaleficusButton> ButtonPressed;
-    public event Action<MaleficusButton> ButtonUnhighlighted;
-    public event Action<MaleficusButton> ButtonSuccessfullyReleased;
+    public event Action<BNJMOButton> ButtonHighlighted;
+    public event Action<BNJMOButton> ButtonPressed;
+    public event Action<BNJMOButton> ButtonUnhighlighted;
+    public event Action<BNJMOButton> ButtonSuccessfullyReleased;
 
-    public MaleficusButton LeftButton { get { return leftButton; } set { leftButton = value; } }
-    public MaleficusButton RightButton { get { return rightButton; } set { rightButton = value; } }
-    public MaleficusButton UpperButton { get { return upperButton; } set { upperButton = value; } }
-    public MaleficusButton BottomButton { get { return buttomButton; } set { buttomButton = value; } }
+    public BNJMOButton LeftButton { get { return leftButton; } set { leftButton = value; } }
+    public BNJMOButton RightButton { get { return rightButton; } set { rightButton = value; } }
+    public BNJMOButton UpperButton { get { return upperButton; } set { upperButton = value; } }
+    public BNJMOButton BottomButton { get { return buttomButton; } set { buttomButton = value; } }
 
     [Header("Button")]
     [SerializeField] private string buttonName = "MenuButton";
     [SerializeField] private bool writeUppercase = false;
     [SerializeField] private bool overrideGameOjbectName = true;
+
+    [Header("Colors")]
+    [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color highlightedColor = Color.white;
+    [SerializeField] private Color pressedColor = Color.white;
     
     [Header("Navigation")]
-    [SerializeField] private MaleficusButton leftButton;
-    [SerializeField] private MaleficusButton buttomButton;
-    [SerializeField] private MaleficusButton rightButton;
-    [SerializeField] private MaleficusButton upperButton;
+    [SerializeField] private BNJMOButton leftButton;
+    [SerializeField] private BNJMOButton buttomButton;
+    [SerializeField] private BNJMOButton rightButton;
+    [SerializeField] private BNJMOButton upperButton;
 
-    private Button myButton;
+    //private Button myButton;
     private Image myButtonImage;
     private Text myText;
     private AbstractUIAction[] myUIActions;
@@ -42,17 +48,18 @@ public class MaleficusButton : BNJMOBehaviour
             myText = GetComponent<Text>();
         }
 
-        // Get Unity's Button
-        myButton = GetComponent<Button>();
-        if (IS_NOT_NULL(myButton))
-        {
-            // Bind clicked event
-            GetComponent<Button>().onClick.AddListener(Release);
+        // Get Image
+        myButtonImage = GetComponentWithCheck<Image>();
+
+        //myButton = GetComponent<Button>();
+        //if (IS_NOT_NULL(myButton))
+        //{
+        //    // Bind clicked event
+        //    GetComponent<Button>().onClick.AddListener(Release);
             
-            // Get image
-            myButtonImage = myButton.image;
-            IS_NOT_NULL(myButtonImage);
-        }
+        //    // Get image
+        //    IS_NOT_NULL(myButtonImage);
+        //}
 
         // Get attached UIActions
         myUIActions = GetComponents<AbstractUIAction>();
@@ -68,35 +75,39 @@ public class MaleficusButton : BNJMOBehaviour
 
     public void Highlight()
     {
-        myButtonImage.color = myButton.colors.highlightedColor;
+        //myButtonImage.color = myButton.colors.highlightedColor;
+        myButtonImage.color = highlightedColor;
 
         InvokeEventIfBound(ButtonHighlighted, this);
     }
 
     public void Release()
     {
-        myButtonImage.color = myButton.colors.highlightedColor;
+        //myButtonImage.color = myButton.colors.highlightedColor;
+        myButtonImage.color = highlightedColor;
 
         InvokeEventIfBound(ButtonSuccessfullyReleased, this);
     }
 
     public void Press()
     {
-        myButtonImage.color = myButton.colors.selectedColor;
+        //myButtonImage.color = myButton.colors.selectedColor;
+        myButtonImage.color = pressedColor;
 
         InvokeEventIfBound(ButtonPressed, this);
     }
 
     public void Unhighlighted()
     {
-        myButtonImage.color = myButton.colors.normalColor;
+        //myButtonImage.color = myButton.colors.normalColor;
+        myButtonImage.color = normalColor;
 
         InvokeEventIfBound(ButtonUnhighlighted, this);
     }
 
-    public MaleficusButton GetNextButton(EButtonDirection buttonDirection)
+    public BNJMOButton GetNextButton(EButtonDirection buttonDirection)
     {
-        MaleficusButton buttonToReturn = null;
+        BNJMOButton buttonToReturn = null;
         switch (buttonDirection)
         {
             case EButtonDirection.LEFT:
@@ -152,5 +163,15 @@ public class MaleficusButton : BNJMOBehaviour
                 myText.text = buttonName;
             }
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Press();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Release();
     }
 }

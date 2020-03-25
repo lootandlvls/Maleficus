@@ -6,7 +6,7 @@ using System;
 public class SpellSelectionButton : BNJMOBehaviour
 {
     public AbstractSpell Spell                  { get { return spell; } }
-    public MaleficusButton MaleficusButton      { get { return GetComponent<MaleficusButton>(); } }
+    public BNJMOButton MaleficusButton      { get { return GetComponent<BNJMOButton>(); } }
     public int RowIndex                         { get { return rowIndex; } }
     public int ColumnIndex                      { get { return columnIndex; } }
 

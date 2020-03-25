@@ -59,7 +59,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
     #region Input Source Callbacks
     private void On_InputSource_ButtonPressed(EControllerID controllerID, EInputButton inputButton)
     {
-        if (connectedControllers.Contains(controllerID))
+        if (IS_VALUE_CONTAINED(connectedControllers, controllerID))
         {
             EPlayerID playerID = PlayerManager.Instance.GetAssignedPlayerID(controllerID);
             EClientID clientID = GetClientIDFrom(playerID);
@@ -74,7 +74,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void On_InputSource_ButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
-        if (connectedControllers.Contains(controllerID))
+        if (IS_VALUE_CONTAINED(connectedControllers, controllerID))
         {
             EPlayerID playerID = PlayerManager.Instance.GetAssignedPlayerID(controllerID);
             EClientID clientID = GetClientIDFrom(playerID);
@@ -89,7 +89,7 @@ public class InputManager : AbstractSingletonManager<InputManager>
 
     private void On_InputSource_JoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
-        if (connectedControllers.Contains(controllerID))
+        if (IS_VALUE_CONTAINED(connectedControllers, controllerID))
         {
             EPlayerID playerID = PlayerManager.Instance.GetAssignedPlayerID(controllerID);
             EClientID clientID = GetClientIDFrom(playerID);

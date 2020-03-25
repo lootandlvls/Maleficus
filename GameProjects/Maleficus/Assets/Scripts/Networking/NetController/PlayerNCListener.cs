@@ -19,6 +19,13 @@ public class PlayerNCListener : NetworkBehaviour
     private void Awake()
     {
         myNetworkIdentity = GetComponent<NetworkIdentity>();
+
+        ButtonPressed += On_PlayerNCListener_ButtonPressed;
+    }
+
+    private void On_PlayerNCListener_ButtonPressed(EControllerID arg1, EInputButton arg2)
+    {
+        Debug.Log("On_PlayerNCListener_ButtonPressed");
     }
 
     // got active on server
@@ -99,10 +106,22 @@ public class PlayerNCListener : NetworkBehaviour
     {
         Debug.Log("Cmd_OnButtonPressed : " + inputButton + " - " + controllerID);
 
-        if (ButtonPressed != null)
+        // temporary solution
+        NetControllerInputSource netControllerInputSource = InputManager.Instance.GetInputSource<NetControllerInputSource>();
+        if (netControllerInputSource)
         {
-            ButtonPressed.Invoke(controllerID, inputButton);
+            Debug.Log("Calling ButtonPressed: " + inputButton + " - " + controllerID);
+
+            netControllerInputSource.PlayerNCListener_OnButtonPressed(controllerID, inputButton);
         }
+
+        // TODO: Fix
+        //if (ButtonPressed != null)
+        //{
+        //    Debug.Log("ButtonPressed");
+
+        //    ButtonPressed.Invoke(controllerID, inputButton);
+        //}
     }
     #endregion
 
@@ -121,10 +140,20 @@ public class PlayerNCListener : NetworkBehaviour
     {
         Debug.Log("Cmd_OnButtonReleased : " + inputButton + " - " + controllerID);
 
-        if (ButtonReleased != null)
+        // temporary solution
+        NetControllerInputSource netControllerInputSource = InputManager.Instance.GetInputSource<NetControllerInputSource>();
+        if (netControllerInputSource)
         {
-            ButtonReleased.Invoke(controllerID, inputButton);
+            Debug.Log("Calling ButtonReleased: " + inputButton + " - " + controllerID);
+
+            netControllerInputSource.PlayerNCListener_OnButtonReleased(controllerID, inputButton);
         }
+
+        // TODO: Fix
+        //if (ButtonReleased != null)
+        //{
+        //    ButtonReleased.Invoke(controllerID, inputButton);
+        //}
     }
     #endregion
 
@@ -143,10 +172,20 @@ public class PlayerNCListener : NetworkBehaviour
     {
         Debug.Log("Cmd_OnJoystickMoved : " + joystickType + " - " + controllerID);
 
-        if (JoystickMoved != null)
+        // temporary solution
+        NetControllerInputSource netControllerInputSource = InputManager.Instance.GetInputSource<NetControllerInputSource>();
+        if (netControllerInputSource)
         {
-            JoystickMoved.Invoke(controllerID, joystickType, x, y);
+            netControllerInputSource.PlayerNCListener_OnJoystickMoved(controllerID, joystickType, x, y);
         }
+
+        // TODO : Fix
+        //if (JoystickMoved != null)
+        //{
+        //    Debug.Log("JoystickMoved");
+
+        //    JoystickMoved.Invoke(controllerID, joystickType, x, y);
+        //}
     }
     #endregion
 

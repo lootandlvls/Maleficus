@@ -5300,7 +5300,7 @@ MonoBehaviour:
   ConnectionMode: 2
   InputMode: 1
   IsConnectControllerInAnyState: 1
-  CanDebugButtonEvents: 0
+  CanDebugButtonEvents: 1
   CanDebugJoystickEvents: 0
   IsUseDebugGameMode: 1
   DebugGameMode: 1
@@ -11978,7 +11978,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1137051851}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &1137051853
 Camera:
   m_ObjectHideFlags: 0

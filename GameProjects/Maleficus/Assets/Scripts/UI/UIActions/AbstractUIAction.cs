@@ -10,14 +10,14 @@ using System;
 /// </summary>
 
 [RequireComponent(typeof (Button))]
-[RequireComponent(typeof (MaleficusButton))]
+[RequireComponent(typeof (BNJMOButton))]
 public abstract class AbstractUIAction : BNJMOBehaviour
 {
     public event Action ActionButtonExecuted;
 
     [SerializeField] private bool delayedEventExecution = false;
 
-    protected MaleficusButton maleficusButton;
+    protected BNJMOButton maleficusButton;
 
     /// <summary>
     /// Trigger Execute() whenever the button is pressed.
@@ -29,7 +29,7 @@ public abstract class AbstractUIAction : BNJMOBehaviour
         GetComponent<Button>().onClick.AddListener(Execute);
 
         // Bind events from MaleficusButton
-        maleficusButton = GetComponent<MaleficusButton>();
+        maleficusButton = GetComponent<BNJMOButton>();
         maleficusButton.ButtonSuccessfullyReleased += On_MaleficusButton_ButtonPressed;
     }
 
@@ -43,7 +43,7 @@ public abstract class AbstractUIAction : BNJMOBehaviour
         ClearEventCallbakcs(ActionButtonExecuted);
     }
 
-    private void On_MaleficusButton_ButtonPressed(MaleficusButton maleficusButton)
+    private void On_MaleficusButton_ButtonPressed(BNJMOButton maleficusButton)
     {
         Execute();
     }

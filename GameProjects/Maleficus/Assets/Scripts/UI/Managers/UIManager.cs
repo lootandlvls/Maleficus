@@ -9,7 +9,7 @@ using static Maleficus.Consts;
 public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMenuState>
 {
 
-    private MaleficusButton highlightedButton;
+    private BNJMOButton highlightedButton;
     private bool canPressButton;
 
     protected override void Awake()
@@ -50,7 +50,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
     }
 
-    private void OnButtonHighlighted(MaleficusButton selectedButton)
+    private void OnButtonHighlighted(BNJMOButton selectedButton)
     {
         highlightedButton = selectedButton;
     }
@@ -69,14 +69,12 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
         EInputButton inputButton = eventHandle.InputButton;
         EPlayerID playerID = GetPlayerIDFrom(eventHandle.SenderID);
 
-        
-
         if ((highlightedButton != null)
              && (AppStateManager.Instance.CurrentState.ContainedIn(APP_STATES_THAT_TRIGGER_SCENE_CHANGE) == false)
-             && (AppStateManager.Instance.CurrentState != EAppState.IN_MENU_IN_SPELL_SELECTION)) // TODO : remove when multiplayer UI is defined
+             && (AppStateManager.Instance.CurrentState != EAppState.IN_MENU_IN_SPELL_SELECTION)) // TODO : remove when multiplayer buttons are defined
         {
 
-            MaleficusButton nextButton = null;
+            BNJMOButton nextButton = null;
             switch (inputButton)
             {
                 case EInputButton.CONFIRM:
@@ -278,7 +276,7 @@ public class UIManager : AbstractSingletonManagerWithStateMachine<UIManager, EMe
 
     private void FindAndBindMaleficusButtons()
     {
-        foreach (MaleficusButton maleficusButton in FindObjectsOfType<MaleficusButton>())
+        foreach (BNJMOButton maleficusButton in FindObjectsOfType<BNJMOButton>())
         {
             maleficusButton.ButtonHighlighted += OnButtonHighlighted;
         }
