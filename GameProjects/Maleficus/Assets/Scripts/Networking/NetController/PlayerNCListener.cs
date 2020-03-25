@@ -76,7 +76,8 @@ public class PlayerNCListener : NetworkBehaviour
 
             if (controllerID != EControllerID.NONE)
             {
-                Target_OnAssignedControllerID(networkIdentity.connectionToServer, newControllerID);
+                //Target_OnAssignedControllerID(networkIdentity.connectionToServer, newControllerID);
+                Target_OnAssignedControllerID(GetComponent<NetworkIdentity>().connectionToClient, newControllerID);
             }
         }
     }
