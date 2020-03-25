@@ -78,6 +78,7 @@ public class PlayerNCListener : NetworkBehaviour
             {
                 //Target_OnAssignedControllerID(networkIdentity.connectionToServer, newControllerID);
                 Target_OnAssignedControllerID(GetComponent<NetworkIdentity>().connectionToClient, newControllerID);
+                Rpc_OnAssignedControllerID(newControllerID);
             }
         }
     }
@@ -88,6 +89,14 @@ public class PlayerNCListener : NetworkBehaviour
         controllerID = assignedControllerID;
         Debug.Log("Target_OnAssignedControllerID : " + controllerID);
     }
+
+    [ClientRpc] // Send to all clients
+    public void Rpc_OnAssignedControllerID(EControllerID assignedControllerID)
+    {
+        controllerID = assignedControllerID;
+        Debug.Log("Rpc_OnAssignedControllerID : " + controllerID);
+    }
+
     #endregion
 
     //#region Button Pressed 
