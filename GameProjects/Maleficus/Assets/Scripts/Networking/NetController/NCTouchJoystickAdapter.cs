@@ -166,12 +166,12 @@ namespace NetController
                         // Right move
                         if (oldMovementInput.x > 0.0f)
                         {
-                            InvokeEventIfBound(ButtonReleased, EInputButton.RIGHT);
+                            InvokeEventIfBound(ButtonPressed, EInputButton.RIGHT);
                         }
                         // Left move
                         else
                         {
-                            InvokeEventIfBound(ButtonReleased, EInputButton.LEFT);
+                            InvokeEventIfBound(ButtonPressed, EInputButton.LEFT);
                         }
                     }
                     // Vertical move
@@ -180,12 +180,12 @@ namespace NetController
                         // Up move
                         if (oldMovementInput.y > 0.0f)
                         {
-                            InvokeEventIfBound(ButtonReleased, EInputButton.UP);
+                            InvokeEventIfBound(ButtonPressed, EInputButton.UP);
                         }
                         // Down move
                         else
                         {
-                            InvokeEventIfBound(ButtonReleased, EInputButton.DOWN);
+                            InvokeEventIfBound(ButtonPressed, EInputButton.DOWN);
                         }
                     }
                     canPerformDirectionalButton = false;
