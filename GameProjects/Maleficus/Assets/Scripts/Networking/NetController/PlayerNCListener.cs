@@ -40,9 +40,9 @@ public class PlayerNCListener : NetworkBehaviour
         {
             Debug.Log("Binding events from NCTouchJoystickAdapter");
 
-            //touchJoystickAdapter.ButtonPressed += On_TouchJoystickAdapter_ButtonPressed;
-            //touchJoystickAdapter.ButtonReleased += On_TouchJoystickAdapter_ButtonReleased;
-            //touchJoystickAdapter.JoystickMoved += On_TouchJoystickAdapter_JoystickMoved;
+            touchJoystickAdapter.ButtonPressed += On_TouchJoystickAdapter_ButtonPressed;
+            touchJoystickAdapter.ButtonReleased += On_TouchJoystickAdapter_ButtonReleased;
+            touchJoystickAdapter.JoystickMoved += On_TouchJoystickAdapter_JoystickMoved;
         }
 
         // TODO: Find a better way to check if is server
@@ -84,56 +84,67 @@ public class PlayerNCListener : NetworkBehaviour
         controllerID = assignedControllerID;
         Debug.Log("Target_OnAssignedControllerID : " + controllerID);
     }
-
-
-
     #endregion
 
-    //#region Button Pressed 
-    //[Client]
-    //private void On_TouchJoystickAdapter_ButtonPressed(EInputButton inputButton)
-    //{
-    //    Cmd_OnButtonPressed(controllerID, inputButton);
-    //}
+    #region Button Pressed 
+    [Client]
+    private void On_TouchJoystickAdapter_ButtonPressed(EInputButton inputButton)
+    {
+        Cmd_OnButtonPressed(controllerID, inputButton);
+    }
 
-    //[Command]
-    //private void Cmd_OnButtonPressed(EControllerID controllerID, EInputButton inputButton)
-    //{
-    //    if (NetControllerInputSource.IsInstanceSet)
-    //    {
-    //        NetControllerInputSource.Instance.butto
-    //    }
-    //}
-    //#endregion
-
-
-    //[Client]
-    //private void On_TouchJoystickAdapter_ButtonReleased(EInputButton inputButton)
-    //{
-    //    Cmd_OnButtonReleased(controllerID, inputButton);
-    //}
-
-    //[Client]
-    //private void On_TouchJoystickAdapter_JoystickMoved(EJoystickType joystickType, float x, float y)
-    //{
-    //    Cmd_OnJoystickMoved(controllerID, joystickType, x, y);
-    //}
-
-    ///* To NC Server */
+    [Command]
+    private void Cmd_OnButtonPressed(EControllerID controllerID, EInputButton inputButton)
+    {
+        if (ButtonPressed != null)
+        {
+            ButtonPressed.Invoke(controllerID, inputButton);
+        }
+    }
+    #endregion
 
 
+    #region Button Released
+    [Client]
+    private void On_TouchJoystickAdapter_ButtonReleased(EInputButton inputButton)
+    {
+        Cmd_OnButtonReleased(controllerID, inputButton);
+    }
 
-    //[Command]
-    //private void Cmd_OnButtonReleased(EControllerID controllerID, EInputButton inputButton)
-    //{
+    [Command]
+    private void Cmd_OnButtonReleased(EControllerID controllerID, EInputButton inputButton)
+    {
+        if (ButtonReleased != null)
+        {
+            ButtonReleased.Invoke(controllerID, inputButton);
+        }
+    }
+    #endregion
 
-    //}
 
-    //[Command]
-    //private void Cmd_OnJoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
-    //{
+    #region Joystick Moved
+    [Client]
+    private void On_TouchJoystickAdapter_JoystickMoved(EJoystickType joystickType, float x, float y)
+    {
+        Cmd_OnJoystickMoved(controllerID, joystickType, x, y);
+    }
 
-    //}
+    [Command]
+    private void Cmd_OnJoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
+    {
+        if (JoystickMoved != null)
+        {
+            JoystickMoved.Invoke(controllerID, joystickType, x, y);
+        }
+    }
+    #endregion
+
+
+
+
+
+
+
 
 
 

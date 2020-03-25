@@ -19,28 +19,6 @@ public class NetControllerInputSource : AbstractInputSource
 
         string ipAddress = GetLocalIPAddress();
         GUI.Box(new Rect(10, Screen.height - 50, 100, 30), ipAddress);
-        //GUI.Label(new Rect(20, Screen.height - 35, 100, 20), "Status : " + NetworkServer.active);
-        //GUI.Label(new Rect(20, Screen.height - 20, 100, 20), "Connected : " + NetworkServer.connections.Count);
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        //NetworkTransport.Init();
-
-        //NetworkServer.Listen(25000);
-        //NetworkServer.RegisterHandler(NET_CONTROLLER_MESSAGE_CONNECT, OnRequestControllerID);
-        //NetworkServer.RegisterHandler(NET_CONTROLLER_MESSAGE_JOYSTICK_MOVED, OnJoystickMovement);
-        //NetworkServer.RegisterHandler(NET_CONTROLLER_MESSAGE_BUTTON_PRESSED, OnReceiveButtonPressed);
-        //NetworkServer.RegisterHandler(NET_CONTROLLER_MESSAGE_BUTTON_RELEASED, OnReceiveButtonReleased);
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-
-        //NetworkTransport.Shutdown();
     }
 
     protected override void Update()
@@ -93,64 +71,39 @@ public class NetControllerInputSource : AbstractInputSource
 
     private void PlayerNCListener_OnJoystickMoved(EControllerID controllerID, EJoystickType joystickType, float x, float y)
     {
-        //if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
-        //{
-        //    EJoystickType joystickType = (EJoystickType)int.Parse(deltas[1]);
-        //    float x = float.Parse(deltas[2], System.Globalization.CultureInfo.InvariantCulture);
-        //    float y = float.Parse(deltas[3], System.Globalization.CultureInfo.InvariantCulture);
+        if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
+        {
+            if (IS_NOT_NONE(joystickType))
+            {
+                InvokeJoystickMoved(controllerID, joystickType, x, y);
+            }
 
-        //    EControllerID controllerID;
-        //    connectedNetworkControllers.TryGetValue(controllerGuid, out controllerID);
-        //    if ((IS_NOT_NULL(controllerID))
-        //        && (IS_NOT_NULL(joystickType)))
-        //    {
-        //        InvokeJoystickMoved(controllerID, joystickType, x, y);
-        //    }
-
-        //    // Debug
-        //    debugX = x;
-        //    debugY = y;
-        //}
+            // Debug
+            debugX = x;
+            debugY = y;
+        }
     }
 
     public void PlayerNCListener_OnButtonPressed(EControllerID controllerID, EInputButton inputButton)
     {
-        //StringMessage message = new StringMessage();
-        //message.value = receivedMessage.ReadMessage<StringMessage>().value;
-        //string[] deltas = message.value.Split('|');
-        //string controllerGuid = deltas[0];
-
-        //if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerGuid))
-        //{
-        //    EInputButton inputButton = (EInputButton)int.Parse(deltas[1]);
-        //    EControllerID controllerID;
-        //    connectedNetworkControllers.TryGetValue(controllerGuid, out controllerID);
-        //    if ((IS_NOT_NULL(controllerID)) 
-        //        && (IS_NOT_NULL(inputButton)))
-        //    { 
-        //        InvokeButtonPressed(controllerID, inputButton);
-        //    }
-        //}
+        if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
+        {
+            if (IS_NOT_NONE(inputButton))
+            {
+                InvokeButtonPressed(controllerID, inputButton);
+            }
+        }
     }
 
     public void PlayerNCListener_OnButtonReleased(EControllerID controllerID, EInputButton inputButton)
     {
-        //StringMessage message = new StringMessage();
-        //message.value = receivedMessage.ReadMessage<StringMessage>().value;
-        //string[] deltas = message.value.Split('|');
-        //string controllerGuid = deltas[0];
-
-        //if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerGuid))
-        //{
-        //    EInputButton inputButton = (EInputButton)int.Parse(deltas[1]);
-        //    EControllerID controllerID;
-        //    connectedNetworkControllers.TryGetValue(controllerGuid, out controllerID);
-        //    if ((IS_NOT_NULL(controllerID))
-        //        && (IS_NOT_NULL(inputButton)))
-        //    {
-        //        InvokeButtonReleased(controllerID, inputButton);
-        //    }
-        //}
+        if (IS_KEY_CONTAINED(connectedNetworkControllers, controllerID))
+        {
+            if (IS_NOT_NONE(inputButton))
+            {
+                InvokeButtonReleased(controllerID, inputButton);
+            }
+        }
     }
 
     private EControllerID GetNextFreeNetworkControllerID()
