@@ -45,8 +45,6 @@ public class PlayerNCListener : NetworkBehaviour
             //touchJoystickAdapter.JoystickMoved += On_TouchJoystickAdapter_JoystickMoved;
         }
 
-        RequestControllerID();
-
         // TODO: Find a better way to check if is server
         if (InputManager.IsInstanceSet == false)
         {
@@ -68,7 +66,7 @@ public class PlayerNCListener : NetworkBehaviour
     [Command]
     private void Cmd_OnRequestControllerID(NetworkIdentity networkIdentity)
     {
-        Debug.Log("Cmd_OnRequestControllerID : " + networkIdentity.connectionToClient.address);
+        Debug.Log("Cmd_OnRequestControllerID : " + networkIdentity.ToString());
 
         NetControllerInputSource netControllerInputSource = InputManager.Instance.GetInputSource<NetControllerInputSource>();
         if (netControllerInputSource)
@@ -78,13 +76,13 @@ public class PlayerNCListener : NetworkBehaviour
 
             if (controllerID != EControllerID.NONE)
             {
-                Target_OnAssignedControllerID(networkIdentity, newControllerID);
+                Target_OnAssignedControllerID(networkIdentity.connectionToClient, newControllerID);
             }
         }
     }
 
     [TargetRpc]
-    private void Target_OnAssignedControllerID(NetworkIdentity networkIdentity, EControllerID assignedControllerID)
+    private void Target_OnAssignedControllerID(NetworkConnection networkConnection, EControllerID assignedControllerID)
     {
         controllerID = assignedControllerID;
         Debug.Log("Assigned ControllerID : " + controllerID);
