@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-//[RequireComponent(typeof(Button))]
+[RequireComponent(typeof(Image))]
 public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public event Action<BNJMOButton> ButtonHighlighted;
@@ -11,6 +11,8 @@ public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandle
     public event Action<BNJMOButton> ButtonUnhighlighted;
     public event Action<BNJMOButton> ButtonSuccessfullyReleased;
 
+    public string ButtonName { get { return buttonName; } }
+    public Image Image { get { return GetComponent<Image>(); } }
     public BNJMOButton LeftButton { get { return leftButton; } set { leftButton = value; } }
     public BNJMOButton RightButton { get { return rightButton; } set { rightButton = value; } }
     public BNJMOButton UpperButton { get { return upperButton; } set { upperButton = value; } }
@@ -23,8 +25,8 @@ public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandle
 
     [Header("Colors")]
     [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color highlightedColor = Color.white;
-    [SerializeField] private Color pressedColor = Color.white;
+    [SerializeField] private Color highlightedColor = Color.white * (3.0f / 4.0f);
+    [SerializeField] private Color pressedColor = Color.white / 2.0f;
     
     [Header("Navigation")]
     [SerializeField] private BNJMOButton leftButton;
@@ -33,7 +35,6 @@ public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandle
     [SerializeField] private BNJMOButton upperButton;
 
     //private Button myButton;
-    private Image myButtonImage;
     private Text myText;
     private AbstractUIAction[] myUIActions;
 
@@ -47,19 +48,6 @@ public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandle
         {
             myText = GetComponent<Text>();
         }
-
-        // Get Image
-        myButtonImage = GetComponentWithCheck<Image>();
-
-        //myButton = GetComponent<Button>();
-        //if (IS_NOT_NULL(myButton))
-        //{
-        //    // Bind clicked event
-        //    GetComponent<Button>().onClick.AddListener(Release);
-            
-        //    // Get image
-        //    IS_NOT_NULL(myButtonImage);
-        //}
 
         // Get attached UIActions
         myUIActions = GetComponents<AbstractUIAction>();
@@ -75,32 +63,28 @@ public class BNJMOButton : BNJMOBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void Highlight()
     {
-        //myButtonImage.color = myButton.colors.highlightedColor;
-        myButtonImage.color = highlightedColor;
+        Image.color = highlightedColor;
 
         InvokeEventIfBound(ButtonHighlighted, this);
     }
 
     public void Release()
     {
-        //myButtonImage.color = myButton.colors.highlightedColor;
-        myButtonImage.color = highlightedColor;
+        Image.color = highlightedColor;
 
         InvokeEventIfBound(ButtonSuccessfullyReleased, this);
     }
 
     public void Press()
     {
-        //myButtonImage.color = myButton.colors.selectedColor;
-        myButtonImage.color = pressedColor;
+        Image.color = pressedColor;
 
         InvokeEventIfBound(ButtonPressed, this);
     }
 
     public void Unhighlighted()
     {
-        //myButtonImage.color = myButton.colors.normalColor;
-        myButtonImage.color = normalColor;
+        Image.color = normalColor;
 
         InvokeEventIfBound(ButtonUnhighlighted, this);
     }

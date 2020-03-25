@@ -104,7 +104,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                     {
                         case EInputButton.UP:
 
-                            BNJMOButton upperMaleficusButton = currentSpellButton.MaleficusButton.UpperButton;
+                            BNJMOButton upperMaleficusButton = currentSpellButton.Button.UpperButton;
                             if (IS_NOT_NULL(upperMaleficusButton))
                             {
                                 currentSpellButton.UnHighlightPlayerSelection(playerID);
@@ -116,7 +116,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             break;
 
                         case EInputButton.DOWN:
-                            BNJMOButton bottomMaleficusButton = currentSpellButton.MaleficusButton.BottomButton;
+                            BNJMOButton bottomMaleficusButton = currentSpellButton.Button.BottomButton;
                             if (IS_NOT_NULL(bottomMaleficusButton))
                             {
                                 currentSpellButton.UnHighlightPlayerSelection(playerID);
@@ -128,7 +128,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             break;
 
                         case EInputButton.LEFT:
-                            BNJMOButton leftMaleficusButton = currentSpellButton.MaleficusButton.LeftButton;
+                            BNJMOButton leftMaleficusButton = currentSpellButton.Button.LeftButton;
                             if (IS_NOT_NULL(leftMaleficusButton))
                             {
                                 currentSpellButton.UnHighlightPlayerSelection(playerID);
@@ -140,7 +140,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             break;
 
                         case EInputButton.RIGHT:
-                            BNJMOButton rightMaleficusButton = currentSpellButton.MaleficusButton.RightButton;
+                            BNJMOButton rightMaleficusButton = currentSpellButton.Button.RightButton;
                             if (IS_NOT_NULL(rightMaleficusButton))
                             {
                                 currentSpellButton.UnHighlightPlayerSelection(playerID);
@@ -174,7 +174,7 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                 {
                     if (allSpellSelectionButtons[i].ContainsKey(j))
                     {
-                        BNJMOButton currentButton = allSpellSelectionButtons[i][j].MaleficusButton;
+                        BNJMOButton currentButton = allSpellSelectionButtons[i][j].Button;
                         currentButton.UnPopulateNavigationButtons();
                         
                         /* Upper + Bottom buttons */
@@ -185,14 +185,14 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             if ((allSpellSelectionButtons.ContainsKey(rowCount - 1))
                                 && (allSpellSelectionButtons[rowCount - 1].ContainsKey(j)))
                             {
-                                currentButton.UpperButton = allSpellSelectionButtons[rowCount - 1][j].MaleficusButton;
+                                currentButton.UpperButton = allSpellSelectionButtons[rowCount - 1][j].Button;
                             }
 
                             // Get bottom button if exist
                             if ((allSpellSelectionButtons.ContainsKey(i + 1))
                                   && (allSpellSelectionButtons[i + 1].ContainsKey(j)))
                             {
-                                currentButton.BottomButton = allSpellSelectionButtons[i + 1][j].MaleficusButton;
+                                currentButton.BottomButton = allSpellSelectionButtons[i + 1][j].Button;
                             }
                         }
                         // Last row
@@ -202,14 +202,14 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             if ((allSpellSelectionButtons.ContainsKey(i - 1))
                                 && (allSpellSelectionButtons[i - 1].ContainsKey(j)))
                             {
-                                currentButton.UpperButton = allSpellSelectionButtons[i - 1][j].MaleficusButton;
+                                currentButton.UpperButton = allSpellSelectionButtons[i - 1][j].Button;
                             }
 
                             // Get bottom button if exist : from first row
                             if ((allSpellSelectionButtons.ContainsKey(0))
                                   && (allSpellSelectionButtons[0].ContainsKey(j)))
                             {
-                                currentButton.BottomButton = allSpellSelectionButtons[0][j].MaleficusButton;
+                                currentButton.BottomButton = allSpellSelectionButtons[0][j].Button;
                             }
                         }
                         // Row in the middle
@@ -219,14 +219,14 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             if ((allSpellSelectionButtons.ContainsKey(i - 1))
                                 && (allSpellSelectionButtons[i - 1].ContainsKey(j)))
                             {
-                                currentButton.UpperButton = allSpellSelectionButtons[i - 1][j].MaleficusButton;
+                                currentButton.UpperButton = allSpellSelectionButtons[i - 1][j].Button;
                             }
 
                             // Get bottom button if exist
                             if ((allSpellSelectionButtons.ContainsKey(i + 1))
                                   && (allSpellSelectionButtons[i + 1].ContainsKey(j)))
                             {
-                                currentButton.BottomButton = allSpellSelectionButtons[i + 1][j].MaleficusButton;
+                                currentButton.BottomButton = allSpellSelectionButtons[i + 1][j].Button;
                             }
                         }
 
@@ -237,13 +237,13 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             // Get left button : last element on the row 
                             if (allSpellSelectionButtons[i].ContainsKey(columnCount - 1))
                             {
-                                currentButton.LeftButton = allSpellSelectionButtons[i][columnCount - 1].MaleficusButton;
+                                currentButton.LeftButton = allSpellSelectionButtons[i][columnCount - 1].Button;
                             }
 
                             // Get right button
                             if (allSpellSelectionButtons[i].ContainsKey(j + 1))
                             {
-                                currentButton.RightButton = allSpellSelectionButtons[i][j + 1].MaleficusButton;
+                                currentButton.RightButton = allSpellSelectionButtons[i][j + 1].Button;
                             }
                         }
                         // Last element in the row
@@ -252,13 +252,13 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             // Get left button 
                             if (allSpellSelectionButtons[i].ContainsKey(j - 1))
                             {
-                                currentButton.LeftButton = allSpellSelectionButtons[i][j - 1].MaleficusButton;
+                                currentButton.LeftButton = allSpellSelectionButtons[i][j - 1].Button;
                             }
 
                             // Get right button : first element on the row 
                             if (allSpellSelectionButtons[i].ContainsKey(0))
                             {
-                                currentButton.RightButton = allSpellSelectionButtons[i][0].MaleficusButton;
+                                currentButton.RightButton = allSpellSelectionButtons[i][0].Button;
                             }
                         }
                         // Element in the middle of the row
@@ -267,13 +267,13 @@ public class SpellSelectionManager : AbstractSingletonManager<SpellSelectionMana
                             // Get left button 
                             if (allSpellSelectionButtons[i].ContainsKey(j - 1))
                             {
-                                currentButton.LeftButton = allSpellSelectionButtons[i][j - 1].MaleficusButton;
+                                currentButton.LeftButton = allSpellSelectionButtons[i][j - 1].Button;
                             }
 
                             // Get right button
                             if (allSpellSelectionButtons[i].ContainsKey(j + 1))
                             {
-                                currentButton.RightButton = allSpellSelectionButtons[i][j + 1].MaleficusButton;
+                                currentButton.RightButton = allSpellSelectionButtons[i][j + 1].Button;
                             }
                         }
                     }

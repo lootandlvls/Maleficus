@@ -140,19 +140,16 @@ namespace NetController
         private void On_ConfirmButton_ButtonSuccessfullyReleased(BNJMOButton button)
         {
             InvokeEventIfBound(ButtonReleased, EInputButton.CONFIRM);
-
         }
 
         private void On_CancelButton_ButtonPressed(BNJMOButton button)
         {
             InvokeEventIfBound(ButtonPressed, EInputButton.CANCEL);
-
         }
 
         private void On_CanelButton_ButtonSuccessfullyReleased(BNJMOButton button)
         {
             InvokeEventIfBound(ButtonReleased, EInputButton.CANCEL);
-
         }
         #endregion
 

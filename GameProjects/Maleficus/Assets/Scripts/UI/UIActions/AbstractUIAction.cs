@@ -9,13 +9,12 @@ using System;
 /// Simply drag component on GameObject with a Button and it will automatically binds to event.
 /// </summary>
 
-[RequireComponent(typeof (Button))]
 [RequireComponent(typeof (BNJMOButton))]
 public abstract class AbstractUIAction : BNJMOBehaviour
 {
     public event Action ActionButtonExecuted;
 
-    public BNJMOButton Button { get; private set; }
+    public BNJMOButton Button { get { return GetComponent<BNJMOButton>(); } }
 
     [SerializeField] private bool delayedEventExecution = false;
 
@@ -26,10 +25,7 @@ public abstract class AbstractUIAction : BNJMOBehaviour
     {
         base.Awake();
 
-        GetComponent<Button>().onClick.AddListener(Execute);
-
         // Bind events from MaleficusButton
-        Button = GetComponent<BNJMOButton>();
         Button.ButtonSuccessfullyReleased += On_MaleficusButton_ButtonPressed;
     }
 

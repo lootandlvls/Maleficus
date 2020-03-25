@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
+[RequireComponent(typeof(BNJMOButton))]
 public class SpellSelectionButton : BNJMOBehaviour
 {
     public AbstractSpell Spell                  { get { return spell; } }
-    public BNJMOButton MaleficusButton      { get { return GetComponent<BNJMOButton>(); } }
+    public BNJMOButton Button                   { get { return GetComponent<BNJMOButton>(); } }
     public int RowIndex                         { get { return rowIndex; } }
     public int ColumnIndex                      { get { return columnIndex; } }
 
@@ -18,7 +18,6 @@ public class SpellSelectionButton : BNJMOBehaviour
     [SerializeField] private SpellSkillPointStar[] skillPointStars = new SpellSkillPointStar[3];
 
 
-    private Button myButton;
     private Text myDebugIndexText;
     private Dictionary<EPlayerID, SpellSelectionPlayerHighlight> playerHighlights = new Dictionary<EPlayerID, SpellSelectionPlayerHighlight>();
 
@@ -54,10 +53,9 @@ public class SpellSelectionButton : BNJMOBehaviour
             name = "B_SpellSelectionButton " + RowIndex + "-" + ColumnIndex + " : " + spell.SpellName;
 
             // Update Button image 
-            myButton = GetComponent<Button>();
-            if (myButton != null)
+            if (Button != null)
             {
-                myButton.image.sprite = spell.SpellIcon;
+                Button.Image.sprite = spell.SpellIcon;
             }
 
             // Update Stars count
@@ -87,12 +85,11 @@ public class SpellSelectionButton : BNJMOBehaviour
         base.InitializeComponents();
 
         // Initialize button image 
-        myButton = GetComponent<Button>();
-        if (IS_NOT_NULL(myButton))
+        if (IS_NOT_NULL(Button))
         {
             if (IS_NOT_NULL(spell))
             {
-                myButton.image.sprite = spell.SpellIcon;
+                Button.Image.sprite = spell.SpellIcon;
             }
         }
 
