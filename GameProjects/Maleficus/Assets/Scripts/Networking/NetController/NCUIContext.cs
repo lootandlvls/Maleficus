@@ -14,6 +14,8 @@ namespace NetController
         [SerializeField] private InputField iF_ipAddress;
         [SerializeField] private GameObject c_buttons;
         
+
+
         protected override void InitializeComponents()
         {
             base.InitializeComponents();

@@ -66,7 +66,7 @@ public class PlayerNCListener : NetworkBehaviour
     [Command]
     private void Cmd_OnRequestControllerID(NetworkIdentity networkIdentity)
     {
-        Debug.Log("Cmd_OnRequestControllerID : " + networkIdentity.ToString());
+        Debug.Log("Cmd_OnRequestControllerID : " + networkIdentity.connectionToClient.ToString());
 
         NetControllerInputSource netControllerInputSource = InputManager.Instance.GetInputSource<NetControllerInputSource>();
         if (netControllerInputSource)
@@ -76,7 +76,7 @@ public class PlayerNCListener : NetworkBehaviour
 
             if (controllerID != EControllerID.NONE)
             {
-                Target_OnAssignedControllerID(networkIdentity.connectionToClient, newControllerID);
+                Target_OnAssignedControllerID(networkIdentity.connectionToServer, newControllerID);
             }
         }
     }
@@ -85,7 +85,7 @@ public class PlayerNCListener : NetworkBehaviour
     private void Target_OnAssignedControllerID(NetworkConnection networkConnection, EControllerID assignedControllerID)
     {
         controllerID = assignedControllerID;
-        Debug.Log("Assigned ControllerID : " + controllerID);
+        Debug.Log("Target_OnAssignedControllerID : " + controllerID);
     }
     #endregion
 
