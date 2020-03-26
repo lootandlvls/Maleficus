@@ -53,9 +53,12 @@ namespace BNJMO
                 scale = Vector3.LerpUnclamped(start.localScale, end.localScale, alpha);
             }
 
-            AnimatedTransform.position = position;
-            AnimatedTransform.rotation = rotation;
-            AnimatedTransform.localScale = scale;
+            if (IS_NOT_NULL(AnimatedTransform))
+            { 
+                AnimatedTransform.position = position;
+                AnimatedTransform.rotation = rotation;
+                AnimatedTransform.localScale = scale;
+            }
 
             return AnimatedTransform;
         }

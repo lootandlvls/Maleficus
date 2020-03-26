@@ -86,17 +86,10 @@ namespace Maleficus
         public const float NETWORK_UPDATE_FREQUENCY = 0.0078125f;
         public const float NETWORK_CONNECT_FREQUENCY = 0.75f;
 
-        /* Net Controllers */
-        public const int NET_CONTROLLER_MESSAGE_CONNECT = 800;
-        public const int NET_CONTROLLER_MESSAGE_JOYSTICK_MOVED = 810;
-        public const int NET_CONTROLLER_MESSAGE_BUTTON_PRESSED = 811;
-        public const int NET_CONTROLLER_MESSAGE_BUTTON_RELEASED = 812;
-
         /// <summary> Threshold to know what joystick value can be considered as a directional button </summary>  
-        public const float DIRECTIONAL_BUTTON_THRESHOLD = 0.5f;
-
+        public const float DIRECTIONAL_BUTTON_THRESHOLD = 0.3f;
         /// <summary> Threshold to know when a touch joystick can perform a spell button </summary>
-        public const float SPELL_BUTTON_THRESHOLD = 0.3f;
+        public const float SPELL_BUTTON_THRESHOLD = 0.1f;
 
         // Input
         public const float THRESHOLD_JOYSTICK_ACTIVATION = 0.2f;
