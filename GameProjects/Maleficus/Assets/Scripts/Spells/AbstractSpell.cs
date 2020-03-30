@@ -139,11 +139,13 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     protected void SetPushDuration(float duration)
     {
         pushDuration = duration;
+        Debug.Log("PUSH DURATION = " + pushDuration);
     }
 
     protected void SetDebuffDuration(float duration)
     {
-        debuffDuration = duration; 
+        debuffDuration = duration;
+        Debug.Log("DEBUFF DURATION = " + debuffDuration);
     }
 
     protected void ProcessHits(IPlayer[] hitPlayers, ESpellStatus spellStatus)

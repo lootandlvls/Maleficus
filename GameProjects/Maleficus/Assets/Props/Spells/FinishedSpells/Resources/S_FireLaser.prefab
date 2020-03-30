@@ -13984,7 +13984,7 @@ MonoBehaviour:
   spell: 1
   movementType: 6
   cooldown: 5
-  castDuration: 0
+  castDuration: 2
   pushDuration: 0.5
   spellDuration: 2
   debuffEffects: 

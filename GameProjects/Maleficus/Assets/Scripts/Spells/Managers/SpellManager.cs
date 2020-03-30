@@ -330,6 +330,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     private void SpawnSpell(AbstractSpell spellToCast, EPlayerID playerID)
     {
+        Debug.Log("SPELL STARTED");
         AbstractSpell spawnedSpell = null;
         if (spellToCast.GetComponent<AOE>() != null)
         {
@@ -381,6 +382,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
         else if (spellToCast.GetComponent<Linear_Laser>() != null)
         {
+            Debug.Log("LAZER STARTING");
             activePlayers[playerID].DoLazerAnimation(spellToCast.CastDuration);
             Vector3 position = activePlayers[playerID].SpellInitPosition;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
@@ -532,9 +534,15 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             snowman.transform.parent = activePlayers[playerID].transform;
 
             yield return new WaitForSeconds(debuffDuration);
-            Destroy(snowman);
-            activePlayers[playerID].SetPlayerFrozen(false);
-            activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
+            Destroy(snowman);     
+            //when the player dies while being frozen can lead to null pointer
+            if (activePlayers.ContainsKey(playerID))
+            {
+                activePlayers[playerID].SetPlayerFrozen(false);
+                activePlayers[playerID].transform.GetChild(2).gameObject.SetActive(true);
+            }
+
+
            
         }
 

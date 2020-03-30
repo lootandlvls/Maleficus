@@ -29,7 +29,7 @@ public class Linear_Hit : AbstractSpell
     {
         base.Start();
         startPosition = transform.position;
-        backDuration = SpellDuration;
+        backDuration = SpellDuration / 6    ;
 
         LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(CastingPlayerID));
         if (SpellID == ESpellID.GET_OVER_HERE)
@@ -73,6 +73,9 @@ public class Linear_Hit : AbstractSpell
         if (dir == Vector3.forward)
         {
             dir = Vector3.back;
+            mySphereCollider.enabled = false;
+            speed *= 6 ;
+
         }
 
        
@@ -106,9 +109,11 @@ public class Linear_Hit : AbstractSpell
                     {
                         if (SpellID == ESpellID.GET_OVER_HERE)
                         {
-                            backDuration = collisionTime - startTime;
+                            backDuration = collisionTime - startTime - 0.09f;
                             dir = Vector3.back;
-                            speed = 800;
+                          
+                            SetDirection(transform.TransformDirection(-dir));
+                            speed = 850;
                             SetPushDuration(backDuration);
                             SetDebuffDuration(backDuration);
                             ProcessHits(otherPlayer, ESpellStatus.ENTER);

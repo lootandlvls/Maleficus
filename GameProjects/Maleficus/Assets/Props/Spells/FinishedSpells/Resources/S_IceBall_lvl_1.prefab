@@ -56,7 +56,7 @@ MonoBehaviour:
   speed: 1000
   spellLevel: 0
   OnSelfEffect: 0
-  hasPushPower: 0
+  hasPushPower: 1
   hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0

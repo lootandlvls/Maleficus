@@ -448,6 +448,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
     IEnumerator LazerAnimationCoroutine(float spellDuration)
     {
+        Debug.Log("LAZER ANIMATION STARTING");
         currentSpeed = 0;
         IsReadyToShoot = false;
         myAnimator.SetBool("channeling", true);
