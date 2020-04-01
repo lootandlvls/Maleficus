@@ -29,7 +29,7 @@ public class Player : BNJMOBehaviour, IPlayer
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
-
+    
     [SerializeField] private float speed;
     [SerializeField] private float maximumPushVelocity = 25.0f;
     [Range(0.1f, 3.0f)]
@@ -98,7 +98,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
         IsReadyToShoot = false;
         IsPlayerCharging = false;
-
+        chargingWandEnergy.SetActive(false);
         InitializeDictionaries();
 
         myAnimator.SetBool("idle", true);
@@ -270,9 +270,9 @@ public class Player : BNJMOBehaviour, IPlayer
         {
             particleSystemBodyEffect.Stop();
         }
-        if(particleSystemWandEffect != null)
+        if(chargingWandEnergy != null)
         {
-            particleSystemWandEffect.Stop();
+            chargingWandEnergy.SetActive(false);
         }
 
     }
@@ -377,39 +377,41 @@ public class Player : BNJMOBehaviour, IPlayer
 
             // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
             Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
-            GameObject wandEffect = Instantiate(chargingWandEnergy, position, transform.rotation);
-            wandEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
+            
             GameObject bodyEffect = Instantiate(chargingBodyEnergy, transform.position, transform.rotation);
             bodyEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
             bodyEffect.transform.parent = this.transform;
-            wandEffect.transform.parent = this.transform;
-            particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
+          
+          
             particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
+           
+            var mainPS_Body = particleSystemBodyEffect.emission;
 
-            
+            bool maximumPowerReached = false;
+
             while (IsPlayerCharging)
             {
 
-                var mainPS = particleSystemWandEffect.main;                
 
-                mainPS.maxParticles = SpellChargingPower;
-
-                mainPS = particleSystemBodyEffect.main;
-
-                mainPS.maxParticles = SpellChargingPower;
+        
+              
 
               //  yield return new WaitForSeconds(0.0f);
 
-                if  (spellChargingPower < 200)
+                if  (spellChargingPower < 1000)
                 {
-                  //  Debug.Log("CHARGING...");
-                    spellChargingPower += 1;       // TODO: Add how an attribute in spell to influence how fast second level is charged
+                    //  Debug.Log("CHARGING...");
+                    mainPS_Body.rateOverTime = SpellChargingPower;
+                    spellChargingPower += 4;       // TODO: Add how an attribute in spell to influence how fast second level is charged
                 }
 
 
-                if (SpellChargingPower >= 200)
+                if (SpellChargingPower >= 1000 && !maximumPowerReached)
                 {
-                //    Debug.Log("MAX POWER REACHED");
+                    maximumPowerReached = true;
+
+                    chargingWandEnergy.SetActive(true);
+                    particleSystemBodyEffect.Stop();
                     //TODO : PLAY THE MAXIMUM CHARGE POWER VISUAL EFFECT
                 }
 
