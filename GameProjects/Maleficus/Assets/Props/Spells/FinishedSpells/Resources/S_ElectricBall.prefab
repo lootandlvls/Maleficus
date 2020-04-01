@@ -19142,7 +19142,7 @@ MonoBehaviour:
   OnSelfEffect: 0
   hasPushPower: 1
   hasGrabPower: 0
-  isChargeable: 0
+  isChargeable: 1
   isTripleCast: 0
   spell: 8
   movementType: 0

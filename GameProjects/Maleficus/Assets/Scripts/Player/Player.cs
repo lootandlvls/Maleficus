@@ -13,6 +13,7 @@ public class Player : BNJMOBehaviour, IPlayer
     public Quaternion Rotation { get { return transform.rotation; } }
     public bool IsDead { get; private set; } = false;
     public Dictionary<ESpellSlot, bool> ReadyToUseSpell { get; } = new Dictionary<ESpellSlot, bool>();
+    public Dictionary<ESpellSlot, bool> SpellButtonPressed { get; } = new Dictionary<ESpellSlot, bool>();
     public Dictionary<ESpellSlot, float> SpellCooldown { get; } = new Dictionary<ESpellSlot, float>();
     public Dictionary<ESpellSlot, float> SpellCastDuration { get; } = new Dictionary<ESpellSlot, float>();
     public bool IsReadyToShoot { get; set; }
@@ -20,7 +21,7 @@ public class Player : BNJMOBehaviour, IPlayer
     public bool IsUnhittable { get; set; } = false;
     public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
-    public int SpellChargingLVL { get; private set; } = 1;
+    public int SpellChargingPower { get {return spellChargingPower; } }
     public bool HasCastedSpell { get; set; } = false;
     public Vector3 PushVelocity { get; private set; }
     public float MaxPushVelocity { get { return maximumPushVelocity; } }
@@ -28,6 +29,7 @@ public class Player : BNJMOBehaviour, IPlayer
     [Header("Charging Spell Effects")]
     [SerializeField] private GameObject chargingBodyEnergy;
     [SerializeField] private GameObject chargingWandEnergy;
+
     [SerializeField] private float speed;
     [SerializeField] private float maximumPushVelocity = 25.0f;
     [Range(0.1f, 3.0f)]
@@ -39,8 +41,12 @@ public class Player : BNJMOBehaviour, IPlayer
     private Animator myAnimator;
     private DirectionalSprite[] myDirectionalSprites;
 
+    private ParticleSystem particleSystemWandEffect;
+    private ParticleSystem particleSystemBodyEffect;
+
     private float lastTimeSinceRotated;
     private float currentSpeed;
+    private int spellChargingPower;
     private IEnumerator UpdatePushVelocityEnumerator;
     private IEnumerator SpellChargingEnumerator;
     private Vector3 movingDirection;
@@ -53,6 +59,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
         myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
         myAnimator = GetComponent<Animator>();
+      
 
     }
 
@@ -239,35 +246,35 @@ public class Player : BNJMOBehaviour, IPlayer
 
     public void StartChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
-        if (IsPlayerCharging == false)
-        {
-            if (spell.MovementType == ESpellMovementType.LINEAR_HIT)
-            {
-                IsPlayerCharging = true;
-
+        
+           
+            //    Debug.Log("START CHARGING SPELL");
+              
                 //LogConsole("Player started Charging", "SPELL_CHARGE");
-                StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
+               StartNewCoroutine(ref SpellChargingEnumerator, SpellChargingCoroutine(spellSlot));
                 //StartCoroutine(SpellChargingCoroutine(spellSlot));
-            }
+            
 
-        }
+        
     }
 
     public void StopChargingSpell(ISpell spell, ESpellSlot spellSlot)
     {
         //LogConsole("player stopped charging " + spellSlot, "SPELL_CHARGE");
-
-        IsPlayerCharging = false;
-
-        if (spell.MovementType == ESpellMovementType.LINEAR_LASER)
+      //  Debug.Log("STOP CHARGING SPELL");
+       
+        StopCoroutineIfRunning(SpellChargingEnumerator);      
+        myAnimator.SetBool("charging", false);
+        StopSlowDownPlayer();
+        if (particleSystemBodyEffect != null)
         {
-            StartCoroutine(SlowDownPlayerCoroutine(0, spell.CastDuration));
+            particleSystemBodyEffect.Stop();
         }
-        else
+        if(particleSystemWandEffect != null)
         {
-            StopSlowDownPlayer();
-
+            particleSystemWandEffect.Stop();
         }
+
     }
 
     public void RotateToClosestPlayer()
@@ -304,6 +311,7 @@ public class Player : BNJMOBehaviour, IPlayer
             if (spellSlot != ESpellSlot.NONE)
             {
                 ReadyToUseSpell[spellSlot] = true;
+                SpellButtonPressed[spellSlot] = false;
                 AbstractSpell chosenSpell = SpellManager.Instance.GetChosenSpell(PlayerID, spellSlot);
                 if (IS_NOT_NULL(chosenSpell))
                 {
@@ -318,7 +326,7 @@ public class Player : BNJMOBehaviour, IPlayer
     {
         myAnimator.SetBool("channeling", true);
         currentSpeed = slowDownSpeed;
-        Debug.Log("PLAYER SLOWED : SPEED = " + currentSpeed);
+      //  Debug.Log("PLAYER SLOWED : SPEED = " + currentSpeed);
         yield return new WaitForSeconds(duration);
 
         currentSpeed = speed;
@@ -348,22 +356,24 @@ public class Player : BNJMOBehaviour, IPlayer
     }
 
 
-
+  
     private IEnumerator SpellChargingCoroutine(ESpellSlot spellSlot)
     {
+        IsPlayerCharging = true;
+    //    Debug.Log("CHARGING SPELL COROUTINE STARTED");
         //LogConsole("Starting coroutine > " + "IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
-        while ((IsPlayerCharging == true)
+       /* while ((IsPlayerCharging == true)
             && ((ReadyToUseSpell[spellSlot] == false) || (IsReadyToShoot == false)))
         {
             //LogConsole("IsPlayerCharging : " + IsPlayerCharging + " | readyToUseSpell : " + ReadyToUseSpell[spellSlot] + " | IsReadyToShoot : " + IsReadyToShoot, "SPELL_CHARGE");
             yield return new WaitForEndOfFrame();
-        }
+        }*/
 
         if (IsPlayerCharging == true)
         {
             SlowDownPlayer(speed / 2.0f);
             myAnimator.SetBool("charging", true);
-            int counter = 0;
+            spellChargingPower = 0;
 
             // Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 90, 1);
             Vector3 position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
@@ -373,47 +383,40 @@ public class Player : BNJMOBehaviour, IPlayer
             bodyEffect.transform.Rotate(new Vector3(-90.0f, 0.0f, 0.0f));
             bodyEffect.transform.parent = this.transform;
             wandEffect.transform.parent = this.transform;
-            ParticleSystem particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
-            ParticleSystem particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
+            particleSystemWandEffect = wandEffect.GetComponent<ParticleSystem>();
+            particleSystemBodyEffect = bodyEffect.GetComponent<ParticleSystem>();
 
-            SpellChargingLVL = 0;
+            
             while (IsPlayerCharging)
             {
-                var mainPS = particleSystemBodyEffect.main;
-                mainPS.maxParticles = counter;
-                mainPS.maxParticles = counter;
 
+                var mainPS = particleSystemWandEffect.main;                
 
-                yield return new WaitForSeconds(0.0f);
-                counter += 4;       // TODO: Add how an attribute in spell to influence how fast second level is charged
-                if (counter > 100)
+                mainPS.maxParticles = SpellChargingPower;
+
+                mainPS = particleSystemBodyEffect.main;
+
+                mainPS.maxParticles = SpellChargingPower;
+
+              //  yield return new WaitForSeconds(0.0f);
+
+                if  (spellChargingPower < 200)
                 {
-                    if (SpellChargingLVL != 2)
-                    {
-                        SpellChargingLVL = 2;
-                        //LogConsole("Spell upgraded to lvl 2", "SPELL_CHARGE");
-                    }
+                  //  Debug.Log("CHARGING...");
+                    spellChargingPower += 1;       // TODO: Add how an attribute in spell to influence how fast second level is charged
                 }
-                else
+
+
+                if (SpellChargingPower >= 200)
                 {
-                    if (SpellChargingLVL != 1)
-                    {
-
-                        SpellChargingLVL = 1;
-                        //LogConsole("Spell upgraded to lvl 1", "SPELL_CHARGE");
-                    }
-
+                //    Debug.Log("MAX POWER REACHED");
+                    //TODO : PLAY THE MAXIMUM CHARGE POWER VISUAL EFFECT
                 }
+
                 yield return new WaitForEndOfFrame();
             }
             //LogConsole("spellCharging function Done!!", "SPELL_CHARGE");
-
-            myAnimator.SetBool("charging", false);
-            StopSlowDownPlayer();
-
-            particleSystemBodyEffect.Stop();
-            particleSystemWandEffect.Stop();
-
+        
             //LogConsole("counter = " + counter, "SPELL_CHARGE");
         }
     }
@@ -424,7 +427,7 @@ public class Player : BNJMOBehaviour, IPlayer
     {
         if (myDirectionalSprites.Length == 0)
         {
-            Debug.LogError("PLayer's directional sprites are empty!");
+        //    Debug.LogError("PLayer's directional sprites are empty!");
             myDirectionalSprites = GetComponentsInChildren<DirectionalSprite>();
         }
 
@@ -448,7 +451,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
     IEnumerator LazerAnimationCoroutine(float spellDuration)
     {
-        Debug.Log("LAZER ANIMATION STARTING");
+     //   Debug.Log("LAZER ANIMATION STARTING");
         currentSpeed = 0;
         IsReadyToShoot = false;
         myAnimator.SetBool("channeling", true);
@@ -519,9 +522,10 @@ public class Player : BNJMOBehaviour, IPlayer
         currentSpeed *= speedFactor;
     }
 
-    public void ResetSpellChargingLVL()
+    public void ResetSpellChargingPower()
     {
-        SpellChargingLVL = 1;
+      //  Debug.Log("RESET THE SPELL CHARGING POWER");
+        spellChargingPower = 0;
     }
 
     public void PushPlayer(Vector3 velocity, float duration)

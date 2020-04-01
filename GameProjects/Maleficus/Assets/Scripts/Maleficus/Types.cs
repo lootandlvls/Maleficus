@@ -191,7 +191,7 @@ public struct SHitInfo
     {
         get
         {
-            return CastedSpell.Direction * CastedSpell.HitPower;
+            return CastedSpell.Direction.normalized * CastedSpell.HitPower;
         }
     }
 }

@@ -31,7 +31,7 @@ public class Linear_Hit : AbstractSpell
         startPosition = transform.position;
         backDuration = SpellDuration / 6    ;
 
-        LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(CastingPlayerID));
+     //   LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(CastingPlayerID));
         if (SpellID == ESpellID.GET_OVER_HERE)
         {
             StartCoroutine(returnCoroutine());
@@ -85,7 +85,7 @@ public class Linear_Hit : AbstractSpell
     {
         float collisionTime = Time.time;
 
-        LogConsole("Collision " + other.gameObject.ToString());
+   //     LogConsole("Collision " + other.gameObject.ToString());
 
         if (hasBeenTriggered == false)
         {
