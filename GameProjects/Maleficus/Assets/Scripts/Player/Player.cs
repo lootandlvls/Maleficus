@@ -21,7 +21,7 @@ public class Player : BNJMOBehaviour, IPlayer
     public bool IsUnhittable { get; set; } = false;
     public Vector3 SpellInitPosition { get { return spellInitPosition.position; } }
     public Vector3 SpellEndPosition { get { return spellEndPosition.position; } }
-    public int SpellChargingPower { get {return spellChargingPower; } }
+    public float SpellChargingPower { get {return spellChargingPower; } }
     public bool HasCastedSpell { get; set; } = false;
     public Vector3 PushVelocity { get; private set; }
     public float MaxPushVelocity { get { return maximumPushVelocity; } }
@@ -46,7 +46,7 @@ public class Player : BNJMOBehaviour, IPlayer
 
     private float lastTimeSinceRotated;
     private float currentSpeed;
-    private int spellChargingPower;
+    private float spellChargingPower;
     private IEnumerator UpdatePushVelocityEnumerator;
     private IEnumerator SpellChargingEnumerator;
     private Vector3 movingDirection;
@@ -398,15 +398,15 @@ public class Player : BNJMOBehaviour, IPlayer
 
               //  yield return new WaitForSeconds(0.0f);
 
-                if  (spellChargingPower < 1000)
+                if  (spellChargingPower < 500)
                 {
                     //  Debug.Log("CHARGING...");
                     mainPS_Body.rateOverTime = SpellChargingPower;
-                    spellChargingPower += 4;       // TODO: Add how an attribute in spell to influence how fast second level is charged
+                    spellChargingPower += 3;       // TODO: Add how an attribute in spell to influence how fast second level is charged
                 }
 
 
-                if (SpellChargingPower >= 1000 && !maximumPowerReached)
+                if (SpellChargingPower >= 500 && !maximumPowerReached)
                 {
                     maximumPowerReached = true;
 

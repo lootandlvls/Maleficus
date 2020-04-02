@@ -304,7 +304,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
     }
 
-    public void CastSpell(EPlayerID playerID, ESpellSlot spellID , int spellChargingPower)
+    public void CastSpell(EPlayerID playerID, ESpellSlot spellID , float spellChargingPower)
     {
         AbstractSpell spellToCast ;
         float spellCooldown = playersChosenSpells[playerID][spellID].Cooldown;      
@@ -318,7 +318,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         EventManager.Instance.Invoke_SPELLS_SpellSpawned(spellToCast, playerID , spellID);
     }
 
-    private void SpawnSpell(AbstractSpell spellToCast, EPlayerID playerID , int spellChargingPower)
+    private void SpawnSpell(AbstractSpell spellToCast, EPlayerID playerID , float spellChargingPower)
     {
         //Debug.Log("SPELL STARTED");
         AbstractSpell spawnedSpell = null;
@@ -381,7 +381,9 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
             spawnedSpell.transform.rotation = activePlayers[playerID].transform.rotation;
             spawnedSpell.transform.parent = activePlayers[playerID].transform;
             spawnedSpell.CastingPlayerID = playerID;
-            
+             //Spell upgrade using the chargedPower
+            spawnedSpell.ChargingPower = spellChargingPower / 1000;
+
         }
         else if (spellToCast.GetComponent<Traps>() != null)
         {
@@ -421,8 +423,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
                 StartCoroutine(AnimationDelayCoroutine(spellToCast, playerID, spellChargingPower , 1));
             }
         }
-
-        activePlayers[playerID].ResetSpellChargingPower();
+        if (spellToCast.MovementType != ESpellMovementType.STATIC && spellToCast.MovementType != ESpellMovementType.TELEPORT)
+        {
+            activePlayers[playerID].ResetSpellChargingPower();
+        }
+       
     }
 
     public void SpawnPreviewSpell(AbstractSpell spellToCast, Transform transform)
@@ -585,7 +590,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         }
     }
 
-    IEnumerator AnimationDelayCoroutine(AbstractSpell spellToCast, EPlayerID playerID, int spellChargingPower, int animationID)
+    IEnumerator AnimationDelayCoroutine(AbstractSpell spellToCast, EPlayerID playerID, float spellChargingPower, int animationID)
     {
        
         switch (animationID)
@@ -603,13 +608,29 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
 
         if (spellToCast.IsTripleCast)
         {
-            TripleCastSpell(spellToCast, playerID);
+            TripleCastSpell(spellToCast, playerID , spellChargingPower);
         }
         else
         {          
             AbstractSpell spell = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
             spell.CastingPlayerID = playerID;
-            spell.speed += spellChargingPower;
+            //upgrade spell respectively with the amount of the charged power
+            if (spellToCast.SpellID == ESpellID.BLACK_HOLE)
+            {
+                spell.speed += spellChargingPower / 2;
+               
+                spell.ChargingPower = spellChargingPower / 1100;
+            }
+            else
+            {
+                spell.speed += spellChargingPower;
+                spell.hitPower += spellChargingPower / 100;
+                spell.ChargingPower = spellChargingPower / 1000;
+            }
+           
+            Debug.Log( "CHARGING POWER " + spellChargingPower);
+            Debug.Log("SPELL CHARGING POWER" +spell.ChargingPower);
+
             LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(playerID));
             spell.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
             AddSpellToActiveMovingSpells(spell);
@@ -617,7 +638,7 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
     }
 
     //CAST A TRIPLE VERSION OF THE SPELL 
-    private void TripleCastSpell(AbstractSpell spellToCast, EPlayerID playerID)
+    private void TripleCastSpell(AbstractSpell spellToCast, EPlayerID playerID , float spellChargingPower)
     {
         Vector3 rot1 = activePlayers[playerID].transform.rotation.eulerAngles;
         Vector3 rot2euler = rot1 + new Vector3(0, 30, 0);
@@ -628,16 +649,25 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         AbstractSpell cast_1 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, activePlayers[playerID].transform.rotation);
         cast_1.CastingPlayerID = playerID;
         cast_1.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        cast_1.speed += spellChargingPower;
+        cast_1.hitPower += spellChargingPower / 100;
+        cast_1.ChargingPower = spellChargingPower / 1000;
         AddSpellToActiveMovingSpells(cast_1);
 
         AbstractSpell cast_2 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, rotation_2);
         cast_2.CastingPlayerID = playerID;
         cast_2.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        cast_2.speed += spellChargingPower;
+        cast_2.hitPower += spellChargingPower / 100;
+        cast_2.ChargingPower = spellChargingPower / 1000;
         AddSpellToActiveMovingSpells(cast_2);
 
         AbstractSpell cast_3 = Instantiate(spellToCast, activePlayers[playerID].SpellInitPosition, rotation_3);
         cast_3.CastingPlayerID = playerID;
         cast_3.parabolicSpell_EndPosition = activePlayers[playerID].SpellEndPosition;
+        cast_3.speed += spellChargingPower;
+        cast_3.hitPower += spellChargingPower / 100;
+        cast_3.ChargingPower = spellChargingPower / 1000;
         AddSpellToActiveMovingSpells(cast_3);
     }
 

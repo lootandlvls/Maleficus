@@ -9611,9 +9611,9 @@ MonoBehaviour:
   OnSelfEffect: 0
   hasPushPower: 1
   hasGrabPower: 0
-  isChargeable: 0
+  isChargeable: 1
   isTripleCast: 1
-  spell: 5
+  spell: 6
   movementType: 0
   cooldown: 2
   castDuration: 0
@@ -9635,6 +9635,7 @@ MonoBehaviour:
   - {fileID: 4225733853669119593}
   - {fileID: 4226173581530324453}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  ChargingPower: 0
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0
 --- !u!54 &4207213974452832667

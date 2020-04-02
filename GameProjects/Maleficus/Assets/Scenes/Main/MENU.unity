@@ -5305,12 +5305,12 @@ MonoBehaviour:
   IsUseDebugGameMode: 1
   DebugGameMode: 1
   IsSpawnGhostPlayerPositionsIfNotFound: 0
-  MaximumNumberOfAIToSpawn: 4
-  IsAISpawnSpellsEneabled: 1
+  MaximumNumberOfAIToSpawn: 1
+  IsAISpawnSpellsEneabled: 0
   IsAIArenaCenterAttractionEnabled: 1
-  IsAIClosestPlayerDeviationEnabled: 1
-  IsAIClosestSpellDeviationEnabled: 1
-  IsAIPushDeviationEnabled: 1
+  IsAIClosestPlayerDeviationEnabled: 0
+  IsAIClosestSpellDeviationEnabled: 0
+  IsAIPushDeviationEnabled: 0
   IsLoadDebugSpells: 0
   IsLimitMaxPushPower: 1
   spellPreviewScaleFactor: 0.2
@@ -8231,10 +8231,60 @@ PrefabInstance:
       propertyPath: m_Text
       value: 3-5
       objectReference: {fileID: 0}
+    - target: {fileID: 3293009887849862156, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293009887849862156, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293009887849862156, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293009887849862156, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293009887849862156, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4603513628557649601, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}
       propertyPath: m_Text
       value: 2-4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4684892615646938714, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4684892615646938714, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4684892615646938714, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4684892615646938714, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4684892615646938714, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4997602523722511757, guid: 3f787d2e0c4b02e42aaae6f8284cb01a,
         type: 3}

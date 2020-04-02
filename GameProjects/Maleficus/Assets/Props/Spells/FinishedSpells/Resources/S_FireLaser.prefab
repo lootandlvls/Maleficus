@@ -13953,7 +13953,7 @@ Transform:
   m_GameObject: {fileID: 3869868896117027089}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -1.81, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children:
   - {fileID: 3088163194612396766}
   m_Father: {fileID: 0}
@@ -13979,7 +13979,7 @@ MonoBehaviour:
   OnSelfEffect: 0
   hasPushPower: 1
   hasGrabPower: 0
-  isChargeable: 0
+  isChargeable: 1
   isTripleCast: 0
   spell: 1
   movementType: 6
@@ -14005,6 +14005,7 @@ MonoBehaviour:
   - {fileID: 3870225384778224809}
   - {fileID: 3868611317914537683}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  ChargingPower: 0
 --- !u!114 &3757880027999616581
 MonoBehaviour:
   m_ObjectHideFlags: 0

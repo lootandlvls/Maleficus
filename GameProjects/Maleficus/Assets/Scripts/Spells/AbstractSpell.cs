@@ -83,6 +83,7 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
     public GameObject hitPrefab;
     public List<GameObject> trails;
     public Vector3 parabolicSpell_EndPosition;
+    public float ChargingPower;
 
     protected override void OnValidate()
     {
@@ -206,6 +207,8 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
             ProcessHits(hitEnemy);
         }
     }
+
+  
 
     protected void DestroySpell()
     {

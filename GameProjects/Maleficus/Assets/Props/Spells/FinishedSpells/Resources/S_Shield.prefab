@@ -4833,7 +4833,7 @@ MonoBehaviour:
   isChargeable: 0
   isTripleCast: 0
   spell: 12
-  movementType: 10
+  movementType: 11
   cooldown: 6
   castDuration: 0
   pushDuration: 0
@@ -4851,6 +4851,7 @@ MonoBehaviour:
   trails:
   - {fileID: 6922480370834727651}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  ChargingPower: 0
 --- !u!135 &1324690934861586665
 SphereCollider:
   m_ObjectHideFlags: 0

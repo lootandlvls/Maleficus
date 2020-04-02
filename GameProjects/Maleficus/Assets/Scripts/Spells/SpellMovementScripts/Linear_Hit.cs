@@ -7,10 +7,12 @@ public class Linear_Hit : AbstractSpell
 {
     private Vector3 movingDirection;
     public Vector3 directionVector;
+
     private Vector3 dir = Vector3.forward;
     private Vector3 startPosition;
     private float startTime;
     private float backDuration ;
+    private float localScale;
     [SerializeField] private bool shoot;
 
     private SphereCollider mySphereCollider;
@@ -29,9 +31,12 @@ public class Linear_Hit : AbstractSpell
     {
         base.Start();
         startPosition = transform.position;
+      
         backDuration = SpellDuration / 6    ;
+        localScale = transform.localScale.x ;
 
-     //   LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(CastingPlayerID));
+
+     //   LogConsole("CASTING PLAYER ID IS " + Maleficus.Utils.GetIntFrom(CfastingPlayerID));
         if (SpellID == ESpellID.GET_OVER_HERE)
         {
             StartCoroutine(returnCoroutine());
@@ -43,6 +48,11 @@ public class Linear_Hit : AbstractSpell
         base.FixedUpdate();
 
         Move();
+       
+            transform.localScale = new Vector3((float)localScale + ChargingPower, (float)localScale + ChargingPower, (float)localScale + ChargingPower);
+            mySphereCollider.radius = transform.localScale.x - 0.2f;
+      
+
 
         if ( dir == Vector3.back && SpellID == ESpellID.GET_OVER_HERE)
         {
@@ -84,8 +94,8 @@ public class Linear_Hit : AbstractSpell
     private void OnTriggerEnter(Collider other)
     {
         float collisionTime = Time.time;
-
-   //     LogConsole("Collision " + other.gameObject.ToString());
+        Debug.Log("HAS BEEN TRIGGERED");
+        //     LogConsole("Collision " + other.gameObject.ToString());
 
         if (hasBeenTriggered == false)
         {
@@ -100,10 +110,13 @@ public class Linear_Hit : AbstractSpell
             {
                 if ((otherPlayer != null) && (CastingPlayerID != otherPlayer.PlayerID) && other.tag == Maleficus.Consts.TAG_PLAYER)
                 {
+                    
                     hasBeenTriggered = true;
                     if (HasPushPower)
-                    {                       
-                         Explode();
+                    {
+                       
+                      // Explode();
+                       ProcessHits(otherPlayer, ESpellStatus.ENTER);
                     }
                     else if (HasGrabPower)
                     {
@@ -153,8 +166,10 @@ public class Linear_Hit : AbstractSpell
             {
                // Debug.Log(collider.name);
                 IPlayer otherPlayer = collider.gameObject.GetComponent<IPlayer>();
+             
                 if (otherPlayer != null && collider.tag == "Player")
                 {
+                    Debug.Log(otherPlayer.PlayerID);
                     if (CastingPlayerID != otherPlayer.PlayerID)
                     {
                         hitPlayers.Add(otherPlayer);

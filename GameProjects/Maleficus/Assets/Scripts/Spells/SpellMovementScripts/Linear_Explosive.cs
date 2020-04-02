@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class Linear_Explosive : AbstractSpell { 
 
-      private Vector3 movingDirection;
-      public Vector3 directionVector;
-      private Vector3 forward = Vector3.forward;
+    private Vector3 movingDirection;
+    public Vector3 directionVector;
+    private float maxLocalScale;
+    
+    private Vector3 forward = Vector3.forward;
+    private SphereCollider mySphereCollider;
 
+
+    protected override void Start()
+    {
+        base.Start();
+        maxLocalScale = 1 + ChargingPower;
+       
+        StartCoroutine(ScaleUpdateCoroutine());
+   
+    }
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
@@ -23,6 +35,22 @@ public class Linear_Explosive : AbstractSpell {
 
         directionVector = transform.TransformDirection(movingDirection);
         myRigidBody.velocity = new Vector3(directionVector.x, directionVector.y, directionVector.z);
+
+    }
+
+    IEnumerator ScaleUpdateCoroutine()
+    {
+
+        float startTime = Time.time;
+
+        while (transform.localScale.z <= maxLocalScale)
+        {
+            transform.localScale = new Vector3(transform.localScale.x + (Time.time - startTime) / (SpellDuration * 4), transform.localScale.y + (Time.time - startTime) / (SpellDuration * 4), transform.localScale.z + (Time.time - startTime) / (SpellDuration * 4));
+        //    mySphereCollider.radius += (Time.time - startTime) / (SpellDuration * 4);
+            yield return new WaitForEndOfFrame();
+        }
+
+
 
     }
     private void OnTriggerStay(Collider other)

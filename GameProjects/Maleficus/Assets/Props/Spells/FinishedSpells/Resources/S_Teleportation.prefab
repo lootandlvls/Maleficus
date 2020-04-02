@@ -55,7 +55,7 @@ MonoBehaviour:
   hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
-  spell: 4
+  spell: 5
   movementType: 4
   cooldown: 3
   castDuration: 0
@@ -75,6 +75,7 @@ MonoBehaviour:
   - {fileID: 7050889972861179905}
   - {fileID: 3030455969806695533}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  ChargingPower: 0
 --- !u!82 &2961951851154664143
 AudioSource:
   m_ObjectHideFlags: 0

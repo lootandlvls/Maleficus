@@ -19164,7 +19164,7 @@ MonoBehaviour:
   hasGrabPower: 0
   isChargeable: 0
   isTripleCast: 0
-  spell: 0
+  spell: 6
   movementType: 0
   cooldown: 2
   castDuration: 0
@@ -19186,6 +19186,7 @@ MonoBehaviour:
   - {fileID: 2759821787568496742}
   - {fileID: 2759909698158572790}
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  ChargingPower: 0
   speedCurve:
     serializedVersion: 2
     m_Curve:
