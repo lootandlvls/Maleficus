@@ -148,7 +148,8 @@ public abstract class AbstractSpell : BNJMOBehaviour, ISpell
         debuffDuration = duration;
         Debug.Log("DEBUFF DURATION = " + debuffDuration);
     }
-
+     
+  
     protected void ProcessHits(IPlayer[] hitPlayers, ESpellStatus spellStatus)
     {
         foreach (IPlayer hitPlayer in hitPlayers)

@@ -14422,14 +14422,14 @@ MonoBehaviour:
   OnSelfEffect: 0
   hasPushPower: 1
   hasGrabPower: 0
-  isChargeable: 0
+  isChargeable: 1
   isTripleCast: 0
   spell: 13
-  movementType: 7
+  movementType: 0
   cooldown: 2
   castDuration: 0
   pushDuration: 0.5
-  spellDuration: 4
+  spellDuration: 1
   debuffEffects: 
   debuffDuration: 0
   debuffPower: 0
@@ -14442,6 +14442,7 @@ MonoBehaviour:
   hitPrefab: {fileID: 1329826249346808, guid: 7a37fbaa558a2b54d9aef711134128e1, type: 3}
   trails: []
   parabolicSpell_EndPosition: {x: 0, y: 0, z: 0}
+  ChargingPower: 0
   directionVector: {x: 0, y: 0, z: 0}
   shoot: 0
 --- !u!114 &7893525993616841485

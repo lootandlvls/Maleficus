@@ -405,7 +405,8 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         {
             if (spellToCast.SpellID == ESpellID.RAPID_FIRE_PLASMA)
             {
-                StartCoroutine(DelayBetweenMultipleSpellCastingCoroutine(0.05f, playerID, spellToCast));
+               
+                StartCoroutine(DelayBetweenMultipleSpellCastingCoroutine(0.1f, playerID, spellToCast, (int) spellChargingPower / 200));
             }
             else if (spellToCast.SpellID == ESpellID.AIR_SLASH)
             {
@@ -574,10 +575,11 @@ public class SpellManager : AbstractSingletonManager<SpellManager>
         
     }
     //USED FOR RAPIDFIRE SPELLS
-    IEnumerator DelayBetweenMultipleSpellCastingCoroutine(float delay , EPlayerID playerID , AbstractSpell spell)
+    IEnumerator DelayBetweenMultipleSpellCastingCoroutine(float delay , EPlayerID playerID , AbstractSpell spell , int chargingSpellPower)
     {
+        Debug.Log("chargingpowr = " + chargingSpellPower);
         activePlayers[playerID].DoProjectileAttackAnimation();
-        for (int i = 0; i <= spell.SpellDuration; i++)
+        for (int i = 0; i <= (spell.SpellDuration + chargingSpellPower); i++)
         {
             Vector3 position = activePlayers[playerID].transform.position;
             Quaternion rotation = activePlayers[playerID].transform.rotation;
