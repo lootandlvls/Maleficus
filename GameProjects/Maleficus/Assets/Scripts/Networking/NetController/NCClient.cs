@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
-using UnityEngine.Networking.NetworkSystem;
 using System;
 using static Maleficus.Utils;
 using static Maleficus.Consts;

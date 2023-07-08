@@ -330,7 +330,7 @@ TextureImporter:
       213: 21300216
     second: WizardMenu_Left_Active
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -350,6 +350,8 @@ TextureImporter:
   isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -360,7 +362,7 @@ TextureImporter:
     serializedVersion: 2
     filterMode: 2
     aniso: 16
-    mipBias: -100
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -381,9 +383,14 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -407,6 +414,42 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2606,6 +2649,111 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      StepBar_Bubble: 21300090
+      PopupList_Arrow_Normal: 21300180
+      Slider_Horizontal_Thumb: 21300146
+      ProgressBar_Vertical_Fill: 21300138
+      SmallArrow_Left: 21300158
+      Window_CloseButton_Normal: 21300102
+      ScrollBar_Horizontal_Thumb: 21300132
+      ScrollView_Item_Icon_Borders: 21300204
+      PopupList_Separator: 21300182
+      StepBar_Separator_Inactive: 21300092
+      LargeUnitBar_Background: 21300078
+      StepBar_Fill_Incomplete: 21300086
+      Arrow_Left: 21300166
+      ActionButton_Lightning: 21300034
+      LargeUnitBar_Fill_Power: 21300082
+      TextField_Normal: 21300170
+      Padlock: 21300056
+      ItemBox_Icon_Background: 21300190
+      Star_2: 21300048
+      NormalButton_Background: 21300014
+      Star_1: 21300038
+      ScrollBar_Horizontal_Background: 21300124
+      TextField_Focused: 21300172
+      Arrow_Right: 21300162
+      GoldCoin: 21300196
+      ScrollBar_Horizontal_Foreground: 21300128
+      ActionButton_1_Background: 21300022
+      ImageBox_ExampleImage: 21300120
+      StepBar_Fill: 21300088
+      WizardMenu_Left: 21300210
+      WizardMenu_Middle_Active: 21300208
+      Star_2_Slot: 21300040
+      Joystick_Arrow_Horizontal: 21300070
+      ImageBox_Background: 21300122
+      LoadingBar_Background: 21300074
+      Tab_Active_Highlighted: 21300112
+      LargeButton_Background: 21300000
+      Joystick_Background: 21300058
+      LargeFrame_Borders: 21300008
+      ActionButton_0_Background: 21300020
+      WizardMenu_Left_Active: 21300216
+      ItemBox_Icon_Borders: 21300194
+      Arrow_Down: 21300164
+      LargeFrame_Background: 21300006
+      Checkbox_Background: 21300148
+      LargeFrame_ExampleImage: 21300010
+      StepBar_Separator: 21300094
+      Joystick_Button_Left: 21300062
+      ItemBox_ExampleIcon: 21300192
+      ScrollBar_Vertical_Thumb: 21300134
+      Joystick_Button_Right: 21300068
+      SmallArrow_Right: 21300156
+      TinyButton_Background: 21300016
+      Window_Background: 21300096
+      LargeButton_NormalState: 21300002
+      Joystick_ButtonsMerged: 21300060
+      LargeFrame_Footer: 21300012
+      Tab_Active: 21300104
+      Joystick_Button_Top: 21300064
+      Star_0_Slot: 21300042
+      RadioCheckbox_Checkmark: 21300154
+      ScrollView_Item_Background: 21300200
+      Star_0: 21300046
+      LargeUnitBar_Fill_Health: 21300080
+      PopupList_Background: 21300178
+      ScrollView_Background: 21300198
+      Star_3: 21300044
+      Tab_Inactive_Highlighted: 21300114
+      Tab_Inactive_Pressed: 21300116
+      ScrollBar_Vertical_Background: 21300126
+      ProgressBar_Vertical_Background: 21300136
+      WizardMenu_Right_Active: 21300214
+      Joystick_Arrow_Vertical: 21300072
+      Window_CloseButton_Hover: 21300100
+      PopupList_Arrow_Active: 21300186
+      PopupList_Highlight: 21300184
+      WizardMenu_Right: 21300212
+      Slider_Horizontal_Background: 21300140
+      ScrollBar_Vertical_Foreground: 21300130
+      ItemBox_Background: 21300188
+      SmallFrame_ExampleImage: 21300054
+      Tab_Active_Pressed: 21300118
+      SmallFrame_Background: 21300050
+      StepBar_Background: 21300084
+      Slider_Vertical_Background: 21300142
+      LargeButton_Label_Play: 21300004
+      ScrollView_Item_Icon_Background: 21300202
+      Checkbox_Background_Highlighted: 21300174
+      Window_Header: 21300098
+      ActionButton_Swords: 21300032
+      SmallArrow_Middle: 21300168
+      Arrow_Up: 21300160
+      LoadingBar_Fill: 21300076
+      Slider_Vertical_Thumb: 21300144
+      Joystick_Button_Bottom: 21300066
+      ActionButton_Fist: 21300030
+      SmallFrame_Borders: 21300052
+      RadioCheckbox_Background_Highlighted: 21300176
+      Tab_Inactive: 21300106
+      WizardMenu_Middle: 21300206
+      ActionButton_2_Background: 21300018
+      RadioCheckbox_Background: 21300150
+      Checkbox_Checkmark: 21300152
+      Star_1_Slot: 21300036
   spritePackingTag: Tribal UI
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
